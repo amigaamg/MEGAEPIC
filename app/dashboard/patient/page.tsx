@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth, db, storage } from '@/lib/firebase';
 import {
-  collection, query, where, onSnapshot, doc, addDoc, updateDoc,
+  collection, query, where, onSnapshot, doc,setDoc, addDoc, updateDoc,
   getDoc, serverTimestamp, orderBy, getDocs, arrayUnion, Timestamp
 } from 'firebase/firestore';
 import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
