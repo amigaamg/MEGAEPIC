@@ -1,67 +1,72 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-admin'; // Use admin SDK on server
-import { collection, query, where, getDocs, updateDoc, doc, addDoc, serverTimestamp } from 'firebase/firestore';
+import { initializeApp, cert, getApps } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
-// POST /api/payhero-callback — receives M-Pesa STK push result from PayHero
+// Lazy Firestore getter – initializes Admin only once
+function getFirestoreAdmin() {
+  if (getApps().length === 0) {
+    const projectId = process.env.FIREBASE_PROJECT_ID;
+    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+    // If you paste the private key as a multi-line string, the replace may not be needed.
+    // But it's safe: it replaces literal "\n" with actual newlines if present.
+    const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+
+    if (!projectId || !clientEmail || !privateKey) {
+      throw new Error(
+        'Firebase Admin environment variables missing. ' +
+        'Set FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, and FIREBASE_PRIVATE_KEY.'
+      );
+    }
+
+    initializeApp({
+      credential: cert({ projectId, clientEmail, privateKey }),
+    });
+  }
+  return getFirestore();
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    console.log('PayHero callback received:', body);
 
-    // PayHero sends: { status, reference, amount, phone, external_reference, ... }
-    const {
-      status,             // "Success" | "Failed"
-      reference,          // PayHero reference / M-Pesa receipt
-      amount,
-      phone_number,
-      external_reference, // This is our appointmentId
-      result_description,
-    } = body;
+    const { status, reference, external_reference } = body;
 
     if (!external_reference) {
-      return NextResponse.json({ error: 'No reference provided' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing external_reference' }, { status: 400 });
     }
 
-    const appointmentRef = doc(db as any, 'appointments', external_reference);
+    const db = getFirestoreAdmin();
+    const appointmentRef = db.collection('appointments').doc(external_reference);
 
-    if (status === 'Success') {
-      // Mark appointment as paid and generate receipt
-      await updateDoc(appointmentRef, {
-        paymentStatus: 'paid',
-        paymentRef: reference,
-        paymentReceipt: reference,
-        paymentPhone: phone_number,
-        paymentAmount: amount,
-        paidAt: serverTimestamp(),
-        status: 'booked',          // Confirmed once paid
-      });
+    await appointmentRef.update({
+      paymentStatus: status === 'success' ? 'paid' : 'failed',
+      paymentRef: reference || null,
+      paymentUpdatedAt: new Date().toISOString(),
+    });
 
-      // Create receipt document
-      await addDoc(collection(db as any, 'receipts'), {
-        appointmentId: external_reference,
-        reference,
-        amount,
-        phone: phone_number,
-        status: 'paid',
-        createdAt: serverTimestamp(),
-      });
-
-      // Create notification for patient
-      // Fetch appointment to get patientId
-      // (in production, use admin SDK for atomic ops)
-
-      return NextResponse.json({ success: true, message: 'Payment confirmed' });
-    } else {
-      // Payment failed — allow retry
-      await updateDoc(appointmentRef, {
-        paymentStatus: 'failed',
-        paymentFailReason: result_description || 'Payment declined',
-        updatedAt: serverTimestamp(),
-      });
-
-      return NextResponse.json({ success: false, message: 'Payment failed' });
+    // Optional: notify the doctor
+    if (status === 'success') {
+      const appointment = await appointmentRef.get();
+      if (appointment.exists) {
+        const data = appointment.data();
+        if (data?.doctorId) {
+          await db.collection('alerts').add({
+            doctorId: data.doctorId,
+            patientId: data.patientId,
+            title: 'Payment received',
+            body: `Payment of KES ${data.amount} confirmed.`,
+            severity: 'low',
+            read: false,
+            createdAt: new Date().toISOString(),
+          });
+        }
+      }
     }
-  } catch (error: any) {
+
+    return NextResponse.json({ received: true });
+  } catch (error) {
     console.error('PayHero callback error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
