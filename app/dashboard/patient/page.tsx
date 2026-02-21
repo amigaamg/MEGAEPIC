@@ -11,6 +11,135 @@ import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebas
 import { signOut, onAuthStateChanged, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { QRCodeSVG } from 'qrcode.react';
 
+
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ADD THESE TWO HELPERS near the top of your page.tsx (after imports)
+// They replace the raw fetch + res.json() calls and prevent the
+// "Unexpected token '<'" crash when the route returns an HTML error page.
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Safe JSON fetch — throws a readable Error if:
+ *  - The network fails
+ *  - The server returns HTML instead of JSON (route not found / server crash)
+ *  - The JSON body contains success: false
+ */
+async function safePost(url: string, payload: Record<string, any>): Promise<Record<string, any>> {
+  let res: Response;
+
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (networkErr: any) {
+    throw new Error("Network error — please check your connection.");
+  }
+
+  // Check Content-Type before calling .json() to avoid the HTML parse crash
+  const contentType = res.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    // Server returned HTML (404 page, 500 page, etc.)
+    const htmlSnippet = await res.text().catch(() => "");
+    console.error(`[safePost] ${url} returned non-JSON (${res.status}):`, htmlSnippet.slice(0, 200));
+    throw new Error(
+      res.status === 404
+        ? `API route not found: ${url} — check the file is at app/api/payhero/initiate/route.ts`
+        : `Server error ${res.status} — check server logs.`
+    );
+  }
+
+  const data = await res.json();
+
+  if (!res.ok || data.success === false) {
+    throw new Error(data.message ?? `Request failed with status ${res.status}`);
+  }
+
+  return data;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// REPLACE handlePay inside BookModal with this:
+// ═══════════════════════════════════════════════════════════════════════════
+
+/*
+  const handlePay = async (targetApptId?: string) => {
+    const id = targetApptId || apptId;
+
+    if (!phone.match(/^(07|01|\+2547|\+2541)\d{7,8}$/)) {
+      setError('Enter a valid Safaricom number (e.g. 0712345678)');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const data = await safePost('/api/payhero/initiate', {
+        phone,
+        amount: svc.price,
+        appointmentId: id,
+        patientName: patient.name,
+        specialty: svc.specialty,
+      });
+
+      // Optimistically update Firestore (callback will set the real status)
+      await updateDoc(doc(db, 'appointments', id), {
+        paymentRef: data.data?.reference || data.data?.CheckoutRequestID || '',
+        paymentStatus: 'processing',
+        phone,
+      });
+
+      setStep('done');
+    } catch (e: any) {
+      setError(e.message);
+      setExistingApptId(id);
+    }
+
+    setLoading(false);
+  };
+*/
+
+// ═══════════════════════════════════════════════════════════════════════════
+// REPLACE retryPay inside PaymentsPanel with this:
+// ═══════════════════════════════════════════════════════════════════════════
+
+/*
+  const retryPay = async (appt: Appointment) => {
+    if (!phone.match(/^(07|01|\+2547|\+2541)\d{7,8}$/)) {
+      setPayMsg('Enter valid Safaricom number');
+      return;
+    }
+
+    setPaying(appt.id);
+    setPayMsg('');
+
+    try {
+      const data = await safePost('/api/payhero/initiate', {
+        phone,
+        amount: appt.amount || 0,
+        appointmentId: appt.id,
+        patientName: patient.name,
+        specialty: appt.specialty || 'Consultation',
+      });
+
+      await updateDoc(doc(db, 'appointments', appt.id), {
+        paymentRef: data.data?.reference || data.data?.CheckoutRequestID || '',
+        paymentStatus: 'processing',
+        phone,
+      });
+
+      setPayMsg('✅ STK push sent! Check your phone for the M-Pesa prompt.');
+    } catch (e: any) {
+      setPayMsg('❌ ' + e.message);
+    }
+
+    setPaying(null);
+  };
+*/
 // ═══════════════════════════════════════════════════════════════════════════
 // TYPES
 // ═══════════════════════════════════════════════════════════════════════════

@@ -1,98 +1,94 @@
 // client/app/api/payhero-callback/route.ts
 //
 // PayHero posts to: https://epics-eyvx.onrender.com/api/payhero-callback
-// (matches PAYHERO_CALLBACK_URL in your .env)
 //
-// PayHero callback body shape:
+// Callback body PayHero sends:
 // {
 //   "status": "SUCCESS" | "FAILED",
-//   "external_reference": "<appointmentId you sent>",
-//   "reference": "<payhero internal ref>",
+//   "external_reference": "<appointmentId>",
+//   "reference": "<payhero ref>",
 //   "amount": 500,
 //   "phone_number": "2547XXXXXXXX",
 //   "transaction_date": "2024-01-01T12:00:00",
 //   "MpesaReceiptNumber": "RGH23XYZ",
-//   "description": "AMEXAN: Cardiology"
+//   "description": "AMEXAN: Consultation"
 // }
 
 import { NextRequest, NextResponse } from "next/server";
-import { adminDb } from "@/lib/firebase-admin";
+import { adminDb } from "@/lib/firebaseAdmin";
 
 export async function POST(req: NextRequest) {
-  // ── Always respond 200 immediately ────────────────────────────────────────
-  // PayHero will keep retrying if we respond slowly. We acknowledge first,
-  // then process asynchronously.
+  // ── ALWAYS respond 200 immediately ───────────────────────────────────
+  // PayHero retries until it gets 200. Acknowledge first, process after.
   let body: Record<string, any> = {};
-
   try {
     body = await req.json();
   } catch {
-    // Malformed body — still return 200 to stop retries
-    console.warn("PayHero callback: could not parse JSON body");
+    console.warn("⚠️  PayHero callback: empty or invalid body");
     return NextResponse.json({ received: true }, { status: 200 });
   }
 
-  console.log("📩 PayHero callback received:", JSON.stringify(body, null, 2));
+  console.log("📩 PayHero callback:", JSON.stringify(body, null, 2));
 
-  // Acknowledge PayHero immediately
-  const acknowledgement = NextResponse.json({ received: true }, { status: 200 });
+  // Process asynchronously so we return 200 instantly
+  void processCallback(body);
 
-  // ── Process in background (Edge/Node streaming safe) ─────────────────────
-  processCallback(body).catch((err) =>
-    console.error("❌ Callback processing error:", err.message)
-  );
-
-  return acknowledgement;
+  return NextResponse.json({ received: true }, { status: 200 });
 }
 
 async function processCallback(body: Record<string, any>) {
   const {
     status,
     external_reference: appointmentId,
-    reference: payheroReference,
+    reference:          payheroReference,
     amount,
-    phone_number: phone,
-    transaction_date: transactionDate,
+    phone_number:       phone,
+    transaction_date:   transactionDate,
     MpesaReceiptNumber: mpesaReceiptNumber,
     description,
   } = body;
 
   if (!appointmentId) {
-    console.warn("⚠️  Callback missing external_reference — cannot update Firestore");
+    console.warn("⚠️  Callback has no external_reference — skipping Firestore update");
     return;
   }
 
-  const isSuccess = String(status ?? "").toUpperCase() === "SUCCESS";
+  const isSuccess    = String(status ?? "").toUpperCase() === "SUCCESS";
   const paymentStatus = isSuccess ? "paid" : "failed";
 
-  const firestoreUpdate: Record<string, any> = {
+  const update: Record<string, any> = {
     paymentStatus,
-    paymentSettledAt: transactionDate ?? new Date().toISOString(),
-    payheroReference: payheroReference ?? null,
+    paymentSettledAt:   transactionDate ?? new Date().toISOString(),
+    payheroReference:   payheroReference   ?? null,
     mpesaReceiptNumber: mpesaReceiptNumber ?? null,
-    paymentCallbackRaw: body, // full payload for debugging
+    paymentCallbackRaw: body,
   };
 
   if (isSuccess) {
-    firestoreUpdate.paidAmount = amount ?? null;
-    firestoreUpdate.paidPhone = phone ?? null;
-    firestoreUpdate.paidDescription = description ?? null;
+    update.paidAmount      = amount      ?? null;
+    update.paidPhone       = phone       ?? null;
+    update.paidDescription = description ?? null;
+    update.paidAt          = new Date().toISOString();
+  } else {
+    update.paymentFailReason = body.failure_reason ?? body.ResultDesc ?? "Payment declined";
   }
 
-  // ── Update the appointment doc ────────────────────────────────────────────
-  await adminDb
-    .collection("appointments")
-    .doc(String(appointmentId))
-    .update(firestoreUpdate);
+  try {
+    // Update the appointment document
+    await adminDb
+      .collection("appointments")
+      .doc(String(appointmentId))
+      .update(update);
 
-  console.log(`✅ Appointment ${appointmentId} → paymentStatus: ${paymentStatus}`);
+    console.log(`✅ Appointment ${appointmentId} → ${paymentStatus}`);
 
-  // ── Write audit record to /payments collection ────────────────────────────
-  await adminDb.collection("payments").add({
-    appointmentId: String(appointmentId),
-    ...firestoreUpdate,
-    createdAt: new Date().toISOString(),
-  });
-
-  console.log(`📝 Payment audit record written for appointment ${appointmentId}`);
+    // Write audit record
+    await adminDb.collection("payments").add({
+      appointmentId: String(appointmentId),
+      ...update,
+      createdAt: new Date().toISOString(),
+    });
+  } catch (err: any) {
+    console.error("❌ Firestore update failed after callback:", err.message);
+  }
 }

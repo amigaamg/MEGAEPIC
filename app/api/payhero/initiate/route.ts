@@ -1,20 +1,16 @@
 // client/app/api/payhero/initiate/route.ts
-// ⚠️  Rename/move the current initiate.ts into this file:
-//     app/api/payhero/initiate/route.ts
+//
+// ⚠️  IMPORTANT — FILE LOCATION:
+//     The file MUST live at:  app/api/payhero/initiate/route.ts
+//     NOT at:                 app/api/payhero/initiate.ts
+//
+//     If initiate.ts exists alongside this folder, DELETE it — Next.js
+//     will try to serve the old file and return an HTML error page.
+
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
-import { adminDb } from "@/lib/firebase-admin";
-import { FieldValue } from "firebase-admin/firestore";
+import { adminDb } from "@/lib/firebaseAdmin";
 
-type RequestBody = {
-  phone: string;
-  amount: number;
-  appointmentId: string;
-  patientName: string;
-  specialty?: string;
-};
-
-/** Normalise any KE number → 254XXXXXXXXX */
+/** Normalise any KE number to 254XXXXXXXXX */
 function normalisePhone(raw: string): string {
   const digits = raw.replace(/\D/g, "");
   if (digits.startsWith("254")) return digits;
@@ -23,105 +19,136 @@ function normalisePhone(raw: string): string {
 }
 
 export async function POST(req: NextRequest) {
-  let body: RequestBody;
-
+  // ── Parse body safely ─────────────────────────────────────────────────
+  let body: Record<string, any>;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ message: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json(
+      { success: false, message: "Invalid JSON in request body" },
+      { status: 400 }
+    );
   }
 
   const { phone, amount, appointmentId, patientName, specialty } = body;
 
-  // ── Validate required fields ──────────────────────────────────────────────
+  // ── Validate required fields ──────────────────────────────────────────
   if (!phone || !amount || !appointmentId || !patientName) {
-    return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+    return NextResponse.json(
+      { success: false, message: "Missing required fields: phone, amount, appointmentId, patientName" },
+      { status: 400 }
+    );
   }
 
-  // ── Validate env vars ─────────────────────────────────────────────────────
+  // ── Validate env vars (fail fast with a clear message) ───────────────
   const channelId = Number(process.env.PAYHERO_CHANNEL_ID);
-  const auth = process.env.PAYHERO_AUTH;
+  const auth      = process.env.PAYHERO_AUTH;
   const callbackUrl = process.env.PAYHERO_CALLBACK_URL;
 
   if (!channelId || !auth || !callbackUrl) {
-    console.error("❌ PayHero env vars missing:", { channelId, auth: !!auth, callbackUrl });
-    return NextResponse.json({ message: "Payment gateway not configured" }, { status: 500 });
+    console.error("❌ PayHero env vars not set:", {
+      PAYHERO_CHANNEL_ID: !!process.env.PAYHERO_CHANNEL_ID,
+      PAYHERO_AUTH:       !!process.env.PAYHERO_AUTH,
+      PAYHERO_CALLBACK_URL: !!process.env.PAYHERO_CALLBACK_URL,
+    });
+    return NextResponse.json(
+      { success: false, message: "Payment gateway is not configured. Contact support." },
+      { status: 500 }
+    );
   }
 
-  const normalised = normalisePhone(phone);
+  const normalisedPhone = normalisePhone(phone);
 
-  // ── 1. Pre-flight Firestore write (pending) ───────────────────────────────
+  // ── 1. Write "pending" to Firestore before STK push ──────────────────
   try {
     await adminDb.collection("appointments").doc(appointmentId).set(
       {
         paymentStatus: "pending",
         paymentInitiatedAt: new Date().toISOString(),
-        patientPhone: normalised,
+        patientPhone: normalisedPhone,
         amount,
       },
       { merge: true }
     );
   } catch (err: any) {
-    console.error("Firestore pre-write failed:", err.message);
-    // non-fatal — still attempt STK push
+    // Non-fatal — log and continue
+    console.warn("Firestore pre-write warning:", err.message);
   }
 
-  // ── 2. Fire STK push ──────────────────────────────────────────────────────
+  // ── 2. Fire STK push ──────────────────────────────────────────────────
+  let payheroRes: Response;
   try {
-    const payheroRes = await axios.post(
-      "https://backend.payhero.co.ke/api/v2/payments",
-      {
+    payheroRes = await fetch("https://backend.payhero.co.ke/api/v2/payments", {
+      method: "POST",
+      headers: {
+        Authorization: auth,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         amount,
-        phone_number: normalised,
+        phone_number: normalisedPhone,
         channel_id: channelId,
         provider: "m-pesa",
-        external_reference: appointmentId,   // ← echoed back in the callback
+        external_reference: appointmentId,   // echoed in callback
         customer_name: patientName,
         description: `AMEXAN: ${specialty ?? "Consultation"}`,
         callback_url: callbackUrl,
-      },
-      {
-        headers: {
-          Authorization: auth,
-          "Content-Type": "application/json",
-        },
-        timeout: 30_000,
-      }
-    );
-
-    const data = payheroRes.data ?? {};
-    const payheroReference =
-      data.reference ?? data.CheckoutRequestID ?? data.checkout_request_id ?? null;
-
-    // ── 3. Save PayHero reference for reconciliation ──────────────────────
-    if (payheroReference) {
-      await adminDb
-        .collection("appointments")
-        .doc(appointmentId)
-        .update({ payheroReference });
-    }
-
-    console.log(`✅ STK push sent for appointment ${appointmentId}`, data);
-
-    return NextResponse.json({ success: true, data }, { status: 200 });
-  } catch (error: any) {
-    const errData = error.response?.data;
-    console.error("❌ STK Push Error:", errData ?? error.message);
-
-    // Roll back status so the UI can surface a retry
-    await adminDb
-      .collection("appointments")
-      .doc(appointmentId)
-      .update({ paymentStatus: "failed" })
+      }),
+      // @ts-ignore — Node 18+ supports signal
+      signal: AbortSignal.timeout(30_000),
+    });
+  } catch (err: any) {
+    console.error("❌ PayHero network error:", err.message);
+    await adminDb.collection("appointments").doc(appointmentId)
+      .update({ paymentStatus: "failed", paymentFailReason: err.message })
       .catch(() => {});
-
     return NextResponse.json(
-      {
-        success: false,
-        message: errData?.message ?? "STK push failed",
-        raw: errData,
-      },
-      { status: 500 }
+      { success: false, message: "Could not reach payment gateway. Please try again." },
+      { status: 502 }
     );
   }
+
+  // ── 3. Parse PayHero response ─────────────────────────────────────────
+  let payheroData: Record<string, any>;
+  try {
+    payheroData = await payheroRes.json();
+  } catch {
+    const raw = await payheroRes.text().catch(() => "");
+    console.error("❌ PayHero non-JSON response:", raw);
+    await adminDb.collection("appointments").doc(appointmentId)
+      .update({ paymentStatus: "failed", paymentFailReason: "Invalid response from gateway" })
+      .catch(() => {});
+    return NextResponse.json(
+      { success: false, message: "Unexpected response from payment gateway." },
+      { status: 502 }
+    );
+  }
+
+  if (!payheroRes.ok) {
+    const msg = payheroData?.message ?? `PayHero error ${payheroRes.status}`;
+    console.error("❌ STK push rejected:", payheroData);
+    await adminDb.collection("appointments").doc(appointmentId)
+      .update({ paymentStatus: "failed", paymentFailReason: msg })
+      .catch(() => {});
+    return NextResponse.json(
+      { success: false, message: msg, raw: payheroData },
+      { status: 400 }
+    );
+  }
+
+  // ── 4. Save PayHero reference for reconciliation ──────────────────────
+  const payheroReference =
+    payheroData?.reference ??
+    payheroData?.CheckoutRequestID ??
+    payheroData?.checkout_request_id ??
+    null;
+
+  if (payheroReference) {
+    await adminDb.collection("appointments").doc(appointmentId)
+      .update({ payheroReference, paymentStatus: "processing" })
+      .catch(() => {});
+  }
+
+  console.log(`✅ STK push sent — appointment: ${appointmentId}, ref: ${payheroReference}`);
+  return NextResponse.json({ success: true, data: payheroData }, { status: 200 });
 }
