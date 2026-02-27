@@ -485,7 +485,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
 // BOOK APPOINTMENT MODAL
 // ═══════════════════════════════════════════════════════════════════════════
 function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; onClose: () => void }) {
-  const [step, setStep] = useState<'slot'|'details'|'pay'|'done'>('slot');
+  const [step, setStep] = useState<'slot'|'details'|'pay'|'waiting'|'done'|'failed'>('slot');
   const [concern, setConcern] = useState('');
   const [phone, setPhone] = useState(patient.phone || '');
   const [selectedSlot, setSelectedSlot] = useState('');
@@ -493,31 +493,76 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [apptId, setApptId] = useState('');
-  const [retrying, setRetrying] = useState(false);
   const [existingApptId, setExistingApptId] = useState('');
+  const [pollSecs, setPollSecs] = useState(0);
+  const [isFirstVisit, setIsFirstVisit] = useState(false);
 
-  // Generate slots for next 7 days
+  const unsubRef = useRef<(() => void) | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Day names (if not already globally available)
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  // Slots and available days
   const slots = svc.availableSlots || ['09:00','09:30','10:00','10:30','11:00','11:30','14:00','14:30','15:00','15:30','16:00'];
   const next7Days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(); d.setDate(d.getDate() + 1 + i);
     const dayName = dayNames[d.getDay()];
     const isAvailable = !svc.availableDays?.length || svc.availableDays.includes(dayName);
-    return { date: d, key: d.toISOString().slice(0, 10), label: `${dayName} ${d.getDate()}`, available: isAvailable };
+    return { date: d, key: d.toISOString().slice(0,10), label: `${dayName} ${d.getDate()}`, available: isAvailable };
   }).filter(d => d.available);
+
+  // Cleanup listeners on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (unsubRef.current) unsubRef.current();
+    };
+  }, []);
+
+  const stopPolling = () => {
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+    if (unsubRef.current) { unsubRef.current(); unsubRef.current = null; }
+  };
+
+  const startPolling = (id: string) => {
+    let secs = 0;
+    timerRef.current = setInterval(() => {
+      secs += 1;
+      setPollSecs(secs);
+      if (secs >= 120) {
+        stopPolling();
+        setStep('failed');
+        setError('Payment timed out after 2 minutes. Your booking is saved — tap Retry to try again.');
+      }
+    }, 1000);
+
+    unsubRef.current = onSnapshot(doc(db, 'appointments', id), (snap) => {
+      const status = snap.data()?.paymentStatus;
+      if (status === 'paid') {
+        stopPolling();
+        setStep('done');
+      } else if (status === 'failed') {
+        stopPolling();
+        setStep('failed');
+        setError('M-Pesa payment was declined. Tap Retry to try again.');
+      }
+    });
+  };
 
   const handleBook = async () => {
     if (!concern.trim()) { setError('Please describe your concern.'); return; }
     if (!selectedSlot || !selectedDate) { setError('Please select a date and time.'); return; }
     setLoading(true); setError('');
     try {
-      // Check if patient has previously visited this doctor
       const prevVisits = await getDocs(query(
         collection(db, 'appointments'),
         where('patientId', '==', patient.uid),
         where('doctorId', '==', svc.doctorId),
         where('status', 'in', ['completed', 'booked'])
       ));
-      const isFirstVisit = prevVisits.empty;
+      const firstVisit = prevVisits.empty;
+      setIsFirstVisit(firstVisit);
       const scheduledDateTime = new Date(`${selectedDate}T${selectedSlot}:00`);
 
       const ref = await addDoc(collection(db, 'appointments'), {
@@ -529,7 +574,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
         scheduledTime: selectedSlot,
         patientNotes: concern, prescriptions: [], notes: '',
         paymentStatus: 'pending', amount: svc.price, type: 'telemedicine',
-        firstVisit: isFirstVisit,
+        firstVisit: firstVisit,
       });
       setApptId(ref.id);
       setStep('pay');
@@ -538,49 +583,45 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
   };
 
   const handlePay = async (targetApptId?: string) => {
-  const id = targetApptId || apptId;
+    const id = targetApptId || apptId;
+    if (!id) { setError('No appointment found. Please start over.'); return; }
+    if (loading) return;
 
-  // Validate Safaricom number
-  if (!phone.match(/^(07|01|\+2547|\+2541)\d{7,8}$/)) {
-    setError('Enter a valid Safaricom number (e.g. 0712345678)');
-    return;
-  }
+    if (!/^(?:254|0)?(7|1)\d{8}$/.test(phone.replace(/\D/g, ""))) {
+      setError("Enter a valid Safaricom number (e.g. 0712345678)");
+      return;
+    }
 
-  setLoading(true);
-  setError('');
+    setLoading(true); setError(''); setPollSecs(0);
 
-  try {
-    // Call server-side API instead of client-side initiateSTK
-    const res = await fetch('/api/payhero/initiate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      const data = await safePost("/api/payhero/initiate", {
+        phone, amount: svc.price, appointmentId: id,
+        patientName: patient.name, specialty: svc.specialty,
+      });
+
+      if (!data?.success) throw new Error(data?.message || "Payment initiation failed");
+
+      await updateDoc(doc(db, "appointments", id), {
+        paymentStatus: "processing",
+        paymentInitiatedAt: new Date().toISOString(),
         phone,
-        amount: svc.price,
-        appointmentId: id,
-        patientName: patient.name,
-        specialty: svc.specialty,
-      }),
-    });
+        payheroReference: data.data?.reference || data.data?.CheckoutRequestID || data.data?.checkout_request_id || "",
+      });
 
-    const data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.message || 'STK push failed');
+      setExistingApptId(id);
+      setStep("waiting");
+      startPolling(id);
+    } catch (e: any) {
+      setError(e?.message || "Could not initiate payment. Check network or try again.");
+      setExistingApptId(id);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    // Update Firestore with payment reference
-    await updateDoc(doc(db, 'appointments', id), {
-      paymentRef: data.data?.reference || data.data?.CheckoutRequestID || '',
-      paymentStatus: 'processing',
-      phone,
-    });
-
-    setStep('done');
-  } catch (e: any) {
-    setError(e.message);
-    setExistingApptId(id); // Allow retry
-  }
-
-  setLoading(false);
-};
+  // Helper for progress bar step index
+  const stepIdx = step === 'slot' ? 0 : step === 'details' ? 1 : step === 'pay' || step === 'waiting' ? 2 : step === 'done' ? 3 : 2;
 
   return (
     <div className="overlay" onClick={onClose}>
@@ -592,20 +633,23 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
           </div>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
-        {/* Steps bar */}
-        <div className="steps-bar">
-          {['Date & Time','Details','Payment','Confirmed'].map((s, i) => {
-            const stepIdx = step === 'slot' ? 0 : step === 'details' ? 1 : step === 'pay' ? 2 : 3;
-            return (
+
+        {/* Progress bar (hidden on done/failed) */}
+        {step !== 'done' && step !== 'failed' && (
+          <div className="steps-bar">
+            {['Date & Time','Details','Payment','Confirmed'].map((s, i) => (
               <div key={s} className="step-wrap">
-                <div className={`step-num ${i <= stepIdx ? 'step-on' : ''}`}>{i < stepIdx ? '✓' : i + 1}</div>
+                <div className={`step-num ${i <= stepIdx ? 'step-on' : ''}`}>
+                  {i < stepIdx ? '✓' : i + 1}
+                </div>
                 <span className="step-text">{s}</span>
                 {i < 3 && <div className={`step-line ${i < stepIdx ? 'step-line-on' : ''}`} />}
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
 
+        {/* STEP: Date & Time */}
         {step === 'slot' && (
           <div className="modal-body">
             <div className="field-col">
@@ -642,6 +686,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
           </div>
         )}
 
+        {/* STEP: Details */}
         {step === 'details' && (
           <div className="modal-body">
             <div className="booking-summary">
@@ -665,6 +710,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
           </div>
         )}
 
+        {/* STEP: Payment */}
         {step === 'pay' && (
           <div className="modal-body">
             <div className="pay-center">
@@ -697,18 +743,76 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
           </div>
         )}
 
+        {/* STEP: Waiting for payment */}
+        {step === 'waiting' && (
+          <div className="modal-body" style={{ textAlign: 'center', padding: '24px 20px' }}>
+            <div style={{ position: 'relative', width: 70, height: 70, margin: '0 auto 16px' }}>
+              <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '3px solid #e2e8f0' }} />
+              <div style={{
+                position: 'absolute', inset: 0, borderRadius: '50%',
+                border: '3px solid transparent',
+                borderTopColor: '#0aaa76', borderRightColor: '#0aaa76',
+                animation: 'spin 0.9s linear infinite',
+              }} />
+              <div style={{ position: 'absolute', inset: 10, background: '#0aaa76', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>📱</div>
+            </div>
+            <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+            <h4 style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>Check your phone</h4>
+            <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+              We sent an M-Pesa prompt to <strong>{phone}</strong>.<br />
+              Enter your PIN to confirm payment.
+            </p>
+            <div style={{ background: '#f1f5f9', borderRadius: 12, padding: 12, marginBottom: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#334155', marginBottom: 6 }}>
+                <span>Waiting time</span>
+                <span>{Math.floor(pollSecs / 60)}:{String(pollSecs % 60).padStart(2,'0')} / 2:00</span>
+              </div>
+              <div style={{ height: 6, background: '#cbd5e1', borderRadius: 3, overflow: 'hidden' }}>
+                <div style={{ width: `${(pollSecs / 120) * 100}%`, height: '100%', background: '#0aaa76', transition: 'width 1s linear' }} />
+              </div>
+            </div>
+            <button className="btn-secondary" onClick={() => { stopPolling(); setStep('pay'); setError(''); }}>
+              ← Didn't get the prompt?
+            </button>
+          </div>
+        )}
+
+        {/* STEP: Done (success) */}
         {step === 'done' && (
           <div className="modal-body" style={{ textAlign: 'center', padding: '32px 22px' }}>
             <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
             <h4 style={{ fontWeight: 800, fontSize: 20, color: 'var(--text)', marginBottom: 10 }}>Appointment Booked!</h4>
             <p style={{ color: 'var(--text2)', fontSize: 14, lineHeight: 1.8, marginBottom: 8 }}>
-              Payment is being processed. Dr. {svc.doctorName} will be available on<br />
+              Payment confirmed. Dr. {svc.doctorName} will be available on<br />
               <strong>{new Date(selectedDate).toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })} at {selectedSlot}</strong>
             </p>
+            {isFirstVisit && (
+              <span style={{ display: 'inline-block', background: '#fef9c3', color: '#854d0e', borderRadius: 20, padding: '4px 12px', fontSize: 12, fontWeight: 700, marginBottom: 12 }}>⭐ First Visit</span>
+            )}
             <p style={{ color: 'var(--accent)', fontSize: 13, marginBottom: 28 }}>
               A receipt will appear in Payments once confirmed.
             </p>
             <button className="btn-cta" onClick={onClose}>Done</button>
+          </div>
+        )}
+
+        {/* STEP: Failed */}
+        {step === 'failed' && (
+          <div className="modal-body" style={{ textAlign: 'center', padding: '24px 20px' }}>
+            <div style={{ fontSize: 48, marginBottom: 12 }}>❌</div>
+            <h4 style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>Payment Unsuccessful</h4>
+            <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+              {error || 'Your M-Pesa payment could not be completed.'}
+            </p>
+            <div style={{ background: '#fef9c3', borderRadius: 10, padding: 12, marginBottom: 16, fontSize: 13, color: '#854d0e' }}>
+              ⏳ Your appointment slot is still reserved. You can retry without losing your date and time.
+            </div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button className="btn-secondary" onClick={onClose} style={{ flex: 1 }}>Cancel</button>
+              <button className="btn-cta" onClick={() => { stopPolling(); setStep('pay'); setError(''); }} style={{ flex: 2 }}>
+                🔄 Retry Payment
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -1075,50 +1179,37 @@ function PaymentsPanel({ appointments, patient }: { appointments: Appointment[];
   const pending = appointments.filter(a => a.paymentStatus === 'pending' || a.paymentStatus === 'failed');
   const paid = appointments.filter(a => a.paymentStatus === 'paid');
 
-  const retryPay = async (appt: Appointment) => {
-  // Validate Safaricom number
-  if (!phone.match(/^(07|01|\+2547|\+2541)\d{7,8}$/)) {
-    setPayMsg('Enter valid Safaricom number');
-    return;
-  }
+ const retryPay = async (appt: Appointment) => {
+    if (!phone.match(/^(07|01|\+2547|\+2541)\d{7,8}$/)) {
+      setPayMsg('Enter valid Safaricom number');
+      return;
+    }
 
-  setPaying(appt.id);
-  setPayMsg('');
+    setPaying(appt.id);
+    setPayMsg('');
 
-  try {
-    // Call server-side API route
-    const res = await fetch('/api/payhero/initiate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      const data = await safePost('/api/payhero/initiate', {
         phone,
         amount: appt.amount || 0,
         appointmentId: appt.id,
         patientName: patient.name,
         specialty: appt.specialty || 'Consultation',
-      }),
-    });
+      });
 
-    const data = await res.json();
+      await updateDoc(doc(db, 'appointments', appt.id), {
+        paymentRef: data.data?.reference || data.data?.CheckoutRequestID || '',
+        paymentStatus: 'processing',
+        phone,
+      });
 
-    if (!res.ok || !data.success) {
-      throw new Error(data.message || 'STK push failed');
+      setPayMsg('✅ STK push sent! Check your phone for the M-Pesa prompt.');
+    } catch (e: any) {
+      setPayMsg('❌ ' + e.message);
     }
 
-    // Update Firestore
-    await updateDoc(doc(db, 'appointments', appt.id), {
-      paymentRef: data.data?.reference || data.data?.CheckoutRequestID || '',
-      paymentStatus: 'processing',
-      phone,
-    });
-
-    setPayMsg('STK push sent! Check your phone.');
-  } catch (e: any) {
-    setPayMsg('Error: ' + e.message);
-  }
-
-  setPaying(null);
-};
+    setPaying(null);
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

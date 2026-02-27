@@ -1,52 +1,39 @@
-// client/lib/firebaseAdmin.ts
-//
-// KEY DESIGN: Nothing runs at module import time.
-// getAdminDb() is called INSIDE route handlers only → safe during build.
+/**
+ * client/lib/firebaseAdmin.ts
+ *
+ * Firebase Admin SDK — singleton initialisation.
+ * Server-only. Never import this in client components.
+ *
+ * Your .env.local already has the correct vars:
+ *   FIREBASE_PROJECT_ID=telemed-a98cf
+ *   FIREBASE_CLIENT_EMAIL=firebase-adminsdk-fbsvc@telemed-a98cf.iam.gserviceaccount.com
+ *   FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n..."
+ */
 
-import { initializeApp, cert, getApps, App } from "firebase-admin/app";
-import { getFirestore, Firestore } from "firebase-admin/firestore";
+import * as admin from "firebase-admin";
 
-let _app: App | null = null;
-let _db: Firestore | null = null;
+function getAdminApp(): admin.app.App {
+  // Reuse across hot-reloads in Next.js dev mode
+  if (admin.apps.length > 0) return admin.apps[0]!;
 
-function createApp(): App {
-  if (_app) return _app;
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+  if (!privateKey) throw new Error("FIREBASE_PRIVATE_KEY is not set in .env.local");
 
-  const projectId   = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const rawKey      = process.env.FIREBASE_PRIVATE_KEY;
-
-  if (!projectId || !clientEmail || !rawKey) {
-    throw new Error(
-      `Firebase Admin env vars missing at runtime.\n` +
-      `FIREBASE_PROJECT_ID:   ${projectId   ? "✓" : "✗ MISSING"}\n` +
-      `FIREBASE_CLIENT_EMAIL: ${clientEmail ? "✓" : "✗ MISSING"}\n` +
-      `FIREBASE_PRIVATE_KEY:  ${rawKey      ? "✓" : "✗ MISSING"}`
-    );
-  }
-
-  // Normalise the private key regardless of how Render stored it
-  const privateKey = rawKey
-    .replace(/^["']|["']$/g, "") // strip any wrapping quotes
-    .replace(/\\n/g, "\n");      // literal \n → real newline
-
-  if (!privateKey.includes("BEGIN PRIVATE KEY")) {
-    throw new Error(
-      "FIREBASE_PRIVATE_KEY does not look like a valid PEM key. " +
-      "Check the value in your Render environment variables."
-    );
-  }
-
-  _app = getApps().length === 0
-    ? initializeApp({ credential: cert({ projectId, clientEmail, privateKey }) })
-    : getApps()[0];
-
-  return _app;
+  return admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId:   process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      // .env.local escapes newlines as \n — restore real newlines here
+      privateKey:  privateKey.replace(/\\n/g, "\n"),
+    }),
+  });
 }
 
-/** Call this inside route handlers — never at the top level of a module */
-export function getAdminDb(): Firestore {
-  if (_db) return _db;
-  _db = getFirestore(createApp());
-  return _db;
+/** Call inside API route handlers only — never at module top-level */
+export function getAdminDb(): admin.firestore.Firestore {
+  return getAdminApp().firestore();
+}
+
+export function getAdminAuth(): admin.auth.Auth {
+  return getAdminApp().auth();
 }
