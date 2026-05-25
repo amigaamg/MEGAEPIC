@@ -114,6 +114,7 @@ export default function DiagnosticCommandCenter({
   const [intRecommendation, setIntRecommendation] = useState('');
   const [intSaving, setIntSaving] = useState(false);
   const [panelValues, setPanelValues] = useState<Record<string, string>>({});
+  const [expandedInvId, setExpandedInvId] = useState<string | null>(null);
 
   /* Sync panelValues ←→ intFindings when interpreting order changes */
   const syncPanelFromFindings = useCallback((findings: string) => {
@@ -194,6 +195,18 @@ export default function DiagnosticCommandCenter({
   const pendingOrders = useMemo(() => workspaceOrders.filter((o: any) => o.status !== 'resulted' && o.status !== 'reviewed' && o.status !== 'closed'), [workspaceOrders]);
   const resultedOrders = useMemo(() => workspaceOrders.filter((o: any) => o.status === 'resulted' || o.status === 'reviewed' || o.status === 'closed'), [workspaceOrders]);
   const awaitingReview = useMemo(() => workspaceOrders.filter((o: any) => (o.uploadUrl || o.fileUrl) && !o.interpreted), [workspaceOrders]);
+
+  /* ── Workspace-specific counts ── */
+  const wsCounts = useMemo(() => {
+    const total = workspaceOrders.length;
+    const needUpload = workspaceOrders.filter((o: any) => !(o.uploadUrl || o.fileUrl)).length;
+    const uploaded = workspaceOrders.filter((o: any) => (o.uploadUrl || o.fileUrl) && !o.interpreted).length;
+    const reviewed = workspaceOrders.filter((o: any) => o.interpreted).length;
+    const pending = workspaceOrders.filter((o: any) => o.status !== 'resulted' && o.status !== 'reviewed' && o.status !== 'closed').length;
+    const abnormal = workspaceOrders.filter((o: any) => o.structuredResults?.some((sr: any) => sr.flag?.toLowerCase() === 'critical')).length;
+    const unreadMessages = wsMessages.filter((m: any) => m.senderRole !== 'doctor').length;
+    return { total, needUpload, uploaded, reviewed, pending, abnormal, unreadMessages };
+  }, [workspaceOrders, wsMessages]);
 
   /* ── Inbox items ── */
   const inboxItems = useMemo(() => {
@@ -640,236 +653,282 @@ export default function DiagnosticCommandCenter({
     }
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {/* Workspace header */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {/* ═══ 1. COMPACT WORKSPACE HEADER ═══ */}
         <div style={{
-          background: 'var(--white)', borderRadius: 12, border: '1px solid var(--border)', padding: 14,
+          background: 'var(--white)', borderRadius: 12, border: '1px solid var(--border)', padding: 12,
           borderLeft: `4px solid ${activeWorkspace.urgency === 'stat' ? '#dc2626' : activeWorkspace.urgency === 'urgent' ? '#f97316' : '#0F766E'}`,
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 8 }}>
-            <div>
-              <div style={{ fontSize: 16, fontWeight: 800, display: 'flex', alignItems: 'center', gap: 6 }}>
-                {activeWorkspace.name}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 16, fontWeight: 800 }}>{activeWorkspace.name}</span>
+              <span style={{
+                fontSize: 9, fontWeight: 700, padding: '1px 8px', borderRadius: 99,
+                background: activeWorkspace.status === 'active' ? '#f0fdf4' : '#fefce8',
+                color: activeWorkspace.status === 'active' ? '#16a34a' : '#ca8a04',
+              }}>{activeWorkspace.status}</span>
+              {activeWorkspace.urgency !== 'routine' && (
                 <span style={{
-                  fontSize: 9, fontWeight: 700, padding: '1px 8px', borderRadius: 99,
-                  background: activeWorkspace.status === 'active' ? '#f0fdf4' : '#fefce8',
-                  color: activeWorkspace.status === 'active' ? '#16a34a' : '#ca8a04',
-                }}>{activeWorkspace.status}</span>
-                {activeWorkspace.urgency !== 'routine' && (
-                  <span style={{
-                    fontSize: 9, fontWeight: 800, padding: '1px 8px', borderRadius: 4,
-                    background: activeWorkspace.urgency === 'stat' ? '#dc2626' : '#f97316', color: '#fff',
-                  }}>{activeWorkspace.urgency.toUpperCase()}</span>
-                )}
-              </div>
-              {activeWorkspace.clinicalProblem && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>🧠 {activeWorkspace.clinicalProblem}</div>}
+                  fontSize: 9, fontWeight: 800, padding: '1px 8px', borderRadius: 4,
+                  background: activeWorkspace.urgency === 'stat' ? '#dc2626' : '#f97316', color: '#fff',
+                }}>{activeWorkspace.urgency.toUpperCase()}</span>
+              )}
             </div>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 4 }}>
               <button onClick={() => { setOrderWorkspaceId(activeWorkspace.id); setOrderType('lab'); setShowOrderModal(true); setOrderStep(1); }} style={{
-                background: '#0F766E', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
-              }}>🧪 Order Lab</button>
+                background: '#0F766E', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
+              }}>🧪 Lab</button>
               <button onClick={() => { setOrderWorkspaceId(activeWorkspace.id); setOrderType('imaging'); setShowOrderModal(true); setOrderStep(1); }} style={{
-                background: '#7c3aed', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
-              }}>🩻 Order Imaging</button>
+                background: '#7c3aed', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
+              }}>🩻 Imaging</button>
               <button onClick={() => {
                 const noUpload = pendingOrders.filter((o: any) => !(o.uploadUrl || o.fileUrl));
-                if (noUpload.length > 0) { openUploadcareForDoctor(noUpload[0]); }
-                else { alert('No pending orders to upload for. Place an order first.'); }
+                if (noUpload.length > 0) openUploadcareForDoctor(noUpload[0]);
+                else alert('No pending orders to upload for.');
               }} disabled={doctorUploading} style={{
-                background: '#059669', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
+                background: '#059669', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
                 opacity: doctorUploading ? 0.6 : 1,
-              }}>{doctorUploading ? '⌛' : '📤 Upload Result'}</button>
+              }}>{doctorUploading ? '⌛' : '📤'}</button>
+              <button onClick={() => printForm(allOrders.find((o:any) => o.workspaceId === activeWorkspace.id))} style={{
+                background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 10px', fontSize: 10, cursor: 'pointer', fontFamily: 'var(--font)',
+              }}>🖨</button>
             </div>
           </div>
-
-          {/* Clinical context chips */}
-          <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
-            {activeWorkspace.suspectedDiagnoses?.map((d: string, i: number) => (
-              <span key={i} style={{ fontSize: 10, fontWeight: 600, background: '#fefce8', color: '#ca8a04', borderRadius: 99, padding: '2px 8px' }}>🏷 {d}</span>
-            ))}
-          </div>
-          {/* ── Smart overview counts strip ── */}
-          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 6 }}>
+          {activeWorkspace.clinicalProblem && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>🧠 {activeWorkspace.clinicalProblem}</div>}
+          {activeWorkspace.suspectedDiagnoses?.length > 0 && (
+            <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
+              {activeWorkspace.suspectedDiagnoses.map((d: string, i: number) => (
+                <span key={i} style={{ fontSize: 9, fontWeight: 600, background: '#fefce8', color: '#ca8a04', borderRadius: 99, padding: '1px 6px' }}>🏷 {d}</span>
+              ))}
+            </div>
+          )}
+          {/* Counts strip */}
+          <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', marginTop: 6 }}>
             {[
-              { label: 'Total', count: wsSummary.find(s => s.id === activeWorkspace.id)?.total || 0, icon: '📊', color: '#475569' },
-              { label: 'Pending', count: wsSummary.find(s => s.id === activeWorkspace.id)?.pending || 0, icon: '⏳', color: '#ca8a04' },
-              { label: 'Unreviewed', count: wsSummary.find(s => s.id === activeWorkspace.id)?.unreviewed || 0, icon: '📎', color: '#f97316' },
-              { label: 'Critical', count: wsSummary.find(s => s.id === activeWorkspace.id)?.critical || 0, icon: '🚨', color: '#dc2626' },
+              { label: 'Investigations', count: wsCounts.total, icon: '📊', color: '#475569' },
+              { label: 'Pending', count: wsCounts.pending, icon: '⏳', color: '#ca8a04' },
+              { label: 'Awaiting Review', count: wsCounts.uploaded, icon: '📎', color: '#f97316' },
+              { label: 'Results', count: wsCounts.reviewed, icon: '✅', color: '#16a34a' },
+              { label: 'Unread Messages', count: wsCounts.unreadMessages, icon: '💬', color: '#2563eb' },
+              { label: 'Abnormal', count: wsCounts.abnormal, icon: '🚨', color: '#dc2626' },
             ].map(s => (
-              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 3, background: '#f8fafc', borderRadius: 6, padding: '2px 8px', border: '1px solid #e2e8f0' }}>
-                <span style={{ fontSize: 10 }}>{s.icon}</span>
-                <span style={{ fontSize: 12, fontWeight: 800, color: s.color }}>{s.count}</span>
-                <span style={{ fontSize: 9, color: 'var(--muted)' }}>{s.label}</span>
+              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 2, background: '#f8fafc', borderRadius: 6, padding: '2px 7px', border: '1px solid #e2e8f0' }}>
+                <span style={{ fontSize: 9 }}>{s.icon}</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: s.color }}>{s.count}</span>
+                <span style={{ fontSize: 8, color: 'var(--muted)' }}>{s.label}</span>
               </div>
             ))}
           </div>
-
-          {/* Clinical questions */}
           {activeWorkspace.clinicalQuestions?.length > 0 && (
-            <div style={{ marginTop: 8, padding: '6px 10px', background: '#eff6ff', borderRadius: 6, fontSize: 11, color: '#1e40af' }}>
+            <div style={{ marginTop: 4, padding: '4px 8px', background: '#eff6ff', borderRadius: 6, fontSize: 10, color: '#1e40af' }}>
               <strong>Clinical questions:</strong> {activeWorkspace.clinicalQuestions.join(' · ')}
             </div>
           )}
         </div>
 
-        {/* Awaiting review alert */}
+        {/* ═══ 2. AWAITING REVIEW ═══ */}
         {awaitingReview.length > 0 && (
-          <div style={{ background: '#fef2f2', border: '1.5px solid #dc262630', borderRadius: 10, padding: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#dc2626', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ background: '#fef2f2', border: '1.5px solid #dc262630', borderRadius: 10, padding: 10 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: '#dc2626', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
               📎 {awaitingReview.length} Result{awaitingReview.length > 1 ? 's' : ''} Awaiting Review
-              <button onClick={() => {
-                const first = awaitingReview[0];
-                setInterpretingOrderId(first.id);
-                setIntFindings(first.structuredResults?.map((sr: any) => `${sr.test}, ${sr.value}, ${sr.unit}, ${sr.flag}`).join('\n') || '');
-                setIntImpression(first.interpretationImpression || '');
-                setIntRecommendation(first.interpretationRecommendation || '');
-              }} style={{ fontSize: 9, background: '#dc2626', color: '#fff', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer', fontFamily: 'var(--font)', fontWeight: 700 }}>
-                Review All
-              </button>
             </div>
-            {awaitingReview.slice(0, 3).map((o: any) => (
-              <div key={o.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #dc262610', gap: 8 }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: 12 }}>{o._type === 'imaging' ? '🩻' : '🧪'} {(o.tests || []).join(', ')}</div>
-                  <div style={{ fontSize: 10, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</div>
+            {awaitingReview.map((o: any) => (
+              <div key={o.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0', borderBottom: '1px solid #dc262610', gap: 6 }}>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontWeight: 600, fontSize: 11 }}>{o._type === 'imaging' ? '🩻' : '🧪'} {(o.tests || []).join(', ')}</span>
+                  <span style={{ fontSize: 9, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</span>
                 </div>
-                <a href={o.uploadUrl || o.fileUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: '#2563eb', textDecoration: 'underline' }}>View</a>
-                <button onClick={() => { const f = o.structuredResults?.map((sr: any) => `${sr.test}, ${sr.value}, ${sr.unit}, ${sr.flag}`).join('\n') || ''; setInterpretingOrderId(o.id); setIntPanelOrder(o); setIntFindings(f); syncPanelFromFindings(f); setIntImpression(o.interpretationImpression || ''); setIntRecommendation(o.interpretationRecommendation || ''); setShowIntPanel(true); }} style={{
-                  background: '#059669', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
-                }}>Interpret</button>
+                <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                  {o.uploadUrl && <a href={o.uploadUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, color: '#2563eb' }}>View</a>}
+                  <button onClick={() => {
+                    const f = o.structuredResults?.map((sr: any) => `${sr.test}, ${sr.value}, ${sr.unit}, ${sr.flag}`).join('\n') || '';
+                    setInterpretingOrderId(o.id); setIntPanelOrder(o); setIntFindings(f); syncPanelFromFindings(f);
+                    setIntImpression(o.interpretationImpression || ''); setIntRecommendation(o.interpretationRecommendation || '');
+                    setShowIntPanel(true);
+                  }} style={{ background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: '3px 8px', fontSize: 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)' }}>Interpret</button>
+                </div>
               </div>
             ))}
-            {awaitingReview.length > 3 && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>+{awaitingReview.length - 3} more</div>}
           </div>
         )}
 
-        {/* Pending orders */}
-        {pendingOrders.filter((o: any) => !(o.uploadUrl || o.fileUrl)).length > 0 && (
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 6 }}>⏳ Active Orders ({pendingOrders.length})</div>
-            {pendingOrders.filter((o: any) => !(o.uploadUrl || o.fileUrl)).map((o: any, pIdx: number) => (
-              <div key={o.id} style={{
-                background: 'var(--white)', borderRadius: 10, padding: '10px 14px', marginBottom: 6,
-                border: o.urgency === 'stat' ? '1.5px solid #dc262640' : o.urgency === 'urgent' ? '1.5px solid #f9731640' : '1px solid var(--border)',
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      {o._type === 'imaging' ? '🩻' : '🧪'} #{pIdx + 1} {(o.tests || []).join(', ')}
-                      {o.urgency === 'stat' && <span style={{ fontSize: 8, fontWeight: 800, color: '#fff', background: '#dc2626', borderRadius: 4, padding: '1px 5px' }}>STAT</span>}
-                      {o.urgency === 'urgent' && <span style={{ fontSize: 8, fontWeight: 800, color: '#fff', background: '#f97316', borderRadius: 4, padding: '1px 5px' }}>URGENT</span>}
-                      {o.recurrence && <span style={{ fontSize: 8, fontWeight: 800, color: '#fff', background: '#0F766E', borderRadius: 4, padding: '1px 5px' }}>🔄 {o.recurrence}×{o.recurrenceCount || 3}</span>}
+        {/* ═══ 3. INVESTIGATIONS (Collapsible Tree) ═══ */}
+        {(() => {
+          const active = pendingOrders.filter((o: any) => !(o.uploadUrl || o.fileUrl));
+          if (active.length === 0) return null;
+          return (
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span>⏳ Investigations ({active.length})</span>
+                <span style={{ fontSize: 9, fontWeight: 400, color: 'var(--muted)', textTransform: 'none' }}>
+                  — awaiting results
+                </span>
+              </div>
+              {active.map((o: any) => {
+                const isExpanded = expandedInvId === o.id;
+                return (
+                  <div key={o.id} style={{
+                    background: 'var(--white)', borderRadius: 8, marginBottom: 4,
+                    border: o.urgency === 'stat' ? '1.5px solid #dc262640' : o.urgency === 'urgent' ? '1.5px solid #f9731640' : '1px solid var(--border)',
+                    overflow: 'hidden',
+                  }}>
+                    {/* Collapsed row */}
+                    <div onClick={() => setExpandedInvId(isExpanded ? null : o.id)} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '8px 10px', cursor: 'pointer',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
+                        <span style={{ fontSize: 10, color: 'var(--muted)', transform: isExpanded ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }}>▶</span>
+                        <span style={{ fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {o._type === 'imaging' ? '🩻' : '🧪'} {(o.tests || []).join(', ')}
+                        </span>
+                        {o.urgency === 'stat' && <span style={{ fontSize: 7, fontWeight: 800, color: '#fff', background: '#dc2626', borderRadius: 3, padding: '0 4px' }}>STAT</span>}
+                        {o.urgency === 'urgent' && <span style={{ fontSize: 7, fontWeight: 800, color: '#fff', background: '#f97316', borderRadius: 3, padding: '0 4px' }}>URGENT</span>}
+                        {o.recurrence && <span style={{ fontSize: 7, fontWeight: 800, color: '#fff', background: '#0F766E', borderRadius: 3, padding: '0 4px' }}>🔄×{o.recurrenceCount || 3}</span>}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                        <span style={{
+                          fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 99,
+                          background: o.status === 'processing' ? '#fefce8' : o.status === 'collected' ? '#eff6ff' : '#f0fdf4',
+                          color: o.status === 'processing' ? '#ca8a04' : o.status === 'collected' ? '#2563eb' : '#16a34a',
+                        }}>{o.status}</span>
+                        <span style={{ fontSize: 9, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</span>
+                      </div>
                     </div>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{fmtDate(o.createdAt)} · {o.doctorName || doctorName}</div>
-                    {o.clinicalIndication && <div style={{ fontSize: 11, color: 'var(--text)', fontStyle: 'italic', marginTop: 2 }}>💡 {o.clinicalIndication}</div>}
-                    {/* Pipeline dots */}
-                    <div style={{ display: 'flex', gap: 3, marginTop: 4 }}>
-                      {(o._type === 'imaging' ? IMG_PIPELINE : LAB_PIPELINE).map((step: string) => {
-                        const statuses = ['ordered', 'collected', 'processing', 'resulted', 'reviewed'];
-                        const idx = statuses.indexOf(o.status);
-                        const stepIdx = statuses.indexOf(step);
-                        const done = stepIdx <= idx;
-                        return (
-                          <div key={step} style={{
-                            width: 8, height: 8, borderRadius: '50%', background: done ? '#059669' : 'var(--border)',
-                            opacity: done ? 1 : 0.5,
-                          }} title={step} />
-                        );
-                      })}
-                      <span style={{ fontSize: 8, color: 'var(--muted)', marginLeft: 4 }}>{o.status}</span>
-                    {o.facilityName && <span style={{ fontSize: 8, color: 'var(--muted)', marginLeft: 4 }}>· {o.facilityName}</span>}
-                    </div>
+                    {/* Expanded details */}
+                    {isExpanded && (
+                      <div style={{ padding: '8px 10px 10px', borderTop: '1px solid var(--border)', background: '#fafafa' }}>
+                        {o.clinicalIndication && <div style={{ fontSize: 10, color: 'var(--text)', marginBottom: 4 }}>💡 {o.clinicalIndication}</div>}
+                        {o.doctorName && <div style={{ fontSize: 9, color: 'var(--muted)', marginBottom: 4 }}>Ordered by {o.doctorName} · {o.facilityName || 'AMEXAN'}</div>}
+                        {/* Pipeline dots */}
+                        <div style={{ display: 'flex', gap: 3, alignItems: 'center', marginBottom: 6 }}>
+                          {(o._type === 'imaging' ? IMG_PIPELINE : LAB_PIPELINE).map((step: string) => {
+                            const statuses = ['ordered', 'collected', 'processing', 'resulted', 'reviewed'];
+                            const idx = statuses.indexOf(o.status);
+                            const stepIdx = statuses.indexOf(step);
+                            const done = stepIdx <= idx;
+                            return (
+                              <div key={step} style={{
+                                width: 7, height: 7, borderRadius: '50%', background: done ? '#059669' : '#d1d5db',
+                              }} title={step} />
+                            );
+                          })}
+                          <span style={{ fontSize: 8, color: 'var(--muted)', marginLeft: 2 }}>{o.status} · {o.facilityName || 'AMEXAN'}</span>
+                        </div>
+                         {o.patientExplanation && <div style={{ fontSize: 9, color: '#166534', fontStyle: 'italic', marginBottom: 4 }}>📋 {o.patientExplanation}</div>}
+                        <button onClick={e => { e.stopPropagation(); openUploadcareForDoctor(o); }} disabled={doctorUploading} style={{
+                          background: '#0F766E', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px',
+                          fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
+                          opacity: doctorUploading ? 0.6 : 1,
+                        }}>{doctorUploading ? '⌛' : '📤 Upload Result'}</button>
+                      </div>
+                    )}
                   </div>
-                  <span style={{
-                    fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 99,
-                    background: o.status === 'processing' ? '#fefce8' : o.status === 'collected' ? '#eff6ff' : o.status === 'ordered' ? '#f0fdf4' : '#f0fdf4',
-                    color: o.status === 'processing' ? '#ca8a04' : o.status === 'collected' ? '#2563eb' : '#16a34a',
-                  }}>{o.status}</span>
-                  <button onClick={() => openUploadcareForDoctor(o)} disabled={doctorUploading} style={{
-                    background: '#0F766E', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px',
-                    fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
-                    opacity: doctorUploading ? 0.6 : 1, whiteSpace: 'nowrap',
-                  }}>{doctorUploading ? '⌛' : '📤 Upload Result'}</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+                );
+              })}
+            </div>
+          );
+        })()}
 
-        {/* Resulted orders */}
+        {/* ═══ 4. RESULTS ═══ */}
         {resultedOrders.length > 0 && (
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 6 }}>✅ Results ({resultedOrders.length})</div>
-            {resultedOrders.map((o: any, idx: number) => (
-              <div key={o.id} style={{
-                background: 'var(--white)', borderRadius: 10, padding: '10px 14px', marginBottom: 6,
-                border: o.interpreted ? '1px solid #38a16940' : '1px solid var(--border)',
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                      <span style={{ fontWeight: 700, fontSize: 13 }}>{o._type === 'imaging' ? '🩻' : '🧪'} #{idx + 1} {(o.tests || []).join(', ')}</span>
-                      {o.interpreted && <span style={{ fontSize: 9, fontWeight: 700, color: '#16a34a', background: '#f0fdf4', borderRadius: 99, padding: '1px 6px' }}>✓ Reviewed</span>}
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>✅ Results ({resultedOrders.length})</span>
+            </div>
+            {resultedOrders.map((o: any) => {
+              const isExpanded = expandedInvId === o.id;
+              return (
+                <div key={o.id} style={{
+                  background: 'var(--white)', borderRadius: 8, marginBottom: 4,
+                  border: o.interpreted ? '1px solid #38a16940' : '1px solid var(--border)',
+                  overflow: 'hidden',
+                }}>
+                  {/* Collapsed row */}
+                  <div onClick={() => setExpandedInvId(isExpanded ? null : o.id)} style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    padding: '8px 10px', cursor: 'pointer',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
+                      <span style={{ fontSize: 10, color: 'var(--muted)', transform: isExpanded ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }}>▶</span>
+                      <span style={{ fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {o._type === 'imaging' ? '🩻' : '🧪'} {(o.tests || []).join(', ')}
+                      </span>
+                      {o.interpreted ? (
+                        <span style={{ fontSize: 9, fontWeight: 700, color: '#16a34a', background: '#f0fdf4', borderRadius: 99, padding: '0 5px' }}>✓ Reviewed</span>
+                      ) : (
+                        <span style={{ fontSize: 9, fontWeight: 700, color: '#f97316', background: '#fff7ed', borderRadius: 99, padding: '0 5px' }}>⏳ Pending Review</span>
+                      )}
                       {o.interpretationSeverity && (
                         <span style={{
-                          fontSize: 9, fontWeight: 700, borderRadius: 99, padding: '1px 6px',
+                          fontSize: 8, fontWeight: 700, borderRadius: 99, padding: '0 5px',
                           background: o.interpretationSeverity === 'critical' ? '#fef2f2' : o.interpretationSeverity === 'severe' ? '#fff7ed' : '#f0fdf4',
                           color: o.interpretationSeverity === 'critical' ? '#dc2626' : o.interpretationSeverity === 'severe' ? '#f97316' : '#16a34a',
                         }}>{o.interpretationSeverity}</span>
                       )}
                     </div>
-                    <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1 }}>{fmtDate(o.createdAt)}</div>
-                    {o.uploadUrl && <a href={o.uploadUrl} target="_blank" style={{ fontSize: 10, color: '#2563eb', textDecoration: 'underline' }}>📎 View File</a>}
-
-                    {o.structuredResults?.length > 0 && (
-                      <div style={{ marginTop: 6, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 4 }}>
-                        {o.structuredResults.map((sr: any, i: number) => (
-                          <div key={i} style={{
-                            background: sr.flag === 'critical' ? '#fef2f2' : sr.flag === 'high' || sr.flag === 'low' ? '#fff7ed' : '#f0fdf4',
-                            borderRadius: 6, padding: '4px 6px', fontSize: 10,
-                            border: sr.flag === 'critical' ? '1px solid #dc262630' : 'none',
-                          }}>
-                            <div style={{ fontWeight: 600, fontSize: 9, color: 'var(--muted)' }}>{sr.test}</div>
-                            <div style={{ fontWeight: 700, color: sr.flag === 'critical' ? '#dc2626' : 'var(--text)' }}>
-                              {sr.value} <span style={{ fontWeight: 400, fontSize: 9 }}>{sr.unit}</span>
-                              {sr.flag && <span style={{ fontWeight: 700, fontSize: 9, color: '#dc2626', marginLeft: 2 }}>{sr.flag}</span>}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {o.interpretationImpression && (
-                      <div style={{ marginTop: 4, fontSize: 11, color: '#166534', fontStyle: 'italic' }}>💬 {o.interpretationImpression}</div>
-                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                      <span style={{ fontSize: 9, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</span>
+                      {!o.interpreted && (
+                        <button onClick={e => { e.stopPropagation();
+                          const findings = o.structuredResults?.map((sr: any) => `${sr.test}, ${sr.value}, ${sr.unit}, ${sr.flag}`).join('\n') || '';
+                          setInterpretingOrderId(o.id); setIntPanelOrder(o); setIntFindings(findings); syncPanelFromFindings(findings);
+                          setIntImpression(o.interpretationImpression || ''); setIntSeverity(o.interpretationSeverity || '');
+                          setIntDifferential(o.interpretationDifferentialSupport || ''); setIntComparison(o.interpretationPriorComparison || '');
+                          setIntRecommendation(o.interpretationRecommendation || ''); setShowIntPanel(true);
+                        }} style={{ background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: '3px 8px', fontSize: 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)' }}>✍️ Interpret</button>
+                      )}
+                      <button onClick={e => { e.stopPropagation(); printForm(o); }} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 4, padding: '3px 8px', fontSize: 9, cursor: 'pointer', fontFamily: 'var(--font)' }}>🖨</button>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
-                    {!o.interpreted && (
-                      <button onClick={() => {
-                        const findings = o.structuredResults?.map((sr: any) => `${sr.test}, ${sr.value}, ${sr.unit}, ${sr.flag}`).join('\n') || '';
-                        setInterpretingOrderId(o.id);
-                        setIntPanelOrder(o);
-                        setIntFindings(findings);
-                        syncPanelFromFindings(findings);
-                        setIntImpression(o.interpretationImpression || '');
-                        setIntSeverity(o.interpretationSeverity || '');
-                        setIntDifferential(o.interpretationDifferentialSupport || '');
-                        setIntComparison(o.interpretationPriorComparison || '');
-                        setIntRecommendation(o.interpretationRecommendation || '');
-                        setShowIntPanel(true);
-                      }} style={{
-                        background: '#059669', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
-                      }}>✍️ Interpret</button>
-                    )}
-                    <button onClick={() => printForm(o)} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 10px', fontSize: 10, cursor: 'pointer', fontFamily: 'var(--font)', color: 'var(--muted)' }}>🖨 PDF</button>
-                  </div>
+                  {/* Expanded details */}
+                  {isExpanded && (
+                    <div style={{ padding: '8px 10px 10px', borderTop: '1px solid var(--border)', background: '#fafafa' }}>
+                      {o.uploadUrl && <a href={o.uploadUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, color: '#2563eb', display: 'inline-block', marginBottom: 6 }}>📎 View File</a>}
+                      {o.structuredResults?.length > 0 && (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 4 }}>
+                          {o.structuredResults.map((sr: any, i: number) => {
+                            const isAbn = sr.flag === 'high' || sr.flag === 'low' || sr.flag === 'critical';
+                            return (
+                              <div key={i} style={{
+                                background: sr.flag === 'critical' ? '#fef2f2' : sr.flag === 'high' || sr.flag === 'low' ? '#fff7ed' : '#f0fdf4',
+                                borderRadius: 6, padding: '5px 7px',
+                                border: sr.flag === 'critical' ? '1px solid #dc262630' : 'none',
+                              }}>
+                                <div style={{ fontWeight: 600, fontSize: 9, color: 'var(--muted)' }}>{sr.test}</div>
+                                <div style={{ fontWeight: 700, color: isAbn ? '#dc2626' : 'var(--text)', fontSize: 12 }}>
+                                  {sr.value} <span style={{ fontWeight: 400, fontSize: 9 }}>{sr.unit}</span>
+                                  {sr.flag && <span style={{ fontWeight: 700, fontSize: 9, color: '#dc2626', marginLeft: 2 }}>{sr.flag}</span>}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                      {o.interpretationImpression && (
+                        <div style={{ marginTop: 6, padding: '6px 8px', background: '#f0fdf4', borderRadius: 6, borderLeft: '3px solid #16a34a' }}>
+                          <div style={{ fontSize: 9, fontWeight: 700, color: '#166534' }}>💬 Impression</div>
+                          <div style={{ fontSize: 11, color: '#166534' }}>{o.interpretationImpression}</div>
+                        </div>
+                      )}
+                      {o.interpreted && (
+                        <button onClick={e => { e.stopPropagation(); setInterpretingOrderId(o.id); setIntPanelOrder(o);
+                          const findings = o.structuredResults?.map((sr: any) => `${sr.test}, ${sr.value}, ${sr.unit}, ${sr.flag}`).join('\n') || '';
+                          setIntFindings(findings); syncPanelFromFindings(findings);
+                          setIntImpression(o.interpretationImpression || ''); setIntSeverity(o.interpretationSeverity || '');
+                          setIntDifferential(o.interpretationDifferentialSupport || ''); setIntComparison(o.interpretationPriorComparison || '');
+                          setIntRecommendation(o.interpretationRecommendation || ''); setShowIntPanel(true);
+                        }} style={{ marginTop: 6, background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: '3px 8px', fontSize: 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)' }}>✍️ Re-interpret</button>
+                      )}
+                    </div>
+                  )}
                 </div>
-                {/* Interpretation now opens in right-side sliding panel */}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
+        {/* ═══ EMPTY STATE ═══ */}
         {workspaceOrders.length === 0 && (
           <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--muted)' }}>
             <div style={{ fontSize: 32, marginBottom: 8 }}>🫁</div>
@@ -890,49 +949,44 @@ export default function DiagnosticCommandCenter({
           </div>
         )}
 
-        {/* ── Workspace Chat ── */}
-        <div style={{ background: 'var(--white)', borderRadius: 14, border: '1px solid var(--border)', overflow: 'hidden' }}>
-          <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontWeight: 700, fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+        {/* ═══ 5. WORKSPACE DISCUSSION ═══ */}
+        <div style={{ background: 'var(--white)', borderRadius: 12, border: '1px solid var(--border)', overflow: 'hidden' }}>
+          <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border)', fontWeight: 700, fontSize: 11, display: 'flex', alignItems: 'center', gap: 6 }}>
             💬 Workspace Discussion
-            <span style={{ fontSize: 10, fontWeight: 400, color: 'var(--muted)' }}>— messages with patient</span>
+            {wsMessages.length > 0 && <span style={{ fontSize: 9, fontWeight: 400, color: 'var(--muted)' }}>— {wsMessages.filter(m => m.senderRole !== 'doctor').length} unread from patient</span>}
           </div>
-          <div style={{ padding: '8px 12px', maxHeight: 220, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ padding: '6px 10px', maxHeight: 200, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
             {wsMessages.length === 0 && (
-              <div style={{ textAlign: 'center', padding: 16, color: 'var(--muted)', fontSize: 11 }}>
+              <div style={{ textAlign: 'center', padding: 14, color: 'var(--muted)', fontSize: 10 }}>
                 No messages yet. Messages from the patient about this workspace will appear here.
               </div>
             )}
             {wsMessages.map((m: any) => (
-              <div key={m.id} style={{
-                alignSelf: m.senderRole === 'doctor' ? 'flex-end' : 'flex-start',
-                maxWidth: '80%',
-              }}>
+              <div key={m.id} style={{ alignSelf: m.senderRole === 'doctor' ? 'flex-end' : 'flex-start', maxWidth: '80%' }}>
                 <div style={{
-                  padding: '6px 12px', borderRadius: 12, fontSize: 12, lineHeight: 1.4,
+                  padding: '5px 10px', borderRadius: 10, fontSize: 11, lineHeight: 1.4,
                   background: m.senderRole === 'doctor' ? '#0F766E' : '#f0fdf4',
                   color: m.senderRole === 'doctor' ? '#fff' : '#166534',
-                  borderTopRightRadius: m.senderRole === 'doctor' ? 4 : 12,
-                  borderTopLeftRadius: m.senderRole === 'doctor' ? 12 : 4,
-                }}>
-                  {m.text}
-                </div>
-                <div style={{ fontSize: 9, color: 'var(--muted)', marginTop: 1, textAlign: m.senderRole === 'doctor' ? 'right' : 'left' }}>
+                  borderTopRightRadius: m.senderRole === 'doctor' ? 3 : 10,
+                  borderTopLeftRadius: m.senderRole === 'doctor' ? 10 : 3,
+                }}>{m.text}</div>
+                <div style={{ fontSize: 8, color: 'var(--muted)', marginTop: 1, textAlign: m.senderRole === 'doctor' ? 'right' : 'left' }}>
                   {m.senderName} · {fmtTime(m.createdAt)}
                 </div>
               </div>
             ))}
           </div>
-          <div style={{ padding: '8px 12px', borderTop: '1px solid var(--border)', display: 'flex', gap: 6 }}>
+          <div style={{ padding: '6px 10px', borderTop: '1px solid var(--border)', display: 'flex', gap: 4 }}>
             <input value={wsMsgText} onChange={e => setWsMsgText(e.target.value)}
               placeholder="Reply to patient about this workspace…"
               onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendWsMessage(); } }}
               style={{
-                flex: 1, padding: '8px 10px', borderRadius: 8, border: '1.5px solid var(--border)',
-                fontSize: 12, outline: 'none', fontFamily: 'var(--font)', background: 'var(--bg)',
+                flex: 1, padding: '6px 8px', borderRadius: 6, border: '1.5px solid var(--border)',
+                fontSize: 11, outline: 'none', fontFamily: 'var(--font)', background: 'var(--bg)',
               }} />
             <button onClick={sendWsMessage} disabled={wsMsgSending || !wsMsgText.trim()} style={{
-              background: '#0F766E', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 14px',
-              fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
+              background: '#0F766E', color: '#fff', border: 'none', borderRadius: 6, padding: '6px 12px',
+              fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
               opacity: wsMsgSending || !wsMsgText.trim() ? 0.5 : 1,
             }}>{wsMsgSending ? '…' : 'Send'}</button>
           </div>
