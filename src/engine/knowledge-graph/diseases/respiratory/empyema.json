@@ -1,0 +1,149 @@
+{
+  "id": "empyema",
+  "name": "Empyema",
+  "system": "respiratory",
+  "syndromeType": "infected_pleural_space_pus_collection",
+  "corePathophysiology": [
+    "bacterial_invasion_of_pleural_space",
+    "fibrin_deposition",
+    "loculation_formation",
+    "purulent_accumulation",
+    "systemic_inflammatory_response",
+    "lung_compression"
+  ],
+  "ageLogic": {
+    "peak": [0, 216],
+    "context": {
+      "infants": "rapid_progression_from_pneumonia",
+      "children": "parapneumonic_effusion_to_empyema",
+      "adolescents": "TB_or_staph_related"
+    }
+  },
+  "prevalenceWeight": 0.15,
+  "staging": {
+    "stage1_exudative": "sterile_inflammatory_fluid_early_pneumonia_spillover",
+    "stage2_fibrinopurulent": "pus_formation_septations_loculations",
+    "stage3_organizing": "thick_pleural_peel_trapped_lung_surgical_disease"
+  },
+  "historyFeatures": [
+    { "symptomId": "fever", "weight": 5, "keyIndicator": "persistent_or_worsening_despite_antibiotics" },
+    { "symptomId": "chest_pain", "weight": 3 },
+    { "symptomId": "worsening_cough", "weight": 3 },
+    { "symptomId": "previous_pneumonia", "weight": 6 },
+    { "symptomId": "antibiotic_failure", "weight": 7, "critical_flag": true },
+    { "symptomId": "lethargy", "weight": 4 }
+  ],
+  "negativeWeights": {
+    "rapid_recovery_on_antibiotics": -6,
+    "no_fever": -4,
+    "viral_symptoms_only": -3
+  },
+  "examFeatures": [
+    { "signId": "stony_dullness", "weight": 7, "critical_sign": true },
+    { "signId": "toxic_appearance", "weight": 6, "sepsis_marker": true },
+    { "signId": "reduced_breath_sounds", "weight": 5 },
+    { "signId": "reduced_chest_expansion", "weight": 4 },
+    { "signId": "tachypnea", "weight": 3 },
+    { "signId": "dehydration_signs", "weight": 3 }
+  ],
+  "severityCriteria": {
+    "moderate": ["fever_persists", "localized_effusion", "stable_oxygen"],
+    "severe": [
+      "toxic_appearance",
+      "respiratory_distress",
+      "hypoxia",
+      "sepsis_signs",
+      "large_loculated_effusion"
+    ]
+  },
+  "syndromeTags": ["infected_pleural_space", "sepsis"],
+  "mustNotMiss": false,
+  "diagnosticClues": ["persistent fever + dullness despite antibiotics", "antibiotic failure"],
+  "exclusionClues": ["rapid response to antibiotics"],
+  "differentialDiagnosis": [
+    { "disease": "Pneumonia", "keyDiscriminator": "responds to antibiotics, no large effusion" },
+    { "disease": "Tuberculous Effusion", "keyDiscriminator": "chronic cough, weight loss, high ADA" },
+    { "disease": "Simple Pleural Effusion", "keyDiscriminator": "sterile fluid, no pus" },
+    { "disease": "Malignancy", "keyDiscriminator": "rare in children, systemic symptoms" },
+    { "disease": "Lung Abscess", "keyDiscriminator": "parenchymal cavity, not pleural" }
+  ],
+  "investigations": {
+    "imaging": [
+      {
+        "name": "Chest X-ray (PA)",
+        "findings": ["homogenous opacity", "meniscus sign", "white-out hemithorax"],
+        "indication": "all suspected"
+      },
+      {
+        "name": "Chest Ultrasound",
+        "role": "key tool for loculation assessment and drainage guidance"
+      }
+    ],
+    "labs": [
+      { "test": "FBC", "expected": "neutrophilia" },
+      { "test": "CRP", "expected": "high inflammatory marker" },
+      { "test": "Blood culture", "indication": "all febrile patients" }
+    ],
+    "pleural_fluid_analysis": {
+      "required_tests": ["Gram stain", "culture", "pH", "glucose", "LDH"],
+      "diagnostic_criteria": "low pH (<7.2), low glucose, high LDH, positive Gram stain/culture"
+    }
+  },
+  "fluidBiomarkerLogic": {
+    "low_pH": "severe infection / empyema",
+    "low_glucose": "bacterial metabolism",
+    "high_LDH": "cell breakdown / inflammation",
+    "pus_visible": "confirmed empyema"
+  },
+  "managementProtocols": [
+    {
+      "condition": "moderate",
+      "steps": [
+        "IV antibiotics: Ceftriaxone 80 mg/kg IV OD (max 2g) + Metronidazole 7.5 mg/kg IV TDS",
+        "Chest tube drainage under ultrasound guidance",
+        "Analgesia: Paracetamol 15 mg/kg Q6H PRN",
+        "Monitor: drain output, SpO2, vital signs Q4H"
+      ]
+    },
+    {
+      "condition": "severe",
+      "steps": [
+        "IV antibiotics: Ceftriaxone + Metronidazole (adjust based on culture when available)",
+        "Chest tube drainage (large bore) — consider intrapleural fibrinolytics (urokinase) if loculated",
+        "IV fluids to maintain hydration",
+        "Nutritional support (high protein)",
+        "If no improvement in 48–72 h: refer for VATS (video-assisted thoracoscopic surgery) or surgical decortication",
+        "Monitor: drain output hourly, SpO2 continuous, RR, HR, temperature Q4H"
+      ]
+    }
+  ],
+  "failureNode": {
+    "description": "If no clinical improvement in 48–72 hours (persistent fever, no lung re-expansion, thick loculated fluid)",
+    "escalation": "proceed to VATS or open decortication — empyema is now surgical disease"
+  },
+  "responseToTreatment": {
+    "expected": "fever drops within 48–72 h, drainage output reduces, lung re-expansion on CXR",
+    "warningSignsFailure": [
+      "persistent fever beyond 72 h",
+      "thick loculated fluid on ultrasound",
+      "no lung re-expansion",
+      "worsening sepsis"
+    ],
+    "actionOnFailure": "escalate to surgical intervention; do not delay"
+  },
+  "complications": [
+    {
+      "id": "fibrothorax",
+      "description": "fibrous pleural peel trapping lung → may require decortication"
+    },
+    {
+      "id": "sepsis",
+      "severity": "high_risk"
+    },
+    {
+      "id": "respiratory_failure",
+      "risk": "critical"
+    }
+  ],
+  "clinicalPearl": "Empyema is FAILED PNEUMONIA with compartmentalized pus and surgical potential. AMEXAN must: detect antibiotic failure early, identify loculation via ultrasound, drain promptly, and escalate to surgery if no response within 48–72 hours. Pus in the pleural space = drainage mandatory."
+}

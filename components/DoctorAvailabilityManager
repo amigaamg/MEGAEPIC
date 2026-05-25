@@ -1,0 +1,133 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import {
+  useAvailability, generateSlots,
+  AVAILABILITY_DAYS, AVAILABILITY_TIMEZONES, DEFAULT_AVAILABILITY,
+  DoctorAvailability,
+} from '@/lib/availability';
+
+export function DoctorAvailabilityManager({ doctorId }: { doctorId: string }) {
+  const { availability, loading, save } = useAvailability(doctorId);
+  const [form, setForm] = useState<DoctorAvailability>(DEFAULT_AVAILABILITY);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (availability) setForm(availability);
+  }, [availability]);
+
+  const toggleDay = (day: string) => {
+    setForm(f => ({
+      ...f,
+      availableDays: f.availableDays.includes(day)
+        ? f.availableDays.filter(d => d !== day)
+        : [...f.availableDays, day],
+    }));
+  };
+
+  const generatedSlots = generateSlots(
+    form.availableFrom, form.availableTo, form.slotDuration, form.bufferMinutes,
+  );
+
+  const handleSave = async () => {
+    setSaving(true);
+    await save({ ...form, slots: generatedSlots });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
+
+  if (loading) {
+    return <div style={{ color: '#94a3b8', fontSize: 14, padding: 20 }}>Loading availability...</div>;
+  }
+
+  return (
+    <div style={{ background: 'var(--card, #fff)', borderRadius: 16, padding: 24, border: '1px solid var(--border, #e2e8f0)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text, #1e293b)' }}>🗓️ My Availability</h3>
+        <span style={{ fontSize: 12, color: '#64748b' }}>Patients see these slots in real-time</span>
+      </div>
+
+      {/* Timezone */}
+      <div style={{ marginBottom: 18 }}>
+        <label style={labelStyle}>Your Timezone</label>
+        <select value={form.timezone} onChange={e => setForm(f => ({ ...f, timezone: e.target.value }))} style={selectStyle}>
+          {AVAILABILITY_TIMEZONES.map(tz => <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>)}
+        </select>
+      </div>
+
+      {/* Days */}
+      <div style={{ marginBottom: 18 }}>
+        <label style={labelStyle}>Available Days</label>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {AVAILABILITY_DAYS.map(day => (
+            <button key={day} onClick={() => toggleDay(day)}
+              style={{ padding: '8px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13, background: form.availableDays.includes(day) ? '#0aaa76' : '#f1f5f9', color: form.availableDays.includes(day) ? '#fff' : '#64748b' }}>
+              {day}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Hours + config grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 18 }}>
+        <div>
+          <label style={labelStyle}>Available From</label>
+          <input type="time" value={form.availableFrom} onChange={e => setForm(f => ({ ...f, availableFrom: e.target.value }))} style={selectStyle} />
+        </div>
+        <div>
+          <label style={labelStyle}>Available To</label>
+          <input type="time" value={form.availableTo} onChange={e => setForm(f => ({ ...f, availableTo: e.target.value }))} style={selectStyle} />
+        </div>
+        <div>
+          <label style={labelStyle}>Slot Duration (mins)</label>
+          <select value={form.slotDuration} onChange={e => setForm(f => ({ ...f, slotDuration: Number(e.target.value) }))} style={selectStyle}>
+            {[15, 20, 30, 45, 60].map(m => <option key={m} value={m}>{m} minutes</option>)}
+          </select>
+        </div>
+        <div>
+          <label style={labelStyle}>Buffer Between Slots (mins)</label>
+          <select value={form.bufferMinutes} onChange={e => setForm(f => ({ ...f, bufferMinutes: Number(e.target.value) }))} style={selectStyle}>
+            {[0, 5, 10, 15, 20].map(m => <option key={m} value={m}>{m} minutes</option>)}
+          </select>
+        </div>
+        <div>
+          <label style={labelStyle}>Max Appointments / Day</label>
+          <select value={form.maxAppointmentsPerDay} onChange={e => setForm(f => ({ ...f, maxAppointmentsPerDay: Number(e.target.value) }))} style={selectStyle}>
+            {[4, 6, 8, 10, 12, 15, 20].map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {/* Slot preview */}
+      <div style={{ marginBottom: 20 }}>
+        <label style={labelStyle}>Preview: Generated Slots ({generatedSlots.length} slots)</label>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, padding: '12px', background: '#f8fafc', borderRadius: 10, maxHeight: 120, overflowY: 'auto' }}>
+          {generatedSlots.length === 0 ? (
+            <span style={{ color: '#94a3b8', fontSize: 13 }}>No slots — adjust your hours</span>
+          ) : (
+            generatedSlots.map(s => (
+              <span key={s} style={{ padding: '4px 10px', background: '#e0fdf4', color: '#0aaa76', borderRadius: 6, fontSize: 12, fontWeight: 600 }}>{s}</span>
+            ))
+          )}
+        </div>
+      </div>
+
+      <button onClick={handleSave} disabled={saving}
+        style={{ padding: '12px 28px', background: saving ? '#94a3b8' : '#0aaa76', color: '#fff', border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: saving ? 'default' : 'pointer', width: '100%' }}>
+        {saving ? 'Saving...' : saved ? '✓ Saved! Patients can now see your availability' : '💾 Save Availability'}
+      </button>
+    </div>
+  );
+}
+
+const labelStyle: React.CSSProperties = {
+  display: 'block', fontSize: 12, fontWeight: 600, color: '#64748b',
+  marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em',
+};
+
+const selectStyle: React.CSSProperties = {
+  width: '100%', padding: '9px 12px', background: '#f8fafc',
+  border: '1px solid #e2e8f0', borderRadius: 8, color: '#1e293b', fontSize: 13,
+};

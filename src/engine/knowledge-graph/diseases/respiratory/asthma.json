@@ -1,0 +1,355 @@
+{
+  "disease": {
+    "id": "asthma",
+    "name": "Asthma",
+    "system": "respiratory",
+    "syndromeType": "reversible_lower_airway_obstruction",
+    "agePeak_months": [12, 216],
+    "ageWeighting": {
+      "0-11": 0.2,
+      "12-35": 0.6,
+      "36-60": 0.85,
+      "61+": 1.0
+    },
+    "note": "Asthma probability is low under 12 months; bronchiolitis dominates. Recurrent wheeze >12 months strongly favours asthma.",
+    "prevalenceWeight": 0.75,
+
+    "corePathophysiology": [
+      "bronchial_hyperresponsiveness",
+      "airway_inflammation",
+      "bronchospasm",
+      "mucus_plugging",
+      "ventilation_perfusion_mismatch",
+      "hypoxemia_in_severe_cases"
+    ],
+
+    "phenotypes": [
+      {
+        "id": "viral_induced_wheeze",
+        "description": "Preschool episodic wheeze triggered by URIs, often self-limiting. Less likely to persist.",
+        "ageRange_months": [12, 60],
+        "modifier": {"prevalenceBoost": 0.3, "futureAsthmaRisk": "moderate"}
+      },
+      {
+        "id": "atopic_asthma",
+        "description": "Classical allergic asthma, often with eczema/rhinitis, strong family history.",
+        "keyFeatures": ["eczema", "allergic_rhinitis", "family_atopy"],
+        "modifier": {"prevalenceBoost": 0.5}
+      },
+      {
+        "id": "exercise_induced_asthma",
+        "description": "School-age exertional cough/wheeze, typical of sports.",
+        "ageMinimum_months": 60,
+        "keyFeatures": ["exercise_trigger", "cough_after_play"]
+      },
+      {
+        "id": "nocturnal_asthma",
+        "description": "Night-time cough/wheeze due to circadian bronchial reactivity.",
+        "keyFeatures": ["nocturnal_cough", "sleep_disturbance"]
+      },
+      {
+        "id": "severe_acute_asthma",
+        "description": "Life-threatening exacerbation with risk of status asthmaticus.",
+        "severityLevel": "critical",
+        "keyFeatures": ["silent_chest", "cyanosis", "exhaustion", "SpO2<90"]
+      }
+    ],
+
+    "historyFeatures": [
+      { "symptomId": "wheeze", "weight": 5, "mustBoost": true },
+      { "symptomId": "cough", "weight": 2, "qualitativeModifiers": [
+          { "qualityKey": "nocturnal", "weightBoost": 3, "description": "Nocturnal cough strongly suggests asthma." },
+          { "qualityKey": "exercise_induced", "weightBoost": 2 }
+        ]
+      },
+      { "symptomId": "chest_tightness", "weight": 3, "ageApplicable": ">5years" },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "recurrent_episodes", "weight": 5, "note": "≥2 wheeze episodes in last 12 months" },
+      { "symptomId": "bronchodilator_response", "weight": 5, "note": "Reported or observed improvement after salbutamol" },
+      { "symptomId": "trigger_exposure", "weight": 2, "examples": ["dust", "pollen", "smoke", "cold_air"] },
+      { "symptomId": "family_atopy", "weight": 2, "multiplier": 1.3 },
+      { "symptomId": "personal_atopy", "weight": 2, "multiplier": 1.4, "examples": ["eczema", "allergic_rhinitis"] }
+    ],
+
+    "examFeatures": [
+      { "signId": "wheeze", "baseWeight": 5, "doubleWeight": true, "note": "Polyphonic expiratory wheeze is hallmark." },
+      { "signId": "prolonged_expiration", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "accessory_muscle_use", "baseWeight": 3, "severityMarker": true },
+      { "signId": "chest_recession", "baseWeight": 4, "severityMarker": true },
+      { "signId": "hyperinflation", "baseWeight": 2 },
+      { "signId": "silent_chest", "baseWeight": 6, "severityLevel": "critical", "note": "No wheeze audible – ominous sign of severe obstruction." }
+    ],
+
+    "negativePredictors": [
+      { "feature": "fever_high", "description": "Temperature ≥38.5°C", "scoreReduction": 4, "favorsAlternative": ["pneumonia"] },
+      { "feature": "focal_crackles", "scoreReduction": 5, "favorsAlternative": ["pneumonia"] },
+      { "feature": "bronchial_breathing", "scoreReduction": 4, "favorsAlternative": ["pneumonia"] },
+      { "feature": "toxic_appearance", "scoreReduction": 5, "favorsAlternative": ["bacterial_pneumonia"] },
+      { "feature": "stridor", "scoreReduction": 3, "favorsAlternative": ["croup"] },
+      { "feature": "first_episode_infant", "scoreReduction": 4, "favorsAlternative": ["bronchiolitis"] },
+      { "feature": "unilateral_wheeze", "scoreReduction": 3, "favorsAlternative": ["foreign_body"] }
+    ],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "central_cyanosis", "weight": 10 },
+        { "sign": "unable_to_drink_or_breastfeed", "weight": 10 },
+        { "sign": "avpu_abnormal", "description": "V, P or U", "weight": 10 },
+        { "sign": "inability_to_talk_or_complete_sentences", "weight": 10 },
+        { "sign": "spo2_less_than_90", "weight": 9 },
+        { "sign": "pulse_rate_extreme", "description": ">200 bpm (0–3 yrs) or >180 bpm (4–5 yrs)", "weight": 8 },
+        { "sign": "silent_chest", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "lower_chest_wall_indrawing", "weight": 6 },
+          { "sign": "fast_breathing", "ageThresholds": [
+              { "ageMonths": [2, 11], "rr": 50 },
+              { "ageMonths": [12, 59], "rr": 40 }
+            ], "weight": 5 }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "wheezePresent": true,
+        "noDistress": true,
+        "normalSpO2": true
+      }
+    },
+
+    "tachypneaThresholds": [
+      { "ageMonths": [2, 11], "rr": 50 },
+      { "ageMonths": [12, 59], "rr": 40 }
+    ],
+
+    "riskFactors": [
+      { "id": "atopy", "multiplier": 1.4, "description": "Personal history of eczema or allergic rhinitis." },
+      { "id": "family_asthma", "multiplier": 1.3, "description": "First-degree relative with asthma." },
+      { "id": "previous_exacerbations", "multiplier": 1.5 },
+      { "id": "poor_adherence", "multiplier": 1.3, "note": "Increases exacerbation risk." },
+      { "id": "environmental_triggers", "multiplier": 1.2, "examples": ["tobacco_smoke", "dust_mites"] }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Pulse oximetry",
+          "priority": "immediate",
+          "yield": 1.0,
+          "indication": "all acute wheeze"
+        },
+        {
+          "name": "Peak Expiratory Flow Rate (PEFR)",
+          "priority": "if age >5 years",
+          "yield": 0.8,
+          "note": "Helps assess severity and response to treatment."
+        },
+        {
+          "name": "Respiratory rate",
+          "priority": "immediate",
+          "ageThresholds": true
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "Blood gas (arterial/venous)",
+          "priority": "if severe or not responding",
+          "indication": "assess hypercapnia, acidosis",
+          "yield": 0.9
+        }
+      ],
+      "imaging": [
+        {
+          "name": "Chest X-ray",
+          "indication": "first severe episode, atypical presentation, poor response, suspected foreign body or complication (pneumothorax)",
+          "priority": "low in typical asthma",
+          "yield": 0.3
+        }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Kenya Paediatric Guidelines + GINA 2024 acute exacerbation principles",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "wheeze, no distress, normal SpO2, no danger signs",
+          "treatment": [
+            "Salbutamol 2 puffs via MDI + spacer every 4–6 hours PRN for 3–5 days",
+            "Prednisolone 2 mg/kg PO once daily for 3 days (max 20 mg/day under 2 yrs, 30 mg/day 2–5 yrs)",
+            "Review inhaler technique",
+            "Avoid triggers",
+            "Return if: symptoms worsen, requiring >4‑hourly reliever, night waking, exercise limitation"
+          ],
+          "followUp": "Review in 48 hours; if recurrent, consider low‑dose ICS maintenance."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "wheeze + indrawing or tachypnoea, no danger signs",
+          "treatment": [
+            "Nebulised salbutamol 2.5 mg (or 6 puffs MDI + spacer) every 20 minutes up to 3 doses in first hour",
+            "Prednisolone 2 mg/kg PO once daily for 3–5 days",
+            "Oxygen to keep SpO₂ ≥94%",
+            "Ipratropium bromide 250 mcg nebulised (or 2 puffs MDI 80 mcg) with each salbutamol dose for first hour if poor response",
+            "Monitor SpO₂, RR, heart rate, wheeze, PEFR if able"
+          ],
+          "reassessment": "If lack of response after 3 doses: increasing RR, worsening saturation, any severe signs → escalate to severe protocol."
+        },
+        {
+          "severity": "severe",
+          "criteria": "any danger sign (SpO₂<90%, cyanosis, unable to drink/talk, silent chest, pulse >200/180, AVPU abnormal)",
+          "treatment": [
+            "Admit urgently, consider HDU/ICU",
+            "Oxygen to maintain SpO₂ ≥94%",
+            "Continuous nebulised salbutamol (2.5 mg) or back‑to‑back MDI (6–12 puffs) via spacer, repeat every 15–20 min",
+            "Ipratropium bromide 250 mcg nebulised with first 3 salbutamol doses",
+            "Prednisolone 2 mg/kg PO/IV daily (max 60 mg/day) for 5 days",
+            "IV magnesium sulfate 40 mg/kg (max 2 g) over 20 min if poor initial response",
+            "IV fluids: maintenance only, avoid overload",
+            "Monitor for fatigue, rising pCO₂, silent chest – prepare for ventilation",
+            "If no improvement, consider differentials: pneumonia, foreign body, cardiac failure, TB"
+          ],
+          "escalation": "Consider IV salbutamol or aminophylline in ICU. Early intubation if deteriorating."
+        }
+      ]
+    },
+
+    "treatmentResponseLogic": {
+      "positiveResponse": {
+        "criteria": "decreased wheeze, reduced RR, improved SpO₂, improved PEFR",
+        "action": "Asthma probability confirmed, continue treatment, discharge with plan."
+      },
+      "noResponseAfter1_2Hours": {
+        "criteria": "persistent severe distress, worsening hypoxia, no bronchodilator response",
+        "action": "Re‑evaluate diagnosis: increase probability of pneumonia, foreign body, cardiac failure, staphylococcal pneumonia, TB."
+      },
+      "recurrenceWithin48Hours": {
+        "criteria": "return of wheeze/distress after initial improvement",
+        "action": "Consider inadequate maintenance therapy, persistent trigger, or alternative diagnosis (e.g., foreign body). Start ICS if not already on."
+      }
+    },
+
+    "differentialCompetition": {
+      "bronchiolitis": {
+        "discriminators": ["first_episode_infant", "viral_prodrome", "crackles_present"],
+        "negativeImpactOnAsthma": 4
+      },
+      "pneumonia": {
+        "discriminators": ["fever_>38.5", "focal_crackles", "bronchial_breathing"],
+        "negativeImpactOnAsthma": 5
+      },
+      "foreign_body": {
+        "discriminators": ["sudden_onset", "unilateral_wheeze", "choking_history"],
+        "negativeImpactOnAsthma": 3
+      },
+      "tb": {
+        "discriminators": ["chronic_cough", "weight_loss", "night_sweats", "TB_contact"],
+        "negativeImpactOnAsthma": 2
+      },
+      "cardiac_heart_failure": {
+        "discriminators": ["hepatomegaly", "gallop_rhythm", "cardiomegaly"],
+        "negativeImpactOnAsthma": 3,
+        "note": "Consider in infant with wheeze and failure to thrive."
+      },
+      "vocal_cord_dysfunction": {
+        "discriminators": ["stridor_inspiratory", "no_nocturnal_symptoms", "normal_PEFR_variability"],
+        "negativeImpactOnAsthma": 2,
+        "ageMinimum": ">10years"
+      }
+    },
+
+    "complications": [
+      {
+        "diseaseId": "status_asthmaticus",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["silent_chest", "hypercapnia", "exhaustion"],
+        "management": "ICU, intravenous bronchodilators, possible mechanical ventilation"
+      },
+      {
+        "diseaseId": "respiratory_failure",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["SpO2<88", "rising_pCO2", "decreased_consciousness"]
+      },
+      {
+        "diseaseId": "atelectasis",
+        "probability": 0.1,
+        "clues": ["localised_diminished_breath_sounds", "mucus_plugging"]
+      },
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.02,
+        "clues": ["sudden_chest_pain", "asymmetrical_chest_expansion", "hyperresonance"]
+      }
+    ],
+
+    "syndromeTags": ["lower_airway_obstruction", "reversible_airway_disease"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["recurrent_wheeze", "nocturnal_cough", "trigger_exposure", "bronchodilator_response"],
+    "exclusionClues": ["fever_with_focal_crackles", "stridor_only", "sudden_onset_choking"],
+
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["wheeze?", "cough?", "difficulty_breathing?", "age?", "fever?"],
+      "branching": [
+        {
+          "if": "wheeze_present",
+          "ask": [
+            "previous_wheeze_episodes?",
+            "age_at_first_episode?",
+            "bronchodilator_response?",
+            "nocturnal_cough?",
+            "triggers? (exercise, cold air, dust)"
+          ]
+        },
+        {
+          "if": "recurrent_wheeze_>12months",
+          "ask": [
+            "family_history_of_asthma?",
+            "personal_atopy? (eczema, allergic_rhinitis)",
+            "previous_use_of_inhalers?"
+          ],
+          "action": "Asthma probability high → assess severity and treat accordingly."
+        },
+        {
+          "if": "first_episode_infant",
+          "ask": [
+            "viral_prodrome?",
+            "feeding_well?",
+            "apnea?"
+          ],
+          "action": "Suspect bronchiolitis → reduce asthma weight."
+        },
+        {
+          "if": "fever_present",
+          "ask": [
+            "maximum_temperature?",
+            "any_chills?",
+            "crackles_on_exam?"
+          ],
+          "action": "If fever >38.5°C and crackles, raise pneumonia probability."
+        },
+        {
+          "if": "sudden_onset",
+          "ask": [
+            "choking_event?",
+            "possible_inhaled_object?"
+          ],
+          "action": "Add foreign body to differential."
+        },
+        {
+          "if": "chronic_cough_>2_weeks",
+          "ask": [
+            "weight_loss?",
+            "night_sweats?",
+            "TB_contact?"
+          ],
+          "action": "Investigate for TB."
+        }
+      ]
+    }
+  }
+}

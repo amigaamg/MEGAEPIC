@@ -1,0 +1,457 @@
+[
+  {
+    "id": "bacterial_meningitis",
+    "name": "Bacterial Meningitis",
+    "system": "cns",
+    "alsoPresentIn": ["infectious"],
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.6,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "headache", "weight": 3, "condition": "age > 36" },
+      { "symptomId": "irritability", "weight": 3 },
+      { "symptomId": "lethargy", "weight": 4 },
+      { "symptomId": "seizures", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "neck_stiffness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bulging_fontanelle", "baseWeight": 5, "doubleWeight": true, "condition": "age < 18" },
+      { "signId": "petechiae", "baseWeight": 5, "doubleWeight": true }
+    ],
+    "syndromeTags": ["neurological_emergency", "sepsis"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["fever + neck stiffness + altered consciousness"],
+    "exclusionClues": ["normal LP"],
+    "complications": [
+      { "diseaseId": "sepsis", "probability": 0.5, "severityBoost": 0.5 },
+      { "diseaseId": "raised_icp", "probability": 0.3, "severityBoost": 0.4 }
+    ],
+    "investigations": [
+      { "type": "procedure", "name": "Lumbar puncture", "indication": "CSF analysis — cell count, protein, glucose, Gram stain, culture" },
+      { "type": "lab", "name": "Full blood count", "indication": "leukocytosis" },
+      { "type": "lab", "name": "CRP", "indication": "inflammatory marker" },
+      { "type": "lab", "name": "Blood cultures", "indication": "before antibiotics" },
+      { "type": "lab", "name": "Blood glucose", "indication": "compare with CSF glucose" },
+      { "type": "lab", "name": "CSF GeneXpert if TB suspected", "indication": "TB meningitis" },
+      { "type": "imaging", "name": "CT head before LP", "indication": "if focal signs, papilledema, or GCS <10" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ward immediately",
+          "Empiric: Ceftriaxone 100 mg/kg IV Q12H + Vancomycin 15 mg/kg IV Q6H",
+          "Dexamethasone 0.15 mg/kg IV Q6H x 4 days (start before or with first antibiotic)",
+          "IV fluids — restrict to 2/3 maintenance",
+          "Seizure control — Diazepam 0.3 mg/kg IV PRN",
+          "Monitor GCS and pupillary response Q2H",
+          "Notify infection control — droplet precautions"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "viral_meningitis",
+    "name": "Viral Meningitis",
+    "system": "cns",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.4,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "headache", "weight": 3, "condition": "age > 36" },
+      { "symptomId": "photophobia", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "neck_stiffness", "baseWeight": 3 }
+    ],
+    "syndromeTags": ["neurological_emergency"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["milder presentation", "viral prodrome"],
+    "exclusionClues": ["CSF bacterial profile"],
+    "investigations": [
+      { "type": "procedure", "name": "Lumbar puncture", "indication": "CSF analysis — lymphocyte predominant" },
+      { "type": "lab", "name": "CSF viral PCR (enterovirus, HSV, VZV)", "indication": "identify aetiology" },
+      { "type": "lab", "name": "Full blood count", "indication": "lymphocytosis" },
+      { "type": "lab", "name": "CRP", "indication": "typically normal or mild elevation" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Supportive care — IV fluids, analgesia",
+          "Paracetamol 15 mg/kg PO Q6H PRN for headache/fever",
+          "Isolation until aetiology confirmed",
+          "Reassess in 24-48 hours — if worsening, repeat LP"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "encephalitis",
+    "name": "Encephalitis",
+    "system": "cns",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.3,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "altered_mental_state", "weight": 4 },
+      { "symptomId": "headache", "weight": 2, "condition": "age > 36" }
+    ],
+    "examFeatures": [
+      { "signId": "focal_neurological_signs", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "altered_consciousness", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "syndromeTags": ["neurological_emergency"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["seizures + altered consciousness + focal signs"],
+    "exclusionClues": ["normal MRI/CSF"],
+    "investigations": [
+      { "type": "lab", "name": "Lumbar puncture", "indication": "CSF analysis and viral PCR" },
+      { "type": "lab", "name": "CSF HSV/VZV/enterovirus PCR", "indication": "viral aetiology" },
+      { "type": "imaging", "name": "MRI brain with contrast", "indication": "temporal lobe changes in HSV" },
+      { "type": "lab", "name": "EEG", "indication": "focal slowing or periodic discharges" },
+      { "type": "lab", "name": "Full blood count", "indication": "inflammatory markers" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to HDU/ICU",
+          "IV Acyclovir 20 mg/kg Q8H x 14-21 days",
+          "Seizure control — Diazepam 0.3 mg/kg IV, Phenytoin 20 mg/kg IV load",
+          "Manage raised ICP — Mannitol 0.5 g/kg IV, elevate head 30 degrees",
+          "Dexamethasone 0.15 mg/kg IV Q6H if vasogenic oedema",
+          "Monitor GCS and neurological status Q2H",
+          "Consider anticonvulsant prophylaxis for 3 months"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "febrile_seizure",
+    "name": "Febrile Seizure",
+    "system": "cns",
+    "agePeak": [6, 60],
+    "prevalenceWeight": 0.8,
+    "historyFeatures": [
+      { "symptomId": "seizures", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 }
+    ],
+    "examFeatures": [],
+    "syndromeTags": ["neurological_emergency"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["generalised seizure + fever in 6-60 months"],
+    "exclusionClues": ["seizure >15 min", "focal seizure", "post-ictal >30 min"],
+    "investigations": [
+      { "type": "lab", "name": "Full blood count", "indication": "infection screen" },
+      { "type": "lab", "name": "CRP", "indication": "inflammatory marker" },
+      { "type": "lab", "name": "Urinalysis", "indication": "UTI is common cause" },
+      { "type": "lab", "name": "Malaria RDT", "indication": "endemic area" },
+      { "type": "lab", "name": "Lumbar puncture", "indication": "if meningeal signs, complex seizure, or age <12 months" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Treat fever — Paracetamol 15 mg/kg PO Q6H",
+          "Identify and treat underlying infection",
+          "Reassure parents — febrile seizure is self-limiting, low recurrence risk",
+          "No routine anticonvulsant prophylaxis",
+          "Advise: seek care if seizure >5 min, focal, or recurrent within 24h"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Diazepam 0.3 mg/kg IV or 0.5 mg/kg PR if active seizure",
+          "Admit for observation 24 hours",
+          "Investigate underlying cause",
+          "Lumbar puncture if not yet done"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cerebral_malaria",
+    "name": "Cerebral Malaria",
+    "system": "cns",
+    "alsoPresentIn": ["infectious"],
+    "agePeak": [6, 216],
+    "prevalenceWeight": 0.5,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "lethargy", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "altered_consciousness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "jaundice", "baseWeight": 2 }
+    ],
+    "syndromeTags": ["neurological_emergency", "sepsis"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["fever + coma + malaria endemic area"],
+    "exclusionClues": ["negative blood film", "RDT negative"],
+    "investigations": [
+      { "type": "lab", "name": "Malaria RDT and blood film", "indication": "definitive diagnosis" },
+      { "type": "lab", "name": "Full blood count", "indication": "anaemia, thrombocytopenia" },
+      { "type": "lab", "name": "Blood glucose", "indication": "hypoglycaemia common" },
+      { "type": "lab", "name": "Lumbar puncture", "indication": "rule out meningitis" },
+      { "type": "lab", "name": "Serum electrolytes", "indication": "metabolic disturbances" },
+      { "type": "lab", "name": "Blood cultures", "indication": "rule out bacteraemia" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to HDU/ICU",
+          "IV Artesunate 2.4 mg/kg at 0, 12, 24 hours then daily",
+          "If Artesunate unavailable: IV Quinine 20 mg/kg load over 4h, then 10 mg/kg Q8H",
+          "Treat hypoglycaemia — 10% dextrose 5 mL/kg IV",
+          "Correct anaemia — packed RBC transfusion if Hb <6 g/dL",
+          "Seizure control — Diazepam 0.3 mg/kg IV PRN",
+          "Monitor GCS, blood glucose Q4H, parasite count daily"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "space_occupying_lesion",
+    "name": "Space-Occupying Lesion (abscess/tumour)",
+    "system": "cns",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.15,
+    "historyFeatures": [
+      { "symptomId": "headache", "weight": 4, "condition": "age > 36" },
+      { "symptomId": "vomiting", "weight": 3 },
+      { "symptomId": "seizures", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "focal_neurological_signs", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "papilledema", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "syndromeTags": ["neurological_emergency"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["progressive headache + vomiting + focal signs"],
+    "exclusionClues": ["normal CT/MRI"],
+    "investigations": [
+      { "type": "imaging", "name": "CT head with contrast", "indication": "first-line — ring-enhancing lesion" },
+      { "type": "imaging", "name": "MRI brain with gadolinium", "indication": "better characterisation" },
+      { "type": "lab", "name": "Full blood count", "indication": "infection screen" },
+      { "type": "lab", "name": "Toxoplasma serology", "indication": "Toxoplasma abscess" },
+      { "type": "lab", "name": "TB workup", "indication": "TB abscess" },
+      { "type": "procedure", "name": "Stereotactic biopsy", "indication": "tissue diagnosis if accessible" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "CT/MRI head for definitive diagnosis",
+          "Neurosurgical consultation",
+          "If abscess: empiric Ceftriaxone 100 mg/kg IV Q12H + Metronidazole 10 mg/kg IV Q8H",
+          "If tumour: Dexamethasone 0.1 mg/kg IV Q6H to reduce oedema",
+          "Anticonvulsants if seizure — Phenytoin 5 mg/kg/day PO"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to HDU/ICU",
+          "Mannitol 0.5 g/kg IV if acute raised ICP",
+          "Dexamethasone 0.15 mg/kg IV Q6H",
+          "Urgent neurosurgery — drainage vs resection",
+          "Continue empiric antibiotics if abscess",
+          "Monitor GCS, vital signs, pupillary response"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "status_epilepticus",
+    "name": "Status Epilepticus",
+    "system": "cns",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.3,
+    "historyFeatures": [
+      { "symptomId": "seizures", "weight": 5, "condition": "prolonged >5 min" },
+      { "symptomId": "lethargy", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "prolonged_convulsion", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "altered_consciousness", "baseWeight": 3 }
+    ],
+    "syndromeTags": ["neurological_emergency"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["continuous seizure >5 min or >2 seizures without recovery"],
+    "exclusionClues": ["brief self-limiting seizure"],
+    "investigations": [
+      { "type": "lab", "name": "Blood glucose (bedside)", "indication": "hypoglycaemia" },
+      { "type": "lab", "name": "Serum electrolytes", "indication": "hyponatraemia, hypocalcaemia" },
+      { "type": "lab", "name": "Full blood count", "indication": "infection screen" },
+      { "type": "lab", "name": "Antiepileptic drug levels", "indication": "if on therapy" },
+      { "type": "lab", "name": "Blood cultures, LP", "indication": "if infection suspected" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "severe",
+        "steps": [
+          "ABC — airway, oxygen, IV access",
+          "0-5 min: Diazepam 0.3 mg/kg IV (or 0.5 mg/kg PR if no IV)",
+          "5-10 min if ongoing: Phenytoin 20 mg/kg IV slow (max 50 mg/min) or Levetiracetam 40 mg/kg IV",
+          "10-20 min if ongoing: Phenobarbital 20 mg/kg IV slow",
+          "Check glucose — 10% dextrose 5 mL/kg if hypoglycaemic",
+          ">20 min: IV anaesthesia — Thiopental or Midazolam infusion, intubate",
+          "Admit to ICU"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "guillain_barre",
+    "name": "Guillain-Barre Syndrome",
+    "system": "cns",
+    "agePeak": [60, 216],
+    "prevalenceWeight": 0.15,
+    "historyFeatures": [
+      { "symptomId": "ascending_weakness", "weight": 5 },
+      { "symptomId": "paresthesia", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "reduced_tone", "baseWeight": 3 },
+      { "signId": "areflexia", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "respiratory_muscle_weakness", "baseWeight": 3 }
+    ],
+    "syndromeTags": ["neurological_emergency"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["ascending flaccid paralysis + areflexia"],
+    "exclusionClues": ["normal CSF protein"],
+    "investigations": [
+      { "type": "procedure", "name": "Lumbar puncture", "indication": "CSF protein elevated, normal cell count" },
+      { "type": "lab", "name": "Nerve conduction studies", "indication": "demyelinating pattern" },
+      { "type": "lab", "name": "Full blood count", "indication": "baseline" },
+      { "type": "lab", "name": "Spirometry/peak flow", "indication": "respiratory muscle function" },
+      { "type": "lab", "name": "Stool culture/Serology", "indication": "Campylobacter, EBV, CMV" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Admit for monitoring of respiratory function",
+          "IV immunoglobulins 0.4 g/kg/day x 5 days",
+          "Monitor: SpO2, respiratory rate, ability to cough, single breath count",
+          "Physiotherapy — prevent contractures"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ICU",
+          "IV immunoglobulins 0.4 g/kg/day x 5 days",
+          "Monitor respiratory function — vital capacity Q4-6H",
+          "Intubate if vital capacity <15 mL/kg, declining, or bulbar weakness",
+          "Plasmapheresis if IVIG contraindicated",
+          "DVT prophylaxis, chest physiotherapy, pressure care"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "myasthenia_gravis",
+    "name": "Myasthenia Gravis",
+    "system": "cns",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.1,
+    "historyFeatures": [
+      { "symptomId": "ptosis", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "difficulty_swallowing", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "ptosis", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "ophthalmoplegia", "baseWeight": 3 }
+    ],
+    "syndromeTags": ["neurological_emergency"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["fatigable weakness + ptosis + diplopia"],
+    "exclusionClues": ["negative Tensilon test"],
+    "investigations": [
+      { "type": "lab", "name": "Acetylcholine receptor antibody", "indication": "definitive" },
+      { "type": "lab", "name": "Repetitive nerve stimulation", "indication": "decremental response" },
+      { "type": "lab", "name": "CT chest", "indication": "thymoma screening" },
+      { "type": "lab", "name": "Pulmonary function tests", "indication": "respiratory muscle strength" },
+      { "type": "procedure", "name": "Tensilon (edrophonium) test", "indication": "diagnostic challenge" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Pyridostigmine 1-2 mg/kg PO Q4-6H, titrate to symptoms",
+          "Avoid drugs that worsen MG (aminoglycosides, beta-blockers, magnesium)",
+          "Ophthalmology review for ptosis/diplopia management",
+          "Neurology follow-up"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ICU for monitoring",
+          "IV immunoglobulins 0.4 g/kg/day x 5 days",
+          "Plasmapheresis if myasthenic crisis",
+          "Pyridostigmine as above — may need temporary IV",
+          "Prednisolone 1-2 mg/kg PO OD — start after improvement on pyridostigmine",
+          "Intubation if respiratory failure"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "infantile_spasms",
+    "name": "Infantile Spasms",
+    "system": "cns",
+    "agePeak": [3, 12],
+    "prevalenceWeight": 0.1,
+    "historyFeatures": [
+      { "symptomId": "spasms", "weight": 5 },
+      { "symptomId": "developmental_regression", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "hypsarrhythmia_eg", "baseWeight": 5, "doubleWeight": true }
+    ],
+    "syndromeTags": ["neurological_emergency"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["flexor/extensor spasms in clusters + developmental regression"],
+    "exclusionClues": ["normal EEG"],
+    "investigations": [
+      { "type": "lab", "name": "EEG (VEEG monitoring)", "indication": "hypsarrhythmia pattern" },
+      { "type": "imaging", "name": "MRI brain", "indication": "structural lesion" },
+      { "type": "lab", "name": "Metabolic workup", "indication": "inborn errors of metabolism" },
+      { "type": "lab", "name": "Genetic testing", "indication": "if structural and metabolic normal" },
+      { "type": "lab", "name": "Developmental assessment", "indication": "baseline and monitoring" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "VEEG monitoring to confirm hypsarrhythmia",
+          "First line: ACTH 150 IU/m2/day IM x 2 weeks, then taper",
+          "Alternative: Vigabatrin 50 mg/kg/day PO, titrate to 150 mg/kg/day",
+          "If Vigabatrin: visual field monitoring",
+          "Developmental paediatrician referral",
+          "MRI brain to identify underlying cause"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ward",
+          "ACTH or Vigabatrin as above",
+          "If refractory: Ketogenic diet therapy",
+          "Corticosteroid pulse — Methylprednisolone 30 mg/kg IV OD x 3 days",
+          "Treat underlying cause if identified",
+          "Long-term neurodevelopmental follow-up"
+        ]
+      }
+    ]
+  }
+]

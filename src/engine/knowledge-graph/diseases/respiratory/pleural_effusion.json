@@ -1,0 +1,175 @@
+{
+  "id": "pleural_effusion",
+  "name": "Pleural Effusion",
+  "system": "respiratory",
+  "syndromeType": "pleural_space_fluid_accumulation",
+  "corePathophysiology": [
+    "increased_capillary_permeability",
+    "reduced_lymphatic_drainage",
+    "infection_inflammation",
+    "oncotic_pressure_imbalance",
+    "pleural_inflammation",
+    "lung_compression"
+  ],
+  "ageLogic": {
+    "peak": [0, 216],
+    "context": {
+      "0_5_yrs": "pneumonia, TB",
+      "5_12_yrs": "TB, parapneumonic",
+      "any_age": "trauma, CHF, nephrotic (rare)"
+    }
+  },
+  "etiologyTypes": [
+    {"type": "parapneumonic", "cause": "pneumonia", "weight": 0.5},
+    {"type": "empyema", "cause": "pus in pleural space", "weight": 0.1},
+    {"type": "tuberculous", "cause": "Mycobacterium tuberculosis", "weight": 0.3},
+    {"type": "malignant", "cause": "lymphoma, leukaemia, rare solid tumors", "weight": 0.02},
+    {"type": "cardiac", "cause": "congestive heart failure (transudate)", "weight": 0.03},
+    {"type": "hypoalbuminemic", "cause": "nephrotic syndrome, liver disease", "weight": 0.03},
+    {"type": "traumatic", "cause": "hemothorax", "weight": 0.02}
+  ],
+  "prevalenceWeight": 0.2,
+  "historyFeatures": [
+    {"symptomId": "difficulty_breathing", "weight": 4},
+    {"symptomId": "chest_pain", "weight": 3},
+    {"symptomId": "fever", "weight": 4, "suggests": "parapneumonic/empyema"},
+    {"symptomId": "chronic_cough", "weight": 3, "suggests": "TB"},
+    {"symptomId": "weight_loss", "weight": 3, "suggests": "TB/malignancy"},
+    {"symptomId": "acute_deterioration", "weight": 4}
+  ],
+  "negativeWeights": {
+    "no_fever_acute_onset": -2,
+    "generalized_edema": 2,
+    "sudden_trauma": "hemothorax_flag"
+  },
+  "examFeatures": [
+    {"signId": "stony_dullness", "weight": 7, "criticalMarker": true, "description": "pathognomonic for effusion"},
+    {"signId": "reduced_air_entry", "weight": 5},
+    {"signId": "tracheal_deviation", "weight": 5, "severityMarker": true, "description": "mediastinal shift → emergency"},
+    {"signId": "reduced_chest_expansion", "weight": 4},
+    {"signId": "decreased_tactile_fremitus", "weight": 4},
+    {"signId": "tachypnea", "weight": 3}
+  ],
+  "severityCriteria": {
+    "mild": ["small_effusion", "stable_spO2"],
+    "moderate": ["dyspnea", "moderate_fluid"],
+    "severe": [
+      "respiratory_distress",
+      "tracheal_shift",
+      "hypoxia",
+      "large_effusion",
+      "sepsis_signs"
+    ]
+  },
+  "syndromeTags": ["pleural_space_fluid"],
+  "mustNotMiss": false,
+  "diagnosticClues": ["stony dullness + reduced breath sounds"],
+  "exclusionClues": ["clear CXR"],
+  "differentialDiagnosis": [
+    {"disease": "Pneumonia", "keyDiscriminator": "fever + acute illness"},
+    {"disease": "Tuberculosis", "keyDiscriminator": "chronic cough + weight loss + high ADA"},
+    {"disease": "Congestive Heart Failure", "keyDiscriminator": "hepatomegaly, edema, gallop, transudate"},
+    {"disease": "Nephrotic Syndrome", "keyDiscriminator": "generalized edema, proteinuria, low albumin"},
+    {"disease": "Malignancy", "keyDiscriminator": "persistent symptoms, lymphadenopathy, exudate"},
+    {"disease": "Trauma", "keyDiscriminator": "sudden onset after injury, blood on tap"}
+  ],
+  "investigations": {
+    "imaging": [
+      {
+        "name": "Chest X-ray",
+        "findings": ["blunting_costophrenic_angle", "meniscus_sign", "white_out_hemithorax"],
+        "indication": "all suspected"
+      },
+      {
+        "name": "Chest ultrasound",
+        "role": "gold_standard_confirmation_and_drainage_guidance"
+      }
+    ],
+    "procedures": [
+      {
+        "name": "Diagnostic thoracentesis",
+        "indication": "all moderate/large effusions"
+      }
+    ],
+    "pleural_fluid_analysis": ["protein", "LDH", "glucose", "pH", "Gram stain", "culture", "ADA"],
+    "labs": ["FBC + CRP", "blood culture if febrile"]
+  },
+  "fluidClassification": {
+    "exudate": {
+      "criteria": "high protein + high LDH",
+      "likely_causes": ["pneumonia", "TB", "malignancy", "empyema"]
+    },
+    "transudate": {
+      "criteria": "low protein",
+      "likely_causes": ["CHF", "nephrotic syndrome", "hypoalbuminemia"]
+    },
+    "empyema": {
+      "criteria": "low glucose + low pH (<7.2) + positive culture",
+      "action": "chest tube + prolonged antibiotics ± surgery"
+    },
+    "TB_effusion": {
+      "criteria": "high ADA (>40 U/L)",
+      "action": "start ATT"
+    }
+  },
+  "managementProtocols": [
+    {
+      "condition": "mild",
+      "steps": [
+        "Treat underlying cause (antibiotics for pneumonia, ATT for TB)",
+        "No drainage unless progression",
+        "Monitor SpO2, RR, chest pain, fever curve"
+      ]
+    },
+    {
+      "condition": "moderate",
+      "steps": [
+        "Ultrasound-guided diagnostic thoracentesis",
+        "IV antibiotics if parapneumonic: Ceftriaxone 80 mg/kg IV OD (max 2g)",
+        "Analgesia: Paracetamol 15 mg/kg Q6H PRN",
+        "Oxygen to maintain SpO2 >92%",
+        "Monitor drain output, SpO2, RR Q4H"
+      ]
+    },
+    {
+      "condition": "severe",
+      "steps": [
+        "Immediate chest tube drainage (large bore)",
+        "IV antibiotics: Ceftriaxone 80 mg/kg IV OD + Metronidazole 7.5 mg/kg IV TDS (if empyema suspected)",
+        "Pleural fluid: MC&S, LDH, protein, pH, glucose, Gram stain",
+        "IV fluids to maintain hydration",
+        "Analgesia",
+        "ICU admission, continuous SpO2 monitoring",
+        "Surgical referral if loculated or no improvement after 48-72h"
+      ]
+    }
+  ],
+  "responseToTreatment": {
+    "expected": "improvement within 48-72 hours",
+    "warningSignsFailure": [
+      "persistent fever",
+      "no drainage improvement",
+      "worsening imaging",
+      "developing chest wall edema"
+    ],
+    "escalation": "Consider TB, loculated empyema, resistant infection, or malignancy"
+  },
+  "complications": [
+    {
+      "id": "lung_collapse",
+      "trigger": "large_effusion",
+      "severity": "moderate"
+    },
+    {
+      "id": "fibrothorax",
+      "trigger": "untreated_empyema",
+      "severity": "high"
+    },
+    {
+      "id": "respiratory_failure",
+      "trigger": "massive_effusion",
+      "severity": "life_threatening"
+    }
+  ],
+  "clinicalPearl": "Pleural effusion is a visible end-stage signal of multiple disease systems. AMEXAN must detect fluid, classify type, identify upstream cause, decide drainage urgency, and treat the root disease. Never delay drainage in empyema."
+}

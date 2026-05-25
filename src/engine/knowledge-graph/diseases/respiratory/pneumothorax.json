@@ -1,0 +1,147 @@
+
+{
+  "id": "pneumothorax",
+  "name": "Pneumothorax",
+  "system": "respiratory",
+  "syndromeType": "pleural_air_accumulation_with_lung_collapse",
+  "corePathophysiology": [
+    "pleural_pressure_disruption",
+    "lung_collapse",
+    "ventilation_perfusion_mismatch",
+    "reduced_tidal_volume",
+    "hypoxemia",
+    "mediastinal_shift_possible"
+  ],
+  "ageLogic": {
+    "peak": [0, 216],
+    "context": {
+      "neonates": "birth_trauma_ventilation_injury",
+      "infants": "underlying_lung_disease",
+      "children": "asthma_rupture_infection_trauma",
+      "adolescents": "spontaneous_primary_pneumothorax"
+    }
+  },
+  "prevalenceWeight": 0.15,
+  "historyFeatures": [
+    { "symptomId": "sudden_chest_pain", "weight": 5, "keyDiscriminator": true },
+    { "symptomId": "acute_dyspnea", "weight": 5 },
+    { "symptomId": "chest_tightness", "weight": 3 },
+    { "symptomId": "trauma_history", "weight": 6 },
+    { "symptomId": "recent_procedures", "weight": 4 },
+    { "symptomId": "asthma_exacerbation", "weight": 3 }
+  ],
+  "negativeWeights": {
+    "gradual_onset_cough": -4,
+    "fever_predominant": -3,
+    "bilateral_symptoms": -5,
+    "wheeze_dominant": -4
+  },
+  "examFeatures": [
+    { "signId": "hyperresonance", "weight": 6, "critical_sign": true },
+    { "signId": "absent_breath_sounds", "weight": 7, "critical_sign": true },
+    { "signId": "reduced_chest_expansion", "weight": 4 },
+    { "signId": "tachypnea", "weight": 3 },
+    { "signId": "tracheal_deviation", "weight": 6, "tension_marker": true },
+    { "signId": "hypotension", "weight": 7, "late_sign": true, "tension_marker": true }
+  ],
+  "severityCriteria": {
+    "mild": ["small_air_collection", "stable_vitals", "no_distress"],
+    "moderate": ["dyspnea", "partial_lung_collapse", "mild_hypoxia"],
+    "severe": [
+      "hypotension",
+      "tracheal_shift",
+      "severe_respiratory_distress",
+      "cyanosis",
+      "neck_vein_distension"
+    ]
+  },
+  "syndromeTags": ["respiratory_distress", "air_leak_emergency"],
+  "mustNotMiss": true,
+  "diagnosticClues": ["hyperresonance + absent breath sounds + tracheal deviation"],
+  "exclusionClues": ["normal CXR"],
+  "differentialDiagnosis": [
+    { "disease": "Asthma", "keyDiscriminator": "expiratory wheeze + response to salbutamol" },
+    { "disease": "Pneumonia", "keyDiscriminator": "fever + crackles" },
+    { "disease": "Pleural Effusion", "keyDiscriminator": "stony dullness, not hyperresonance" },
+    { "disease": "Croup", "keyDiscriminator": "inspiratory stridor, barking cough" },
+    { "disease": "Foreign Body Aspiration", "keyDiscriminator": "sudden onset wheeze + unilateral" }
+  ],
+  "investigations": {
+    "imaging": [
+      {
+        "name": "Chest X-ray (PA or AP upright)",
+        "findings": ["visible pleural line", "absent lung markings", "lung collapse", "mediastinal shift (tension)"],
+        "indication": "all suspected"
+      },
+      {
+        "name": "Chest CT",
+        "indication": "complex, recurrent, or to guide management"
+      }
+    ],
+    "bedside": [
+      "SpO2 continuous monitoring",
+      "clinical airway and breathing assessment (do NOT delay intervention for imaging in tension)"
+    ]
+  },
+  "managementProtocols": [
+    {
+      "condition": "mild",
+      "steps": [
+        "Small pneumothorax (<20%) without respiratory distress: observe with high-flow oxygen",
+        "Repeat CXR in 4-6 hours to confirm stability",
+        "Monitor: SpO2 continuous, RR, HR Q4H",
+        "Avoid positive pressure ventilation if possible"
+      ]
+    },
+    {
+      "condition": "moderate",
+      "steps": [
+        "Needle decompression: 2nd ICS midclavicular line with 14G/16G cannula if enlarging or distress",
+        "Definitive: Chest tube insertion (4th-5th ICS midaxillary line, size 12-16F for children)",
+        "Connect to underwater seal drainage (no suction initially)",
+        "CXR to confirm tube position and lung re-expansion",
+        "Monitor: chest drain output, air leak, SpO2, RR, BP Q1H"
+      ]
+    },
+    {
+      "condition": "severe (TENSION PNEUMOTHORAX)",
+      "steps": [
+        "EMERGENCY: Do NOT wait for imaging – immediate needle decompression",
+        "Insert large-bore cannula into 2nd ICS midclavicular line (or 4th/5th ICS anterior axillary line)",
+        "Immediate chest tube insertion after decompression",
+        "High-flow oxygen (target SpO2 >94%)",
+        "IV fluids if hypotensive",
+        "Monitor continuously: SpO2, BP, HR, tracheal position, chest drain output",
+        "Prepare for thoracotomy if persistent air leak >5-7 days"
+      ]
+    }
+  ],
+  "responseToTreatment": {
+    "expected": "lung re-expansion and clinical improvement within hours after drainage",
+    "warningSignsFailure": [
+      "persistent air leak >48 hours",
+      "no lung re-expansion on CXR",
+      "worsening hypoxia or respiratory distress",
+      "recurrent pneumothorax after tube removal"
+    ],
+    "escalation": "Consider bronchopleural fistula, underlying cavitary lung disease (TB, bullae), or need for surgical pleurodesis"
+  },
+  "complications": [
+    {
+      "id": "tension_pneumothorax",
+      "riskLevel": "immediate_death_risk",
+      "prevention": "early recognition and decompression"
+    },
+    {
+      "id": "respiratory_failure",
+      "severity": "high",
+      "trigger": "large or bilateral pneumothorax"
+    },
+    {
+      "id": "recurrent_pneumothorax",
+      "chronicRisk": true,
+      "management": "may require pleurodesis or surgery"
+    }
+  ],
+  "clinicalPearl": "Pneumothorax is an ACUTE PRESSURE LOSS + LUNG COLLAPSE EMERGENCY. The triad of hyperresonance, absent breath sounds, and tracheal deviation demands immediate decompression before imaging. Never wait for CXR in tension pneumothorax."
+}

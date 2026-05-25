@@ -1,18 +1,30 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth, db, storage } from '@/lib/firebase';
 import {
-  collection, query, where, onSnapshot, doc,setDoc, addDoc, updateDoc,
+  collection, query, where, onSnapshot, doc,setDoc, addDoc, limit, updateDoc,
   getDoc, serverTimestamp, orderBy, getDocs, arrayUnion, Timestamp
 } from 'firebase/firestore';
 import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { signOut, onAuthStateChanged, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { signOut, onAuthStateChanged, updatePassword, EmailAuthProvider, reauthenticateWithCredential, getAuth } from 'firebase/auth';
 import { QRCodeSVG } from 'qrcode.react';
+import { initPatientTheme, applyPatientTheme, getStoredPatientTheme, PATIENT_THEME_LIST, type PatientTheme } from '@/lib/patient-theme';
+import ARTICLES, { searchArticles } from '@/src/data/education';
 
+import PatientHealthDashboard from '@/components/PatientHealthDashboard';
+import ClinicalHistory from '@/components/ClinicalHistory';
+import AmexanClinicalMessaging from '@/components/AmexanClinicalMessaging';
 
-
+import PatientToolLogger from '@/components/PatientToolLogger';
+import ClinicalMessenger from '@/components/ClinicalMessenger';
+import PatientVisitSummary from '@/components/PatientVisitSummary';
+import PatientOrdersCenter  from '@/components/PatientOrdersCenter';
+import PatientRxCenter      from '@/components/PatientRxCenter';
+import DiscoverTab from '@/components/DiscoverTab';
+import PatientReferralPortal from '@/components/PatientReferralPortal';
+import PatientEducationView from '@/components/PatientEducationView';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ADD THESE TWO HELPERS near the top of your page.tsx (after imports)
@@ -21,7 +33,7 @@ import { QRCodeSVG } from 'qrcode.react';
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Safe JSON fetch — throws a readable Error if:
+ * Safe JSON fetch — throws a readabltabe Error if:
  *  - The network fails
  *  - The server returns HTML instead of JSON (route not found / server crash)
  *  - The JSON body contains success: false
@@ -208,11 +220,6 @@ interface DiseaseTarget {
   id: string; label: string; current?: string; target: string;
   status: 'on-target'|'off-target'|'warning'; unit?: string; icon: string;
 }
-interface Education {
-  id: string; title: string; type: 'article'|'video'; url?: string;
-  summary: string; condition: string; readTime?: string; imageUrl?: string;
-}
-
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════════════════════════════════
@@ -239,6 +246,8 @@ const statusCfg: Record<string, { label: string; color: string; bg: string }> = 
   completed: { label: 'Completed', color: '#64748b', bg: 'rgba(100,116,139,0.12)' },
   cancelled: { label: 'Cancelled', color: '#ff4560', bg: 'rgba(255,69,96,0.12)' },
 };
+
+
 const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 function getDaysSince(ts: any): number {
   if (!ts) return 999;
@@ -274,18 +283,6 @@ function useCountdown(target: any) {
 // ═══════════════════════════════════════════════════════════════════════════
 // PAYHERO STK PUSH
 // ═══════════════════════════════════════════════════════════════════════════
-async function initiateSTKFrontend(phone: string, amount: number, appointmentId: string, patientName: string, specialty: string) {
-  const res = await fetch("/api/payhero/initiate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ phone, amount, appointmentId, patientName, specialty }),
-  });
-
-  const data = await res.json();
-  if (!res.ok || data.success === false) throw new Error(data.message || "STK push failed");
-  return data;
-}
-
 // ═══════════════════════════════════════════════════════════════════════════
 // PRESCRIPTION ADHERENCE CALENDAR
 // ═══════════════════════════════════════════════════════════════════════════
@@ -496,23 +493,52 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
   const [existingApptId, setExistingApptId] = useState('');
   const [pollSecs, setPollSecs] = useState(0);
   const [isFirstVisit, setIsFirstVisit] = useState(false);
+// ── Real-time availability from Firestore ──────────────────────────────────
+  const [availability, setAvailability] = useState<{
+    availableDays: string[];
+    slots: string[];
+    timezone: string;
+    slotDuration: number;
+  } | null>(null);
+  const [availLoading, setAvailLoading] = useState(true);
 
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, 'availability', svc.doctorId), (snap) => {
+      setAvailability(snap.exists() ? snap.data() as any : null);
+      setAvailLoading(false);
+    });
+    return () => unsub();
+  }, [svc.doctorId]);
+
+  // ── Derived: use doctor's real data, fallback to service data ─────────────
+  const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  const availableDays = availability?.availableDays?.length
+    ? availability.availableDays
+    : (svc.availableDays ?? []);
+
+  const slots = availability?.slots?.length
+    ? availability.slots
+    : (svc.availableSlots || ['09:00','09:30','10:00','10:30','11:00','11:30','14:00','14:30','15:00','15:30','16:00']);
+
+  const timezone = availability?.timezone || 'Africa/Nairobi';
+
+  // Next 14 days filtered to doctor's real available days
+  const next14Days = Array.from({ length: 14 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() + 1 + i);
+    const dayName = DAY_NAMES[d.getDay()];
+    return {
+      key: d.toISOString().slice(0, 10),
+      label: `${dayName} ${d.getDate()}`,
+      month: d.toLocaleString('default', { month: 'short' }),
+      available: !availableDays.length || availableDays.includes(dayName),
+    };
+  }).filter(d => d.available);
+
+  // ── Polling refs ───────────────────────────────────────────────────────────
   const unsubRef = useRef<(() => void) | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Day names (if not already globally available)
-  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-  // Slots and available days
-  const slots = svc.availableSlots || ['09:00','09:30','10:00','10:30','11:00','11:30','14:00','14:30','15:00','15:30','16:00'];
-  const next7Days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(); d.setDate(d.getDate() + 1 + i);
-    const dayName = dayNames[d.getDay()];
-    const isAvailable = !svc.availableDays?.length || svc.availableDays.includes(dayName);
-    return { date: d, key: d.toISOString().slice(0,10), label: `${dayName} ${d.getDate()}`, available: isAvailable };
-  }).filter(d => d.available);
-
-  // Cleanup listeners on unmount
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -528,28 +554,20 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
   const startPolling = (id: string) => {
     let secs = 0;
     timerRef.current = setInterval(() => {
-      secs += 1;
-      setPollSecs(secs);
+      secs += 1; setPollSecs(secs);
       if (secs >= 120) {
-        stopPolling();
-        setStep('failed');
+        stopPolling(); setStep('failed');
         setError('Payment timed out after 2 minutes. Your booking is saved — tap Retry to try again.');
       }
     }, 1000);
-
     unsubRef.current = onSnapshot(doc(db, 'appointments', id), (snap) => {
       const status = snap.data()?.paymentStatus;
-      if (status === 'paid') {
-        stopPolling();
-        setStep('done');
-      } else if (status === 'failed') {
-        stopPolling();
-        setStep('failed');
-        setError('M-Pesa payment was declined. Tap Retry to try again.');
-      }
+      if (status === 'paid') { stopPolling(); setStep('done'); }
+      else if (status === 'failed') { stopPolling(); setStep('failed'); setError('M-Pesa payment was declined. Tap Retry to try again.'); }
     });
   };
 
+  // ── Book ───────────────────────────────────────────────────────────────────
   const handleBook = async () => {
     if (!concern.trim()) { setError('Please describe your concern.'); return; }
     if (!selectedSlot || !selectedDate) { setError('Please select a date and time.'); return; }
@@ -564,7 +582,6 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
       const firstVisit = prevVisits.empty;
       setIsFirstVisit(firstVisit);
       const scheduledDateTime = new Date(`${selectedDate}T${selectedSlot}:00`);
-
       const ref = await addDoc(collection(db, 'appointments'), {
         patientId: patient.uid, patientName: patient.name, patientEmail: patient.email,
         doctorId: svc.doctorId, doctorName: svc.doctorName, serviceId: svc.id,
@@ -572,9 +589,10 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
         date: serverTimestamp(),
         scheduledDate: Timestamp.fromDate(scheduledDateTime),
         scheduledTime: selectedSlot,
+        scheduledTimezone: timezone,
         patientNotes: concern, prescriptions: [], notes: '',
         paymentStatus: 'pending', amount: svc.price, type: 'telemedicine',
-        firstVisit: firstVisit,
+        firstVisit,
       });
       setApptId(ref.id);
       setStep('pay');
@@ -582,6 +600,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
     setLoading(false);
   };
 
+  // ── Pay ────────────────────────────────────────────────────────────────────
   const handlePay = async (targetApptId?: string) => {
     const id = targetApptId || apptId;
     if (!id) { setError('No appointment found. Please start over.'); return; }
@@ -593,22 +612,18 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
     }
 
     setLoading(true); setError(''); setPollSecs(0);
-
     try {
       const data = await safePost("/api/payhero/initiate", {
         phone, amount: svc.price, appointmentId: id,
         patientName: patient.name, specialty: svc.specialty,
       });
-
-      if (!data?.success) throw new Error(data?.message || "Payment initiation failed");
-
+      if (data?.success === false) throw new Error(data?.message || "Payment initiation failed");
       await updateDoc(doc(db, "appointments", id), {
         paymentStatus: "processing",
         paymentInitiatedAt: new Date().toISOString(),
         phone,
         payheroReference: data.data?.reference || data.data?.CheckoutRequestID || data.data?.checkout_request_id || "",
       });
-
       setExistingApptId(id);
       setStep("waiting");
       startPolling(id);
@@ -620,28 +635,32 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
     }
   };
 
-  // Helper for progress bar step index
   const stepIdx = step === 'slot' ? 0 : step === 'details' ? 1 : step === 'pay' || step === 'waiting' ? 2 : step === 'done' ? 3 : 2;
 
   return (
     <div className="overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()}>
+
+        {/* Header */}
         <div className="modal-hd">
           <div>
             <h3 className="modal-ht">{svc.specialty}</h3>
             <p className="modal-hs">Dr. {svc.doctorName} · {svc.clinic}</p>
+            {!availLoading && availability?.timezone && (
+              <p style={{ margin: '3px 0 0', fontSize: 11, color: '#0aaa76', fontWeight: 600 }}>
+                🌍 {timezone}{availability.slotDuration ? ` · ${availability.slotDuration}min slots` : ''}
+              </p>
+            )}
           </div>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
 
-        {/* Progress bar (hidden on done/failed) */}
+        {/* Progress bar */}
         {step !== 'done' && step !== 'failed' && (
           <div className="steps-bar">
             {['Date & Time','Details','Payment','Confirmed'].map((s, i) => (
               <div key={s} className="step-wrap">
-                <div className={`step-num ${i <= stepIdx ? 'step-on' : ''}`}>
-                  {i < stepIdx ? '✓' : i + 1}
-                </div>
+                <div className={`step-num ${i <= stepIdx ? 'step-on' : ''}`}>{i < stepIdx ? '✓' : i + 1}</div>
                 <span className="step-text">{s}</span>
                 {i < 3 && <div className={`step-line ${i < stepIdx ? 'step-line-on' : ''}`} />}
               </div>
@@ -652,32 +671,60 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
         {/* STEP: Date & Time */}
         {step === 'slot' && (
           <div className="modal-body">
-            <div className="field-col">
-              <label className="field-lbl">Select Date</label>
-              <div className="slot-days">
-                {next7Days.map(d => (
-                  <button key={d.key} className={`slot-day ${selectedDate === d.key ? 'slot-on' : ''}`}
-                    onClick={() => setSelectedDate(d.key)}>
-                    {d.label}
-                  </button>
-                ))}
+            {availLoading ? (
+              <div style={{ textAlign: 'center', padding: '40px 0', color: '#94a3b8' }}>
+                <div style={{ fontSize: 32, marginBottom: 8 }}>⏳</div>
+                <p style={{ fontSize: 14 }}>Loading Dr. {svc.doctorName}'s availability...</p>
               </div>
-            </div>
-            {selectedDate && (
-              <div className="field-col">
-                <label className="field-lbl">Select Time</label>
-                <div className="slot-times">
-                  {slots.map(s => (
-                    <button key={s} className={`slot-time ${selectedSlot === s ? 'slot-on' : ''}`}
-                      onClick={() => setSelectedSlot(s)}>
-                      {s}
-                    </button>
-                  ))}
+            ) : (
+              <>
+                <div className="field-col">
+                  <label className="field-lbl">
+                    Select Date
+                    {availability && (
+                      <span style={{ marginLeft: 8, fontSize: 10, fontWeight: 700, color: '#0aaa76', background: '#ecfdf5', padding: '2px 6px', borderRadius: 6 }}>
+                        🟢 LIVE
+                      </span>
+                    )}
+                  </label>
+                  {next14Days.length === 0 ? (
+                    <div style={{ padding: 14, background: '#fff7ed', borderRadius: 10, color: '#92400e', fontSize: 13, border: '1px solid #fed7aa' }}>
+                      ⚠️ No available days in the next 2 weeks. Please check back later.
+                    </div>
+                  ) : (
+                    <div className="slot-days">
+                      {next14Days.map(d => (
+                        <button key={d.key} className={`slot-day ${selectedDate === d.key ? 'slot-on' : ''}`}
+                          onClick={() => { setSelectedDate(d.key); setSelectedSlot(''); }}>
+                          <span style={{ fontSize: 9, display: 'block', opacity: 0.65 }}>{d.month}</span>
+                          {d.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
+
+                {selectedDate && (
+                  <div className="field-col">
+                    <label className="field-lbl">
+                      Select Time
+                      <span style={{ marginLeft: 8, fontSize: 11, color: '#0aaa76', fontWeight: 400 }}>({timezone})</span>
+                    </label>
+                    <div className="slot-times">
+                      {slots.map(s => (
+                        <button key={s} className={`slot-time ${selectedSlot === s ? 'slot-on' : ''}`}
+                          onClick={() => setSelectedSlot(s)}>
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
+
             {error && <div className="err-box">{error}</div>}
-            <button className="btn-cta" onClick={() => {
+            <button className="btn-cta" disabled={availLoading} onClick={() => {
               if (!selectedDate || !selectedSlot) { setError('Please pick a date and time.'); return; }
               setError(''); setStep('details');
             }}>
@@ -691,8 +738,8 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
           <div className="modal-body">
             <div className="booking-summary">
               <span>📅 {new Date(selectedDate).toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
-              <span>⏰ {selectedSlot}</span>
-              <span>💰 KES {svc.price.toLocaleString()}</span>
+              <span>⏰ {selectedSlot} <span style={{ fontSize: 11, opacity: 0.7 }}>({timezone})</span></span>
+              <span>💰 KES {svc.price?.toLocaleString() ?? '0'}</span>
             </div>
             <div className="field-col">
               <label className="field-lbl">Describe your concern *</label>
@@ -714,7 +761,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
         {step === 'pay' && (
           <div className="modal-body">
             <div className="pay-center">
-              <div className="pay-amt">KES {svc.price.toLocaleString()}</div>
+              <div className="pay-amt">KES {svc.price?.toLocaleString() ?? '0'}</div>
               <p className="pay-sub">M-Pesa STK Push</p>
             </div>
             <div className="mpesa-pill">
@@ -731,36 +778,28 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
               <div className="err-box">
                 {error}
                 {existingApptId && (
-                  <button className="retry-btn" onClick={() => handlePay(existingApptId)}>
-                    🔄 Retry Payment
-                  </button>
+                  <button className="retry-btn" onClick={() => handlePay(existingApptId)}>🔄 Retry Payment</button>
                 )}
               </div>
             )}
             <button className="btn-cta" onClick={() => handlePay()} disabled={loading}>
-              {loading ? 'Sending prompt…' : `💳 Pay KES ${svc.price.toLocaleString()}`}
+              {loading ? 'Sending prompt…' : `💳 Pay KES ${svc.price?.toLocaleString() ?? '0'}`}
             </button>
           </div>
         )}
 
-        {/* STEP: Waiting for payment */}
+        {/* STEP: Waiting */}
         {step === 'waiting' && (
           <div className="modal-body" style={{ textAlign: 'center', padding: '24px 20px' }}>
             <div style={{ position: 'relative', width: 70, height: 70, margin: '0 auto 16px' }}>
               <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '3px solid #e2e8f0' }} />
-              <div style={{
-                position: 'absolute', inset: 0, borderRadius: '50%',
-                border: '3px solid transparent',
-                borderTopColor: '#0aaa76', borderRightColor: '#0aaa76',
-                animation: 'spin 0.9s linear infinite',
-              }} />
+              <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '3px solid transparent', borderTopColor: '#0aaa76', borderRightColor: '#0aaa76', animation: 'spin 0.9s linear infinite' }} />
               <div style={{ position: 'absolute', inset: 10, background: '#0aaa76', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>📱</div>
             </div>
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
             <h4 style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>Check your phone</h4>
             <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
-              We sent an M-Pesa prompt to <strong>{phone}</strong>.<br />
-              Enter your PIN to confirm payment.
+              We sent an M-Pesa prompt to <strong>{phone}</strong>.<br />Enter your PIN to confirm payment.
             </p>
             <div style={{ background: '#f1f5f9', borderRadius: 12, padding: 12, marginBottom: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#334155', marginBottom: 6 }}>
@@ -777,7 +816,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
           </div>
         )}
 
-        {/* STEP: Done (success) */}
+        {/* STEP: Done */}
         {step === 'done' && (
           <div className="modal-body" style={{ textAlign: 'center', padding: '32px 22px' }}>
             <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
@@ -785,14 +824,15 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
             <p style={{ color: 'var(--text2)', fontSize: 14, lineHeight: 1.8, marginBottom: 8 }}>
               Payment confirmed. Dr. {svc.doctorName} will be available on<br />
               <strong>{new Date(selectedDate).toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })} at {selectedSlot}</strong>
+              <br /><span style={{ fontSize: 12, color: '#0aaa76' }}>({timezone})</span>
             </p>
             {isFirstVisit && (
               <span style={{ display: 'inline-block', background: '#fef9c3', color: '#854d0e', borderRadius: 20, padding: '4px 12px', fontSize: 12, fontWeight: 700, marginBottom: 12 }}>⭐ First Visit</span>
             )}
             <p style={{ color: 'var(--accent)', fontSize: 13, marginBottom: 28 }}>
-              A receipt will appear in Payments once confirmed.
+              You'll receive a notification when the doctor starts the session.
             </p>
-            <button className="btn-cta" onClick={onClose}>Done</button>
+            <button className="btn-cta" onClick={onClose}>Done ✓</button>
           </div>
         )}
 
@@ -815,6 +855,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
@@ -891,7 +932,7 @@ function SmartcardModal({ patient, onClose }: { patient: Patient; onClose: () =>
         <div className="modal-body">
           <div className="smartcard">
             <div className="sc-top">
-              <div className="sc-avatar">{patient.photoUrl ? <img src={patient.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} /> : patient.name[0]}</div>
+              <div className="sc-avatar">{patient.photoUrl ? <img src={patient.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} /> : (patient.name || '?')[0]}</div>
               <div style={{ flex: 1 }}>
                 <div className="sc-name">{patient.name}</div>
                 <div className="sc-id">ID: {uid}</div>
@@ -1062,7 +1103,7 @@ function SettingsPanel({ patient, onUpdate }: { patient: Patient; onUpdate: (p: 
         <div className="settings-card-title">🖼️ Profile Photo</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div className="settings-avatar">
-            {form.photoUrl ? <img src={form.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} /> : form.name[0]}
+            {form.photoUrl ? <img src={form.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} /> : (form.name || '?')[0]}
           </div>
           <div>
             <button className="btn-sm-accent" onClick={() => fileRef.current?.click()} disabled={photoUploading}>
@@ -1272,6 +1313,7 @@ function PaymentsPanel({ appointments, patient }: { appointments: Appointment[];
   );
 }
 
+
 // ═══════════════════════════════════════════════════════════════════════════
 // CLINICAL HISTORY PANEL
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1381,6 +1423,20 @@ function DiseaseToolsPanel({ patientId, condition, vitals, onLogVital }: {
 }) {
   const [targets, setTargets] = useState<DiseaseTarget[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [activeReferralCount, setActiveReferralCount] = useState(0);
+  useEffect(() => {
+    if (!patientId) return;
+    const u = onSnapshot(
+      query(
+        collection(db, 'referrals'),
+        where('patientId', '==', patientId),
+        where('status', 'in', ['pending', 'accepted', 'scheduled']),
+      ),
+      snap => setActiveReferralCount(snap.size),
+      () => setActiveReferralCount(0),   // fallback on index error
+    );
+    return () => u();
+  }, [patientId]);
 
   useEffect(() => {
     const unsub = onSnapshot(
@@ -1405,7 +1461,7 @@ function DiseaseToolsPanel({ patientId, condition, vitals, onLogVital }: {
   const latestBP = vitals.find(v => v.type === 'bp');
   const latestGlucose = vitals.find(v => v.type === 'glucose');
   const conditionTargets = targets.length ? targets : condition === 'Hypertension' ? [
-    { id: 'bp', label: 'Blood Pressure', target: '<130/80 mmHg', icon: '❤️', status: (latestBP && latestBP.systolic! < 130) ? 'on-target' as const : 'off-target' as const, current: latestBP ? `${latestBP.systolic}/${latestBP.diastolic}` : undefined, unit: 'mmHg' },
+    { id: 'bp', label: 'Blood Pressure', target: '<130/80 mmHg', icon: '❤️', status: (latestBP && (latestBP.systolic ?? 120) < 130) ? 'on-target' as const : 'off-target' as const, current: latestBP ? `${latestBP.systolic ?? '—'}/${latestBP.diastolic ?? '—'}` : undefined, unit: 'mmHg' },
   ] : condition === 'Diabetes' ? [
     { id: 'glc', label: 'Blood Glucose', target: '4.0–7.0 mmol/L', icon: '🩸', status: (latestGlucose && parseFloat(latestGlucose.value) <= 7) ? 'on-target' as const : 'off-target' as const, current: latestGlucose?.value, unit: 'mmol/L' },
   ] : [];
@@ -1459,9 +1515,9 @@ function DiseaseToolsPanel({ patientId, condition, vitals, onLogVital }: {
         <div style={{ marginTop: 16 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>7-Day BP Trend</div>
           <div className="bp-sparkline-row">
-            {vitals.filter(v => v.type === 'bp').slice(0, 7).reverse().map((v, i) => {
-              const pct = Math.min(100, Math.max(5, ((v.systolic! - 80) / 80) * 100));
-              const cat = bpCat(v.systolic!, v.diastolic!);
+              {vitals.filter(v => v.type === 'bp').slice(0, 7).reverse().map((v, i) => {
+              const pct = Math.min(100, Math.max(5, (((v.systolic ?? 120) - 80) / 80) * 100));
+              const cat = bpCat(v.systolic ?? 120, v.diastolic ?? 80);
               return (
                 <div key={i} className="spark-col" title={`${v.systolic}/${v.diastolic} — ${cat.label}\n${fmtShort(v.recordedAt)}`}>
                   <div className="spark-bar-outer">
@@ -1661,44 +1717,6 @@ function MessagesPanel({ patient, appointments }: { patient: Patient; appointmen
 // ═══════════════════════════════════════════════════════════════════════════
 // EDUCATION PANEL
 // ═══════════════════════════════════════════════════════════════════════════
-function EducationPanel({ patientId, condition }: { patientId: string; condition?: string }) {
-  const [items, setItems] = useState<Education[]>([]);
-
-  useEffect(() => {
-    const q = condition
-      ? query(collection(db, 'education'), where('condition', 'in', [condition, 'General']))
-      : query(collection(db, 'education'), where('condition', '==', 'General'));
-    const unsub = onSnapshot(q, snap => setItems(snap.docs.map(d => ({ id: d.id, ...d.data() } as Education))));
-    return () => unsub();
-  }, [patientId, condition]);
-
-  return (
-    <div className="panel">
-      <div className="panel-hd">
-        <div className="panel-title">📚 Health Education</div>
-        {condition && <span className="count-badge">{condition}</span>}
-      </div>
-      {items.length === 0 ? (
-        <div className="empty-sm"><div style={{ fontSize: 28 }}>📚</div><p>Personalized articles will appear based on your condition.</p></div>
-      ) : (
-        <div className="edu-grid">
-          {items.map(e => (
-            <a key={e.id} href={e.url || '#'} target="_blank" rel="noreferrer" className="edu-card">
-              {e.imageUrl && <img src={e.imageUrl} alt={e.title} className="edu-img" />}
-              <div className="edu-body">
-                <span className="edu-type">{e.type === 'video' ? '🎥' : '📄'} {e.type}</span>
-                <div className="edu-title">{e.title}</div>
-                <p className="edu-summary">{e.summary}</p>
-                {e.readTime && <div className="edu-time">⏱ {e.readTime}</div>}
-              </div>
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ═══════════════════════════════════════════════════════════════════════════
 // MAIN DASHBOARD
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1710,6 +1728,11 @@ export default function PatientDashboard() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [vitals, setVitals] = useState<VitalReading[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [patientNotifications, setPatientNotifications] = useState<any[]>([]);
+  const [educationLogs, setEducationLogs] = useState<any[]>([]);
+  const [labOrders, setLabOrders] = useState<any[]>([]);
+  const [clinicalNotes, setClinicalNotes] = useState<any[]>([]);
+  const [standalonePrescriptions, setStandalonePrescriptions] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [bookSvc, setBookSvc] = useState<Service | null>(null);
   const [profileSvc, setProfileSvc] = useState<Service | null>(null);
@@ -1723,6 +1746,19 @@ export default function PatientDashboard() {
   const [triageSpecialty, setTriageSpecialty] = useState('All');
   const [joining, setJoining] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [chatDoctor, setChatDoctor] = useState<{ doctorId: string; doctorName: string } | null>(null);
+  const [patientTheme, setPatientTheme] = useState<PatientTheme>('teal');
+  const [expandedEdu, setExpandedEdu] = useState<string | null>(null);
+  const [eduQuestions, setEduQuestions] = useState<any[]>([]);
+  const [eduStories, setEduStories] = useState<any[]>([]);
+  const eduReadRef = useRef(false);
+
+  // ── Close sidebar on mobile resize ──
+  useEffect(() => {
+    const handleResize = () => { if (window.innerWidth <= 768) setSidebarOpen(false); };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // ── Auth ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -1746,19 +1782,36 @@ export default function PatientDashboard() {
     return () => unsub();
   }, [router]);
 
-  // ── Firestore listeners ───────────────────────────────────────────────
-  useEffect(() => {
-    const unsub = onSnapshot(query(collection(db, 'services'), where('isAvailable', '==', true)), snap =>
-      setServices(snap.docs.map(d => ({ id: d.id, ...d.data() } as Service))));
-    return () => unsub();
-  }, []);
+ // ─── Firestore listeners ──────────────────────────────────────────────────────
 
-  useEffect(() => {
-    if (!patient) return;
-    const unsub = onSnapshot(
-      query(collection(db, 'appointments'), where('patientId', '==', patient.uid), orderBy('date', 'desc')),
-      async snap => {
-        const appts = await Promise.all(snap.docs.map(async d => {
+// Services — publicly readable (rule: allow read: if true) ✅ no change needed
+// but add limit to avoid loading all docs unnecessarily
+useEffect(() => {
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'services'),
+      where('isAvailable', '==', true),
+      limit(50)
+    ),
+    snap => setServices(snap.docs.map(d => ({ id: d.id, ...d.data() } as Service)))
+  );
+  return () => unsub();
+}, []);
+
+
+// Appointments — ✅ already correct (patientId filter present)
+// Added: handle missing orderBy index gracefully
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'appointments'),
+      where('patientId', '==', patient.uid),   // ← matches rule check
+      orderBy('date', 'desc')
+    ),
+    async snap => {
+      const appts = await Promise.all(
+        snap.docs.map(async d => {
           const appt = { id: d.id, ...d.data() } as Appointment;
           if (appt.consultationId) {
             try {
@@ -1766,47 +1819,222 @@ export default function PatientDashboard() {
               if (cs.exists()) {
                 const cdata = cs.data();
                 appt.prescriptions = cdata.prescriptions || [];
-                appt.notes = cdata.notes || '';
+                appt.notes         = cdata.notes         || '';
               }
-            } catch {}
+            } catch {}  // consultation may not exist yet — silent
           }
           return appt;
-        }));
-        setAppointments(appts);
-      }
-    );
-    return () => unsub();
-  }, [patient]);
+        })
+      );
+      setAppointments(appts);
+    },
+    err => console.error('appointments listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
 
-  useEffect(() => {
-    if (!patient) return;
-    const unsub = onSnapshot(
-      query(collection(db, 'vitals'), where('patientId', '==', patient.uid), orderBy('recordedAt', 'desc')),
-      snap => setVitals(snap.docs.map(d => ({ id: d.id, ...d.data() } as VitalReading)))
-    );
-    return () => unsub();
-  }, [patient]);
 
-  useEffect(() => {
-    if (!patient) return;
-    const unsub = onSnapshot(
-      query(collection(db, 'alerts'), where('patientId', '==', patient.uid), orderBy('createdAt', 'desc')),
-      snap => setAlerts(snap.docs.map(d => ({ id: d.id, ...d.data() } as Alert)))
-    );
-    return () => unsub();
-  }, [patient]);
+// Vitals — ✅ already correct (patientId filter present)
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'vitals'),
+      where('patientId', '==', patient.uid),   // ← matches rule check
+      orderBy('recordedAt', 'desc'),
+      limit(50)
+    ),
+    snap => setVitals(snap.docs.map(d => ({ id: d.id, ...d.data() } as VitalReading))),
+    err => console.error('vitals listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+
+// Alerts — ✅ already correct (patientId filter present)
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'alerts'),
+      where('patientId', '==', patient.uid),   // ← matches rule check
+      orderBy('createdAt', 'desc'),
+      limit(30)
+    ),
+    snap => setAlerts(snap.docs.map(d => ({ id: d.id, ...d.data() } as Alert))),
+    err => console.error('alerts listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+// PatientNotifications — doctor-sent alerts (education, labs, referrals, pathway, clinical)
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'patientNotifications'),
+      where('patientId', '==', patient.uid),
+      orderBy('createdAt', 'desc'),
+      limit(50)
+    ),
+    snap => setPatientNotifications(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+    err => console.error('patientNotifications listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+// EducationLogs — doctor-sent education materials
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'education_logs'),
+      where('patientId', '==', patient.uid),
+      orderBy('sentAt', 'desc'),
+      limit(50)
+    ),
+    snap => setEducationLogs(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+    err => console.error('education_logs listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+// ── Education Questions ──
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(collection(db, 'education_questions'), where('patientId', '==', patient.uid), orderBy('askedAt', 'desc')),
+    snap => setEduQuestions(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+    err => console.error('education_questions listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+// ── Education Stories ──
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(collection(db, 'education_stories'), where('patientId', '==', patient.uid), orderBy('sharedAt', 'desc')),
+    snap => setEduStories(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+    err => console.error('education_stories listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+// ── Mark education as read when tab is visited ──
+useEffect(() => {
+  if (activeTab !== 'education' || !patient || eduReadRef.current) return;
+  const unread = educationLogs.filter((e: any) => !e.read && e.id);
+  if (unread.length === 0) { eduReadRef.current = true; return; }
+  eduReadRef.current = true;
+  unread.forEach((e: any) => {
+    updateDoc(doc(db, 'education_logs', e.id), { read: true }).catch(() => {});
+  });
+}, [activeTab, educationLogs, patient]);
+
+// ── Deduplicated education logs (by topic, keep latest) ──
+const dedupedEducation = useMemo(() => {
+  const seen = new Map<string, any>();
+  for (const log of educationLogs) {
+    const key = (log.topic || log.title || log.resourceTitle || log.id || '');
+    if (!seen.has(key) || (log.sentAt?.toDate?.()?.getTime() || 0) > (seen.get(key)?.sentAt?.toDate?.()?.getTime() || 0)) {
+      seen.set(key, log);
+    }
+  }
+  return Array.from(seen.values());
+}, [educationLogs]);
+
+// LabOrders — pending / active lab orders from doctor
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'labOrders'),
+      where('patientId', '==', patient.uid),
+      orderBy('createdAt', 'desc'),
+      limit(30)
+    ),
+    snap => setLabOrders(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+    err => console.error('labOrders listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+// ClinicalNotes — doctor's clinical notes for this patient
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'clinicalNotes'),
+      where('patientId', '==', patient.uid),
+      orderBy('createdAt', 'desc'),
+      limit(100)
+    ),
+    snap => setClinicalNotes(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+    err => console.error('clinicalNotes listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+// Prescriptions — standalone (not attached to an appointment)
+useEffect(() => {
+  if (!patient) return;
+  const unsub = onSnapshot(
+    query(
+      collection(db, 'prescriptions'),
+      where('patientId', '==', patient.uid),
+      orderBy('createdAt', 'desc'),
+      limit(50)
+    ),
+    snap => setStandalonePrescriptions(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+    err => console.error('prescriptions listener:', err.code, err.message)
+  );
+  return () => unsub();
+}, [patient]);
+
+// ── Init theme on mount ──
+useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); }, []);
 
   // ── Derived data ──────────────────────────────────────────────────────
   const activeAppts = appointments.filter(a => a.status === 'active');
   const upcomingAppts = appointments.filter(a => a.status === 'booked');
   const nextAppt = upcomingAppts[0];
   const countdown = useCountdown(nextAppt?.scheduledDate || nextAppt?.date);
-  const unreadAlerts = alerts.filter(a => !a.read).length;
-  const allPrescriptions = appointments.flatMap(a => (a.prescriptions || []).map(rx => ({ ...rx, apptId: a.id, doctorName: a.doctorName })));
+  const unreadNotifications = patientNotifications.filter((n: any) => !n.read).length;
+  const unreadAlerts = alerts.filter(a => !a.read).length + unreadNotifications;
+  const allNotifications = [
+    ...alerts.map(a => ({ ...a, _source: 'alerts' as const })),
+    ...patientNotifications.map((n: any) => ({ ...n, _source: 'patientNotifications' as const })),
+  ].sort((a, b) => {
+    const ta = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+    const tb = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+    return tb - ta;
+  });
+  const unreadEducationLogs = educationLogs.filter((e: any) => !e.read).length;
+  const pendingLabOrders = labOrders.filter((o: any) => o.status === 'ordered' || o.status === 'pending').length;
+  const allPrescriptions = [
+    ...appointments.flatMap(a => (a.prescriptions || []).map(rx => ({ ...rx, apptId: a.id, doctorName: a.doctorName }))),
+    ...standalonePrescriptions.map(rx => ({ ...rx, doctorName: rx.doctorName || rx.prescriberName })),
+  ].filter((rx, i, arr) => arr.findIndex(r => r.id === rx.id) === i);
   const specialties = ['All', ...Array.from(new Set(services.map(s => s.specialty)))];
   const clinics = ['All', ...Array.from(new Set(services.map(s => s.clinic)))];
   const [clinicFilter, setClinicFilter] = useState('All');
+// Add this near the top of your component, after appointments state is set
+  const [referralCount, setReferralCount] = useState(0);
 
+  useEffect(() => {
+    if (!patient?.uid) return;
+    const u = onSnapshot(
+      query(
+        collection(db, 'referrals'),
+        where('patientId', '==', patient.uid),
+        where('status', 'in', ['pending', 'accepted', 'scheduled'])
+      ),
+      snap => setReferralCount(snap.size),
+      () => setReferralCount(0)
+    );
+    return () => u();
+  }, [patient?.uid]);
   const filteredSvcs = services.filter(s => {
     const q = search.toLowerCase();
     const matchQ = !q || `${s.specialty} ${s.doctorName} ${s.clinic} ${s.location || ''}`.toLowerCase().includes(q);
@@ -1817,34 +2045,60 @@ export default function PatientDashboard() {
   });
 
   // ── Join consultation ──────────────────────────────────────────────────
-  const joinConsultation = async (appt: Appointment) => {
-    setJoining(appt.id);
-    try {
-      if (appt.consultationId) { router.push(`/consultation/${appt.consultationId}`); return; }
-      const q = query(collection(db, 'consultations'), where('appointmentId', '==', appt.id));
-      const qs = await getDocs(q);
-      if (!qs.empty) { router.push(`/consultation/${qs.docs[0].id}`); }
-      else { alert('Consultation room not ready. Please wait for the doctor.'); }
-    } catch { alert('Could not join. Please try again.'); }
-    setJoining(null);
-  };
+ const joinConsultation = async (appt: Appointment) => {
+  setJoining(appt.id);
+  try {
+    // Fast path — consultationId already stored on appointment
+    if (appt.consultationId) {
+      router.push(`/dashboard/consultation/${appt.consultationId}`);
+      setJoining(null);
+      return;
+    }
 
-  // ── Tabs ──────────────────────────────────────────────────────────────
+    // ✅ FIXED: add patientId filter so Firestore rule can verify access
+    const q = query(
+      collection(db, 'consultations'),
+      where('appointmentId', '==', appt.id),
+      where('patientId', '==', patient!.uid)   // ← required by security rule
+    );
+    const qs = await getDocs(q);
+
+    if (!qs.empty) {
+      router.push(`/dashboard/consultation/${qs.docs[0].id}`);
+    } else {
+      alert('Consultation room not ready yet. Please wait for your doctor to open the session.');
+    }
+  } catch (e) {
+    console.error('joinConsultation error:', e);
+    alert('Could not join. Please try again.');
+  }
+  setJoining(null);
+};
   const tabs = [
-    { id: 'overview', icon: '🏠', label: 'Overview' },
-    { id: 'disease', icon: '🎯', label: 'My Health' },
-    { id: 'discover', icon: '🔍', label: 'Find Doctors' },
-    { id: 'vitals', icon: '📊', label: 'Vitals' },
-    { id: 'appointments', icon: '📅', label: 'Appointments' },
-    { id: 'prescriptions', icon: '💊', label: 'Prescriptions' },
-    { id: 'labs', icon: '🔬', label: 'Labs' },
-    { id: 'history', icon: '📋', label: 'History' },
-    { id: 'messages', icon: '💬', label: 'Messages', badge: alerts.filter(a => !a.read && a.type === 'message').length },
-    { id: 'education', icon: '📚', label: 'Education' },
-    { id: 'payments', icon: '💳', label: 'Payments' },
-    { id: 'settings', icon: '⚙️', label: 'Settings' },
-  ];
-
+  { id: 'overview',      icon: '🏠', label: 'Overview' },
+  { id: 'record',        icon: '📋', label: 'Medical Record' },
+  { id: 'prescriptions', icon: '💊', label: 'Prescriptions' },
+  { id: 'vitals',        icon: '📊', label: 'Vitals' },
+  { id: 'labs',          icon: '🔬', label: 'Labs' },
+  { id: 'health',        icon: '🩺', label: 'My Health' },
+  { id: 'appointments',  icon: '📅', label: 'Appointments' },
+  { id: 'visits',        icon: '🩺', label: 'Visit Notes' },
+  { id: 'tools',         icon: '🔧', label: 'My Tools' },
+  { id: 'referrals',     icon: '📋', label: 'Referrals' },
+  { id: 'messages',      icon: '💬', label: 'Messages', badge: allNotifications.filter((n: any) => !n.read && (n.type === 'message' || n.type === 'clinical')).length },
+  { id: 'education',     icon: '📚', label: 'Education', badge: educationLogs.filter((e: any) => !e.read).length },
+  { id: 'discover',      icon: '🔍', label: 'Find Doctors' },
+  { id: 'payments',      icon: '💳', label: 'Payments' },
+  { id: 'settings',      icon: '⚙️', label: 'Settings' },
+];
+// Mobile nav — keep 5 items, swap Education for Health since Health is used daily
+[
+  { id: 'overview',     icon: '🏠', label: 'Home' },
+  { id: 'record',       icon: '📋', label: 'Record' },
+  { id: 'health',       icon: '🩺', label: 'Health' },     // ← My Health visible on mobile
+  { id: 'appointments', icon: '📅', label: 'Visits' },
+  { id: 'messages',     icon: '💬', label: 'Messages' },
+]
   // ── Loading state ──────────────────────────────────────────────────────
   if (!authDone || !patient) {
     return (
@@ -1859,7 +2113,7 @@ export default function PatientDashboard() {
   }
 
   const latestBP = vitals.find(v => v.type === 'bp');
-  const bpInfo = latestBP ? bpCat(latestBP.systolic!, latestBP.diastolic!) : null;
+  const bpInfo = latestBP ? bpCat(latestBP.systolic ?? 120, latestBP.diastolic ?? 80) : null;
 
   // ══════════════════════════════════════════════════════════════════════
   // RENDER
@@ -1911,9 +2165,14 @@ export default function PatientDashboard() {
         .sidebar {
           width: 228px; background: var(--surface); border-right: 1px solid var(--border);
           display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
-          flex-shrink: 0; z-index: 30; overflow: hidden;
+          flex-shrink: 0; z-index: 30; overflow: hidden; transition: width 0.3s ease;
         }
         .main { flex: 1; overflow-y: auto; min-height: 100vh; display: flex; flex-direction: column; }
+        .hamburger-btn { background: none; border: none; color: var(--text); font-size: 20px; cursor: pointer; padding: 6px 10px; border-radius: 6px; transition: background 0.15s; line-height: 1; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+        .hamburger-btn:hover { background: var(--surface2); }
+        .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 49; }
+        .sidebar-backdrop.visible { display: block; }
+        @media (min-width: 769px) { .sidebar-backdrop { display: none !important; } }
 
         /* ── SIDEBAR ─────────────────────────────────────────────────────── */
         .sb-brand { padding: 20px 18px 14px; border-bottom: 1px solid var(--border); }
@@ -1950,9 +2209,13 @@ export default function PatientDashboard() {
         .sb-item-icon { font-size: 15px; flex-shrink: 0; width: 20px; text-align: center; }
         .sb-badge { margin-left: auto; background: var(--red); color: white; border-radius: 99px; min-width: 18px; height: 18px; font-size: 9px; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px; }
 
-        .sb-footer { padding: 10px 8px; border-top: 1px solid var(--border); }
-        .sb-signout { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 11px; background: transparent; border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--muted); font-size: 12.5px; font-weight: 500; cursor: pointer; font-family: var(--font); transition: all 0.15s; }
+        .sb-footer { padding: 10px 8px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+        .sb-signout { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 11px; background: transparent; border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--muted); font-size: 12.5px; font-weight: 500; cursor: pointer; font-family: var(--font); transition: all 0.15s; flex-shrink: 0; }
         .sb-signout:hover { border-color: var(--red); color: var(--red); background: rgba(255,69,96,.08); }
+        .sb-themes { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 4px 0; }
+        .sb-theme-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; background: var(--dot-color, var(--accent)); transition: all 0.2s; padding: 0; flex-shrink: 0; }
+        .sb-theme-dot:hover { transform: scale(1.2); }
+        .sb-theme-dot.active { border-color: var(--text); box-shadow: 0 0 0 2px var(--dot-color, var(--accent)); }
 
         /* ── TOP HEADER ──────────────────────────────────────────────────── */
         .top-hd {
@@ -2028,6 +2291,30 @@ export default function PatientDashboard() {
         .empty-sm { text-align: center; padding: 28px 0; color: var(--muted); font-size: 13px; }
         .btn-sm-accent { background: rgba(0,229,204,.12); color: var(--accent); border: 1px solid rgba(0,229,204,.2); border-radius: 7px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: var(--font); transition: all 0.15s; }
         .btn-sm-accent:hover { background: rgba(0,229,204,.2); }
+
+        /* ── PRESCRIPTION HISTORY ─────────────────────────────────────────── */
+        .rx-history-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+        .rxh-hd { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+        .rxh-title { font-size: 14px; font-weight: 700; color: var(--text); }
+        .rxh-count { font-size: 10px; color: var(--muted); font-weight: 600; }
+        .rxh-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--border); padding: 0; }
+        .rxh-card { background: var(--surface); padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; transition: background 0.15s; }
+        .rxh-card:hover { background: var(--surface2); }
+        .rxh-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+        .rxh-drug { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .rxh-drug-name { font-size: 14px; font-weight: 700; color: var(--text); }
+        .rxh-status-badge { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .rxh-status-badge.active { background: rgba(0,214,143,.12); color: var(--green); }
+        .rxh-status-badge.completed { background: rgba(59,130,246,.12); color: var(--accent3); }
+        .rxh-status-badge.stopped { background: rgba(255,69,96,.1); color: var(--red); }
+        .rxh-date { font-size: 10px; color: var(--muted); font-family: var(--mono); white-space: nowrap; flex-shrink: 0; }
+        .rxh-meta { display: flex; flex-wrap: wrap; gap: 4px; }
+        .rxh-chip { font-size: 10.5px; color: var(--text2); background: var(--surface3); padding: 3px 9px; border-radius: 6px; font-weight: 500; }
+        .rxh-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
+        .rxh-doctor { font-size: 11px; color: var(--accent3); font-weight: 600; }
+        .rxh-condition { font-size: 10px; color: var(--muted); }
+        @media (min-width: 640px) { .rxh-grid { grid-template-columns: repeat(2, 1fr); background: transparent; gap: 8px; padding: 12px; } .rxh-card { border: 1px solid var(--border); border-radius: var(--r-sm); } }
+        @media (min-width: 1024px) { .rxh-grid { grid-template-columns: repeat(3, 1fr); } }
 
         /* ── OVERVIEW GRIDS ──────────────────────────────────────────────── */
         .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -2321,7 +2608,9 @@ export default function PatientDashboard() {
           .overview-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 768px) {
-          .sidebar { display: none; }
+          .sidebar { display: flex; position: fixed; top: 0; left: 0; height: 100vh; z-index: 50; }
+          .hamburger-btn { position: fixed; top: 12px; left: 12px; z-index: 100; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 8px 12px; border-radius: 8px; }
+          .th-left { padding-left: 44px; }
           .content { padding: 14px 14px 80px; }
           .top-hd { padding: 10px 14px; }
           .th-name { font-size: 15px; }
@@ -2334,12 +2623,28 @@ export default function PatientDashboard() {
           .settings-grid { grid-template-columns: 1fr; }
           .slot-times { grid-template-columns: repeat(3, 1fr); }
           .drawer { width: 100vw; }
+          .stat-icon { font-size: 20px; }
+          .stat-val { font-size: 16px; }
+          .stat-lbl { font-size: 8.5px; }
+        }
+        @media (max-width: 500px) {
+          .th-actions { gap: 4px; }
+          .th-btn { padding: 7px 9px; font-size: 10px; }
+          .th-btn span { display: none; }
+          .stat-card { padding: 10px 12px; gap: 8px; }
+          .panel { padding: 14px; }
+          .content { padding: 10px 10px 80px; }
+          .stat-icon { font-size: 16px; }
+          .stat-val { font-size: 14px; }
+          .mob-nav-btn { font-size: 7px; padding: 3px 2px; }
+          .mob-icon { font-size: 16px; }
+          .mobile-nav { padding: 4px 0; }
         }
       `}</style>
 
       <div className="shell">
         {/* ─── SIDEBAR ─────────────────────────────────────────────────── */}
-        <aside className="sidebar">
+        <aside className="sidebar" style={{ width: sidebarOpen ? 228 : 0, borderRight: sidebarOpen ? '1px solid var(--border)' : 'none' }}>
           <div className="sb-brand">
             <div className="sb-logo">
               <div className="sb-logo-glyph">⚕️</div>
@@ -2351,7 +2656,7 @@ export default function PatientDashboard() {
           </div>
           <div className="sb-profile">
             <div className="sb-ava">
-              {patient.photoUrl ? <img src={patient.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} /> : patient.name[0]}
+              {patient.photoUrl ? <img src={patient.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} /> : (patient.name || '?')[0]}
             </div>
             <div className="sb-pname">{patient.name}</div>
             <div className="sb-pid">{patient.universalId}</div>
@@ -2367,28 +2672,47 @@ export default function PatientDashboard() {
             ))}
           </nav>
           <div className="sb-footer">
+            <div className="sb-themes">
+              {PATIENT_THEME_LIST.map(t => (
+                <button key={t.id} className={`sb-theme-dot ${patientTheme === t.id ? 'active' : ''}`}
+                  style={{ '--dot-color': t.css.match(/--accent:([^;]+)/)?.[1] || '#00e5cc' } as React.CSSProperties}
+                  onClick={() => { applyPatientTheme(t.id); setPatientTheme(t.id); }}
+                  title={t.label}
+                />
+              ))}
+            </div>
             <button className="sb-signout" onClick={() => { signOut(auth); router.replace('/login'); }}>
               <span>🚪</span> Sign Out
             </button>
           </div>
         </aside>
 
+        {/* Sidebar backdrop overlay for mobile */}
+        <div className={`sidebar-backdrop ${sidebarOpen ? 'visible' : ''}`} onClick={() => setSidebarOpen(false)} />
+
         {/* ─── MAIN CONTENT ────────────────────────────────────────────── */}
         <div className="main">
           {/* Top Header */}
           <div className="top-hd">
-            <div className="th-left">
-              <span className="th-greeting">{getGreeting()},</span>
-              <span className="th-name">{patient.name.split(' ')[0]} 👋</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button className="hamburger-btn" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle sidebar">
+                {sidebarOpen ? '✕' : '☰'}
+              </button>
+              <div className="th-left">
+                <span className="th-greeting">{getGreeting()},</span>
+                <span className="th-name">{patient.name.split(' ')[0]} 👋</span>
+              </div>
             </div>
             <div className="th-actions">
               <button className="th-btn" onClick={() => setShowTriage(true)}>🔍 <span>Find Doctor</span></button>
               <button className="th-btn" onClick={() => setShowLogVital(true)}>📊 <span>Log Vital</span></button>
-              {unreadAlerts > 0 && (
-                <button className="th-btn" onClick={() => setActiveTab('overview')} style={{ borderColor: 'rgba(255,69,96,.3)', color: 'var(--red)' }}>
-                  🔔 {unreadAlerts}
-                </button>
-              )}
+              <button className="th-btn" onClick={() => setActiveTab('overview')} style={{
+                borderColor: unreadAlerts > 0 ? 'rgba(255,69,96,.3)' : 'var(--border2)',
+                color: unreadAlerts > 0 ? 'var(--red)' : 'var(--text2)',
+                position: 'relative',
+              }}>
+                {unreadAlerts > 0 ? `🔔 ${unreadAlerts}` : '🔔'} {unreadNotifications > 0 && <span style={{ position: 'absolute', top: -4, right: -4, width: 8, height: 8, borderRadius: '50%', background: '#ff4560', animation: 'pulse 1.5s infinite' }} />}
+              </button>
               <button className="th-btn th-btn-accent" onClick={() => setShowSmartcard(true)}>🪪 <span>Smartcard</span></button>
             </div>
           </div>
@@ -2409,285 +2733,876 @@ export default function PatientDashboard() {
                 </button>
               </div>
             ))}
-
+   
             {/* ── OVERVIEW TAB ── */}
-            {activeTab === 'overview' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-                {/* Hero row */}
-                <div className="hero-row">
-                  <div className="hero-card">
-                    <div className="hero-greet">{getGreeting()}</div>
-                    <div className="hero-name">{patient.name}</div>
-                    <div className="hero-chips">
-                      {patient.bloodGroup && <span className="hero-chip">🩸 {patient.bloodGroup}</span>}
-                      {patient.age && <span className="hero-chip">{patient.age} yrs</span>}
-                      {patient.gender && <span className="hero-chip">{patient.gender}</span>}
-                      {patient.condition && <span className="hero-chip">🎯 {patient.condition}</span>}
-                      {patient.insuranceProvider && <span className="hero-chip">🏥 {patient.insuranceProvider}</span>}
-                    </div>
-                    {latestBP && bpInfo && (
-                      <div className="hero-tip">
-                        Latest BP: <strong style={{ color: bpInfo.color }}>{latestBP.systolic}/{latestBP.diastolic} mmHg ({bpInfo.label})</strong> · {fmtShort(latestBP.recordedAt)}
-                      </div>
-                    )}
-                  </div>
-                  {nextAppt && (
-                    <div className="next-appt-card">
-                      <div className="na-label">Next Appointment</div>
-                      <div className="na-count">{countdown || 'Soon'}</div>
-                      <div className="na-badge">{countdown}</div>
-                      <div className="na-doctor">Dr. {nextAppt.doctorName}</div>
-                      <div className="na-date">{fmtDate(nextAppt.scheduledDate || nextAppt.date)}</div>
-                    </div>
-                  )}
-                </div>
+            {activeTab === 'overview' && (() => {
 
-                {/* Stats */}
-                <div className="stats-grid">
-                  {[
-                    { icon: '❤️', val: latestBP ? `${latestBP.systolic}/${latestBP.diastolic}` : '—', lbl: 'Blood Pressure', color: bpInfo?.color || 'var(--muted)' },
-                    { icon: '📅', val: String(upcomingAppts.length), lbl: 'Upcoming Visits', color: 'var(--accent2)' },
-                    { icon: '💊', val: String(allPrescriptions.length), lbl: 'Active Prescriptions', color: 'var(--accent)' },
-                    { icon: unreadAlerts > 0 ? '🔴' : '✅', val: String(unreadAlerts), lbl: unreadAlerts > 0 ? 'Unread Alerts' : 'All Clear', color: unreadAlerts > 0 ? 'var(--red)' : 'var(--green)' },
-                  ].map(s => (
-                    <div key={s.lbl} className="stat-card">
-                      <span className="stat-icon">{s.icon}</span>
-                      <div>
-                        <div className="stat-lbl">{s.lbl}</div>
-                        <div className="stat-val" style={{ color: s.color }}>{s.val}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+  /* ─── INJECT EPIC STYLES (once, useEffect-safe) ──────────────────────── */
+  if (typeof document !== 'undefined' && !document.getElementById('ov-epic')) {
+    const s = document.createElement('style');
+    s.id = 'ov-epic';
+    s.textContent = `
+      /* ── KEYFRAMES ── */
+      @keyframes ov-float   { 0%,100%{transform:translateY(0)}   50%{transform:translateY(-6px)} }
+      @keyframes ov-glow-p  { 0%,100%{opacity:.45} 50%{opacity:.9} }
+      @keyframes ov-glow-t  { 0%,100%{opacity:.3}  50%{opacity:.7} }
+      @keyframes ov-ring    { to{stroke-dashoffset:0} }
+      @keyframes ov-shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+      @keyframes ov-pulse-g { 0%,100%{box-shadow:0 0 0 0 rgba(0,229,204,.5)} 70%{box-shadow:0 0 0 8px rgba(0,229,204,0)} }
+      @keyframes ov-slide-up{ from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+      @keyframes ov-count   { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
 
-                {/* Disease tools (if condition set) */}
-                {patient.condition && (
-                  <DiseaseToolsPanel patientId={patient.uid} condition={patient.condition} vitals={vitals} onLogVital={() => setShowLogVital(true)} />
-                )}
+      /* ── ROOT ── */
+      .ov-epic-root { display:flex;flex-direction:column;gap:16px;animation:ov-slide-up .35s ease both; }
 
-                {/* Alerts */}
-                {alerts.filter(a => !a.read).length > 0 && (
-                  <div className="panel">
-                    <div className="panel-hd">
-                      <div className="panel-title">🔔 Active Alerts</div>
-                      <span className="count-badge" style={{ background: 'rgba(255,69,96,.12)', color: 'var(--red)' }}>{alerts.filter(a => !a.read).length}</span>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      {alerts.filter(a => !a.read).slice(0, 5).map(al => (
-                        <div key={al.id} style={{
-                          background: al.severity === 'high' ? 'rgba(255,69,96,.07)' : 'rgba(255,176,32,.05)',
-                          border: `1px solid ${al.severity === 'high' ? 'rgba(255,69,96,.2)' : 'rgba(255,176,32,.2)'}`,
-                          borderRadius: 10, padding: '11px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10
-                        }}>
-                          <div>
-                            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{al.title}</div>
-                            <div style={{ fontSize: 12, color: 'var(--text2)', marginTop: 2 }}>{al.body}</div>
-                            <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 3, fontFamily: 'var(--mono)' }}>{fmtDate(al.createdAt)}</div>
-                          </div>
-                          <button className="btn-sm-accent" onClick={() => updateDoc(doc(db, 'alerts', al.id), { read: true })}>Dismiss</button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+      /* ── COMMAND HERO ── */
+      .ov-cmd-hero {
+        position:relative; border-radius:24px; overflow:hidden;
+        background:linear-gradient(135deg,#060d1f 0%,#0a1628 35%,#091922 65%,#050e1a 100%);
+        border:1px solid rgba(0,229,204,.15);
+        box-shadow:0 24px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(0,229,204,.1);
+        min-height:220px;
+      }
+      /* mesh blobs */
+      .ov-blob-1 { position:absolute;top:-80px;right:-60px;width:400px;height:400px;border-radius:50%;
+        background:radial-gradient(circle,rgba(124,90,245,.18) 0%,transparent 65%);pointer-events:none; }
+      .ov-blob-2 { position:absolute;bottom:-120px;left:-40px;width:360px;height:360px;border-radius:50%;
+        background:radial-gradient(circle,rgba(0,229,204,.12) 0%,transparent 65%);pointer-events:none; }
+      .ov-blob-3 { position:absolute;top:30%;right:30%;width:200px;height:200px;border-radius:50%;
+        background:radial-gradient(circle,rgba(59,130,246,.1) 0%,transparent 70%);pointer-events:none; }
+      /* top shimmer line */
+      .ov-hero-line { position:absolute;top:0;left:0;right:0;height:1px;
+        background:linear-gradient(90deg,transparent 0%,rgba(0,229,204,.6) 40%,rgba(124,90,245,.6) 60%,transparent 100%); }
 
-                <div className="overview-grid">
-                  {/* Vitals panel */}
-                  <div className="panel">
-                    <div className="panel-hd">
-                      <div className="panel-title">📊 Latest Vitals</div>
-                      <button className="btn-sm-accent" onClick={() => setShowLogVital(true)}>+ Log</button>
-                    </div>
-                    {latestBP && (
-                      <div className="vital-main" style={{ borderColor: bpInfo?.color + '40' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                          <span style={{ fontSize: 26 }}>❤️</span>
-                          <div>
-                            <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>Blood Pressure</div>
-                            <div className="vital-main-val" style={{ color: bpInfo?.color }}>{latestBP.systolic}/{latestBP.diastolic} <span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 400 }}>mmHg</span></div>
-                            {bpInfo && <span className="vital-badge" style={{ background: bpInfo.color + '20', color: bpInfo.color }}>{bpInfo.label}</span>}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    <div className="vitals-mini">
-                      {[
-                        { type: 'glucose', icon: '🩸', label: 'Glucose', unit: 'mmol/L' },
-                        { type: 'pulse', icon: '💓', label: 'Pulse', unit: 'bpm' },
-                        { type: 'weight', icon: '⚖️', label: 'Weight', unit: 'kg' },
-                        { type: 'temp', icon: '🌡️', label: 'Temp', unit: '°C' },
-                      ].map(v => {
-                        const r = vitals.find(vi => vi.type === v.type);
-                        return (
-                          <div key={v.type} className="vital-mini">
-                            <span style={{ fontSize: 20 }}>{v.icon}</span>
-                            <span className="vital-mini-val" style={{ color: 'var(--text)' }}>{r ? r.value : '—'}</span>
-                            <span style={{ fontSize: 9, color: 'var(--muted)' }}>{v.unit}</span>
-                            <span style={{ fontSize: 10, color: 'var(--text2)', fontWeight: 600 }}>{v.label}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                    {vitals.length === 0 && <div className="empty-sm"><div style={{ fontSize: 28 }}>📊</div><p>No readings yet. Start tracking.</p></div>}
-                  </div>
+      .ov-hero-inner { position:relative;z-index:2;padding:28px 32px 0;display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start; }
 
-                  {/* Recent prescriptions */}
-                  <div className="panel">
-                    <div className="panel-hd">
-                      <div className="panel-title">💊 Prescriptions</div>
-                      <button className="btn-sm-accent" onClick={() => setActiveTab('prescriptions')}>View All</button>
-                    </div>
-                    {allPrescriptions.length === 0 ? (
-                      <div className="empty-sm"><div style={{ fontSize: 28 }}>💊</div><p>Prescriptions appear after consultations.</p></div>
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {allPrescriptions.slice(0, 3).map((rx, i) => (
-                          <div key={i} className="rx-card">
-                            <div className="rx-card-hd">
-                              <span className="rx-card-name">💊 {rx.medication}</span>
-                              <span className="rx-card-doc">Dr. {rx.doctorName}</span>
-                            </div>
-                            <div className="rx-card-meta">
-                              <span>{rx.dosage}</span><span>·</span><span>{rx.frequency}</span><span>·</span><span>{rx.duration}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+      /* avatar + identity */
+      .ov-hero-id { display:flex;gap:16px;align-items:center;flex:1;min-width:260px; }
+      .ov-avatar-wrap { position:relative;flex-shrink:0; }
+      .ov-avatar-ring {
+        width:70px;height:70px;border-radius:50%;
+        background:linear-gradient(135deg,#7c5af5,#00e5cc);
+        padding:2.5px;box-shadow:0 0 28px rgba(0,229,204,.3);
+        animation:ov-pulse-g 3s infinite;
+      }
+      .ov-avatar-inner {
+        width:100%;height:100%;border-radius:50%;
+        background:linear-gradient(135deg,#0f1f3d,#1a2e50);
+        display:flex;align-items:center;justify-content:center;
+        font-size:26px;font-weight:900;color:#fff;overflow:hidden;
+      }
+      .ov-avatar-status {
+        position:absolute;bottom:2px;right:2px;width:14px;height:14px;
+        background:#00d68f;border-radius:50%;border:2px solid #060d1f;
+      }
+      .ov-hero-text { min-width:0; }
+      .ov-hero-greeting { font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+        background:linear-gradient(90deg,#00e5cc,#7c5af5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+        background-clip:text;margin-bottom:5px; }
+      .ov-hero-name { font-family:'Syne',sans-serif;font-size:clamp(20px,3.5vw,28px);font-weight:900;
+        color:#fff;letter-spacing:-.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+      .ov-hero-chips { display:flex;flex-wrap:wrap;gap:5px;margin-top:10px; }
+      .ov-hero-chip {
+        display:inline-flex;align-items:center;gap:4px;
+        background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+        backdrop-filter:blur(12px);border-radius:99px;padding:3px 10px;
+        font-size:11px;font-weight:600;color:rgba(255,255,255,.75);
+      }
+      .ov-hero-chip--hl { background:rgba(0,229,204,.1);border-color:rgba(0,229,204,.25);color:#00e5cc; }
 
-                  {/* Recent appointments */}
-                  <div className="panel full-width">
-                    <div className="panel-hd">
-                      <div className="panel-title">📅 Recent Appointments</div>
-                      <button className="btn-sm-accent" onClick={() => setActiveTab('appointments')}>View All</button>
-                    </div>
-                    {appointments.length === 0 ? (
-                      <div className="empty-sm">
-                        <div style={{ fontSize: 32 }}>📭</div>
-                        <p>No appointments yet. <button style={{ color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 13 }} onClick={() => setActiveTab('discover')}>Find a doctor →</button></p>
-                      </div>
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {appointments.slice(0, 4).map(appt => {
-                          const sc = statusCfg[appt.status] || statusCfg.booked;
-                          return (
-                            <div key={appt.id} className="appt-card">
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                <div className="appt-icon">{appt.status === 'active' ? '🟢' : appt.status === 'completed' ? '✅' : appt.status === 'cancelled' ? '❌' : '📅'}</div>
-                                <div>
-                                  <div className="appt-spec">{appt.specialty || 'Consultation'} {appt.firstVisit && <span className="appt-first-visit">1st Visit</span>}</div>
-                                  <div className="appt-dr">Dr. {appt.doctorName}</div>
-                                  <div className="appt-date">{fmtDate(appt.scheduledDate || appt.date)}</div>
-                                </div>
-                              </div>
-                              <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
-                                <span className="status-pill" style={{ background: sc.bg, color: sc.color }}>{sc.label}</span>
-                                {appt.status === 'active' && <button className="btn-join-sm" onClick={() => joinConsultation(appt)} disabled={joining === appt.id}>{joining === appt.id ? '…' : '🎥 Join'}</button>}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+      /* health score ring */
+      .ov-score-wrap { display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0; }
+      .ov-score-ring { position:relative;width:90px;height:90px; }
+      .ov-score-ring svg { transform:rotate(-90deg); }
+      .ov-score-track { fill:none;stroke:rgba(255,255,255,.06);stroke-width:6; }
+      .ov-score-fill  { fill:none;stroke-width:6;stroke-linecap:round;
+        stroke:url(#scoreGrad);transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1); }
+      .ov-score-center { position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center; }
+      .ov-score-num { font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#fff;line-height:1; }
+      .ov-score-lbl { font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:1px; }
+      .ov-score-tag { font-size:10px;font-weight:700;color:#00e5cc; }
+
+      /* bp tip */
+      .ov-bp-tip {
+        margin:14px 32px 0;position:relative;z-index:2;
+        background:rgba(0,229,204,.06);border:1px solid rgba(0,229,204,.15);
+        border-radius:10px;padding:9px 14px;font-size:12px;color:rgba(255,255,255,.6);
+        line-height:1.5;display:flex;align-items:center;gap:10px;
+      }
+
+      /* hero stat strip */
+      .ov-hero-strip {
+        position:relative;z-index:2;
+        display:grid;grid-template-columns:repeat(4,1fr);
+        border-top:1px solid rgba(255,255,255,.06);margin-top:20px;
+      }
+      .ov-hero-strip-cell {
+        padding:16px 20px;text-align:center;cursor:pointer;
+        border-right:1px solid rgba(255,255,255,.05);
+        transition:background .15s;
+      }
+      .ov-hero-strip-cell:last-child { border-right:none; }
+      .ov-hero-strip-cell:hover { background:rgba(255,255,255,.03); }
+      .ov-strip-icon { font-size:18px;margin-bottom:4px; }
+      .ov-strip-val { font-family:'JetBrains Mono',monospace;font-size:clamp(18px,2.5vw,26px);font-weight:800;line-height:1; }
+      .ov-strip-lbl { font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;opacity:.4;margin-top:4px; }
+
+      /* ── NEXT APPT CARD ── */
+      .ov-next-card {
+        background:linear-gradient(135deg,rgba(124,90,245,.12),rgba(0,229,204,.06));
+        border:1px solid rgba(124,90,245,.25);border-radius:18px;
+        padding:18px 22px;display:flex;align-items:center;justify-content:space-between;
+        gap:16px;flex-wrap:wrap;
+        box-shadow:0 4px 24px rgba(124,90,245,.12);
+      }
+      .ov-next-left { display:flex;align-items:center;gap:14px;min-width:0;flex:1; }
+      .ov-next-icon {
+        width:48px;height:48px;border-radius:14px;flex-shrink:0;
+        background:linear-gradient(135deg,#7c5af5,#00e5cc);
+        display:flex;align-items:center;justify-content:center;font-size:22px;
+        box-shadow:0 6px 20px rgba(124,90,245,.35);
+      }
+      .ov-next-lbl { font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(124,90,245,.9);margin-bottom:3px; }
+      .ov-next-name { font-weight:800;font-size:15px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+      .ov-next-date { font-size:11px;color:var(--text2);margin-top:2px; }
+      .ov-next-right { display:flex;align-items:center;gap:14px;flex-shrink:0; }
+      .ov-next-countdown {
+        text-align:center;background:rgba(0,0,0,.3);border-radius:12px;
+        padding:10px 16px;border:1px solid rgba(255,255,255,.07);
+      }
+      .ov-next-time { font-family:'JetBrains Mono',monospace;font-size:clamp(18px,2vw,24px);font-weight:700;color:#fff;line-height:1; }
+      .ov-next-sub { font-size:9px;color:var(--muted);margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:.8px; }
+      .ov-next-btn {
+        background:linear-gradient(135deg,#7c5af5,#5a3fd4);color:#fff;border:none;
+        border-radius:12px;padding:11px 20px;font-size:13px;font-weight:800;
+        cursor:pointer;font-family:var(--font);white-space:nowrap;
+        box-shadow:0 4px 16px rgba(124,90,245,.4);transition:all .15s;
+      }
+      .ov-next-btn:hover { transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,90,245,.5); }
+
+      /* ── STAT CARDS ── */
+      .ov-stats { display:grid;grid-template-columns:repeat(4,1fr);gap:12px; }
+      .ov-stat {
+        position:relative;border-radius:16px;padding:16px 18px;overflow:hidden;
+        background:var(--surface);border:1px solid var(--border);
+        transition:all .2s;cursor:default;
+      }
+      .ov-stat::before {
+        content:'';position:absolute;top:0;left:0;right:0;height:2px;
+        background:var(--_accent,linear-gradient(90deg,#00e5cc,#7c5af5));
+      }
+      .ov-stat:hover { border-color:rgba(0,229,204,.3);transform:translateY(-2px);
+        box-shadow:0 8px 32px rgba(0,0,0,.35); }
+      .ov-stat-top { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px; }
+      .ov-stat-icon-wrap { width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0; }
+      .ov-stat-trend { font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px; }
+      .ov-stat-val { font-family:'JetBrains Mono',monospace;font-size:clamp(16px,2vw,22px);font-weight:800;line-height:1;margin-bottom:4px; }
+      .ov-stat-lbl { font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--muted); }
+
+      /* ── SECTION HEADER ── */
+      .ov-sec-hd { display:flex;justify-content:space-between;align-items:center;margin-bottom:14px; }
+      .ov-sec-title { font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text); }
+      .ov-sec-eyebrow { font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px; }
+
+      /* ── VITALS ── */
+      .ov-vitals-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+      .ov-vital-card {
+        background:var(--surface2);border:1px solid var(--border);border-radius:14px;
+        padding:14px 16px;transition:border-color .15s;
+      }
+      .ov-vital-card:hover { border-color:rgba(0,229,204,.25); }
+      .ov-vital-card--hero {
+        grid-column:1/-1;
+        background:linear-gradient(135deg,rgba(0,229,204,.05),rgba(0,0,0,0));
+        border-color:rgba(0,229,204,.2);
+      }
+      .ov-vital-top { display:flex;align-items:center;gap:10px;margin-bottom:10px; }
+      .ov-vital-ico { font-size:22px; }
+      .ov-vital-label { font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted); }
+      .ov-vital-reading { font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;line-height:1; }
+      .ov-vital-unit { font-size:12px;color:var(--muted);font-weight:400;margin-left:3px; }
+      .ov-vital-badge { display:inline-flex;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;margin-top:6px; }
+      .ov-vital-mini { display:flex;align-items:center;justify-content:space-between; }
+      .ov-vital-mini-val { font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--text); }
+      .ov-vital-mini-lbl { font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-top:2px; }
+
+      /* progress bar */
+      .ov-progress-bar { height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-top:8px; }
+      .ov-progress-fill { height:100%;border-radius:99px;transition:width 1s ease; }
+
+      /* ── ALERTS ── */
+      .ov-alert-card {
+        border-radius:12px;padding:12px 14px;
+        display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+        border-left:3px solid;margin-bottom:8px;
+      }
+      .ov-alert-card--high { background:rgba(255,69,96,.07);border-left-color:#ff4560;border:1px solid rgba(255,69,96,.2);border-left-width:3px; }
+      .ov-alert-card--med  { background:rgba(255,176,32,.05);border-left-color:#ffb020;border:1px solid rgba(255,176,32,.18);border-left-width:3px; }
+
+      /* ── RX CARDS ── */
+      .ov-rx {
+        background:var(--surface2);border:1px solid var(--border);border-radius:13px;
+        padding:13px 15px;margin-bottom:8px;transition:border-color .15s;
+      }
+      .ov-rx:hover { border-color:rgba(124,90,245,.3); }
+      .ov-rx:last-child { margin-bottom:0; }
+      .ov-rx-top { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px; }
+      .ov-rx-name { font-weight:800;font-size:14px;color:var(--text); }
+      .ov-rx-dr { font-size:11px;color:var(--muted); }
+      .ov-rx-meta { display:flex;flex-wrap:wrap;gap:6px;font-size:11px;color:var(--text2); }
+      .ov-rx-pill { background:rgba(124,90,245,.1);color:#9f87fa;border-radius:99px;padding:2px 8px;font-size:10px;font-weight:700; }
+
+      /* ── APPT CARDS ── */
+      .ov-appt {
+        display:flex;justify-content:space-between;align-items:center;gap:12px;
+        background:var(--surface2);border:1px solid var(--border);border-radius:13px;
+        padding:13px 16px;margin-bottom:8px;cursor:pointer;transition:all .15s;
+      }
+      .ov-appt:hover { border-color:rgba(0,229,204,.3);transform:translateX(3px); }
+      .ov-appt:last-child { margin-bottom:0; }
+      .ov-appt-left { display:flex;align-items:center;gap:12px;min-width:0;flex:1; }
+      .ov-appt-ico { width:40px;height:40px;border-radius:11px;background:rgba(0,229,204,.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0; }
+      .ov-appt-spec { font-weight:700;font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+      .ov-appt-dr   { font-size:11.5px;color:var(--text2);margin-top:2px; }
+      .ov-appt-date { font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px; }
+      .ov-appt-right { display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0; }
+      .ov-status-pill { display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;white-space:nowrap; }
+      .ov-join-btn { background:var(--green);color:#000;border:none;border-radius:7px;padding:6px 12px;font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font); }
+
+      /* ── 2-COL GRID ── */
+      .ov-2col { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+      .ov-panel { background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px 22px;box-sizing:border-box;overflow:hidden; }
+      .ov-full { grid-column:1/-1; }
+
+      /* ── DISEASE PANEL ── */
+      .ov-disease {
+        background:linear-gradient(135deg,#080f1e 0%,#0c1a2e 50%,#080f1e 100%);
+        border:1px solid rgba(0,229,204,.2);border-radius:18px;padding:20px 24px;
+        box-shadow:0 4px 24px rgba(0,229,204,.06);
+      }
+      .ov-disease-hd { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px; }
+      .ov-disease-title { font-family:'Syne',sans-serif;font-size:15px;font-weight:900;color:#fff; }
+      .ov-disease-sub { font-size:11px;color:rgba(0,229,204,.6);margin-top:3px; }
+      .ov-targets { display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px; }
+      .ov-target {
+        border-radius:13px;padding:14px 16px;
+        display:flex;align-items:center;gap:12px;
+        border:1.5px solid;
+      }
+      .ov-target--on  { background:rgba(0,214,143,.05);border-color:rgba(0,214,143,.25); }
+      .ov-target--off { background:rgba(255,69,96,.05);border-color:rgba(255,69,96,.25); }
+      .ov-target--warn{ background:rgba(255,176,32,.05);border-color:rgba(255,176,32,.2); }
+      .ov-target-val { font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#fff; }
+      .ov-target-goal { font-size:11px;color:rgba(255,255,255,.35);margin-top:2px; }
+      .ov-target-badge { margin-left:auto;flex-shrink:0;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px; }
+      .ov-target-badge--on  { background:rgba(0,214,143,.15);color:#00d68f; }
+      .ov-target-badge--off { background:rgba(255,69,96,.15);color:#ff4560; }
+      .ov-target-badge--warn{ background:rgba(255,176,32,.15);color:#ffb020; }
+
+      /* ── EMPTY STATE ── */
+      .ov-empty { text-align:center;padding:32px 0;color:var(--muted);font-size:13px; }
+
+      /* ── RESPONSIVE ── */
+      @media(max-width:1024px) { .ov-stats{grid-template-columns:repeat(2,1fr)} }
+      @media(max-width:860px)  {
+        .ov-2col{grid-template-columns:1fr}
+        .ov-hero-strip{grid-template-columns:repeat(2,1fr)}
+        .ov-hero-strip-cell:nth-child(2){border-right:none}
+        .ov-hero-strip-cell:nth-child(3){border-top:1px solid rgba(255,255,255,.05)}
+        .ov-hero-strip-cell:nth-child(4){border-top:1px solid rgba(255,255,255,.05);border-right:none}
+      }
+      @media(max-width:640px)  {
+        .ov-cmd-hero { min-height:auto }
+        .ov-hero-inner { padding:20px 18px 0;flex-direction:column;gap:16px }
+        .ov-score-wrap { flex-direction:row;gap:12px;align-items:center }
+        .ov-stats { grid-template-columns:repeat(2,1fr);gap:8px }
+        .ov-hero-strip { grid-template-columns:repeat(2,1fr) }
+        .ov-vitals-grid { grid-template-columns:1fr }
+        .ov-vital-card--hero { grid-column:1 }
+        .ov-next-card { flex-direction:column;align-items:flex-start }
+        .ov-next-right { width:100%;justify-content:space-between }
+        .ov-appt-date { display:none }
+        .ov-hero-name { font-size:20px }
+      }
+      @media(max-width:420px)  {
+        .ov-stats { grid-template-columns:1fr 1fr }
+        .ov-next-right { flex-direction:column;gap:8px;align-items:flex-start }
+        .ov-next-btn { width:100% }
+      }
+    `;
+    document.head.appendChild(s);
+  }
+
+  /* ─── DERIVED VALUES ─────────────────────────────────────────────────── */
+  const sortedUpcoming = [...upcomingAppts].sort((a, b) => {
+    const da = a.scheduledDate?.toDate ? a.scheduledDate.toDate() : new Date(a.scheduledDate || a.date || 0);
+    const db2 = b.scheduledDate?.toDate ? b.scheduledDate.toDate() : new Date(b.scheduledDate || b.date || 0);
+    return da - db2;
+  });
+  const nextApptSorted = sortedUpcoming[0] || nextAppt;
+  const pendingAlerts = alerts.filter(a => !a.read);
+  const pendingNotifications = patientNotifications.filter((n: any) => !n.read);
+  const allPendingAlerts = [
+    ...pendingAlerts.map(a => ({ ...a, _source: 'alerts' as const })),
+    ...pendingNotifications.map((n: any) => ({ ...n, _source: 'patientNotifications' as const })),
+  ].sort((a, b) => {
+    const ta = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+    const tb = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+    return tb - ta;
+  });
+  const completedCount = appointments.filter(a => a.status === 'completed').length;
+  const healthScore = Math.min(100, Math.max(40,
+    70
+    + (latestBP && bpInfo?.label === 'Normal' ? 10 : latestBP && bpInfo?.label === 'Elevated' ? 5 : 0)
+    + (allPrescriptions.length > 0 ? 5 : 0)
+    + (completedCount > 0 ? 8 : 0)
+    + (vitals.length > 2 ? 7 : vitals.length > 0 ? 3 : 0)
+    - (allPendingAlerts.filter((a: any) => a.severity === 'high' || a.severity === 'urgent').length * 5)
+  ));
+  const scoreColor = healthScore >= 80 ? '#00d68f' : healthScore >= 60 ? '#ffb020' : '#ff4560';
+  const circumference = 2 * Math.PI * 36;
+  const dashOffset = circumference - (healthScore / 100) * circumference;
+
+  /* micro helper */
+  const mini = (bg: string, color: string) => ({ display: 'inline-flex', alignItems: 'center', padding: '3px 10px', borderRadius: 99, fontSize: 10, fontWeight: 700, background: bg, color } as React.CSSProperties);
+
+  return (
+    <div className="ov-epic-root">
+
+      {/* ══════════════════════════════════════════════════════════════════
+          COMMAND HERO
+      ══════════════════════════════════════════════════════════════════ */}
+      <div className="ov-cmd-hero">
+        <div className="ov-blob-1" />
+        <div className="ov-blob-2" />
+        <div className="ov-blob-3" />
+        <div className="ov-hero-line" />
+
+        <div className="ov-hero-inner">
+
+          {/* Identity */}
+          <div className="ov-hero-id" style={{ flex: 1 }}>
+            <div className="ov-avatar-wrap">
+              <div className="ov-avatar-ring">
+                <div className="ov-avatar-inner">
+                  {patient.photoUrl
+                    ? <img src={patient.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : (patient.name || '?')[0]}
                 </div>
               </div>
-            )}
-
-            {/* ── DISEASE/HEALTH TAB ── */}
-            {activeTab === 'disease' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                {patient.condition
-                  ? <DiseaseToolsPanel patientId={patient.uid} condition={patient.condition} vitals={vitals} onLogVital={() => setShowLogVital(true)} />
-                  : <div className="panel"><div className="empty-sm"><div style={{ fontSize: 40 }}>🎯</div><p>No condition assigned yet. Your doctor will set this up during consultation.</p></div></div>
-                }
-                {/* Labs */}
-                <LabsPanel patientId={patient.uid} />
-                {/* Education */}
-                <EducationPanel patientId={patient.uid} condition={patient.condition} />
+              <div className="ov-avatar-status" />
+            </div>
+            <div className="ov-hero-text" style={{ minWidth: 0 }}>
+              <div className="ov-hero-greeting">{getGreeting()} ·  {new Date().toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+              <div className="ov-hero-name">{patient.name}</div>
+              <div className="ov-hero-chips">
+                {patient.bloodGroup && <span className="ov-hero-chip ov-hero-chip--hl">🩸 {patient.bloodGroup}</span>}
+                {patient.age        && <span className="ov-hero-chip">{patient.age} yrs</span>}
+                {patient.gender     && <span className="ov-hero-chip">{patient.gender}</span>}
+                {patient.condition  && <span className="ov-hero-chip ov-hero-chip--hl">🎯 {patient.condition}</span>}
+                {patient.insuranceProvider && <span className="ov-hero-chip">🏥 {patient.insuranceProvider}</span>}
+                <span className="ov-hero-chip ov-hero-chip--hl">🟢 Active Patient</span>
               </div>
-            )}
+            </div>
+          </div>
 
-            {/* ── DISCOVER TAB ── */}
-            {activeTab === 'discover' && (
-              <div>
-                {!triageDone ? (
-                  <div className="triage-prompt">
+          {/* Health Score Ring */}
+          <div className="ov-score-wrap">
+            <div className="ov-score-ring">
+              <svg width="90" height="90" viewBox="0 0 90 90">
+                <defs>
+                  <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#7c5af5" />
+                    <stop offset="100%" stopColor="#00e5cc" />
+                  </linearGradient>
+                </defs>
+                <circle className="ov-score-track" cx="45" cy="45" r="36" />
+                <circle
+                  className="ov-score-fill"
+                  cx="45" cy="45" r="36"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={dashOffset}
+                />
+              </svg>
+              <div className="ov-score-center">
+                <div className="ov-score-num" style={{ color: scoreColor }}>{healthScore}</div>
+                <div className="ov-score-lbl">Score</div>
+              </div>
+            </div>
+            <div className="ov-score-tag">
+              {healthScore >= 85 ? '✦ Excellent' : healthScore >= 70 ? '◈ Good' : '△ Needs Care'}
+            </div>
+          </div>
+
+        </div>
+
+        {/* BP tip */}
+        {latestBP && bpInfo && (
+          <div className="ov-bp-tip">
+            <span style={{ fontSize: 18 }}>❤️</span>
+            <span>
+              Latest Blood Pressure:&nbsp;
+              <strong style={{ color: bpInfo.color, fontFamily: 'JetBrains Mono,monospace' }}>
+                {latestBP.systolic}/{latestBP.diastolic} mmHg
+              </strong>
+              &nbsp;·&nbsp;
+              <span style={{ color: bpInfo.color, fontWeight: 700 }}>{bpInfo.label}</span>
+              &nbsp;·&nbsp;{fmtShort(latestBP.recordedAt)}
+            </span>
+          </div>
+        )}
+
+        {/* Bottom stat strip */}
+        <div className="ov-hero-strip">
+          {([
+            { icon: '📅', val: upcomingAppts.length,     label: 'Upcoming',    color: '#7c5af5', tab: 'appointments' },
+            { icon: '✅', val: completedCount,            label: 'Completed',   color: '#00d68f', tab: 'appointments' },
+            { icon: '💊', val: allPrescriptions.length,  label: 'Medications', color: '#00e5cc', tab: 'prescriptions' },
+            { icon: '🔔', val: allPendingAlerts.length,     label: 'Alerts & Updates',      color: allPendingAlerts.length > 0 ? '#ff4560' : '#00d68f', tab: 'overview' },
+          ] as any[]).map((s: any) => (
+            <div key={s.label} className="ov-hero-strip-cell" onClick={() => setActiveTab(s.tab)}>
+              <div className="ov-strip-icon">{s.icon}</div>
+              <div className="ov-strip-val" style={{ color: s.color }}>{s.val}</div>
+              <div className="ov-strip-lbl">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          NEXT APPOINTMENT BANNER
+      ══════════════════════════════════════════════════════════════════ */}
+      {nextApptSorted && countdown && (
+        <div className="ov-next-card">
+          <div className="ov-next-left">
+            <div className="ov-next-icon">📅</div>
+            <div style={{ minWidth: 0 }}>
+              <div className="ov-next-lbl">Next Appointment</div>
+              <div className="ov-next-name">
+                Dr. {nextApptSorted.doctorName} · {nextApptSorted.specialty || 'Consultation'}
+              </div>
+              <div className="ov-next-date">{fmtDate(nextApptSorted.scheduledDate || nextApptSorted.date)}</div>
+            </div>
+          </div>
+          <div className="ov-next-right">
+            <div className="ov-next-countdown">
+              <div className="ov-next-time">{countdown}</div>
+              <div className="ov-next-sub">Until Session</div>
+            </div>
+            {nextApptSorted.status === 'active'
+              ? <button className="ov-next-btn" style={{ background: 'linear-gradient(135deg,#00d68f,#00b377)' }}
+                  onClick={() => joinConsultation(nextApptSorted)} disabled={joining === nextApptSorted.id}>
+                  {joining === nextApptSorted.id ? '…' : '🎥 Join Now'}
+                </button>
+              : <button className="ov-next-btn" onClick={() => setActiveTab('appointments')}>View Details →</button>
+            }
+          </div>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════
+          SMART STAT CARDS
+      ══════════════════════════════════════════════════════════════════ */}
+      <div className="ov-stats">
+        {([
+          {
+            icon: '❤️', iconBg: 'rgba(255,69,96,.12)',
+            val: latestBP ? `${latestBP.systolic}/${latestBP.diastolic}` : '—',
+            lbl: 'Blood Pressure', color: bpInfo?.color || 'var(--muted)',
+            accent: bpInfo?.color ? `linear-gradient(90deg,${bpInfo.color},${bpInfo.color}99)` : 'linear-gradient(90deg,#ff4560,#ff456099)',
+            trend: bpInfo?.label || 'No data', trendOk: bpInfo?.label === 'Normal',
+          },
+          {
+            icon: '📅', iconBg: 'rgba(124,90,245,.12)',
+            val: String(upcomingAppts.length), lbl: 'Upcoming Visits', color: '#7c5af5',
+            accent: 'linear-gradient(90deg,#7c5af5,#00e5cc)',
+            trend: upcomingAppts.length > 0 ? 'Scheduled' : 'None', trendOk: upcomingAppts.length > 0,
+          },
+          {
+            icon: '💊', iconBg: 'rgba(0,229,204,.12)',
+            val: String(allPrescriptions.length), lbl: 'Active Medications', color: '#00e5cc',
+            accent: 'linear-gradient(90deg,#00e5cc,#7c5af5)',
+            trend: allPrescriptions.length > 0 ? 'On Track' : 'None', trendOk: true,
+          },
+          {
+            icon: allPendingAlerts.length > 0 ? '🔴' : '✅', iconBg: allPendingAlerts.length > 0 ? 'rgba(255,69,96,.12)' : 'rgba(0,214,143,.12)',
+            val: String(allPendingAlerts.length), lbl: allPendingAlerts.length > 0 ? 'Unread' : 'All Clear',
+            color: allPendingAlerts.length > 0 ? '#ff4560' : '#00d68f',
+            accent: allPendingAlerts.length > 0 ? 'linear-gradient(90deg,#ff4560,#ff456099)' : 'linear-gradient(90deg,#00d68f,#00d68f99)',
+            trend: allPendingAlerts.length > 0 ? 'Needs Action' : 'Healthy', trendOk: allPendingAlerts.length === 0,
+          },
+        ] as any[]).map((s: any) => (
+          <div key={s.lbl} className="ov-stat" style={{ ['--_accent' as any]: s.accent }}>
+            <div className="ov-stat-top">
+              <div className="ov-stat-icon-wrap" style={{ background: s.iconBg }}>
+                <span style={{ fontSize: 18 }}>{s.icon}</span>
+              </div>
+              <span className="ov-stat-trend" style={{
+                background: s.trendOk ? 'rgba(0,214,143,.12)' : 'rgba(255,176,32,.1)',
+                color: s.trendOk ? '#00d68f' : '#ffb020',
+              }}>{s.trend}</span>
+            </div>
+            <div className="ov-stat-val" style={{ color: s.color }}>{s.val}</div>
+            <div className="ov-stat-lbl">{s.lbl}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          DISEASE MANAGEMENT (if condition)
+      ══════════════════════════════════════════════════════════════════ */}
+      {patient.condition && (
+        <DiseaseToolsPanel
+          patientId={patient.uid}
+          condition={patient.condition}
+          vitals={vitals}
+          onLogVital={() => setShowLogVital(true)}
+        />
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════
+          ACTIVE CONSULTATION BANNER
+      ══════════════════════════════════════════════════════════════════ */}
+      {activeAppts.map(a => (
+        <div key={a.id} style={{
+          background: 'linear-gradient(135deg,rgba(0,214,143,.08),rgba(0,214,143,.03))',
+          border: '1px solid rgba(0,214,143,.25)', borderRadius: 14,
+          padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#00d68f', animation: 'ov-pulse-g 1.5s infinite', flexShrink: 0 }} />
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 13, color: '#00d68f' }}>Live Session · Dr. {a.doctorName}</div>
+              <div style={{ fontSize: 11, color: 'var(--text2)', marginTop: 1 }}>{a.specialty || 'Consultation'} · In Progress</div>
+            </div>
+          </div>
+          <button style={{ background: '#00d68f', color: '#000', border: 'none', borderRadius: 10, padding: '10px 20px', fontWeight: 800, fontSize: 13, cursor: 'pointer', fontFamily: 'var(--font)' }}
+            onClick={() => joinConsultation(a)} disabled={joining === a.id}>
+            {joining === a.id ? 'Joining…' : '🎥 Rejoin Session'}
+          </button>
+        </div>
+      ))}
+
+      {/* ══════════════════════════════════════════════════════════════════
+          ACTIVE ALERTS & NOTIFICATIONS
+      ══════════════════════════════════════════════════════════════════ */}
+      {allPendingAlerts.length > 0 && (
+        <div className="ov-panel">
+          <div className="ov-sec-hd">
+            <div>
+              <div className="ov-sec-eyebrow">Action Required</div>
+              <div className="ov-sec-title">🔔 Alerts & Notifications</div>
+            </div>
+            <span style={mini('rgba(255,69,96,.12)', '#ff4560')}>{allPendingAlerts.length} unread</span>
+          </div>
+          {allPendingAlerts.slice(0, 6).map((al: any) => {
+            const severity = al.severity || (al.type === 'pathway' || al.type === 'education' ? 'low' : 'medium');
+            const severityClass = severity === 'high' || severity === 'urgent' ? 'high' : severity === 'medium' || severity === 'referral_created' ? 'med' : 'med';
+            const typeIcon = al.type === 'pathway' ? '🛤️' : al.type === 'education' || al._source === 'patientNotifications' && al.title?.includes('Education') ? '📚' : al.type === 'lab' ? '🧪' : al.type === 'referral_created' || al.title?.includes('referral') ? '📋' : al.type === 'message' || al.type === 'clinical' ? '💬' : al.type === 'emergency' ? '🚨' : '🔔';
+            const dismissFn = al._source === 'patientNotifications'
+              ? () => updateDoc(doc(db, 'patientNotifications', al.id), { read: true })
+              : () => updateDoc(doc(db, 'alerts', al.id), { read: true });
+            return (
+              <div key={al.id + (al._source || '')} className={`ov-alert-card ov-alert-card--${severityClass}`}>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 3 }}>
+                    {typeIcon} {al.title || al.message?.slice(0, 60)}
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--text2)', lineHeight: 1.5 }}>{al.body || al.message}</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4, fontFamily: 'JetBrains Mono,monospace' }}>
+                    {fmtDate(al.createdAt)}
+                    {al.doctorName && ` · by Dr. ${al.doctorName}`}
+                  </div>
+                </div>
+                <button className="btn-sm-accent" style={{ flexShrink: 0 }} onClick={dismissFn}>
+                  Dismiss
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {/* Doctor notifications from patientNotifications — only if not already shown above */}
+      {allPendingAlerts.length === 0 && pendingNotifications.length > 0 && (
+        <div className="ov-panel">
+          <div className="ov-sec-hd">
+            <div>
+              <div className="ov-sec-eyebrow">From Your Doctor</div>
+              <div className="ov-sec-title">📨 Recent Updates</div>
+            </div>
+          </div>
+          {pendingNotifications.slice(0, 4).map((n: any) => (
+            <div key={n.id} className="ov-alert-card ov-alert-card--med">
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 3 }}>
+                  {n.type === 'pathway' ? '🛤️' : n.type === 'education' ? '📚' : n.type === 'lab' ? '🧪' : n.type === 'referral_created' ? '📋' : '📨'} {n.title}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text2)', lineHeight: 1.5 }}>{n.message}</div>
+                <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4, fontFamily: 'JetBrains Mono,monospace' }}>
+                  {fmtDate(n.createdAt)} · Dr. {n.doctorName || 'Doctor'}
+                </div>
+              </div>
+              <button className="btn-sm-accent" style={{ flexShrink: 0 }}
+                onClick={() => updateDoc(doc(db, 'patientNotifications', n.id), { read: true })}>
+                Dismiss
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════
+          MAIN 2-COL: VITALS + PRESCRIPTIONS
+      ══════════════════════════════════════════════════════════════════ */}
+      <div className="ov-2col">
+
+        {/* VITALS */}
+        <div className="ov-panel">
+          <div className="ov-sec-hd">
+            <div>
+              <div className="ov-sec-eyebrow">Real-time Health</div>
+              <div className="ov-sec-title">📊 Vital Signs</div>
+            </div>
+            <button className="btn-sm-accent" onClick={() => setShowLogVital(true)}>+ Log Reading</button>
+          </div>
+
+          {vitals.length === 0 ? (
+            <div className="ov-empty">
+              <div style={{ fontSize: 32, marginBottom: 8 }}>📊</div>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>No readings yet</div>
+              <button className="btn-sm-accent" onClick={() => setShowLogVital(true)}>Start Tracking</button>
+            </div>
+          ) : (
+            <div className="ov-vitals-grid">
+              {/* BP hero card */}
+              {latestBP && bpInfo && (
+                <div className="ov-vital-card ov-vital-card--hero">
+                  <div className="ov-vital-top">
+                    <span className="ov-vital-ico">❤️</span>
                     <div>
-                      <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)', marginBottom: 3 }}>🔍 Not sure which specialist to see?</div>
-                      <p style={{ fontSize: 13, color: 'var(--text2)' }}>Answer 4 quick questions for a smart recommendation.</p>
-                    </div>
-                    <button className="btn-cta" onClick={() => setShowTriage(true)} style={{ width: 'auto', padding: '10px 20px', fontSize: 12 }}>Start Triage →</button>
-                  </div>
-                ) : (
-                  <div className="triage-done">
-                    <span style={{ fontSize: 13, color: 'var(--green)', fontWeight: 700 }}>✅ Showing <strong>{triageSpecialty}</strong> specialists</span>
-                    <button onClick={() => { setTriageDone(false); setTriageSpecialty('All'); setSpecialtyFilter('All'); }} style={{ background: 'none', border: 'none', color: 'var(--text2)', cursor: 'pointer', fontWeight: 700, fontSize: 12 }}>Reset</button>
-                  </div>
-                )}
-
-                <div className="discover-controls">
-                  <div className="search-wrap">
-                    <span className="search-icon">🔍</span>
-                    <input className="discover-search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search doctors, specialties, clinics…" />
-                  </div>
-                </div>
-
-                {/* Specialty pills */}
-                <div className="pills">
-                  {specialties.map(sp => <button key={sp} className={`pill ${specialtyFilter === sp ? 'on' : ''}`} onClick={() => setSpecialtyFilter(sp)}>{sp}</button>)}
-                </div>
-
-                {/* Clinic pills */}
-                <div className="pills" style={{ marginTop: -8 }}>
-                  {clinics.map(cl => <button key={cl} className={`pill ${clinicFilter === cl ? 'on' : ''}`} onClick={() => setClinicFilter(cl)}>{cl}</button>)}
-                </div>
-
-                <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 14 }}>
-                  Showing <strong style={{ color: 'var(--text)' }}>{filteredSvcs.length}</strong> doctor{filteredSvcs.length !== 1 ? 's' : ''}
-                </p>
-
-                {filteredSvcs.length === 0 ? (
-                  <div className="panel"><div className="empty-sm"><div style={{ fontSize: 40 }}>🔭</div><p>No doctors match your filters.</p></div></div>
-                ) : (
-                  <div className="svc-grid">
-                    {filteredSvcs.map(svc => (
-                      <div key={svc.id} className="svc-card" onClick={() => setProfileSvc(svc)}>
-                        <div className="svc-card-banner" />
-                        <div className="svc-card-body">
-                          <div className="svc-card-hd">
-                            <div className="svc-spec">{svc.specialty}</div>
-                            <div className="svc-price">KES {svc.price.toLocaleString()}</div>
-                          </div>
-                          <div className="svc-doc-row">
-                            <div className="svc-doc-ava">
-                              {svc.photo ? <img src={svc.photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 9 }} /> : svc.doctorName[0]}
-                            </div>
-                            <div>
-                              <div className="svc-doc-name">Dr. {svc.doctorName}</div>
-                              <div className="svc-doc-clinic">{svc.clinic} {svc.location && `· ${svc.location}`}</div>
-                            </div>
-                          </div>
-                          <div className="svc-chips">
-                            <span className="svc-chip">⏱ {svc.duration} min</span>
-                            {svc.rating && <span className="svc-chip">⭐ {svc.rating}</span>}
-                            {svc.yearsExperience && <span className="svc-chip">🏆 {svc.yearsExperience} yrs</span>}
-                            {svc.acceptsInsurance && <span className="svc-chip">🏥 Insurance</span>}
-                            <span className="svc-chip">🟢 Available</span>
-                          </div>
-                          {svc.description && <p className="svc-desc">{svc.description.slice(0, 100)}{svc.description.length > 100 ? '…' : ''}</p>}
-                        </div>
-                        <div className="svc-card-footer" onClick={e => e.stopPropagation()}>
-                          <button className="btn-view-profile" onClick={() => setProfileSvc(svc)}>View Profile</button>
-                          <button className="btn-book" onClick={() => { setProfileSvc(null); setBookSvc(svc); }}>Book Now</button>
-                        </div>
+                      <div className="ov-vital-label">Blood Pressure</div>
+                      <div style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'JetBrains Mono,monospace' }}>
+                        {fmtShort(latestBP.recordedAt)}
                       </div>
-                    ))}
+                    </div>
                   </div>
-                )}
+                  <div>
+                    <span className="ov-vital-reading" style={{ color: bpInfo.color }}>
+                      {latestBP.systolic}/{latestBP.diastolic}
+                    </span>
+                    <span className="ov-vital-unit">mmHg</span>
+                  </div>
+                  <span className="ov-vital-badge" style={{ background: bpInfo.color + '20', color: bpInfo.color }}>
+                    {bpInfo.label}
+                  </span>
+                  <div className="ov-progress-bar" style={{ marginTop: 10 }}>
+                    <div className="ov-progress-fill" style={{
+                      width: `${Math.min(100, ((latestBP.systolic ?? 120) / 180) * 100)}%`,
+                      background: bpInfo.color,
+                    }} />
+                  </div>
+                </div>
+              )}
+
+              {/* Mini vitals */}
+              {([
+                { type: 'glucose', icon: '🩸', label: 'Glucose',     unit: 'mmol/L', color: '#f59e0b' },
+                { type: 'pulse',   icon: '💓', label: 'Pulse Rate',  unit: 'bpm',    color: '#ec4899' },
+                { type: 'weight',  icon: '⚖️', label: 'Weight',      unit: 'kg',     color: '#60a5fa' },
+                { type: 'temp',    icon: '🌡️', label: 'Temperature', unit: '°C',     color: '#f97316' },
+              ] as any[]).map((v: any) => {
+                const reading = vitals.find(vi => vi.type === v.type);
+                return (
+                  <div key={v.type} className="ov-vital-card">
+                    <div className="ov-vital-top">
+                      <span className="ov-vital-ico">{v.icon}</span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className="ov-vital-label">{v.label}</div>
+                        {reading && <div style={{ fontSize: 9, color: 'var(--muted)', fontFamily: 'JetBrains Mono,monospace' }}>{fmtShort(reading.recordedAt)}</div>}
+                      </div>
+                    </div>
+                    <div className="ov-vital-mini">
+                      <div>
+                        <div style={{ fontFamily: 'JetBrains Mono,monospace', fontSize: 22, fontWeight: 700, color: reading ? v.color : 'var(--muted)', lineHeight: 1 }}>
+                          {reading ? reading.value : '—'}
+                        </div>
+                        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>{v.unit}</div>
+                      </div>
+                      {reading && (
+                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: v.color, boxShadow: `0 0 8px ${v.color}88` }} />
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* PRESCRIPTIONS */}
+        <div className="ov-panel">
+          <div className="ov-sec-hd">
+            <div>
+              <div className="ov-sec-eyebrow">Current Medications</div>
+              <div className="ov-sec-title">💊 Prescriptions</div>
+            </div>
+            <button className="btn-sm-accent" onClick={() => setActiveTab('prescriptions')}>View All</button>
+          </div>
+
+          {allPrescriptions.length === 0 ? (
+            <div className="ov-empty">
+              <div style={{ fontSize: 32, marginBottom: 8 }}>💊</div>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>No prescriptions yet</div>
+              <div>Medications will appear after consultations.</div>
+            </div>
+          ) : allPrescriptions.slice(0, 4).map((rx: any, i: number) => (
+            <div key={i} className="ov-rx">
+              <div className="ov-rx-top">
+                <div>
+                  <div className="ov-rx-name">{rx.medication}</div>
+                  <div className="ov-rx-dr">Prescribed by Dr. {rx.doctorName}</div>
+                </div>
+                <span className="ov-rx-pill">Active</span>
               </div>
-            )}
+              <div className="ov-rx-meta">
+                <span>💉 {rx.dosage}</span>
+                <span>·</span>
+                <span>🕐 {rx.frequency}</span>
+                <span>·</span>
+                <span>📆 {rx.duration}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* RECENT APPOINTMENTS — full width */}
+        <div className="ov-panel ov-full">
+          <div className="ov-sec-hd">
+            <div>
+              <div className="ov-sec-eyebrow">Care History</div>
+              <div className="ov-sec-title">📅 Recent Appointments</div>
+            </div>
+            <button className="btn-sm-accent" onClick={() => setActiveTab('appointments')}>View All</button>
+          </div>
+
+          {appointments.length === 0 ? (
+            <div className="ov-empty">
+              <div style={{ fontSize: 36, marginBottom: 10 }}>📭</div>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>No appointments yet</div>
+              <button className="btn-sm-accent" onClick={() => setActiveTab('discover')}>Find a Doctor →</button>
+            </div>
+          ) : (
+            <div>
+              {appointments.slice(0, 5).map(appt => {
+                const sc = statusCfg[appt.status] || statusCfg.booked;
+                return (
+                  <div key={appt.id} className="ov-appt" onClick={() => setActiveTab('appointments')}>
+                    <div className="ov-appt-left">
+                      <div className="ov-appt-ico">
+                        {appt.status === 'active' ? '🟢' : appt.status === 'completed' ? '✅' : appt.status === 'cancelled' ? '❌' : '📅'}
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <div className="ov-appt-spec">
+                          {appt.specialty || 'Consultation'}
+                          {appt.firstVisit && <span style={{ marginLeft: 8, fontSize: 9, background: 'rgba(255,176,32,.12)', color: '#ffb020', borderRadius: 99, padding: '2px 7px', fontWeight: 700 }}>1st Visit</span>}
+                        </div>
+                        <div className="ov-appt-dr">Dr. {appt.doctorName}</div>
+                        <div className="ov-appt-date">{fmtDate(appt.scheduledDate || appt.date)}</div>
+                      </div>
+                    </div>
+                    <div className="ov-appt-right">
+                      <span className="ov-status-pill" style={{ background: sc.bg, color: sc.color }}>{sc.label}</span>
+                      {appt.status === 'active' && (
+                        <button className="ov-join-btn"
+                          onClick={e => { e.stopPropagation(); joinConsultation(appt); }}
+                          disabled={joining === appt.id}>
+                          {joining === appt.id ? '…' : '🎥 Join'}
+                        </button>
+                      )}
+                      {appt.paymentStatus === 'failed' && (
+                        <span style={mini('rgba(255,69,96,.1)', '#ff4560')}>Pay Now →</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          PENDING LAB ORDERS
+      ══════════════════════════════════════════════════════════════════ */}
+      {pendingLabOrders > 0 && (
+        <div className="ov-panel">
+          <div className="ov-sec-hd">
+            <div>
+              <div className="ov-sec-eyebrow">Doctor-Ordered Tests</div>
+              <div className="ov-sec-title">🧪 Pending Lab Orders</div>
+            </div>
+            <span style={mini('rgba(255,176,32,.12)', '#ffb020')}>{pendingLabOrders} pending</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {labOrders.filter((o: any) => o.status === 'ordered' || o.status === 'pending').slice(0, 4).map((o: any) => (
+              <div key={o.id} className="lab-card" style={{ borderLeft: '3px solid #ffb020' }}>
+                <div className="lab-card-hd">
+                  <div>
+                    <div className="lab-name">{o.tests?.join(', ') || o.testName || 'Lab Test'}</div>
+                    <div className="lab-meta">
+                      Ordered by Dr. {o.doctorName || o.doctorId?.slice(0, 6)} · {fmtDate(o.createdAt)}
+                    </div>
+                  </div>
+                  <span style={{ background: 'rgba(255,176,32,.12)', color: '#ffb020', borderRadius: 99, padding: '2px 8px', fontSize: 10, fontWeight: 700 }}>
+                    {o.status || 'Ordered'}
+                  </span>
+                </div>
+                {o.instructions && <p style={{ fontSize: 12, color: 'var(--text2)', marginTop: 6, fontStyle: 'italic' }}>{o.instructions}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════
+          RECENT EDUCATION FROM DOCTOR
+      ══════════════════════════════════════════════════════════════════ */}
+      {educationLogs.filter((e: any) => e.topic || e.title).length > 0 && (
+        <div className="ov-panel ov-full">
+          <div className="ov-sec-hd">
+            <div>
+              <div className="ov-sec-eyebrow">Assigned Learning</div>
+              <div className="ov-sec-title">📚 Education from Your Doctor</div>
+            </div>
+            <button className="btn-sm-accent" onClick={() => setActiveTab('education')}>View All →</button>
+          </div>
+          <div className="edu-grid">
+            {educationLogs.filter((e: any) => e.topic || e.title).slice(0, 3).map((e: any, i: number) => (
+              <div key={e.id || i} className="edu-card" style={{ cursor: 'default' }}>
+                <div className="edu-body">
+                  <span className="edu-type">👨‍⚕️ Dr. {e.doctorName || 'Your Doctor'}</span>
+                  <div className="edu-title">📚 {e.topic || e.title}</div>
+                  <p className="edu-summary">{e.notes || `Educational material sent on ${fmtDate(e.sentAt)}`}</p>
+                  <div className="edu-time">📅 {fmtDate(e.sentAt)}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* FOOTER */}
+      <div style={{ textAlign: 'center', padding: '4px 0 2px', fontSize: 10, color: 'var(--muted)', letterSpacing: 3.5, textTransform: 'uppercase', fontFamily: 'Georgia,serif' }}>
+        AMEXAN HealthOS · Your Lifelong Care Companion
+      </div>
+
+    </div>
+  );
+})()}
+
+        
+        {/* ── DISCOVER TAB ── */}
+            {activeTab === 'discover' && <DiscoverTab />}
 
             {/* ── VITALS TAB ── */}
             {activeTab === 'vitals' && (
@@ -2712,8 +3627,8 @@ export default function PatientDashboard() {
                           <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8 }}>7-Day Trend</div>
                           <div className="bp-sparkline-row">
                             {vitals.filter(v => v.type === 'bp').slice(0, 7).reverse().map((v, i) => {
-                              const pct = Math.min(100, Math.max(5, ((v.systolic! - 80) / 80) * 100));
-                              const cat = bpCat(v.systolic!, v.diastolic!);
+                              const pct = Math.min(100, Math.max(5, (((v.systolic ?? 120) - 80) / 80) * 100));
+                              const cat = bpCat(v.systolic ?? 120, v.diastolic ?? 80);
                               return (
                                 <div key={i} className="spark-col" title={`${v.systolic}/${v.diastolic} — ${fmtShort(v.recordedAt)}`}>
                                   <div className="spark-bar-outer"><div className="spark-bar-inner" style={{ height: `${pct}%`, background: cat.color }} /></div>
@@ -2832,56 +3747,161 @@ export default function PatientDashboard() {
 
             {/* ── PRESCRIPTIONS TAB ── */}
             {activeTab === 'prescriptions' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                <div className="panel">
-                  <div className="panel-hd">
-                    <div className="panel-title">💊 Active Prescriptions</div>
-                    <span className="count-badge">{allPrescriptions.length}</span>
-                  </div>
-                  {allPrescriptions.length === 0 ? (
-                    <div className="empty-sm"><div style={{ fontSize: 36 }}>💊</div><p>Prescriptions appear here after doctor consultations.</p></div>
-                  ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                      {allPrescriptions.map((rx, i) => (
-                        <div key={i} className="rx-card">
-                          <div className="rx-card-hd">
-                            <div>
-                              <div className="rx-card-name">💊 {rx.medication}</div>
-                              <div className="rx-card-doc">Prescribed by Dr. {rx.doctorName}</div>
-                            </div>
-                            <div style={{ textAlign: 'right', fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--mono)' }}>
-                              {rx.addedAt ? new Date(rx.addedAt).toLocaleDateString() : '—'}
-                            </div>
-                          </div>
-                          <div className="rx-card-meta">
-                            <span>📏 {rx.dosage}</span><span>·</span>
-                            <span>🔁 {rx.frequency}</span><span>·</span>
-                            <span>⏳ {rx.duration}</span>
-                            {rx.refills ? <><span>·</span><span>🔄 {rx.refills} refills</span></> : null}
-                          </div>
-                          {rx.instructions && <div className="rx-card-instructions">📌 {rx.instructions}</div>}
-                          {/* Adherence calendar */}
-                          <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, marginTop: 10, marginBottom: 4 }}>7-Day Adherence — tap a day to mark as taken</div>
-                          <PrescriptionCalendar rx={{ ...rx, apptId: rx.apptId }} patientId={patient.uid} apptId={rx.apptId} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+  <PatientRxCenter
+    patientId={patient.uid}
+    patientName={patient.name}
+  />
+)}
 
             {/* ── LABS TAB ── */}
-            {activeTab === 'labs' && <LabsPanel patientId={patient.uid} />}
+            {activeTab === 'labs' && (
+  <PatientOrdersCenter
+    patientId={patient.uid}
+    patientName={patient.name}
+    patient={patient}
+    onOpenChat={(doctorId, doctorName) => {
+      setActiveTab('messages');
+    }}
+  />
+)}
 
-            {/* ── HISTORY TAB ── */}
-            {activeTab === 'history' && <ClinicalHistoryPanel patientId={patient.uid} patient={patient} />}
+            {/* Medical Record — the ONE tab for all clinical history */}
+{activeTab === 'record' && (
+  <div className="space-y-6">
+    <ClinicalHistory
+      patientId={patient.uid}
+      patientName={patient.name}
+      viewerRole="patient"
+      viewerId={patient.uid}
+      viewerName={patient.name}
+    />
 
+    {/* ── Prescription History ── */}
+    {allPrescriptions.length > 0 && (
+      <div className="rx-history-section">
+        <div className="rxh-hd">
+          <span className="rxh-title">💊 Prescription History</span>
+          <span className="rxh-count">{allPrescriptions.length} total</span>
+        </div>
+        <div className="rxh-grid">
+          {allPrescriptions.map((rx: any, i: number) => {
+            const rxDate = rx.createdAt?.toDate
+              ? rx.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+              : rx.date || '';
+            return (
+              <div key={rx.id || i} className="rxh-card">
+                <div className="rxh-top">
+                  <div className="rxh-drug">
+                    <span className="rxh-drug-name">{rx.medication || rx.medicationName}</span>
+                    <span className="rxh-status-badge active">Active</span>
+                  </div>
+                  <span className="rxh-date">{rxDate}</span>
+                </div>
+                <div className="rxh-meta">
+                  {rx.dosage && <span className="rxh-chip">💉 {rx.dosage}</span>}
+                  {rx.frequency && <span className="rxh-chip">🕐 {rx.frequency}</span>}
+                  {rx.duration && <span className="rxh-chip">📆 {rx.duration}</span>}
+                  {rx.route && <span className="rxh-chip">🩸 {rx.route}</span>}
+                </div>
+                <div className="rxh-footer">
+                  <span className="rxh-doctor">Dr. {rx.doctorName || rx.prescriberName || 'Unknown'}</span>
+                  {rx.condition && <span className="rxh-condition">For: {rx.condition}</span>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    )}
+
+    {/* Doctor's clinical notes */}
+    {clinicalNotes.length > 0 && (
+      <div className="panel">
+        <div className="panel-hd">
+          <span className="panel-title">📝 Doctor's Clinical Notes</span>
+          <span className="count-badge">{clinicalNotes.length}</span>
+        </div>
+        <div className="rxh-grid">
+          {clinicalNotes.map(note => {
+            const date = note.createdAt?.toDate
+              ? note.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+              : note.visitDate || new Date(note.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            return (
+              <div key={note.id} className="rxh-card">
+                <div className="rxh-top">
+                  <span className="rxh-drug-name" style={{ fontSize: 14, color: 'var(--accent3)' }}>{note.doctorName || 'Doctor'}</span>
+                  <span className="rxh-date">{date}</span>
+                </div>
+                {note.type && <span className="rxh-chip" style={{ background: 'var(--surface2)' }}>{note.type}</span>}
+                <p style={{ color: 'var(--text2)', fontSize: 13, lineHeight: 1.6, marginTop: 8, whiteSpace: 'pre-wrap' }}>{note.content}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    )}
+  </div>
+)}
+{activeTab === 'visits' && (
+  <PatientVisitSummary patientId={patient.uid} />
+)}
+
+{/* ── MY HEALTH ─────────────────────────────────────────────────── */}
+{activeTab === 'health' && (
+  <PatientHealthDashboard
+    patientId={patient.uid}
+    patientName={patient.name}
+    isDoctor={false}
+    appointments={appointments}
+  />
+)}
+{activeTab === 'referrals' && patient && (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div style={{ marginBottom: 4 }}>
+      <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--text, #1e293b)', marginBottom: 4 }}>
+        🏥 My Referrals
+      </div>
+      <div style={{ fontSize: 13, color: 'var(--muted, #94a3b8)' }}>
+        Referrals issued by your doctors · Download letters · Track status
+      </div>
+    </div>
+    <PatientReferralPortal
+      patientId={patient.uid}
+      patientName={patient.name || 'Patient'}
+      patient={patient}
+      onOpenChat={(doctorId, doctorName) => {
+        setChatDoctor({ doctorId, doctorName });
+        setActiveTab('messages');
+      }}
+    />
+  </div>
+)}
+{/* ── MY TOOLS ──────────────────────────────────────────────────── */}
+{activeTab === 'tools' && (
+  <PatientToolLogger
+    patientId={patient.uid}
+    doctorId={appointments?.[0]?.doctorId || ''}
+  />
+)}
             {/* ── MESSAGES TAB ── */}
-            {activeTab === 'messages' && <MessagesPanel patient={patient} appointments={appointments} />}
-
-            {/* ── EDUCATION TAB ── */}
-            {activeTab === 'education' && <EducationPanel patientId={patient.uid} condition={patient.condition} />}
+           {activeTab === 'messages' && patient?.uid && patient?.name && (
+  <AmexanClinicalMessaging
+    myId={patient.uid}
+    myName={patient.name}
+    myRole="patient"
+    defaultDoctorId={chatDoctor?.doctorId}
+    defaultDoctorName={chatDoctor?.doctorName}
+  />
+)}
+           {/* ── EDUCATION TAB ── */}
+            {activeTab === 'education' && (
+              <PatientEducationView
+                patient={patient}
+                educationLogs={dedupedEducation}
+                fullLogs={educationLogs}
+                searchArticles={searchArticles}
+              />
+            )}
 
             {/* ── PAYMENTS TAB ── */}
             {activeTab === 'payments' && <PaymentsPanel appointments={appointments} patient={patient} />}
@@ -2897,11 +3917,13 @@ export default function PatientDashboard() {
       {/* Mobile Bottom Nav */}
       <nav className="mobile-nav">
         {[
-          { id: 'overview', icon: '🏠', label: 'Home' },
-          { id: 'discover', icon: '🔍', label: 'Discover' },
-          { id: 'disease', icon: '🎯', label: 'My Health' },
-          { id: 'appointments', icon: '📅', label: 'Visits' },
-          { id: 'messages', icon: '💬', label: 'Messages' },
+          
+  { id: 'overview',     icon: '🏠', label: 'Home' },
+  { id: 'record',       icon: '📋', label: 'Record' },
+  { id: 'discover',     icon: '🔍', label: 'Doctors' },
+  { id: 'appointments', icon: '📅', label: 'Visits' },
+  { id: 'messages',     icon: '💬', label: 'Messages' },
+
         ].map(t => (
           <button key={t.id} className={`mob-nav-btn ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
             <span className="mob-icon">{t.icon}</span>

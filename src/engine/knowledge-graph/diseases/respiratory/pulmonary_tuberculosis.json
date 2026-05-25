@@ -1,0 +1,244 @@
+
+{
+  "disease": {
+    "id": "tuberculosis",
+    "name": "Pulmonary Tuberculosis",
+    "system": "respiratory",
+    "syndromeType": "chronic_granulomatous_infection",
+    "corePathophysiology": [
+      "mycobacterial_infection",
+      "cell_mediated_immunity_response",
+      "granuloma_formation",
+      "caseation_necrosis",
+      "airway_involvement",
+      "systemic_spread_possible"
+    ],
+    "agePhenotype": {
+      "infant_0_12m": "disseminated_high_risk",
+      "toddler_1_5y": "primary_complex_lymph_node_disease",
+      "school_age_5y_plus": "adult_type_pulmonary_TB"
+    },
+    "ageWeighting": {
+      "0-11": 0.6,
+      "12-59": 1.0,
+      "60-143": 0.9
+    },
+    "prevalenceWeight": 0.5,
+    "mustNotMiss": true,
+    "penaltyForMiss": "high",
+    "priorityOverride": "long_term_chronic_disease_screen",
+
+    "historyFeatures": [
+      { "symptomId": "chronic_cough", "weight": 6, "durationGate": ">=14_days" },
+      { "symptomId": "weight_loss_or_failure_to_thrive", "weight": 5 },
+      { "symptomId": "fever", "weight": 3, "pattern": "prolonged_low_grade" },
+      { "symptomId": "night_sweats", "weight": 4 },
+      { "symptomId": "tb_contact", "weight": 6, "mustBoost": true, "note": "Household contact with smear-positive TB" },
+      { "symptomId": "poor_weight_gain", "weight": 5 },
+      { "symptomId": "chronic_fatigue", "weight": 3 },
+      { "symptomId": "recurrent_pneumonia", "weight": 3, "note": "Especially if poor response to antibiotics" }
+    ],
+
+    "negativePredictors": [
+      { "feature": "rapid_symptom_resolution", "scoreReduction": 6, "description": "Symptoms resolve completely within 7 days" },
+      { "feature": "acute_onset_under_7_days", "scoreReduction": 5 },
+      { "feature": "strong_bronchodilator_response", "scoreReduction": 4, "favorsAlternative": ["asthma"] },
+      { "feature": "episodic_wheeze_pattern", "scoreReduction": 5, "favorsAlternative": ["asthma"] },
+      { "feature": "localised_crackles_with_high_fever", "scoreReduction": 3, "favorsAlternative": ["bacterial_pneumonia"] }
+    ],
+
+    "examFeatures": [
+      { "signId": "crackles", "baseWeight": 3, "note": "May be absent in early/mild disease" },
+      { "signId": "clubbing", "baseWeight": 3, "note": "Late finding" },
+      { "signId": "lymphadenopathy", "baseWeight": 5, "note": "Especially cervical or supraclavicular" },
+      { "signId": "respiratory_distress", "baseWeight": 2, "note": "Only if advanced" },
+      { "signId": "failure_to_thrive", "baseWeight": 6 },
+      { "signId": "pleural_effusion_signs", "baseWeight": 5, "note": "Dullness, reduced breath sounds" }
+    ],
+
+    "severityAssessment": {
+      "severeTBCriteria": {
+        "anyOf": [
+          { "sign": "tb_meningitis", "description": "Meningeal signs or altered consciousness" },
+          { "sign": "miliary_tb", "description": "Disseminated TB on imaging" },
+          { "sign": "severe_respiratory_compromise", "description": "Hypoxia, cyanosis, respiratory failure" }
+        ],
+        "action": "Admit, treat with prolonged regimen, add corticosteroids for TB meningitis"
+      },
+      "nonSevereCriteria": {
+        "description": "Chronic cough, weight loss, typical CXR findings without danger signs"
+      }
+    },
+
+    "riskFactors": [
+      { "id": "hiv_exposure_or_infection", "multiplier": 2.5 },
+      { "id": "malnutrition", "multiplier": 2.0 },
+      { "id": "overcrowding", "multiplier": 1.5 },
+      { "id": "tb_household_contact", "multiplier": 3.0 },
+      { "id": "lack_of_BCG_vaccination", "multiplier": 1.2 }
+    ],
+
+    "chronicityModel": {
+      "timeThresholdDays": 14,
+      "probabilityIncreasePerWeekAfterThreshold": 0.2,
+      "weightLossTrajectoryImpact": "If weight decreasing over last 3 months, boost TB score by 2"
+    },
+
+    "investigations": {
+      "bedside": [
+        { "name": "Weight chart review", "priority": "immediate", "yield": 0.9 },
+        { "name": "Pulse oximetry", "priority": "if respiratory distress" }
+      ],
+      "laboratory": [
+        { "name": "GeneXpert MTB/RIF on sputum or gastric aspirate", "priority": "highest", "yield": 0.95, "note": "Rapid molecular test; detects rifampicin resistance" },
+        { "name": "AFB smear microscopy x 3", "priority": "high", "yield": 0.6, "note": "Low sensitivity in children" },
+        { "name": "Mantoux tuberculin skin test (TST)", "priority": "high", "yield": 0.7, "interpretation": "≥10mm in non-HIV, ≥5mm in HIV" },
+        { "name": "IGRA (Interferon-Gamma Release Assay)", "priority": "if available", "yield": 0.8, "note": "Distinguishes latent from active? Not routine in all settings" },
+        { "name": "HIV test", "priority": "mandatory", "yield": 1.0 },
+        { "name": "LFT baseline", "priority": "before starting TB treatment", "yield": 0.8 },
+        { "name": "FBC", "priority": "supportive" }
+      ],
+      "imaging": [
+        {
+          "name": "Chest X-ray PA and lateral",
+          "priority": "high",
+          "yield": 0.85,
+          "indication": "all suspected cases",
+          "typicalFindings": {
+            "primary_tb": "hilar/mediastinal lymphadenopathy, consolidation",
+            "miliary": "diffuse micronodules",
+            "older_child_cavitation": "apical cavitation",
+            "pleural_effusion": "blunted costophrenic angle"
+          }
+        }
+      ],
+      "advanced": [
+        { "name": "CT chest", "indication": "diagnostic doubt, complications", "priority": "low" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Kenya National Guidelines for Management of Tuberculosis in Children",
+      "standardRegimen": {
+        "intensivePhase": "2 months RHZE (Rifampicin, Isoniazid, Pyrazinamide, Ethambutol) daily",
+        "continuationPhase": "4 months RH (Rifampicin, Isoniazid) daily",
+        "totalDuration": "6 months",
+        "dosage": "Weight‑banded dosing per national guidelines"
+      },
+      "severeTBRegimen": {
+        "indications": ["tb_meningitis", "miliary_tb", "severe_respiratory_compromise"],
+        "treatment": "Standard intensive phase 2 months RHZE + continuation phase prolonged to 7–10 months (total 9–12 months)",
+        "adjuncts": "Add corticosteroids (prednisolone 2 mg/kg/day) for TB meningitis; taper over 4–6 weeks"
+      },
+      "supportiveCare": [
+        "Nutritional assessment and support",
+        "HIV care if co‑infected (cotrimoxazole prophylaxis, ART timing)",
+        "Directly Observed Therapy (DOT) recommended"
+      ],
+      "followUp": "Monthly weight, symptom review, adherence check. Repeat CXR if symptoms persist."
+    },
+
+    "treatmentResponseLogic": {
+      "expectedImprovement": "Clinical improvement (weight gain, reduced cough) within 2–4 weeks. Weight gain often the best marker.",
+      "noImprovementAfter4_8Weeks": {
+        "actions": [
+          "Check adherence",
+          "Repeat GeneXpert and culture for drug susceptibility",
+          "Exclude drug‑resistant TB",
+          "Re‑evaluate for alternative diagnoses: malignancy, bronchiectasis, HIV‑related lung disease",
+          "If still diagnostic of TB, switch to second‑line regimen"
+        ]
+      }
+    },
+
+    "differentialCompetition": {
+      "bacterial_pneumonia": {
+        "discriminators": ["acute_onset", "high_fever", "focal_crackles", "rapid_response_to_antibiotics"],
+        "negativeImpactOnTB": 4
+      },
+      "asthma": {
+        "discriminators": ["episodic_wheeze", "recurrent_episodes", "bronchodilator_response", "no_weight_loss"],
+        "negativeImpactOnTB": 3
+      },
+      "bronchiolitis": {
+        "discriminators": ["age_under_2", "acute_viral_prodrome", "fine_crackles_and_wheeze"],
+        "negativeImpactOnTB": 3
+      },
+      "hiv_pneumonia_pcp": {
+        "discriminators": ["severe_hypoxia", "relatively_clear_chest", "hiv_exposed"],
+        "negativeImpactOnTB": 2,
+        "note": "TB and PCP can coexist"
+      },
+      "malignancy_lymphoma": {
+        "discriminators": ["progressive_lymphadenopathy", "hepatosplenomegaly", "B_symptoms"],
+        "negativeImpactOnTB": 2
+      },
+      "bronchiectasis": {
+        "discriminators": ["chronic_productive_cough_since_early_childhood", "clubbing"],
+        "negativeImpactOnTB": 1
+      }
+    },
+
+    "complications": [
+      {
+        "diseaseId": "pleural_effusion",
+        "probability": 0.2,
+        "clues": ["stony_dull_percussion", "reduced_breath_sounds"],
+        "severityBoost": 0.2
+      },
+      {
+        "diseaseId": "miliary_tuberculosis",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["diffuse_micronodules_on_CXR", "severe_systemic_illness"]
+      },
+      {
+        "diseaseId": "tb_meningitis",
+        "probability": 0.05,
+        "agePeak": [0, 24],
+        "severityBoost": 0.5,
+        "clues": ["headache", "vomiting", "neck_stiffness", "altered_consciousness"]
+      },
+      {
+        "diseaseId": "bronchiectasis",
+        "probability": 0.1,
+        "note": "Long‑term complication of inadequately treated TB"
+      }
+    ],
+
+    "syndromeTags": ["chronic_respiratory_disease", "granulomatous_disease", "systemic_infection"],
+    "diagnosticClues": ["chronic_cough_>2_weeks", "weight_loss", "night_sweats", "tb_contact", "hilar_adenopathy_on_CXR"],
+    "exclusionClues": ["rapid_symptom_resolution", "acute_onset_with_high_fever_and_crackles", "strong_bronchodilator_response"],
+
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["age_months?", "cough_duration?", "weight_loss?", "fever?", "tb_contact?", "hiv_risk?"],
+      "branching": [
+        {
+          "if": "cough_duration_>=_14_days",
+          "ask": ["weight_loss?", "night_sweats?", "tb_contact?", "hiv_test_done?"],
+          "action": "TB highly likely – obtain CXR and GeneXpert."
+        },
+        {
+          "if": "tb_contact_positive",
+          "ask": ["type_of_contact?", "duration?", "contact_smear_status?"],
+          "action": "Boost TB probability significantly; consider TB preventive therapy if child well."
+        },
+        {
+          "if": "hiv_risk_or_exposure",
+          "ask": ["hiv_test_result?", "previous_pcp_prophylaxis?", "oral_thrush?", "recurrent_infections?"],
+          "action": "Test for HIV; TB and HIV often coexist."
+        },
+        {
+          "if": "acute_onset_<_7_days",
+          "ask": ["fever_high?", "crackles_focal?", "response_to_antibiotics?"],
+          "action": "Pneumonia more likely; keep TB in differential if risk factors."
+        },
+        {
+          "if": "wheeze_present",
+          "ask": ["recurrent_episodes?", "family_atopy?", "bronchodilator_response?"],
+          "action": "Asthma more likely if episodic; TB if chronic and weight loss."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "id": "croup",
+  "name": "Croup (Laryngotracheobronchitis)",
+  "system": "respiratory",
+  "syndromeType": "upper_airway_obstruction_subglottic",
+  "corePathophysiology": [
+    "subglottic_edema",
+    "airway_narrowing",
+    "inspiratory_airflow_limitation",
+    "increased_airway_resistance",
+    "stridor_generation"
+  ],
+  "ageLogic": {
+    "peak": [6, 36],
+    "declineAfter": 60,
+    "description": "highest risk 6-36 months, decreasing at 3-5 years, rare >6 years"
+  },
+  "etiology": [
+    { "virus": "Parainfluenza type 1", "weight": 0.6 },
+    { "virus": "Parainfluenza type 3", "weight": 0.2 },
+    { "virus": "RSV", "weight": 0.1 },
+    { "virus": "Influenza", "weight": 0.1 }
+  ],
+  "historyFeatures": [
+    { "symptomId": "barking_cough", "weight": 6, "keyDiscriminator": true },
+    { "symptomId": "hoarseness", "weight": 4 },
+    { "symptomId": "nocturnal_worsening", "weight": 3 },
+    { "symptomId": "low_grade_fever", "weight": 2 },
+    { "symptomId": "viral_prodrome", "weight": 3 }
+  ],
+  "negativeWeights": {
+    "drooling": -10,
+    "toxic_child": -6,
+    "high_fever_gt_39": -3,
+    "sudden_onset_choking": -5,
+    "description": "These features strongly suppress croup probability and point to epiglottitis, bacterial tracheitis, or foreign body"
+  },
+  "examFeatures": [
+    { "signId": "stridor", "weight": 7, "criticalMarker": true, "description": "inspiratory stridor = upper airway obstruction" },
+    { "signId": "chest_indrawing", "weight": 3 },
+    { "signId": "tachypnea", "weight": 3 },
+    { "signId": "agitation_worsening_stridor", "weight": 4 },
+    { "signId": "reduced_air_entry_upper", "weight": 5 }
+  ],
+  "severityCriteria": {
+    "mild": {
+      "features": ["barking_cough_only", "no_stridor_at_rest", "no_distress"],
+      "action": "home management with steroid, observe"
+    },
+    "moderate": {
+      "features": ["stridor_at_rest", "chest_indrawing", "agitation_worsens"],
+      "action": "steroid + nebulised adrenaline, observe minimum 4h"
+    },
+    "severe": {
+      "features": ["stridor_at_rest_plus_restlessness", "severe_indrawing", "hypoxia", "fatigue", "silent_chest_late_sign"],
+      "action": "emergency airway management, ICU, early intubation"
+    }
+  },
+  "differentialDiagnosis": [
+    {
+      "disease": "Epiglottitis",
+      "keyDiscriminator": "drooling + toxic child, absent cough",
+      "stridor": true
+    },
+    {
+      "disease": "Foreign Body Aspiration",
+      "keyDiscriminator": "sudden onset choking, no prodrome",
+      "stridor": true
+    },
+    {
+      "disease": "Bacterial Tracheitis",
+      "keyDiscriminator": "toxic + high fever, biphasic stridor",
+      "stridor": true
+    },
+    {
+      "disease": "Asthma",
+      "keyDiscriminator": "expiratory wheeze, not inspiratory stridor",
+      "stridor": false
+    },
+    {
+      "disease": "Anaphylaxis",
+      "keyDiscriminator": "facial swelling, urticaria, rapid collapse",
+      "stridor": true
+    }
+  ],
+  "stridorLogic": "Inspiratory stridor → upper airway (croup/epiglottitis/FB); expiratory wheeze → lower airway (asthma/bronchiolitis)",
+  "investigations": {
+    "bedside": ["SpO2 monitoring", "clinical airway assessment"],
+    "imaging": [
+      {
+        "name": "Neck X-ray (steeple sign)",
+        "indication": "atypical or diagnostic uncertainty only; NOT routine"
+      }
+    ],
+    "note": "Diagnosis is primarily clinical; do not delay treatment for imaging"
+  },
+  "managementProtocols": [
+    {
+      "condition": "mild",
+      "steps": [
+        "Dexamethasone 0.6 mg/kg PO single dose (max 16 mg)",
+        "No stridor at rest — may discharge if caretaker reliable",
+        "Return if: stridor at rest develops, increased work of breathing"
+      ]
+    },
+    {
+      "condition": "moderate",
+      "steps": [
+        "Dexamethasone 0.6 mg/kg PO/IV stat (max 16 mg)",
+        "Nebulised Adrenaline (1:1000) 0.5 mL/kg (max 5 mL) if stridor at rest",
+        "Observe for minimum 4 hours after adrenaline",
+        "Admit if stridor persists after 4h or repeated adrenaline needed"
+      ]
+    },
+    {
+      "condition": "severe",
+      "steps": [
+        "Dexamethasone 0.6 mg/kg IV stat (max 16 mg)",
+        "Nebulised Adrenaline (1:1000) 0.5 mL/kg — may repeat every 1–2 h",
+        "Oxygen to maintain SpO2 >92%",
+        "Heliox if available",
+        "Prepare for intubation early — call anaesthesia",
+        "Admit to ICU/HDU"
+      ]
+    }
+  ],
+  "responseToTreatment": {
+    "expected": "Steroids improve symptoms in hours; adrenaline gives temporary relief in minutes",
+    "warningSignsFailure": [
+      "repeated adrenaline needed",
+      "worsening stridor",
+      "fatigue or decreasing consciousness",
+      "hypoxia not correcting"
+    ],
+    "ifFailure": "Escalate differential – consider bacterial tracheitis, epiglottitis, foreign body, or complete airway obstruction"
+  },
+  "complications": [
+    {
+      "id": "airway_obstruction",
+      "riskTriggers": ["severe_stridor", "fatigue"],
+      "severity": "life_threatening"
+    },
+    {
+      "id": "respiratory_failure",
+      "late_sign": true
+    }
+  ],
+  "croupVsEpiglottitisVsFB": {
+    "croup": { "onset": "gradual", "cough": "barking", "drooling": false, "toxic": false },
+    "epiglottitis": { "onset": "rapid", "cough": "absent", "drooling": true, "toxic": true },
+    "foreignBody": { "onset": "sudden", "cough": "variable", "drooling": false, "toxic": false }
+  },
+  "clinicalPearl": "Croup is a REVERSIBLE upper airway obstruction driven by airway caliber, not primarily infection severity. Steroids are definitive; adrenaline is a temporising bridge."
+}

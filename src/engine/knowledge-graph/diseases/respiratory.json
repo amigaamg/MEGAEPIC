@@ -1,0 +1,252 @@
+[
+  {
+    "id": "pneumonia",
+    "name": "Pneumonia",
+    "system": "respiratory",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.85,
+    "historyFeatures": [
+      { "symptomId": "cough", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "fast_breathing", "weight": 4 },
+      { "symptomId": "difficulty_feeding", "weight": 2, "condition": "age < 12" }
+    ],
+    "examFeatures": [
+      { "signId": "crackles", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "bronchial_breathing", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "chest_indrawing", "baseWeight": 3, "doubleWeight": true },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "hypoxia", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "hiv", "multiplier": 1.5 },
+      { "id": "malnutrition", "multiplier": 1.3 }
+    ],
+    "complications": [
+      { "diseaseId": "pleural_effusion", "probability": 0.2, "lagDays": [2, 7], "severityBoost": 0.3 },
+      { "diseaseId": "empyema", "probability": 0.1, "lagDays": [5, 14], "severityBoost": 0.3 },
+      { "diseaseId": "sepsis", "probability": 0.25, "severityBoost": 0.4 }
+    ],
+    "mimics": [
+      { "diseaseId": "asthma", "discriminators": ["wheeze dominant", "no fever"] },
+      { "diseaseId": "bronchiolitis", "discriminators": ["age < 2 years", "viral prodrome"] }
+    ],
+    "syndromeTags": ["alveolar_disease", "respiratory_distress"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["fever + crackles + tachypnoea"],
+    "exclusionClues": ["pure wheeze without fever"],
+    "investigations": [
+      { "type": "imaging", "name": "Chest X-ray PA", "indication": "moderate/severe" },
+      { "type": "lab", "name": "FBC + CRP", "indication": "all suspected" },
+      { "type": "lab", "name": "Blood culture", "indication": "severe or toxic" }
+    ],
+    "managementProtocols": [
+      { "condition": "non-severe", "steps": ["Amoxicillin PO 40-45 mg/kg/dose every 12 h x 5 days"] },
+      { "condition": "severe", "steps": ["Benzylpenicillin IV 50,000 IU/kg every 6 h + Gentamicin IV 7.5 mg/kg once daily", "If no improvement at 48 h, switch to Ceftriaxone IV 50 mg/kg once daily"] }
+    ]
+  },
+
+  
+  {
+    "id": "asthma",
+    "name": "Asthma",
+    "system": "respiratory",
+    "agePeak": [24, 216],
+    "prevalenceWeight": 0.75,
+    "historyFeatures": [
+      { "symptomId": "wheeze", "weight": 4 },
+      { "symptomId": "cough", "weight": 2, "qualitativeModifiers": [{"qualityKey": "nocturnal", "weightBoost": 2}] },
+      { "symptomId": "chest_tightness", "weight": 2 },
+      { "symptomId": "exercise_triggered_symptoms", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "wheeze", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "prolonged_expiration", "baseWeight": 3, "doubleWeight": true },
+      { "signId": "hyperinflation", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "atopy", "multiplier": 1.4 },
+      { "id": "family_asthma", "multiplier": 1.3 }
+    ],
+    "complications": [
+      { "diseaseId": "status_asthmaticus", "probability": 0.15, "severityBoost": 0.5 }
+    ],
+    "mimics": [
+      { "diseaseId": "bronchiolitis", "discriminators": ["first episode in infancy", "viral prodrome"] }
+    ],
+    "syndromeTags": ["lower_airway_obstruction"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["recurrent wheeze", "trigger exposure"],
+    "exclusionClues": ["fever with crackles"],
+    "investigations": [
+      { "type": "imaging", "name": "Chest X-ray (only if atypical)", "indication": "severe or complicated" }
+    ],
+    "managementProtocols": [
+      { "condition": "mild", "steps": ["Inhaled salbutamol 2 puffs via spacer Q4-6H PRN", "Prednisolone 2 mg/kg PO OD x 3 days", "Review trigger avoidance and inhaler technique", "Return if: requiring >4-hourly reliever, night waking, exercise intolerance"] },
+      { "condition": "moderate", "steps": ["Nebulised salbutamol 2.5 mg Q20 min x 3 doses then Q1-4H", "Prednisolone 2 mg/kg PO OD x 3-5 days (max 60 mg/day)", "Oxygen to maintain SpO2 ≥94%", "Ipratropium bromide 0.25 mg nebulised with first 3 salbutamol doses", "Monitor: SpO2, RR, HR, wheeze severity, PEFR if able"] },
+      { "condition": "severe", "steps": ["Nebulised salbutamol 2.5 mg continuously or Q15-20 min", "Ipratropium bromide 0.25 mg with each salbutamol dose x 3 doses", "Prednisolone 2 mg/kg PO/IV OD (max 60 mg/day)", "Oxygen to maintain SpO2 ≥94%", "IV Magnesium sulphate 40 mg/kg (max 2 g) over 20 min", "IV fluids — maintain hydration", "Monitor for fatigue, silent chest, rising CO2 — prepare for ventilation", "Admit to HDU/ICU"] }
+    ]
+  },
+  {
+    "id": "bronchiolitis",
+    "name": "Bronchiolitis",
+    "system": "respiratory",
+    "agePeak": [1, 24],
+    "prevalenceWeight": 0.9,
+    "historyFeatures": [
+      { "symptomId": "cough", "weight": 2 },
+      { "symptomId": "fever", "weight": 1.5 },
+      { "symptomId": "poor_feeding", "weight": 2 },
+      { "symptomId": "nasal_discharge", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "wheeze", "baseWeight": 3, "doubleWeight": true },
+      { "signId": "crackles", "baseWeight": 2 },
+      { "signId": "chest_indrawing", "baseWeight": 3, "doubleWeight": true },
+      { "signId": "tachypnea", "baseWeight": 2 }
+    ],
+    "syndromeTags": ["lower_airway_obstruction"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["first wheeze in infant", "RSV season"],
+    "exclusionClues": ["recurrent episodes (suggest asthma)"],
+    "investigations": [
+      { "type": "lab", "name": "FBC + CRP", "indication": "fever or toxic appearance" },
+      { "type": "lab", "name": "RSV rapid antigen test", "indication": "seasonal / for cohorting" },
+      { "type": "imaging", "name": "Chest X-ray", "indication": "severe, atypical, or if apnoeic episodes" }
+    ],
+    "managementProtocols": [
+      { "condition": "mild", "steps": ["Supportive care — may be managed at home if feeding and SpO2 normal", "Nasal suctioning with saline drops before feeds", "Encourage small frequent feeds to maintain hydration", "Return if: feeding <50% normal, apnoeic pauses, severe respiratory distress"] },
+      { "condition": "moderate", "steps": ["Admit for observation and supportive care", "Oxygen to maintain SpO2 ≥90% (≥92% if cyanotic heart disease)", "Nasal suctioning PRN — especially before feeds", "NG/IV fluids if unable to feed adequately (80% maintenance)", "Trial of nebulised salbutamol only if strong family history of atopy"] },
+      { "condition": "severe", "steps": ["Admit to HDU/ICU", "Oxygen to maintain SpO2 ≥90%", "Nasal CPAP if severe respiratory distress or apnoeic spells", "IV fluids — 80% maintenance", "No routine bronchodilators or corticosteroids", "Monitor: SpO2 continuous, RR, HR, conscious level, feeding ability Q2-4H"] }
+    ]
+  },
+  {
+    "id": "croup",
+    "name": "Croup (Laryngotracheobronchitis)",
+    "system": "respiratory",
+    "agePeak": [6, 60],
+    "prevalenceWeight": 0.7,
+    "historyFeatures": [
+      { "symptomId": "barking_cough", "weight": 4 },
+      { "symptomId": "hoarseness", "weight": 2 },
+      { "symptomId": "fever", "weight": 1.5 }
+    ],
+    "examFeatures": [
+      { "signId": "stridor", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "chest_indrawing", "baseWeight": 2 }
+    ],
+    "syndromeTags": ["upper_airway_obstruction"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["barking cough", "worse at night"],
+    "exclusionClues": ["drooling", "toxic appearance"],
+    "investigations": [
+      { "type": "imaging", "name": "Chest X-ray (AP + lateral neck)", "indication": "atypical, severe, or recurrent" }
+    ],
+    "managementProtocols": [
+      { "condition": "mild", "steps": ["Single dose Dexamethasone 0.6 mg/kg PO (max 16 mg)", "No stridor at rest — can be discharged if caretaker reliable", "Return if: stridor at rest develops, increased work of breathing"] },
+      { "condition": "moderate", "steps": ["Dexamethasone 0.6 mg/kg PO/IV stat (max 16 mg)", "Nebulised Adrenaline (1:1000) 0.5 mL/kg (max 5 mL) if stridor at rest", "Observe for minimum 4 h after Adrenaline", "Admit if stridor persists after 4 h or requires repeated Adrenaline"] },
+      { "condition": "severe", "steps": ["Dexamethasone 0.6 mg/kg IV stat (max 16 mg)", "Nebulised Adrenaline (1:1000) 0.5 mL/kg — may repeat Q1-2H", "Helium-oxygen mixture (Heliox) if available", "Prepare for intubation if deteriorating — call anaesthesia early", "Admit to ICU"] }
+    ]
+  },
+ 
+  {
+    "id": "foreign_body_aspiration",
+    "name": "Foreign Body Aspiration",
+    "system": "respiratory",
+    "agePeak": [6, 48],
+    "prevalenceWeight": 0.3,
+    "historyFeatures": [
+      { "symptomId": "choking_episode", "weight": 5 },
+      { "symptomId": "unilateral_wheeze", "weight": 4 },
+      { "symptomId": "sudden_cough", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "asymmetrical_air_entry", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "wheeze", "baseWeight": 2 }
+    ],
+    "syndromeTags": ["airway_obstruction"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["sudden onset", "choking history"],
+    "exclusionClues": ["gradual fever onset"],
+    "investigations": [
+      { "type": "imaging", "name": "Chest X-ray (inspiratory + expiratory views)", "indication": "all suspected" },
+      { "type": "imaging", "name": "Fluoroscopy / decubitus views", "indication": "if equivocal" },
+      { "type": "procedure", "name": "Rigid bronchoscopy", "indication": "all confirmed or high suspicion" }
+    ],
+    "managementProtocols": [
+      { "condition": "severe", "steps": ["Maintain upright position — do not lay flat", "DO NOT attempt blind finger sweep", "Call ENT/anaesthesia for emergency bronchoscopy", "Oxygen via face mask if SpO2 <92%", "Prepare for rigid bronchoscopy: fasting/NBM", "If complete obstruction and deteriorating: Heimlich manoeuvre (>1 yr) or back blows + chest thrusts (<1 yr)", "Post-bronchoscopy: CXR to confirm removal, monitor for complications (oedema, pneumothorax, infection)"] }
+    ]
+  },
+  {
+    "id": "tuberculosis",
+    "name": "Pulmonary Tuberculosis",
+    "system": "respiratory",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.4,
+    "historyFeatures": [
+      { "symptomId": "chronic_cough", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "night_sweats", "weight": 3 },
+      { "symptomId": "tb_contact", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "crackles", "baseWeight": 2 },
+      { "signId": "clubbing", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "hiv", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 1.5 }
+    ],
+    "complications": [
+      { "diseaseId": "pleural_effusion", "probability": 0.15, "severityBoost": 0.2 }
+    ],
+    "syndromeTags": ["chronic_respiratory"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["night sweats + weight loss + contact"],
+    "exclusionClues": ["rapid resolution with antibiotics"],
+    "investigations": [
+      { "type": "imaging", "name": "Chest X-ray PA", "indication": "all suspected" },
+      { "type": "lab", "name": "GeneXpert MTB/RIF on sputum/gastric aspirate", "indication": "all suspected" },
+      { "type": "lab", "name": "Gastric aspirate x 3 (early morning)", "indication": "if unable to expectorate" },
+      { "type": "lab", "name": "TST (Mantoux) / IGRA", "indication": "all suspected" },
+      { "type": "lab", "name": "HIV test", "indication": "all TB patients" },
+      { "type": "lab", "name": "LFTs at baseline and monthly", "indication": "monitoring on ATT" }
+    ],
+    "managementProtocols": [
+      { "condition": "non-severe", "steps": ["Intensive phase: RHZE daily x 2 months (Rifampicin 15 mg/kg, INH 10 mg/kg, Pyrazinamide 35 mg/kg, Ethambutol 20 mg/kg)", "Continuation phase: RH daily x 4 months (Rifampicin 15 mg/kg, INH 10 mg/kg)", "Directly Observed Therapy (DOT) strongly recommended", "Monitor LFTs at baseline, 2 weeks, and monthly"] },
+      { "condition": "severe", "steps": ["Same RHZE regimen as non-severe", "If TB meningitis/miliary: add Dexamethasone 0.6 mg/kg/day x 4 weeks with taper", "Extend continuation phase to 7 months (total 9 months for TB meningitis)", "IV ATT if unable to tolerate oral", "Monitor for IRIS if HIV co-infected", "Nutritional rehabilitation — high protein diet"] }
+    ]
+  },
+ 
+  
+  {
+    "id": "pneumothorax",
+    "name": "Pneumothorax",
+    "system": "respiratory",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.15,
+    "historyFeatures": [
+      { "symptomId": "sudden_chest_pain", "weight": 4 },
+      { "symptomId": "difficulty_breathing", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "hyperresonance", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "absent_breath_sounds", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tracheal_deviation", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "syndromeTags": ["respiratory_distress", "airway_obstruction"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["hyperresonance + absent breath sounds"],
+    "exclusionClues": ["normal CXR"],
+    "investigations": [
+      { "type": "imaging", "name": "Chest X-ray PA (or AP if upright)", "indication": "all suspected" },
+      { "type": "imaging", "name": "Chest CT", "indication": "if complex, recurrent, or to guide management" }
+    ],
+    "managementProtocols": [
+      { "condition": "mild", "steps": ["Small pneumothorax (<20%) without respiratory distress: observe with high-flow oxygen", "Repeat CXR in 4-6 h to confirm stability", "Monitor: SpO2 continuous, RR, HR Q4H"] },
+      { "condition": "moderate", "steps": ["Needle decompression: 2nd ICS midclavicular line with 14G/16G cannula", "Chest tube insertion: 4th-5th ICS midaxillary line (size 12-16F for children)", "Connect to underwater seal drainage", "CXR to confirm tube position and lung re-expansion", "Monitor: chest drain output, SpO2, RR, BP Q1H"] },
+      { "condition": "severe", "steps": ["Emergency needle decompression if tension pneumothorax suspected (tracheal deviation, distended neck veins, hypotension)", "Immediate chest tube insertion", "IV fluids if hypotensive", "High-flow oxygen", "Monitor: SpO2 continuous, BP, HR, tracheal position, chest drain output hourly", "Prepare for thoracotomy if persistent air leak >5-7 days"] }
+    ]
+  }
+]

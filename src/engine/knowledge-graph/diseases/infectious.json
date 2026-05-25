@@ -1,0 +1,517 @@
+[
+  {
+    "id": "sepsis",
+    "name": "Sepsis",
+    "system": "infectious",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.7,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "lethargy", "weight": 4 },
+      { "symptomId": "poor_feeding", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "prolonged_cap_refill", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "toxic_appearance", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "riskFactors": [
+      { "id": "hiv", "multiplier": 1.5 },
+      { "id": "malnutrition", "multiplier": 1.5 }
+    ],
+    "syndromeTags": ["sepsis", "systemic_infection"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["fever + tachycardia + altered consciousness + poor perfusion"],
+    "exclusionClues": ["well-appearing", "normal vitals"],
+    "complications": [
+      { "diseaseId": "septic_shock", "probability": 0.3, "severityBoost": 0.5 }
+    ],
+    "investigations": [
+      { "type": "lab", "name": "Full blood count", "indication": "leukocytosis/leukopenia, thrombocytopenia" },
+      { "type": "lab", "name": "CRP", "indication": "inflammatory marker" },
+      { "type": "lab", "name": "Blood cultures x 2", "indication": "before antibiotics" },
+      { "type": "lab", "name": "Blood glucose", "indication": "hypoglycaemia" },
+      { "type": "lab", "name": "Serum lactate", "indication": "tissue hypoperfusion" },
+      { "type": "lab", "name": "Serum electrolytes and creatinine", "indication": "renal function and metabolic panel" },
+      { "type": "lab", "name": "Urinalysis and culture", "indication": "source identification" },
+      { "type": "lab", "name": "Chest X-ray", "indication": "pneumonia as source" },
+      { "type": "lab", "name": "Malaria RDT", "indication": "endemic area" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "IV/IO access",
+          "Empiric: Ceftriaxone 100 mg/kg IV Q12H or Cefotaxime 50 mg/kg IV Q6H",
+          "Add Gentamicin 5 mg/kg IV Q24H if septic shock or neonate",
+          "Paracetamol 15 mg/kg PO/IV Q6H if febrile",
+          "Monitor vitals Q1H, urine output"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "ABC — airway, 100% oxygen, IV/IO access x 2",
+          "Normal saline 20 mL/kg IV bolus over 5-10 min, repeat up to 60 mL/kg if no improvement",
+          "Inotrope: Dopamine 5-15 mcg/kg/min IV (or Adrenaline if Dopamine-resistant)",
+          "Empiric: Ceftriaxone 100 mg/kg IV Q12H + Gentamicin 5 mg/kg IV Q24H",
+          "Correct hypoglycaemia — 10% dextrose 5 mL/kg IV",
+          "Monitor: HR, BP, SpO2, RR, urine output, lactate, GCS",
+          "Admit to ICU"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "severe_malaria",
+    "name": "Severe Malaria",
+    "system": "infectious",
+    "agePeak": [6, 216],
+    "prevalenceWeight": 0.6,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "lethargy", "weight": 3 },
+      { "symptomId": "vomiting", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "altered_consciousness", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "syndromeTags": ["systemic_infection", "sepsis"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["fever + pallor + splenomegaly in endemic area"],
+    "exclusionClues": ["negative RDT/blood film"],
+    "investigations": [
+      { "type": "lab", "name": "Malaria RDT and blood film", "indication": "parasite density" },
+      { "type": "lab", "name": "Full blood count", "indication": "anaemia, thrombocytopenia" },
+      { "type": "lab", "name": "Blood glucose", "indication": "hypoglycaemia common" },
+      { "type": "lab", "name": "Serum bilirubin", "indication": "jaundice assessment" },
+      { "type": "lab", "name": "Serum creatinine and electrolytes", "indication": "renal function" },
+      { "type": "lab", "name": "ABG", "indication": "acidosis" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to HDU/ICU",
+          "IV Artesunate 2.4 mg/kg at 0, 12, 24 hours then daily",
+          "If Artesunate unavailable: IV Quinine 20 mg/kg load over 4h, then 10 mg/kg Q8H",
+          "Treat hypoglycaemia — 10% dextrose 5 mL/kg IV",
+          "Correct anaemia — packed RBC transfusion if Hb <6 g/dL",
+          "Monitor: parasite count daily, blood glucose Q4H, urine output",
+          "Seizure prophylaxis — no routine anticonvulsants"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "typhoid_fever",
+    "name": "Typhoid Fever",
+    "system": "infectious",
+    "agePeak": [60, 216],
+    "prevalenceWeight": 0.4,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 4, "condition": "prolonged >7 days" },
+      { "symptomId": "abdominal_pain", "weight": 2 },
+      { "symptomId": "vomiting", "weight": 2 },
+      { "symptomId": "constipation", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "rose_spots", "baseWeight": 3 }
+    ],
+    "syndromeTags": ["systemic_infection"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["step-ladder fever + abdominal pain + relative bradycardia"],
+    "exclusionClues": ["negative blood/stool culture"],
+    "investigations": [
+      { "type": "lab", "name": "Blood cultures", "indication": "gold standard — positive in 1st week" },
+      { "type": "lab", "name": "Stool culture", "indication": "positive from 2nd week" },
+      { "type": "lab", "name": "Widal test", "indication": "supportive, unreliable alone" },
+      { "type": "lab", "name": "Full blood count", "indication": "leukopenia, anaemia" },
+      { "type": "lab", "name": "Liver function tests", "indication": "transaminitis" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Ceftriaxone 100 mg/kg IV Q12H for 7-10 days",
+          "Oral: Azithromycin 20 mg/kg PO OD x 7 days if uncomplicated",
+          "Paracetamol for fever",
+          "Maintain hydration — oral or IV fluids"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ward",
+          "Ceftriaxone 100 mg/kg IV Q12H for 10-14 days",
+          "Dexamethasone 3 mg/kg IV load, then 1 mg/kg IV Q6H x 2 days (if severe with altered consciousness)",
+          "IV fluids",
+          "Monitor for intestinal perforation — acute abdomen, rebound tenderness"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "brucellosis",
+    "name": "Brucellosis",
+    "system": "infectious",
+    "agePeak": [60, 216],
+    "prevalenceWeight": 0.2,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 3, "condition": "undulant pattern" },
+      { "symptomId": "joint_pain", "weight": 3 },
+      { "symptomId": "night_sweats", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2 }
+    ],
+    "syndromeTags": ["systemic_infection"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["undulant fever + joint pain + livestock exposure"],
+    "exclusionClues": ["negative serology"],
+    "investigations": [
+      { "type": "lab", "name": "Brucella serology (SAT/ELISA)", "indication": "definitive" },
+      { "type": "lab", "name": "Blood cultures (prolonged incubation)", "indication": "if serology equivocal" },
+      { "type": "lab", "name": "Full blood count", "indication": "leukopenia, thrombocytopenia" },
+      { "type": "lab", "name": "CRP", "indication": "inflammatory marker" },
+      { "type": "lab", "name": "Liver function tests", "indication": "transaminitis" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Doxycycline 2.2 mg/kg PO Q12H x 6 weeks (if age >8 years)",
+          "Rifampicin 10 mg/kg PO OD x 6 weeks",
+          "For age <8: Co-trimoxazole 5 mg/kg TMP PO Q12H x 6 weeks",
+          "Paracetamol for fever and joint pain"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ward",
+          "Doxycycline + Rifampicin as above",
+          "Gentamicin 5 mg/kg IV Q24H x 7 days if severe",
+          "Joint aspiration if septic arthritis suspected",
+          "Neurology consult if neurobrucellosis"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hiv_related_infections",
+    "name": "HIV-Related Infections",
+    "system": "infectious",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.3,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "chronic_cough", "weight": 3 },
+      { "symptomId": "lymphadenopathy", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "hiv", "multiplier": 3.0 }
+    ],
+    "syndromeTags": ["systemic_infection"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["HIV+ with unexplained fever/weight loss"],
+    "exclusionClues": ["HIV negative"],
+    "investigations": [
+      { "type": "lab", "name": "HIV rapid test / PCR (if <18 months)", "indication": "confirm status" },
+      { "type": "lab", "name": "CD4 count and percentage", "indication": "immunosuppression level" },
+      { "type": "lab", "name": "HIV viral load", "indication": "ART monitoring" },
+      { "type": "lab", "name": "Chest X-ray", "indication": "TB/LIP screening" },
+      { "type": "lab", "name": "GeneXpert MTB/RIF", "indication": "TB diagnosis" },
+      { "type": "lab", "name": "Full blood count", "indication": "anaemia, cytopenia" },
+      { "type": "lab", "name": "CRP", "indication": "inflammatory marker" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Start or optimise ART per national guidelines",
+          "Co-trimoxazole prophylaxis 5 mg/kg TMP PO OD if CD4 <25% or age <5 years",
+          "Screen for TB — GeneXpert, TST",
+          "Nutritional assessment and support",
+          "Immunisations per HIV schedule"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ward",
+          "Treat identified OI — TB therapy, antifungal, or antiviral as indicated",
+          "Start ART after treating acute OI (typically 2-8 weeks)",
+          "IV antibiotics if bacterial infection suspected",
+          "Nutritional rehabilitation",
+          "Social work and counselling referral"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "measles",
+    "name": "Measles",
+    "system": "infectious",
+    "agePeak": [6, 60],
+    "prevalenceWeight": 0.3,
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "cough", "weight": 2 },
+      { "symptomId": "rash", "weight": 4 },
+      { "symptomId": "conjunctivitis", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "koplik_spots", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "rash", "baseWeight": 3 },
+      { "signId": "conjunctival_injection", "baseWeight": 2 }
+    ],
+    "complications": [
+      { "diseaseId": "pneumonia", "probability": 0.2, "severityBoost": 0.3 },
+      { "diseaseId": "encephalitis", "probability": 0.05, "severityBoost": 0.4 }
+    ],
+    "syndromeTags": ["systemic_infection"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["fever + rash + cough + coryza + conjunctivitis"],
+    "exclusionClues": ["fully vaccinated", "atypical rash"],
+    "investigations": [
+      { "type": "lab", "name": "Measles IgM (serum)", "indication": "confirmatory" },
+      { "type": "lab", "name": "Throat swab for viral PCR", "indication": "outbreak confirmation" },
+      { "type": "lab", "name": "Full blood count", "indication": "leukopenia" },
+      { "type": "lab", "name": "Vitamin A level", "indication": "deficiency common" },
+      { "type": "imaging", "name": "Chest X-ray", "indication": "if respiratory complications" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Vitamin A 100,000-200,000 IU PO stat (age-dependent dose)",
+          "Paracetamol 15 mg/kg PO Q6H PRN for fever",
+          "Isolation — airborne and contact precautions for 4 days after rash onset",
+          "Immunisation status review — vaccinate contacts",
+          "Eye care — lubricate eyes, treat conjunctivitis"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ward — isolation",
+          "Vitamin A as above, repeat next day",
+          "IV antibiotics if secondary bacterial pneumonia: Ceftriaxone 100 mg/kg IV Q12H",
+          "Oxygen if SpO2 <94%",
+          "IV fluids if oral intake poor",
+          "Monitor for encephalitis — seizures, altered consciousness"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "diphtheria",
+    "name": "Diphtheria",
+    "system": "infectious",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.05,
+    "historyFeatures": [
+      { "symptomId": "sore_throat", "weight": 4 },
+      { "symptomId": "fever", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "pseudomembrane", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bull_neck", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "syndromeTags": ["systemic_infection", "upper_airway_obstruction"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["pseudomembrane + bull neck + toxic appearance"],
+    "exclusionClues": ["negative throat swab"],
+    "investigations": [
+      { "type": "lab", "name": "Throat swab for culture (Loeffler medium)", "indication": "definitive" },
+      { "type": "lab", "name": "PCR for diphtheria toxin gene", "indication": "confirm toxigenic strain" },
+      { "type": "lab", "name": "Full blood count", "indication": "baseline" },
+      { "type": "lab", "name": "ECG", "indication": "myocarditis screening" },
+      { "type": "lab", "name": "Serum cardiac enzymes (troponin)", "indication": "myocarditis" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "severe",
+        "steps": [
+          "Diphtheria antitoxin IV — dose based on severity (20,000-120,000 IU)",
+          "Test for hypersensitivity before antitoxin administration",
+          "Benzylpenicillin 50,000 IU/kg IV Q6H x 14 days",
+          "Alternative: Erythromycin 12.5 mg/kg PO Q6H x 14 days",
+          "Airway monitoring — prepare for intubation/tracheostomy",
+          "ECG monitoring for myocarditis",
+          "Isolation — droplet precautions",
+          "Notify public health authorities"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pertussis",
+    "name": "Pertussis (Whooping Cough)",
+    "system": "infectious",
+    "agePeak": [0, 60],
+    "prevalenceWeight": 0.4,
+    "historyFeatures": [
+      { "symptomId": "paroxysmal_cough", "weight": 5 },
+      { "symptomId": "post_tussive_vomiting", "weight": 3 },
+      { "symptomId": "apnoeic_spells", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "whoop", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cyanosis", "baseWeight": 3 }
+    ],
+    "syndromeTags": ["systemic_infection"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["paroxysmal cough + whoop + post-tussive vomiting"],
+    "exclusionClues": ["fully vaccinated", "afebrile well child"],
+    "investigations": [
+      { "type": "lab", "name": "Pertussis PCR (nasopharyngeal swab)", "indication": "definitive — best in catarrhal/early paroxysmal phase" },
+      { "type": "lab", "name": "Perinasal culture (Bordet-Gengou medium)", "indication": "alternative" },
+      { "type": "lab", "name": "Full blood count", "indication": "lymphocytosis" },
+      { "type": "imaging", "name": "Chest X-ray", "indication": "rule out secondary pneumonia" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Azithromycin 10 mg/kg PO OD x 5 days (first line)",
+          "Alternative: Erythromycin 12.5 mg/kg PO Q6H x 14 days",
+          "Post-exposure prophylaxis for household contacts",
+          "Isolation — droplet precautions x 5 days from starting antibiotics",
+          "Immunisation review — vaccinate if incomplete"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ward",
+          "Azithromycin or Erythromycin as above",
+          "Oxygen to maintain SpO2 ≥94%",
+          "Apnoea monitoring — for infants <6 months",
+          "Suctioning of secretions PRN",
+          "IV fluids if unable to feed",
+          "Chest physiotherapy — gentle, after paroxysms"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tetanus",
+    "name": "Tetanus",
+    "system": "infectious",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.2,
+    "historyFeatures": [
+      { "symptomId": "trismus", "weight": 5 },
+      { "symptomId": "muscle_spasms", "weight": 4 },
+      { "symptomId": "difficulty_swallowing", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "risus_sardonicus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "opisthotonos", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "generalised_rigidity", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "syndromeTags": ["systemic_infection"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["trismus + generalised spasms + history of wound"],
+    "exclusionClues": ["fully vaccinated", "no wound"],
+    "investigations": [
+      { "type": "lab", "name": "Clinical diagnosis — no specific lab test", "indication": "tetanus is clinical" },
+      { "type": "lab", "name": "Full blood count", "indication": "baseline" },
+      { "type": "lab", "name": "Serum electrolytes", "indication": "rhabdomyolysis risk" },
+      { "type": "lab", "name": "Wound culture for C. tetani", "indication": "if visible wound" },
+      { "type": "lab", "name": "ECG", "indication": "autonomic instability" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to ICU — minimise stimulation (dark, quiet room)",
+          "Human tetanus immunoglobulin (HTIG) 500 IU IM/IV stat",
+          "Metronidazole 10 mg/kg IV Q8H x 7-10 days",
+          "Diazepam 0.3 mg/kg IV PRN for muscle spasms (may need high doses)",
+          "Magnesium sulphate 40 mg/kg IV loading then 20 mg/kg Q4H for spasm control",
+          "Wound debridement",
+          "Tracheostomy if laryngospasm or respiratory compromise",
+          "Autonomic monitoring — beta-blockers if sympathetic storm",
+          "Tetanus toxoid vaccination (separate site from Ig)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "neonatal_sepsis",
+    "name": "Neonatal Sepsis",
+    "system": "infectious",
+    "agePeak": [0, 1],
+    "prevalenceWeight": 0.8,
+    "historyFeatures": [
+      { "symptomId": "poor_feeding", "weight": 4 },
+      { "symptomId": "lethargy", "weight": 4 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "hypothermia", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "prolonged_cap_refill", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "irritability", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "maternal_fever", "multiplier": 1.5 },
+      { "id": "prolonged_labour", "multiplier": 1.3 }
+    ],
+    "syndromeTags": ["sepsis", "systemic_infection"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["any sick neonate with temperature instability + poor feeding"],
+    "exclusionClues": ["well-appearing term neonate >72h with normal vitals"],
+    "investigations": [
+      { "type": "lab", "name": "Full blood count", "indication": "leukopenia, thrombocytopenia" },
+      { "type": "lab", "name": "CRP (serial 12-24 hourly)", "indication": "trend monitoring" },
+      { "type": "lab", "name": "Blood cultures", "indication": "definitive — before antibiotics" },
+      { "type": "lab", "name": "Lumbar puncture", "indication": "rule out meningitis" },
+      { "type": "lab", "name": "Chest X-ray", "indication": "pneumonia" },
+      { "type": "lab", "name": "Blood glucose", "indication": "hypoglycaemia" },
+      { "type": "lab", "name": "Urine culture (suprapubic)", "indication": "UTI" }
+    ],
+    "managementProtocols": [
+      {
+        "condition": "mild",
+        "steps": [
+          "Admit to neonatal unit",
+          "IV Ampicillin 50 mg/kg Q6H + Gentamicin 5 mg/kg IV Q24H",
+          "Monitor vitals Q2H, feed tolerance",
+          "CRP at 24 hours — if normal and baby well, stop antibiotics at 48 hours"
+        ]
+      },
+      {
+        "condition": "severe",
+        "steps": [
+          "Admit to NICU",
+          "IV Ampicillin 50 mg/kg Q6H + Cefotaxime 50 mg/kg IV Q6H + Gentamicin 5 mg/kg IV Q24H",
+          "IV fluids — 10% dextrose at maintenance",
+          "Normal saline 10-20 mL/kg IV if hypotensive",
+          "Respiratory support — CPAP or mechanical ventilation",
+          "Correct hypoglycaemia, electrolyte disturbances",
+          "Lumbar puncture before antibiotics if stable"
+        ]
+      }
+    ]
+  }
+]
