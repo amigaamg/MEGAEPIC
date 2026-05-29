@@ -1,18 +1,16 @@
 let prisma: any = null;
 
-try {
-  if (process.env.DATABASE_URL) {
-    // Dynamic require using variable to avoid build-time resolution
-    const modName = '@prisma/client';
-    const { PrismaClient } = require(modName);
-    prisma = new PrismaClient();
+export async function getPrisma(): Promise<any> {
+  if (prisma) return prisma;
+  try {
+    if (process.env.DATABASE_URL) {
+      const { PrismaClient } = await import('@prisma/client');
+      prisma = new PrismaClient();
+    }
+  } catch {
+    prisma = null;
   }
-} catch {
-  prisma = null;
-}
-
-export function getPrisma(): any {
   return prisma;
 }
 
-export default prisma;
+export default null;
