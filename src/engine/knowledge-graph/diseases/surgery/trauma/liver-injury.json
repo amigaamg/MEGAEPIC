@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "liver_injury",
+    "name": "Liver Injury",
+    "system": "surgical",
+    "agePeak_months": [120, 480],
+    "note": "Second most commonly injured organ in blunt trauma. Right upper quadrant pain, shock, bile peritonitis.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["abdominal_trauma", "right_upper_quadrant_pain", "hemorrhagic_shock"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemorrhagic_shock", "weight": 10 },
+        { "sign": "peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "hypotension_refractory", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "grade_iv_v_injury", "weight": 8 },
+          { "sign": "active_bleeding_on_ct", "weight": 8 },
+          { "sign": "biloma_or_bile_leak", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Shock/high-grade/bile leak -> SEVERE; stable low-grade -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "blunt_abdominal_trauma", "weight": 5 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 5 },
+      { "symptomId": "right_shoulder_pain", "weight": 3 },
+      { "symptomId": "dizziness_syncope", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "penetrating_trauma_lower_chest", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "signs_of_hypovolemic_shock", "baseWeight": 5 },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "right_lower_rib_fractures", "baseWeight": 3 },
+      { "signId": "peritoneal_signs", "baseWeight": 4 },
+      { "signId": "abrasion_bruising_ruq", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "high_energy_trauma_mva", "multiplier": 2.5 },
+      { "id": "right_lower_rib_fractures", "multiplier": 2.5 },
+      { "id": "hepatomegaly", "multiplier": 1.5 },
+      { "id": "anticoagulation", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "low_grade_hepatic_injury",
+        "name": "Low-Grade Hepatic Injury (I-III)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "hematoma_or_laceration_less_10cm", "weight": 5 },
+          { "feature": "stable_hemodynamics", "weight": 5 },
+          { "feature": "non_operative_management_possible", "weight": 5 }
+        ],
+        "management": "Non-operative management. ICU monitoring. Serial CT. Angioembolization for active bleeding. NPO, NG tube."
+      },
+      {
+        "id": "high_grade_hepatic_injury",
+        "name": "High-Grade Hepatic Injury (IV-V)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "laceration_extensive_or_juxtahepatic_venous", "weight": 5 },
+          { "feature": "hemodynamic_instability", "weight": 5 },
+          { "feature": "massive_hemoperitoneum", "weight": 5 }
+        ],
+        "management": "Damage control laparotomy. Perihepatic packing. Pringle maneuver. Angioembolization post-op. Definitive repair once stable. ERCP + stenting for bile leaks."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "splenic_injury",
+        "discriminators": ["left_upper_quadrant_pain", "kehr_sign", "left_rib_fractures"]
+      },
+      {
+        "diseaseId": "right_kidney_injury",
+        "discriminators": ["flank_pain", "hematuria", "retroperitoneal_hematoma"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "FAST Exam", "priority": "immediate", "yield": 0.8, "indication": "detect free fluid" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.6, "indication": "falling hemoglobin" },
+        { "name": "LFTs", "priority": "high", "yield": 0.5, "indication": "elevated transaminases" },
+        { "name": "Cross-match", "priority": "immediate", "yield": 0.5, "indication": "transfusion preparation" },
+        { "name": "Lactate", "priority": "high", "yield": 0.6, "indication": "shock assessment" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen/Pelvis with IV contrast", "priority": "immediate", "yield": 0.98, "indication": "gold standard for stable patient" },
+        { "name": "FAST Exam", "priority": "immediate", "yield": 0.8, "indication": "bedside screening" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Hepatic Trauma",
+      "pathways": [
+        {
+          "severity": "stable low-grade",
+          "criteria": "hemodynamically stable, grade I-III, no active bleeding",
+          "treatment": "Non-operative management. ICU. NPO. CT follow-up. Angiography if active extravasation. Observe for bile leak."
+        },
+        {
+          "severity": "unstable/high-grade",
+          "criteria": "hemodynamic instability, grade IV-V, active extravasation",
+          "treatment": "Damage control laparotomy. Perihepatic packing. Pringle maneuver. Angioembolization. ICU resuscitation. Re-look laparotomy in 24-48h."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "blunt_or_penetrating_trauma",
+      "liver_laceration",
+      "parenchymal_hemorrhage",
+      "hemoperitoneum",
+      "bile_leak",
+      "hemorrhagic_shock"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bile_leak_biloma",
+        "probability": 0.1,
+        "lagDays": [3, 14],
+        "severityBoost": 0.2,
+        "clues": ["persistent_abdominal_pain", "bilious_drain", "fluid_collection_on_ct"]
+      },
+      {
+        "diseaseId": "delayed_hemorrhage",
+        "probability": 0.05,
+        "lagDays": [1, 14],
+        "severityBoost": 0.4,
+        "clues": ["sudden_hypotension", "dropping_hb", "increasing_abdominal_girth"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["right_upper_quadrant_pain_after_trauma", "hypotension", "right_rib_fractures", "positive_fast"],
+    "exclusionClues": ["no_trauma_history", "left_sided_pain", "stable_with_mild_symptoms"]
+  }
+}

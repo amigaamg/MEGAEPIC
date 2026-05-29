@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "traumatic_bowel_perforation",
+    "name": "Traumatic Bowel Perforation",
+    "system": "surgical",
+    "agePeak_months": [120, 480],
+    "note": "Full-thickness bowel injury from blunt or penetrating trauma. Delayed diagnosis common. Peritonitis and sepsis ensue.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["abdominal_trauma", "peritonitis", "acute_abdomen"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "evisceration", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "free_air_on_imaging", "weight": 9 },
+          { "sign": "feculent_ascites", "weight": 9 },
+          { "sign": "delayed_presentation_more_than_6h", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Peritonitis/sepsis -> SEVERE; early contained perforation -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "blunt_or_penetrating_abdominal_trauma", "weight": 5 },
+      { "symptomId": "abdominal_pain_increasing", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "seat_belt_sign", "weight": 3, "note": "Classic in MVA" },
+      { "symptomId": "delayed_onset_peritonitis", "weight": 4, "note": "May be delayed hours after trauma" },
+      { "symptomId": "abdominal_distension", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "generalized_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "guarding_rigidity", "baseWeight": 5 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 4 },
+      { "signId": "rebound_tenderness", "baseWeight": 4 },
+      { "signId": "seat_belt_ecchymosis", "baseWeight": 3 },
+      { "signId": "fever_tachycardia", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "high_energy_mva", "multiplier": 2.5 },
+      { "id": "seat_belt_injury", "multiplier": 2.0 },
+      { "id": "penetrating_trauma_stab_gsW", "multiplier": 3.0 },
+      { "id": "handlebar_injury_children", "multiplier": 2.0 },
+      { "id": "delayed_presentation", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "small_bowel_perforation_traumatic",
+        "name": "Traumatic Small Bowel Perforation",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "peritonitis_may_be_delayed", "weight": 5 },
+          { "feature": "free_air_often_present", "weight": 4 },
+          { "feature": "small_bowel_mesentery_injury", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy. Primary closure (if single) or resection with anastomosis. Thorough exploration of entire small bowel. Peritoneal lavage."
+      },
+      {
+        "id": "colonic_perforation_traumatic",
+        "name": "Traumatic Colonic Perforation",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "feculent_peritonitis", "weight": 5 },
+          { "feature": "higher_morbidity_than_small_bowel", "weight": 5 },
+          { "feature": "free_air_common", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy. Primary repair or resection with anastomosis for stable patients. Hartmann procedure for unstable or contaminated. Stoma if high risk."
+      },
+      {
+        "id": "duodenal_injury",
+        "name": "Traumatic Duodenal Injury",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "retroperitoneal_perforation", "weight": 5 },
+          { "feature": "diagnosis_difficult", "weight": 5 },
+          { "feature": "retroperitoneal_air_on_ct", "weight": 5 },
+          { "feature": "elevated_amylase", "weight": 3 }
+        ],
+        "management": "Primary repair. Pyloric exclusion with GJ for complex injuries. Duodenal diverticulization. Wide drainage."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "solid_organ_injury",
+        "discriminators": ["localized_pain", "hemorrhage_more_than_peritonitis", "fast_positive_for_blood"]
+      },
+      {
+        "diseaseId": "rectus_sheath_hematoma",
+        "discriminators": ["hemodynamically_stable", "no_peritonitis", "ct_shows_hematoma_in_rectus"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "FAST Exam", "priority": "immediate", "yield": 0.5, "indication": "limited sensitivity for bowel injury" },
+        { "name": "Diagnostic Peritoneal Aspiration", "priority": "medium", "yield": 0.8, "indication": "feculent or bilious aspirate" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.6, "indication": "leukocytosis" },
+        { "name": "Lactate", "priority": "high", "yield": 0.5, "indication": "tissue hypoperfusion" },
+        { "name": "Amylase", "priority": "medium", "yield": 0.4, "indication": "elevated in duodenal injury" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen/Pelvis with IV + oral contrast", "priority": "immediate", "yield": 0.85, "indication": "free air, bowel wall thickening, mesenteric stranding" },
+        { "name": "Erect CXR", "priority": "high", "yield": 0.5, "indication": "free air under diaphragm" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Bowel Injury in Trauma",
+      "pathways": [
+        {
+          "severity": "stable contained",
+          "criteria": "hemodynamically stable, minimal contamination, single perforation",
+          "treatment": "Laparotomy (open or laparoscopic). Primary repair or resection with anastomosis. Peritoneal lavage."
+        },
+        {
+          "severity": "unstable / multiple / contaminated",
+          "criteria": "hemodynamic instability, multiple perforations, feculent peritonitis, delayed surgery",
+          "treatment": "Damage control laparotomy. Bowel resection without anastomosis. Stoma formation. Second-look laparotomy. ICU resuscitation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "blunt_force_crush_or_deceleration",
+      "bowel_wall_contusion",
+      "delayed Necrosis",
+      "full_thickness_perforation",
+      "enteric_content_spillage",
+      "chemical_and_bacterial_peritonitis",
+      "sepsis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "probability": 0.15,
+        "lagDays": [5, 14],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "elevated_crp", "fluid_collection_on_ct"]
+      },
+      {
+        "diseaseId": "anastomotic_leak",
+        "probability": 0.05,
+        "lagDays": [5, 10],
+        "severityBoost": 0.4,
+        "clues": ["persistent_ileus", "fever", "drainage", "peritonitis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["abdominal_trauma_with_increasing_pain", "peritonitis", "free_air", "seat_belt_sign"],
+    "exclusionClues": ["no_trauma", "mild_pain_without_peritonitis", "clear_ct"]
+  }
+}

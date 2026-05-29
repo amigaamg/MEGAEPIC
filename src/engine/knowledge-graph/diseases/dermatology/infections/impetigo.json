@@ -1,0 +1,133 @@
+{
+  "disease": {
+    "id": "impetigo",
+    "name": "Impetigo (School Sores)",
+    "system": "dermatology",
+    "agePeak_months": [24, 120],
+    "note": "Highly contagious superficial bacterial skin infection. Two forms: non-bullous (honey-colored crusts) and bullous (flaccid bullae). Group A Streptococcus and S. aureus.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["skin_infection", "contagious_disease", "pediatric_dermatosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapidly_spreading_severe", "weight": 7 },
+        { "sign": "post_streptococcal_glomerulonephritis", "weight": 8 },
+        { "sign": "sepsis_neonatal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Extensive/bullous/sepsis -> MODERATE-SEVERE; mild localized -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "honey_colored_crusts_on_face_around_mouth", "weight": 5 },
+      { "symptomId": "blisters_that_rupture_easily", "weight": 4 },
+      { "symptomId": "itchy_sores", "weight": 3 },
+      { "symptomId": "child_attending_daycare_school", "weight": 3 },
+      { "symptomId": "close_contact_with_impetigo_case", "weight": 4 },
+      { "symptomId": "hot_humid_climate_or_overcrowding", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "honey_colored_crusted_erosions", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "flaccid_bullae_ruptured", "baseWeight": 4 },
+      { "signId": "perioral_and_perinasal_distribution", "baseWeight": 4 },
+      { "signId": "regional_lymphadenopathy", "baseWeight": 2 },
+      { "signId": "impetiginized_eczema", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_2_to_5_years", "multiplier": 3.0 },
+      { "id": "daycare_school_attendance", "multiplier": 2.5 },
+      { "id": "poor_hygiene", "multiplier": 2.0 },
+      { "id": "warm_humid_environment", "multiplier": 2.0 },
+      { "id": "pre_existing_skin_condition_eczema", "multiplier": 2.5 },
+      { "id": "overcrowding", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "non_bullous_impetigo",
+        "name": "Non-Bullous Impetigo (70%)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "honey_colored_crusts", "weight": 5 },
+          { "feature": "face_around_mouth_nose", "weight": 4 },
+          { "feature": "contagious", "weight": 3 }
+        ],
+        "management": "Topical mupirocin 2% TID for 7 days. If extensive: oral flucloxacillin 25mg/kg/day or cephalexin. Good hygiene. School exclusion for 48h after treatment."
+      },
+      {
+        "id": "bullous_impetigo",
+        "name": "Bullous Impetigo (30%)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "flaccid_bullae_clear_fluid", "weight": 5 },
+          { "feature": "trunk_perineum_extremities", "weight": 3 },
+          { "feature": "caused_by_staph_exfoliative_toxin", "weight": 3 }
+        ],
+        "management": "Oral antibiotics (flucloxacillin or cephalexin) 7 days. Clean with chlorhexidine. Topical mupirocin for small lesions. Drain bullae if tense."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "herpes_simplex",
+        "discriminators": ["vesicles_on_erythematous_base", "burning_pain", "recurrent"]
+      },
+      {
+        "diseaseId": "contact_dermatitis",
+        "discriminators": ["history_of_allergen", "itching_predominant", "no_crusts"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Wound swab for culture and sensitivity", "priority": "medium", "yield": 0.7, "indication": "if treatment failure or MRSA suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE / IDSA Guidelines for Impetigo",
+      "pathways": [
+        {
+          "severity": "mild localized",
+          "criteria": "few lesions, small area",
+          "treatment": "Mupirocin 2% topical TID for 7 days. Fusidic acid cream alternative. Hygiene measures. Avoid school for 48h after treatment."
+        },
+        {
+          "severity": "extensive/bullous",
+          "criteria": "multiple sites, large area, bullous, or systemic symptoms",
+          "treatment": "Oral flucloxacillin 25-50mg/kg/day (or cephalexin) for 7 days. If MRSA: clindamycin or TMP-SMX. Topical cleaning. Monitor for post-strep glomerulonephritis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bacterial_inoculation_into_epidermis",
+      "staph_strep_toxins",
+      "superficial_pustule_formation",
+      "crust_formation_from_dried_exudate",
+      "exfoliative_toxin_causes_bullae"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "post_streptococcal_glomerulonephritis",
+        "probability": 0.02,
+        "lagDays": [14, 28],
+        "severityBoost": 0.5,
+        "clues": ["hematuria", "edema", "hypertension", "oliguria"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["honey_colored_crusts", "childhood_onset", "perioral_distribution", "contagious"],
+    "exclusionClues": ["chronic_lesions", "no_response_to_beta_lactam", "negative_swab"]
+  }
+}

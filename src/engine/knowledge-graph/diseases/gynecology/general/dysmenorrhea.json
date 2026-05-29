@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "dysmenorrhea",
+    "name": "Dysmenorrhea (Painful Periods)",
+    "system": "GYN",
+    "agePeak_months": [180, 360],
+    "note": "Painful menstrual cramps of uterine origin. Primary dysmenorrhea occurs without pelvic pathology; secondary dysmenorrhea is associated with underlying conditions like endometriosis, fibroids, or adenomyosis.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["pelvic_pain", "menstrual_disorder"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "severeCriteria": {
+        "anyDangerSign": false,
+        "additionalCriteria": [
+          { "sign": "pain_unresponsive_to_analgesics", "weight": 6 },
+          { "sign": "absent_from_school_work", "weight": 6 },
+          { "sign": "associated_syncope", "weight": 5 },
+          { "sign": "progressive_worsening", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Severe pain causing functional impairment -> SEVERE; Mild cramps -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "lower_abdominal_cramping_during_menstruation", "weight": 5 },
+      { "symptomId": "pain_radiating_to_back_thighs", "weight": 4 },
+      { "symptomId": "nausea_vomiting_during_period", "weight": 3 },
+      { "symptomId": "headache", "weight": 2 },
+      { "symptomId": "diarrhea_loose_stools", "weight": 3 },
+      { "symptomId": "dizziness_fatigue", "weight": 2 },
+      { "symptomId": "syncope", "weight": 2 },
+      { "symptomId": "onset_within_first_3_years_of_menarche", "weight": 3, "note": "Primary dysmenorrhea" },
+      { "symptomId": "later_onset_progressive_worsening", "weight": 3, "note": "Secondary dysmenorrhea" }
+    ],
+
+    "examFeatures": [
+      { "signId": "normal_pelvic_exam", "baseWeight": 3 },
+      { "signId": "tender_uterus_on_exam", "baseWeight": 2 },
+      { "signId": "adnexal_tenderness_if_secondary", "baseWeight": 2 },
+      { "signId": "pallor_if_heavy_bleeding", "baseWeight": 1 },
+      { "signId": "signs_of_endometriosis_or_fibroids", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "early_menarche_under_12", "multiplier": 1.5 },
+      { "id": "positive_family_history", "multiplier": 2.0 },
+      { "id": "heavy_or_long_menstrual_flow", "multiplier": 1.5 },
+      { "id": "nulliparity", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "low_BMI", "multiplier": 1.3 },
+      { "id": "stress_anxiety", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "primary_dysmenorrhea",
+        "name": "Primary Dysmenorrhea",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "onset_monthly_not_progressive", "weight": 4 },
+          { "feature": "starts_within_3_years_of_menarche", "weight": 5 },
+          { "feature": "normal_pelvic_anatomy", "weight": 5 },
+          { "feature": "responsive_to_nsaids", "weight": 4 }
+        ],
+        "management": "NSAIDs (ibuprofen 400mg TID, naproxen 500mg BD). COCP. Heat therapy. Exercise. TENS machine. If refractory, consider baclofen or nifedipine."
+      },
+      {
+        "id": "secondary_dysmenorrhea",
+        "name": "Secondary Dysmenorrhea",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "later_onset_or_worsening", "weight": 5 },
+          { "feature": "pain_throughout_cycle", "weight": 3 },
+          { "feature": "pelvic_pathology_present", "weight": 5 },
+          { "feature": "dyspareunia", "weight": 4 }
+        ],
+        "management": "Treat underlying cause. Endometriosis: hormonal suppression, laparoscopy. Fibroids: myomectomy, UAE, hysterectomy. Adenomyosis: LNG-IUS, UAE, hysterectomy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "endometriosis",
+        "discriminators": ["pain_throughout_cycle", "dyspareunia", "infertility", "tender_nodules"]
+      },
+      {
+        "diseaseId": "irritable_bowel_syndrome",
+        "discriminators": ["pain_not_exclusively_menstrual", "change_in_bowel_habit", "bloating"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "low", "yield": 0.3, "indication": "if heavy bleeding" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound", "priority": "medium", "yield": 0.6, "indication": "if secondary dysmenorrhea suspected" },
+        { "name": "Diagnostic laparoscopy", "priority": "low", "yield": 0.9, "indication": "if endometriosis suspected and medical therapy fails" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACOG Practice Bulletin No. 199 - Dysmenorrhea",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "mild cramps, no functional impairment",
+          "treatment": "NSAIDs starting day before menstruation. Heat therapy. Exercise. Rest. Alternative therapy: ginger, acupuncture."
+        },
+        {
+          "severity": "severe_primary",
+          "criteria": "severe pain, missed school/work, unresponsive to NSAIDs",
+          "treatment": "COCP (continuous or cyclical). NSAIDs continued. Trial of naproxen vs ibuprofen. If still refractory, refer for pelvic exam and imaging to rule out secondary causes."
+        },
+        {
+          "severity": "suspected_secondary",
+          "criteria": "progressive, late onset, associated symptoms",
+          "treatment": "Ultrasound. Treat underlying cause. Laparoscopy if endometriosis suspected. Refer to gynecology. Surgical options for structural causes."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "prostaglandin_F2alpha_overproduction",
+      "leukotriene_release",
+      "myometrial_hypercontractility",
+      "uterine_ischemia",
+      "vasopressin_elevation"
+    ],
+
+    "complications": [],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["cyclic_pain_associated_with_menses", "cramping_lower_abdomen"],
+    "exclusionClues": ["absence_of_menstrual_cycle", "pain_not_related_to_menstruation"]
+  }
+}

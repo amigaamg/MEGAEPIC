@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "tetanus",
+    "name": "Tetanus",
+    "system": "infectious-disease",
+    "alsoPresentIn": ["emergency-medicine", "neurology", "critical-care"],
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["neuromuscular_disorder", "spastic_paralysis", "vaccine_preventable"],
+    "mustNotMiss": true,
+    "emergencyPriority": "immediate",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "laryngospasm_stridor", "weight": 5, "description": "Upper airway obstruction" },
+        { "sign": "autonomic_instability_hypertension_hypotension", "weight": 5, "description": "Life-threatening dysautonomia" },
+        { "sign": "respiratory_muscle_spasm", "weight": 5, "description": "Respiratory failure imminent" },
+        { "sign": "generalized_severe_spasms", "weight": 4, "description": "High risk of complications" },
+        { "sign": "arrhythmia_cardiac_arrest", "weight": 5, "description": "Autonomic storm" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "incubation_period_<7_days", "weight": 4 },
+          { "sign": "onset_period_<48_hours", "weight": 4 },
+          { "sign": "neonatal_tetanus", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "neurotoxicity-rigidity"
+    },
+    "historyFeatures": [
+      { "symptomId": "trismus_lockjaw", "weight": 5, "condition": "earliest symptom in 75%" },
+      { "symptomId": "neck_stiffness", "weight": 4 },
+      { "symptomId": "dysphagia", "weight": 4 },
+      { "symptomId": "muscle_spasms", "weight": 5, "condition": "generalized or localized" },
+      { "symptomId": "risus_sardonicus", "weight": 4, "condition": "facial muscle spasm producing grinning" },
+      { "symptomId": "opisthotonos", "weight": 4, "condition": "severe arching of back" },
+      { "symptomId": "wound_or_injury", "weight": 5, "note": "often puncture wound, burn, or contaminated wound" },
+      { "symptomId": "incomplete_vaccination", "weight": 4 },
+      { "symptomId": "sweating_tachycardia", "weight": 3, "note": "autonomic features" }
+    ],
+    "examFeatures": [
+      { "signId": "trismus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "risus_sardonicus", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "opisthotonos", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "generalized_rigidity", "baseWeight": 4 },
+      { "signId": "muscle_spasms_provoked", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "laryngospasm", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "labile_blood_pressure", "baseWeight": 4, "severityIndicator": true }
+    ],
+    "riskFactors": [
+      { "id": "incomplete_or_no_tetanus_vaccination", "multiplier": 5.0 },
+      { "id": "age_>65_years", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "contaminated_wound_puncture_burn", "multiplier": 3.0 },
+      { "id": "injection_drug_use", "multiplier": 2.5 },
+    ],
+    "diagnosticClues": [
+      "trismus + risus sardonicus + opisthotonos in unvaccinated patient",
+      "generalized rigidity and reflex spasms triggered by stimuli",
+      "recent wound with soil/rust contamination",
+      "no fever or altered consciousness"
+    ],
+    "exclusionClues": [
+      "strychnine poisoning: rapid onset, no wound, history of exposure",
+      "dystonic reaction: antipsychotics, response to benztropine",
+      "tetany: carpopedal spasm, Chvostek sign, hypocalcemia"
+    ],
+    "subtypes": [
+      {
+        "id": "neonatal_tetanus",
+        "name": "Neonatal Tetanus",
+        "prevalenceModifier": 0.1,
+        "agePeak": [0, 0.3],
+        "riskFactors": ["unvaccinated_mother", "unclean_umbilical_cord_care"],
+        "keyFeatures": [
+          { "feature": "irritability_poor_sucking_day_3_14", "weight": 5 },
+          { "feature": "trismus_neonatorum", "weight": 5 },
+          { "feature": "generalized_rigidity_opisthotonos", "weight": 5 },
+          { "feature": "apnea_cyanosis", "weight": 4 }
+        ],
+        "management": {
+          "management": "ICU, HTIG, wound care, benzodiazepines, supportive ventilation"
+        }
+      },
+      {
+        "id": "generalized_tetanus",
+        "name": "Generalized Tetanus",
+        "prevalenceModifier": 0.7,
+        "riskFactors": ["wound", "incomplete_vaccination"],
+          "keyFeatures": [
+            { "feature": "descending_trismus_then_neck_then_trunk", "weight": 5 },
+            { "feature": "reflex_spasms", "weight": 5 }
+          ],
+        "management": {
+          "management": "ICU admission, HTIG, metronidazole, benzodiazepines, magnesium sulfate"
+        }
+      },
+        {
+          "id": "cephalic_tetanus",
+          "name": "Cephalic Tetanus",
+          "prevalenceModifier": 0.05,
+          "keyFeatures": [
+            { "feature": "cranial_nerve_palsy_VII_often", "weight": 5 },
+            { "feature": "dysphagia", "weight": 4 },
+            { "feature": "later_progression_to_generalized", "weight": 3 }
+          ],
+          "management": { "management": "Same as generalized plus head/neck wound debridement" }
+        }
+    ],
+    "mimics": [
+      { "diseaseId": "strychnine_poisoning", "discriminators": ["rapid onset minutes to hours", "no trismus", "no wound", "preserved consciousness", "history of exposure"] },
+      { "diseaseId": "dystonic_reaction", "discriminators": ["antipsychotic exposure", "oculogyric crisis", "torticollis", "responds to diphenhydramine/benztropine"] },
+      { "diseaseId": "hypocalcemic_tetany", "discriminators": ["carpopedal spasm", "Chvostek/Trousseau signs", "low serum calcium", "no wound"] },
+      { "diseaseId": "rabies", "discriminators": ["hydrophobia", "aerophobia", "encephalitic features", "history of animal bite"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Spatula Test and Continuous Cardiac Monitoring", "priority": "essential", "yield": 5, "indication": "reflex glottis spasm and autonomic instability" }
+      ],
+      "laboratory": [
+        { "name": "Serum Calcium and Magnesium", "priority": "essential", "yield": 4, "indication": "exclude tetany mimics" },
+        { "name": "Tetanus IgG Antibody Level", "priority": "if available", "yield": 4, "indication": ">0.1 IU/mL essentially excludes tetanus" }
+      ],
+      "imaging": [
+        { "name": "CT/MRI Brain and Chest X-ray", "priority": "if indicated", "yield": 2, "indication": "exclude intracranial cause and aspiration" }
+      ]
+    },
+    "management": {
+      "protocolReference": "WHO Tetanus Guidelines; CDC Tetanus Surveillance and Prevention",
+      "pathways": [
+        {
+          "severity": "all-cases",
+          "criteria": "any suspected or confirmed tetanus",
+          "treatment": [
+            "Human Tetanus Immunoglobulin (HTIG) 500 IU IM (or 3000-6000 IU IV for severe cases)",
+            "Metronidazole 500 mg IV Q6H x 10-14 days (preferred over penicillin)",
+            "Wound debridement — remove all necrotic tissue and foreign material",
+            "Complete active immunization series (tetanus toxoid) given at separate site from HTIG",
+            "Admit to ICU or closely monitored setting"
+          ]
+        },
+        {
+          "severity": "severe-critical",
+          "criteria": "generalized tetanus, spasms, autonomic instability, or respiratory involvement",
+          "treatment": [
+            "ICU, dark quiet room, benzodiazepines (diazepam 10-30 mg IV PRN, up to 200 mg/day)",
+            "Magnesium sulfate IV: loading 5 g, then 2-3 g/hr titrated to patellar reflex",
+            "Neuromuscular blockade and mechanical ventilation if spasms refractory",
+            "IV labetalol for hypertension, enteral nutrition, DVT and stress ulcer prophylaxis"
+          ]
+        },
+        {
+          "severity": "mild-localized",
+          "criteria": "mild trismus, no generalized spasms, limited rigidity",
+          "treatment": [
+            "HTIG, metronidazole 400-500 mg PO Q6H",
+            "Diazepam 5-10 mg PO/IV Q6H, wound debridement, active immunization",
+            "Monitor for progression to generalized tetanus (first 72 hours most critical)"
+          ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "C. tetani (gram-positive anaerobe) produces tetanospasmin toxin",
+      "Toxin undergoes retrograde axonal transport, cleaves synaptobrevin to block GABA/glycine release",
+      "Loss of inhibition causes unopposed motor activity → rigidity and autonomic instability"
+    ],
+    "complications": [
+      { "diseaseId": "respiratory_failure_requiring_ventilation", "probability": 0.3, "severityBoost": 0.7 },
+      { "diseaseId": "autonomic_storm_cardiac_arrest", "probability": 0.1, "severityBoost": 1.0 },
+      { "diseaseId": "laryngospasm_airway_obstruction", "probability": 0.2, "severityBoost": 0.8 },
+      { "diseaseId": "aspiration_pneumonia", "probability": 0.3, "severityBoost": 0.4 },
+      { "diseaseId": "rhabdomyolysis_acute_kidney_injury", "probability": 0.1, "severityBoost": 0.5 },
+      { "diseaseId": "nosocomial_infections", "probability": 0.15, "severityBoost": 0.3 }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "skin_abscess",
+    "name": "Cutaneous Abscess (Skin Abscess / Boil)",
+    "system": "dermatology",
+    "agePeak_months": [0, 960],
+    "note": "Localized collection of pus within the dermis and subcutaneous tissue. Usually due to S. aureus (including MRSA). Fluctuant, tender, erythematous nodule.",
+    "prevalenceWeight": 0.55,
+    "syndromeTags": ["skin_infection", "purulent_infection", "soft_tissue_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapid_spread_cellulitis", "weight": 8 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "deep_space_infection_compartment", "weight": 9 },
+        { "sign": "airway_impingement_head_neck_abscess", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Large/deep/head-neck/systemic -> MODERATE-SEVERE; small superficial -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painful_swollen_red_lump", "weight": 5 },
+      { "symptomId": "fluctuant_center_possible_drainage", "weight": 4 },
+      { "symptomId": "fever_malaise", "weight": 3 },
+      { "symptomId": "history_of_skin_break_folliculitis_foreign_body", "weight": 3 },
+      { "symptomId": "diabetes_or_immunosuppression", "weight": 3 },
+      { "symptomId": "recurrent_abscesses_or_mrsa_history", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "erythematous_tender_nodule", "baseWeight": 5 },
+      { "signId": "fluctuance_on_palpation", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "purulent_discharge_or_frank_pus", "baseWeight": 4 },
+      { "signId": "warmth_and_edema_surrounding", "baseWeight": 3 },
+      { "signId": "regional_lymphadenopathy", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 2.5 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "mrsa_carriage_or_history", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "poor_hygiene_or_hyperhidrosis", "multiplier": 2.0 },
+      { "id": "iv_drug_use", "multiplier": 3.0 },
+      { "id": "recurrent_skin_infections", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "simple_skin_abscess",
+        "name": "Simple Cutaneous Abscess (MSSA)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "localized_fluctuant_nodule", "weight": 5 },
+          { "feature": "no_systemic_symptoms", "weight": 4 },
+          { "feature": "low_mrsa_risk", "weight": 3 }
+        ],
+        "management": "Incision and drainage (I&D) is PRIMARY treatment. Antibiotics often NOT needed after adequate drainage unless extensive cellulitis, immunocompromised, or systemic signs. If given: cephalexin 500mg Q6H or clindamycin 300mg Q6H."
+      },
+      {
+        "id": "mrsa_abscess",
+        "name": "MRSA Skin Abscess",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "prior_mrsa_or_healthcare_exposure", "weight": 4 },
+          { "feature": "recurrent", "weight": 4 },
+          { "feature": "non_responding_to_beta_lactams", "weight": 5 }
+        ],
+        "management": "I&D. Antibiotics: TMP-SMX 2 DS tabs PO BID or clindamycin 300mg PO Q6H or doxycycline 100mg PO BID. Decolonization (mupirocin nasal, chlorhexidine washes) if recurrent. Culture wound."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hidradenitis_suppurativa",
+        "discriminators": ["chronic_recurrent", "axillary_inguinal", "sinus_tracts_scarring"]
+      },
+      {
+        "diseaseId": "infected_cyst_epidermoid",
+        "discriminators": ["central_punctum", "prior_cyst_present", "foul_smell_sebum"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Incision and drainage (diagnostic and therapeutic)", "priority": "immediate", "yield": 0.95, "indication": "fluctuant abscess" },
+        { "name": "Ultrasound if deep or uncertain", "priority": "medium", "yield": 0.9, "indication": "confirm collection, depth, relation to vessels" }
+      ],
+      "laboratory": [
+        { "name": "Wound culture and sensitivity", "priority": "high", "yield": 0.8, "indication": "MRSA risk, treatment failure, recurrent" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Guidelines for Skin and Soft Tissue Infections",
+      "pathways": [
+        {
+          "severity": "simple abscess",
+          "criteria": "fluctuant, <5cm, no systemic signs, immunocompetent",
+          "treatment": "Incision and drainage (I&D). Antibiotics not routinely needed if adequate drainage. Warm compresses. Pain control. Pack wound if needed. Review in 48h."
+        },
+        {
+          "severity": "abscess with cellulitis/systemic signs",
+          "criteria": ">5cm, surrounding cellulitis, fever, comorbidities, immunocompromised",
+          "treatment": "I&D + antibiotics. Cover MRSA if risk factors (TMP-SMX or doxycycline or clindamycin). Culture-guided therapy. Severe: IV antibiotics (vancomycin, daptomycin). Hospitalization if extensive."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bacterial_entry_via_follicle_or_skin_break",
+      "local_inflammation_and_pus_formation",
+      "abscess_cavity_walled_off_by_fibrin",
+      "ischemic_center_liquefactive_necrosis",
+      "spontaneous_drainage_or_need_for_incision"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "spreading_cellulitis_lymphangitis",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["spreading_erythema", "red_streaks", "fever"]
+      },
+      {
+        "diseaseId": "recurrent_abscesses_recurrence",
+        "probability": 0.2,
+        "severityBoost": 0.1,
+        "clues": ["multiple_sites", "mrsa_colonization", "diabetes"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["painful_fluctuant_nodule", "purulent_drainage", "fever", "local_warmth_erythema"],
+    "exclusionClues": ["non_fluctuant_cellulitis_only", "cyst_epithelialized", "chronic_sinus_tract"]
+  }
+}

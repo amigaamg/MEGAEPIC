@@ -1,0 +1,143 @@
+{
+  "disease": {
+    "id": "pneumothorax_spontaneous",
+    "name": "Pneumothorax",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 600],
+    "note": "Air in the pleural space causing lung collapse. Can be primary spontaneous (young tall thin males), secondary (underlying lung disease), traumatic, or tension. Tension pneumothorax is life-threatening.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["respiratory_emergency", "chest_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "tension_pneumothorax", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "severe_hypoxia", "weight": 9 },
+        { "sign": "hypotension", "weight": 9 },
+        { "sign": "tracheal_deviation", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "TENSION PNEUMOTHORAX is immediately life-threatening. Simple pneumothorax requires aspiration or chest drain."
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_pleuritic_chest_pain", "weight": 5 },
+      { "symptomId": "shortness_of_breath", "weight": 4 },
+      { "symptomId": "trauma_or_mechanical_ventilation", "weight": 3 },
+      { "symptomId": "known_bullous_lung_disease", "weight": 3 },
+      { "symptomId": "previous_pneumothorax", "weight": 3 },
+      { "symptomId": "marfan_habitus_tall_thin", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "absent_breath_sounds", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hyperresonance_on_percussion", "baseWeight": 4 },
+      { "signId": "tracheal_deviation_away_tension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension_if_tension", "baseWeight": 5 },
+      { "signId": "distended_neck_veins_tension", "baseWeight": 4 },
+      { "signId": "reduced_chest_wall_movement", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "tall_thin_male_habitus", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 3.0 },
+      { "id": "copd_emphysema_bullae", "multiplier": 3.5 },
+      { "id": "marfan_or_ehlers_danlos_syndrome", "multiplier": 3.0 },
+      { "id": "mechanical_ventilation", "multiplier": 3.0 },
+      { "id": "chest_trauma", "multiplier": 2.5 },
+      { "id": "previous_pneumothorax", "multiplier": 4.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "primary_spontaneous",
+        "name": "Primary Spontaneous Pneumothorax",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "young_adult_tall_thin", "weight": 4 },
+          { "feature": "no_underlying_lung_disease", "weight": 4 },
+          { "feature": "sudden_chest_pain_rest", "weight": 5 }
+        ],
+        "management": "Aspiration if large (>=2cm rim at hilum). Success 70%. If fails or >50%: chest drain 12F. Discharge if small and resolving."
+      },
+      {
+        "id": "secondary_spontaneous",
+        "name": "Secondary Spontaneous Pneumothorax",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "known_lung_disease_copd_fibrosis", "weight": 5 },
+          { "feature": "older_age", "weight": 3 },
+          { "feature": "respiratory_distress", "weight": 4 }
+        ],
+        "management": "Chest drain (admit all). Consider pleurodesis (surgical or chemical) to prevent recurrence. Treat underlying disease."
+      },
+      {
+        "id": "traumatic_pneumothorax",
+        "name": "Traumatic / Iatrogenic Pneumothorax",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "trauma_or_procedure", "weight": 5 },
+          { "feature": "rib_fracture", "weight": 4 },
+          { "feature": "chest_tube_or_central_line_insertion", "weight": 3 }
+        ],
+        "management": "Chest drain. May require thoracostomy if massive air leak or hemothorax. Surgical repair if ongoing leak."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Ultrasound (POCUS)", "priority": "immediate", "yield": 0.95, "indication": "absent lung sliding, lung point" },
+        { "name": "Clinical assessment", "priority": "immediate", "yield": 0.7, "indication": "breath sounds, trachea, percussion" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray (PA + lateral)", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis, measure size" },
+        { "name": "CT chest", "priority": "medium", "yield": 0.99, "indication": "differentiate secondary, assess bullae, small pneumothorax" }
+      ]
+    },
+    "management": {
+      "protocolReference": "BTS Guidelines for Pleural Disease / ATLS for Tension PTX",
+      "pathways": [
+        {
+          "severity": "tension pneumothorax",
+          "criteria": "respiratory distress, hypotension, tracheal deviation, absent breath sounds, distended neck veins",
+          "treatment": "IMMEDIATE needle decompression (2nd ICS midclavicular line, 14-16G cannula). Do not wait for X-ray. Follow with chest drain insertion (5th ICS anterior axillary line) for definitive management."
+        },
+        {
+          "severity": "non-tension pneumothorax",
+          "criteria": "stable, no respiratory compromise",
+          "treatment": "Aspiration (14G cannula - 2nd ICS MCL) if large (rim >2cm) or symptomatic. Observe 6h then repeat CXR. If failed aspiration or large recurrence: chest drain. Discharge criteria: small size, resolved symptoms, reliable follow-up."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "rupture_of_pleural_bleb_or_bulla",
+      "air_leaks_into_pleural_space",
+      "negative_intrapleural_pressure_lost",
+      "lung_collapse",
+      "ventilation_perfusion_mismatch",
+      "hypoxia",
+      "tension_mechanism_with_mediastinal_shift"
+    ],
+    "complications": [
+      {
+        "diseaseId": "tension_pneumothorax",
+        "probability": 0.1,
+        "severityBoost": 0.7,
+        "clues": ["worsening_respiratory_distress", "tracheal_deviation", "hypotension"]
+      },
+      {
+        "diseaseId": "recurrent_pneumothorax",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["ipsilateral_recurrence_days_to_years"]
+      },
+      {
+        "diseaseId": "haemopneumothorax",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["traumatic_cause", "bloody_drain_output"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_pleuritic_chest_pain", "absent_breath_sounds", "hyperresonance", "tracheal_deviation_tension", "cxr_confirms"],
+    "exclusionClues": ["normal_breath_sounds", "normal_cxr", "non_pleuritic_pain"]
+  }
+}

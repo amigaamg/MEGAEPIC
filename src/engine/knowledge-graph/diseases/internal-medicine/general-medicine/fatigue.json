@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "chronic_fatigue",
+    "name": "Chronic Fatigue",
+    "system": "IM",
+    "agePeak_months": [240, 600],
+    "note": "Persistent tiredness lasting >1 month. Common complaint with broad differential: anemia, thyroid disorders, sleep apnea, depression, chronic infection, autoimmune disease, or malignancy.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["constitutional_symptoms", "malaise", "asthenia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "new_neurologic_deficit", "weight": 10 },
+        { "sign": "sepsis", "weight": 10 },
+        { "sign": "cardiorespiratory_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "gross_anemia_hb_under_7", "weight": 8 },
+          { "sign": "severe_bradycardia", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If danger signs -> SEVERE; else -> NON-SEVERE (investigate outpatient)"
+    },
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5, "modifiers": [
+          { "condition": "duration_over_6_months", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "sleep_disturbance", "weight": 4 },
+      { "symptomId": "exertional_malaise", "weight": 3 },
+      { "symptomId": "orthostatic_symptoms", "weight": 2 },
+      { "symptomId": "cognitive_dysfunction", "weight": 3 },
+      { "symptomId": "weight_changes", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "goiter", "baseWeight": 3 },
+      { "signId": "lymphadenopathy", "baseWeight": 3 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "orthostatic_hypotension", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 1.8 },
+      { "id": "stressful_life_events", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.4 },
+      { "id": "chronic_disease", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "myalgic_encephalomyelitis",
+        "name": "ME/CFS (Myalgic Encephalomyelitis)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "post_exertional_malaise", "weight": 5 },
+          { "feature": "unrefreshing_sleep", "weight": 5 },
+          { "feature": "cognitive_impairment", "weight": 4 },
+          { "feature": "orthostatic_intolerance", "weight": 3 }
+        ],
+        "management": "Diagnosis per CDC/Institute of Medicine criteria. Pacing/energy management. CBT and graded exercise therapy. Symptom-based pharmacotherapy."
+      },
+      {
+        "id": "anemia_fatigue",
+        "name": "Anemia-Related Fatigue",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "pallor", "weight": 4 },
+          { "feature": "dyspnea_on_exertion", "weight": 4 },
+          { "feature": "palpitations", "weight": 3 },
+          { "feature": "pica", "weight": 2 }
+        ],
+        "management": "CBC, ferritin, B12, folate. Iron replacement. Treat underlying cause of deficiency."
+      },
+      {
+        "id": "hypothyroidism_fatigue",
+        "name": "Hypothyroid Fatigue",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "cold_intolerance", "weight": 4 },
+          { "feature": "weight_gain", "weight": 3 },
+          { "feature": "constipation", "weight": 3 },
+          { "feature": "dry_skin_hair_loss", "weight": 3 }
+        ],
+        "management": "TSH, fT4. Levothyroxine replacement. Monitor TSH every 6-8 weeks until stable."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "obstructive_sleep_apnea",
+        "discriminators": ["snoring", "apneas_witnessed", "daytime_somnolence", "obesity"]
+      },
+      {
+        "diseaseId": "major_depressive_disorder",
+        "discriminators": ["low_mood", "anhedonia", "guilt", "suicidal_ideation"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Orthostatic vitals", "priority": "immediate", "yield": 0.4, "indication": "all patients" },
+        { "name": "Epworth Sleepiness Scale", "priority": "high", "yield": 0.6, "indication": "screen for sleep apnea" }
+      ],
+      "laboratory": [
+        { "name": "CBC with differential", "priority": "immediate", "yield": 0.4, "indication": "screen for anemia" },
+        { "name": "CMP", "priority": "high", "yield": 0.3, "indication": "liver, renal, electrolytes" },
+        { "name": "TSH", "priority": "high", "yield": 0.3, "indication": "screen for thyroid disease" },
+        { "name": "Ferritin, B12, Folate", "priority": "high", "yield": 0.3, "indication": "nutritional deficiencies" },
+        { "name": "ESR, CRP", "priority": "medium", "yield": 0.2, "indication": "screen for inflammation" },
+        { "name": "HbA1c", "priority": "medium", "yield": 0.1, "indication": "screen for diabetes" },
+        { "name": "Vitamin D", "priority": "low", "yield": 0.15, "indication": "if risk factors" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "low", "yield": 0.1, "indication": "if pulmonary symptoms" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guideline NG206 - ME/CFS Diagnosis and Management",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "fatigue <3 months, no red flags, normal initial labs",
+          "treatment": "Reassurance. Sleep hygiene education. Regular exercise. Follow-up in 4-6 weeks."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "fatigue >3 months, impaired function, abnormal labs",
+          "treatment": "Treat underlying cause identified on workup. Multidisciplinary approach. Monitor for improvement."
+        },
+        {
+          "severity": "severe",
+          "criteria": "danger signs, severe anemia, neurological symptoms",
+          "treatment": "Hospital admission. Urgent workup and treatment of underlying etiology. Supportive care."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "central_sensitization",
+      "mitochondrial_dysfunction",
+      "neuroendocrine_dysregulation",
+      "immune_activation",
+      "psychological_factors"
+    ],
+    "complications": [
+      {
+        "diseaseId": "depression",
+        "probability": 0.3,
+        "lagDays": [30, 365],
+        "severityBoost": 0.2,
+        "clues": ["social_withdrawal", "anhedonia", "hopelessness"]
+      },
+      {
+        "diseaseId": "disability",
+        "probability": 0.2,
+        "lagDays": [180, 730],
+        "severityBoost": 0.3,
+        "clues": ["work_absenteeism", "functional_decline"]
+      }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["persistent_fatigue", "ruled_out_pathological_causes", "post_exertional_symptoms"],
+    "exclusionClues": ["acute_onset", "focal_neurological_signs", "acute_infection"]
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "disease": {
+    "id": "polytrauma",
+    "name": "Polytrauma / ATLS",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 720],
+    "note": "Major trauma involving multiple injuries with potential for life-threatening physiological derangement. ATLS approach: systematic ABCDE assessment with concurrent resuscitation.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["trauma", "haemorrhage", "shock", "resuscitation"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "hypotension_unresponsive", "weight": 10 },
+        { "sign": "gcs_less_than_9", "weight": 9 },
+        { "sign": "severe_hypoxia", "weight": 9 },
+        { "sign": "tracheal_deviation", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "POLYTRAUMA is always a high-priority trauma activation requiring multidisciplinary team response."
+    },
+    "historyFeatures": [
+      { "symptomId": "high_energy_mechanism", "weight": 5 },
+      { "symptomId": "loss_of_consciousness", "weight": 4 },
+      { "symptomId": "difficulty_breathing", "weight": 4 },
+      { "symptomId": "visible_deformity_wound", "weight": 3 },
+      { "symptomId": "chest_or_abdominal_pain", "weight": 3 },
+      { "symptomId": "spinal_pain_or_neurological_deficit", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "airway_compromise", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "gcs_less_than_15", "baseWeight": 4 },
+      { "signId": "open_fracture_or_amputation", "baseWeight": 3 },
+      { "signId": "bruising_or_haematoma", "baseWeight": 2 },
+      { "signId": "distended_neck_veins", "baseWeight": 4 },
+      { "signId": "absent_breath_sounds", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "motor_vehicle_collision_high_speed", "multiplier": 3.0 },
+      { "id": "fall_from_height", "multiplier": 2.5 },
+      { "id": "penetrating_trauma", "multiplier": 2.0 },
+      { "id": "anticoagulation_therapy", "multiplier": 3.0 },
+      { "id": "age_over_65", "multiplier": 1.8 },
+      { "id": "intoxication", "multiplier": 1.5 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE primary survey", "priority": "immediate", "yield": 1.0, "indication": "all trauma patients" },
+        { "name": "E-FAST (Extended Focused Assessment Sonography in Trauma)", "priority": "immediate", "yield": 0.9, "indication": "hemothorax, pericardial effusion, intra-abdominal fluid, PTX" },
+        { "name": "ECG monitoring", "priority": "high", "yield": 0.4, "indication": "arrhythmia, ischemia" }
+      ],
+      "laboratory": [
+        { "name": "ABG/VBG with lactate", "priority": "high", "yield": 0.8, "indication": "shock assessment, acidosis" },
+        { "name": "Cross-match and group", "priority": "high", "yield": 1.0, "indication": "prepare for blood transfusion" },
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.5, "indication": "baseline, Hb" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.6, "indication": "trauma-induced coagulopathy" },
+        { "name": "Toxicology screen", "priority": "medium", "yield": 0.3, "indication": "alcohol, drugs" }
+      ],
+      "imaging": [
+        { "name": "Whole-body CT (trauma series)", "priority": "high", "yield": 0.95, "indication": "stable patient, comprehensive injury assessment" },
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.7, "indication": "PTX, hemothorax, mediastinal widening" },
+        { "name": "Pelvic X-ray", "priority": "immediate", "yield": 0.6, "indication": "pelvic fracture" },
+        { "name": "C-spine CT or X-ray", "priority": "high", "yield": 0.7, "indication": "cervical spine clearance" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ATLS 10th Edition / NICE Major Trauma Guidelines",
+      "pathways": [
+        {
+          "severity": "primary survey",
+          "criteria": "all major trauma",
+          "treatment": "A: Airway maintenance with C-spine immobilization. B: Breathing - tension PTX decompression, open PTX seal, hemothorax chest drain. C: Circulation - pressure on external bleeding, pelvic binder, 2 large-bore IVs, warm crystalloid/blood, massive transfusion protocol if needed. D: Disability - GCS, pupils. E: Exposure - log roll, full examination, warm."
+        },
+        {
+          "severity": "massive hemorrhage",
+          "criteria": "hemodynamic instability, suspected active bleeding, need for >4 units PRBC",
+          "treatment": "Activate massive transfusion protocol. 1:1:1 ratio (PRBC:FFP:platelets). Tranexamic acid 1g IV (within 3 hours). Damage control resuscitation. Permissive hypotension until surgical control. Damage control surgery."
+        },
+        {
+          "severity": "secondary survey",
+          "criteria": "after primary survey and initial resuscitation",
+          "treatment": "Complete head-to-toe examination. AMPLE history. Focused neurological exam. Re-evaluation of all injuries. Definitive imaging. Tetanus prophylaxis. Antibiotics as indicated."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "direct_tissue_damage",
+      "haemorrhage",
+      "hypovolaemic_shock",
+      "traumatic_coagulopathy",
+      "systemic_inflammatory_response",
+      "reperfusion_injury",
+      "multi_organ_dysfunction"
+    ],
+    "complications": [
+      {
+        "diseaseId": "fat_embolism_syndrome",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["long_bone_fractures", "hypoxia", "petechiae", "confusion"]
+      },
+      {
+        "diseaseId": "compartment_syndrome",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["tense_swollen_limb", "pain_on_passive_stretch", "paresthesia"]
+      },
+      {
+        "diseaseId": "massive_transfusion_complications",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["hypocalcemia", "hyperkalemia", "acidosis", "hypothermia"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["high_energy_mechanism", "multi_system_injury", "hemodynamic_instability", "altered_consciousness"],
+    "exclusionClues": ["low_energy_mechanism", "isolated_injury", "hemodynamically_normal"]
+  }
+}

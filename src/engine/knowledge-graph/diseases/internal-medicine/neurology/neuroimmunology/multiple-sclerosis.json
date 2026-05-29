@@ -1,0 +1,132 @@
+{
+  "disease": {
+    "id": "multiple_sclerosis",
+    "name": "Multiple Sclerosis",
+    "system": "NEURO",
+    "agePeak_months": [240, 480],
+    "note": "Chronic inflammatory demyelinating disease of CNS. Disseminated in time and space. Relapsing-remitting most common.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["demyelinating_disease", "neuroinflammatory"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_severe_relapse", "weight": 8 },
+        { "sign": "brainstem_syndrome", "weight": 8 },
+        { "sign": "transverse_myelitis", "weight": 9 },
+        { "sign": "respiratory_compromise", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If severe relapse/brainstem/myelitis -> ACUTE TREATMENT; else -> MAINTENANCE"
+    },
+    "historyFeatures": [
+      { "symptomId": "optic_neuritis", "weight": 4 },
+      { "symptomId": "numbness_tingling", "weight": 3 },
+      { "symptomId": "weakness", "weight": 3 },
+      { "symptomId": "diplopia", "weight": 2 },
+      { "symptomId": "ataxia", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "bladder_dysfunction", "weight": 2 },
+      { "symptomId": "relapses_and_remissions", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "afferent_pupillary_defect", "baseWeight": 3 },
+      { "signId": "internuclear_ophthalmoplegia", "baseWeight": 3 },
+      { "signId": "hyperreflexia_and_spasticity", "baseWeight": 3 },
+      { "signId": "cerebellar_signs", "baseWeight": 2 },
+      { "signId": "sensory_level_or_loss", "baseWeight": 2 },
+      { "signId": "uhthoff_phenomenon", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 2.5 },
+      { "id": "low_vitamin_d", "multiplier": 2.0 },
+      { "id": "ebv_infection", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "family_history_ms", "multiplier": 2.5 },
+      { "id": "hla_drb1_1501", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "relapsing_remitting_ms",
+        "name": "Relapsing-Remitting MS",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "acute_relapses_plus_recovery", "weight": 5 },
+          { "feature": "relapse_free_periods", "weight": 4 }
+        ],
+        "management": "DMT: fingolimod, dimethyl fumarate, teriflunomide. High-efficacy: natalizumab, ocrelizumab, alemtuzumab. Acute relapse: IV methylprednisolone 1g x 3-5 days."
+      },
+      {
+        "id": "secondary_progressive_ms",
+        "name": "Secondary Progressive MS",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "gradual_progression_after_rrms", "weight": 5 },
+          { "feature": "fewer_relapses", "weight": 4 }
+        ],
+        "management": "Siponimod. Ocrelizumab. Symptom management: spasticity, fatigue, bladder. Rehab. Multidisciplinary."
+      },
+      {
+        "id": "primary_progressive_ms",
+        "name": "Primary Progressive MS",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "progression_from_onset", "weight": 5 },
+          { "feature": "no_relapses", "weight": 5 }
+        ],
+        "management": "Ocrelizumab (only approved DMT for PPMS). Symptomatic treatment. Physiotherapy, OT. Mobility aids."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "neuromyelitis_optica", "discriminators": ["aquaporin_4_antibody", "longitudinal_extensive_transverse_myelitis", "severe_optic_neuritis"] },
+      { "diseaseId": "cns_vasculitis", "discriminators": ["headache", "encephalopathy", "meningeal_signs", "abnormal_angiogram"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "EDSS (Expanded Disability Status Scale)", "priority": "high", "yield": 0.9, "indication": "disability assessment" }
+      ],
+      "laboratory": [
+        { "name": "CSF analysis (oligoclonal bands, IgG index)", "priority": "high", "yield": 0.85, "indication": "intrathecal IgG synthesis" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain + Spine with contrast", "priority": "immediate", "yield": 0.95, "indication": "demyelinating lesions, dissemination in time/space" },
+        { "name": "Visual evoked potentials (VEP)", "priority": "medium", "yield": 0.6, "indication": "optic nerve demyelination" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE/MS International Guidelines for Multiple Sclerosis",
+      "pathways": [
+        {
+          "severity": "acute relapse",
+          "criteria": "new neurological symptoms lasting >24h, significant disability",
+          "treatment": "IV methylprednisolone 1 g/day for 3-5 days. Oral prednisolone taper not needed. Refer to MS specialist for DMT optimization."
+        },
+        {
+          "severity": "relapsing-remitting (stable)",
+          "criteria": "infrequent mild relapses, EDSS <4",
+          "treatment": "DMT first-line: dimethyl fumarate, fingolimod, teriflunomide. High-efficacy: ocrelizumab, natalizumab. Vitamin D 4000 IU daily. Lifestyle, exercise."
+        },
+        {
+          "severity": "progressive",
+          "criteria": "accumulating disability, SPMS or PPMS",
+          "treatment": "Siponimod (SPMS). Ocrelizumab (PPMS + active SPMS). Symptomatic mgmt: spasticity (baclofen), fatigue (amantadine, modafinil), bladder (anticholinergics). Rehab."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "autoimmune_demyelination",
+      "t_cell_mediated_attack",
+      "oligodendrocyte_loss",
+      "axonal_damage",
+      "plaque_formation",
+      "blood_brain_barrier_disruption",
+      "neurodegeneration"
+    ],
+    "complications": [
+      { "diseaseId": "optic_atrophy", "probability": 0.2, "severityBoost": 0.2, "clues": ["reduced_visual_acuity", "optic_pallor"] },
+      { "diseaseId": "severe_disability_bedbound", "probability": 0.15, "severityBoost": 0.3, "clues": ["edss_greater_7", "progressive_course"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["disseminated_in_time_and_space", "optic_neuritis_young_woman", "mri_demyelinating_lesions", "oligoclonal_bands"],
+    "exclusionClues": ["neuromyelitis_optica_serology_positive", "no_mri_lesions", "mimic_identified"]
+  }
+}

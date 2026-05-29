@@ -43,6 +43,7 @@ export default function PrescriptionIntelligencePanel({
   doctor,
   onClose,
 }: PrescriptionIntelligencePanelProps) {
+  return null;
   const [search,       setSearch]       = useState('');
   const [selectedDrug, setSelectedDrug] = useState('');
   const [dose,         setDose]         = useState('');
@@ -332,7 +333,7 @@ export default function PrescriptionIntelligencePanel({
               {selectedDrug && drug && intel && (
                 <>
                   {/* Alerts — allergy + contraindications + interactions */}
-                  {intel.warnings.length > 0 && (
+                  {intel!.warnings.length > 0 && (
                     <div
                       style={{
                         background: hasEmergency ? 'rgba(239,68,68,.07)' : 'rgba(245,158,11,.06)',
@@ -356,7 +357,7 @@ export default function PrescriptionIntelligencePanel({
                           ? '🚨 Contraindication / Allergy Alert'
                           : '⚠️ Warnings & Interactions'}
                       </div>
-                      {intel.warnings.map((w, i) => (
+                      {intel!.warnings.map((w, i) => (
                         <div
                           key={i}
                           style={{
@@ -454,7 +455,7 @@ export default function PrescriptionIntelligencePanel({
                         </div>
                       </div>
                     ))}
-                    {intel.suggestions.map((s, i) => (
+                    {intel!.suggestions.map((s, i) => (
                       <div key={i} style={{ display: 'flex', gap: 6, fontSize: 10, color: '#06b6d4', marginTop: 3 }}>
                         <span>→</span>
                         <span>{s}</span>

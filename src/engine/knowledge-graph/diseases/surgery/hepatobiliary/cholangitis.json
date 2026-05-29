@@ -1,0 +1,186 @@
+{
+  "disease": {
+    "id": "cholangitis",
+    "name": "Acute Cholangitis",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Life-threatening infection of the biliary tree. Charcot's triad: fever, jaundice, RUQ pain. Reynolds' pentagon adds shock and confusion.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["jaundice", "fever", "biliary_tract_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "reynolds_pentagon", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_fever_rigors", "weight": 7 },
+          { "sign": "bilirubin_elevated", "weight": 6 },
+          { "sign": "organ_dysfunction", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Septic shock/organ failure -> SEVERE (Grade III); no organ failure -> NON-SEVERE (Grade I-II)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_rigors", "weight": 5 },
+      { "symptomId": "jaundice", "weight": 5 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 4 },
+      { "symptomId": "known_gallstones_or_cbd_stones", "weight": 5 },
+      { "symptomId": "dark_urine_pale_stool", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "previous_biliary_surgery", "weight": 3, "note": "Stricture, stent, previous ERCP" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 4 },
+      { "signId": "murphy_sign", "baseWeight": 3 },
+      { "signId": "fever_tachycardia", "baseWeight": 5 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "altered_mental_state", "baseWeight": 4 },
+      { "signId": "palpable_gallbladder", "baseWeight": 3, "note": "Courvoisier sign" }
+    ],
+
+    "riskFactors": [
+      { "id": "choledocholithiasis", "multiplier": 3.0 },
+      { "id": "biliary_stricture", "multiplier": 2.5 },
+      { "id": "previous_ercp", "multiplier": 2.0 },
+      { "id": "biliary_stent", "multiplier": 2.5 },
+      { "id": "gallstone_pancreatitis", "multiplier": 2.0 },
+      { "id": "sclerosing_cholangitis", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "grade_i_mild_cholangitis",
+        "name": "Mild (Grade I) Cholangitis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "charcots_triad_incomplete", "weight": 4 },
+          { "feature": "no_organ_dysfunction", "weight": 5 },
+          { "feature": "responsive_to_antibiotics", "weight": 4 }
+        ],
+        "management": "IV broad-spectrum antibiotics (Piperacillin-Tazobactam or Ceftriaxone + Metronidazole). Fluid resuscitation. Semi-urgent ERCP with sphincterotomy and stone extraction within 24-48h."
+      },
+      {
+        "id": "grade_ii_moderate_cholangitis",
+        "name": "Moderate (Grade II) Cholangitis",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "complete_charcots_triad", "weight": 5 },
+          { "feature": "no_shock_or_confusion", "weight": 4 },
+          { "feature": "significant_laboratory_abnormalities", "weight": 4 }
+        ],
+        "management": "IV antibiotics. Urgent ERCP <24h. Biliary drainage (sphincterotomy + stone extraction, or biliary stent if complete clearance not possible). Fluid resuscitation."
+      },
+      {
+        "id": "grade_iii_severe_cholangitis",
+        "name": "Severe (Grade III) Cholangitis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "reynolds_pentagon", "weight": 5 },
+          { "feature": "organ_dysfunction", "weight": 5 },
+          { "feature": "septic_shock", "weight": 5 }
+        ],
+        "management": "ICU admission. IV broad-spectrum antibiotics. Vasopressors. Urgent biliary drainage <12h (ERCP or PTC). Biliary drainage may be temporizing with stent until stable. Definitive treatment after resolution."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_cholecystitis",
+        "discriminators": ["no_jaundice", "no_reynolds", "murphy_sign_stronger", "normal_bilirubin"]
+      },
+      {
+        "diseaseId": "acute_pancreatitis",
+        "discriminators": ["elevated_amylase_lipase", "pain_radiating_to_back", "no_jaundice"]
+      },
+      {
+        "diseaseId": "liver_abscess",
+        "discriminators": ["subacute_onset", "no_jaundice", "lesion_on_imaging"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "qSOFA score", "priority": "immediate", "yield": 0.7, "indication": "sepsis assessment" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "immediate", "yield": 0.8, "indication": "leukocytosis" },
+        { "name": "Bilirubin (total + direct)", "priority": "immediate", "yield": 0.85, "indication": "elevated in cholestasis" },
+        { "name": "ALP, GGT", "priority": "high", "yield": 0.8, "indication": "cholestatic enzymes" },
+        { "name": "ALT, AST", "priority": "high", "yield": 0.6, "indication": "hepatocellular injury" },
+        { "name": "Blood cultures", "priority": "immediate", "yield": 0.5, "indication": "bacteremia common" },
+        { "name": "CRP", "priority": "high", "yield": 0.8, "indication": "markedly elevated" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.7, "indication": "dilated CBD, choledocholithiasis" },
+        { "name": "MRCP", "priority": "high", "yield": 0.95, "indication": "non-invasive assessment of biliary tree" },
+        { "name": "ERCP", "priority": "immediate", "yield": 0.95, "indication": "therapeutic as well as diagnostic" },
+        { "name": "CT Abdomen", "priority": "medium", "yield": 0.7, "indication": "alternative if US inconclusive" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Tokyo Guidelines (TG18) for Acute Cholangitis",
+      "pathways": [
+        {
+          "severity": "Grade I (Mild)",
+          "criteria": "TB 2-10 mg/dL, CRP <10, WBC <12,000, no organ failure",
+          "treatment": "IV antibiotics (Piperacillin-Tazobactam or Ceftriaxone + Metronidazole). Fluid resuscitation. ERCP within 24-48h for biliary drainage."
+        },
+        {
+          "severity": "Grade II (Moderate)",
+          "criteria": "TB >10, CRP >10, WBC >12,000, organ failure mild",
+          "treatment": "IV antibiotics. Urgent ERCP <24h. Biliary drainage. ICU monitoring."
+        },
+        {
+          "severity": "Grade III (Severe)",
+          "criteria": "organ dysfunction, septic shock, altered consciousness",
+          "treatment": "ICU. IV broad-spectrum antibiotics. Vasopressors. Urgent ERCP <12h or PTC if ERCP fails. Biliary drainage. Fluid resuscitation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "biliary_obstruction",
+      "bile_stasis",
+      "bacterial_overgrowth_in_biliary_tree",
+      "increased_intraductal_pressure",
+      "bacteremia",
+      "systemic_inflammatory_response",
+      "sepsis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.2,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "tachycardia", "oliguria", "lactic_acidosis"]
+      },
+      {
+        "diseaseId": "hepatic_abscess",
+        "probability": 0.05,
+        "lagDays": [5, 30],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "RUQ_pain", "lesion_on_imaging"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever_jaundice_ruq_pain", "charcots_triad", "known_gallstones", "dark_urine"],
+    "exclusionClues": ["no_jaundice", "no_fever", "normal_alkaline_phosphatase"]
+  }
+}

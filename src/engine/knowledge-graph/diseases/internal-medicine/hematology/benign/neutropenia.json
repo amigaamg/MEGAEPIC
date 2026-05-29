@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "neutropenia",
+    "name": "Neutropenia",
+    "system": "hematology",
+    "agePeak_months": [6, 36, 480, 960],
+    "note": "Abnormally low absolute neutrophil count (ANC). Increased risk of bacterial and fungal infections. Severity graded by ANC level. Can be congenital, autoimmune, drug-induced, or secondary to marrow disorders.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["neutropenia", "infection_risk", "febrile_neutropenia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "febrile_neutropenia", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "anc_below_100", "weight": 9, "note": "Agranulocytosis" },
+        { "sign": "severe_infection", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "anc_below_500_and_fever": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "anc_above_500": true
+      },
+      "severityLabel": "If febrile neutropenia or ANC <100 -> EMERGENCY; ANC 500-1000 with no fever -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "recurrent_infections", "weight": 4 },
+      { "symptomId": "sore_throat", "weight": 3 },
+      { "symptomId": "oral_ulcers", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "drug_history", "weight": 4, "note": "Chemotherapy, clozapine, sulfonamides, NSAIDs" },
+      { "symptomId": "autoimmune_symptoms", "weight": 2 },
+      { "symptomId": "family_history", "weight": 2, "note": "Congenital neutropenia" }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "oral_ulcers", "baseWeight": 3 },
+      { "signId": "pharyngitis", "baseWeight": 3 },
+      { "signId": "signs_of_infection", "baseWeight": 4 },
+      { "signId": "lymphadenopathy", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "chemotherapy", "multiplier": 4.0 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "drug_exposure", "multiplier": 3.0 },
+      { "id": "bone_marrow_disorder", "multiplier": 2.5 },
+      { "id": "infection", "multiplier": 1.5 },
+      { "id": "congenital_syndrome", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_neutropenia",
+        "name": "Mild Neutropenia",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "anc_1000_to_1500", "weight": 5 },
+          { "feature": "minimal_infection_risk", "weight": 4 }
+        ],
+        "management": "Observation. Identify and treat underlying cause. No routine G-CSF."
+      },
+      {
+        "id": "severe_chronic_neutropenia",
+        "name": "Severe Chronic Neutropenia",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "anc_below_500_for_months", "weight": 5 },
+          { "feature": "recurrent_febrile_infections", "weight": 5 }
+        ],
+        "management": "G-CSF (filgrastim) to maintain ANC >500. Antibiotic prophylaxis if recurrent infections. Address underlying cause."
+      },
+      {
+        "id": "febrile_neutropenia",
+        "name": "Febrile Neutropenia",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "temperature_above_38.3", "weight": 5 },
+          { "feature": "anc_below_500", "weight": 5 }
+        ],
+        "management": "EMERGENCY: IV broad-spectrum antibiotics (piperacillin-tazobactam or carbapenem) within 1hr. Blood cultures. G-CSF. Hospital admission."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "leukemia_or_mds",
+        "discriminators": ["blasts_on_film", "dysplasia", "other_cytopenias"]
+      },
+      {
+        "diseaseId": "viral_suppression",
+        "discriminators": ["self_limited", "lymphocytosis", "recent_viral_illness"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count with differential", "priority": "immediate", "yield": 0.98, "indication": "Low ANC, assess severity" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.8, "indication": "Check for blasts, dysplasia, clumping" }
+      ],
+      "laboratory": [
+        { "name": "Blood cultures", "priority": "immediate", "yield": 0.3, "indication": "If febrile neutropenia" },
+        { "name": "Anti-neutrophil antibodies", "priority": "medium", "yield": 0.5, "indication": "Autoimmune neutropenia" },
+        { "name": "Bone marrow aspirate", "priority": "medium", "yield": 0.7, "indication": "If unexplained persistent neutropenia" },
+        { "name": "Autoimmune serology (ANA, RF)", "priority": "medium", "yield": 0.3, "indication": "If autoimmune cause suspected" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.3, "indication": "If febrile, source of infection" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA / EORTC Guidelines for Neutropenia",
+      "pathways": [
+        {
+          "severity": "febrile_neutropenia_emergency",
+          "criteria": "Temperature >38.3°C, ANC <500",
+          "treatment": "IV broad-spectrum antibiotics (piperacillin-tazobactam) within 60 min. Blood and urine cultures. CXR. G-CSF. Hospitalize. Consider antifungal if persistent fever >4 days."
+        },
+        {
+          "severity": "chronic_neutropenia",
+          "criteria": "ANC <500 without fever, recurrent infections",
+          "treatment": "G-CSF (filgrastim 5mcg/kg/day) to target ANC >1000. Antibiotic prophylaxis. Oral hygiene. Avoid crowds and sick contacts."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "decreased_neutrophil_production",
+      "increased_peripheral_destruction",
+      "immune_mediated_clearance",
+      "drug_toxic_effect_on_marrow",
+      "splenic_sequestration",
+      "impaired_host_defense"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["anc_below_100", "fever", "tachycardia", "hypotension"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if febrile neutropenia",
+    "diagnosticClues": ["low_anc", "fever", "oral_ulcers", "recent_chemotherapy"],
+    "exclusionClues": ["normal_anc", "no_infection"]
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "disease": {
+    "id": "chemotherapy_dosing",
+    "name": "Antineoplastic Dosing and Chemotherapy Management",
+    "system": "PHARM",
+    "agePeak_months": [144, 1008],
+    "note": "Chemotherapy dosing requires BSA calculation (Mosteller formula), dose banding for efficiency, adjustment for organ dysfunction, and growth factor support to prevent complications. Premedication protocols essential for taxanes, platinum agents, and monoclonal antibodies. Safe handling mandates closed-system transfer devices and personal protective equipment.",
+    "prevalenceWeight": 1.0,
+    "syndromeTags": ["antineoplastic_dosing", "bsa_calculation", "dose_banding", "chemotherapy_safety", "growth_factor_support"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "extravasation_of_vesicant_chemotherapy", "weight": 10 },
+        { "sign": "anaphylaxis_during_infusion", "weight": 10 },
+        { "sign": "tumor_lysis_syndrome_with_hyperuricemia", "weight": 9 },
+        { "sign": "febrile_neutropenia_with_sepsis", "weight": 9 },
+        { "sign": "capillary_leak_syndrome", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "absolute_neutrophil_count_below_500", "weight": 8 },
+          { "sign": "creatinine_clearance_below_30_dosing_critical", "weight": 7 },
+          { "sign": "bilirubin_above_3x_uln_holding_chemotherapy", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If febrile neutropenia or extravasation -> EMERGENCY; if ANC <500 without fever -> SEVERE; if dose reduction needed only -> MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_during_neutropenic_period", "weight": 5, "modifiers": [
+          { "condition": "anc_below_500_and_temp_above_38_3", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "infusion_site_pain_swelling_erythema", "weight": 5 },
+      { "symptomId": "prior_allergic_reaction_to_chemotherapy", "weight": 4 },
+      { "symptomId": "nausea_vomiting_uncontrolled_despite_antiemetics", "weight": 3 },
+      { "symptomId": "dyspnea_new_onset_during_or_after_treatment", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "bsa_calculation_mosteller_formula_result", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "creatinine_clearance_cockcroft_gault", "baseWeight": 5 },
+      { "signId": "liver_function_alt_ast_bilirubin", "baseWeight": 4 },
+      { "signId": "absolute_neutrophil_count_trend", "baseWeight": 5 },
+      { "signId": "ecog_performance_status_score", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "bsa_above_2_0_m2", "multiplier": 1.2 },
+      { "id": "age_above_65", "multiplier": 2.0 },
+      { "id": "renal_impairment_crcl_below_60", "multiplier": 3.0 },
+      { "id": "hepatic_impairment_bilirubin_above_uln", "multiplier": 2.5 },
+      { "id": "prior_chemotherapy_cycles_with_toxicity", "multiplier": 1.5 },
+      { "id": "concurrent_radiation_therapy", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "myelosuppressive_regimens",
+        "name": "Myelosuppressive Chemotherapy (Growth Factor Support Required)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "febrile_neutropenia_risk_above_20_percent", "weight": 5 },
+          { "feature": "filgrastim_pegfilgrastim_primary_prophylaxis", "weight": 5 },
+          { "feature": "nadir_at_day_7_to_14_post_chemotherapy", "weight": 4 },
+          { "feature": "regimens_taxanes_platinum_anthracycline", "weight": 4 }
+        ],
+        "management": "Primary prophylaxis with G-CSF (filgrastim 5mcg/kg/day or pegfilgrastim 6mg single dose) if febrile neutropenia risk >20%. Hold if ANC <1000 on day of treatment. Antibiotic prophylaxis if high risk. Transfusion support if Hb <7 or platelets <10."
+      },
+      {
+        "id": "high_emetic_risk_regimens",
+        "name": "High Emetic Risk Chemotherapy (HEC) Protocols",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "cisplatin_dacarbazine_cyclophosphamide_above_1500", "weight": 5 },
+          { "feature": "akynzeo_or_emend_based_antiemetic_regimen", "weight": 5 },
+          { "feature": "neurokinin_1_receptor_antagonist_required", "weight": 5 },
+          { "feature": "dexamethasone_12mg_day_one_then_8mg_days_two_four", "weight": 4 }
+        ],
+        "management": "Triple antiemetic: NK1 RA (aprepitant 125mg day1, 80mg day2-3) + 5-HT3 RA (palonosetron 0.25mg) + dexamethasone 12mg day1, 8mg days 2-4. For cisplatin, continue day 5-8. Consider olanzapine 5-10mg for breakthrough."
+      },
+      {
+        "id": "vesicant_dosing_protocols",
+        "name": "Vesicant Chemotherapy Administration and Extravasation Management",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "doxorubicin_daunorubicin_vinca_alkaloids_paclitaxel", "weight": 5 },
+          { "feature": "central_line_administration_required", "weight": 5 },
+          { "feature": "extravasation_antidote_dexrazoxane_dmso_hyaluronidase", "weight": 5 },
+          { "feature": "closed_system_transfer_device_required", "weight": 4 }
+        ],
+        "management": "Administer via central line. If extravasation: stop infusion immediately, aspirate residual, apply cold (anthracyclines) or warm (vinca) compresses. Dexrazoxane 1000mg/m2 days 1-2, 500mg/m2 day 3 for anthracycline extravasation. Hyaluronidase for vinca alkaloids. Surgical consult if tissue necrosis."
+      },
+      {
+        "id": "renal_adjusted_dosing",
+        "name": "Renal Impairment Chemotherapy Dose Adjustment",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "cisplatin_contraindicated_if_crcl_below_60", "weight": 5 },
+          { "feature": "carboplatin_calvert_formula_auc_dosing", "weight": 5 },
+          { "feature": "methotrexate_clearance_dependent_on_renal_function", "weight": 4 },
+          { "feature": "bleomycin_risk_of_pulmonary_toxicity_if_crcl_low", "weight": 4 }
+        ],
+        "management": "Carboplatin dose = target AUC x (CrCl + 25). Cisplatin avoid if CrCl <60; split doses if borderline. Methotrexate: hold if CrCl <50, leucovorin rescue based on levels. Bleomycin: reduce dose if CrCl <50. Monitor CrCl before each cycle."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "sepsis_non_chemotherapy_related",
+        "discriminators": ["no_recent_chemotherapy", "positive_cultures_other_source", "normal_anc"]
+      },
+      {
+        "diseaseId": "progressive_disease_symptoms",
+        "discriminators": ["no_temporal_relation_to_infusion", "imaging_worsening", "tumor_markers_rising"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECOG performance status assessment", "priority": "high", "yield": 0.8, "indication": "before every cycle" },
+        { "name": "Weight and height for BSA calculation", "priority": "immediate", "yield": 1.0, "indication": "every cycle" },
+        { "name": "Infusion site inspection for extravasation signs", "priority": "high", "yield": 0.7, "indication": "during and after infusion" }
+      ],
+      "laboratory": [
+        { "name": "CBC with differential", "priority": "immediate", "yield": 0.9, "indication": "ANC assessment before each dose" },
+        { "name": "Serum creatinine, CrCl (Cockcroft-Gault)", "priority": "immediate", "yield": 0.9, "indication": "renal dosing, before each cycle" },
+        { "name": "ALT, AST, total bilirubin, albumin", "priority": "high", "yield": 0.8, "indication": "hepatic adjustment, before each cycle" },
+        { "name": "Uric acid, potassium, phosphate, calcium", "priority": "high", "yield": 0.7, "indication": "tumor lysis syndrome monitoring" },
+        { "name": "Therapeutic drug monitoring (methotrexate level)", "priority": "high", "yield": 0.9, "indication": "high-dose MTX protocols" },
+        { "name": "Serum pregnancy test", "priority": "high", "yield": 0.5, "indication": "all childbearing age before therapy" }
+      ],
+      "imaging": [
+        { "name": "ECHO or MUGA scan", "priority": "medium", "yield": 0.4, "indication": "anthracycline baseline and monitoring" },
+        { "name": "CT chest abdomen pelvis", "priority": "medium", "yield": 0.3, "indication": "baseline before initiating therapy" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ASCO/AACR Guidelines for Chemotherapy Dosing, NCCN Chemotherapy Order Templates, ASCO Safe Handling Guidelines",
+      "pathways": [
+        {
+          "severity": "pre_chemotherapy_assessment",
+          "criteria": "all patients before cycle start",
+          "treatment": "Calculate BSA (Mosteller formula). Assess ECOG PS. Check CrCl, LFTs, CBC. Verify dose banding. Prescribe premedications (antiemetics, antihistamines, corticosteroids). Confirm informed consent."
+        },
+        {
+          "severity": "dose_delay_or_reduction",
+          "criteria": "ANC <1500 or platelets <100k on day of treatment, or CrCl drop >25%",
+          "treatment": "Hold chemotherapy. Recheck labs q3-7 days. When recovered, reduce dose by 25% for grade 3 toxicity, 50% for grade 4. Consider growth factor support for subsequent cycles. Document rationale."
+        },
+        {
+          "severity": "febrile_neutropenia_management",
+          "criteria": "ANC <500 + single temp >38.3 or sustained >38.0",
+          "treatment": "Immediate broad-spectrum antibiotics (piperacillin-tazobactam or cefepime). Blood cultures x2. Hospital admission. G-CSF 5mcg/kg/day. Continue until ANC >500 and afebrile 48h."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "cytotoxic_agents_target_dna_synthesis_and_mitosis",
+      "rapidly_dividing_cells_most_sensitive",
+      "dose_response_relationship_steep_for_solid_tumors",
+      "bsa_calibration_for_therapeutic_index",
+      "organ_dysfunction_alters_clearance",
+      "growth_factor_stimulates_bone_marrow_recovery"
+    ],
+    "complications": [
+      {
+        "diseaseId": "febrile_neutropenia",
+        "probability": 0.2,
+        "lagDays": [7, 14],
+        "severityBoost": 0.7,
+        "clues": ["anc_below_500", "fever", "mucositis"]
+      },
+      {
+        "diseaseId": "chemotherapy_extravasation",
+        "probability": 0.02,
+        "lagDays": [0, 1],
+        "severityBoost": 0.6,
+        "clues": ["pain_at_infusion_site", "swelling", "erythema", "blistering"]
+      },
+      {
+        "diseaseId": "tumor_lysis_syndrome",
+        "probability": 0.05,
+        "lagDays": [0, 5],
+        "severityBoost": 0.5,
+        "clues": ["hyperuricemia", "hyperkalemia", "hyperphosphatemia", "hypocalcemia"]
+      },
+      {
+        "diseaseId": "cardiotoxicity_anthracycline",
+        "probability": 0.03,
+        "lagDays": [30, 730],
+        "severityBoost": 0.4,
+        "clues": ["reduced_ejection_fraction", "dyspnea", "edema"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["bsa_above_2_or_below_1_2", "crcl_below_60", "bilirubin_above_uln", "anc_below_1500_on_day", "prior_toxicity_history"],
+    "exclusionClues": ["no_chemotherapy_exposure", "normal_organ_function", "no_history_of_myelosuppression"]
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "disease": {
+    "id": "cardiac_tamponade",
+    "name": "Cardiac Tamponade",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 960],
+    "note": "Compression of the heart due to fluid accumulation in the pericardial sac, impairing cardiac filling and reducing cardiac output. Beck's triad: hypotension, muffled heart sounds, distended neck veins.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["cardiac_emergency", "obstructive_shock"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "electromechanical_dissociation", "weight": 10 },
+        { "sign": "severe_hypotension", "weight": 10 },
+        { "sign": "pulsus_paradoxus_severe", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "CARDIAC TAMPONADE is a critical emergency requiring urgent pericardiocentesis or surgical drainage."
+    },
+    "historyFeatures": [
+      { "symptomId": "chest_pain_or_pressure", "weight": 3 },
+      { "symptomId": "shortness_of_breath", "weight": 4 },
+      { "symptomId": "dizziness_syncope", "weight": 4 },
+      { "symptomId": "fatigue_weakness", "weight": 3 },
+      { "symptomId": "recent_chest_trauma_or_cardiac_surgery", "weight": 4 },
+      { "symptomId": "known_malignancy_renal_failure_infection", "weight": 3 },
+      { "symptomId": "anticoagulation_therapy", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "distended_neck_veins", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "muffled_heart_sounds", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pulsus_paradoxus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "oliguria", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "recent_cardiac_surgery", "multiplier": 3.0 },
+      { "id": "penetrating_chest_trauma", "multiplier": 4.0 },
+      { "id": "malignancy_lung_breast_lymphoma", "multiplier": 2.5 },
+      { "id": "end_stage_renal_disease", "multiplier": 2.0 },
+      { "id": "tuberculosis_or_viral_pericarditis", "multiplier": 1.5 },
+      { "id": "anticoagulation_therapy", "multiplier": 2.0 },
+      { "id": "connective_tissue_disease", "multiplier": 2.0 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "POCUS (echocardiography)", "priority": "immediate", "yield": 0.98, "indication": "pericardial effusion with RV diastolic collapse" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "low voltage, electrical alternans, tachycardia" },
+        { "name": "Pulsus paradoxus measurement", "priority": "high", "yield": 0.8, "indication": "drop in SBP >10mmHg with inspiration" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.4, "indication": "baseline, renal function" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.5, "indication": "assess bleeding risk" },
+        { "name": "Troponin", "priority": "medium", "yield": 0.3, "indication": "myocardial injury" },
+        { "name": "Pericardial fluid analysis", "priority": "medium", "yield": 0.7, "indication": "after drainage: cytology, culture, TB" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography (TTE)", "priority": "immediate", "yield": 0.98, "indication": "diagnosis, hemodynamic assessment" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "enlarged cardiac silhouette (water bottle heart)" },
+        { "name": "CT chest", "priority": "medium", "yield": 0.85, "indication": "if TTE inconclusive, assess pericardial thickness" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines on Pericardial Diseases / ERC Guidelines",
+      "pathways": [
+        {
+          "severity": "cardiac tamponade (hemodynamically significant)",
+          "criteria": "hypotension, JVD, pulsus paradoxus, echo confirms large effusion with tamponade physiology",
+          "treatment": "Immediate drainage: pericardiocentesis (subxiphoid approach, echo/fluoroscopy guided) or surgical window. Volume expansion (500mL crystalloid) as temporizing measure. Do not use diuretics or vasodilators. IV access. Inotrope support if needed. Drain until no further fluid. Send fluid for analysis."
+        },
+        {
+          "severity": "cardiac arrest with suspected tamponade",
+          "criteria": "PEA arrest + high suspicion (trauma, post-cardiac surgery, malignancy)",
+          "treatment": "CPR. Immediate pericardiocentesis (blind subxiphoid may be life-saving). REBOA or thoracotomy if traumatic. Consider E-FAST to confirm."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "pericardial_fluid_accumulation",
+      "increased_intrapericardial_pressure",
+      "compression_of_all_cardiac_chambers",
+      "impaired_diastolic_filling",
+      "reduced_stroke_volume",
+      "compensatory_tachycardia",
+      "decreased_cardiac_output",
+      "hypotension",
+      "obstructive_shock"
+    ],
+    "complications": [
+      {
+        "diseaseId": "obstructive_shock",
+        "probability": 0.6,
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "jvd", "pulsus_paradoxus"]
+      },
+      {
+        "diseaseId": "recurrent_tamponade",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["reaccumulation_days_weeks"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["becks_triad", "pulsus_paradoxus", "pericardial_effusion_on_echo", "low_voltage_ecg", "electrical_alternans"],
+    "exclusionClues": ["normal_echo_no_effusion", "no_jvd", "no_pulsus_paradoxus", "normal_cardiac_output"]
+  }
+}

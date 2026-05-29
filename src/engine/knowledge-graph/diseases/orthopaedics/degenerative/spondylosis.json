@@ -1,0 +1,121 @@
+{
+  "disease": {
+    "id": "spondylosis",
+    "name": "Cervical/Lumbar Spondylosis (Spinal Osteoarthritis)",
+    "system": "ORTHO",
+    "agePeak_months": [480, 960],
+    "note": "Degenerative changes of the spine affecting vertebrae, discs, and facet joints. Common in aging population. May cause radiculopathy or myelopathy.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["degenerative_spine", "osteoarthritis_spine"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "myelopathy_long_tract_signs", "weight": 10 },
+        { "sign": "cauda_equina_syndrome", "weight": 10 },
+        { "sign": "acute_cord_compression", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "radiculopathy_with_motor_deficit", "weight": 7 },
+          { "sign": "stenosis_with_neurogenic_claudication", "weight": 7 },
+          { "sign": "intractable_pain", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If myelopathy, cauda equina, or significant neurologic deficit -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "neck_or_low_back_pain_chronic", "weight": 5 },
+      { "symptomId": "stiffness_worse_in_morning", "weight": 4 },
+      { "symptomId": "radicular_pain_radiating_arm_leg", "weight": 4 },
+      { "symptomId": "numbness_tingling_in_dermatome", "weight": 3 },
+      { "symptomId": "weakness_in_myotome", "weight": 3 },
+      { "symptomId": "clumsy_hands_gait_disturbance_myelopathy", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "decreased_range_of_motion_spine", "baseWeight": 4 },
+      { "signId": "spurling_test_positive_cervical", "baseWeight": 4 },
+      { "signId": "neurologic_exam_motor_sensory_reflex", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "long_tract_signs_hofmann_babinski_clonus", "baseWeight": 5 },
+      { "signId": "lasegue_test_positive_lumbar", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_>50", "multiplier": 5.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "repetitive_heavy_lifting", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "previous_spine_injury", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "cervical_spondylosis",
+        "name": "Cervical Spondylosis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "neck_pain_with_referred_shoulder", "weight": 4 },
+          { "feature": "radiculopathy_c5_c6_c7_patterns", "weight": 4 },
+          { "feature": "±_myelopathy", "weight": 4 }
+        ],
+        "management": "PT, NSAIDs, cervical collar PRN. Epidural steroid injections. Surgery (ACDF/corpectomy) for myelopathy or intractable radiculopathy."
+      },
+      {
+        "id": "lumbar_spondylosis",
+        "name": "Lumbar Spondylosis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "low_back_pain_exacerbated_by_activity", "weight": 5 },
+          { "feature": "radiculopathy_l4_l5_s1_distribution", "weight": 4 },
+          { "feature": "neurogenic_claudication_if_stenosis", "weight": 4 }
+        ],
+        "management": "PT (core strengthening). NSAIDs. Activity modification. Epidural steroid injection. Surgery (decompression ± fusion) for refractory radiculopathy or neurogenic claudication."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "fibromyalgia",
+        "discriminators": ["widespread_pain", "tender_points", "fatigue", "normal_imaging"]
+      },
+      {
+        "diseaseId": "vertebral_fracture",
+        "discriminators": ["acute_onset", "history_of_trauma_or_osteoporosis", "wedge_deformity_on_xray"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Spine X-ray (AP, lateral, oblique, flexion-extension)", "priority": "high", "yield": 0.8, "indication": "osteophytes, disc space narrowing, alignment" },
+        { "name": "MRI spine", "priority": "high", "yield": 0.95, "indication": "cord/nerve root compression, disc degeneration" },
+        { "name": "CT myelogram", "priority": "low", "yield": 0.85, "indication": "if MRI contraindicated or for surgical planning" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NASS Clinical Guidelines for Degenerative Spine",
+      "pathways": [
+        {
+          "severity": "conservative",
+          "criteria": "No neurologic deficit, pain tolerable, no myelopathy",
+          "treatment": "Physical therapy, NSAIDs, activity modification, muscle relaxants. Epidural steroid injection for radiculopathy. Home exercise program."
+        },
+        {
+          "severity": "surgical",
+          "criteria": "Myelopathy, motor deficit, intractable pain, failed conservative",
+          "treatment": "Cervical: ACDF or posterior decompression/fusion. Lumbar: decompressive laminectomy ± fusion. Post-op rehab and restrictions."
+        }
+      ]
+    },
+
+    "pathophysiology": ["intervertebral_disc_desiccation", "facet_joint_arthrosis", "osteophyte_formation", "canal_stenosis", "ligamentum_flavum_hypertrophy"]
+  }
+}

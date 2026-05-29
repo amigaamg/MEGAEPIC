@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "hypertensive_emergency",
+    "name": "Hypertensive Emergency",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Severely elevated BP (≥180/120) with acute target organ damage. Time-critical. Requires immediate controlled BP reduction IV.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["hypertensive_crisis", "cardiac_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypertensive_encephalopathy", "weight": 10 },
+        { "sign": "aortic_dissection", "weight": 10 },
+        { "sign": "intracranial_haemorrhage", "weight": 10 },
+        { "sign": "acute_pulmonary_oedema", "weight": 9 },
+        { "sign": "acute_stroke", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "ALL patients are SEVERE - ICU admission with IV therapy"
+    },
+    "historyFeatures": [
+      { "symptomId": "severe_headache", "weight": 4 },
+      { "symptomId": "altered_mental_status", "weight": 5 },
+      { "symptomId": "visual_disturbance", "weight": 4 },
+      { "symptomId": "seizure", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "chest_pain", "weight": 4 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "focal_neurological_deficit", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "bp_greater_180_120", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "papilloedema", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "focal_neurological_signs", "baseWeight": 4 },
+      { "signId": "pulmonary_oedema_crackles", "baseWeight": 4 },
+      { "signId": "signs_of_aortic_dissection", "baseWeight": 5 },
+      { "signId": "seizure_activity", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "medication_nonadherence", "multiplier": 3.0 },
+      { "id": "chronic_uncontrolled_htn", "multiplier": 2.5 },
+      { "id": "renal_artery_stenosis", "multiplier": 2.0 },
+      { "id": "preeclampsia", "multiplier": 2.0 },
+      { "id": "cocaine_amphetamines", "multiplier": 3.0 },
+      { "id": "pheochromocytoma", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "hypertensive_encephalopathy",
+        "name": "Hypertensive Encephalopathy",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "altered_mental_status", "weight": 5 },
+          { "feature": "visual_disturbance", "weight": 4 },
+          { "feature": "papilloedema", "weight": 5 }
+        ],
+        "management": "Reduce MAP by 25% over 1-2h with IV labetalol or nitroprusside. ICU. Avoid drops >25% in first 24h."
+      },
+      {
+        "id": "hypertensive_aortic_syndrome",
+        "name": "Acute Aortic Syndrome",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "tearing_chest_back_pain", "weight": 5 },
+          { "feature": "bp_difference_between_arms", "weight": 5 }
+        ],
+        "management": "Reduce SBP to 100-120 in 20 min with IV esmolol + nitroprusside. Urgent CT aortogram. Surgical repair."
+      },
+      {
+        "id": "hypertensive_heart_failure",
+        "name": "Hypertensive Heart Failure/Pulmonary Oedema",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "acute_dyspnea", "weight": 5 },
+          { "feature": "pulmonary_oedema", "weight": 5 }
+        ],
+        "management": "IV nitroglycerin or nitroprusside. IV furosemide. Non-invasive ventilation. Reduce BP gradually."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Fundoscopy", "priority": "immediate", "yield": 0.8, "indication": "papilloedema, haemorrhages, exudates" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "LVH strain, ischemia" }
+      ],
+      "laboratory": [
+        { "name": "U&E, creatinine, eGFR", "priority": "immediate", "yield": 0.7, "indication": "renal function" },
+        { "name": "Troponin", "priority": "high", "yield": 0.5, "indication": "myocardial injury" },
+        { "name": "Urinalysis", "priority": "high", "yield": 0.5, "indication": "proteinuria, RBC casts" },
+        { "name": "FBC, blood film", "priority": "high", "yield": 0.4, "indication": "microangiopathic hemolytic anemia" }
+      ],
+      "imaging": [
+        { "name": "CT Head", "priority": "immediate", "yield": 0.7, "indication": "rule out intracranial hemorrhage" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "pulmonary oedema, aortic contour" },
+        { "name": "CT aortogram", "priority": "high", "yield": 0.9, "indication": "if aortic dissection suspected" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ACC Guidelines for Hypertensive Crisis",
+      "pathways": [
+        {
+          "severity": "encephalopathy or stroke",
+          "criteria": "altered mental status, papilloedema, focal deficit",
+          "treatment": "IV labetalol 20 mg bolus then infusion 0.5-2 mg/min. Or nicardipine 5 mg/h infusion. Reduce MAP 25% over 1-2h. ICU. CT head."
+        },
+        {
+          "severity": "aortic dissection",
+          "criteria": "tearing pain, BP differential, wide mediastinum",
+          "treatment": "IV esmolol 0.5 mg/kg bolus then 0.05-0.2 mg/kg/min + nitroprusside 0.3-3 mcg/kg/min. Target SBP 100-120 in 20 min. Urgent surgery."
+        },
+        {
+          "severity": "pulmonary oedema",
+          "criteria": "dyspnea, crackles, chest X-ray oedema",
+          "treatment": "IV nitroglycerin 5-200 mcg/min + furosemide 40-80 mg IV. Non-invasive ventilation. Avoid beta-blockers."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "failure_of_autoregulation",
+      "endothelial_damage",
+      "fibrinoid_necrosis",
+      "end_organ_hypoperfusion",
+      "cerebral_oedema",
+      "renin_angiotensin_activation",
+      "microvascular_thrombosis"
+    ],
+    "complications": [
+      { "diseaseId": "intracranial_hemorrhage", "probability": 0.1, "severityBoost": 0.6, "clues": ["sudden_severe_headache", "decreased_consciousness"] },
+      { "diseaseId": "acute_kidney_injury", "probability": 0.15, "severityBoost": 0.3, "clues": ["oliguria", "rising_creatinine"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["bp_180_120_plus_end_organ", "papilloedema", "neurological_or_cardiac_symptoms"],
+    "exclusionClues": ["bp_less_180_120", "no_end_organ_damage"]
+  }
+}

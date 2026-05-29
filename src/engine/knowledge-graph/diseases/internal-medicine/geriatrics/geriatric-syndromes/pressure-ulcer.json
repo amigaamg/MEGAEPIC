@@ -1,0 +1,140 @@
+{
+  "disease": {
+    "id": "pressure_ulcer",
+    "name": "Pressure Ulcer",
+    "system": "geriatrics",
+    "agePeak_months": [720, 1080],
+    "note": "Localized tissue damage from prolonged pressure. Major quality of life and healthcare burden. Largely preventable.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["skin_breakdown", "geriatric_giant", "preventable_harm"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "deep_tissue_injury_suspected", "weight": 8 },
+        { "sign": "full_thickness_skin_loss", "weight": 8 },
+        { "sign": "signs_of_osteomyelitis", "weight": 9 },
+        { "sign": "necrotic_tissue_with_infection", "weight": 9 },
+        { "sign": "sepsis_from_wound", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "stage_1_or_2_ulcer": true,
+        "no_infection": true,
+        "mild_superficial": true
+      },
+      "severityLabel": "If stage 3+, deep tissue injury, or infection -> URGENT; stage 1-2 superficial -> NON-URGENT prevention-focused"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prolonged_immobility", "weight": 5 },
+      { "symptomId": "non_blanching_erythema", "weight": 4 },
+      { "symptomId": "skin_breakdown_over_bony_prominence", "weight": 5 },
+      { "symptomId": "pain_or_tenderness_at_site", "weight": 3 },
+      { "symptomId": "incontinence_exacerbating", "weight": 3 },
+      { "symptomId": "previous_pressure_ulcer", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "non_blanching_erythema_intact_skin", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "partial_thickness_skin_loss", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "full_thickness_ulcer_with_slough", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "necrotic_tissue_or_eschar", "baseWeight": 5 },
+      { "signId": "wound_exudate_or_malodor", "baseWeight": 3 },
+      { "signId": "undermining_or_tunneling", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "immobility", "multiplier": 3.0 },
+      { "id": "incontinence", "multiplier": 2.5 },
+      { "id": "malnutrition", "multiplier": 2.5 },
+      { "id": "age_over_75", "multiplier": 2.0 },
+      { "id": "diabetes", "multiplier": 1.8 },
+      { "id": "peripheral_vascular_disease", "multiplier": 1.6 },
+      { "id": "low_albumin", "multiplier": 2.0 },
+      { "id": "cognitive_impairment", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "venous_stasis_ulcer",
+        "discriminators": ["gaiter_region_location", "venous_changes_skin", "dependent_edema"]
+      },
+      {
+        "diseaseId": "arterial_ulcer",
+        "discriminators": ["distal_location_toes_heel", "absent_pulses", "painful", "punched_out_appearance"]
+      },
+      {
+        "diseaseId": "diabetic_foot_ulcer",
+        "discriminators": ["plantar_surface", "neuropathy", "foot_deformity"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pressure ulcer staging (NPUAP/EPUAP)", "priority": "immediate", "yield": 0.95, "indication": "severity classification" },
+        { "name": "Waterlow or Braden scale", "priority": "immediate", "yield": 0.9, "indication": "risk assessment" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP, albumin", "priority": "high", "yield": 0.6, "indication": "infection and nutrition status" },
+        { "name": "Wound swab culture", "priority": "high", "yield": 0.7, "indication": "if signs of infection" }
+      ],
+      "imaging": [
+        { "name": "Wound ultrasound or MRI", "priority": "medium", "yield": 0.7, "indication": "deep tissue involvement, abscess" },
+        { "name": "X-ray or bone scan", "priority": "medium", "yield": 0.6, "indication": "suspected osteomyelitis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline CG179 – Pressure ulcers prevention and management",
+      "pathways": [
+        {
+          "severity": "active_ulcer",
+          "criteria": "any stage pressure ulcer present",
+          "treatment": "Offload pressure (specialized mattress, repositioning 2-hourly). Wound debridement if necrotic tissue. Moist wound healing dressings. Manage exudate and infection. Nutritional support (protein 1.2-1.5 g/kg). Pain management."
+        },
+        {
+          "severity": "prevention",
+          "criteria": "at risk (Waterlow >=10, Braden <=18)",
+          "treatment": "Pressure-redistributing equipment. Regular repositioning. Skin inspection daily. Optimize nutrition and hydration. Manage incontinence. Mobilize if possible."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "capillary_occlusion_pressure",
+      "ischemia_reperfusion_injury",
+      "tissue_hypoxia",
+      "cellular_death_and_necrosis",
+      "shear_and_friction_forces",
+      "moisture_associated_skin_damage"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cellulitis",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["surrounding_erythema", "warmth", "increased_exudate"]
+      },
+      {
+        "diseaseId": "osteomyelitis",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["deep_ulcer_over_bone", "persistent_non_healing", "positive_bone_biopsy"]
+      },
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["systemic_inflammation", "fever", "increased_crp"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if stage 3+ or infected",
+    "diagnosticClues": ["skin_breakdown_over_bony_prominence", "immobility", "incontinence"],
+    "exclusionClues": ["intact_skin_over_pressure_areas", "mobilizing_independently"]
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "mastitis",
+    "name": "Mastitis",
+    "system": "surgical",
+    "agePeak_months": [120, 480],
+    "note": "Inflammation of breast tissue, usually during lactation. Can be infectious or non-infectious. Early treatment prevents abscess formation.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["breast_pain", "breast_redness", "fever"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "necrotizing_infection", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "abscess_formation", "weight": 7 },
+          { "sign": "bilateral_mastitis", "weight": 5 },
+          { "sign": "failed_outpatient_treatment", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Abscess/necrotizing/sepsis -> SEVERE; early uncomplicated -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "breast_pain", "weight": 5 },
+      { "symptomId": "breast_redness_warmth", "weight": 5 },
+      { "symptomId": "fever_chills", "weight": 4 },
+      { "symptomId": "breastfeeding", "weight": 5 },
+      { "symptomId": "milk_stasis_or_engorgement", "weight": 4 },
+      { "symptomId": "nipple_crack_or_soreness", "weight": 3 },
+      { "symptomId": "systemic_malaise", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "diffuse_breast_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "erythema_warmth", "baseWeight": 4 },
+      { "signId": "breast_engorgement", "baseWeight": 3 },
+      { "signId": "no_fluctuance", "baseWeight": 3, "note": "Key difference from abscess" },
+      { "signId": "axillary_tenderness", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "lactation", "multiplier": 4.0 },
+      { "id": "nipple_crack_or_trauma", "multiplier": 2.5 },
+      { "id": "poor_latching", "multiplier": 2.0 },
+      { "id": "previous_mastitis", "multiplier": 2.0 },
+      { "id": "engorgement_skipped_feeds", "multiplier": 2.0 },
+      { "id": "immune_suppression", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "lactational_mastitis",
+        "name": "Lactational (Puerperal) Mastitis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "breastfeeding_woman", "weight": 5 },
+          { "feature": "acute_onset", "weight": 5 },
+          { "feature": "systemic_symptoms", "weight": 4 },
+          { "feature": "responds_to_antibiotics_and_emptying", "weight": 4 }
+        ],
+        "management": "Continue breastfeeding/emptying breast frequently. Oral antibiotics (Flucloxacillin, Cephalexin, or Amoxicillin-Clavulanate). Analgesia (ibuprofen). Cold packs. If no improvement in 48h, US to rule out abscess."
+      },
+      {
+        "id": "non_lactational_mastitis",
+        "name": "Non-Lactational Mastitis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "not_breastfeeding", "weight": 5 },
+          { "feature": "periarolar_inflammation", "weight": 4 },
+          { "feature": "may_be_associated_with_smoking", "weight": 3 },
+          { "feature": "recurrent_often", "weight": 3 }
+        ],
+        "management": "Antibiotics targeting anaerobes (Metronidazole + Co-amoxiclav). US to exclude abscess. Smoking cessation. Mammogram after resolution. Surgical excision of duct if recurrent."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "breast_abscess",
+        "discriminators": ["fluctuant_mass", "pus_on_aspiration", "localized_not_diffuse"]
+      },
+      {
+        "diseaseId": "inflammatory_breast_cancer",
+        "discriminators": ["no_fever", "no_response_to_antibiotics", "progressive", "skin_biopsy_positive"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Breast milk culture", "priority": "medium", "yield": 0.5, "indication": "if recurrent or severe" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.6, "indication": "may be elevated" },
+        { "name": "CRP", "priority": "high", "yield": 0.6, "indication": "elevated in inflammation" }
+      ],
+      "imaging": [
+        { "name": "Breast Ultrasound", "priority": "high", "yield": 0.8, "indication": "rule out abscess if no improvement in 48h" },
+        { "name": "Mammogram", "priority": "low", "yield": 0.3, "indication": "after resolution if non-lactational" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Academy of Breastfeeding Medicine Protocol for Mastitis",
+      "pathways": [
+        {
+          "severity": "mild to moderate",
+          "criteria": "localized inflammation, fever <38.5, no abscess",
+          "treatment": "Frequent breastfeeding/pumping. Oral antibiotics (Flucloxacillin 500mg QID or Cephalexin 500mg QID for 10-14 days). Analgesia (Ibuprofen). Heat/cold packs. Hydration. Rest."
+        },
+        {
+          "severity": "severe or no improvement",
+          "criteria": "high fever, severe pain, no improvement in 48h on oral antibiotics",
+          "treatment": "Admit for IV antibiotics (Flucloxacillin + Gentamicin). US to rule out abscess. Incision and drainage if abscess found. Continue breast emptying."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "milk_stasis",
+      "ductal_obstruction",
+      "bacterial_proliferation",
+      "inflammatory_response",
+      "tissue_edema",
+      "potential_abscess_formation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "breast_abscess",
+        "probability": 0.1,
+        "lagDays": [2, 7],
+        "severityBoost": 0.3,
+        "clues": ["persistent_focal_pain", "fluctuant_mass", "no_improvement_with_antibiotics"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["breastfeeding", "acute_breast_pain_erythema", "fever", "no_fluctuant_mass"],
+    "exclusionClues": ["fluctuant_mass_on_exam", "no_lactation_history", "no_response_to_antibiotics"]
+  }
+}

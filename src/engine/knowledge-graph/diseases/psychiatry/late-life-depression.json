@@ -1,0 +1,191 @@
+{
+  "disease": {
+    "id": "late_life_depression",
+    "name": "Late-Life Depression (Geriatric Depression)",
+    "system": "psychiatry",
+    "agePeak_months": [720, 1080],
+    "note": "Depression in older adults (age 65+) with distinct clinical features including prominent cognitive complaints, somatic symptoms, and higher rates of medical comorbidity. The Geriatric Depression Scale (GDS-15) is the preferred screening tool. Critical distinction between pseudodementia (depression masquerading as dementia) and true dementia. SSRIs (citalopram, sertraline) are first-line pharmacotherapy with careful attention to side effect profile and drug interactions. ECT is highly effective for severe or psychotic geriatric depression. Must differentiate from normal bereavement.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["geriatric", "depression", "late_life", "pseudodementia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_intent_or_plan", "weight": 10 },
+        { "sign": "psychotic_features", "weight": 9 },
+        { "sign": "refusal_to_eat_or_drink", "weight": 9 },
+        { "sign": "catatonia_or_severe_weight_loss", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "noDangerSigns": true },
+      "severityLabel": "If suicidal/psychotic/refusing food -> EMERGENCY; moderate -> HIGH"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "depressed_mood_or_anhedonia", "weight": 5 },
+      { "symptomId": "cognitive_complaints_pseudodementia", "weight": 4 },
+      { "symptomId": "somatic_symptoms", "weight": 4 },
+      { "symptomId": "sleep_and_appetite_disturbance", "weight": 4 },
+      { "symptomId": "psychomotor_retardation", "weight": 3 },
+      { "symptomId": "thoughts_of_death_or_suicide", "weight": 5 },
+      { "symptomId": "recent_bereavement_or_loss", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "depressed_affect_or_retardation", "baseWeight": 4 },
+      { "signId": "slowed_speech", "baseWeight": 3 },
+      { "signId": "cognitive_testing_impairment", "baseWeight": 4 },
+      { "signId": "weight_loss_or_poor_grooming", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_75_or_dementia", "multiplier": 3.0 },
+      { "id": "prior_depressive_episodes", "multiplier": 3.0 },
+      { "id": "chronic_medical_illness_or_pain", "multiplier": 2.5 },
+      { "id": "social_isolation_or_bereavement", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "late_onset_first_episode",
+        "name": "Late-Onset First Episode",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "first_episode_after_60", "weight": 5 },
+          { "feature": "vascular_risk_factors", "weight": 4 }
+        ],
+        "management": "SSRI at half dose. MRI brain. Treat medical comorbidities."
+      },
+      {
+        "id": "early_onset_recurrent",
+        "name": "Early-Onset Recurrent",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "prior_episodes_in_younger_adulthood", "weight": 5 }
+        ],
+        "management": "Restart previously effective antidepressant. Adjust for age."
+      },
+      {
+        "id": "depression_with_psychotic_features",
+        "name": "Depression with Psychotic Features",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "mood_congruent_delusions", "weight": 5 },
+          { "feature": "high_suicide_risk", "weight": 5 }
+        ],
+        "management": "Antidepressant + antipsychotic. ECT first-line. Inpatient."
+      },
+      {
+        "id": "vascular_depression",
+        "name": "Vascular Depression",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "white_matter_hyperintensities", "weight": 5 },
+          { "feature": "executive_dysfunction", "weight": 5 }
+        ],
+        "management": "Vascular risk management. Sertraline. Methylphenidate for apathy. ECT."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "dementia_alzheimer",
+        "discriminators": ["insidious_cognitive_decline", "no_sadness", "hippocampal_atrophy"]
+      },
+      {
+        "diseaseId": "normal_bereavement",
+        "discriminators": ["waves_of_grief", "intact_self_esteem", "improves_over_2_months"]
+      },
+      {
+        "diseaseId": "apathy_syndrome",
+        "discriminators": ["no_dysphoria", "no_suicidal_thoughts", "prefrontal_lesion"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Geriatric Depression Scale (GDS-15)", "priority": "immediate", "yield": 0.9, "indication": "Score >5 suggests depression" },
+        { "name": "Montreal Cognitive Assessment (MoCA)", "priority": "high", "yield": 0.7, "indication": "Baseline cognition; pseudodementia vs dementia" },
+        { "name": "Suicide risk assessment", "priority": "immediate", "yield": 1.0, "indication": "Higher lethality in elderly" }
+      ],
+      "laboratory": [
+        { "name": "TSH, B12, Folate, Vitamin D, FBC, U&E, LFTs, ECG", "priority": "high", "yield": 0.4, "indication": "Medical causes and pre-treatment baseline; QTc before citalopram" }
+      ],
+      "imaging": [
+        { "name": "Brain MRI", "priority": "medium", "yield": 0.3, "indication": "First episode after 60 or atypical features" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "APA Guidelines for Geriatric Depression",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "GDS-15 5-9, functional",
+          "treatment": "CBT, behavioral activation, exercise. Address medical comorbidity."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "GDS-15 10-12, functional decline",
+          "treatment": "SSRI: citalopram 10-20 mg (max 20, monitor QTc) or sertraline 25-100 mg. Start half dose. Combine with psychotherapy."
+        },
+        {
+          "severity": "severe",
+          "criteria": "GDS-15 13-15, weight loss, marked impairment",
+          "treatment": "SSRI/SNRI therapeutic dose. Augment with bupropion or mirtazapine. ECT at 4-6 weeks if inadequate."
+        },
+        {
+          "severity": "psychotic_or_refractory",
+          "criteria": "Psychotic depression, catatonia, high suicide risk",
+          "treatment": "ECT (bitemporal, 6-12 sessions) first-line. Suicide precautions."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "vascular_lesion_hypothesis",
+      "monoamine_deficiency_with_age_related_changes",
+      "hpa_axis_dysregulation",
+      "hippocampal_and_prefrontal_atrophy",
+      "neuroinflammation",
+      "white_matter_hyperintensity_burden"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "suicide_completion",
+        "probability": 0.03,
+        "severityBoost": 0.8,
+        "clues": ["older_white_male", "social_isolation", "medical_illness", "prior_attempts", "hopelessness", "psychotic_features"]
+      },
+      {
+        "diseaseId": "functional_decline_and_institutionalization",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["severe_depression", "falls", "weight_loss", "refusing_care"]
+      },
+      {
+        "diseaseId": "cognitive_decline_dementia_acceleration",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["pseudodementia_pattern", "poor_treatment_response", "vascular_risk_factors"]
+      },
+      {
+        "diseaseId": "medication_side_effects",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["falls_hyponatremia", "qtc_prolongation", "gi_bleeding_ssri", "drug_interactions"]
+      },
+      {
+        "diseaseId": "malnutrition_and_dehydration",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["refusing_food", "weight_loss_greater_5_percent", "low_albumin"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if suicidal or psychotic; moderate otherwise",
+    "diagnosticClues": ["geriatric_age", "depressed_mood_anhedonia", "cognitive_complaints", "somatic_presentation", "gds15_elevated", "pseudodementia_reversible"],
+    "exclusionClues": ["normal_bereavement_waves_of_grief", "moca_improves_with_prompting", "no_subjective_distress", "symptoms_secondary_to_medical_condition_alone"]
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "angioedema_laryngeal",
+    "name": "Laryngeal Angioedema",
+    "system": "ent",
+    "alsoPresentIn": ["emergency-medicine", "immunology"],
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["airway_emergency", "angioedema"],
+    "mustNotMiss": true,
+    "emergencyPriority": "immediate",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stridor", "weight": 5, "description": "Upper airway obstruction imminent" },
+        { "sign": "hoarse_voice_dysphonia", "weight": 4, "description": "Laryngeal edema progressing" },
+        { "sign": "dysphagia_drooling", "weight": 4, "description": "Pharyngeal/laryngeal involvement" },
+        { "sign": "hypoxia", "weight": 5, "description": "Critical airway compromise" },
+        { "sign": "tongue_swelling", "weight": 4, "description": "May progress to airway obstruction" }
+      ],
+      "severeCriteria": { "anyDangerSign": true, "additionalCriteria": [ { "sign": "rapid_onset_<2_hours", "weight": 4 } ] },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "airway-emergency"
+    },
+    "historyFeatures": [
+      { "symptomId": "lip_or_face_swelling", "weight": 5, "condition": "rapid onset over minutes to hours" },
+      { "symptomId": "dysphagia", "weight": 4 },
+      { "symptomId": "hoarse_voice", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 5 },
+      { "symptomId": "stridor", "weight": 5 },
+      { "symptomId": "urticaria", "weight": 2, "note": "NOT present in hereditary angioedema" },
+      { "symptomId": "ACE_inhibitor_use", "weight": 4 },
+      { "symptomId": "previous_episodes", "weight": 3 },
+      { "symptomId": "family_history_angioedema", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "stridor", "baseWeight": 5, "severityIndicator": true, "doubleWeight": true },
+      { "signId": "lip_swelling", "baseWeight": 4 },
+      { "signId": "tongue_swelling", "baseWeight": 4, "severityIndicator": true },
+      { "signId": "pharyngeal_edema_on_laryngoscopy", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "urticaria", "baseWeight": 2 },
+      { "signId": "hypotension", "baseWeight": 4, "severityIndicator": true },
+      { "signId": "use_of_accessory_muscles", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "ACE_inhibitor_therapy", "multiplier": 3.0, "note": "most common drug-induced cause" },
+      { "id": "family_history_hereditary_angioedema", "multiplier": 4.0 },
+      { "id": "known_C1_esterase_inhibitor_deficiency", "multiplier": 5.0 },
+      { "id": "previous_episode_angioedema", "multiplier": 2.5 }
+    ],
+    "diagnosticClues": [
+      "rapid onset of lip/tongue/laryngeal swelling",
+      "stridor or hoarseness with airway compromise",
+      "absence of urticaria suggests hereditary angioedema"
+    ],
+    "exclusionClues": [
+      "fever and leukocytosis suggest Ludwig angina or epiglottitis",
+      "urticaria and anaphylaxis features suggest IgE-mediated allergy",
+      "normal C4 and C1 inhibitor rule out hereditary angioedema"
+    ],
+    "subtypes": [
+      {
+        "id": "histaminergic_angioedema", "name": "Histaminergic / Allergic Angioedema",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [ { "feature": "urticaria_present", "weight": 5 }, { "feature": "response_to_antihistamines", "weight": 4 } ],
+        "management": { "management": "Epinephrine IM, antihistamines, corticosteroids" }
+      },
+      {
+        "id": "hereditary_angioedema", "name": "Hereditary Angioedema (C1-INH Deficiency)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [ { "feature": "no_urticaria", "weight": 5 }, { "feature": "recurrent_abdominal_pain", "weight": 4 }, { "feature": "laryngeal_edema", "weight": 5 } ],
+        "management": { "management": "Icatibant or C1-INH concentrate, FFP if unavailable" }
+      },
+      {
+        "id": "ace_inhibitor_angioedema", "name": "ACE Inhibitor-Induced Angioedema",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [ { "feature": "ACE_inhibitor_exposure", "weight": 5 }, { "feature": "lip_tongue_swelling", "weight": 5 } ],
+        "management": { "management": "Discontinue ACE-I, airway management, icatibant or FFP if severe" }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "anaphylaxis", "discriminators": ["urticaria", "wheezing", "hypotension", "response to epinephrine"] },
+      { "diseaseId": "epiglottitis", "discriminators": ["fever", "severe sore throat", "thumbprint sign on X-ray"] },
+      { "diseaseId": "ludwig_angina", "discriminators": ["fever", "trismus", "elevated floor of mouth"] }
+    ],
+    "investigations": {
+      "bedside": [ { "name": "Flexible Nasolaryngoscopy", "priority": "critical", "yield": 5, "indication": "direct laryngeal edema visualization" }, { "name": "Pulse Oximetry", "priority": "continuous", "yield": 5, "indication": "monitor oxygenation" } ],
+      "laboratory": [
+        { "name": "C4 Complement Level", "priority": "urgent", "yield": 4, "indication": "screening for HAE" },
+        { "name": "C1-INH Level and Function", "priority": "essential", "yield": 5, "indication": "confirm hereditary angioedema" },
+        { "name": "Serum Tryptase", "priority": "if indicated", "yield": 3, "indication": "elevated in anaphylaxis" }
+      ],
+      "imaging": [ { "name": "Lateral Neck X-ray", "priority": "bedside", "yield": 3, "indication": "assess supraglottic airway" } ]
+    },
+    "management": {
+      "protocolReference": "AAAAI/EAOI Guidelines: Angioedema Management",
+      "pathways": [
+        {
+          "severity": "immediate-life-threatening",
+          "criteria": "stridor, severe dyspnea, or impending airway loss",
+          "treatment": [
+            "Airway team immediately — awake fiberoptic intubation or surgical airway",
+            "Epinephrine 0.5 mg IM (0.3 mg if histaminergic) — may repeat Q5 min",
+            "Icatibant 30 mg SC if HAE or ACE-I; C1-INH 20 IU/kg IV if HAE",
+            "FFP 2-4 units IV if no specific therapy available"
+          ]
+        },
+        {
+          "severity": "moderate",
+          "criteria": "swelling without stridor, able to speak, no hypoxia",
+          "treatment": [
+            "Supplemental O2, nebulized epinephrine (5 mL of 1:1000)",
+            "Diphenhydramine 25-50 mg IV/IM, methylprednisolone 125 mg IV",
+            "Icatibant or C1-INH if HAE/ACE-I subtype",
+            "Admit for airway monitoring for minimum 24 hours"
+          ]
+        },
+        {
+          "severity": "mild",
+          "criteria": "mild lip/facial swelling, no airway symptoms",
+          "treatment": [ "Discontinue ACE-I if applicable, antihistamines and corticosteroids", "Allergy/immunology referral for recurrent episodes" ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Bradykinin-mediated (HAE, ACE-I): bradykinin accumulation increases vascular permeability",
+      "Histamine-mediated (allergic): mast cell degranulation of vasoactive mediators",
+      "C1-INH deficiency leads to uncontrolled activation of contact system and bradykinin production",
+      "Edema involves deep dermis and submucosa of lips, tongue, larynx, and GI tract"
+    ],
+    "complications": [
+      { "diseaseId": "airway_obstruction_death", "probability": 0.05, "severityBoost": 1.0, "lagDays": [0, 1] },
+      { "diseaseId": "hypoxic_brain_injury", "probability": 0.03, "severityBoost": 0.9 },
+      { "diseaseId": "aspiration_pneumonitis", "probability": 0.1, "severityBoost": 0.4 },
+      { "diseaseId": "recurrent_episodes", "probability": 0.7, "severityBoost": 0.2 }
+    ]
+  }
+}

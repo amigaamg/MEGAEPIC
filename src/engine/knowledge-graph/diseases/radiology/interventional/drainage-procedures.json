@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "drainage_procedures",
+    "name": "Image-Guided Drainage Procedures",
+    "system": "RAD",
+    "agePeak_months": [240, 840],
+    "note": "Percutaneous drainage of abscesses and fluid collections under CT or ultrasound guidance. Seldinger technique most common. Key indications: intra-abdominal abscess, pleural empyema, renal abscess, psoas abscess.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["interventional_radiology", "abscess_drainage", "fluid_collection"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock_during_procedure", "weight": 10 },
+        { "sign": "active_hemorrhage_from_drain_placement", "weight": 10 },
+        { "sign": "bowel_perforation", "weight": 10 },
+        { "sign": "tension_pneumothorax_during_chest_drain", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "loculated_collection_poor_drainage", "weight": 7 },
+          { "sign": "unsafe_access_route_transgressing_bowel", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If septic shock during drain -> COMPLICATION; else -> NON-COMPLICATED"
+    },
+    "historyFeatures": [
+      { "symptomId": "persistent_fever_despite_antibiotics", "weight": 5, "modifiers": [
+          { "condition": "imaging_documented_collection", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "post_operative_collection", "weight": 4 },
+      { "symptomId": "abdominal_or_flank_pain", "weight": 3 },
+      { "symptomId": "sepsis_suspected_source", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "rim_enhancing_fluid_collection_on_ct", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "septations_or_loculations", "baseWeight": 4 },
+      { "signId": "air_fluid_level_within", "baseWeight": 3 },
+      { "signId": "safe_window_on_imaging", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "immunosuppression", "multiplier": 1.8 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "recent_abdominal_surgery", "multiplier": 2.0 },
+      { "id": "perforated_viscus_history", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "abdominal_abscess_drainage",
+        "name": "Intra-Abdominal Abscess Drainage",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "subphrenic_subhepatic_or_pelvic_location", "weight": 4 },
+          { "feature": "unilocular_preferred_over_loculated", "weight": 4 },
+          { "feature": "safe_extraperitoneal_or_transperitoneal_route", "weight": 5 },
+          { "feature": "size_gt_3cm_amenable_to_drainage", "weight": 3 }
+        ],
+        "management": "CT or US guidance. Seldinger technique. 10-14Fr pigtail drain. Culture and sensitivity. Flush with saline daily. CT follow-up for resolution. Remove when output <10ml/day for 2 days."
+      },
+      {
+        "id": "pleural_drainage",
+        "name": "Pleural Effusion/Empyema Drainage",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "loculated_pleural_effusion", "weight": 5 },
+          { "feature": "increased_pleural_enhancement", "weight": 4 },
+          { "feature": "gas_within_collection", "weight": 4 },
+          { "feature": "septations_on_ultrasound", "weight": 4 }
+        ],
+        "management": "US-guided thoracentesis for diagnosis. Chest tube (12-14Fr) for drainage. Intrapleural tPA/DNase for loculated empyema. Thoracoscopic decortication if fails."
+      },
+      {
+        "id": "renal_perinephric_drainage",
+        "name": "Renal/Perinephric Abscess Drainage",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "renal_abscess_gt_3cm", "weight": 5 },
+          { "feature": "perinephric_extension", "weight": 4 },
+          { "feature": "failed_medical_therapy_72h", "weight": 4 },
+          { "feature": "hydronephrosis_with_pus", "weight": 3 }
+        ],
+        "management": "CT or US guidance. Nephrostomy tube if obstructed + infected. Percutaneous drain if perinephric. IV antibiotics tailored to culture. Follow-up nephrostogram."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "sterile_seroma_lymphocele",
+        "discriminators": ["no_fever", "no_rim_enhancement", "clear_fluid_aspiration"]
+      },
+      {
+        "diseaseId": "hemorrhagic_collection",
+        "discriminators": ["trauma_history", "high_attenuation_ct", "no_infection_signs"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pre-procedure antibiotic", "priority": "immediate", "yield": 0.7, "indication": "coverage of skin and enteric flora" }
+      ],
+      "laboratory": [
+        { "name": "CBC with differential", "priority": "high", "yield": 0.6, "indication": "baseline, leukocytosis" },
+        { "name": "Coagulation panel", "priority": "high", "yield": 0.8, "indication": "pre-procedure safety" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.5, "indication": "identify pathogen" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen/Pelvis with contrast", "priority": "immediate", "yield": 0.95, "indication": "characterize collection, guide drainage planning" },
+        { "name": "Ultrasound with Doppler", "priority": "high", "yield": 0.8, "indication": "real-time guidance, assess loculations" },
+        { "name": "CT of chest for pleural collections", "priority": "high", "yield": 0.9, "indication": "empyema characterization" }
+      ]
+    },
+    "management": {
+      "protocolReference": "SIR/ACR Guidelines for Percutaneous Drainage",
+      "pathways": [
+        {
+          "severity": "simple_drainage",
+          "criteria": "unilocular collection, safe window, no sepsis",
+          "treatment": "Consent. Antibiotics 30 min prior. US/CT guidance. 10-12Fr pigtail. Aspirate for culture. Irrigate. Secure drain. Admit for observation."
+        },
+        {
+          "severity": "complex_drainage",
+          "criteria": "loculated, multiple, near viscera, septic patient",
+          "treatment": "ICU level care. Larger drain (14-16Fr). Consider multiple drains. tPA/DNase for loculations. Interventional radiology + surgical consult. Daily catheter care."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "abscess_formation",
+      "bacterial_inoculation",
+      "inflammatory_response",
+      "purulent_collection",
+      "sepsis_systemic_spread"
+    ],
+    "complications": [
+      {
+        "diseaseId": "drain_related_sepsis",
+        "probability": 0.05,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["fever_spike", "hypotension", "rigors"]
+      },
+      {
+        "diseaseId": "inadvertent_bowel_injury",
+        "probability": 0.02,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["peritonitis", "feculent_drain_output", "free_air"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["fluid_collection_on_imaging", "clinical_infection", "safe_access_route"],
+    "exclusionClues": ["phlegmon_no_drainable_fluid", "coagulopathy_uncorrected"]
+  }
+}

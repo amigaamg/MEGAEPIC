@@ -1,0 +1,75 @@
+{
+  "disease": {
+    "id": "stroke_imaging",
+    "name": "Stroke Imaging Findings",
+    "system": "radiology",
+    "note": "Pattern of stroke findings across different imaging modalities. Key for identifying ischemia, hemorrhage, and treatment windows.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["cerebrovascular_imaging", "neurological_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "large_core_infarct_aspects_less_6", "weight": 9 },
+        { "sign": "midline_shift", "weight": 10 },
+        { "sign": "hemorrhagic_transformation", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "ASPECTS score and vessel occlusion pattern guide treatment"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_focal_neurological_deficit", "weight": 5 },
+      { "symptomId": "known_time_of_onset", "weight": 5 },
+      { "symptomId": "received_thrombolysis_or_thrombectomy", "weight": 3 },
+      { "symptomId": "worsening_symptoms", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hemiparesis", "baseWeight": 4 },
+      { "signId": "aphasia", "baseWeight": 3 },
+      { "signId": "neglect", "baseWeight": 3 }
+    ],
+
+    "investigations": {
+      "imaging": [
+        { "name": "Non-contrast CT Head", "priority": "immediate", "yield": 0.92, "indication": "hyperacute: hyperdense artery sign, early ischemic changes, ASPECTS scoring" },
+        { "name": "CT Angiography (head and neck)", "priority": "immediate", "yield": 0.95, "indication": "large vessel occlusion, carotid/vertebral stenosis" },
+        { "name": "CT Perfusion", "priority": "high", "yield": 0.88, "indication": "ischemic core vs penumbra for extended window thrombectomy" },
+        { "name": "MRI Brain (DWI, ADC, GRE, FLAIR)", "priority": "high", "yield": 0.97, "indication": "diffusion restriction confirms acute infarct, GRE for hemorrhage" }
+      ],
+      "advanced": [
+        { "name": "MR Perfusion", "indication": "penumbral imaging when CTP unavailable", "priority": "medium" },
+        { "name": "Carotid Duplex Ultrasound", "indication": "carotid stenosis follow-up", "priority": "medium" }
+      ]
+    },
+
+    "management": {
+      "pathways": [
+        {
+          "severity": "imaging protocol for acute stroke",
+          "criteria": "onset <4.5 hours, no contraindications",
+          "treatment": "Non-contrast CT to exclude hemorrhage. CTA for vessel occlusion. CT perfusion for extended window candidates. MRI if uncertain."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cerebral_ischemia",
+      "cytotoxic_edema",
+      "diffusion_restriction",
+      "vasogenic_edema",
+      "hemorrhagic_conversion"
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["acute_focal_deficit", "ct_excludes_hemorrhage", "diffusion_restriction_on_mri"],
+    "exclusionClues": ["normal_imaging", "ct_perfusion_negative"]
+  }
+}

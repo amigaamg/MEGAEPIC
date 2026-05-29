@@ -1,0 +1,195 @@
+{
+  "disease": {
+    "id": "dyslipidemia",
+    "name": "Dyslipidemia and Hyperlipidemia",
+    "system": "IMED",
+    "agePeak_months": [360, 1080],
+    "note": "Dyslipidemia is a major modifiable risk factor for ASCVD. The ACC-AHA 2018 guideline uses the Pooled Cohort Equations (PCE) for 10-year ASCVD risk estimation to guide statin therapy decisions. LDL-C is the primary treatment target. High-intensity statins (atorvastatin 40-80mg, rosuvastatin 20-40mg) reduce LDL-C by >=50%. Ezetimibe and PCSK9 inhibitors (evolocumab, alirocumab) are add-on therapies. Familial hypercholesterolemia requires early identification and aggressive treatment.",
+    "prevalenceWeight": 3.0,
+    "syndromeTags": ["dyslipidemia", "hyperlipidemia", "statin_therapy", "pcsk9_inhibitor", "familial_hypercholesterolemia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_coronary_syndrome_myocardial_infarction", "weight": 10 },
+        { "sign": "acute_ischemic_stroke", "weight": 10 },
+        { "sign": "severe_hypertriglyceridemia_above_500_with_pancreatitis", "weight": 9 },
+        { "sign": "statin_induced_rhabdomyolysis_ck_above_5x_uln", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ldl_c_above_190_familial_hypercholesterolemia", "weight": 8 },
+          { "sign": "triglycerides_above_500_risk_of_pancreatitis", "weight": 7 },
+          { "sign": "ascvd_10_year_risk_above_20_percent", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If TG >500 or LDL >190 -> SEVERE; if ASCVD risk >7.5% -> MODERATE; if low risk -> MILD"
+    },
+    "historyFeatures": [
+      { "symptomId": "premature_ascvd_prior_mi_stroke_or_pad", "weight": 5, "modifiers": [
+          { "condition": "age_below_55_male_or_65_female", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "family_history_premature_ascvd_or_hyperlipidemia", "weight": 5 },
+      { "symptomId": "xanthomas_tendinous_or_tuberoeruptive", "weight": 4 },
+      { "symptomId": "arcus_cornealis_below_age_45", "weight": 3 },
+      { "symptomId": "history_of_pancreatitis_with_hypertriglyceridemia", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "fasting_lipid_panel_total_c_ldl_hdl_triglycerides", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ascvd_10_year_risk_by_pooled_cohort_equations", "baseWeight": 5 },
+      { "signId": "apolipoprotein_b_level", "baseWeight": 3 },
+      { "signId": "lipoprotein_a_measurement", "baseWeight": 3 },
+      { "signId": "non_hdl_cholesterol_calculation", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "obesity_bmi_above_30", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus_type_2", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 2.0 },
+      { "id": "smoking_current", "multiplier": 2.5 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.5 },
+      { "id": "family_history_premature_ascvd_first_degree", "multiplier": 3.0 },
+      { "id": "metabolic_syndrome", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "primary_prevention_statin_eligible",
+        "name": "Primary Prevention: Statin Eligibility by ASCVD Risk",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "ldl_c_above_190_high_intensity_statin_no_risk_calc", "weight": 5 },
+          { "feature": "ldl_c_70_189_with_dm_or_ascvd_risk_above_7_point_5", "weight": 5 },
+          { "feature": "ldl_c_70_189_with_risk_5_to_7_point_5_risk_discussion", "weight": 4 },
+          { "feature": "pooled_cohort_equations_used_for_10_year_risk", "weight": 4 }
+        ],
+        "management": "Calculate 10-year ASCVD risk using PCE. LDL >=190 or DM age 40-75: high-intensity statin (atorvastatin 40-80mg or rosuvastatin 20-40mg). LDL 70-189 + risk >=7.5%: moderate-to-high intensity statin. Risk 5-7.5%: discuss, consider moderate intensity. Risk <5%: lifestyle modification. Reassess lipids 4-12 weeks after initiation."
+      },
+      {
+        "id": "familial_hypercholesterolemia",
+        "name": "Familial Hypercholesterolemia (HeFH and HoFH)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "ldl_c_above_190_adults_or_above_160_children_fh_mutation", "weight": 5 },
+          { "feature": "tendon_xanthomas_achilles_or_extensor_tendons", "weight": 5 },
+          { "feature": "premature_ascvd_age_below_55_male_65_female", "weight": 5 },
+          { "feature": "dutch_lipid_clinic_or_simon_broome_criteria", "weight": 4 }
+        ],
+        "management": "High-intensity statin + ezetimibe. If LDL not at goal (>50% reduction or <100), add PCSK9 inhibitor (evolocumab 420mg monthly or alirocumab 75-150mg q2wk). Cascade screening of first-degree relatives. HoFH: triple therapy (statin + ezetimibe + PCSK9i), consider lomitapide or evinacumab. LDL apheresis if refractory. Echocardiogram to assess aortic valve."
+      },
+      {
+        "id": "severe_hypertriglyceridemia",
+        "name": "Severe Hypertriglyceridemia (TG >=500 mg/dL)",
+        "prevalenceModifier": 0.08,
+        "keyFeatures": [
+          { "feature": "fasting_triglycerides_above_500", "weight": 5 },
+          { "feature": "risk_of_pancreatitis_especially_if_above_1000", "weight": 5 },
+          { "feature": "eruptive_xanthomas_and_lipemia_retinalis", "weight": 4 },
+          { "feature": "secondary_causes_diabetes_alcohol_metabolic_syndrome", "weight": 4 }
+        ],
+        "management": "Address secondary causes. Fibrate first line: fenofibrate 145mg daily. If mixed dyslipidemia, use fenofibrate with moderate statin (avoid gemfibrozil + statin). Omega-3 fatty acids EPA 4g/day (icosapent ethyl) reduce CV events. Lifestyle: very low fat diet (<15% calories), no alcohol, strict DM control. Goal TG <500 to prevent pancreatitis."
+      },
+      {
+        "id": "statin_intolerance_management",
+        "name": "Statin Intolerance and Alternative Therapy",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "muscle_symptoms_myalgia_cramping_weakness", "weight": 5 },
+          { "feature": "ck_elevation_above_4x_uln", "weight": 4 },
+          { "feature": "hepatic_transaminase_elevation_above_3x_uln", "weight": 3 },
+          { "feature": "symptom_onset_temporally_related_to_statin", "weight": 4 }
+        ],
+        "management": "Confirm true intolerance: dechallenge (stop 2-4 weeks) and rechallenge (at least 2 attempts). Try alternate statin (low dose rosuvastatin 2.5-5mg or pitavastatin 2mg). Reduce dose or alternate day dosing. Add ezetimibe 10mg (LDL reduction ~15-20%). PCSK9 inhibitors for high risk if statin cannot achieve goal. Bempedoic acid 180mg as additional option."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "secondary_hyperlipidemia_hypothyroidism",
+        "discriminators": ["tsh_elevated", "weight_gain_fatigue", "resolves_with_thyroid_replacement"]
+      },
+      {
+        "diseaseId": "nephrotic_syndrome",
+        "discriminators": ["proteinuria", "hypoalbuminemia", "edema", "normal_tsh"]
+      },
+      {
+        "diseaseId": "cholestatic_liver_disease",
+        "discriminators": ["elevated_alp_ggt", "abnormal_lfts_cholestatic", "lipoprotein_x_present"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Fasting lipid panel (12h fast, water only)", "priority": "high", "yield": 0.9, "indication": "baseline and monitoring" }
+      ],
+      "laboratory": [
+        { "name": "Total cholesterol, LDL-C calculated or direct, HDL-C, triglycerides", "priority": "immediate", "yield": 0.95, "indication": "all patients for diagnosis" },
+        { "name": "Non-HDL cholesterol calculation", "priority": "high", "yield": 0.8, "indication": "secondary target, accurate when TG >200" },
+        { "name": "Apolipoprotein B", "priority": "medium", "yield": 0.5, "indication": "residual risk assessment, FH evaluation" },
+        { "name": "Lipoprotein(a)", "priority": "medium", "yield": 0.4, "indication": "once in lifetime for ASCVD risk refinement" },
+        { "name": "ALT, AST baseline before statin", "priority": "high", "yield": 0.3, "indication": "baseline before statin therapy" },
+        { "name": "CK baseline before statin if muscle symptoms concern", "priority": "medium", "yield": 0.2, "indication": "baseline if high risk for myopathy" },
+        { "name": "Fasting glucose or HbA1c", "priority": "medium", "yield": 0.3, "indication": "statin increases diabetes risk, baseline needed" }
+      ],
+      "imaging": [
+        { "name": "Coronary artery calcium (CAC) score", "priority": "medium", "yield": 0.4, "indication": "risk reclassification in intermediate risk" },
+        { "name": "Carotid intima-media thickness (CIMT)", "priority": "low", "yield": 0.2, "indication": "limited role, not routinely recommended" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACC-AHA 2018 Guideline on Management of Blood Cholesterol, ESC/EAS 2019 Dyslipidemia Guidelines, NLA Recommendations",
+      "pathways": [
+        {
+          "severity": "primary_prevention_low_risk",
+          "criteria": "LDL <190, age 40-75, no DM, ASCVD risk <5%",
+          "treatment": "Lifestyle modification: TLC diet, saturated fat <7% calories, dietary cholesterol <200mg/day, plant sterols 2g/day, viscous fiber 10-25g/day. Exercise 150min/week. Recheck lipids in 4-12 weeks. No pharmacotherapy unless risk discussion supports it."
+        },
+        {
+          "severity": "primary_prevention_moderate_high_risk",
+          "criteria": "LDL >=190, or DM 40-75, or ASCVD risk >=7.5% with LDL 70-189",
+          "treatment": "High-intensity statin: atorvastatin 40-80mg or rosuvastatin 20-40mg. Target >=50% LDL reduction. If not at target, add ezetimibe 10mg. If still not at target, consider PCSK9i. Recheck lipids 4-12 weeks after initiation, then q3-12 months once stable."
+        },
+        {
+          "severity": "secondary_prevention",
+          "criteria": "established ASCVD (prior MI, stroke, PAD, revascularization)",
+          "treatment": "High-intensity statin on day 1 of admission. Target LDL <70 or <55 for very high risk (polyvascular disease, recurrent events). Add ezetimibe 10mg if not at goal. Add PCSK9i if LDL remains >=70 on statin + ezetimibe. Check Lp(a) once."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "increased_hepatic_ldl_receptor_downregulation",
+      "overproduction_or_impaired_clearance_of_vldl",
+      "genetic_mutations_in_ldlr_apob_or_pcsk9_in_fh",
+      "reduced_hdl_mediated_reverse_cholesterol_transport",
+      "oxidative_modification_of_ldl_promotes_atherogenesis",
+      "hypertriglyceridemia_drives_small_dense_ldl_formation"
+    ],
+    "complications": [
+      {
+        "diseaseId": "acute_coronary_syndrome_myocardial_infarction",
+        "probability": 0.1,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.8,
+        "clues": ["ldl_above_190_or_untreated", "low_hdl", "smoking_diabetes", "cac_above_100"]
+      },
+      {
+        "diseaseId": "acute_pancreatitis_hypertriglyceridemia_induced",
+        "probability": 0.03,
+        "lagDays": [0, 365],
+        "severityBoost": 0.7,
+        "clues": ["triglycerides_above_1000", "eruptive_xanthomas", "epigastric_pain"]
+      },
+      {
+        "diseaseId": "peripheral_artery_disease",
+        "probability": 0.05,
+        "lagDays": [730, 3650],
+        "severityBoost": 0.5,
+        "clues": ["claudication", "ankle_brachial_index_below_0_point_9", "non_healing_ulcers"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["elevated_non_hdl_or_ldl", "family_history_premature_ascvd", "xanthomas_or_arcus_cornealis", "prior_personal_ascvd"],
+    "exclusionClues": ["normal_lipid_panel", "no_ascvd_history", "no_family_history", "secondary_cause_identified_and_reversible"]
+  }
+}

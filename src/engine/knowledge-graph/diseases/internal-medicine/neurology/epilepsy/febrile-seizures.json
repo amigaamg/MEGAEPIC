@@ -1,0 +1,110 @@
+{
+  "disease": {
+    "id": "febrile_seizures",
+    "name": "Febrile Seizures",
+    "system": "NEURO",
+    "agePeak_months": [6, 60],
+    "note": "Seizures in children 6-60 months associated with fever but without CNS infection. Simple (generalized, <15 min) vs complex (focal, prolonged, recurrent).",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["seizure_disorder", "febrile_illness", "pediatric_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "prolonged_greater_15_min", "weight": 9 },
+        { "sign": "focal_features", "weight": 8 },
+        { "sign": "recurrent_within_24h", "weight": 8 },
+        { "sign": "meningeal_signs", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If prolonged/focal/recurrent/meningeal signs -> COMPLEX; else -> SIMPLE"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_temp_greater_38", "weight": 5 },
+      { "symptomId": "generalized_tonic_clonic_seizure", "weight": 5 },
+      { "symptomId": "seizure_at_onset_of_fever", "weight": 4 },
+      { "symptomId": "family_history_febrile_seizures", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "seizure_activity", "baseWeight": 5 },
+      { "signId": "post_ictal_sleepiness", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "no_meningeal_signs", "baseWeight": 4 },
+      { "signId": "no_focal_neurological_deficit_post_ictal", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_febrile_seizures", "multiplier": 3.0 },
+      { "id": "low_serum_iron", "multiplier": 1.5 },
+      { "id": "high_fever_rapid_rise", "multiplier": 2.0 },
+      { "id": "viral_infection", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "simple_febrile_seizure",
+        "name": "Simple Febrile Seizure",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "generalized_tonic_clonic", "weight": 5 },
+          { "feature": "duration_less_15_min", "weight": 5 },
+          { "feature": "single_in_24h", "weight": 4 }
+        ],
+        "management": "Reassure parents. Treat fever (paracetamol 15 mg/kg). Identify and treat source of fever. No AED needed. No imaging or EEG routinely."
+      },
+      {
+        "id": "complex_febrile_seizure",
+        "name": "Complex Febrile Seizure",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "focal_onset", "weight": 5 },
+          { "feature": "duration_greater_15_min", "weight": 5 },
+          { "feature": "recurrent_within_24h", "weight": 4 }
+        ],
+        "management": "Consider LP to rule out meningitis. Urgent EEG. MRI brain if focal features. No long-term AED. Counsel on slightly higher risk of later epilepsy."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "meningitis_encephalitis", "discriminators": ["meningeal_signs", "irritable", "bulging_fontanelle", "lp_positive"] },
+      { "diseaseId": "afebrile_seizure_first", "discriminators": ["no_fever_at_time_of_seizure", "epilepsy_later"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature measurement", "priority": "immediate", "yield": 0.9, "indication": "confirm fever" }
+      ],
+      "laboratory": [
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.3, "indication": "rule out hypoglycemic seizure" },
+        { "name": "Lumbar puncture", "priority": "selective", "yield": 0.5, "indication": "if complex features, age <12 months, meningeal signs, or ill-appearing" }
+      ],
+      "imaging": [
+        { "name": "CT/MRI Brain", "priority": "selective", "yield": 0.1, "indication": "only if complex features, microcephaly, abnormal neuro exam" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Febrile Seizures",
+      "pathways": [
+        {
+          "severity": "simple (no risk factors)",
+          "criteria": "generalized, <15 min, single, age 6-60 months, well after",
+          "treatment": "Treat fever. Identify source. Parental reassurance. No investigations needed. No admission needed if well and source identified."
+        },
+        {
+          "severity": "complex (risk factors)",
+          "criteria": "focal, prolonged, recurrent, or ill-appearing",
+          "treatment": "Admit for observation. Consider LP. EEG next day. MRI brain if focal. Monitor for recurrence. Explain red flags."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "immature_brain",
+      "fever_induced_neuronal_hyperexcitability",
+      "cytokine_mediated_seizure_threshold",
+      "genetic_predisposition",
+      "rapid_temperature_elevation"
+    ],
+    "complications": [
+      { "diseaseId": "epilepsy_future", "probability": 0.02, "severityBoost": 0.2, "clues": ["complex_febrile_seizure", "family_history"] },
+      { "diseaseId": "recurrence", "probability": 0.3, "severityBoost": 0.05, "clues": ["age_less_18_months", "low_fever"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["seizure_with_fever", "age_6_to_60_months", "no_cns_infection"],
+    "exclusionClues": ["afebrile_seizure", "meningitis_confirmed", "age_outside_range"]
+  }
+}

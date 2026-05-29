@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "focal_epilepsy",
+    "name": "Focal (Partial) Epilepsy",
+    "system": "NEURO",
+    "agePeak_months": [0, 720],
+    "note": "Seizures originating from a localized brain region. Types: aware vs impaired awareness, motor vs non-motor onset.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["seizure_disorder", "focal_seizures"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "status_epilepticus_focal", "weight": 10 },
+        { "sign": "secondary_generalization", "weight": 8 },
+        { "sign": "post_ictal_coma", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If status/generalization/coma -> EMERGENCY; else -> CHRONIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "focal_aware_seizure_aura", "weight": 5, "note": "Epigastric rising, déjà vu, olfactory, visual phenomena" },
+      { "symptomId": "focal_impaired_awareness", "weight": 4 },
+      { "symptomId": "focal_motor_seizure", "weight": 3 },
+      { "symptomId": "secondary_generalization", "weight": 3 },
+      { "symptomId": "post_ictal_weakness_todd_paresis", "weight": 2 },
+      { "symptomId": "focal_sensory_symptoms", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "focal_neurological_signs", "baseWeight": 2, "note": "May suggest underlying structural lesion" },
+      { "signId": "normal_exam_interictal", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "traumatic_brain_injury", "multiplier": 3.0 },
+      { "id": "stroke", "multiplier": 3.0 },
+      { "id": "cns_infection", "multiplier": 2.5 },
+      { "id": "brain_tumor", "multiplier": 3.0 },
+      { "id": "hippocampal_sclerosis", "multiplier": 4.0 },
+      { "id": "malformation_cortical_development", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "temporal_lobe_epilepsy",
+        "name": "Temporal Lobe Epilepsy",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "epigastric_rising_aura", "weight": 5 },
+          { "feature": "déjà_vu_jamais_vu", "weight": 4 },
+          { "feature": "oral_automatisms", "weight": 4 },
+          { "feature": "hippocampal_sclerosis", "weight": 3 }
+        ],
+        "management": "AED: lamotrigine, levetiracetam, carbamazepine. If refractory: epilepsy surgery evaluation (anterior temporal lobectomy)."
+      },
+      {
+        "id": "frontal_lobe_epilepsy",
+        "name": "Frontal Lobe Epilepsy",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "nocturnal_clustering", "weight": 5 },
+          { "feature": "brief_frequent_seizures", "weight": 5 },
+          { "feature": "motor_bilateral_asymmetric", "weight": 4 }
+        ],
+        "management": "AED: carbamazepine, oxcarbazepine, lamotrigine. Surgical resection if lesional. Responsive neurostimulation (RNS) if focus eloquent."
+      },
+      {
+        "id": "parietal_occipital_epilepsy",
+        "name": "Parietal/Occipital Lobe Epilepsy",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "visual_auras_flashing", "weight": 5 },
+          { "feature": "somatosensory_aura", "weight": 4 },
+          { "feature": "ictal_nystagmus_or_blinking", "weight": 3 }
+        ],
+        "management": "AED as above. Structural imaging important (cortical dysplasia, tumor, vascular malformation). Surgical resection if lesion."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "generalized_epilepsy", "discriminators": ["generalized_eeg", "no_aura", "family_history"] },
+      { "diseaseId": "psychogenic_none epileptic_seizures", "discriminators": ["asynchronous_movements", "eyes_closed", "gradual_onset", "suggestibility"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "EEG (routine + sleep-deprived)", "priority": "high", "yield": 0.7, "indication": "focal epileptiform discharges, background slowing" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain (3T, epilepsy protocol)", "priority": "high", "yield": 0.8, "indication": "hippocampal sclerosis, cortical dysplasia, tumor, vascular malformation" },
+        { "name": "CT Head", "priority": "immediate_emergency", "yield": 0.4, "indication": "mass, hemorrhage, calcification" }
+      ],
+      "advanced": [
+        { "name": "Video-EEG monitoring", "indication": "surgical candidate, diagnosis uncertainty", "priority": "medium" },
+        { "name": "PET/MEG", "indication": "refractory epilepsy, localize focus", "priority": "low" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE/ILAE Guidelines for Focal Epilepsy",
+      "pathways": [
+        {
+          "severity": "first-line treatment",
+          "criteria": "newly diagnosed focal epilepsy",
+          "treatment": "Lamotrigine first-line. Levetiracetam or carbamazepine alternatives. Start low, titrate slowly. Monitor for side effects. Counsel on SUDEP."
+        },
+        {
+          "severity": "refractory focal epilepsy",
+          "criteria": "failed 2+ appropriate AEDs",
+          "treatment": "Epilepsy specialist. Epilepsy surgery evaluation (resection if lesion and concordant). VNS. RNS. Ketogenic diet if not surgical candidate."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "localized_cortical_hyperexcitability",
+      "structural_lesion_scar",
+      "hippocampal_sclerosis",
+      "cortical_dysplasia",
+      "altered_ion_channel_function",
+      "synaptic_reorganization"
+    ],
+    "complications": [
+      { "diseaseId": "status_epilepticus", "probability": 0.03, "severityBoost": 0.5, "clues": ["prolonged_focal_seizure"] },
+      { "diseaseId": "depression", "probability": 0.3, "severityBoost": 0.1, "clues": ["low_mood"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["focal_aura", "focal_eeg_discharges", "structural_lesion_or_mesial_temporal_sclerosis"],
+    "exclusionClues": ["generalized_eeg", "psychogenic_pattern"]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "disease": {
+    "id": "aortic_stenosis",
+    "name": "Aortic Stenosis",
+    "system": "CARD",
+    "agePeak_months": [600, 1080],
+    "note": "Narrowing of the aortic valve. Symptoms: angina, syncope, dyspnea. Once symptomatic, prognosis poor without intervention.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["valvular_heart_disease", "left_heart_outflow_obstruction"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "syncope", "weight": 9 },
+        { "sign": "heart_failure", "weight": 9 },
+        { "sign": "angina_at_rest", "weight": 8 },
+        { "sign": "sudden_cardiac_death_risk", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If symptomatic (angina/syncope/dyspnea) -> SEVERE - intervention indicated; else -> ASYMPTOMATIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "exertional_dyspnea", "weight": 5 },
+      { "symptomId": "exertional_syncope", "weight": 4 },
+      { "symptomId": "exertional_angina", "weight": 4 },
+      { "symptomId": "heart_failure_symptoms", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "late_peaking_crescendo_decrescendo_systolic_murmur", "baseWeight": 5, "doubleWeight": true, "note": "Right upper sternal border, radiates to carotids" },
+      { "signId": "reduced_carotid_upstroke_pulsus_parvus", "baseWeight": 4 },
+      { "signId": "sustained_apex_beat", "baseWeight": 3 },
+      { "signId": "s4_gallop", "baseWeight": 3 },
+      { "signId": "soft_or_single_s2", "baseWeight": 3 },
+      { "signId": "thrill_over_aortic_area", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "advanced_age", "multiplier": 3.0 },
+      { "id": "male_sex", "multiplier": 1.5 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "dyslipidemia", "multiplier": 1.3 },
+      { "id": "smoking", "multiplier": 1.3 },
+      { "id": "diabetes", "multiplier": 1.3 },
+      { "id": "bicuspid_aortic_valve", "multiplier": 3.0 },
+      { "id": "rheumatic_heart_disease", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "mild_as",
+        "name": "Mild Aortic Stenosis (AVA >1.5 cm2, mean gradient <20 mmHg)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [{ "feature": "ava_greater_1_point_5", "weight": 5 }],
+        "management": "Surveillance echo every 3-5 years. No intervention. Manage hypertension. Avoid competitive sports."
+      },
+      {
+        "id": "moderate_as",
+        "name": "Moderate Aortic Stenosis (AVA 1.0-1.5 cm2, mean gradient 20-40 mmHg)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [{ "feature": "ava_1_to_1_point_5", "weight": 5 }],
+        "management": "Surveillance echo every 1-2 years. Symptom assessment. Avoid dehydration. Preload dependent."
+      },
+      {
+        "id": "severe_as",
+        "name": "Severe Aortic Stenosis (AVA <1.0 cm2, mean gradient >40 mmHg)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "ava_less_than_1", "weight": 5 },
+          { "feature": "mean_gradient_greater_40", "weight": 5 },
+          { "feature": "symptomatic", "weight": 5 }
+        ],
+        "management": "Aortic valve replacement (SAVR or TAVI). Symptomatic severe AS is surgical emergency. Balloon valvuloplasty as bridge if needed."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "hypertrophic_cardiomyopathy", "discriminators": ["murmur_increases_with_valsalva", "septal_hypertrophy", "dynamic_obstruction"] },
+      { "diseaseId": "supravalvular_aortic_stenosis", "discriminators": ["williams_syndrome", "differing_bp_arms", "sinus_of_valsalva_aneurysm"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "high", "yield": 0.6, "indication": "LVH strain pattern, LA enlargement" }
+      ],
+      "laboratory": [
+        { "name": "BNP/NT-proBNP", "priority": "medium", "yield": 0.6, "indication": "poor prognosis if elevated" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "AVA, gradients, LV function, LVH" },
+        { "name": "Exercise stress test", "priority": "cautious", "yield": 0.6, "indication": "symptom verification in asymptomatic severe AS (contraindicated if symptomatic)" },
+        { "name": "CT Aortic Valve Calcium Score", "priority": "medium", "yield": 0.9, "indication": "quantification of calcification" },
+        { "name": "Coronary angiography", "priority": "pre_surgical", "yield": 0.8, "indication": "rule out CAD before AVR" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC/EACTS Guidelines for Valvular Heart Disease",
+      "pathways": [
+        {
+          "severity": "asymptomatic severe AS",
+          "criteria": "AVA <1.0 cm2, mean gradient >40 mmHg, no symptoms",
+          "treatment": "Surveillance echo Q6-12 months. Exercise stress test if equivocal symptoms. SAVR if LVEF <50% or abnormal exercise test."
+        },
+        {
+          "severity": "symptomatic severe AS (surgical candidate)",
+          "criteria": "angina, syncope, dyspnea, low surgical risk",
+          "treatment": "Surgical aortic valve replacement (SAVR). Mechanical valve if <60y and no anticoagulation contraindication. Bioprosthetic if >65y."
+        },
+        {
+          "severity": "symptomatic severe AS (high surgical risk)",
+          "criteria": "EuroSCORE II >4% or STS >8%, frailty, porcelain aorta",
+          "treatment": "Transcatheter aortic valve implantation (TAVI). Balloon aortic valvuloplasty as bridge if needed. Palliative care if not candidate."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "valve_calcification_sclerosis",
+      "fixed_lv_outflow_obstruction",
+      "left_ventricular_hypertrophy",
+      "increased_myocardial_oxygen_demand",
+      "decreased_coronary_perfusion",
+      "diastolic_dysfunction",
+      "exertional_symptoms"
+    ],
+    "complications": [
+      { "diseaseId": "heart_failure", "probability": 0.15, "severityBoost": 0.4, "clues": ["dyspnea", "low_lvef", "pulmonary_congestion"] },
+      { "diseaseId": "syncope_injury", "probability": 0.1, "severityBoost": 0.3, "clues": ["exertional_syncope", "falls"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if symptomatic",
+    "diagnosticClues": ["ejection_systolic_murmur_rsb", "reduced_carotid_upstroke", "symptom_triad_angina_syncope_dyspnea"],
+    "exclusionClues": ["normal_ava", "symptoms_with_mild_as", "other_causes"]
+  }
+}

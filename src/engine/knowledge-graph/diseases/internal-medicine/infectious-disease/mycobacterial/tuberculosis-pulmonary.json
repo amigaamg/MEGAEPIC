@@ -1,0 +1,169 @@
+{
+  "disease": {
+    "id": "tuberculosis_pulmonary",
+    "name": "Pulmonary Tuberculosis",
+    "system": "infectious_disease",
+    "agePeak_months": [120, 600],
+    "note": "Mycobacterium tuberculosis infection of the lungs. Airborne transmission. Primary or post-primary (reactivation). Leading infectious killer globally.",
+    "prevalenceWeight": 0.65,
+    "syndromeTags": ["pulmonary_infection", "chronic_infection", "mycobacterial_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hemoptysis", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "tension_pneumothorax", "weight": 9 },
+        { "sign": "miliary_tb_septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Miliary/disseminated -> SEVERE; cavitary -> MODERATE; minimal -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "cough_persistent_over_2_weeks", "weight": 5 },
+      { "symptomId": "hemoptysis", "weight": 4 },
+      { "symptomId": "fever_night_sweats", "weight": 4 },
+      { "symptomId": "weight_loss_unintentional", "weight": 4 },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "chest_pain", "weight": 2 },
+      { "symptomId": "close_contact_with_tb_case", "weight": 4 },
+      { "symptomId": "hiv_positive_or_immunosuppressed", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "wasting_bmi_low", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "apical_crackles", "baseWeight": 3 },
+      { "signId": "lymphadenopathy_cervical", "baseWeight": 2 },
+      { "signId": "dullness_to_percussion", "baseWeight": 2 },
+      { "signId": "clubbing", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "hiv_coinfection", "multiplier": 3.0 },
+      { "id": "close_contact_smear_positive_case", "multiplier": 3.0 },
+      { "id": "born_in_high_tb_burden_country", "multiplier": 2.5 },
+      { "id": "malnutrition_low_bmi", "multiplier": 2.0 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "immunosuppression_anti_tnf", "multiplier": 3.0 },
+      { "id": "silico_tuberculosis_mining", "multiplier": 2.5 },
+      { "id": "incarceration_homelessness", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "primary_tb",
+        "name": "Primary Pulmonary TB",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "lower_lobe_infiltrates", "weight": 3 },
+          { "feature": "ghon_complex", "weight": 3 },
+          { "feature": "lymphadenopathy_mediastinal", "weight": 3 }
+        ],
+        "management": "Standard 4-drug regimen: Rifampin + Isoniazid + Pyrazinamide + Ethambutol for 2 months, then Rifampin + Isoniazid for 4 months."
+      },
+      {
+        "id": "postprimary_reactivation_tb",
+        "name": "Post-Primary (Reactivation) TB",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "apical_cavitary_lesions", "weight": 5 },
+          { "feature": "upper_lobe_infiltrates", "weight": 4 },
+          { "feature": "positive_sputum_smear", "weight": 5 }
+        ],
+        "management": "Standard 4-drug regimen (RIPE). Assess for drug resistance. Monitor adherence with DOT. Sputum conversion check at 2 months."
+      },
+      {
+        "id": "miliary_tb",
+        "name": "Miliary (Disseminated) TB",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "diffuse_micronodular_pattern", "weight": 5 },
+          { "feature": "systemic_illness", "weight": 4 },
+          { "feature": "hiv_coinfection_common", "weight": 4 }
+        ],
+        "management": "Standard 4-drug regimen. Consider corticosteroids for TB meningitis or pericarditis. ICU if respiratory failure. Treat for minimum 6-9 months."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "community_acquired_pneumonia",
+        "discriminators": ["acute_onset", "productive_cough", "focal_consolidation", "rapid_response_to_beta_lactams"]
+      },
+      {
+        "diseaseId": "lung_cancer",
+        "discriminators": ["non_resolving_opacity", "mass_lesion", "no_response_to_anti_tb", "biopsy_positive"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Sputum smear microscopy (AFB)", "priority": "immediate", "yield": 0.6, "indication": "all suspected PTB" }
+      ],
+      "laboratory": [
+        { "name": "GeneXpert MTB/RIF (sputum)", "priority": "immediate", "yield": 0.9, "indication": "diagnosis + rifampin resistance" },
+        { "name": "Sputum culture (solid + liquid media)", "priority": "gold_standard", "yield": 0.95, "indication": "confirmation, DST" },
+        { "name": "TB NAAT (nucleic acid amplification)", "priority": "high", "yield": 0.85, "indication": "rapid confirmation" },
+        { "name": "Interferon gamma release assay (IGRA)", "priority": "medium", "yield": 0.8, "indication": "latent infection, not active" },
+        { "name": "Tuberculin skin test (PPD)", "priority": "medium", "yield": 0.75, "indication": "screening" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray (PA + lateral)", "priority": "high", "yield": 0.85, "indication": "all suspected TB" },
+        { "name": "CT Chest", "priority": "medium", "yield": 0.9, "indication": "better characterization of cavities, nodules" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / ATS/CDC/IDSA Guidelines for TB Treatment",
+      "pathways": [
+        {
+          "severity": "drug-sensitive PTB",
+          "criteria": "confirmed MTB, sensitive to rifampin",
+          "treatment": "Intensive phase (2 months): Rifampin 10mg/kg + Isoniazid 5mg/kg + Pyrazinamide 25mg/kg + Ethambutol 15mg/kg daily. Continuation (4 months): Rifampin + Isoniazid."
+        },
+        {
+          "severity": "rifampin-resistant/MDR-TB",
+          "criteria": "rifampin resistance detected on GeneXpert or DST",
+          "treatment": "Specialist referral. Longer MDR regimen (9-20 months). Bedaquiline + Linezolid + Levofloxacin + Clofazimine + Cycloserine. Individualized regimen."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "airborne_inhalation_of_droplet_nuclei",
+      "alveolar_macrophage_infection",
+      "granuloma_formation",
+      "caseous_necrosis",
+      "cavitation_apical_lung",
+      "hematogenous_dissemination",
+      "fibrosis_and_lung_destruction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "massive_hemoptysis",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["cavitary_disease", "bronchial_artery_erosion"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["nausea", "jaundice", "elevated_alt"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["chronic_cough_hemoptysis", "night_sweats_weight_loss", "apical_cavitary_lesions", "positive_afb_xpert"],
+    "exclusionClues": ["negative_sputum_x2", "alternative_diagnosis_confirmed", "no_response_to_anti_tb"]
+  }
+}

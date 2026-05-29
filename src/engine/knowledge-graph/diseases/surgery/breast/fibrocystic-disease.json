@@ -1,0 +1,161 @@
+{
+  "disease": {
+    "id": "fibrocystic_breast_disease",
+    "name": "Fibrocystic Breast Disease",
+    "system": "surgical",
+    "agePeak_months": [240, 600],
+    "note": "Benign breast condition characterized by cyclic breast pain, nodularity, and cyst formation. Hormonal influence.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["breast_pain", "breast_nodularity", "benign_breast_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "dominant_mass_suspicious", "weight": 7 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "complex_cyst_on_imaging", "weight": 5 },
+          { "sign": "atypical_ductal_hyperplasia_on_biopsy", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Atypical hyperplasia/complex cyst -> SEVERE (increased cancer risk); simple fibrocystic -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "cyclic_breast_pain_mastalgia", "weight": 5 },
+      { "symptomId": "breast_nodularity_lumpiness", "weight": 4, "note": "Worse pre-menstrually" },
+      { "symptomId": "breast_swelling_fullness", "weight": 3 },
+      { "symptomId": "cysts_that_come_and_go", "weight": 3 },
+      { "symptomId": "symptoms_worse_premenstrually", "weight": 4 },
+      { "symptomId": "nipples_sensitive", "weight": 2 },
+      { "symptomId": "age_30_to_50", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "nodular_breast_tissue", "baseWeight": 4 },
+      { "signId": "ropey_or_cord_like_thickening", "baseWeight": 3 },
+      { "signId": "palpable_cysts", "baseWeight": 3 },
+      { "signId": "tenderness_on_palpation", "baseWeight": 3 },
+      { "signId": "upper_outer_quadrant_predominance", "baseWeight": 2 },
+      { "signId": "bilateral_involvement", "baseWeight": 3 },
+      { "signId": "no_dominant_mass", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_30_to_50", "multiplier": 3.0 },
+      { "id": "nulliparity", "multiplier": 1.5 },
+      { "id": "late_menopause", "multiplier": 1.3 },
+      { "id": "hormonal_imbalance", "multiplier": 1.5 },
+      { "id": "caffeine_consumption", "multiplier": 1.2 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "simple_fibrocystic",
+        "name": "Non-Proliferative Fibrocystic Change",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "cysts_and_fibrosis", "weight": 5 },
+          { "feature": "cyclic_pain", "weight": 4 },
+          { "feature": "no_hyperplasia", "weight": 5 },
+          { "feature": "no_increased_cancer_risk", "weight": 4 }
+        ],
+        "management": "Reassurance. Well-fitted supportive bra. Analgesia (NSAIDs). Evening primrose oil. Avoid caffeine. Oral contraceptives if severe. Symptomatic cysts can be aspirated."
+      },
+      {
+        "id": "proliferative_without_atypia",
+        "name": "Proliferative without Atypia",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "ductal_hyperplasia_usual_type", "weight": 5 },
+          { "feature": "slightly_increased_cancer_risk_1_5_2x", "weight": 4 },
+          { "feature": "sclerosing_adenosis", "weight": 3 }
+        ],
+        "management": "Reassurance. Regular follow-up. Clinical breast exam every 6-12 months. Annual imaging. Consider risk-reducing strategies if strong family history."
+      },
+      {
+        "id": "atypical_hyperplasia",
+        "name": "Atypical Ductal/Lobular Hyperplasia",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "atypical_cells_on_biopsy", "weight": 5 },
+          { "feature": "4_5x_increased_breast_cancer_risk", "weight": 5 },
+          { "feature": "may_have_family_history", "weight": 3 }
+        ],
+        "management": "Close surveillance: annual mammogram + MRI. Clinical exam every 6 months. Risk-reducing medications (Tamoxifen). Consider genetic counseling if family history."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "breast_cancer",
+        "discriminators": ["dominant_fixed_mass", "asymmetric_nodularity", "skin_changes", "axillary_nodes", "imaging_suspicious"]
+      },
+      {
+        "diseaseId": "fibroadenoma",
+        "discriminators": ["single_firm_mobile_mass", "well_defined", "younger_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical breast exam", "priority": "immediate", "yield": 0.6, "indication": "baseline assessment" }
+      ],
+      "laboratory": [
+        { "name": "None routine", "priority": "low", "yield": 0.1, "indication": "not indicated" }
+      ],
+      "imaging": [
+        { "name": "Breast Ultrasound", "priority": "high", "yield": 0.8, "indication": "characterize cysts, nodularity" },
+        { "name": "Mammogram", "priority": "high", "yield": 0.6, "indication": "baseline for age >35, diffuse density" },
+        { "name": "Fine needle aspiration of dominant cyst", "priority": "medium", "yield": 0.9, "indication": "therapeutic and diagnostic" },
+        { "name": "Core biopsy if imaging suspicious", "priority": "medium", "yield": 0.95, "indication": "rule out atypia or malignancy" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACOG/American College of Radiology Guidelines for Benign Breast Disease",
+      "pathways": [
+        {
+          "severity": "non-proliferative",
+          "criteria": "simple cysts, fibrosis, no hyperplasia, no atypia",
+          "treatment": "Reassurance. Symptom management: supportive bra, NSAIDs, evening primrose oil, reduced caffeine. Simple cyst aspiration if painful."
+        },
+        {
+          "severity": "proliferative with atypia",
+          "criteria": "atypical ductal or lobular hyperplasia on biopsy",
+          "treatment": "Close surveillance (annual MRI + mammogram). 6-month clinical exam. Risk-reduction counseling. Tamoxifen for risk reduction. Genetic testing."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hormonal_fluctuations",
+      "estrogen_dominance",
+      "fibrous_tissue_proliferation",
+      "cyst_formation",
+      "ductal_epithelial_hyperplasia",
+      "stromal_fibrosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "breast_cancer",
+        "probability": 0.05,
+        "lagDays": [360, 3600],
+        "severityBoost": 0.1,
+        "clues": ["atypical_hyperplasia_on_biopsy", "new_dominant_mass", "change_in_parenchymal_pattern"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["cyclic_breast_pain", "nodularity_worse_premenstrually", "age_30_50", "cysts_on_us"],
+    "exclusionClues": ["dominant_fixed_mass", "older_age_new_onset", "unilateral_persistent"]
+  }
+}

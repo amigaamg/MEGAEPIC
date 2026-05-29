@@ -1,0 +1,138 @@
+{
+  "disease": {
+    "id": "candidemia",
+    "name": "Candidemia (Invasive Candidiasis)",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 960],
+    "note": "Bloodstream infection with Candida species. Leading cause of nosocomial fungemia. High mortality (30-50%). Common in ICU patients.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["bloodstream_infection", "nosocomial_infection", "fungal_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 },
+        { "sign": "endophthalmitis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Candidemia with shock -> SEVERE; uncomplicated -> MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_persistent_despite_antibiotics", "weight": 5 },
+      { "symptomId": "hypotension", "weight": 4 },
+      { "symptomId": "icu_stay_prolonged", "weight": 4 },
+      { "symptomId": "central_venous_catheter", "weight": 5 },
+      { "symptomId": "total_parenteral_nutrition", "weight": 4 },
+      { "symptomId": "broad_spectrum_antibiotics", "weight": 4 },
+      { "symptomId": "neutropenia_or_immunosuppression", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "eye_exam_retinal_lesions", "baseWeight": 3 },
+      { "signId": "skin_lesions_macronodular", "baseWeight": 3 },
+      { "signId": "signs_of_sepsis", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "central_venous_catheter", "multiplier": 3.0 },
+      { "id": "total_parenteral_nutrition", "multiplier": 2.5 },
+      { "id": "broad_spectrum_antibiotics", "multiplier": 2.5 },
+      { "id": "neutropenia", "multiplier": 3.0 },
+      { "id": "immunosuppression_corticosteroids", "multiplier": 2.0 },
+      { "id": "prolonged_icu_stay", "multiplier": 2.0 },
+      { "id": "abdominal_surgery_recent", "multiplier": 2.0 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "renal_replacement_therapy", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "candida_albicans_candidemia",
+        "name": "Candida albicans Candidemia",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "positive_blood_culture_albicans", "weight": 5 },
+          { "feature": "susceptible_to_azoles", "weight": 3 }
+        ],
+        "management": "Echinocandin (caspofungin or micafungin) first-line. Remove central line. Fluconazole step-down if stable and susceptible."
+      },
+      {
+        "id": "candida_glabrata_candidemia",
+        "name": "Candida glabrata Candidemia",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "azole_resistance_common", "weight": 4 },
+          { "feature": "older_age", "weight": 3 }
+        ],
+        "management": "Echinocandin (caspofungin, micafungin, anidulafungin). Avoid fluconazole. High dose echinocandin or amphotericin B if resistant."
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Blood cultures (aerobic, fungal bottles)", "priority": "immediate", "yield": 0.7, "indication": "all suspected candidemia" },
+        { "name": "Fungal species identification", "priority": "high", "yield": 0.9, "indication": "all positive cultures" },
+        { "name": "Antifungal susceptibility testing", "priority": "high", "yield": 0.85, "indication": "guide therapy, especially C. glabrata" },
+        { "name": "Beta-D-glucan assay", "priority": "medium", "yield": 0.75, "indication": "adjunctive biomarker" },
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.4, "indication": "infection assessment" }
+      ],
+      "imaging": [
+        { "name": "Ophthalmology exam (dilated fundoscopy)", "priority": "high", "yield": 0.3, "indication": "all patients, rule out endophthalmitis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Guidelines for Invasive Candidiasis",
+      "pathways": [
+        {
+          "severity": "non-neutropenic candidemia",
+          "criteria": "positive culture, no neutropenia",
+          "treatment": "Echinocandin (caspofungin 70mg then 50mg OD, micafungin 100mg OD) first-line. Remove CVC. Blood cultures daily until negative. Step-down to fluconazole if susceptible and stable."
+        },
+        {
+          "severity": "neutropenic candidemia",
+          "criteria": "positive culture with neutropenia",
+          "treatment": "Echinocandin or liposomal amphotericin B. Colony-stimulating factors. Remove CVC. Duration: 14 days after first negative culture."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "skin_mucosal_barrier_breach",
+      "central_line_colonization",
+      "hematogenous_dissemination",
+      "endothelial_adhesion",
+      "tissue_invasion",
+      "organ_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "candida_endophthalmitis",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["eye_pain_visual_disturbance", "retinal_lesions"]
+      },
+      {
+        "diseaseId": "candida_endocarditis",
+        "probability": 0.02,
+        "severityBoost": 0.5,
+        "clues": ["murmur", "fever", "vegetation_on_echo"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["persistent_fever_on_antibiotics", "cvc_in_situ", "icu_patient", "positive_blood_culture"],
+    "exclusionClues": ["negative_blood_cultures", "alternative_bacterial_source"]
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "disease": {
+    "id": "malnutrition_elderly",
+    "name": "Malnutrition in the Elderly",
+    "system": "geriatrics",
+    "agePeak_months": [720, 1080],
+    "note": "Significant contributor to frailty, sarcopenia, impaired immunity, and poor clinical outcomes in older adults.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["weight_loss", "nutritional_deficit", "frailty"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_weight_loss_gt_10_percent_3mo", "weight": 9 },
+        { "sign": "bmi_less_than_16", "weight": 8 },
+        { "sign": "dysphagia_with_aspiration", "weight": 8 },
+        { "sign": "severe_hypoalbuminemia", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "mild_weight_loss": true,
+        "bmi_above_20": true,
+        "eating_independently": true
+      },
+      "severityLabel": "Severe malnutrition or aspiration risk -> URGENT; mild-moderate -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "unintentional_weight_loss", "weight": 5 },
+      { "symptomId": "poor_appetite", "weight": 4 },
+      { "symptomId": "difficulty_chewing_or_swallowing", "weight": 4 },
+      { "symptomId": "early_satiety", "weight": 3 },
+      { "symptomId": "reduced_food_intake", "weight": 4 },
+      { "symptomId": "social_isolation_meals_alone", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "low_bmi_less_than_20", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "temporal_muscle_wasting", "baseWeight": 4 },
+      { "signId": "loss_of_subcutaneous_fat", "baseWeight": 4 },
+      { "signId": "peripheral_edema_hypoalbuminemia", "baseWeight": 3 },
+      { "signId": "poor_dentition_or_missing_teeth", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "dementia", "multiplier": 2.0 },
+      { "id": "depression", "multiplier": 1.8 },
+      { "id": "dysphagia", "multiplier": 2.0 },
+      { "id": "poor_dentition", "multiplier": 1.6 },
+      { "id": "polypharmacy", "multiplier": 1.4 },
+      { "id": "social_isolation", "multiplier": 1.5 },
+      { "id": "hospitalization", "multiplier": 1.8 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sarcopenia",
+        "discriminators": ["primarily_muscle_loss", "normal_protein_intake", "strength_focused"]
+      },
+      {
+        "diseaseId": "cachexia",
+        "discriminators": ["inflammatory_driven", "cytokine_mediated", "resistant_to_nutritional_support"]
+      },
+      {
+        "diseaseId": "malabsorption_syndrome",
+        "discriminators": ["steatorrhea", "abdominal_bloating", "specific_nutrient_deficiencies"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "MUST (Malnutrition Universal Screening Tool)", "priority": "immediate", "yield": 0.95, "indication": "screening and risk stratification" },
+        { "name": "BMI and weight trend", "priority": "immediate", "yield": 0.9, "indication": "nutritional assessment" }
+      ],
+      "laboratory": [
+        { "name": "Albumin, prealbumin, transferrin", "priority": "high", "yield": 0.6, "indication": "protein status" },
+        { "name": "Vitamin B12, folate, iron, vitamin D", "priority": "high", "yield": 0.5, "indication": "specific deficiencies" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.4, "indication": "if aspiration suspected" },
+        { "name": "Barium swallow or videofluoroscopy", "priority": "medium", "yield": 0.7, "indication": "if dysphagia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline QS147 – Nutrition support",
+      "pathways": [
+        {
+          "severity": "severe",
+          "criteria": "BMI < 18, weight loss >10% in 3 months, severe hypoalbuminemia",
+          "treatment": "Refer to dietitian. Consider nasogastric or parenteral feeding. Treat underlying cause. Oral nutritional supplements. Address dentition and swallowing."
+        },
+        {
+          "severity": "mild_moderate",
+          "criteria": "BMI 18-20, weight loss 5-10%",
+          "treatment": "Dietary advice. Oral nutritional supplements. Food fortification. Small frequent meals. Social eating support. Review medications affecting appetite."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "reduced_dietary_intake",
+      "age_related_anorexia_of_aging",
+      "increased_metabolic_demands",
+      "malabsorption",
+      "catabolic_state_from_chronic_disease",
+      "social_and_psychological_factors"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "sarcopenia",
+        "probability": 0.5,
+        "severityBoost": 0.5,
+        "clues": ["muscle_wasting", "weakness"]
+      },
+      {
+        "diseaseId": "pressure_ulcer",
+        "probability": 0.25,
+        "severityBoost": 0.5,
+        "clues": ["immobility", "low_albumin", "incontinence"]
+      },
+      {
+        "diseaseId": "impaired_wound_healing",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["post_surgical", "chronic_wound"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium unless severe or aspiration",
+    "diagnosticClues": ["unintentional_weight_loss", "low_bmi", "poor_appetite", "muscle_wasting"],
+    "exclusionClues": ["stable_weight", "normal_bmi", "adequate_dietary_intake"]
+  }
+}

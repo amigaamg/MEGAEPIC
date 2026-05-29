@@ -1,0 +1,129 @@
+{
+  "disease": {
+    "id": "colorectal_cancer",
+    "name": "Colorectal Cancer",
+    "system": "surgical",
+    "agePeak_months": [600, 960],
+    "note": "One of the most common malignancies. Right-sided and left-sided have different presentations.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["gastrointestinal_malignancy", "lower_gi_bleeding"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "bowel_obstruction", "weight": 10 },
+        { "sign": "perforation", "weight": 10 },
+        { "sign": "massive_lower_gi_bleed", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If obstruction/perforation/bleeding -> EMERGENCY; else -> ELECTIVE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "change_in_bowel_habit", "weight": 4 },
+      { "symptomId": "rectal_bleeding", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "abdominal_pain", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "tenesmus", "weight": 2, "note": "More common in rectal cancer" },
+      { "symptomId": "narrow_stool_caliber", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_abdominal_mass", "baseWeight": 4 },
+      { "signId": "rectal_mass_on_dre", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 3, "note": "Suggests liver metastases" },
+      { "signId": "abdominal_distension", "baseWeight": 3, "note": "Suggests obstruction" }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 2.0 },
+      { "id": "family_history_crc", "multiplier": 2.5 },
+      { "id": "inflammatory_bowel_disease", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 1.4 },
+      { "id": "obesity", "multiplier": 1.3 },
+      { "id": "red_meat_consumption", "multiplier": 1.2 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "diverticulitis",
+        "discriminators": ["acute_pain", "fever", "leukocytosis", "no_bleeding"]
+      },
+      {
+        "diseaseId": "hemorrhoids",
+        "discriminators": ["bright_red_blood_per_rectum", "no_weight_loss", "prolapsing_mass"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Digital Rectal Examination", "priority": "immediate", "yield": 0.7, "indication": "all patients with rectal bleeding or change in bowel habit" }
+      ],
+      "laboratory": [
+        { "name": "Fecal Occult Blood Test", "priority": "high", "yield": 0.5, "indication": "screening" },
+        { "name": "CEA (Carcinoembryonic Antigen)", "priority": "high", "yield": 0.6, "indication": "baseline and monitoring" },
+        { "name": "Full Blood Count", "priority": "high", "yield": 0.5, "indication": "anaemia from chronic blood loss" }
+      ],
+      "imaging": [
+        { "name": "Colonoscopy with biopsy", "priority": "high", "yield": 0.95, "indication": "gold standard for diagnosis" },
+        { "name": "CT colonography", "priority": "medium", "yield": 0.85, "indication": "when colonoscopy incomplete or contraindicated" },
+        { "name": "CT Abdomen/Pelvis with contrast", "priority": "high", "yield": 0.9, "indication": "staging, assess metastases" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Colorectal Cancer",
+      "pathways": [
+        {
+          "severity": "localized",
+          "criteria": "tumour confined to bowel wall, no metastases",
+          "treatment": "Surgical resection with lymphadenectomy. Adjuvant chemotherapy if high-risk features (T4, nodal involvement)."
+        },
+        {
+          "severity": "metastatic",
+          "criteria": "distant metastases (liver, lung, peritoneum)",
+          "treatment": "Neoadjuvant chemotherapy. Consider resection of primary and metastases. Palliative chemotherapy if unresectable."
+        },
+        {
+          "severity": "obstructed/perforated",
+          "criteria": "acute obstruction or perforation",
+          "treatment": "Emergency surgery (resection or diverting stoma). IV fluids. Broad-spectrum antibiotics. ICU if septic."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "adenoma_carcinoma_sequence",
+      "mismatch_repair_deficiency",
+      "chromosomal_instability",
+      "kras_mutation",
+      "microsatellite_instability"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bowel_obstruction",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["distension", "vomiting", "constipation"]
+      },
+      {
+        "diseaseId": "perforation",
+        "probability": 0.03,
+        "severityBoost": 0.5,
+        "clues": ["acute_severe_pain", "peritonitis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["change_in_bowel_habit", "rectal_bleeding", "weight_loss", "age_over_50"],
+    "exclusionClues": ["normal_colonoscopy", "negative_fobt"]
+  }
+}

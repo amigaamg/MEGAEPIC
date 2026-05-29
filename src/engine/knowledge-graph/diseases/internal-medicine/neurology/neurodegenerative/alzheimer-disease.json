@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "alzheimer_disease",
+    "name": "Alzheimer Disease",
+    "system": "NEURO",
+    "agePeak_months": [720, 1080],
+    "note": "Progressive neurodegenerative disorder. Most common cause of dementia. Core: amnestic syndrome with gradual onset.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["dementia", "neurodegenerative", "cognitive_decline"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_delirium_superimposed", "weight": 9 },
+        { "sign": "aggression_harm_to_self_others", "weight": 9 },
+        { "sign": "wandering_or_getting_lost", "weight": 8 },
+        { "sign": "severe_dysphagia", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If delirium/aggression/wandering -> URGENT; else -> ROUTINE"
+    },
+    "historyFeatures": [
+      { "symptomId": "gradual_memory_loss", "weight": 5 },
+      { "symptomId": "short_term_memory_impaired", "weight": 5 },
+      { "symptomId": "word_finding_difficulty", "weight": 4 },
+      { "symptomId": "visuospatial_difficulty", "weight": 3 },
+      { "symptomId": "executive_dysfunction", "weight": 3 },
+      { "symptomId": "personality_changes", "weight": 2 },
+      { "symptomId": "apathy_withdrawal", "weight": 2 },
+      { "symptomId": "difficulty_with_familiar_tasks", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "impaired_short_term_memory", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "impaired_orientation", "baseWeight": 4 },
+      { "signId": "constructional_apraxia", "baseWeight": 3 },
+      { "signId": "language_deficits", "baseWeight": 3 },
+      { "signId": "normal_motor_exam_early", "baseWeight": 2 },
+      { "signId": "frontal_release_signs_late", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 4.0 },
+      { "id": "apoe_e4_genotype", "multiplier": 3.0 },
+      { "id": "family_history_ad", "multiplier": 2.0 },
+      { "id": "female_sex", "multiplier": 1.5 },
+      { "id": "down_syndrome", "multiplier": 3.5 },
+      { "id": "cardiovascular_risk_factors", "multiplier": 1.5 },
+      { "id": "head_injury", "multiplier": 1.5 },
+      { "id": "low_education", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "early_onset_ad",
+        "name": "Early-Onset Alzheimer Disease (<65 years)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "age_less_65", "weight": 5 },
+          { "feature": "rapid_progression", "weight": 4 },
+          { "feature": "autosomal_dominant_mutation", "weight": 3 }
+        ],
+        "management": "Cholinesterase inhibitor (donepezil, rivastigmine, galantamine). Memantine. Supportive care. Genetic counseling. Plan for early disability."
+      },
+      {
+        "id": "late_onset_ad",
+        "name": "Late-Onset Alzheimer Disease (≥65 years)",
+        "prevalenceModifier": 0.95,
+        "keyFeatures": [
+          { "feature": "age_65_or_older", "weight": 5 },
+          { "feature": "insidious_onset", "weight": 5 },
+          { "feature": "slow_progressive_course", "weight": 4 }
+        ],
+        "management": "Cholinesterase inhibitor. Memantine in moderate-late stages. Non-pharmacologic: cognitive stimulation, exercise, social engagement. Manage BPSD."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "vascular_dementia", "discriminators": ["stepwise_deterioration", "focal_signs", "vascular_lesions_mri"] },
+      { "diseaseId": "dementia_with_lewy_bodies", "discriminators": ["visual_hallucinations", "parkinsonism", "fluctuating_cognition"] },
+      { "diseaseId": "frontotemporal_dementia", "discriminators": ["personality_behavior_early", "language", "younger", "spared_memory_early"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "MoCA or MMSE", "priority": "immediate", "yield": 0.85, "indication": "cognitive screening" },
+        { "name": "Clock drawing test", "priority": "high", "yield": 0.6, "indication": "visuospatial and executive function" }
+      ],
+      "laboratory": [
+        { "name": "TSH, B12, FBC, U&E, LFT, Glucose", "priority": "high", "yield": 0.2, "indication": "reversible causes of dementia" },
+        { "name": "Syphilis serology, HIV", "priority": "medium", "yield": 0.05, "indication": "infectious causes" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain", "priority": "high", "yield": 0.7, "indication": "medial temporal/hippocampal atrophy, exclude other causes" },
+        { "name": "FDG-PET", "priority": "medium", "yield": 0.8, "indication": "temporoparietal hypometabolism, differentiate from FTD" },
+        { "name": "Amyloid PET", "priority": "low", "yield": 0.9, "indication": "definitive amyloid plaque detection" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Dementia",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "MMSE 10-26, independent or minimal assistance",
+          "treatment": "Cholinesterase inhibitor (donepezil 5-10 mg, rivastigmine patch, galantamine). Cognitive stimulation therapy. Exercise. Driving assessment. Safety planning."
+        },
+        {
+          "severity": "moderate-severe",
+          "criteria": "MMSE <10, significant functional impairment",
+          "treatment": "Memantine added (20 mg). Manage BPSD (non-pharmacologic first). Antipsychotics only for severe agitation/psychosis (short-term). Caregiver support. Advanced care planning."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "amyloid_beta_plaques",
+      "tau_neurofibrillary_tangles",
+      "synaptic_loss",
+      "neuronal_death",
+      "neuroinflammation",
+      "cholinergic_deficit",
+      "hippocampal_atrophy"
+    ],
+    "complications": [
+      { "diseaseId": "delirium_superimposed", "probability": 0.3, "severityBoost": 0.3, "clues": ["acute_behavioral_change", "infection_trigger"] },
+      { "diseaseId": "malnutrition", "probability": 0.2, "severityBoost": 0.2, "clues": ["weight_loss", "dysphagia", "forgetting_to_eat"] },
+      { "diseaseId": "falls_injury", "probability": 0.3, "severityBoost": 0.2, "clues": ["unsteady_gait", "wandering"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["gradual_memory_loss", "hippocampal_atrophy_mri", "impaired_daily_function", "age_over_65"],
+    "exclusionClues": ["reversible_cause_treated", "stepwise_course", "early_behavioral_ftd"]
+  }
+}

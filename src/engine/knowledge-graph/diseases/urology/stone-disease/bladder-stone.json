@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "bladder_stone",
+    "name": "Bladder Stone (Vesical Calculus)",
+    "system": "URO",
+    "agePeak_months": [480, 1080],
+    "note": "Urinary stones in the bladder. Usually secondary to bladder outlet obstruction, neurogenic bladder, or foreign body. Struvite stones from infection.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["urolithiasis", "bladder_pathology", "lower_urinary_tract_symptoms"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_urinary_retention", "weight": 9 },
+        { "sign": "hematuria_severe_clot_retention", "weight": 8 },
+        { "sign": "sepsis_from_uti", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Single vs multiple stones. Size determines treatment approach."
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_interruption_of_urinary_stream", "weight": 4 },
+      { "symptomId": "suprapubic_pain", "weight": 4 },
+      { "symptomId": "hematuria_terminal", "weight": 3 },
+      { "symptomId": "frequency_urgency", "weight": 3 },
+      { "symptomId": "dysuria", "weight": 3 },
+      { "symptomId": "recurrent_uti", "weight": 3 },
+      { "symptomId": "hesitancy_weak_stream_bph_history", "weight": 4 },
+      { "symptomId": "previous_stone_history", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "suprapubic_tenderness", "baseWeight": 3 },
+      { "signId": "enlarged_prostate_on_dre", "baseWeight": 4 },
+      { "signId": "palpable_bladder_chronic_retention", "baseWeight": 3 },
+      { "signId": "hematuria_on_dipstick", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "bph_bladder_outlet_obstruction", "multiplier": 4.0 },
+      { "id": "neurogenic_bladder", "multiplier": 3.0 },
+      { "id": "recurrent_uti", "multiplier": 2.5 },
+      { "id": "bladder_diverticulum", "multiplier": 2.0 },
+      { "id": "foreign_body_catheter_suture", "multiplier": 3.0 },
+      { "id": "dehydration", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "primary_bladder_stone",
+        "name": "Primary Bladder Stone",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "no_outlet_obstruction", "weight": 4 },
+          { "feature": "children_or_endemic_area", "weight": 3 },
+          { "feature": "dietary_factors", "weight": 2 }
+        ],
+        "management": "Cystolitholapaxy (endoscopic). Open cystolithotomy if very large (>4cm) or multiple. Treat underlying metabolic cause."
+      },
+      {
+        "id": "secondary_bladder_stone",
+        "name": "Secondary Bladder Stone (from BOO)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "bph_or_urethral_stricture", "weight": 5 },
+          { "feature": "chronic_retention_history", "weight": 4 },
+          { "feature": "struvite_or_infection_stone", "weight": 3 },
+          { "feature": "multiple_or_large_stones", "weight": 3 }
+        ],
+        "management": "Cystolitholapaxy (endoscopic laser or pneumatic lithotripsy) + bladder drainage. Treat underlying cause: TURP if BPH, urethrotomy if stricture. If small stone and BPH: TURP + stone removal same session. Suprapubic cystolithotomy if very large."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "bladder_tumor", "discriminators": ["negative_ct_for_stone", "cystoscopy_shows_tumor", "biopsy_positive", "hematuria_not_positional"] },
+      { "diseaseId": "chronic_pelvic_pain_syndrome", "discriminators": ["normal_imaging", "no_uti", "stone_negative_on_imaging"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Urinalysis + microscopy + culture", "priority": "high", "yield": 0.7, "indication": "hematuria, pyuria, infection, crystals" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.5, "indication": "renal function" }
+      ],
+      "imaging": [
+        { "name": "Non-contrast CT KUB (CT abdomen/pelvis)", "priority": "gold_standard", "yield": 0.98, "indication": "stone detection, size, number, location" },
+        { "name": "KUB X-ray", "priority": "high", "yield": 0.8, "indication": "radiopaque stones (calcium, struvite)" },
+        { "name": "Bladder ultrasound", "priority": "high", "yield": 0.8, "indication": "stone detection, PVR, prostate size" },
+        { "name": "Cystoscopy", "priority": "gold_standard for diagnosis and treatment", "yield": 0.99, "indication": "direct visualization, stone fragmentation" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EAU Guidelines on Urolithiasis / AUA Guidelines",
+      "pathways": [
+        {
+          "severity": "small stone (<2cm)",
+          "criteria": "single or few small stones, no severe BOO",
+          "treatment": "Endoscopic cystolitholapaxy (transurethral). Holmium laser or pneumatic lithotripsy. Stone-free rate >90%. Catheter x 24h post-op."
+        },
+        {
+          "severity": "large stone (>2cm) or multiple",
+          "criteria": "stone >2cm, or multiple, or hard composition",
+          "treatment": "Cystolitholapaxy (may require longer operative time). Open or laparoscopic cystolithotomy if >4cm. Address underlying BOO same session (TURP)."
+        },
+        {
+          "severity": "with BPH/BOO",
+          "criteria": "BPH with significant obstruction and bladder stones",
+          "treatment": "TURP (or laser prostatectomy) + cystolitholapaxy. Remove all stone fragments. Alpha-blocker post-op. Ensure complete stone clearance."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "urinary_stasis_from_outlet_obstruction",
+      "crystallization_of_urinary_solutes",
+      "infection_with_urease_producing_organisms",
+      "struvite_formation_magnesium_ammonium_phosphate",
+      "stone_enlargement_over_time",
+      "mucosal_irritation_and_hematuria",
+      "predisposition_to_recurrent_uti"
+    ],
+    "complications": [
+      { "diseaseId": "acute_urinary_retention", "probability": 0.1, "severityBoost": 0.3, "clues": ["sudden_inability_to_void", "suprapubic_pain", "ball_valve_stone_effect"] },
+      { "diseaseId": "recurrent_hematuria", "probability": 0.2, "severityBoost": 0.1, "clues": ["terminal_hematuria", "clots", "exertion_related"] },
+      { "diseaseId": "recurrent_uti_pyelonephritis", "probability": 0.3, "severityBoost": 0.2, "clues": ["recurrent_positive_cultures", "fever", "struvite_stone"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["sudden_stop_of_stream", "terminal_hematuria", "recurrent_uti_with_bph", "stone_on_imaging"],
+    "exclusionClues": ["normal_imaging_cystoscopy", "clear_urine_no_uti"]
+  }
+}

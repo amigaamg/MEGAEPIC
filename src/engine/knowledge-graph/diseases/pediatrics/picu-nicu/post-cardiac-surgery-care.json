@@ -1,0 +1,175 @@
+{
+  "disease": {
+    "id": "post-cardiac-surgery-care",
+    "name": "Post-Cardiac Surgery Care (Pediatric ICU)",
+    "system": "PAED",
+    "agePeak_months": [0, 60],
+    "note": "Post-operative management following congenital heart disease repair. Focus on low cardiac output syndrome, bleeding, arrhythmias, and respiratory support.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["post_operative_care", "cardiac_surgery"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "tamponade_signs", "weight": 10 },
+        { "sign": "massive_bleeding_>5_ml_kg_h", "weight": 10 },
+        { "sign": "refractory_hypoxemia", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "low_cardiac_output_lactate_>4", "weight": 8 },
+          { "sign": "arrhythmia_with_hemodynamic_compromise", "weight": 8 },
+          { "sign": "pulmonary_hypertension_crisis", "weight": 9 }
+        ],
+        "additionalCriteria": [
+          { "sign": "lactate_>4_mmol_L", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If LCOS, arrhythmia, bleeding, or pulmonary hypertension crisis -> SEVERE; else -> NON-SEVERE (stable recovery)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "post_cardiac_surgery", "weight": 5 },
+      { "symptomId": "cardiopulmonary_bypass_used", "weight": 3 },
+      { "symptomId": "preoperative_risk_factors", "weight": 3 },
+      { "symptomId": "difficulty_weaning_ventilator", "weight": 4 },
+      { "symptomId": "chest_tube_output_high", "weight": 4 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "arrhythmia_post_operative", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "low_urine_output_<1_ml_kg_h", "baseWeight": 4 },
+      { "signId": "cool_extremities_crt_>3s", "baseWeight": 4 },
+      { "signId": "high_chest_tube_output", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "arrhythmia_on_monitor", "baseWeight": 4 },
+      { "signId": "signs_of_tamponade_muffled_hearts", "baseWeight": 5 },
+      { "signId": "jvd_distended_neck_veins_tamponade", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "neonatal_age_at_surgery", "multiplier": 3.0 },
+      { "id": "prolonged_bypass_time_>120_min", "multiplier": 2.5 },
+      { "id": "complex_biventricular_or_single_ventricle_repair", "multiplier": 3.0 },
+      { "id": "preoperative_ventilation", "multiplier": 2.0 },
+      { "id": "pulmonary_hypertension", "multiplier": 2.5 },
+      { "id": "renal_dysfunction_preop", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "low_cardiac_output_syndrome_postop",
+        "name": "Post-Operative Low Cardiac Output Syndrome",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "lactate_rising_>3", "weight": 5 },
+          { "feature": "cool_extremities", "weight": 4 },
+          { "feature": "hypotension_or_high_inotrope_requirement", "weight": 5 }
+        ],
+        "management": "Optimize preload (fluids/blood). Milrinone 0.5-1 mcg/kg/min. Epinephrine/dobutamine. Afterload reduction. Consider ECMO if refractory. Monitor lactate, ScvO2, near-infrared spectroscopy."
+      },
+      {
+        "id": "postop_bleeding",
+        "name": "Post-Operative Bleeding",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "chest_tube_output_>3_ml_kg_h", "weight": 5 },
+          { "feature": "coagulopathy_bypass_related", "weight": 4 },
+          { "feature": "hypotension_tachycardia", "weight": 4 }
+        ],
+        "management": "Check ACT, CBC, coagulation, TEG/ROTEM. Protamine if heparin effect. Platelets, FFP, cryoprecipitate as guided. Surgical re-exploration if >5 mL/kg/h or tamponade."
+      },
+      {
+        "id": "pulmonary_hypertension_crisis",
+        "name": "Pulmonary Hypertension Crisis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "sudden_desaturation", "weight": 5 },
+          { "feature": "hypotension_and_bradycardia", "weight": 5 },
+          { "feature": "high_pap_on_monitor", "weight": 5 }
+        ],
+        "management": "Avoid stimulation (sedation/paralysis). Inhaled nitric oxide 20-40 ppm. Oxygen. Hyperventilation (pCO2 30-35). Milrinone. ECMO if refractory."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sepsis_postop",
+        "discriminators": ["fever", "positive_culture", "wbc_elevated", "later_timing"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Arterial blood gas", "priority": "immediate", "yield": 0.9, "indication": "frequent monitoring" },
+        { "name": "Chest tube output measurement", "priority": "immediate", "yield": 0.95, "indication": "bleeding assessment" }
+      ],
+      "laboratory": [
+        { "name": "ACT (activated clotting time)", "priority": "immediate", "yield": 0.7, "indication": "heparin effect" },
+        { "name": "CBC, PT, PTT, fibrinogen, TEG", "priority": "high", "yield": 0.8, "indication": "coagulation status" },
+        { "name": "Lactate", "priority": "immediate", "yield": 0.85, "indication": "perfusion q1-2h" },
+        { "name": "Troponin", "priority": "medium", "yield": 0.4, "indication": "myocardial injury" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.6, "indication": "tube placement, effusion, pneumothorax" },
+        { "name": "Echocardiogram", "priority": "immediate", "yield": 0.85, "indication": "ventricular function, effusion, residual lesions" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Specific institutional post-cardiotomy guidelines / PC4 protocol",
+      "pathways": [
+        {
+          "severity": "stable_recovery",
+          "criteria": "Hemodynamically stable, low inotropes, lactate <2, chest tube <3 mL/kg/h",
+          "treatment": "Ventilator weaning. Chest tube removal if <2 mL/kg/h. Transition to oral feeds. Pain management. Rhythm monitoring. Ward transfer when stable."
+        },
+        {
+          "severity": "complicated_lcos_or_bleeding",
+          "criteria": "Rising lactate, high inotrope requirement, hypotension, significant bleeding, arrhythmia",
+          "treatment": "ICU. Optimize preload. Milrinone + epinephrine infusion. Blood products for bleeding. Chest re-exploration if indicated. Steroids if on bypass. ECMO if refractory. Arrhythmia management."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cardiopulmonary_bypass_effects", "myocardial_stunning", "systemic_inflammatory_response", "coagulopathy", "third_spacing_of_fluids", "low_cardiac_output"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cardiac_tamponade",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.7,
+        "clues": ["muffled_hearts", "hypotension", "rising_cvp", "decreased_urine"]
+      },
+      {
+        "diseaseId": "phrenic_nerve_palsy",
+        "probability": 0.02,
+        "lagDays": [0, 7],
+        "severityBoost": 0.3,
+        "clues": ["elevated_hemidiaphragm_on_cxr", "difficulty_weaning"]
+      },
+      {
+        "diseaseId": "post_pericardiotomy_syndrome",
+        "probability": 0.1,
+        "lagDays": [3, 21],
+        "severityBoost": 0.2,
+        "clues": ["fever", "chest_pain", "effusion", "elevated_crp"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["post_cardiac_surgery_status", "low_urine_output", "rising_lactate", "high_chest_tube_output"],
+    "exclusionClues": ["stable_vitals", "low_inotropes", "lactate_normal", "chest_tube_output_<2_ml_kg_h"]
+  }
+}

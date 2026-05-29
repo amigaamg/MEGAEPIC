@@ -1,0 +1,178 @@
+{
+  "disease": {
+    "id": "drug_induced_nephropathy",
+    "name": "Drug-Induced Nephropathy",
+    "system": "nephrology",
+    "alsoPresentIn": ["pharmacy", "critical-care"],
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["acute_kidney_injury", "tubulointerstitial_disease", "nephrotoxicity"],
+    "mustNotMiss": true,
+    "emergencyPriority": "urgent",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "oliguria_anuria", "weight": 5, "description": "Severe AKI requiring dialysis" },
+        { "sign": "hyperkalemia", "weight": 5, "description": "Life-threatening from renal failure or direct drug effect" },
+        { "sign": "anuria_with_flank_pain", "weight": 4, "description": "Papillary necrosis or bilateral obstruction" },
+        { "sign": "eosinophilia_fever_rash", "weight": 4, "description": "Triad of acute interstitial nephritis" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "creatinine_rise_>3x_baseline", "weight": 4 },
+          { "sign": "dialysis_requirement", "weight": 5 },
+          { "sign": "histologic_evidence_of_acute_tubular_necrosis", "weight": 4 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "acute-nephrotoxic"
+    },
+    "historyFeatures": [
+      { "symptomId": "recent_drug_exposure", "weight": 5, "condition": "within days to weeks" },
+      { "symptomId": "decreased_urine_output", "weight": 4 },
+      { "symptomId": "fever", "weight": 3, "note": "especially in acute interstitial nephritis" },
+      { "symptomId": "rash", "weight": 3 },
+      { "symptomId": "NSAID_use", "weight": 4 },
+      { "symptomId": "aminoglycoside_contrast_or_tenofovir_exposure", "weight": 4 },
+      { "symptomId": "calcineurin_inhibitor_use", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "maculopapular_rash", "baseWeight": 3 },
+      { "signId": "hypertension", "baseWeight": 2 },
+      { "signId": "oliguria", "baseWeight": 4, "severityIndicator": true }
+    ],
+    "riskFactors": [
+      { "id": "pre_existing_chronic_kidney_disease_or_hypovolemia", "multiplier": 3.0 },
+      { "id": "concomitant_nephrotoxic_drugs", "multiplier": 3.0 },
+      { "id": "sepsis_or_low_cardiac_output", "multiplier": 2.0 }
+    ],
+    "diagnosticClues": [
+      "temporal relationship between drug initiation and AKI",
+      "triad of fever, rash, and eosinophilia suggests acute interstitial nephritis",
+      "non-oliguric AKI with urine sodium >20 mEq/L and FeNa >2%",
+      "eosinophiluria suggests drug-induced AIN"
+    ],
+    "exclusionClues": [
+      "no known nephrotoxic drug exposure",
+      "RBC casts and proteinuria >3 g/day suggest glomerulonephritis",
+      "positive ANCA, anti-GBM, or ANA serology"
+    ],
+    "subtypes": [
+      {
+        "id": "acute_interstitial_nephritis",
+        "name": "Acute Interstitial Nephritis",
+        "prevalenceModifier": 0.25,
+        "riskFactors": ["NSAID_use", "antibiotics_beta_lactams", "PPI_use"],
+        "keyFeatures": [
+          { "feature": "fever_rash_eosinophilia", "weight": 5 },
+          { "feature": "sterile_pyuria_wbc_casts", "weight": 5 },
+          { "feature": "eosinophiluria", "weight": 4 },
+          { "feature": "drug_exposure_2_4_weeks_prior", "weight": 4 }
+        ],
+        "management": {
+          "management": "Stop offending drug, corticosteroids if severe"
+        }
+      },
+      {
+        "id": "acute_tubular_necrosis",
+        "name": "Acute Tubular Necrosis (Aminoglycoside / CIN)",
+        "prevalenceModifier": 0.3,
+        "riskFactors": ["aminoglycoside_therapy_>5_days", "contrast_exposure"],
+        "keyFeatures": [
+          { "feature": "non_oliguric_aki", "weight": 4 },
+          { "feature": "muddy_brown_granular_casts", "weight": 5 },
+          { "feature": "feNa_>2%", "weight": 4 },
+          { "feature": "peak_trough_dosing_issues", "weight": 3 }
+        ],
+        "management": {
+          "management": "Stop nephrotoxin, supportive care, dialysis if needed"
+        }
+      },
+      {
+        "id": "calcineurin_inhibitor_nephrotoxicity",
+        "name": "Calcineurin Inhibitor Nephrotoxicity",
+        "prevalenceModifier": 0.15,
+        "riskFactors": ["cyclosporine_tacrolimus_therapy", "high_trough_levels"],
+          "keyFeatures": [
+            { "feature": "chronic_renal_impairment", "weight": 4 },
+            { "feature": "hypertension", "weight": 4 },
+            { "feature": "trough_level_elevated", "weight": 5 }
+          ],
+          "management": { "management": "Reduce dose, monitor levels, switch to mTOR inhibitor" }
+        },
+        {
+          "id": "tenofovir_nephropathy",
+          "name": "Tenofovir Nephropathy",
+          "prevalenceModifier": 0.1,
+          "riskFactors": ["HIV_on_TDF"],
+          "keyFeatures": [
+            { "feature": "proteinuria_fanconi_syndrome", "weight": 5 },
+            { "feature": "hypophosphatemia", "weight": 4 },
+            { "feature": "glycosuria_normal_glucose", "weight": 4 }
+          ],
+          "management": { "management": "Switch to tenofovir alafenamide (TAF)" }
+        }
+      ],
+      "mimics": [
+      { "diseaseId": "acute_glomerulonephritis", "discriminators": ["RBC casts", "proteinuria >1 g/day", "hypertension", "positive serology"] },
+      { "diseaseId": "postrenal_aki_obstruction", "discriminators": ["ultrasound hydronephrosis", "anuria alternating with polyuria"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Urinalysis with Microscopy", "priority": "first-line", "yield": 5, "indication": "WBC casts (AIN), muddy brown casts (ATN)" },
+        { "name": "Urine Na and FeNa Calculation", "priority": "essential", "yield": 4, "indication": "distinguish ATN from prerenal" }
+      ],
+      "laboratory": [
+        { "name": "Serum Creatinine / BUN and Electrolytes", "priority": "serial", "yield": 5, "indication": "renal function, K, acidosis" },
+        { "name": "Complete Blood Count with Differential", "priority": "essential", "yield": 4, "indication": "eosinophilia in AIN" },
+        { "name": "Drug Levels (trough/peak)", "priority": "essential", "yield": 5, "indication": "aminoglycoside, vancomycin, CNI" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "first-line", "yield": 3, "indication": "exclude obstruction, assess kidney size" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO AKI Guidelines; Drug-Induced Nephropathy Management Consensus",
+      "pathways": [
+        {
+          "severity": "essential-first-step",
+          "criteria": "any suspected drug-induced nephropathy",
+          "treatment": [
+            "Discontinue offending agent, assess volume status, maintain MAP >65",
+            "Avoid additional nephrotoxic agents (NSAIDs, contrast, aminoglycosides)",
+            "Monitor serum creatinine and urine output daily"
+          ]
+        },
+        {
+          "severity": "ain-specific",
+          "criteria": "persistent AKI with suspected AIN",
+          "treatment": [
+            "Prednisolone 0.5-1 mg/kg/day x 4-6 weeks then taper",
+            "Renal biopsy if no improvement after 2 weeks"
+          ]
+        },
+        {
+          "severity": "dialysis-indicated",
+          "criteria": "refractory hyperkalemia, acidosis, volume overload",
+          "treatment": [ "Hemodialysis, correct electrolytes, supportive care" ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Acute interstitial nephritis: T-cell mediated interstitial inflammation from drug hypersensitivity",
+      "Acute tubular necrosis: direct tubular toxicity from aminoglycosides, contrast, cisplatin",
+      "Hemodynamic: NSAIDs block vasodilatory prostaglandins causing afferent arteriolar constriction",
+      "Crystal nephropathy: drug crystals precipitate in tubules (acyclovir, methotrexate)",
+      "Proximal tubulopathy: tenofovir accumulates in mitochondria; CNI causes vasoconstriction and fibrosis"
+    ],
+    "complications": [
+      { "diseaseId": "acute_kidney_injury_requiring_dialysis", "probability": 0.15, "severityBoost": 0.7 },
+      { "diseaseId": "chronic_kidney_disease", "probability": 0.2, "severityBoost": 0.4, "lagDays": [90, 365] },
+      { "diseaseId": "hyperkalemic_cardiac_arrhythmia", "probability": 0.05, "severityBoost": 1.0 },
+      { "diseaseId": "drug_interaction_complications", "probability": 0.15, "severityBoost": 0.2 }
+    ]
+  }
+}

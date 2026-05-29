@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "hemophilia_a",
+    "name": "Hemophilia A",
+    "system": "hematology",
+    "agePeak_months": [12, 120, 240],
+    "note": "X-linked recessive coagulation disorder due to factor VIII deficiency. Severity correlates with FVIII activity level. Presents with hemarthroses, easy bruising, and bleeding after procedures.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["coagulopathy", "bleeding", "hemarthrosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "intracranial_hemorrhage", "weight": 10 },
+        { "sign": "retroperitoneal_bleed", "weight": 9 },
+        { "sign": "airway_compromise", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 9 },
+        { "sign": "compartment_syndrome", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "superficial_bleeding_only": true
+      },
+      "severityLabel": "If intracranial, retroperitoneal, or life-threatening bleed -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "easy_bruising", "weight": 5 },
+      { "symptomId": "hemarthrosis", "weight": 5, "note": "Joint bleeds, especially knees, elbows, ankles" },
+      { "symptomId": "prolonged_bleeding_after_dental_extraction", "weight": 4 },
+      { "symptomId": "excessive_bleeding_after_surgery", "weight": 4 },
+      { "symptomId": "spontaneous_bleeding", "weight": 4 },
+      { "symptomId": "muscle_hematoma", "weight": 3 },
+      { "symptomId": "hematuria", "weight": 2 },
+      { "symptomId": "family_history_of_bleeding", "weight": 5 },
+      { "symptomId": "post_circumcision_bleeding", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "swollen_joint", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "large_ecchymoses", "baseWeight": 4 },
+      { "signId": "muscle_tenderness_and_swelling", "baseWeight": 3 },
+      { "signId": "signs_of_intracranial_bleed", "baseWeight": 5 },
+      { "signId": "oral_mucosal_bullae", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_of_hemophilia", "multiplier": 5.0 },
+      { "id": "known_carrier_status", "multiplier": 4.0 },
+      { "id": "male_gender", "multiplier": 4.0 },
+      { "id": "inhibitor_development", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "severe_hemophilia_a",
+        "name": "Severe Hemophilia A",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "fviii_activity_less_than_1_percent", "weight": 5 },
+          { "feature": "spontaneous_bleeding", "weight": 5 },
+          { "feature": "hemarthrosis_infancy", "weight": 4 }
+        ],
+        "management": "Prophylactic FVIII replacement 2-3x/week. On-demand treatment for breakthrough bleeds. Avoid NSAIDs and IM injections."
+      },
+      {
+        "id": "moderate_hemophilia_a",
+        "name": "Moderate Hemophilia A",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "fviii_activity_1_to_5_percent", "weight": 5 },
+          { "feature": "bleeding_after_trauma", "weight": 4 },
+          { "feature": "rare_spontaneous_bleeds", "weight": 3 }
+        ],
+        "management": "On-demand FVIII replacement for trauma or surgery. Consider prophylaxis if frequent bleeds."
+      },
+      {
+        "id": "mild_hemophilia_a",
+        "name": "Mild Hemophilia A",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "fviii_activity_5_to_40_percent", "weight": 5 },
+          { "feature": "bleeding_only_with_major_trauma_or_surgery", "weight": 4 }
+        ],
+        "management": "Desmopressin (DDAVP) for minor procedures. FVIII concentrate for major surgery or trauma."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "von_willebrand_disease",
+        "discriminators": ["vw_fviii_activity_normal", "vwf_levels_low", "mucocutaneous_bleeding_pattern"]
+      },
+      {
+        "diseaseId": "hemophilia_b",
+        "discriminators": ["low_factor_ix", "normal_fviii", "specific_factor_assay"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "aPTT", "priority": "immediate", "yield": 0.9, "indication": "Prolonged in hemophilia A" },
+        { "name": "Factor VIII activity assay", "priority": "immediate", "yield": 0.99, "indication": "Low in hemophilia A" },
+        { "name": "Factor IX activity", "priority": "high", "yield": 0.5, "indication": "Normal in hemophilia A, ruled out hemophilia B" },
+        { "name": "vWF antigen and activity", "priority": "high", "yield": 0.5, "indication": "Normal in hemophilia A" },
+        { "name": "Inhibitor screen (Bethesda)", "priority": "high", "yield": 0.6, "indication": "Positive if FVIII antibodies present" },
+        { "name": "PT, INR, TT, fibrinogen", "priority": "medium", "yield": 0.3, "indication": "Normal in hemophilia A" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound of joint", "priority": "high", "yield": 0.8, "indication": "Assess hemarthrosis" },
+        { "name": "CT/MRI head", "priority": "immediate", "yield": 0.9, "indication": "If suspected intracranial bleed" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WFH / BSH Guidelines for Hemophilia A",
+      "pathways": [
+        {
+          "severity": "life_threatening_bleed",
+          "criteria": "Intracranial, retroperitoneal, airway, or trauma with hemodynamic instability",
+          "treatment": "Immediate FVIII replacement to 100%. Repeat q8-12h. Admit to ICU. Monitor for inhibitors."
+        },
+        {
+          "severity": "joint_muscle_bleed",
+          "criteria": "Acute hemarthrosis or muscle hematoma",
+          "treatment": "FVIII replacement to 40-60%. Rest, ice, elevation, compression. Analgesia. Physiotherapy after resolution."
+        },
+        {
+          "severity": "mild_superficial_bleed",
+          "criteria": "Minor cuts, superficial bruising",
+          "treatment": "Tranexamic acid. Local pressure. FVIII if persistent."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "fviii_gene_mutation",
+      "factor_viii_deficiency",
+      "impaired_tenase_complex_formation",
+      "reduced_thrombin_burst",
+      "defective_fibrin_clot_stabilization",
+      "bleeding_diathesis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hemophilic_arthropathy",
+        "probability": 0.4,
+        "severityBoost": 0.3,
+        "clues": ["recurrent_hemarthrosis", "joint_deformity", "limited_range_of_motion"]
+      },
+      {
+        "diseaseId": "inhibitor_development",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["poor_response_to_fviii", "increased_bleeding_despite_treatment", "high_bethesda_titer"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prolonged_aptt", "low_fviii", "normal_vwf", "x_linked_family_history"],
+    "exclusionClues": ["normal_aptt", "low_vwf", "abnormal_pt"]
+  }
+}

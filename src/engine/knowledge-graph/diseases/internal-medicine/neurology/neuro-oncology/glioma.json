@@ -1,0 +1,130 @@
+{
+  "disease": {
+    "id": "glioma",
+    "name": "Glioma (Astrocytoma, Oligodendroglioma, Glioblastoma)",
+    "system": "NEURO",
+    "agePeak_months": [360, 840],
+    "note": "Primary brain tumor arising from glial cells. Grades I-IV. Glioblastoma (GBM) is most aggressive. Presentation depends on location.",
+    "prevalenceWeight": 0.12,
+    "syndromeTags": ["brain_tumor", "intracranial_mass", "neuro_oncology"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "raised_icp_herniation", "weight": 10 },
+        { "sign": "status_epilepticus", "weight": 9 },
+        { "sign": "rapid_neurological_decline", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If raised ICP/status/rapid decline -> EMERGENCY; else -> ELECTIVE"
+    },
+    "historyFeatures": [
+      { "symptomId": "progressive_headache", "weight": 4 },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "focal_neurological_deficit", "weight": 4 },
+      { "symptomId": "cognitive_personality_changes", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "morning_headache", "weight": 3 },
+      { "symptomId": "increased_seizure_frequency", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "papilloedema", "baseWeight": 3 },
+      { "signId": "focal_neurological_signs", "baseWeight": 4 },
+      { "signId": "cognitive_impairment", "baseWeight": 3 },
+      { "signId": "signs_of_raised_icp", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "ionizing_radiation_exposure", "multiplier": 3.0 },
+      { "id": "inherited_syndrome_nf1_tp53", "multiplier": 4.0 },
+      { "id": "family_history_glioma", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "glioblastoma_gbm",
+        "name": "Glioblastoma (WHO Grade IV)",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "ring_enhancing_lesion", "weight": 5 },
+          { "feature": "rapid_progression", "weight": 5 },
+          { "feature": "necrosis_and_edema", "weight": 4 }
+        ],
+        "management": "Maximal safe resection. Radiotherapy + temozolomide (Stupp protocol). Tumor-treating fields (TTFields). Palliative care. Median survival 15 months."
+      },
+      {
+        "id": "anaplastic_astrocytoma",
+        "name": "Anaplastic Astrocytoma (WHO Grade III)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "enhancing_lesion_no_necrosis", "weight": 4 },
+          { "feature": "moderate_progression", "weight": 4 }
+        ],
+        "management": "Surgical resection. Radiotherapy + chemotherapy (temozolomide, PCV). IDH mutation predicts better prognosis."
+      },
+      {
+        "id": "diffuse_astrocytoma",
+        "name": "Diffuse Astrocytoma (WHO Grade II)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "non_enhancing_infiltrative", "weight": 5 },
+          { "feature": "slow_growth", "weight": 4 }
+        ],
+        "management": "Observation or surgical resection. Radiotherapy if high-risk. Chemotherapy (temozolomide). Seizure control. Monitor with MRI."
+      },
+      {
+        "id": "oligodendroglioma",
+        "name": "Oligodendroglioma (IDH-mut, 1p19q codeleted)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "calcification_on_ct", "weight": 4 },
+          { "feature": "frontal_lobe_predilection", "weight": 4 },
+          { "feature": "seizures_common", "weight": 3 }
+        ],
+        "management": "Surgical resection. Radiotherapy + PCV chemotherapy (better prognosis due to 1p19q codeletion). Long-term follow-up."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "cerebral_metastasis", "discriminators": ["known_primary", "multiple_lesions", "round_regular_enhancement"] },
+      { "diseaseId": "brain_abscess", "discriminators": ["fever", "restricted_diffusion", "ring_enhancement_smooth"] }
+    ],
+    "investigations": {
+      "imaging": [
+        { "name": "MRI Brain with contrast (DWI, PWI, MRS)", "priority": "immediate", "yield": 0.95, "indication": "lesion characterization, grade assessment, surgical planning" },
+        { "name": "CT Head", "priority": "emergency", "yield": 0.5, "indication": "mass effect, hemorrhage, calcification" }
+      ],
+      "pathology": [
+        { "name": "Histopathology (WHO grading)", "priority": "definitive", "yield": 1.0, "indication": "gold standard diagnosis" },
+        { "name": "Molecular markers: IDH1/2, 1p19q, MGMT, TERT, EGFR", "priority": "high", "yield": 0.9, "indication": "prognostic and predictive classification" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/EANO Guidelines for Gliomas",
+      "pathways": [
+        {
+          "severity": "low-grade (WHO II)",
+          "criteria": "IDH-mutant, slow growth, no or minimal enhancement",
+          "treatment": "Maximal safe resection. If low-risk: observe. If high-risk (age >40, >6 cm, progression): RT + PCV or temozolomide. Seizure control."
+        },
+        {
+          "severity": "high-grade (WHO III-IV)",
+          "criteria": "enhancing lesion, rapid progression, significant mass effect",
+          "treatment": "Maximal safe resection. Stupp protocol: RT 60 Gy + concurrent temozolomide 75 mg/m2 daily, then adjuvant TMZ 150-200 mg/m2 5/28 days x 6 cycles. Dexamethasone for edema. AEDs."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "glial_cell_transformation",
+      "genetic_mutations_idh_tp53_egfr",
+      "angiogenesis",
+      "invasive_growth",
+      "immune_evasion",
+      "treatment_resistance"
+    ],
+    "complications": [
+      { "diseaseId": "raised_intracranial_pressure", "probability": 0.4, "severityBoost": 0.3, "clues": ["headache_worsening", "vomiting", "papilloedema"] },
+      { "diseaseId": "venous_thromboembolism", "probability": 0.2, "severityBoost": 0.2, "clues": ["dvt", "pe", "immobility"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["progressive_headache_seizure_focal_deficit", "enhancing_mass_mri", "biopsy_definitive"],
+    "exclusionClues": ["non_neoplastic_lesion", "metastasis_from_known_primary"]
+  }
+}

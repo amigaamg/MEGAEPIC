@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "hyperkalemia",
+    "name": "Hyperkalemia",
+    "system": "RENAL",
+    "agePeak_months": [480, 1080],
+    "note": "Potentially life-threatening electrolyte disorder. Defined as serum K >5.2 mmol/L. Cardiac toxicity is the main concern.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["electrolyte_disorder", "potassium_imbalance", "cardiac_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrhythmia_ventricular", "weight": 10 },
+        { "sign": "ecg_sine_wave_pattern", "weight": 10 },
+        { "sign": "cardiac_arrest_asystole", "weight": 10 },
+        { "sign": "severe_muscle_weakness_paralysis", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Mild (5.2-5.9), Moderate (6.0-6.4), Severe (6.5+). ECG changes may occur at any level."
+    },
+    "historyFeatures": [
+      { "symptomId": "muscle_weakness_ascending", "weight": 4 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "paresthesias_tingling", "weight": 2 },
+      { "symptomId": "chest_pain", "weight": 2 },
+      { "symptomId": "syncope_near_syncope", "weight": 3 },
+      { "symptomId": "ckd_history", "weight": 5 },
+      { "symptomId": "medication_acei_arb_spironolactone_nsaids", "weight": 5 },
+      { "symptomId": "high_k_diet_nutritional_supplements", "weight": 2 },
+      { "symptomId": "recent_blood_transfusion", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "ecg_peaked_t_waves_tented", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ecg_widened_qrs", "baseWeight": 5 },
+      { "signId": "ecg_flat_p_wave_sine_wave", "baseWeight": 5 },
+      { "signId": "bradycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 2 },
+      { "signId": "muscle_weakness_flaccid_paralysis", "baseWeight": 3 },
+      { "signId": "areflexia", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "chronic_kidney_disease", "multiplier": 4.0 },
+      { "id": "ace_inhibitor_arb_use", "multiplier": 2.5 },
+      { "id": "potassium_sparing_diuretic_spironolactone", "multiplier": 3.0 },
+      { "id": "nsaid_use", "multiplier": 1.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "type_4_renal_tubular_acidosis", "multiplier": 3.0 },
+      { "id": "adrenal_insufficiency_addison", "multiplier": 3.0 },
+      { "id": "hemolysis_rhabdomyolysis_tumor_lysis", "multiplier": 3.0 },
+      { "id": "metabolic_acidosis", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "hyperkalemia_from_renal_failure",
+        "name": "Hyperkalemia from Renal Failure",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "elevated_creatinine_low_egfr", "weight": 5 },
+          { "feature": "oliguria", "weight": 3 },
+          { "feature": "metabolic_acidosis", "weight": 3 },
+          { "feature": "fluid_overload_may_be_present", "weight": 2 }
+        ],
+        "management": "Mild: dietary K restriction, stop hyperkalemic drugs, consider furosemide. Moderate: oral or rectal (PR) potassium-binding resin (patiromer, sodium zirconium cyclosilicate [SZC], or calcium resonium). Severe: emergency treatment (see below). Dialysis if refractory or severe AKI."
+      },
+      {
+        "id": "hyperkalemia_from_medications",
+        "name": "Hyperkalemia from Medications",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "acei_arb_or_k_sparing_diuretic_use", "weight": 5 },
+          { "feature": "known_ckd_as_risk_factor", "weight": 4 },
+          { "feature": "normal_k_with_baseline_medication", "weight": 3 }
+        ],
+        "management": "Stop or dose reduce causative medication. Check for co-contributing factors (NSAIDs, high K diet, volume depletion). Consider adding SZC or patiromer to allow continuation of ACEi/ARB if indicated (e.g., heart failure, CKD with proteinuria). Monitor K closely."
+      },
+      {
+        "id": "pseudohyperkalemia",
+        "name": "Pseudohyperkalemia",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "normal_ecg_despite_elevated_k", "weight": 4 },
+          { "feature": "hemolyzed_sample", "weight": 4 },
+          { "feature": "thrombocytosis_or_leukocytosis", "weight": 3 },
+          { "feature": "repeat_sample_shows_normal_k", "weight": 5 }
+        ],
+        "management": "No treatment needed. Repeat sample (heparinized, no tourniquet, rapid processing). Consider ABG sample with direct measurement. Correct underlying cause (hemolysis, extreme thrombocytosis)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "ecg_pseudoinfarction_patern_from_hyperkalemia", "discriminators": ["elevated_k", "normal_troponin", "ecg_resolves_with_k_correction"] },
+      { "diseaseId": "hypocalcemia_with_prolonged_qt", "discriminators": ["low_calcium", "normal_k", "different_ecg_pattern"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG (12-lead)", "priority": "immediate", "yield": 0.8, "indication": "peaked T waves, wide QRS, sine wave" }
+      ],
+      "laboratory": [
+        { "name": "Serum potassium (repeat if suspect pseudohyperkalemia)", "priority": "immediate", "yield": 0.99, "indication": "confirm level" },
+        { "name": "U&E, creatinine, eGFR", "priority": "immediate", "yield": 0.9, "indication": "renal function assessment" },
+        { "name": "Bicarbonate, pH (ABG/VBG)", "priority": "high", "yield": 0.7, "indication": "metabolic acidosis contributing" },
+        { "name": "Serum magnesium, calcium, phosphate", "priority": "medium", "yield": 0.5, "indication": "assess concurrent electrolyte abnormalities" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "KDIGO / European Resuscitation Council Hyperkalemia Guidelines",
+      "pathways": [
+        {
+          "severity": "mild (K 5.2-5.9, no ECG changes)",
+          "criteria": "asymptomatic, no ECG changes",
+          "treatment": "Dietary K restriction (<50 mmol/day). Review and stop contributing medications. Furosemide if fluid tolerant and CKD. Potassium-binding resins: patiromer 8.4 g/day or SZC 10 g TID x 48h then daily."
+        },
+        {
+          "severity": "moderate (K 6.0-6.4, may have peaked T waves)",
+          "criteria": "ECG changes minimal or absent but K >6.0",
+          "treatment": "IV calcium gluconate (10 mL of 10%) if ECG changes. IV insulin (10 units) + 50 mL of 50% dextrose (or 250 mL of 10% dextrose). Nebulized salbutamol 10-20 mg. IV NaHCO3 if acidotic. Potassium-binding resin. Furosemide. Monitor K and ECG q1-2h."
+        },
+        {
+          "severity": "severe (K ≥6.5, or any K with significant ECG changes)",
+          "criteria": "wide QRS, sine wave, ventricular arrhythmia, or cardiac arrest",
+          "treatment": "Cardiac protection: 10 mL of 10% calcium gluconate (or chloride) IV over 2-5 min. Repeat if ECG persists. Insulin + dextrose (10U + 50 mL D50). Salbutamol neb. NaHCO3 (50 mEq) if acidotic. Dialysis (urgent HD). SZC or patiromer. Continuous ECG monitoring. ICU admission."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "impaired_renal_k_excretion_in_ckd",
+      "reduced_distal_sodium_delivery",
+      "hyporeninemic_hypoaldosteronism_type_4_rta",
+      "ecg_changes_from_increased_extracellular_k",
+      "resting_membrane_potential_depolarization",
+      "impaired_cardiac_myocyte_repolarization",
+      "neuromuscular_excitability_changes"
+    ],
+    "complications": [
+      { "diseaseId": "ventricular_tachycardia_fibrillation", "probability": 0.05, "severityBoost": 0.8, "clues": ["k_greater_than_6_5", "widened_qrs", "sine_wave", "cardiac_arrest"] },
+      { "diseaseId": "sinus_bradycardia_asystole", "probability": 0.03, "severityBoost": 0.9, "clues": ["bradycardia", "p_wave_loss", "sine_wave", "cardiac_arrest"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["elevated_k_on_lab", "ecg_peaked_t_waves", "ckd_or_acei_use", "muscle_weakness"],
+    "exclusionClues": ["pseudohyperkalemia_confirmed", "normal_k_on_repeat", "normal_ecg_despite_elevated_k"]
+  }
+}

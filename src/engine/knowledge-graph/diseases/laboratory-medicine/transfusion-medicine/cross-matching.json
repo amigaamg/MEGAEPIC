@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "cross_matching",
+    "name": "Crossmatching for Transfusion Compatibility",
+    "system": "LAB",
+    "agePeak_months": [0, 960],
+    "note": "Crossmatch tests donor RBCs against recipient serum/plasma to detect incompatibility. Major crossmatch (donor cells + recipient serum) is standard. Methods: immediate spin (for ABO only), antiglobulin/IAT (detects IgG antibodies). Electronic crossmatch is acceptable for patients with negative antibody screen.",
+    "prevalenceWeight": 1.0,
+    "syndromeTags": ["transfusion_medicine", "pre_transfusion_testing", "compatibility"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "positive_crossmatch_incompatible", "weight": 9 },
+        { "sign": "history_of_hemolytic_transfusion_reaction", "weight": 10 },
+        { "sign": "multiple_antibodies_detected", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "positive_antibody_screen_with_antibody_id", "weight": 7 },
+          { "sign": "life_threatening_anemia_needing_emergency_transfusion", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If positive crossmatch -> FIND COMPATIBLE UNIT; if negative -> compatible for transfusion"
+    },
+    "historyFeatures": [
+      { "symptomId": "previous_transfusion_reaction", "weight": 5, "modifiers": [
+          { "condition": "hemolytic_or_allergic", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "multiple_pregnancies", "weight": 3 },
+      { "symptomId": "known_alloantibody_history", "weight": 5 },
+      { "symptomId": "autoimmune_hemolytic_anemia", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "major_crossmatch_negative_compatible", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "antibody_screen_negative_or_positive", "baseWeight": 5 },
+      { "signId": "iAT_phase_reaction", "baseWeight": 4 },
+      { "signId": "immediate_spin_phase_reaction", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "sickle_cell_disease_multiple_transfusions", "multiplier": 3.0 },
+      { "id": "thalassemia_major", "multiplier": 2.5 },
+      { "id": "hemodialysis_chronic_transfusion", "multiplier": 1.5 },
+      { "id": "previous_pregnancy_alloimmunized", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "immediate_spin_crossmatch",
+        "name": "Immediate Spin Crossmatch",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "patient_no_antibody_history", "weight": 5 },
+          { "feature": "negative_current_antibody_screen", "weight": 5 },
+          { "feature": "detects_only_igm_antibodies_abo", "weight": 4 },
+          { "feature": "room_temperature_incubation", "weight": 3 }
+        ],
+        "management": "Acceptable if antibody screen negative and no history of antibodies. Release blood after negative IS crossmatch. Suitable for most routine transfusions."
+      },
+      {
+        "id": "iAT_antiglobulin_crossmatch",
+        "name": "IAT (Indirect Antiglobulin Test) Crossmatch",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "detects_igg_antibodies", "weight": 5 },
+          { "feature": "37_degree_incubation_plus_ahg", "weight": 4 },
+          { "feature": "positive_antibody_screen_needed", "weight": 5 },
+          { "feature": "antibody_identified", "weight": 4 }
+        ],
+        "management": "Needed when antibody screen positive or patient has known antibodies. Must find antigen-negative donor units. Extended phenotyping and genotyping may be needed."
+      },
+      {
+        "id": "electronic_crossmatch",
+        "name": "Electronic Crossmatch (Computer)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "two_independent_abo_rh_types_on_record", "weight": 5 },
+          { "feature": "negative_antibody_screen", "weight": 5 },
+          { "feature": "no_history_of_antibodies", "weight": 4 },
+          { "feature": "computer_validates_abo_compatibility", "weight": 4 }
+        ],
+        "management": "Validated computer system matches ABO/Rh between donor and recipient. Eliminates need for serologic crossmatch. Safe and efficient for negative antibody screen patients."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "positive_direct_antiglobulin_test",
+        "discriminators": ["patient_on_drugs", "aiha", "positive_dat", "crossmatch_may_be_false_positive"]
+      },
+      {
+        "diseaseId": "rouleaux_interference",
+        "discriminators": ["high_protein", "myeloma", "saline_replacement_resolves", "no_igg_on_iAT"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Type and Screen (ABO, Rh, Antibody Screen)", "priority": "immediate", "yield": 0.98, "indication": "pre-transfusion testing" },
+        { "name": "Major crossmatch (donor RBCs + recipient serum)", "priority": "immediate", "yield": 0.99, "indication": "compatibility verification" },
+        { "name": "Antibody identification panel", "priority": "high", "yield": 0.9, "indication": "if antibody screen positive" },
+        { "name": "Direct antiglobulin test (DAT)", "priority": "medium", "yield": 0.5, "indication": "if positive crossmatch or AIHA suspected" },
+        { "name": "Elution", "priority": "low", "yield": 0.6, "indication": "if DAT positive, identify antibody coating RBCs" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "AABB Standards for Blood Bank and Transfusion Services, 33rd Edition",
+      "pathways": [
+        {
+          "severity": "compatible_crossmatch",
+          "criteria": "negative crossmatch at all phases, no antibodies",
+          "treatment": "Blood can be issued. Transfusion can proceed. Monitor patient during infusion."
+        },
+        {
+          "severity": "incompatible_crossmatch",
+          "criteria": "positive at any phase (or IS, or IAT)",
+          "treatment": "DO NOT transfuse the incompatible unit. Identify antibody specificity. Find antigen-negative donor units. Transfusion medicine consultation. Consider phenotype-matched units. May need rare donor registry."
+        },
+        {
+          "severity": "emergency_unmatched",
+          "criteria": "life-threatening hemorrhage, no time for crossmatch",
+          "treatment": "Release O negative (or O positive for males >18). Draw blood for type and screen BEFORE transfusion. Issue uncrossmatched blood. Document rationale."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "antigen_antibody_interaction",
+      "igm_mediated_agglutination",
+      "igg_mediated_sensitization",
+      "complement_activation",
+      "hemolytic_reaction"
+    ],
+    "complications": [
+      {
+        "diseaseId": "acute_hemolytic_transfusion_reaction",
+        "probability": 0.01,
+        "lagDays": [0, 1],
+        "severityBoost": 0.8,
+        "clues": ["positive_crossmatch", "hemoglobinuria", "fever_pain", "hypotension"]
+      },
+      {
+        "diseaseId": "delayed_hemolytic_reaction",
+        "probability": 0.02,
+        "lagDays": [2, 10],
+        "severityBoost": 0.3,
+        "clues": ["falling_hgb_after_transfusion", "jaundice", "positive_dat"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["negative_crossmatch", "compatible_units", "negative_antibody_screen"],
+    "exclusionClues": ["positive_crossmatch_ignore", "historical_incompatibility"]
+  }
+}

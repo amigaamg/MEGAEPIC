@@ -1,0 +1,128 @@
+{
+  "disease": {
+    "id": "chronic_kidney_disease",
+    "name": "Chronic Kidney Disease",
+    "system": "nephrology",
+    "agePeak_months": [480, 1080],
+    "note": "Progressive loss of kidney function over months to years. Staged by eGFR. Major causes: diabetes, hypertension.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["renal_disease", "chronic_illness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "uremic_pericarditis", "weight": 10 },
+        { "sign": "severe_hyperkalemia", "weight": 10 },
+        { "sign": "pulmonary_oedema", "weight": 9 },
+        { "sign": "uremic_encephalopathy", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "CKD Stage 1 (eGFR >90) to Stage 5 (eGFR <15 or dialysis)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue_weakness", "weight": 3 },
+      { "symptomId": "peripheral_oedema", "weight": 3 },
+      { "symptomId": "nocturia", "weight": 3 },
+      { "symptomId": "anorexia_nausea", "weight": 2 },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "muscle_cramps", "weight": 2 },
+      { "symptomId": "known_diabetes_hypertension", "weight": 4 },
+      { "symptomId": "foamy_urine_or_hematuria", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "peripheral_oedema", "baseWeight": 3 },
+      { "signId": "hypertension", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "uremic_fetor", "baseWeight": 2 },
+      { "signId": "scratch_marks_pruritus", "baseWeight": 2 },
+      { "signId": "asterixis", "baseWeight": 2 },
+      { "signId": "pericardial_rub", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 2.5 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "cardiovascular_disease", "multiplier": 1.5 },
+      { "id": "family_history_ckd", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "discriminators": ["acute_rise_creatinine", "no_chronic_changes_on_uss", "reversible"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, eGFR (CKD-EPI)", "priority": "immediate", "yield": 0.95, "indication": "staging and monitoring" },
+        { "name": "U&E, Bicarbonate, Calcium, Phosphate, PTH", "priority": "high", "yield": 0.8, "indication": "CKD-MBD and electrolyte assessment" },
+        { "name": "Hemoglobin (FBC)", "priority": "high", "yield": 0.7, "indication": "anemia of CKD" },
+        { "name": "Urine ACR (albumin-to-creatinine ratio)", "priority": "high", "yield": 0.85, "indication": "proteinuria quantification" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "high", "yield": 0.7, "indication": "small kidneys, cortical thinning, exclude obstruction" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "KDIGO Guidelines for Chronic Kidney Disease",
+      "pathways": [
+        {
+          "severity": "stage 1-3 (eGFR >30)",
+          "criteria": "mild to moderate reduction",
+          "treatment": "Treat underlying cause. ACEi/ARB. BP target <130/80. Lifestyle modification. Avoid nephrotoxins. Annual eGFR and ACR monitoring."
+        },
+        {
+          "severity": "stage 4 (eGFR 15-29)",
+          "criteria": "severe reduction",
+          "treatment": "Nephrology referral. Prepare for RRT. Manage anemia (iron, ESA). CKD-MBD management. Dietary counseling. Vaccinations."
+        },
+        {
+          "severity": "stage 5 (eGFR <15)",
+          "criteria": "kidney failure",
+          "treatment": "RRT (dialysis or transplantation). Symptom management. Advance care planning. Vascular access planning."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "nephron_loss",
+      "glomerular_hypertension",
+      "hyperfiltration_injury",
+      "interstitial_fibrosis",
+      "uremic_retention",
+      "mineral_bone_disorder",
+      "anemia_of_ckd"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hyperkalemia",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["elevated_k", "ecg_changes"]
+      },
+      {
+        "diseaseId": "renal_anemia",
+        "probability": 0.5,
+        "severityBoost": 0.1,
+        "clues": ["hemoglobin_low", "fatigue", "pallor"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["elevated_creatinine", "reduced_egfr", "diabetes_hypertension_history", "proteinuria"],
+    "exclusionClues": ["normal_egfr", "no_proteinuria", "acute_rise_in_creatinine"]
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "disease": {
+    "id": "renal_mass_imaging",
+    "name": "Renal Mass Imaging Characterization",
+    "system": "RAD",
+    "agePeak_months": [480, 780],
+    "note": "CT abdomen with and without contrast (triphasic renal protocol) or MRI for renal mass evaluation. Key assessment: enhancement characteristics, cystic complexity (Bosniak classification), and solid mass features.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["renal_lesion", "renal_cell_carcinoma", "kidney_mass"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "renal_vein_or_ivc_thrombus", "weight": 9 },
+        { "sign": "retroperitoneal_hemorrhage_from_mass", "weight": 9 },
+        { "sign": "acute_kidney_injury_from_mass", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bosniak_4_cyst", "weight": 7 },
+          { "sign": "solid_mass_gt_7cm", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If Bosniak 3-4 or solid enhancing mass -> SUSPICIOUS; else -> NON-CONCERN"
+    },
+    "historyFeatures": [
+      { "symptomId": "incidental_finding", "weight": 4, "modifiers": [
+          { "condition": "on_abdominal_imaging_for_other_reason", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "hematuria_gross_or_microscopic", "weight": 5 },
+      { "symptomId": "flank_pain", "weight": 4 },
+      { "symptomId": "palpable_abdominal_mass", "weight": 4 },
+      { "symptomId": "paraneoplastic_symptoms", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "enhancement_gt_20_hu_on_ct", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cystic_complexity_septations_nodules", "baseWeight": 5 },
+      { "signId": "calcification_pattern", "baseWeight": 3 },
+      { "signId": "fat_density_intralesional", "baseWeight": 4 },
+      { "signId": "infiltrative_margins", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "hypertension", "multiplier": 1.4 },
+      { "id": "acquired_renal_cystic_disease_dialysis", "multiplier": 5.0 },
+      { "id": "von_hippel_lindau_disease", "multiplier": 10.0 },
+      { "id": "tuberous_sclerosis", "multiplier": 5.0 },
+      { "id": "family_history_rcc", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "bosniak_1_2_cyst",
+        "name": "Simple and Minimally Complex Cysts (Bosniak 1-2)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "well_defined_anechoic_on_ultrasound", "weight": 5 },
+          { "feature": "no_enhancement_on_ct", "weight": 5 },
+          { "feature": "hairline_thin_septations_bosniak_2f", "weight": 3 },
+          { "feature": "hyperdense_cyst_bosniak_2_homogeneous", "weight": 3 }
+        ],
+        "management": "Bosniak 1-2: No follow-up needed. Bosniak 2F: Follow-up CT at 6 and 12 months, then annually for 2-5 years."
+      },
+      {
+        "id": "renal_cell_carcinoma",
+        "name": "Renal Cell Carcinoma (Clear Cell Type)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "solid_enhancing_mass", "weight": 5 },
+          { "feature": "heterogeneous_enhancement", "weight": 4 },
+          { "feature": "intralesional_necrosis", "weight": 3 },
+          { "feature": "t2_hyperintense_clear_cell", "weight": 3 },
+          { "feature": "chemical_shift_intracellular_fat", "weight": 4 },
+          { "feature": "renal_vein_invasion", "weight": 4 }
+        ],
+        "management": "Staging CT CAP. Partial or radical nephrectomy depending on size and location. Ablation for small tumors (<3cm). Surveillance for small (<2cm) in elderly. Targeted therapy for metastatic."
+      },
+      {
+        "id": "angiomyolipoma",
+        "name": "Renal Angiomyolipoma (AML)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "macroscopic_fat_density_negative_hu", "weight": 5 },
+          { "feature": "t2_heterogeneous", "weight": 3 },
+          { "feature": "aneurysm_within_lesion", "weight": 4 },
+          { "feature": "no_enhancement_of_fat_components", "weight": 4 },
+          { "feature": "fat_sat_t1_signal_drop", "weight": 5 }
+        ],
+        "management": "Size <4cm: Surveillance. Size >4cm or aneurysm >5mm: Prophylactic embolization (risk of hemorrhage/Wunderlich syndrome). mTOR inhibitors for growing AMLs in TSC."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "renal_abscess",
+        "discriminators": ["clinical_infection", "thick_irregular_wall", "restricted_diffusion", "perinephric_stranding"]
+      },
+      {
+        "diseaseId": "renal_infarct",
+        "discriminators": ["wedge_shaped", "cortical_based", "no_enhancement", "capsular_enhancement"]
+      },
+      {
+        "diseaseId": "column_of_bertin",
+        "discriminators": ["isodense_to_parenchyma", "same_enhancement", "fetal_lobulation_contour"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Urinalysis", "priority": "high", "yield": 0.5, "indication": "hematuria assessment" }
+      ],
+      "laboratory": [
+        { "name": "Renal function (creatinine, eGFR)", "priority": "high", "yield": 0.5, "indication": "baseline for surgical planning" },
+        { "name": "Urine cytology", "priority": "medium", "yield": 0.3, "indication": "if hematuria workup" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen triphasic renal protocol (non-contrast, corticomedullary, nephrographic, excretory)", "priority": "immediate", "yield": 0.95, "indication": "standard for renal mass evaluation" },
+        { "name": "MRI Renal (T1, T2, DWI, dynamic post-contrast)", "priority": "high", "yield": 0.95, "indication": "problem-solving, contrast allergy, young patients" },
+        { "name": "Renal Ultrasound with Doppler", "priority": "medium", "yield": 0.7, "indication": "initial detection, cyst characterization, follow-up" },
+        { "name": "CT Chest (staging)", "priority": "medium", "yield": 0.3, "indication": "if RCC confirmed, lung metastases" },
+        { "name": "Renal mass biopsy", "priority": "low", "yield": 0.9, "indication": "indeterminate mass, prior to ablation, suspected metastasis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AUA Guidelines for Renal Mass and Localized RCC",
+      "pathways": [
+        {
+          "severity": "benign_bosniak_1_2",
+          "criteria": "simple cyst, no enhancement, benign AML with fat",
+          "treatment": "No further action. Discharge from urology if classic findings."
+        },
+        {
+          "severity": "indeterminate_bosniak_2f_3",
+          "criteria": "complex cyst with enhancing septations/nodules, <20mm solid mass",
+          "treatment": "Urology referral. Consider MRI for further characterization. Biopsy if management will change. Active surveillance for small masses in elderly."
+        },
+        {
+          "severity": "malignant_solid_rcc",
+          "criteria": "enhancing solid mass >2cm, Bosniak 4, biopsy-proven RCC",
+          "treatment": "Staging CT CAP. Partial nephrectomy (preferred for T1a). Radical nephrectomy for larger tumors. Ablation for <3cm in poor surgical candidates. Systemic therapy for metastatic (TKI/IO)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "clear_cell_vhl_hif_pathway",
+      "papillary_tubular_architecture",
+      "chromophobe_cell_origin",
+      "angiogenesis",
+      "venous_extension",
+      "metastatic_spread"
+    ],
+    "complications": [
+      {
+        "diseaseId": "renal_vein_thrombus",
+        "probability": 0.1,
+        "lagDays": [1, 90],
+        "severityBoost": 0.4,
+        "clues": ["expanding_renal_vein", "filling_defect_enhancing", "varicocele"]
+      },
+      {
+        "diseaseId": "wunderlich_syndrome",
+        "probability": 0.02,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["acute_flank_pain", "perinephric_hematoma", "hypotension"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["enhancing_renal_mass", "hematuria", "fluctuating_enhancement_on_phases", "bosniak_classification"],
+    "exclusionClues": ["non_enhancing_cyst_simple", "stable_size_over_2_years"]
+  }
+}

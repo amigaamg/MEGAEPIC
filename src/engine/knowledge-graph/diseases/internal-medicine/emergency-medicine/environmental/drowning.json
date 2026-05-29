@@ -1,0 +1,119 @@
+{
+  "disease": {
+    "id": "drowning_submersion_injury",
+    "name": "Drowning / Submersion Injury",
+    "system": "emergency_medicine",
+    "agePeak_months": [24, 480],
+    "note": "Respiratory impairment from submersion/immersion in liquid. Leading cause of preventable death in children. Hypoxia is the primary insult. Immediate rescue breaths and CPR.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["environmental", "respiratory_emergency", "resuscitation"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "severe_hypoxia", "weight": 10 },
+        { "sign": "unconsciousness", "weight": 9 },
+        { "sign": "respiratory_arrest", "weight": 10 },
+        { "sign": "profound_hypothermia", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "DROWNING with cardiac/respiratory arrest or severe hypoxia = CRITICAL. All drowning patients need assessment."
+    },
+    "historyFeatures": [
+      { "symptomId": "submersion_in_liquid", "weight": 5 },
+      { "symptomId": "rescue_from_water", "weight": 5 },
+      { "symptomId": "apnea_or_gasping", "weight": 5 },
+      { "symptomId": "cough_frothy_sputum", "weight": 4 },
+      { "symptomId": "loss_of_consciousness_in_water", "weight": 4 },
+      { "symptomId": "estimated_duration_submersion", "weight": 4 },
+      { "symptomId": "water_type_fresh_vs_salt", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "respiratory_distress_or_arrest", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "crackles_on_auscultation", "baseWeight": 4 },
+      { "signId": "cyanosis", "baseWeight": 4 },
+      { "signId": "hypothermia", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "frothy_sputum", "baseWeight": 4 },
+      { "signId": "distended_abdomen", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_1_to_4_years", "multiplier": 3.0 },
+      { "id": "lack_of_supervision_children", "multiplier": 4.0 },
+      { "id": "alcohol_or_drug_use", "multiplier": 3.0 },
+      { "id": "seizure_disorder", "multiplier": 2.5 },
+      { "id": "inability_to_swim", "multiplier": 2.0 },
+      { "id": "hypothermia_at_time", "multiplier": 1.5 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE assessment", "priority": "immediate", "yield": 1.0, "indication": "all drowning patients" },
+        { "name": "Core temperature", "priority": "high", "yield": 0.8, "indication": "hypothermia assessment" },
+        { "name": "ECG monitoring", "priority": "high", "yield": 0.4, "indication": "arrhythmia" },
+        { "name": "Blood glucose", "priority": "high", "yield": 0.4, "indication": "hypoglycemia" }
+      ],
+      "laboratory": [
+        { "name": "ABG/VBG", "priority": "high", "yield": 0.9, "indication": "hypoxia, acidosis" },
+        { "name": "U&E, Cr", "priority": "high", "yield": 0.5, "indication": "electrolyte disturbances" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "tissue hypoperfusion" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.7, "indication": "pulmonary oedema, aspiration" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ERC/ILCOR Guidelines for Drowning / Ustein Style for Drowning",
+      "pathways": [
+        {
+          "severity": "cardiac arrest",
+          "criteria": "unresponsive, not breathing normally",
+          "treatment": "Rescue breaths immediately (even in water if safe). CPR 5 rescue breaths then 30:2. Defibrillate if VF (may be hypothermia-induced). Prolonged resuscitation (up to 60min) especially in cold water. Hospital: rewarm if hypothermic (ECMO if available). ALS per protocol."
+        },
+        {
+          "severity": "respiratory distress (conscious)",
+          "criteria": "SpO2 <94%, respiratory distress, frothy sputum, crackles",
+          "treatment": "High-flow oxygen. CPAP/NIV if conscious and protecting airway. Monitor for ARDS. Bronchospasm treatment. CXR. Admit for 24h observation. ICU if deteriorating."
+        },
+        {
+          "severity": "asymptomatic",
+          "criteria": "no respiratory symptoms, normal SpO2, normal CXR",
+          "treatment": "Observe minimum 6-8 hours. Re-check SpO2, respiratory rate. Discharge if remains asymptomatic with normal exam."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "laryngospasm_or_aspiration",
+      "hypoxia",
+      "pulmonary_oedema",
+      "surfactant_dysfunction",
+      "ventilation_perfusion_mismatch",
+      "metabolic_acidosis",
+      "hypothermia",
+      "cerebral_hypoxia",
+      "myocardial_depression"
+    ],
+    "complications": [
+      {
+        "diseaseId": "acute_respiratory_distress_syndrome",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["persistent_hypoxia", "bilateral_infiltrates", "progressive_respiratory_failure"]
+      },
+      {
+        "diseaseId": "hypoxic_brain_injury",
+        "probability": 0.2,
+        "severityBoost": 0.6,
+        "clues": ["prolonged_submersion", "gcs_less_than_5", "absent_pupillary_reflexes"]
+      },
+      {
+        "diseaseId": "aspiration_pneumonia",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["fever", "infiltrates", "leucocytosis"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["submersion_history", "respiratory_distress", "hypoxia", "frothy_sputum", "altered_consciousness", "hypothermia"],
+    "exclusionClues": ["no_submersion_event", "normal_oxygenation", "normal_consciousness", "normal_cxr"]
+  }
+}

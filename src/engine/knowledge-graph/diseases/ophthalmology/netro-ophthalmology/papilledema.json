@@ -1,0 +1,178 @@
+{
+  "disease": {
+    "id": "papilledema",
+    "name": "Papilledema (Optic Disc Swelling from Raised ICP)",
+    "system": "OPHTH",
+    "agePeak_months": [120, 480],
+    "note": "Optic disc swelling due to increased intracranial pressure. Typically bilateral. Requires urgent evaluation to identify and treat underlying cause (mass lesion, venous sinus thrombosis, idiopathic intracranial hypertension, meningitis).",
+    "prevalenceWeight": 0.005,
+    "syndromeTags": ["neuro_ophthalmology", "optic_disc_swelling", "raised_ICP"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "vision_loss_sudden", "weight": 9 },
+        { "sign": "sixth_nerve_palsy", "weight": 7 },
+        { "sign": "decreasing_consciousness", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_disc_edema_Frisen_grade_4_5", "weight": 7 },
+          { "sign": "macular_edema_or_exudates", "weight": 6 },
+          { "sign": "visual_field_loss_peripheral", "weight": 6 },
+          { "sign": "atrophic_disc_in_chronically_raised_ICP", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Severe disc edema, visual loss, or signs of brain herniation -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "headache_worse_in_morning", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "transient_visual_obscurations", "weight": 5, "note": "Seconds of vision loss with position change" },
+      { "symptomId": "pulsatile_tinnitus", "weight": 3 },
+      { "symptomId": "blurred_vision", "weight": 4 },
+      { "symptomId": "diplopia", "weight": 3, "note": "CN VI palsy" },
+      { "symptomId": "vision_loss_peripheral_progressive", "weight": 3 },
+      { "symptomId": "obesity_recent_weight_gain", "weight": 3 },
+      { "symptomId": "no_pain_on_eye_movement", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bilateral_optic_disc_edema", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "blurred_disc_margins", "baseWeight": 4 },
+      { "signId": "disc_hyperemia_and_elevation", "baseWeight": 4 },
+      { "signId": "retinal_venous_engorgement", "baseWeight": 3 },
+      { "signId": "disk_hemorrhages_around_disc", "baseWeight": 3 },
+      { "signId": "exudates_or_cotton_wool_spots", "baseWeight": 3 },
+      { "signId": "macular_star_hard_exudates", "baseWeight": 2 },
+      { "signId": "enlarged_blind_spot_on_perimetry", "baseWeight": 4 },
+      { "signId": "sixth_nerve_palsy", "baseWeight": 3 },
+      { "signId": "normal_visual_acuity_early", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "obesity_BMI_over_30", "multiplier": 5.0 },
+      { "id": "female_sex_reproductive_age", "multiplier": 5.0 },
+      { "id": "intracranial_mass_tumor_abscess", "multiplier": 10.0 },
+      { "id": "cerebral_venous_sinus_thrombosis", "multiplier": 8.0 },
+      { "id": "meningitis_encephalitis", "multiplier": 8.0 },
+      { "id": "medications_tetracycline_vitaminA_steroid_withdrawal", "multiplier": 3.0 },
+      { "id": "obstructive_sleep_apnea", "multiplier": 2.0 },
+      { "id": "anemia_or_iron_deficiency", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "papilledema_from_iih",
+        "name": "Papilledema from Idiopathic Intracranial Hypertension (IIH)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "obese_woman_reproductive_age", "weight": 5 },
+          { "feature": "headache_transient_visual_obscurations", "weight": 5 },
+          { "feature": "tinnitus", "weight": 3 },
+          { "feature": "normal_MRV_no_thrombosis", "weight": 4 },
+          { "feature": "elevated_opening_pressure_on_LP_over_25cm", "weight": 5 }
+        ],
+        "management": "Weight loss (5-10% can resolve). Acetazolamide 500mg-2g daily. Topiramate (alternative + weight loss). Optic nerve sheath fenestration if vision worsening. CSF shunt if refractory."
+      },
+      {
+        "id": "papilledema_from_mass",
+        "name": "Papilledema from Intracranial Mass Lesion",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "focal_neurological_signs", "weight": 5 },
+          { "feature": "headache_progressive", "weight": 4 },
+          { "feature": "seizures", "weight": 3 },
+          { "feature": "mass_on_imaging", "weight": 5 }
+        ],
+        "management": "Neurosurgery referral. Tumor resection or biopsy. Corticosteroids for vasogenic edema. Treat underlying cause."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "optic_neuritis",
+        "discriminators": ["unilateral", "RAPD", "pain_on_movement", "vision_loss_unilateral"]
+      },
+      {
+        "diseaseId": "optic_disc_drusen",
+        "discriminators": ["no_edema", "autofluorescent", "lumpy_bumpy", "normal_vision"]
+      },
+      {
+        "diseaseId": "pseudopapilledema",
+        "discriminators": ["congenital", "no_hemorrhages", "normal_vision"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fundoscopy (dilated)", "priority": "immediate", "yield": 0.9, "indication": "detect disc edema" },
+        { "name": "Visual acuity and color vision", "priority": "immediate", "yield": 0.7, "indication": "baseline" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "MRI brain + MRV (with contrast)", "priority": "immediate", "yield": 0.9, "indication": "mass, venous sinus thrombosis, empty sella" },
+        { "name": "Lumbar puncture (opening pressure + CSF analysis)", "priority": "high", "yield": 0.95, "indication": "confirm raised ICP, normal CSF in IIH" },
+        { "name": "OCT (optic nerve head and RNFL)", "priority": "high", "yield": 0.85, "indication": "quantify edema and monitor" },
+        { "name": "Humphrey visual field perimetry", "priority": "high", "yield": 0.8, "indication": "enlarged blind spot, field loss" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IIH Treatment Protocol (NORDIC) / Neuro-ophthalmology Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_moderate_iih",
+          "criteria": "Frisen grade 1-3, no field loss, good acuity",
+          "treatment": "Weight loss program. Acetazolamide 500mg PO BID (titrate to 2g daily). Monitor symptoms, vision, field, OCT. Topiramate if intolerant. Review in 1-2 months."
+        },
+        {
+          "severity": "severe_iih_with_vision_threat",
+          "criteria": "Frisen 4-5, field loss, visual acuity worsening",
+          "treatment": "High-dose Acetazolamide. Consider urgent optic nerve sheath fenestration (ONSF) or CSF diversion (shunt). Monitor daily visual function. Corticosteroids not recommended."
+        },
+        {
+          "severity": "secondary_from_mass",
+          "criteria": "mass lesion on MRI",
+          "treatment": "Neurosurgery. Treat underlying cause. Corticosteroids for edema. Do not perform LP if mass lesion."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "elevated_intracranial_pressure",
+      "axoplasmic_flow_stasis_at_lamina_cribrosa",
+      "optic_nerve_head_swelling",
+      "venous_congestion",
+      "axonal_damage_with_progression"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "optic_atrophy_secondary",
+        "probability": 0.1,
+        "lagDays": [90, 730],
+        "severityBoost": 0.7,
+        "clues": ["pale_disc", "progressive_field_loss"]
+      },
+      {
+        "diseaseId": "permanent_vision_loss",
+        "probability": 0.05,
+        "lagDays": [30, 730],
+        "severityBoost": 0.9,
+        "clues": ["uncontrolled_ICP", "atrophy"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["bilateral_disc_edema", "headache", "transient_obscurations", "raised_ICP"],
+    "exclusionClues": ["pseudopapilledema", "optic_drusen", "unilateral_disc_swelling"]
+  }
+}

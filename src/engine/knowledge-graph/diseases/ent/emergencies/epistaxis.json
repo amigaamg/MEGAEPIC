@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "epistaxis",
+    "name": "Epistaxis (Nosebleed)",
+    "system": "ent",
+    "agePeak_months": [24, 120, 600, 960],
+    "note": "Bleeding from the nasal cavity. 90% are anterior (Little's area / Kiesselbach's plexus). Posterior bleeds are more severe and often require hospital admission.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["nasal_hemorrhage", "bleeding_nose"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemorrhagic_shock", "weight": 10 },
+        { "sign": "airway_obstruction", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "posterior_bleed", "weight": 8 },
+          { "sign": "anticoagulation_therapy", "weight": 7 },
+          { "sign": "hemodynamic_instability", "weight": 7 },
+          { "sign": "significant_blood_loss", "weight": 6 },
+          { "sign": "failure_anterior_packing", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If posterior bleed/shock/airway risk/anticoagulated -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "active_nosebleed", "weight": 5 },
+      { "symptomId": "bleeding_from_one_or_both_nostrils", "weight": 4 },
+      { "symptomId": "blood_in_mouth_throat", "weight": 4, "note": "Suggests posterior bleed" },
+      { "symptomId": "swallowing_blood", "weight": 3 },
+      { "symptomId": "lightheadedness_dizziness", "weight": 3 },
+      { "symptomId": "trauma_history", "weight": 3 },
+      { "symptomId": "anticoagulant_antiplatelet_use", "weight": 4 },
+      { "symptomId": "hypertension_history", "weight": 2 },
+      { "symptomId": "recurrent_epistaxis", "weight": 2 },
+      { "symptomId": "nasal_surgery_history", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "active_bleeding_from_naris", "baseWeight": 5 },
+      { "signId": "blood_in_oropharynx_posterior", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "anterior_septal_bleeding_point", "baseWeight": 3 },
+      { "signId": "hypotension_tachycardia", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "epistaxis_associated_lesions", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "anticoagulation", "multiplier": 4.0 },
+      { "id": "antiplatelet_therapy", "multiplier": 2.5 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "dry_environment", "multiplier": 2.0 },
+      { "id": "nasal_trauma", "multiplier": 3.0 },
+      { "id": "coagulopathy", "multiplier": 5.0 },
+      { "id": "hereditary_hemorrhagic_telangiectasia", "multiplier": 8.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "anterior_epistaxis",
+        "name": "Anterior Epistaxis",
+        "prevalenceModifier": 0.9,
+        "keyFeatures": [
+          { "feature": "bleeding_from_little_area", "weight": 5 },
+          { "feature": "bleeding_out_front", "weight": 4 },
+          { "feature": "easy_to_visualize_source", "weight": 4 },
+          { "feature": "usually_self_limited", "weight": 3 }
+        ],
+        "management": "First aid: lean forward, pinch nose for 10-15 min. If continues: topical vasoconstrictor (Oxymetazoline). Cautery (silver nitrate or electrocautery). Absorbable packing (Surgicel, Floseal). Non-absorbable pack if needed."
+      },
+      {
+        "id": "posterior_epistaxis",
+        "name": "Posterior Epistaxis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "bleeding_down_throat", "weight": 5 },
+          { "feature": "no_anterior_source", "weight": 4 },
+          { "feature": "hemodynamic_instability", "weight": 4 },
+          { "feature": "elderly_hypertensive", "weight": 3 }
+        ],
+        "management": "Resuscitate. Posterior nasal packing (Foley catheter tamponade, Epistat balloon). Nasal endoscopy to identify source. Sphenopalatine artery ligation or embolization if packing fails. Reverse anticoagulation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hemoptysis",
+        "discriminators": ["coughing_blood", "bronchial_origin", "lung_pathology"]
+      },
+      {
+        "diseaseId": "hematemesis_GI_bleed",
+        "discriminators": ["vomiting_blood", "melena", "epigastric_pain", "no_nasal_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Anterior Rhinoscopy", "priority": "immediate", "yield": 0.7, "indication": "identify anterior source" },
+        { "name": "Nasal Endoscopy", "priority": "high", "yield": 0.9, "indication": "identify posterior source, evaluate for mass" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.6, "indication": "assess blood loss, platelets" },
+        { "name": "PT/PTT/INR", "priority": "high", "yield": 0.5, "indication": "coagulopathy assessment" },
+        { "name": "Blood Type and Cross-match", "priority": "high", "yield": 0.3, "indication": "severe bleeding, hemodynamic instability" }
+      ],
+      "imaging": [
+        { "name": "CT Sinuses/Nasal Cavity", "priority": "low", "yield": 0.5, "indication": "suspected tumor, trauma, recurrent epistaxis" },
+        { "name": "Angiography", "priority": "low", "yield": 0.8, "indication": "if embolization planned, failed surgical ligation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Epistaxis",
+      "pathways": [
+        {
+          "severity": "mild anterior",
+          "criteria": "self-limited, anterior source, no coagulopathy",
+          "treatment": "Digital pressure for 10-15 min. Lean forward. Topical vasoconstrictor (oxymetazoline). Avoid nose-blowing for 24h. Nasal saline gel to prevent recurrence."
+        },
+        {
+          "severity": "persistent anterior",
+          "criteria": "active bleeding, visible anterior source, failed first aid",
+          "treatment": "Topical lidocaine + oxymetazoline. Silver nitrate cautery (unilateral, avoid septum perforation). If fails: absorbable packing (Surgicel, Gelfoam, Floseal)."
+        },
+        {
+          "severity": "severe/posterior",
+          "criteria": "posterior bleed, hemodynamic instability, anticoagulated, failed packing",
+          "treatment": "IV access, resuscitation. Reverse anticoagulation (Vitamin K, FFP, PCC). Posterior packing (balloon tamponade). ENT: sphenopalatine artery ligation via transnasal endoscopic approach. Embolization if surgical candidate unfit."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mucosal_desiccation",
+      "vessel_rupture",
+      "little_area_vascular_plexus",
+      "posterior_sphenopalatine_artery_bleed",
+      "coagulation_impairment"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hemorrhagic_shock",
+        "probability": 0.05,
+        "lagDays": [0, 1],
+        "severityBoost": 0.7,
+        "clues": ["hypotension", "tachycardia", "altered_consciousness", "pallor"]
+      },
+      {
+        "diseaseId": "septal_hematoma",
+        "probability": 0.02,
+        "lagDays": [0, 2],
+        "severityBoost": 0.3,
+        "clues": ["septal_swelling", "nasal_obstruction", "pain"]
+      },
+      {
+        "diseaseId": "septal_perforation",
+        "probability": 0.01,
+        "lagDays": [14, 90],
+        "severityBoost": 0.1,
+        "clues": ["bilateral_cautery_history", "nasal_obstruction", "crusting"]
+      },
+      {
+        "diseaseId": "aspiration",
+        "probability": 0.02,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["coughing", "desaturation", "posterior_pack"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["visible_bleeding_from_nose", "posterior_bleeding_down_throat", "anterior_septal_source"],
+    "exclusionClues": ["coughing_blood", "vomiting_coffee_ground", "no_nasal_origin"]
+  }
+}

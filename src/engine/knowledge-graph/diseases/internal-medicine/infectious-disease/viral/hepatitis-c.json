@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "hepatitis_c",
+    "name": "Hepatitis C Virus Infection",
+    "system": "infectious_disease",
+    "agePeak_months": [240, 600],
+    "note": "RNA virus causing chronic hepatitis in >70% of cases. Leading cause of cirrhosis, HCC, and liver transplantation. Curable with DAAs.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["viral_hepatitis", "chronic_liver_disease", "bloodborne_pathogen"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "decompensated_cirrhosis_ascites", "weight": 10 },
+        { "sign": "variceal_hemorrhage", "weight": 10 },
+        { "sign": "acute_liver_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "F0-F1 (mild fibrosis) -> MILD; F2-F3 -> MODERATE; F4/cirrhosis -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue_chronic", "weight": 4 },
+      { "symptomId": "jaundice_rare_acute", "weight": 2 },
+      { "symptomId": "incidental_alt_elevation", "weight": 4 },
+      { "symptomId": "history_ivdu_or_blood_transfusion", "weight": 5 },
+      { "symptomId": "abdominal_discomfort", "weight": 2 },
+      { "symptomId": "arthralgia", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 2 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "palmar_erythema", "baseWeight": 1 },
+      { "signId": "spider_angiomas", "baseWeight": 2 },
+      { "signId": "ascites", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "injection_drug_use_current_or_past", "multiplier": 4.0 },
+      { "id": "blood_transfusion_before_1992", "multiplier": 3.0 },
+      { "id": "healthcare_needlestick_injury", "multiplier": 2.0 },
+      { "id": "long_term_hemodialysis", "multiplier": 2.0 },
+      { "id": "hiv_coinfection", "multiplier": 2.0 },
+      { "id": "born_in_high_prevalence_region", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_hepatitis_c",
+        "name": "Acute Hepatitis C",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "recent_exposure_2_to_12_weeks", "weight": 5 },
+          { "feature": "hcv_rna_positive_anti_hcv_negative", "weight": 5 },
+          { "feature": "alt_surge", "weight": 4 }
+        ],
+        "management": "Monitor for spontaneous clearance at 12 weeks. If HCV RNA persists, start DAA therapy. Avoid alcohol."
+      },
+      {
+        "id": "chronic_hepatitis_c",
+        "name": "Chronic Hepatitis C",
+        "prevalenceModifier": 0.9,
+        "keyFeatures": [
+          { "feature": "anti_hcv_positive_over_6_months", "weight": 5 },
+          { "feature": "hcv_rna_detectable", "weight": 5 },
+          { "feature": "fluctuating_alt", "weight": 3 }
+        ],
+        "management": "Genotype testing. DAA therapy (pangenotypic: Sofosbuvir/Velpatasvir for 12 weeks). Cirrhosis assessment. HCC surveillance if F3/F4."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatitis_b",
+        "discriminators": ["hbsag_positive", "different_serology", "vaccine_preventable"]
+      },
+      {
+        "diseaseId": "nonalcoholic_steatohepatitis",
+        "discriminators": ["metabolic_syndrome", "negative_serology", "ultrasound_steatosis"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Anti-HCV antibody", "priority": "immediate", "yield": 0.95, "indication": "screening" },
+        { "name": "HCV RNA PCR quantitative", "priority": "high", "yield": 0.98, "indication": "confirm active infection" },
+        { "name": "HCV genotype", "priority": "high", "yield": 0.95, "indication": "guide DAA selection" },
+        { "name": "LFTs (ALT, AST, Bilirubin)", "priority": "high", "yield": 0.7, "indication": "liver injury" },
+        { "name": "FibroScan or FIB-4 score", "priority": "high", "yield": 0.85, "indication": "fibrosis staging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD/IDSA HCV Guidance / EASL Guidelines",
+      "pathways": [
+        {
+          "severity": "all HCV (genotype 1-6)",
+          "criteria": "HCV RNA detectable, no decompensation",
+          "treatment": "Pangenotypic DAA: Sofosbuvir 400mg/Velpatasvir 100mg OD for 12 weeks. No ribavirin. SVR >95%. Assess fibrosis before treatment."
+        },
+        {
+          "severity": "decompensated cirrhosis",
+          "criteria": "Child-Pugh B/C cirrhosis",
+          "treatment": "DAA with ribavirin for 12-24 weeks. Refer for liver transplant evaluation. HCC surveillance."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hepatocyte_invasion",
+      "rna_replication",
+      "immune_evasion",
+      "chronic_inflammation",
+      "fibrosis_progressive",
+      "cirrhosis_hcc"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cirrhosis",
+        "probability": 0.2,
+        "lagDays": [3650, 10950],
+        "severityBoost": 0.5,
+        "clues": ["low_platelets", "ascites", "varices"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "probability": 0.05,
+        "lagDays": [3650, 14600],
+        "severityBoost": 0.6,
+        "clues": ["afp_elevated", "liver_mass"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["positive_anti_hcv", "detectable_hcv_rna", "risk_factors_ivdu", "elevated_alt"],
+    "exclusionClues": ["negative_hcv_rna", "sustained_virologic_response"]
+  }
+}

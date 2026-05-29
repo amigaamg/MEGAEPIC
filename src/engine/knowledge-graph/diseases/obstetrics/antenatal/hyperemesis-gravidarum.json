@@ -1,0 +1,175 @@
+{
+  "disease": {
+    "id": "hyperemesis_gravidarum",
+    "name": "Hyperemesis Gravidarum",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Severe nausea and vomiting in early pregnancy leading to dehydration, electrolyte imbalance, and weight loss. More severe than morning sickness.",
+    "prevalenceWeight": 0.03,
+    "syndromeTags": ["nausea_vomiting_pregnancy", "dehydration_pregnancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_dehydration", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 10 },
+        { "sign": "hypotension", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "weight_loss_5_percent", "weight": 7 },
+          { "sign": "ketonuria", "weight": 6 },
+          { "sign": "electrolyte_imbalance", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Severe if dehydration, weight loss >5%, ketonuria, or electrolyte imbalance present"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "nausea", "weight": 5, "modifiers": [
+          { "condition": "onset_before_9_weeks", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "vomiting", "weight": 5 },
+      { "symptomId": "inability_to_tolerate_food_or_fluids", "weight": 5 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "lightheadedness", "weight": 3 },
+      { "symptomId": "reduced_urine_output", "weight": 3 },
+      { "symptomId": "hypersalivation", "weight": 2 },
+      { "symptomId": "food_aversions", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "dry_mucous_membranes", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "reduced_skin_turgor", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension_orthostatic", "baseWeight": 4 },
+      { "signId": "ketonuria_on_dipstick", "baseWeight": 4 },
+      { "signId": "poor_capillary_refill", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "primigravida", "multiplier": 1.5 },
+      { "id": "family_history_hyperemesis", "multiplier": 2.0 },
+      { "id": "history_of_motion_sickness", "multiplier": 1.5 },
+      { "id": "multiple_gestation", "multiplier": 1.8 },
+      { "id": "hydatidiform_mole", "multiplier": 2.0 },
+      { "id": "previous_hyperemesis", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_hyperemesis",
+        "name": "Mild Hyperemesis Gravidarum",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "vomiting_3_to_5_times_daily", "weight": 3 },
+          { "feature": "some_weight_loss", "weight": 2 },
+          { "feature": "no_ketonuria", "weight": 1 }
+        ],
+        "management": "Outpatient management. Dietary modifications, ginger, pyridoxine (vitamin B6), antihistamines (doxylamine)."
+      },
+      {
+        "id": "severe_hyperemesis",
+        "name": "Severe Hyperemesis Gravidarum",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "vomiting_more_than_6_times_daily", "weight": 5 },
+          { "feature": "weight_loss_over_5_percent", "weight": 5 },
+          { "feature": "ketonuria", "weight": 4 },
+          { "feature": "electrolyte_abnormalities", "weight": 5 },
+          { "feature": "dehydration_signs", "weight": 5 }
+        ],
+        "management": "Hospital admission. IV fluid resuscitation (Normal saline or Ringer's lactate with KCl). IV antiemetics (ondansetron, metoclopramide, promethazine). Thiamine supplementation. Monitor electrolytes and renal function."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "gastroenteritis",
+        "discriminators": ["diarrhea", "fever", "acute_onset", "no_weight_loss_over_time"]
+      },
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["epigastric_pain", "heartburn", "pain_relieved_by_food"]
+      },
+      {
+        "diseaseId": "thyrotoxicosis",
+        "discriminators": ["tremor", "heat_intolerance", "palpitations", "goiter"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine ketones (dipstick)", "priority": "immediate", "yield": 0.9, "indication": "all patients" },
+        { "name": "Urine specific gravity", "priority": "immediate", "yield": 0.8, "indication": "assess hydration status" }
+      ],
+      "laboratory": [
+        { "name": "Serum electrolytes", "priority": "high", "yield": 0.8, "indication": "assess for hyponatremia, hypokalemia" },
+        { "name": "Liver function tests", "priority": "high", "yield": 0.6, "indication": "elevated transaminases possible" },
+        { "name": "TSH / free T4", "priority": "medium", "yield": 0.3, "indication": "rule out hyperthyroidism" },
+        { "name": "Amylase", "priority": "low", "yield": 0.2, "indication": "if pancreatitis suspected" }
+      ],
+      "imaging": [
+        { "name": "Obstetric Ultrasound", "priority": "high", "yield": 0.9, "indication": "confirm pregnancy, rule out molar pregnancy, multiple gestation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACOG Practice Bulletin No. 189 - Nausea and Vomiting of Pregnancy",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "tolerating some intake, no ketonuria, weight loss <5%",
+          "treatment": "Dietary modifications: small frequent meals, avoid triggers. Ginger capsules 250mg QID. Pyridoxine 10-25mg TID. Doxylamine 10mg at bedtime. Antiemetics as needed."
+        },
+        {
+          "severity": "severe",
+          "criteria": "weight loss >5%, ketonuria, electrolyte imbalance, dehydration",
+          "treatment": "IV fluids (NS or RL + KCl). IV antiemetics (ondansetron 4-8mg IV q8h, metoclopramide 10mg IV q6h). Thiamine 100mg IV daily. Nasogastric feeding if refractory. Consider corticosteroids (prednisolone 40-50mg/day) in refractory cases after 10 weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "placental_hCG_related",
+      "estrogen_elevation",
+      "gastric_dysmotility",
+      "lower_esophageal_sphincter_relaxation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "wernicke_encephalopathy",
+        "probability": 0.01,
+        "lagDays": [14, 30],
+        "severityBoost": 0.8,
+        "clues": ["confusion", "ataxia", "ophthalmoplegia"]
+      },
+      {
+        "diseaseId": "mallory_weiss_tear",
+        "probability": 0.02,
+        "lagDays": [7, 14],
+        "severityBoost": 0.3,
+        "clues": ["hematemesis", "epigastric_pain"]
+      },
+      {
+        "diseaseId": "hyponatremia",
+        "probability": 0.1,
+        "lagDays": [3, 7],
+        "severityBoost": 0.4,
+        "clues": ["confusion", "seizures", "lethargy"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["early_pregnancy_onset", "weight_loss", "ketonuria", "intractable_vomiting"],
+    "exclusionClues": ["diarrhea_predominant", "fever", "abdominal_pain_severe", "vaginal_bleeding"]
+  }
+}

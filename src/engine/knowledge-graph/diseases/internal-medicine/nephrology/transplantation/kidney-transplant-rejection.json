@@ -1,0 +1,164 @@
+{
+  "disease": {
+    "id": "kidney_transplant_rejection",
+    "name": "Kidney Transplant Rejection",
+    "system": "RENAL",
+    "agePeak_months": [360, 720],
+    "note": "Immune-mediated injury to renal allograft. Three types: hyperacute (minutes-hours), acute cellular (weeks-months), antibody-mediated (AMR, variable). Leading cause of graft loss.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["transplant_complication", "renal_allograft_rejection", "immunosuppression_failure"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hyperacute_rejection_anuria", "weight": 10 },
+        { "sign": "anuria_graft_swelling_rupture", "weight": 10 },
+        { "sign": "severe_amr_with_thrombotic_microangiopathy", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Banff classification: Borderline, Type IA/B, IIA/B (acute cellular), AMR (acute/chronic). Clinical severity: subclinical (incidental on biopsy), mild (creatinine rise), severe (graft dysfunction requiring dialysis)."
+    },
+    "historyFeatures": [
+      { "symptomId": "oliguria_decreased_urine_output", "weight": 5 },
+      { "symptomId": "creatinine_rising_on_routine_labs", "weight": 5 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "graft_tenderness_swelling", "weight": 4 },
+      { "symptomId": "hypertension_new_or_worsening", "weight": 3 },
+      { "symptomId": "weight_gain_edema", "weight": 2 },
+      { "symptomId": "flu_like_symptoms", "weight": 2 },
+      { "symptomId": "non_adherence_to_immunosuppression", "weight": 5 },
+      { "symptomId": "reduced_immunosuppression_dose_dc", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "graft_tenderness_on_palpation", "baseWeight": 4 },
+      { "signId": "graft_swelling_increased_size", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "hypertension", "baseWeight": 3 },
+      { "signId": "peripheral_edema", "baseWeight": 2 },
+      { "signId": "signs_of_fluid_overload", "baseWeight": 2 },
+      { "signId": "reduced_urine_output", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "non_adherence_to_immunosuppression", "multiplier": 5.0 },
+      { "id": "previous_transplant_rejection", "multiplier": 3.0 },
+      { "id": "donor_specific_antibodies_dsa", "multiplier": 4.0 },
+      { "id": "hla_mismatch", "multiplier": 2.0 },
+      { "id": "delayed_graft_function", "multiplier": 2.0 },
+      { "id": "younger_age_recipient", "multiplier": 1.5 },
+      { "id": "african_descent_recipient", "multiplier": 1.5 },
+      { "id": "prolonged_cold_ischemia_time", "multiplier": 1.8 }
+    ],
+    "subtypes": [
+      {
+        "id": "hyperacute_rejection",
+        "name": "Hyperacute Rejection",
+        "prevalenceModifier": 0.01,
+        "keyFeatures": [
+          { "feature": "immediate_anuria_minutes_to_hours_post_reperfusion", "weight": 5 },
+          { "feature": "graft_cyanosis_mottling", "weight": 5 },
+          { "feature": "pre_existing_donor_specific_antibodies", "weight": 5 },
+          { "feature": "complement_deposition_on_biopsy", "weight": 4 }
+        ],
+        "management": "Irreversible. Graft nephrectomy required. Return to dialysis. Highly sensitized patients: desensitization protocols for future transplants, paired exchange."
+      },
+      {
+        "id": "acute_cellular_t_cell_mediated_rejection",
+        "name": "Acute Cellular (T-Cell Mediated) Rejection",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "creatinine_rise", "weight": 5 },
+          { "feature": "tubulitis_on_biopsy", "weight": 5 },
+          { "feature": "interstitial_infiltrate_lymphocytes", "weight": 5 },
+          { "feature": "responds_to_steroids_usually", "weight": 4 }
+        ],
+        "management": "Pulse methylprednisolone 500-1000 mg IV x 3 days. Increase maintenance immunosuppression (tacrolimus, MMF, prednisolone). Steroid-resistant: T-cell depleting agents (anti-thymocyte globulin ATG 1.5 mg/kg x 3-5 days). Check DSA for concurrent AMR. Optimize tacrolimus trough (8-12 ng/mL)."
+      },
+      {
+        "id": "acute_antibody_mediated_rejection",
+        "name": "Acute Antibody-Mediated Rejection (AMR)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "donor_specific_antibodies_positive", "weight": 5 },
+          { "feature": "microvascular_inflammation_capillaritis", "weight": 5 },
+          { "feature": "c4d_deposition_on_peritubular_capillaries", "weight": 5 },
+          { "feature": "resistant_to_steroids", "weight": 4 }
+        ],
+        "management": "Pulse steroids. IVIG (2 g/kg over 2-4 days). Plasmapheresis (5-7 sessions). Rituximab 375 mg/m2 x 1. Bortezomib for plasma cell depletion. Eculizumab for complement-mediated AMR. Optimize maintenance immunosuppression. Remove DSA."
+      },
+      {
+        "id": "chronic_rejection",
+        "name": "Chronic Rejection / Interstitial Fibrosis and Tubular Atrophy",
+        "prevalenceModifier": 0.29,
+        "keyFeatures": [
+          { "feature": "gradual_creatinine_rise_over_months_years", "weight": 5 },
+          { "feature": "proteinuria", "weight": 4 },
+          { "feature": "hypertension", "weight": 3 },
+          { "feature": "chronic_ifta_on_biopsy", "weight": 5 }
+        ],
+        "management": "Prevent progression: optimize BP (ACEi/ARB), reduce proteinuria, maintain adequate immunosuppression (avoid minimization). Treat concurrent AMR if DSA+ (IVIG, rituximab). No specific therapy to reverse established IFTA. Prepare for dialysis or retransplant."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "calcineurin_inhibitor_nephrotoxicity", "discriminators": ["high_tacrolimus_trough_levels", "isometric_vacuolization_on_biopsy", "arteriolar_hyalinosis", "no_inflammation"] },
+      { "diseaseId": "acute_tubular_necrosis_delayed_graft_function", "discriminators": ["immediate_post_op_period", "no_dsa", "no_inflammation_on_biopsy", "tubular_injury_pattern"] },
+      { "diseaseId": "bacterial_or_viral_infection_pyeonephritis_bkv", "discriminators": ["fever_uti_symptoms", "positive_blood_urine_culture", "bkv_pcr_positive", "viral_inclusions_on_biopsy"] },
+      { "diseaseId": "recurrent_or_de_novo_glomerulonephritis", "discriminators": ["biopsy_shows_gn_pattern", "history_of_gn_in_native_kidneys", "may_have_disease_specific_antibodies"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, eGFR trend", "priority": "immediate", "yield": 0.95, "indication": "graft function, 25%+ rise from baseline is significant" },
+        { "name": "Urine ACR/PCR", "priority": "high", "yield": 0.7, "indication": "proteinuria (chronic rejection/AMR)" },
+        { "name": "Donor-specific antibodies (DSA) by Luminex", "priority": "high", "yield": 0.85, "indication": "AMR diagnosis" },
+        { "name": "BK virus PCR (blood and urine)", "priority": "high", "yield": 0.6, "indication": "viral nephropathy mimic" },
+        { "name": "Tacrolimus/cyclosporine trough level", "priority": "high", "yield": 0.5, "indication": "CNI toxicity vs rejection" }
+      ],
+      "imaging": [
+        { "name": "Renal transplant ultrasound with Doppler", "priority": "first-line", "yield": 0.6, "indication": "rule out vascular/ureteric complications, RI (resistive index)" },
+        { "name": "Transplant kidney biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "Banff classification, type and severity of rejection" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO Clinical Practice Guideline for Kidney Transplant Recipients",
+      "pathways": [
+        {
+          "severity": "borderline/suspicious (Banff borderline)",
+          "criteria": "mild infiltrate, minimal tubulitis, stable or mildly elevated Cr",
+          "treatment": "Optimize maintenance immunosuppression (increase tacrolimus/MMF). Repeat biopsy in 2-4 weeks if no improvement. Consider pulse steroids if clinical concern."
+        },
+        {
+          "severity": "acute cellular rejection Banff IA/IB",
+          "criteria": "moderate tubulitis and interstitial infiltrate, rising Cr",
+          "treatment": "IV methylprednisolone 500-1000 mg x 3 days. Increase maintenance. If steroid-resistant: ATG 1.5 mg/kg/day x 3-5 days. Monitor for complications (CMV, EBV, neutropenia)."
+        },
+        {
+          "severity": "acute cellular Banff IIA/IIB (vascular)",
+          "criteria": "intimal arteritis, more severe rejection",
+          "treatment": "ATG first-line (steroid-resistant more likely). Complete course ATG. Monitor DSA. Consider AMR treatment if DSA+."
+        },
+        {
+          "severity": "acute AMR",
+          "criteria": "DSA+, microvascular inflammation, C4d+ or -",
+          "treatment": "Pulse steroids + IVIG (2 g/kg) + plasmapheresis (5-7 sessions) + rituximab 375 mg/m2. Consider bortezomib or eculizumab for refractory. Optimize maintenance immunosuppression."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "t_cell_recognition_of_donor_hla_via_direct_indirect_pathways",
+      "cd8_cytotoxic_t_cell_mediated_tubulitis",
+      "cd4_helper_t_cell_orchestrating_inflammation",
+      "b_cell_activation_and_donor_specific_antibody_production",
+      "antibody_binding_to_endothelial_cells",
+      "complement_activation_through_classical_pathway_c4d",
+      "microvascular_inflammation_capillaritis",
+      "chronic_ifta_from_repeated_injury_repair"
+    ],
+    "complications": [
+      { "diseaseId": "graft_loss_need_for_dialysis", "probability": 0.1, "severityBoost": 0.6, "clues": ["irreversible_rejection", "failure_to_respond_to_treatment"] },
+      { "diseaseId": "infection_from_immunosuppression_escalation", "probability": 0.2, "severityBoost": 0.3, "clues": ["cmv_ebv_bkv_reactivation", "opportunistic_infections", "sepsis"] },
+      { "diseaseId": "drug_toxicity_tacrolimus_atg", "probability": 0.1, "severityBoost": 0.2, "clues": ["cytopathies", "myelosuppression", "neurotoxicity"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["rising_creatinine_in_transplant_recipient", "graft_tenderness", "fever_and_non_adherence", "dsa_positive"],
+    "exclusionClues": ["normal_graft_function_and_biopsy", "non_rejection_cause_identified (CNI toxicity, infection, ATN)"]
+  }
+}

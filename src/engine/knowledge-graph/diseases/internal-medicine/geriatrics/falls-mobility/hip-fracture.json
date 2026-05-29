@@ -1,0 +1,128 @@
+{
+  "disease": {
+    "id": "hip_fracture",
+    "name": "Hip Fracture (Geriatric)",
+    "system": "geriatrics",
+    "agePeak_months": [780, 1080],
+    "note": "Devastating injury in older adults. High morbidity and mortality. Requires urgent surgical repair.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["fracture", "fall", "orthogeriatric"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "inability_to_weight_bear", "weight": 9 },
+        { "sign": "shortened_rotated_leg", "weight": 8 },
+        { "sign": "severe_groin_or_hip_pain", "weight": 8 },
+        { "sign": "obvious_deformity", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "no_trauma": false,
+        "able_to_weight_bear": true
+      },
+      "severityLabel": "Suspected hip fracture -> EMERGENCY (orthopedic referral needed within 24h)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fall_with_hip_strike", "weight": 5 },
+      { "symptomId": "severe_hip_or_groin_pain", "weight": 5 },
+      { "symptomId": "inability_to_walk", "weight": 5 },
+      { "symptomId": "mechanism_low_energy_fall", "weight": 3 },
+      { "symptomId": "osteoporosis_or_fragility_fractures", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "shortened_externally_rotated_leg", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tenderness_over_hip_or_groin", "baseWeight": 5 },
+      { "signId": "pain_on_passive_range_of_motion", "baseWeight": 4 },
+      { "signId": "ecchymosis_over_hip", "baseWeight": 3 },
+      { "signId": "inability_to_raise_leg", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "osteoporosis", "multiplier": 3.0 },
+      { "id": "advanced_age_over_80", "multiplier": 2.5 },
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "previous_fall_history", "multiplier": 1.8 },
+      { "id": "low_bmi", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hip_osteoarthritis",
+        "discriminators": ["chronic_pain", "normal_xray", "able_to_weight_bear", "no_trauma"]
+      },
+      {
+        "diseaseId": "trochanteric_bursitis",
+        "discriminators": ["lateral_hip_tenderness", "pain_on_abduction", "no_fracture_on_xray"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Hip X-ray (AP and lateral)", "priority": "immediate", "yield": 0.95, "indication": "fracture detection" },
+        { "name": "ECG", "priority": "high", "yield": 0.5, "indication": "pre-operative assessment" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr, coagulation profile", "priority": "high", "yield": 0.6, "indication": "pre-operative workup" },
+        { "name": "Vitamin D and calcium", "priority": "medium", "yield": 0.5, "indication": "bone health assessment" }
+      ],
+      "imaging": [
+        { "name": "MRI hip or CT", "priority": "high", "yield": 0.98, "indication": "occult fracture if X-ray negative" },
+        { "name": "DXA scan", "priority": "medium", "yield": 0.8, "indication": "osteoporosis evaluation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG124 – Hip fracture management",
+      "pathways": [
+        {
+          "severity": "confirmed_fracture",
+          "criteria": "radiographic confirmation",
+          "treatment": "Surgical repair within 24-48 hours. Multidisciplinary orthogeriatric care. Analgesia (paracetamol, nerve block). Thromboprophylaxis. Fall prevention on discharge."
+        },
+        {
+          "severity": "occult_suspected",
+          "criteria": "clinical suspicion, negative X-ray",
+          "treatment": "MRI or CT. Non-weight bearing. Orthopedic review. Analgesia."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "osteoporotic_bone_weakness",
+      "low_energy_fall",
+      "disruption_of_femoral_head_blood_supply",
+      "immobility_leading_to_complications"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "avascular_necrosis",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["femoral_neck_fracture", "persistent_pain_post_repair"]
+      },
+      {
+        "diseaseId": "venous_thromboembolism",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["immobility", "leg_swelling", "dyspnea"]
+      },
+      {
+        "diseaseId": "delirium",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["acute_confusion", "post_operative"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["low_energy_fall", "inability_to_weight_bear", "shortened_rotated_leg"],
+    "exclusionClues": ["normal_hip_xray", "no_groin_pain", "able_to_weight_bear"]
+  }
+}

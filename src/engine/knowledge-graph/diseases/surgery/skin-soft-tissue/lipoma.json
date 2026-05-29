@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "lipoma",
+    "name": "Lipoma",
+    "system": "surgical",
+    "agePeak_months": [300, 720],
+    "note": "Benign soft tissue tumor of adipose tissue. Soft, mobile, painless. Usually on trunk, neck, and extremities.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["subcutaneous_mass", "benign_tumor"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapid_growth_suspicious", "weight": 6 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "size_above_5cm_or_deep", "weight": 4 },
+          { "sign": "painful_or_fixed", "weight": 5 },
+          { "sign": "atypical_features_on_imaging", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Rapid growth/atypical features -> SEVERE (rule out liposarcoma); classic lipoma -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "soft_subcutaneous_lump", "weight": 5 },
+      { "symptomId": "slow_growing_over_years", "weight": 4 },
+      { "symptomId": "painless", "weight": 4 },
+      { "symptomId": "lump_mobile_under_skin", "weight": 4 },
+      { "symptomId": "multiple_lipomas_family_history", "weight": 2 },
+      { "symptomId": "any_location_except_palms_soles", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "soft_rubbery_consistency", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "well_circumscribed", "baseWeight": 4 },
+      { "signId": "mobile_under_skin", "baseWeight": 4 },
+      { "signId": "lobulated_surface", "baseWeight": 3 },
+      { "signId": "no_overlying_skin_changes", "baseWeight": 3 },
+      { "signId": "negative_transillumination", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_of_lipomas", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "age_40_to_60", "multiplier": 2.0 },
+      { "id": "multiple_symmetrical_lipomatosis", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "superficial_lipoma",
+        "name": "Superficial Lipoma",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "subcutaneous_location", "weight": 5 },
+          { "feature": "soft_mobile", "weight": 5 },
+          { "feature": "classic_benign_features", "weight": 5 }
+        ],
+        "management": "Reassurance and observation. Excision if symptomatic, growing, cosmetic concern, or diagnostic uncertainty. Simple excision under LA."
+      },
+      {
+        "id": "deep_or_atypical_lipoma",
+        "name": "Deep or Atypical Lipomatous Tumor",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "deep_location_subfascial", "weight": 5 },
+          { "feature": "size_greater_5cm", "weight": 4 },
+          { "feature": "suspicious_features_on_imaging", "weight": 5 }
+        ],
+        "management": "MRI for characterization. Excision with histology. Wide local excision if atypical lipomatous tumor/well-differentiated liposarcoma. Long-term follow-up."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sebaceous_cyst",
+        "discriminators": ["central_punctum", "firm_not_soft", "may_have_cheesy_discharge"]
+      },
+      {
+        "diseaseId": "liposarcoma",
+        "discriminators": ["rapid_growth", "size_greater_10cm", "deep_location", "thick_septa_on_mri", "heterogeneous"]
+      },
+      {
+        "diseaseId": "neurofibroma",
+        "discriminators": ["NF1_stigmata", "cafe_au_lait_spots", "buttonhole_sign", "painful_with_pressure"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Palpation", "priority": "immediate", "yield": 0.7, "indication": "characterize mass" }
+      ],
+      "laboratory": [
+        { "name": "None", "priority": "low", "yield": 0.1, "indication": "not indicated" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound Soft Tissue", "priority": "medium", "yield": 0.8, "indication": "confirm fatty nature, rule out complex features" },
+        { "name": "MRI with contrast", "priority": "medium", "yield": 0.95, "indication": "if deep, large, or suspicious features" },
+        { "name": "CT", "priority": "low", "yield": 0.7, "indication": "alternative if MRI contraindicated" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Classification of Soft Tissue Tumors",
+      "pathways": [
+        {
+          "severity": "classic superficial lipoma",
+          "criteria": "soft, mobile, <5cm, superficial, classic exam",
+          "treatment": "Reassurance. Excision under LA if symptomatic or cosmetic. No further follow-up needed if histology confirms lipoma."
+        },
+        {
+          "severity": "atypical/deep/large lipoma",
+          "criteria": ">5cm, deep, rapid growth, atypical imaging",
+          "treatment": "MRI. Excision with histology. Refer to sarcoma MDT. Wide excision if atypical lipomatous tumor."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "benign_adipocyte_proliferation",
+      "mature_fat_tissue_accumulation",
+      "encapsulated_well_circumscribed_tumor"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrence_excision",
+        "probability": 0.02,
+        "lagDays": [180, 720],
+        "severityBoost": 0,
+        "clues": ["reappearance_at_same_site"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["soft_mobile_painless_subcutaneous_mass", "slow_growth", "benign_appearance_on_us"],
+    "exclusionClues": ["hard_fixed_irregular_mass", "rapid_growth", "skin_changes_overlying"]
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "disease": {
+    "id": "cord_prolapse",
+    "name": "Umbilical Cord Prolapse",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Descent of the umbilical cord through the cervix alongside (occult) or past (overt) the presenting part after membrane rupture. Obstetric emergency due to cord compression and fetal hypoxia.",
+    "prevalenceWeight": 0.003,
+    "syndromeTags": ["intrapartum_emergency", "fetal_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "prolonged_fetal_bradycardia", "weight": 10 },
+        { "sign": "cord_pulsations_stopped", "weight": 10 },
+        { "sign": "fetal_demise", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "overt_cord_prolapse_with_compression", "weight": 9 },
+          { "sign": "fetal_bradycardia_persistent", "weight": 9 },
+          { "sign": "cord_not_reducible", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Overt prolapse with fetal bradycardia -> SEVERE (immediate delivery)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_rupture_of_membranes", "weight": 5 },
+      { "symptomId": "sensation_of_cord_in_vagina", "weight": 5 },
+      { "symptomId": "fetal_movements_gone", "weight": 4 },
+      { "symptomId": "sudden_fetal_bradycardia_after_arm", "weight": 5 },
+      { "symptomId": "high_station_of_presenting_part", "weight": 3 },
+      { "symptomId": "polyhydramnios_history", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_cord_on_vaginal_exam", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cord_visible_at_vulva", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fetal_bradycardia", "baseWeight": 5 },
+      { "signId": "cord_pulsations_absent", "baseWeight": 5 },
+      { "signId": "cord_compression_manual_relief", "baseWeight": 4 },
+      { "signId": "presenting_part_high", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "malpresentation_transverse_oblique", "multiplier": 5.0 },
+      { "id": "prematurity", "multiplier": 3.0 },
+      { "id": "polyhydramnios", "multiplier": 3.0 },
+      { "id": "high_station_at_arm", "multiplier": 4.0 },
+      { "id": "multiple_gestation", "multiplier": 3.0 },
+      { "id": "long_cord", "multiplier": 2.0 },
+      { "id": "artificial_rupture_of_membranes_with_high_head", "multiplier": 3.0 },
+      { "id": "external_cephalic_version", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "overt_cord_prolapse",
+        "name": "Overt Cord Prolapse",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "cord_visible_or_palpable_below_presenting_part", "weight": 5 },
+          { "feature": "fetal_bradycardia", "weight": 5 },
+          { "feature": "membranes_ruptured", "weight": 5 }
+        ],
+        "management": "Emergency delivery. Manual elevation of presenting part (knee-chest or Trendelenburg). Cord replacement (rarely). Bladder filling. Tocolysis to reduce contractions."
+      },
+      {
+        "id": "occult_cord_prolapse",
+        "name": "Occult Cord Prolapse",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "variable_decelerations", "weight": 5 },
+          { "feature": "cord_not_palpable", "weight": 5 },
+          { "feature": "fetal_distress_signs", "weight": 4 }
+        ],
+        "management": "Change maternal position. CTG monitoring. Vaginal exam to confirm. Emergency C-section if persistent abnormalities."
+      }
+    ],
+
+    "mimics": [],
+    "investigations": {
+      "bedside": [
+        { "name": "Sterile vaginal examination", "priority": "immediate", "yield": 0.95, "indication": "confirm cord prolapse, assess cord pulsations" },
+        { "name": "Cardiotocography (CTG)", "priority": "immediate", "yield": 0.9, "indication": "variable decelerations or bradycardia" }
+      ],
+      "laboratory": [],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 50 - Umbilical Cord Prolapse",
+      "pathways": [
+        {
+          "severity": "overt_with_bradycardia",
+          "criteria": "cord palpable/visible, fetal bradycardia, cervix fully dilated",
+          "treatment": "Immediate delivery: instrumental if fully dilated and feasible, otherwise category-1 C-section. Relieve cord pressure manually throughout. Avoid pushing."
+        },
+        {
+          "severity": "overt_with_distress",
+          "criteria": "cord prolapse, fetal heart rate abnormal, cervix not fully dilated",
+          "treatment": "Category-1 C-section. Manual elevation of presenting part (two fingers in vagina). Knee-chest or Trendelenburg position. Bladder filling (500-700ml NS). Tocolysis (terbutaline 0.25mg SC). Arrange neonatal team."
+        },
+        {
+          "severity": "occult_without_distress",
+          "criteria": "variable decelerations, cord not palpable, reactive otherwise",
+          "treatment": "Change position (left lateral, knee-chest). Monitor CTG. Vaginal exam to exclude overt prolapse. Prepare for emergency C-section."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cord_below_presenting_part",
+      "cord_compression_between_presenting_part_and_pelvis",
+      "cord_vasospasm",
+      "fetal_hypoxia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypoxic_ischemic_encephalopathy",
+        "probability": 0.2,
+        "lagDays": [0, 3],
+        "severityBoost": 0.8,
+        "clues": ["prolonged_bradycardia", "low_apgar", "neonatal_seizures"]
+      },
+      {
+        "diseaseId": "fetal_demise",
+        "probability": 0.05,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["absent_fetal_heart_rate", "cord_not_pulsating"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["cord_palpable_on_exam", "fetal_bradycardia_after_arm", "variable_decelerations"],
+    "exclusionClues": ["normal_ctg", "cord_not_palpable_with_reassuring_fetal_status"]
+  }
+}

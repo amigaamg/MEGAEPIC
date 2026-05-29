@@ -1,0 +1,194 @@
+{
+  "disease": {
+    "id": "postoperative_bleeding",
+    "name": "Postoperative Hemorrhage",
+    "system": "surgical",
+    "agePeak_months": [],
+    "note": "Bleeding occurring after surgery, classified by timing: reactionary (within 24h, often from slipped ligature or clot dislodgement) or secondary (after 24h, often from infection eroding vessel). Can be intraluminal or extra-luminal.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["postoperative_complication", "hemorrhage", "hypovolemic_shock"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypotension_refractory", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "massive_hematemesis", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tachycardia_persistent", "weight": 7 },
+          { "sign": "falling_hemoglobin_drop_2gdl", "weight": 8 },
+          { "sign": "oliguria", "weight": 7 },
+          { "sign": "drain_bleeding_frank", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If shock/refractory hypotension/frank drain blood -> SEVERE; else -> NON-SEVERE (minor ooze, stable vitals)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "bleeding_from_wound_or_drain", "weight": 5 },
+      { "symptomId": "hematemesis", "weight": 5 },
+      { "symptomId": "melena", "weight": 5 },
+      { "symptomId": "hematochezia", "weight": 5 },
+      { "symptomId": "dizziness_syncope", "weight": 4 },
+      { "symptomId": "thirst", "weight": 3 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "cold_clammy_skin", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachycardia", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pale_mucous_membranes", "baseWeight": 3 },
+      { "signId": "cold_peripheries", "baseWeight": 3 },
+      { "signId": "oliguria_anuria", "baseWeight": 4 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 3 },
+      { "signId": "drain_output_bloody", "baseWeight": 5 },
+      { "signId": "wound_hematoma", "baseWeight": 4 },
+      { "signId": "abdominal_distension_sudden", "baseWeight": 4, "note": "Suggests intra-abdominal bleed" },
+      { "signId": "nasogastric_aspirate_bloody", "baseWeight": 5, "note": "Upper GI bleed" }
+    ],
+
+    "riskFactors": [
+      { "id": "coagulopathy", "multiplier": 3.0 },
+      { "id": "anticoagulant_therapy", "multiplier": 3.5 },
+      { "id": "antiplatelet_therapy", "multiplier": 2.5 },
+      { "id": "liver_cirrhosis", "multiplier": 2.5 },
+      { "id": "complex_surgery", "multiplier": 2.0 },
+      { "id": "emergency_surgery", "multiplier": 1.8 },
+      { "id": "hypotension_during_surgery", "multiplier": 1.5 },
+      { "id": "massive_blood_transfusion", "multiplier": 1.6 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "reactionary_hemorrhage",
+        "name": "Reactionary Hemorrhage (Early)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "onset_within_24h", "weight": 5 },
+          { "feature": "slipped_ligature", "weight": 4 },
+          { "feature": "clot_dislodgement", "weight": 4 },
+          { "feature": "rapid_deterioration", "weight": 5 }
+        ],
+        "management": "Immediate assessment of drain output, vitals. Fluid resuscitation. Reversal of anticoagulation. Emergency re-exploration if hemodynamically unstable or ongoing hemorrhage."
+      },
+      {
+        "id": "secondary_hemorrhage",
+        "name": "Secondary Hemorrhage (Late)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "onset_after_24h", "weight": 5 },
+          { "feature": "wound_infection", "weight": 4 },
+          { "feature": "erosion_of_vessel", "weight": 5 },
+          { "feature": "sentinel_bleed", "weight": 4, "note": "Small bleed warning sign of impending massive hemorrhage" }
+        ],
+        "management": "Antibiotics for underlying infection. If sentinel bleed: urgent angiography or re-exploration. Often requires vessel ligation. Pack wound if necessary."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "anastomotic_leak",
+        "discriminators": ["fever", "peritonitis", "elevated_crp", "drain_content_not_frank_blood"]
+      },
+      {
+        "diseaseId": "stress_gastritis",
+        "discriminators": ["melena_or_hematemesis", "icu_patient", "ng_aspirate_coffee_ground"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Vital signs monitoring", "priority": "immediate", "yield": 0.9, "indication": "all patients for early decompensation" },
+        { "name": "Drain output assessment", "priority": "immediate", "yield": 0.95, "indication": "drain in situ" },
+        { "name": "Nasogastric tube aspirate", "priority": "immediate", "yield": 0.85, "indication": "suspected upper GI bleed" },
+        { "name": "Urine output monitoring", "priority": "immediate", "yield": 0.8, "indication": "assess end-organ perfusion" }
+      ],
+      "laboratory": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.9, "indication": "Hb drop assessment" },
+        { "name": "Coagulation profile (PT, aPTT, INR)", "priority": "immediate", "yield": 0.9, "indication": "coagulopathy screening" },
+        { "name": "Cross-match blood", "priority": "immediate", "yield": 1.0, "indication": "in anticipation of transfusion" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "tissue hypoperfusion marker" },
+        { "name": "Thromboelastography (TEG/ROTEM)", "priority": "medium", "yield": 0.85, "indication": "targeted coagulation management" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV contrast (arterial phase)", "priority": "high", "yield": 0.9, "indication": "hemodynamically stable; to locate bleeding source" },
+        { "name": "CT Angiography", "priority": "high", "yield": 0.95, "indication": "active extravasation detection" },
+        { "name": "Angiography with embolization", "priority": "medium", "yield": 0.9, "indication": "therapeutic diagnostic if stable" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATLS Massive Hemorrhage Protocol; WHO Surgical Safety Checklist",
+      "pathways": [
+        {
+          "severity": "minor",
+          "criteria": "stable vitals, Hb drop < 1 g/dL, minimal drain output",
+          "treatment": "Conservative: IV fluids, close monitoring of vitals and Hb. If on anticoagulants, reverse appropriately. Consider tranexamic acid."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "tachycardia, Hb drop 1-2 g/dL, drain bloody but no shock",
+          "treatment": "IV fluids resuscitation. Type and cross-match. Reverse anticoagulation. CT angiography to locate source. Consider angioembolization."
+        },
+        {
+          "severity": "severe",
+          "criteria": "hypotension, Hb drop > 2 g/dL, frank blood from drain/wound, oliguria",
+          "treatment": "Massive transfusion protocol. Emergency re-laparotomy. Surgical control of bleeding vessel. IV fluids + vasopressors. ICU admission."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "slipped_vascular_ligature",
+      "inadequate_hemostasis",
+      "coagulopathy",
+      "clot_lysis",
+      "vessel_erosion_by_infection",
+      "increased_venous_pressure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypovolemic_shock",
+        "probability": 0.3,
+        "lagDays": [0, 1],
+        "severityBoost": 0.6,
+        "clues": ["hypotension", "tachycardia", "low_cvp"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "lagDays": [1, 3],
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.1,
+        "lagDays": [0, 2],
+        "severityBoost": 0.4,
+        "clues": ["worsening_coagulopathy", "petechiae", "bleeding_from_all_sites"]
+      },
+      {
+        "diseaseId": "wound_hematoma",
+        "probability": 0.2,
+        "lagDays": [1, 3],
+        "severityBoost": 0.1,
+        "clues": ["wound_swelling", "ecchymosis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["postoperative_tachycardia_unexplained", "falling_hb", "frank_blood_from_drain", "hypotension_postop"],
+    "exclusionClues": ["stable_vitals", "normal_hb", "non_bloody_drain_output"]
+  }
+}

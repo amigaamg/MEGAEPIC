@@ -1,0 +1,170 @@
+{
+  "disease": {
+    "id": "primary_open_angle_glaucoma",
+    "name": "Primary Open Angle Glaucoma (POAG)",
+    "system": "OPHTH",
+    "agePeak_months": [540, 960],
+    "note": "Chronic progressive optic neuropathy characterized by retinal ganglion cell loss, optic disc cupping, and visual field loss. Associated with elevated intraocular pressure but can occur with normal IOP (normal-tension glaucoma).",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["glaucoma", "optic_neuropathy", "irreversible_blindness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "severeCriteria": {
+        "anyDangerSign": false,
+        "additionalCriteria": [
+          { "sign": "advanced_visual_field_loss_binocular", "weight": 8 },
+          { "sign": "cup_to_disc_ratio_over_0_8", "weight": 7 },
+          { "sign": "IOP_over_30_uncontrolled", "weight": 7 },
+          { "sign": "severe_thinning_of_RNFL_on_OCT", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Advanced field loss, high IOP uncontrolled -> SEVERE; Early glaucoma -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "asymptomatic_early_stage", "weight": 5 },
+      { "symptomId": "gradual_peripheral_vision_loss", "weight": 4 },
+      { "symptomId": "tunnel_vision_in_advanced", "weight": 3 },
+      { "symptomId": "difficulty_seeing_at_night", "weight": 2 },
+      { "symptomId": "family_history_of_glaucoma", "weight": 4 },
+      { "symptomId": "incidental_finding_during_routine_exam", "weight": 4 },
+      { "symptomId": "occasional_eye_ache", "weight": 1 },
+      { "symptomId": "frequent_need_to_change_glasses", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "optic_disc_cupping_increased_CDR", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "asymmetric_cup_disc_ratio", "baseWeight": 4 },
+      { "signId": "notch_or_focal_thinning_of_rim", "baseWeight": 4 },
+      { "signId": "elevated_intraocular_pressure_over_21", "baseWeight": 4 },
+      { "signId": "open_angle_on_gonioscopy", "baseWeight": 5 },
+      { "signId": "splinter_hemorrhage_on_disc", "baseWeight": 3 },
+      { "signId": "nerve_fiber_layer_defect_on_slit_lamp", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 3.0 },
+      { "id": "family_history_first_degree", "multiplier": 4.0 },
+      { "id": "elevated_IOP", "multiplier": 5.0 },
+      { "id": "thin_central_corneal_thickness", "multiplier": 2.0 },
+      { "id": "african_caribbean_ancestry", "multiplier": 3.0 },
+      { "id": "myopia_high", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "hypertension", "multiplier": 1.3 },
+      { "id": "corticosteroid_use", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "high_tension_glaucoma",
+        "name": "High-Tension Glaucoma",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "IOP_above_21_mmHg", "weight": 5 },
+          { "feature": "visual_field_defects", "weight": 5 },
+          { "feature": "optic_disc_cupping", "weight": 5 }
+        ],
+        "management": "IOP lowering: Prostaglandin analogs (Latanoprost, Travoprost) first-line. Beta-blockers (Timolol), Alpha-agonists (Brimonidine), CAI (Dorzolamide). Laser trabeculoplasty. Trabeculectomy if medical failure."
+      },
+      {
+        "id": "normal_tension_glaucoma",
+        "name": "Normal-Tension Glaucoma",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "IOP_below_21", "weight": 5 },
+          { "feature": "optic_neuropathy_progressive", "weight": 5 },
+          { "feature": "visual_field_loss", "weight": 5 },
+          { "feature": "lower_24h_blood_pressure_dip", "weight": 3 },
+          { "feature": "migraine_raynauds", "weight": 2 }
+        ],
+        "management": "IOP lowering (target 20-30% reduction). Prostaglandin analogs. Neuroprotective strategies. Treat nocturnal hypotension. Consider surgery if progressive."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "optic_atrophy",
+        "discriminators": ["pale_disc", "reduced_RNFL", "normal_IOP"]
+      },
+      {
+        "diseaseId": "myelinated_nerve_fibers",
+        "discriminators": ["white_abnormal_appearance", "normal_function"]
+      },
+      {
+        "diseaseId": "ischemic_optic_neuropathy",
+        "discriminators": ["acute_vision_loss", "disc_swelling", "no_cupping"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Tonometry (Goldmann applanation)", "priority": "immediate", "yield": 0.9, "indication": "measure IOP" },
+        { "name": "Gonioscopy", "priority": "immediate", "yield": 0.95, "indication": "assess angle - open in POAG" },
+        { "name": "Dilated fundus exam (optic disc assessment)", "priority": "immediate", "yield": 0.9, "indication": "cup:disc ratio, rim" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Visual field perimetry (Humphrey 24-2)", "priority": "diagnostic", "yield": 0.85, "indication": "detect and monitor field loss" },
+        { "name": "OCT optic nerve head / RNFL", "priority": "diagnostic", "yield": 0.9, "indication": "quantify structural loss" },
+        { "name": "Corneal pachymetry", "priority": "high", "yield": 0.7, "indication": "CCT affects IOP accuracy" },
+        { "name": "Gonioscopy", "priority": "essential", "yield": 0.95, "indication": "confirm open angle" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO Preferred Practice Pattern - Primary Open Angle Glaucoma",
+      "pathways": [
+        {
+          "severity": "early",
+          "criteria": "MDU <0.5, early field loss, IOP <25",
+          "treatment": "First-line: Prostaglandin analog (Latanoprost 0.005% nocte). Target IOP: 15-18 mmHg (or 25-30% reduction). Review in 6-12 weeks. If target not met: add second agent."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "MDU 0.5-0.8, moderate field defects",
+          "treatment": "Combination therapy (e.g., Latanoprost + Timolol or Dorzolamide+Timolol). Selective laser trabeculoplasty (SLT). Consider trabeculectomy if target IOP not achieved."
+        },
+        {
+          "severity": "advanced",
+          "criteria": "MDU >0.8, severe field loss, uncontrolled IOP",
+          "treatment": "Trabeculectomy (augmented with Mitomycin-C). Tube shunt (Ahmed, Baerveldt) if failed trab. Low-target IOP (10-12 mmHg). Monitor for progression."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "impaired_aqueous_outflow",
+      "trabecular_meshwork_resistance",
+      "ganglion_cell_apoptosis",
+      "mechanical_compression_of_optic_nerve",
+      "vascular_dysregulation_theory"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "irreversible_vision_loss",
+        "probability": 0.1,
+        "lagDays": [365, 7300],
+        "severityBoost": 0.8,
+        "clues": ["progressive_field_loss", "high_IOP_uncontrolled"]
+      },
+      {
+        "diseaseId": "cataract",
+        "probability": 0.2,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.2,
+        "clues": ["lens_opacity", "surgery_may_be_needed"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["elevated_IOP", "optic_disc_cupping", "visual_field_defects", "open_angle"],
+    "exclusionClues": ["normal_IOP_and_normal_disc", "no_field_loss"]
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "disease": {
+    "id": "polypharmacy",
+    "name": "Polypharmacy",
+    "system": "geriatrics",
+    "agePeak_months": [660, 1080],
+    "note": "Use of multiple medications (typically 5+) in older adults. Associated with increased adverse drug reactions, interactions, and non-adherence.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["medication_overload", "adverse_drug_reactions", "geriatric_giant"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suspected_adverse_drug_reaction", "weight": 8 },
+        { "sign": "drug_drug_interaction_symptoms", "weight": 7 },
+        { "sign": "anticholinergic_toxicity", "weight": 8 },
+        { "sign": "recent_fall_post_medication_change", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "stable_on_medications": true,
+        "no_adverse_effects": true,
+        "medications_appropriate": true
+      },
+      "severityLabel": "If suspected ADR or interaction -> URGENT; stable polypharmacy -> NON-URGENT medication review"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "taking_5_or_more_medications", "weight": 5 },
+      { "symptomId": "recent_medication_changes", "weight": 3 },
+      { "symptomId": "medication_non_adherence", "weight": 3 },
+      { "symptomId": "dizziness_or_falls_since_new_drug", "weight": 4 },
+      { "symptomId": "confusion_or_sedation", "weight": 3 },
+      { "symptomId": "multiple_prescribers", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "orthostatic_hypotension", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "bradycardia_or_hypotension", "baseWeight": 3 },
+      { "signId": "confusion_or_lethargy", "baseWeight": 3 },
+      { "signId": "signs_of_bleeding_or_bruising", "baseWeight": 3 },
+      { "signId": "extrapyramidal_signs", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_75", "multiplier": 2.0 },
+      { "id": "multiple_comorbidities", "multiplier": 2.5 },
+      { "id": "multiple_prescribers", "multiplier": 1.8 },
+      { "id": "hospital_discharge_recent", "multiplier": 1.5 },
+      { "id": "cognitive_impairment", "multiplier": 1.4 },
+      { "id": "renal_impairment", "multiplier": 1.6 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "adverse_drug_reactions_geriatric",
+        "discriminators": ["specific_symptom_medication_timing", "positive_dechallenge_rechallenge"]
+      },
+      {
+        "diseaseId": "delirium",
+        "discriminators": ["acute_confusion_due_to_medications", "anticholinergic_burden"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Medication reconciliation (brown bag review)", "priority": "immediate", "yield": 0.95, "indication": "complete medication list" },
+        { "name": "STOPP/START criteria assessment", "priority": "high", "yield": 0.9, "indication": "potentially inappropriate medications" }
+      ],
+      "laboratory": [
+        { "name": "Renal function (eGFR)", "priority": "high", "yield": 0.7, "indication": "dose adjustment" },
+        { "name": "LFTs, electrolytes, drug levels", "priority": "high", "yield": 0.6, "indication": "monitoring and toxicity" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG56 – Medicines optimisation",
+      "pathways": [
+        {
+          "severity": "active_issue",
+          "criteria": "suspected ADR, interaction, or harm",
+          "treatment": "Identify culprit medication. Withhold or adjust dose. Assess causality. Report ADR. Medication review with deprescribing."
+        },
+        {
+          "severity": "preventive_review",
+          "criteria": ">=5 medications, stable",
+          "treatment": "Comprehensive medication review using STOPP/START. Deprescribe unnecessary medications. Simplify dosing regimens. Use lowest effective doses. Regular review every 6-12 months."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "altered_pharmacokinetics_in_aging",
+      "reduced_renal_clearance",
+      "reduced_hepatic_metabolism",
+      "increased_body_fat_volume_of_distribution",
+      "drug_drug_interactions",
+      "anticholinergic_cumulative_burden"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "adverse_drug_reactions_geriatric",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["new_symptom_after_drug_start", "high_risk_drug_combinations"]
+      },
+      {
+        "diseaseId": "recurrent_falls",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["sedatives_or_antihypertensives", "orthostatic_hypotension"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "variable per individual",
+    "diagnosticClues": ["medication_count_5plus", "age_over_65", "multiple_prescribers"],
+    "exclusionClues": ["appropriate_limited_medications", "no_adverse_effects", "regular_medication_review"]
+  }
+}

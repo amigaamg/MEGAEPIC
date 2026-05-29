@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "cancer_nausea_vomiting",
+    "name": "Nausea and Vomiting in Cancer Patients",
+    "system": "ONCO",
+    "agePeak_months": [360, 960],
+    "note": "Multifactorial etiology in cancer. Chemotherapy-induced (CINV) most studied. Categories: acute, delayed, anticipatory, breakthrough, refractory.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["palliative_care", "symptom_management", "gastrointestinal"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "intractable_vomiting_dehydration", "weight": 8 },
+        { "sign": "aspiration_pneumonitis", "weight": 9 },
+        { "sign": "metabolic_alkalosis_electrolyte_disturbance", "weight": 7 },
+        { "sign": "esophageal_rupture_mallory_weiss", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "CTCAE Grade 1 (mild) to Grade 5 (death). MASCC antiemetic guideline risk categories."
+    },
+    "historyFeatures": [
+      { "symptomId": "nausea_timing_relation_to_meals_medication", "weight": 5 },
+      { "symptomId": "vomiting_frequency_content_projectile", "weight": 4 },
+      { "symptomId": "chemotherapy_radiotherapy_timing", "weight": 5 },
+      { "symptomId": "medication_list_opioids_antibiotics", "weight": 4 },
+      { "symptomId": "bowel_habits_constipation_obstruction", "weight": 3 },
+      { "symptomId": "neurological_symptoms_headache_visual", "weight": 3, "note": "Raised ICP" },
+      { "symptomId": "previous_response_to_antiemetics", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "mucous_membrane_dryness_dehydration", "baseWeight": 3 },
+      { "signId": "abdominal_distension_tenderness", "baseWeight": 3 },
+      { "signId": "neurological_exam_papilledema", "baseWeight": 2 },
+      { "signId": "signs_of_malignant_bowel_obstruction", "baseWeight": 4 },
+      { "signId": "postural_hypotension", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "younger_age_under_50", "multiplier": 1.8 },
+      { "id": "prior_history_cin_v", "multiplier": 3.0 },
+      { "id": "motion_sickness_history", "multiplier": 1.5 },
+      { "id": "anxiety", "multiplier": 1.5 },
+      { "id": "low_alcohol_intake", "multiplier": 1.3 },
+      { "id": "emetic_potential_of_chemotherapy", "multiplier": 4.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "chemotherapy_induced_nausea_vomiting",
+        "name": "Chemotherapy-Induced Nausea and Vomiting",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "temporal_relation_to_chemo_infusion", "weight": 5 },
+          { "feature": "acute_onset_0_24h", "weight": 4 },
+          { "feature": "delayed_onset_24h_5d", "weight": 4 },
+          { "feature": "high_moderate_emetogenic_chemo", "weight": 5 }
+        ],
+        "management": "Triple prophylaxis for high emetic risk: NK1 antagonist (aprepitant/fosaprepitant) + 5-HT3 antagonist (ondansetron/palonosetron) + dexamethasone. Add olanzapine for breakthrough. Delayed: dexamethasone + aprepitant x 3 days."
+      },
+      {
+        "id": "malignant_bowel_obstruction",
+        "name": "Nausea/Vomiting from Malignant Bowel Obstruction",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "vomiting_after_meals", "weight": 5 },
+          { "feature": "abdominal_distension_cramps", "weight": 4 },
+          { "feature": "obstipation", "weight": 4 },
+          { "feature": "known_abdominal_pelvic_malignancy", "weight": 4 }
+        ],
+        "management": "Conservative: IV fluids, NG tube, octreotide (300-600 mcg/ day SC/IV), dexamethasone. Metoclopramide if no complete obstruction. Palliative surgery/stenting if appropriate. Manage at home with octreotide + antiemetics."
+      },
+      {
+        "id": "opioid_induced_nausea",
+        "name": "Opioid-Induced Nausea",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "onset_after_opioid_start_or_dose_increase", "weight": 5 },
+          { "feature": "peaks_3_to_5_days", "weight": 4 },
+          { "feature": "vestibular_sensitivity", "weight": 2 }
+        ],
+        "management": "Antiemetic prophylaxis: metoclopramide or haloperidol PRN for first week. Tolerance usually develops. Switch opioid if persistent. Consider transdermal route (fentanyl patch) to bypass GI."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "vestibular_disorder", "discriminators": ["vertigo", "nystagmus", "positional_triggers", "hearing_loss"] },
+      { "diseaseId": "raised_intracranial_pressure", "discriminators": ["morning_headache", "papilledema", "neurological_deficits", "brain_metastases_on_imaging"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Assessment of oral intake and urine output", "priority": "immediate", "yield": 0.8, "indication": "hydration status" },
+        { "name": "MASCC antiemetic risk assessment", "priority": "high", "yield": 0.85, "indication": "guide prophylaxis based on chemo emetogenicity" }
+      ],
+      "laboratory": [
+        { "name": "U&E, creatinine, bicarbonate, chloride", "priority": "high", "yield": 0.6, "indication": "electrolyte disturbance, metabolic alkalosis" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-ray/CT", "priority": "medium", "yield": 0.7, "indication": "suspected bowel obstruction" },
+        { "name": "CT Brain", "priority": "medium", "yield": 0.6, "indication": "suspected brain metastases/raised ICP" }
+      ]
+    },
+    "management": {
+      "protocolReference": "MASCC/ESMO Antiemetic Guidelines / NCCN Antiemesis",
+      "pathways": [
+        {
+          "severity": "CINV prophylaxis - high emetic risk",
+          "criteria": "cisplatin, AC combination, carboplatin AUC ≥4",
+          "treatment": "Day 1: NK1RA (aprepitant 125 mg or fosaprepitant 150 mg) + 5-HT3RA (palonosetron 0.25 mg) + dexamethasone 12 mg + olanzapine 5-10 mg. Days 2-4: aprepitant 80 mg + dexamethasone 8 mg. Days 2-4: olanzapine 5-10 mg."
+        },
+        {
+          "severity": "CINV prophylaxis - moderate emetic risk",
+          "criteria": "carboplatin AUC <4, oxaliplatin, irinotecan, doxorubicin",
+          "treatment": "Day 1: 5-HT3RA (ondansetron 16 mg or palonosetron) + dexamethasone 8-12 mg. Days 2-3: dexamethasone alone or 5-HT3RA + dexamethasone."
+        },
+        {
+          "severity": "breakthrough/refractory CINV",
+          "criteria": "nausea/vomiting despite optimal prophylaxis",
+          "treatment": "Add olanzapine 5-10 mg daily. Switch 5-HT3RA. Add metoclopramide 10-20 mg TID. Consider haloperidol 1-2 mg, nabilone, or lorazepam. IV hydration. Reassess antiemetic regimen."
+        },
+        {
+          "severity": "malignant bowel obstruction",
+          "criteria": "confirmed obstruction in advanced cancer",
+          "treatment": "IV fluids, NG decompression. Octreotide 300-600 mcg/day SC/IV. Dexamethasone 8-16 mg IV. Metoclopramide if incomplete obstruction only. Anticholinergics (hyoscine butylbromide) for colic. Consider stenting/surgery if single level obstruction."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "chemoreceptor_trigger_zone_activation_area_postrema",
+      "vagal_afferent_stimulation_gut",
+      "serotonin_release_from_enterochromaffin_cells",
+      "substance_p_neurokinin_1_activation",
+      "dopamine_d2_receptors_ctz",
+      "histamine_muscarinic_vestibular_pathways",
+      "cannabinoid_receptors_modulation",
+      "cortical_anticipatory_pathways"
+    ],
+    "complications": [
+      { "diseaseId": "dehydration_electrolyte_imbalance", "probability": 0.2, "severityBoost": 0.2, "clues": ["dry_mucosa", "decreased_skin_turgor", "low_k_na_cl", "metabolic_alkalosis"] },
+      { "diseaseId": "malnutrition_weight_loss", "probability": 0.15, "severityBoost": 0.3, "clues": ["decreased_oral_intake", "weight_loss_over_time", "low_albumin"] },
+      { "diseaseId": "esophageal_tear_mallory_weiss", "probability": 0.01, "severityBoost": 0.5, "clues": ["forceful_vomiting", "hematemesis_after_vomiting", "chest_pain"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["cancer_patient_nausea_vomiting", "temporal_relation_to_treatment", "multifactorial_causes", "impact_on_quality_of_life_and_nutrition"],
+    "exclusionClues": ["vomiting from single reversible cause (e.g. gastroenteritis)", "non_cancer_etiology identified"]
+  }
+}

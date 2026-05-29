@@ -1,0 +1,164 @@
+{
+  "disease": {
+    "id": "acute_myeloid_leukemia",
+    "name": "Acute Myeloid Leukemia",
+    "system": "hematology",
+    "agePeak_months": [720, 960, 1080],
+    "note": "Clonal disorder of myeloid progenitor cells with accumulation of blasts in marrow and blood. Heterogeneous with multiple subtypes. Prognosis depends on cytogenetics and molecular mutations.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["leukemia", "blast", "pancytopenia", "myeloid"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "leukostasis", "weight": 10, "note": "Blast count >100,000" },
+        { "sign": "sepsis", "weight": 9 },
+        { "sign": "severe_bleeding", "weight": 9 },
+        { "sign": "tumor_lysis_syndrome", "weight": 8 },
+        { "sign": "disseminated_intravascular_coagulation", "weight": 9, "note": "Especially APML" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "stable_counts": true
+      },
+      "severityLabel": "If leukostasis, DIC, or TLS -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "bruising", "weight": 4 },
+      { "symptomId": "epistaxis", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "bone_pain", "weight": 3 },
+      { "symptomId": "gum_swelling", "weight": 2 },
+      { "symptomId": "lymphadenopathy", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5 },
+      { "signId": "petechiae", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "gingival_hypertrophy", "baseWeight": 3, "note": "Leukemic infiltration" },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "hepatomegaly", "baseWeight": 1 },
+      { "signId": "nodes", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_chemotherapy", "multiplier": 3.0 },
+      { "id": "radiation_exposure", "multiplier": 2.5 },
+      { "id": "myelodysplastic_syndrome", "multiplier": 3.0 },
+      { "id": "down_syndrome", "multiplier": 3.0 },
+      { "id": "benzene_exposure", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "older_age", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "apml",
+        "name": "Acute Promyelocytic Leukemia (APML, M3)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "pml_rara_translocation", "weight": 5 },
+          { "feature": "high_dic_risk", "weight": 5 },
+          { "feature": "promyelocytes_with_auers", "weight": 4 }
+        ],
+        "management": "ATRA + arsenic trioxide. High vigilance for DIC. DO NOT give prophylactic heparin."
+      },
+      {
+        "id": "aml_standard",
+        "name": "AML (Non-APML)",
+        "prevalenceModifier": 0.9,
+        "keyFeatures": [
+          { "feature": "myeloblasts_in_marrow_above_20_percent", "weight": 5 },
+          { "feature": "cytogenetic_molecular_markers", "weight": 4 }
+        ],
+        "management": "7+3 induction (cytarabine 7d + anthracycline 3d). Consolidation based on risk. HSCT if high risk."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_lymphoblastic_leukemia",
+        "discriminators": ["lymphoblasts", "mpopositive", "t_cell_or_b_cell_markers", "pa_s_positive"]
+      },
+      {
+        "diseaseId": "myelodysplastic_syndrome",
+        "discriminators": ["blasts_less_than_20_percent", "dysplastic_changes", "no_auers"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "Cytopenias, blast present" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.95, "indication": "Blasts, Auers rods in some subtypes" }
+      ],
+      "laboratory": [
+        { "name": "Bone marrow aspirate and trephine", "priority": "immediate", "yield": 0.99, "indication": "Blasts >20%, immunophenotyping" },
+        { "name": "Flow cytometry", "priority": "immediate", "yield": 0.98, "indication": "CD13, CD33, CD117, MPO positive" },
+        { "name": "Cytogenetics / FISH", "priority": "high", "yield": 0.85, "indication": "t(8;21), t(15;17), inv(16), etc." },
+        { "name": "Molecular panel (NGS)", "priority": "high", "yield": 0.7, "indication": "NPM1, FLT3-ITD, CEBPA, IDH1/2, RUNX1" },
+        { "name": "Coagulation screen", "priority": "immediate", "yield": 0.6, "indication": "Rule out DIC in APML" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.2, "indication": "Baseline, rule out infection" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / ELN Guidelines for AML",
+      "pathways": [
+        {
+          "severity": "apml_emergency",
+          "criteria": "Suspected APML with coagulopathy",
+          "treatment": "ATRA 45mg/m2/day immediately. Support platelets and cryoprecipitate. Minimize procedures. Confirm by FISH."
+        },
+        {
+          "severity": "induction",
+          "criteria": "Newly diagnosed AML (non-APML), fit for intensive chemo",
+          "treatment": "7+3: cytarabine 100-200mg/m2/day continuous infusion x7d + idarubicin 12mg/m2/day x3d. Supportive care."
+        },
+        {
+          "severity": "unfit",
+          "criteria": "Age >75 or comorbidities, unfit for intensive chemo",
+          "treatment": "Hypomethylating agents (azacitidine or decitabine). Venetoclax combinations if FLT3 or IDH amenable."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "clonal_myeloid_progenitor_mutation",
+      "differentiation_arrest",
+      "uncontrolled_proliferation",
+      "marrow_failure",
+      "cytopenias",
+      "leukemic_infiltration"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_lysis_syndrome",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["high_tumor_burden", "high_wbc", "elevated_urate_k_phosphate"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["apml_subtype", "prolonged_coag", "low_fibrinogen"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["myeloblasts_in_blood_or_marrow", "auers_rods", "cytopenia", "mpo_positive"],
+    "exclusionClues": ["lymphoblasts", "pa_s_positive", "mpo_negative"]
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "disease": {
+    "id": "tumor_lysis_syndrome",
+    "name": "Tumor Lysis Syndrome",
+    "system": "ONCO",
+    "agePeak_months": [18, 720],
+    "note": "Oncologic emergency from rapid tumor cell destruction releasing intracellular contents. Spontaneous or treatment-induced. High risk in bulky, rapidly proliferating tumors.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["oncologic_emergency", "metabolic_crisis", "chemotherapy_complication"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hyperkalemia_cardiac_arrhythmia", "weight": 10 },
+        { "sign": "acute_renal_failure_oliguric", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "seizure_from_hypocalcemia", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Laboratory TLS (2+ metabolic abnormalities) vs Clinical TLS (lab TLS + organ damage). Cairo-Bishop grading system."
+    },
+    "historyFeatures": [
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "muscle_cramps_weakness", "weight": 3 },
+      { "symptomId": "decreased_urine_output", "weight": 4 },
+      { "symptomId": "fatigue_lethargy", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "confusion_seizures", "weight": 4 },
+      { "symptomId": "recent_initiation_of_chemotherapy", "weight": 5 },
+      { "symptomId": "bulky_disease_high_ldh", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "oliguria_anuria", "baseWeight": 4 },
+      { "signId": "signs_of_hyperkalemia_ecg", "baseWeight": 5 },
+      { "signId": "tetany_carpopedal_spasm", "baseWeight": 3, "note": "Hypocalcemia" },
+      { "signId": "chvostek_trousseau_sign", "baseWeight": 3 },
+      { "signId": "altered_mental_status", "baseWeight": 3 },
+      { "signId": "cardiac_arrhythmia", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "high_tumor_burden_bulky_disease", "multiplier": 3.0 },
+      { "id": "rapidly_proliferating_tumor_high_ki67", "multiplier": 2.5 },
+      { "id": "high_ldh_pre_treatment", "multiplier": 2.5 },
+      { "id": "pre_existing_renal_impairment", "multiplier": 3.0 },
+      { "id": "hematologic_malignancy_leukemia_lymphoma", "multiplier": 3.0 },
+      { "id": "dehydration", "multiplier": 2.0 },
+      { "id": "hyperuricemia_at_baseline", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "laboratory_tls",
+        "name": "Laboratory TLS (Cairo-Bishop Criteria)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "2_or_more_abnormalities_within_3d_of_treatment", "weight": 5 },
+          { "feature": "hyperuricemia_8_476_or_25_percent_increase", "weight": 4 },
+          { "feature": "hyperkalemia_6_0_or_25_percent_increase", "weight": 4 },
+          { "feature": "hyperphosphatemia_4_5_children_6_5_adults", "weight": 4 },
+          { "feature": "hypocalcemia_corrected_2_1_or_25_percent_decrease", "weight": 4 }
+        ],
+        "management": "Aggressive IV hydration (3 L/m2/day of NS). Allopurinol (300 mg/day) or rasburicase (0.2 mg/kg) for hyperuricemia. Monitor electrolytes q6-8h. Cardiac monitoring if K >6.0. Calcium gluconate for symptomatic hypocalcemia only."
+      },
+      {
+        "id": "clinical_tls",
+        "name": "Clinical TLS (Cairo-Bishop Criteria)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "lab_tls_plus_organ_damage", "weight": 5 },
+          { "feature": "acute_kidney_injury_creatinine_1_5_uln", "weight": 5 },
+          { "feature": "cardiac_arrhythmia_or_sudden_death", "weight": 5 },
+          { "feature": "seizure", "weight": 4 }
+        ],
+        "management": "ICU admission. Cardiac monitoring. Rasburicase. Management of hyperkalemia: insulin + glucose, calcium gluconate, albuterol, kayexalate. Hemodialysis for refractory hyperkalemia, severe AKI, or symptomatic hypocalcemia. Continue hydration."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "hyperkalemia_from_renal_failure", "discriminators": ["known_ckd", "no_tumor_lysis_context", "normal_uric_acid_phosphate"] },
+      { "diseaseId": "hypocalcemia_from_other_causes", "discriminators": ["no_hyperphosphatemia_or_hyperuricemia", "normal_k", "vitamin_d_deficiency_or_hypoparathyroidism"] },
+      { "diseaseId": "acute_kidney_injury_other", "discriminators": ["pre_renal_or_intrinsic_aki_etiologies", "no_tls_metabolic_derangements"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "U&E (potassium, creatinine, urea, sodium)", "priority": "immediate", "yield": 0.95, "indication": "hyperkalemia, renal function" },
+        { "name": "Uric acid", "priority": "immediate", "yield": 0.9, "indication": "hyperuricemia hallmark of TLS" },
+        { "name": "Phosphate, calcium (corrected)", "priority": "immediate", "yield": 0.9, "indication": "hyperphosphatemia, secondary hypocalcemia" },
+        { "name": "LDH", "priority": "immediate", "yield": 0.8, "indication": "marker of tumor burden, rapid cell turnover" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.7, "indication": "peaked T, wide QRS, sine wave for hyperkalemia" }
+      ],
+      "bedside": [
+        { "name": "Urine output monitoring (strict I/O)", "priority": "immediate", "yield": 0.9, "indication": "oliguria as early sign of AKI" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "Cairo-Bishop TLS Guidelines / NCCN TLS Guidelines",
+      "pathways": [
+        {
+          "severity": "prophylaxis (high risk, no TLS yet)",
+          "criteria": "high risk tumor (ALL, Burkitt lymphoma, bulky DLBCL), normal electrolytes",
+          "treatment": "IV hydration (3 L/m2/day of 0.45% NS or NS). Allopurinol 300 mg/day PO (600 mg if high risk). Rasburicase if uric acid >7.5 mg/dL or high tumor burden. Monitor electrolytes q6-12h during first 48-72h of treatment."
+        },
+        {
+          "severity": "laboratory TLS",
+          "criteria": "2+ metabolic abnormalities, no organ damage",
+          "treatment": "Continue aggressive hydration. Allopurinol or rasburicase. Monitor cardiac rhythm if K >6.0. Correct hyperkalemia (insulin + glucose, albuterol, calcium gluconate). Monitor urine output. Consider early nephrology consult."
+        },
+        {
+          "severity": "clinical TLS",
+          "criteria": "lab TLS + AKI, arrhythmia, seizure",
+          "treatment": "ICU admission. Rasburicase (0.2 mg/kg IV x 1-2 doses). Emergent management of hyperkalemia. Hemodialysis indications: K >6.5 refractory, severe AKI (creatinine >10x ULN or >5x with oliguria), symptomatic hypocalcemia, severe volume overload. Arrhythmia protocol."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "rapid_tumor_cell_lysis",
+      "release_of_intracellular_contents",
+      "purine_metabolism_leads_to_hyperuricemia",
+      "dna_breakdown_leads_to_hyperphosphatemia",
+      "calcium_phosphate_precipitation_in_kidneys",
+      "acute_urate_nephropathy",
+      "hyperkalemia_from_cell_content_release",
+      "acute_kidney_injury_from_multiple_mechanisms"
+    ],
+    "complications": [
+      { "diseaseId": "acute_renal_failure", "probability": 0.3, "severityBoost": 0.5, "clues": ["oliguria", "rising_creatinine", "hyperkalemia", "refractory_electrolytes"] },
+      { "diseaseId": "cardiac_arrhythmia", "probability": 0.1, "severityBoost": 0.6, "clues": ["hyperkalemia_ecg_changes", "palpitations", "syncope", "cardiac_arrest"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["post_chemotherapy_metabolic_crisis", "bulky_hematologic_malignancy", "hyperuricemia_hyperkalemia_hyperphosphatemia_hypocalcemia", "high_ldh"],
+    "exclusionClues": ["no_tumor_lysis_context", "normal_electrolytes_uric_acid", "aki_from_other_cause"]
+  }
+}

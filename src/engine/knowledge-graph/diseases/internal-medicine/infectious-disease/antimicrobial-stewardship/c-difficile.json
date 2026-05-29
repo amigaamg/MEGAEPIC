@@ -1,0 +1,160 @@
+{
+  "disease": {
+    "id": "c_difficile",
+    "name": "Clostridioides Difficile Infection (CDI)",
+    "system": "infectious_disease",
+    "agePeak_months": [480, 960],
+    "note": "Toxin-producing anaerobic bacterium causing antibiotic-associated diarrhea and colitis. Leading cause of healthcare-associated diarrhea. Hypervirulent strains (NAP1/027).",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["healthcare_associated_infection", "antibiotic_associated_diarrhea", "colitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "fulminant_colitis_toxic_megacolon", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "colonic_perforation", "weight": 10 },
+        { "sign": "ileus", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Mild-moderate (WBC <15, Cr <1.5), Severe (WBC >15 or Cr >1.5), Fulminant (shock/ileus/megacolon)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "diarrhea_watery_frequent", "weight": 5 },
+      { "symptomId": "antibiotic_use_last_12_weeks", "weight": 5 },
+      { "symptomId": "abdominal_pain_cramping", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "nausea_loss_of_appetite", "weight": 2 },
+      { "symptomId": "recent_hospitalization", "weight": 4 },
+      { "symptomId": "prior_cdi_episodes", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_distension_tenderness", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "dehydration_signs", "baseWeight": 3 },
+      { "signId": "guarding_or_rebound", "baseWeight": 3, "note": "Fulminant colitis" }
+    ],
+
+    "riskFactors": [
+      { "id": "antibiotic_exposure_especially_clindamycin_fluoroquinolones_cephalosporins", "multiplier": 4.0 },
+      { "id": "age_over_65", "multiplier": 3.0 },
+      { "id": "proton_pump_inhibitors", "multiplier": 2.0 },
+      { "id": "prolonged_hospitalization", "multiplier": 2.5 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "enteral_feeding", "multiplier": 1.5 },
+      { "id": "prior_cdi", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_moderate_cdi",
+        "name": "Mild-Moderate CDI",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "diarrhea_without_systemic_illness", "weight": 4 },
+          { "feature": "wbc_less_15", "weight": 3 },
+          { "feature": "cr_less_1.5", "weight": 3 }
+        ],
+        "management": "Stop inciting antibiotic if possible. Vancomycin 125mg PO QID x 10 days. OR Fidaxomicin 200mg PO BID x 10 days (lower recurrence)."
+      },
+      {
+        "id": "severe_cdi",
+        "name": "Severe CDI",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "wbc_greater_15", "weight": 4 },
+          { "feature": "cr_greater_1.5", "weight": 4 },
+          { "feature": "abdominal_tenderness_significant", "weight": 3 }
+        ],
+        "management": "Vancomycin 125mg PO QID x 10 days. If ileus: add IV metronidazole 500mg Q8H. Consider fidaxomicin. Monitor for toxic megacolon."
+      },
+      {
+        "id": "fulminant_cdi",
+        "name": "Fulminant CDI",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "shock_ileus_megacolon", "weight": 5 },
+          { "feature": "peritonitis_perforation", "weight": 5 },
+          { "feature": "icu_requirement", "weight": 5 }
+        ],
+        "management": "Vancomycin PO + NG tube. IV metronidazole. Surgical consultation for total colectomy if megacolon/perforation. Fecal microbiota transplant if recurrent and stabilized."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "antibiotic_associated_diarrhea_non_cdi",
+        "discriminators": ["negative_cdi_test", "self_limiting", "less_severe"]
+      },
+      {
+        "diseaseId": "inflammatory_bowel_disease_flare",
+        "discriminators": ["chronic_history", "bloody_diarrhea", "extraintestinal_signs"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Stool GDH antigen + toxin EIA (2-step algorithm)", "priority": "high", "yield": 0.9, "indication": "all suspected CDI" },
+        { "name": "Stool PCR (NAAT) for toxin A/B genes", "priority": "high", "yield": 0.95, "indication": "confirmation, detects toxigenic strain" },
+        { "name": "FBC (WBC count)", "priority": "high", "yield": 0.6, "indication": "severity assessment" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.6, "indication": "severity assessment" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-ray / CT", "priority": "medium", "yield": 0.6, "indication": "if ileus, megacolon, or peritonitis suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA/SHEA Guidelines for C. difficile Infection",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "WBC <15, Cr <1.5 mg/dL",
+          "treatment": "Vancomycin 125mg PO QID x 10 days or Fidaxomicin 200mg PO BID x 10 days. Discontinue offending antibiotics. Infection control: contact precautions."
+        },
+        {
+          "severity": "severe / fulminant",
+          "criteria": "WBC >15, Cr >1.5, or ileus/shock/megacolon",
+          "treatment": "Vancomycin 125mg PO QID x 10 days. If ileus: add IV metronidazole 500mg Q8H. Surgical evaluation for fulminant. ICU support. FMT for recurrent."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "antibiotic_induced_dysbiosis",
+      "loss_of_colonization_resistance",
+      "c_difficile_spore_germination",
+      "toxin_a_b_production",
+      "colonic_epithelial_damage",
+      "pseudomembrane_formation",
+      "inflammatory_diarrhea_colitis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "toxic_megacolon",
+        "probability": 0.03,
+        "severityBoost": 0.6,
+        "clues": ["abdominal_distension", "fever", "colonic_dilation_more_6cm"]
+      },
+      {
+        "diseaseId": "recurrent_cdi",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["diarrhea_recurrence_within_8_weeks", "positive_test_again"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if fulminant",
+    "diagnosticClues": ["antibiotic_exposure", "watery_diarrhea", "positive_cdi_test", "healthcare_onset"],
+    "exclusionClues": ["negative_cdi_test", "non_infectious_cause_of_diarrhea"]
+  }
+}

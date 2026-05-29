@@ -1,0 +1,116 @@
+{
+  "disease": {
+    "id": "schizoaffective_disorder",
+    "name": "Schizoaffective Disorder",
+    "system": "PSYCH",
+    "agePeak_months": [240, 480],
+    "note": "Chronic mental illness with concurrent psychotic (schizophrenia) and mood (depression/mania) symptoms. Requires both for diagnosis.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["psychotic_disorder", "mood_disorder", "chronic_mental_illness"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_intent_or_plan", "weight": 10 },
+        { "sign": "homicidal_violent_intent", "weight": 10 },
+        { "sign": "psychotic_features_command_hallucinations", "weight": 9 },
+        { "sign": "catatonia", "weight": 9 },
+        { "sign": "severe_self_neglect", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If danger signs present -> URGENT inpatient; else -> OUTPATIENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "delusions", "weight": 5 },
+      { "symptomId": "hallucinations", "weight": 5 },
+      { "symptomId": "disorganized_speech", "weight": 4 },
+      { "symptomId": "negative_symptoms", "weight": 3 },
+      { "symptomId": "manic_symptoms", "weight": 3 },
+      { "symptomId": "depressive_symptoms", "weight": 3 },
+      { "symptomId": "psychotic_symptoms_outside_mood_episodes", "weight": 5, "note": "Key discriminator from mood disorder with psychotic features" },
+      { "symptomId": "functional_decline", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "flat_or_inappropriate_affect", "baseWeight": 4 },
+      { "signId": "disorganized_behavior", "baseWeight": 4 },
+      { "signId": "euphoric_or_irritable_affect", "baseWeight": 3 },
+      { "signId": "psychomotor_retardation_or_agitation", "baseWeight": 3 },
+      { "signId": "poor_insight", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_schizoaffective", "multiplier": 5.0 },
+      { "id": "family_history_schizophrenia", "multiplier": 4.0 },
+      { "id": "family_history_bipolar", "multiplier": 3.0 },
+      { "id": "childhood_trauma", "multiplier": 2.0 },
+      { "id": "substance_abuse", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "schizoaffective_bipolar_type",
+        "name": "Schizoaffective Disorder, Bipolar Type",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "manic_symptoms_with_psychosis", "weight": 5 },
+          { "feature": "psychosis_beyond_mood_episodes", "weight": 5 }
+        ],
+        "management": "Mood stabilizer + antipsychotic. Lithium/valproate + olanzapine/risperidone/paliperidone. CBT. Social support."
+      },
+      {
+        "id": "schizoaffective_depressive_type",
+        "name": "Schizoaffective Disorder, Depressive Type",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "depressive_symptoms_with_psychosis", "weight": 5 },
+          { "feature": "psychosis_beyond_mood_episodes", "weight": 5 }
+        ],
+        "management": "Antipsychotic + antidepressant. Olanzapine/quetiapine + SSRI/SNRI. ECT if refractory. CBT."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "schizophrenia", "discriminators": ["no_prominent_mood_episodes", "predominant_negative_symptoms", "earlier_cognitive_decline"] },
+      { "diseaseId": "bipolar_disorder", "discriminators": ["psychosis_only_during_mood_episodes", "no_psychosis_in_remission", "better_interepisode_function"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "SCID (Structured Clinical Interview for DSM)", "priority": "high", "yield": 0.9, "indication": "diagnostic confirmation" }
+      ],
+      "laboratory": [
+        { "name": "TSH, FBC, U&E, LFT", "priority": "medium", "yield": 0.2, "indication": "rule out medical causes, baseline for medications" },
+        { "name": "Urine toxicology", "priority": "high", "yield": 0.4, "indication": "exclude substance-induced psychosis" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain", "priority": "low", "yield": 0.1, "indication": "exclude organic cause if atypical features" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Psychosis and Schizophrenia",
+      "pathways": [
+        {
+          "severity": "acute psychosis",
+          "criteria": "active psychotic symptoms, risk of harm, severe functional impairment",
+          "treatment": "Antipsychotic (olanzapine or risperidone) + mood stabilizer/antidepressant per type. Inpatient if risk. Consider ECT."
+        },
+        {
+          "severity": "maintenance",
+          "criteria": "clinically stable, no acute risk",
+          "treatment": "Continue combination therapy. Monitor metabolic side effects. CBT. Family intervention. Social skills training. Supported employment."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "dopamine_dysregulation",
+      "serotonin_dysregulation",
+      "genetic_predisposition_polygenic",
+      "stress_vulnerability_model",
+      "neuroinflammation"
+    ],
+    "complications": [
+      { "diseaseId": "suicide_attempt", "probability": 0.1, "severityBoost": 0.5, "clues": ["depressive_episode", "hopelessness", "previous_attempts"] },
+      { "diseaseId": "metabolic_syndrome", "probability": 0.3, "severityBoost": 0.1, "clues": ["weight_gain_due_to_antipsychotics", "elevated_lipids_glucose"] },
+      { "diseaseId": "substance_abuse", "probability": 0.3, "severityBoost": 0.2, "clues": ["alcohol_cannabis_use", "poor_treatment_adherence"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if acute psychosis or suicidality",
+    "diagnosticClues": ["psychosis_and_mood_symptoms_concurrent", "psychosis_outside_mood_episodes", "chronic_course", "functional_decline"],
+    "exclusionClues": ["psychosis_only_during_mood_episodes", "negative_symptoms_dominant_without_mood", "symptoms_due_to_substance"]
+  }
+}

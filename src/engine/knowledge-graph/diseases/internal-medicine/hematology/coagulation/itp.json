@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "immune_thrombocytopenia",
+    "name": "Immune Thrombocytopenia",
+    "system": "hematology",
+    "agePeak_months": [36, 480, 720],
+    "note": "Acquired autoimmune disorder with antibody-mediated platelet destruction and impaired platelet production. Presents with isolated thrombocytopenia and mucocutaneous bleeding.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["thrombocytopenia", "bleeding", "autoimmune", "petechiae"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "intracranial_hemorrhage", "weight": 10 },
+        { "sign": "gi_bleeding", "weight": 8 },
+        { "sign": "gross_hematuria", "weight": 7 },
+        { "sign": "retinal_hemorrhage", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "platelet_above_30": true
+      },
+      "severityLabel": "If intracranial bleed or platelets <10 with severe bleeding -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "easy_bruising", "weight": 5 },
+      { "symptomId": "petechiae", "weight": 5 },
+      { "symptomId": "epistaxis", "weight": 4 },
+      { "symptomId": "gingival_bleeding", "weight": 3 },
+      { "symptomId": "menorrhagia", "weight": 3 },
+      { "symptomId": "prolonged_bleeding_after_cut", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "recent_viral_infection", "weight": 3 },
+      { "symptomId": "drug_exposure", "weight": 2 },
+      { "symptomId": "splenomegaly", "weight": 1, "note": "Uncommon in ITP" }
+    ],
+
+    "examFeatures": [
+      { "signId": "petechiae", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ecchymoses", "baseWeight": 4 },
+      { "signId": "oral_petechiae_or_bullae", "baseWeight": 4 },
+      { "signId": "no_splenomegaly", "baseWeight": 2, "note": "Absence of splenomegaly supports ITP" },
+      { "signId": "signs_of_intracranial_bleed", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "viral_infection", "multiplier": 2.0 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "lymphoproliferative_disorder", "multiplier": 1.8 },
+      { "id": "hiv", "multiplier": 2.5 },
+      { "id": "hepatitis_c", "multiplier": 2.0 },
+      { "id": "vaccination", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "newly_diagnosed_itp",
+        "name": "Newly Diagnosed ITP",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "diagnosis_within_3_months", "weight": 5 },
+          { "feature": "acute_onset", "weight": 4 }
+        ],
+        "management": "Prednisone 1mg/kg/day for 2-4 weeks then taper. IVIG if severe bleeding or before surgery. Anti-D if Rh+."
+      },
+      {
+        "id": "persistent_chronic_itp",
+        "name": "Chronic ITP",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "duration_over_12_months", "weight": 5 },
+          { "feature": "need_for_maintenance_therapy", "weight": 4 }
+        ],
+        "management": "TPO-RA (eltrombopag, romiplostim). Rituximab. Splenectomy if refractory. Immunosuppressants."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "drug_induced_thrombocytopenia",
+        "discriminators": ["temporal_relation_to_drug", "resolution_after_stopping", "drug_dependent_antibodies"]
+      },
+      {
+        "diseaseId": "myelodysplastic_syndrome",
+        "discriminators": ["dysplasia_on_film", "other_cytopenias", "abnormal_cbc_indices"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "Isolated thrombocytopenia" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.9, "indication": "Rule out pseudothrombocytopenia, check for blasts" }
+      ],
+      "laboratory": [
+        { "name": "HIV, HCV, HBsAg serology", "priority": "high", "yield": 0.2, "indication": "Rule out secondary ITP" },
+        { "name": "ANA", "priority": "medium", "yield": 0.2, "indication": "Rule out SLE" },
+        { "name": "H. pylori stool antigen or breath test", "priority": "medium", "yield": 0.15, "indication": "Eradication may improve platelet count" },
+        { "name": "Bone marrow aspirate", "priority": "medium", "yield": 0.7, "indication": "If atypical features or age >60 to rule out MDS" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "ASH / BSH Guidelines for ITP",
+      "pathways": [
+        {
+          "severity": "severe_bleeding_emergency",
+          "criteria": "Intracranial bleed, GI bleed, platelets <10 with bleeding",
+          "treatment": "IV methylprednisolone 1g x3 days + IVIG 1g/kg x2 days. Platelet transfusion (short-lived but helpful). Consider TPO-RA."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "Platelets 10-30 with mild bleeding or symptomatic",
+          "treatment": "Prednisone 1mg/kg/day. Taper once platelets >50. IVIG if no response or before surgery. Anti-D if Rh+ and not splenectomized."
+        },
+        {
+          "severity": "mild",
+          "criteria": "Platelets >30, no bleeding",
+          "treatment": "Observation. Avoid NSAIDs and contact sports. Manage if platelets drop or before procedures."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "autoantibodies_against_gp_iib_iiia_or_ib_ix",
+      "opsonized_platelet_clearance_in_spleen",
+      "impaired_platelet_production",
+      "t_cell_mediated_platelet_destruction",
+      "reduced_platelet_lifespan"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intracranial_hemorrhage",
+        "probability": 0.01,
+        "severityBoost": 0.9,
+        "clues": ["platelet_below_10", "headache", "vomiting", "altered_consciousness"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if bleeding",
+    "diagnosticClues": ["isolated_thrombocytopenia", "normal_blood_film", "no_splenomegaly", "mucocutaneous_bleeding"],
+    "exclusionClues": ["pseudothrombocytopenia", "splenomegaly", "blasts_on_film"]
+  }
+}

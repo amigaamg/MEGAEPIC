@@ -1,0 +1,133 @@
+{
+  "disease": {
+    "id": "aortic_dissection",
+    "name": "Aortic Dissection",
+    "system": "CARD",
+    "agePeak_months": [540, 960],
+    "note": "Tear in aortic intima with propagation of false lumen. Time-critical emergency with high mortality. Stanford A (ascending) vs B (descending).",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["aortic_emergency", "chest_pain", "vascular_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "aortic_rupture", "weight": 10 },
+        { "sign": "cardiac_tamponade", "weight": 10 },
+        { "sign": "stroke", "weight": 9 },
+        { "sign": "malperfusion_syndrome", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "ALL aortic dissection is SEVERE - time-critical emergency"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_severe_tearing_chest_pain", "weight": 5, "modifiers": [{ "condition": "worst_ever_ripping", "suspectTB": false }] },
+      { "symptomId": "pain_migrating_to_back_abdomen", "weight": 5 },
+      { "symptomId": "syncope", "weight": 4 },
+      { "symptomId": "neurological_deficit", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 2 },
+      { "symptomId": "hoarseness", "weight": 2 },
+      { "symptomId": "history_of_hypertension", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "bp_difference_between_arms", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pulse_deficit", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "aortic_regurgitation_murmur", "baseWeight": 4 },
+      { "signId": "neurological_deficit", "baseWeight": 4 },
+      { "signId": "signs_of_tamponade", "baseWeight": 5 },
+      { "signId": "hypotension_or_hypertension", "baseWeight": 4 },
+      { "signId": "signs_of_malperfusion", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "uncontrolled_hypertension", "multiplier": 3.0 },
+      { "id": "connective_tissue_disease_marfan_ehlers", "multiplier": 5.0 },
+      { "id": "bicuspid_aortic_valve", "multiplier": 3.0 },
+      { "id": "aortic_coarctation", "multiplier": 2.5 },
+      { "id": "vasculitis_giant_cell_takayasu", "multiplier": 2.5 },
+      { "id": "cocaine_use", "multiplier": 3.0 },
+      { "id": "trauma_deceleration", "multiplier": 2.0 },
+      { "id": "pregnancy_third_trimester", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "stanford_type_a",
+        "name": "Stanford Type A (Ascending Aorta)",
+        "prevalenceModifier": 0.55,
+        "keyFeatures": [
+          { "feature": "ascending_aorta_involvement", "weight": 5 },
+          { "feature": "higher_complication_rate", "weight": 5 }
+        ],
+        "management": "Emergency surgical repair (ascending aortic replacement + possible aortic valve/root). Medical stabilization until OR: pain control, HR <60, SBP 100-120."
+      },
+      {
+        "id": "stanford_type_b",
+        "name": "Stanford Type B (Descending Aorta)",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "descending_aorta_only", "weight": 5 },
+          { "feature": "no_arch_or_ascending", "weight": 5 }
+        ],
+        "management": "Medical management: aggressive HR and BP control. TEVAR if complicated (malperfusion, rupture, refractory pain). Uncomplicated: medical only."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "acute_mi", "discriminators": ["ecg_changes", "troponin_elevation", "no_bp_differential"] },
+      { "diseaseId": "acute_pulmonary_embolism", "discriminators": ["pleuritic_pain", "hemoptysis", "dvt_evidence"] },
+      { "diseaseId": "acute_pericarditis", "discriminators": ["pericardial_rub", "positional_pain", "diffuse_st_elevation"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.6, "indication": "wide mediastinum, abnormal aortic contour, pleural cap" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.3, "indication": "rule out MI, LVH from HTN" }
+      ],
+      "laboratory": [
+        { "name": "D-dimer", "priority": "high", "yield": 0.9, "indication": "if low probability: negative D-dimer excludes, high sensitivity" },
+        { "name": "Troponin", "priority": "high", "yield": 0.3, "indication": "myocardial injury, coronary ostia involvement" },
+        { "name": "Cross-match", "priority": "immediate", "yield": 0.9, "indication": "prepare for emergency surgery" }
+      ],
+      "imaging": [
+        { "name": "CT aortogram (CTA)", "priority": "immediate", "yield": 0.98, "indication": "DEFINITIVE: intimal flap, true/false lumen, extension, complications" },
+        { "name": "TEE (Transesophageal echo)", "priority": "if ct_unavailable", "yield": 0.95, "indication": "mobile, quick, assess aortic valve, pericardial effusion" },
+        { "name": "MRI/MRA", "priority": "elective", "yield": 0.98, "indication": "chronic dissection follow-up" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Aortic Diseases - Aortic Dissection",
+      "pathways": [
+        {
+          "severity": "all patients - initial stabilization",
+          "criteria": "suspected aortic dissection",
+          "treatment": "IV access x 2. Pain control (morphine 5-10 mg IV). HR control (esmolol 0.5 mg/kg bolus then 0.05-0.2 mg/kg/min, target HR <60). SBP control (target 100-120). Urgent CTA. Notify surgical team."
+        },
+        {
+          "severity": "Type A dissection",
+          "criteria": "ascending aorta involvement",
+          "treatment": "EMERGENCY surgery. Ascending aortic replacement +/- aortic valve resuspension/root replacement. Antegrade cerebral perfusion. Cardiac bypass. 1% mortality increase per hour delay."
+        },
+        {
+          "severity": "Type B dissection - complicated",
+          "criteria": "malperfusion, rupture, refractory pain, uncontrolled HTN",
+          "treatment": "TEVAR (thoracic endovascular aortic repair). Stent graft to cover primary tear. Fenestration if malperfusion. Surgical repair if TEVAR not possible."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "intimal_tear",
+      "false_lumen_propagation",
+      "aortic_wall_stress",
+      "cystic_medial_necrosis",
+      "malperfusion_of_branches",
+      "aortic_regurgitation_type_a",
+      "pericardial_effusion_tamponade",
+      "aortic_rupture_fatal"
+    ],
+    "complications": [
+      { "diseaseId": "malperfusion_syndrome", "probability": 0.3, "severityBoost": 0.5, "clues": ["pulse_deficit", "organ_ischemia", "neurological_deficit"] },
+      { "diseaseId": "cardiac_tamponade", "probability": 0.15, "severityBoost": 0.6, "clues": ["hypotension", "jvd", "echo_effusion"] },
+      { "diseaseId": "aortic_rupture", "probability": 0.1, "severityBoost": 0.8, "clues": ["sudden_deterioration", "hypotension", "hemothorax"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_tearing_chest_pain", "bp_differential", "pulse_deficit", "wide_mediastinum"],
+    "exclusionClues": ["alternative_diagnosis_confirmed", "negative_ct_aortogram"]
+  }
+}

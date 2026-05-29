@@ -1,0 +1,106 @@
+{
+  "disease": {
+    "id": "anemia_workup",
+    "name": "Anemia - Laboratory Workup",
+    "system": "laboratory_medicine",
+    "note": "Systematic approach to anemia based on MCV, reticulocyte count, and peripheral smear patterns.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["hematologic_disorder", "diagnostic_workup"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemoglobin_less_5", "weight": 9 },
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "active_bleeding", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Hb <7 g/dL = SEVERE; 7-10 = MODERATE; >10 = MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue_weakness", "weight": 4 },
+      { "symptomId": "pallor", "weight": 3 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "pica_cravings", "weight": 2, "note": "Iron deficiency" },
+      { "symptomId": "blood_loss_history", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor_conjunctival", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "glossitis", "baseWeight": 2 },
+      { "signId": "koilonychia", "baseWeight": 2 },
+      { "signId": "jaundice", "baseWeight": 2, "note": "Hemolytic anemia" }
+    ],
+
+    "subtypes": [
+      {
+        "id": "microcytic_anemia",
+        "name": "Microcytic Anemia (Low MCV)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "mcv_less_80", "weight": 5 },
+          { "feature": "low_ferritin", "weight": 4 }
+        ],
+        "management": "Iron deficiency: ferritin low -> oral iron replacement. If normal ferritin: check Hb electrophoresis for thalassemia, lead levels."
+      },
+      {
+        "id": "macrocytic_anemia",
+        "name": "Macrocytic Anemia (High MCV)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "mcv_greater_100", "weight": 5 },
+          { "feature": "megaloblastic_smear", "weight": 4 }
+        ],
+        "management": "Check B12 and folate levels. B12 deficiency: IM B12 replacement. Folate deficiency: oral folic acid."
+      },
+      {
+        "id": "normocytic_anemia",
+        "name": "Normocytic Anemia (Normal MCV)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "mcv_80_to_100", "weight": 5 },
+          { "feature": "reticulocyte_count_key", "weight": 4 }
+        ],
+        "management": "Low reticulocyte: bone marrow problem (aplasia, infiltration). High reticulocyte: hemolysis or blood loss. Further workup per direction."
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC with RBC indices (MCV, MCH, MCHC, RDW)", "priority": "first_line", "yield": 0.9, "indication": "all suspected anemia" },
+        { "name": "Reticulocyte count", "priority": "high", "yield": 0.8, "indication": "assess bone marrow response" },
+        { "name": "Peripheral blood smear", "priority": "high", "yield": 0.85, "indication": "cell morphology, parasites" },
+        { "name": "Serum ferritin, iron, TIBC", "priority": "high", "yield": 0.8, "indication": "iron deficiency" },
+        { "name": "Vitamin B12, Folate (serum/RBC)", "priority": "high", "yield": 0.7, "indication": "macrocytic anemia" },
+        { "name": "Hb Electrophoresis", "priority": "medium", "yield": 0.7, "indication": "thalassemia, sickle cell" },
+        { "name": "Hemolysis workup (LDH, bilirubin, haptoglobin, DAT)", "priority": "medium", "yield": 0.7, "indication": "hemolytic anemia" }
+      ]
+    },
+
+    "management": {
+      "pathways": [
+        {
+          "severity": "iron deficiency",
+          "criteria": "low ferritin, microcytic indices",
+          "treatment": "Ferrous sulfate 200 mg PO TDS (325 mg ferrous sulfate = 65 mg elemental iron). Treat underlying cause (GI bleeding source). Monitor Hb in 2-4 weeks."
+        },
+        {
+          "severity": "B12 deficiency",
+          "criteria": "low B12, macrocytic",
+          "treatment": "Hydroxocobalamin 1000 mcg IM three times weekly for 2 weeks, then monthly."
+        }
+      ]
+    },
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["low_hb", "mcv_guided_diagnosis", "reticulocyte_response"]
+  }
+}

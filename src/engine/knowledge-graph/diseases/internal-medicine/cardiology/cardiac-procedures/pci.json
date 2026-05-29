@@ -1,0 +1,120 @@
+{
+  "disease": {
+    "id": "pci",
+    "name": "Percutaneous Coronary Intervention",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Non-surgical revascularization of coronary arteries using balloon angioplasty and stent placement. Used for acute and chronic coronary syndromes.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["coronary_revascularization", "cardiac_procedure"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stent_thrombosis", "weight": 10 },
+        { "sign": "coronary_perforation", "weight": 10 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "refractory_ischemia", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If stent thrombosis/perforation/shock -> PROCEDURAL EMERGENCY; else -> STANDARD"
+    },
+    "historyFeatures": [
+      { "symptomId": "chest_pain", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "previous_stenting", "weight": 4 },
+      { "symptomId": "antiplatelet_therapy", "weight": 3 },
+      { "symptomId": "contrast_allergy", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "access_site_hematoma", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "chest_tenderness", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "acute_coronary_syndrome", "multiplier": 2.0 },
+      { "id": "multi_vessel_disease", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "renal_insufficiency", "multiplier": 2.0 },
+      { "id": "left_main_stenting", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "elective_pci",
+        "name": "Elective PCI",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [{ "feature": "stable_angina_or_positive_stress_test", "weight": 5 }],
+        "management": "Pre-procedure dual antiplatelet. Radial access preferred. DES placement. Post-procedure DAPT (minimum 6 months)."
+      },
+      {
+        "id": "primary_pci",
+        "name": "Primary PCI for STEMI",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "st_elevation_mi", "weight": 5 },
+          { "feature": "door_to_balloon_less_90_min", "weight": 5 }
+        ],
+        "management": "Emergency PCI of infarct-related artery. Aspirin + P2Y12 inhibitor loading. Heparin. Thrombus aspiration if high thrombus burden."
+      },
+      {
+        "id": "urgent_pci",
+        "name": "Urgent PCI for NSTEMI/UA",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "high_risk_nstemi", "weight": 5 },
+          { "feature": "refractory_ischemia", "weight": 4 }
+        ],
+        "management": "Early invasive (<24h or <2h if very high risk). Anticoagulation + antiplatelet. Stent appropriate lesion(s)."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.9, "indication": "pre- and post-procedure comparison" }
+      ],
+      "laboratory": [
+        { "name": "Troponin", "priority": "pre_and_post", "yield": 0.8, "indication": "periprocedural MI detection" },
+        { "name": "Creatinine, eGFR", "priority": "pre_procedure", "yield": 0.7, "indication": "contrast nephropathy risk" },
+        { "name": "FBC, INR, PTT", "priority": "pre_procedure", "yield": 0.5, "indication": "bleeding risk assessment" }
+      ],
+      "imaging": [
+        { "name": "Coronary angiography", "priority": "immediate", "yield": 0.99, "indication": "diagnostic and therapeutic" },
+        { "name": "IVUS or OCT", "priority": "medium", "yield": 0.9, "indication": "lesion assessment, stent optimization" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Myocardial Revascularization",
+      "pathways": [
+        {
+          "severity": "pre-procedure",
+          "criteria": "planned PCI",
+          "treatment": "DAPT loading (aspirin 300 mg + ticagrelor 180 mg or clopidogrel 600 mg). Radial access. Heparin 70-100 U/kg. Informed consent."
+        },
+        {
+          "severity": "post-procedure",
+          "criteria": "successful stent placement",
+          "treatment": "DAPT (aspirin 75 mg + ticagrelor 90 mg BD or clopidogrel 75 mg) for 6-12 months. Statin high-intensity. Beta-blocker. ACEi if LVEF <40%. Cardiac rehab."
+        },
+        {
+          "severity": "complicated PCI",
+          "criteria": "dissection, no-reflow, perforation, thrombus",
+          "treatment": "Additional stenting. IABP if shock. GP IIb/IIIa inhibitor. Protamine if perforation. Emergency surgery if refractory."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "balloon_dilation_of_stenosis",
+      "stent_deployment",
+      "plaque_modification",
+      "vessel_wall_injury_healing",
+      "restenosis_process",
+      "stent_thrombosis_risk"
+    ],
+    "complications": [
+      { "diseaseId": "stent_thrombosis", "probability": 0.01, "severityBoost": 0.6, "clues": ["acute_chest_pain", "st_elevation", "dapt_nonadherence"] },
+      { "diseaseId": "restenosis", "probability": 0.05, "severityBoost": 0.2, "clues": ["recurrent_angina", "in_stent_restenosis"] },
+      { "diseaseId": "bleeding_access_site", "probability": 0.03, "severityBoost": 0.1, "clues": ["hematoma", "retroperitoneal_bleed"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["coronary_stenosis_on_angio", "symptomatic_ischemia"],
+    "exclusionClues": ["non_obstructive_cad", "optimal_medical_therapy_preferred"]
+  }
+}

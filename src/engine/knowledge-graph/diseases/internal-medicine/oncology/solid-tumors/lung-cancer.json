@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "lung_cancer",
+    "name": "Lung Cancer",
+    "system": "oncology",
+    "agePeak_months": [600, 900],
+    "note": "Leading cause of cancer death worldwide. Strong association with smoking. NSCLC most common type.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["thoracic_malignancy", "pulmonary_lesion"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "superior_vena_cava_obstruction", "weight": 9 },
+        { "sign": "massive_hemoptysis", "weight": 10 },
+        { "sign": "airway_obstruction_stridor", "weight": 9 },
+        { "sign": "spinal_cord_compression", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Stage I-IV determines treatment approach"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "chronic_cough", "weight": 4 },
+      { "symptomId": "hemoptysis", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "chest_pain", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "hoarseness", "weight": 2 },
+      { "symptomId": "recurrent_pneumonia", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "clubbing", "baseWeight": 3 },
+      { "signId": "cervical_supraclavicular_lymph_nodes", "baseWeight": 3 },
+      { "signId": "reduced_breath_sounds", "baseWeight": 3 },
+      { "signId": "wheeze_localized", "baseWeight": 3 },
+      { "signId": "pleural_effusion_signs", "baseWeight": 3 },
+      { "signId": "s_v_c_obstruction_signs", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 5.0 },
+      { "id": "second_hand_smoke", "multiplier": 1.5 },
+      { "id": "asbestos_exposure", "multiplier": 2.5 },
+      { "id": "radon_exposure", "multiplier": 2.0 },
+      { "id": "family_history_lung_cancer", "multiplier": 1.5 },
+      { "id": "copd", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "nsclc_adenocarcinoma",
+        "name": "NSCLC - Adenocarcinoma",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "peripheral_lesion", "weight": 4 },
+          { "feature": "non_smoker_possible", "weight": 2 }
+        ],
+        "management": "Molecular testing (EGFR, ALK, ROS1, PD-L1). Early stage: surgery. Advanced: targeted therapy or immunotherapy."
+      },
+      {
+        "id": "nsclc_squamous",
+        "name": "NSCLC - Squamous Cell Carcinoma",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "central_lesion", "weight": 4 },
+          { "feature": "strong_smoking_link", "weight": 4 },
+          { "feature": "cavitation", "weight": 3 }
+        ],
+        "management": "Early: surgery. Advanced: chemoimmunotherapy. PD-1 inhibitors."
+      },
+      {
+        "id": "sclc",
+        "name": "Small Cell Lung Cancer (SCLC)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "rapid_growth", "weight": 5 },
+          { "feature": "early_metastasis", "weight": 5 },
+          { "feature": "strong_smoking_link", "weight": 5 },
+          { "feature": "paraneoplastic_syndromes", "weight": 3 }
+        ],
+        "management": "Chemotherapy (platinum + etoposide) first-line. Prophylactic cranial irradiation if limited stage. Immunotherapy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "tuberculosis",
+        "discriminators": ["chronic_cough", "night_sweats", "tb_contact", "positive_gene_xpert"]
+      },
+      {
+        "diseaseId": "benign_lung_nodule",
+        "discriminators": ["stable_over_time", "calcified", "no_risk_factors"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Performance status (ECOG/WHO)", "priority": "high", "yield": 0.8, "indication": "treatment decision" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, LFT, Calcium, ALP", "priority": "high", "yield": 0.5, "indication": "baseline and metastatic screen" },
+        { "name": "Tumor markers (CEA, CYFRA, NSE)", "priority": "medium", "yield": 0.5, "indication": "monitoring" }
+      ],
+      "imaging": [
+        { "name": "CT Chest + Abdomen with contrast", "priority": "high", "yield": 0.9, "indication": "staging" },
+        { "name": "PET-CT", "priority": "high", "yield": 0.85, "indication": "metastatic workup" },
+        { "name": "MRI Brain", "priority": "high", "yield": 0.8, "indication": "brain metastases, especially SCLC" },
+        { "name": "Bronchoscopy with biopsy", "priority": "gold_standard", "yield": 0.9, "indication": "tissue diagnosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Non-Small Cell Lung Cancer",
+      "pathways": [
+        {
+          "severity": "early stage (I-II)",
+          "criteria": "localized disease, node negative",
+          "treatment": "Surgical resection (lobectomy). SABR if not surgical candidate. Adjuvant chemotherapy if node positive."
+        },
+        {
+          "severity": "locally advanced (III)",
+          "criteria": "mediastinal node involvement",
+          "treatment": "Chemoradiotherapy. Immunotherapy consolidation (durvalumab) after CRT. Consider surgery for selected cases."
+        },
+        {
+          "severity": "metastatic (IV)",
+          "criteria": "distant metastases",
+          "treatment": "Molecular testing for targeted therapy (EGFR, ALK, ROS1, BRAF). Immunotherapy if PD-L1 high. Palliative radiotherapy. Best supportive care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bronchial_epithelial_transformation",
+      "genetic_mutations",
+      "tumor_angiogenesis",
+      "local_invasion",
+      "lymphatic_spread",
+      "hematogenous_metastasis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "malignant_pleural_effusion",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["dyspnea", "dullness_to_percussion"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["chronic_cough_hemoptysis", "weight_loss", "smoking_history", "pulmonary_nodule_mass"],
+    "exclusionClues": ["resolved_infection", "stable_nodule_2_years", "calcified_lesion"]
+  }
+}

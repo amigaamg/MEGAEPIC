@@ -1,0 +1,307 @@
+{
+  "disease": {
+    "id": "pediatric_bronchiolitis",
+    "name": "Pediatric Bronchiolitis",
+    "system": "pediatric_respiratory",
+    "syndromeType": "viral_lower_airway_obstruction_infant",
+    "corePathophysiology": [
+      "bronchiolar_edema",
+      "mucus_plugging",
+      "air_trapping",
+      "ventilation_perfusion_mismatch",
+      "hypoxemia",
+      "atelectasis",
+      "increased_airway_resistance"
+    ],
+    "ageGate": {
+      "primaryRange_months": [0, 12],
+      "secondaryRange_months": [13, 24],
+      "excludeRange_months": [25, 60],
+      "hardRule": "If age >24 months, reduce bronchiolitis probability significantly. If age <1 month, consider neonatal sepsis/pneumonia."
+    },
+    "ageWeighting": {
+      "0-11": 1.0,
+      "12-23": 0.5,
+      "24+": 0.1
+    },
+    "prevalenceWeight": 0.8,
+    "etiology": [
+      { "virus": "RSV", "weight": 0.8, "note": "Respiratory Syncytial Virus dominates in pediatric population" },
+      { "virus": "Rhinovirus", "weight": 0.3 },
+      { "virus": "Parainfluenza", "weight": 0.2 },
+      { "virus": "Adenovirus", "weight": 0.2 },
+      { "virus": "Human Metapneumovirus", "weight": 0.2 },
+      { "virus": "Seasonal Coronavirus", "weight": 0.1 }
+    ],
+    "seasonalModifier": {
+      "condition": "RSV_season",
+      "multiplier": 1.5,
+      "description": "Typical RSV season (rainy/cold months) increases bronchiolitis prior probability."
+    },
+    "historyFeatures": [
+      { "symptomId": "cough", "weight": 2 },
+      { "symptomId": "fever", "weight": 1.5, "note": "Usually low-grade; high fever reduces bronchiolitis likelihood in pediatric population." },
+      { "symptomId": "poor_feeding", "weight": 4, "severityMarker": true, "description": "Feeding less than 50% of normal is a strong severity indicator in infants." },
+      { "symptomId": "nasal_congestion", "weight": 3, "description": "Profuse rhinorrhoea/congestion is the typical prodrome." },
+      { "symptomId": "apnoea", "weight": 6, "dangerSign": true, "description": "Apnoea can be the presenting feature in young infants, especially preterm <3 months." },
+      { "symptomId": "first_wheeze_episode", "weight": 5, "keyDiscriminator": true, "description": "First episode of wheeze in infancy strongly favours bronchiolitis over asthma." },
+      { "symptomId": "viral_prodrome", "weight": 4, "description": "Coryza, low-grade fever, cough for 1-3 days before onset of respiratory distress." }
+    ],
+    "negativePredictors": [
+      { "feature": "recurrent_wheeze", "scoreReduction": 6, "favorsAlternative": ["asthma"] },
+      { "feature": "age_>_24_months", "scoreReduction": 10, "favorsAlternative": ["asthma", "pneumonia"] },
+      { "feature": "high_fever_>39", "scoreReduction": 3, "favorsAlternative": ["pneumonia"] },
+      { "feature": "focal_crackles_or_bronchial_breathing", "scoreReduction": 5, "favorsAlternative": ["pneumonia"] },
+      { "feature": "toxic_appearance", "scoreReduction": 4, "favorsAlternative": ["sepsis", "pneumonia"] },
+      { "feature": "paroxysmal_cough_with_whoop", "scoreReduction": 3, "favorsAlternative": ["pertussis"] },
+      { "feature": "sudden_onset_choking", "scoreReduction": 4, "favorsAlternative": ["foreign_body"] }
+    ],
+    "examFeatures": [
+      { "signId": "wheeze", "baseWeight": 4, "doubleWeight": true, "note": "Expiratory wheeze, often bilateral, hallmark of bronchiolitis." },
+      { "signId": "fine_crackles", "baseWeight": 3, "note": "Diffuse fine end-inspiratory crackles are classic." },
+      { "signId": "chest_indrawing", "baseWeight": 5, "severityLinked": true, "doubleWeight": true },
+      { "signId": "nasal_flaring", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 4, "ageThresholds": true },
+      { "signId": "hypoxia", "baseWeight": 6 },
+      { "signId": "grunting", "baseWeight": 3, "note": "Less common than in pneumonia, but indicates severe distress in infants." },
+      { "signId": "head_nodding", "baseWeight": 5, "note": "Severe sign in infants indicating respiratory failure risk." }
+    ],
+    "severityAssessment": {
+      "westleyScore": {
+        "note": "Adapted Westley Croup Score concepts not used here. Bronchiolitis severity assessed by modified clinical scoring evaluating wheeze, indrawing, SpO2, general condition, and feeding ability.",
+        "components": ["wheeze", "chest_indrawing", "spO2", "general_condition", "feeding"]
+      },
+      "immediateDangerSigns": [
+        { "sign": "apnoea", "weight": 10, "note": "Apnoea is a presenting feature in RSV bronchiolitis, especially in young/preterm infants." },
+        { "sign": "central_cyanosis", "weight": 10 },
+        { "sign": "spo2_less_than_90", "weight": 9 },
+        { "sign": "unable_to_feed", "weight": 9, "description": "Feeding less than 50% of normal or completely unable." },
+        { "sign": "severe_chest_indrawing", "weight": 8 },
+        { "sign": "exhaustion_or_lethargy", "weight": 8 },
+        { "sign": "grunting", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "poor_feeding", "description": "Feeding 50-75% of normal" },
+          { "sign": "tachypnea_for_age", "ageThresholds": [
+              { "ageMonths": [0, 2], "rr": 60 },
+              { "ageMonths": [2, 11], "rr": 50 },
+              { "ageMonths": [12, 24], "rr": 40 }
+            ]
+          },
+          { "sign": "mild_to_moderate_chest_indrawing" },
+          { "sign": "spO2_90_to_94" }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "feedingNormal": true,
+        "noRespiratoryDistress": true,
+        "normalSpO2": true,
+        "possibleMildCoughAndCongestion": true
+      }
+    },
+    "tachypneaThresholds": [
+      { "ageMonths": [0, 2], "rr": 60 },
+      { "ageMonths": [2, 11], "rr": 50 },
+      { "ageMonths": [12, 24], "rr": 40 }
+    ],
+    "riskFactors": [
+      { "id": "prematurity", "multiplier": 1.5, "note": "Especially <32 weeks gestation, chronic lung disease of prematurity." },
+      { "id": "congenital_heart_disease", "multiplier": 1.6, "note": "Hemodynamically significant CHD increases severe disease risk." },
+      { "id": "young_age", "description": "<3 months", "multiplier": 1.4, "note": "Higher risk of apnoea and severe disease." },
+      { "id": "immunodeficiency", "multiplier": 1.3 },
+      { "id": "exposure_to_tobacco_smoke", "multiplier": 1.2 },
+      { "id": "lack_of_breastfeeding", "multiplier": 1.2 },
+      { "id": "crowded_living_conditions", "multiplier": 1.2 },
+      { "id": "down_syndrome", "multiplier": 1.4, "note": "Increased risk of severe RSV bronchiolitis." }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 1.0, "indication": "all suspected bronchiolitis" },
+        { "name": "Respiratory rate (full one minute count)", "priority": "immediate", "ageThresholds": true },
+        { "name": "Feeding assessment", "priority": "immediate", "indication": "quantify intake over last 24 hours" },
+        { "name": "AVPU assessment", "priority": "immediate", "indication": "assess level of consciousness" }
+      ],
+      "laboratory": [
+        {
+          "name": "Nasopharyngeal aspirate for RSV/rapid viral panel",
+          "priority": "if cohorting needed or diagnostic uncertainty",
+          "yield": 0.9,
+          "indication": "outbreak control, avoid unnecessary antibiotics, cohorting in hospital"
+        },
+        {
+          "name": "FBC + CRP",
+          "priority": "low; only if toxic or suspected bacterial superinfection",
+          "yield": 0.3,
+          "note": "Often non-specifically elevated in viral illness."
+        },
+        {
+          "name": "Blood culture",
+          "priority": "if toxic or suspected sepsis",
+          "yield": 0.15,
+          "indication": "only if fever >39°C, toxic appearance, or concern for bacterial co-infection"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "Chest X-ray",
+          "priority": "low",
+          "yield": 0.4,
+          "indication": "apnoea, severe disease, diagnostic uncertainty, asymmetrical signs, failure to improve",
+          "findings": "Hyperinflation, peribronchial cuffing, atelectasis. Patchy infiltrates possible. NOT consolidation unless secondary pneumonia."
+        }
+      ]
+    },
+    "management": {
+      "protocolReference": "Kenya Paediatric Guidelines + AAP 2025/NICE 2024 bronchiolitis guidelines + WHO principles",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "Feeding well (>75% normal), no respiratory distress, SpO2 ≥95% on room air.",
+          "treatment": [
+            "Nasal saline drops and gentle bulb suction before feeds",
+            "Small frequent feeds to maintain hydration",
+            "No bronchodilators — no evidence of benefit in bronchiolitis per latest guidelines",
+            "No corticosteroids — not recommended",
+            "No antibiotics unless proven bacterial co-infection",
+            "Counsel parents on danger signs: apnoea, worsening breathing, poor feeding, lethargy",
+            "Advise to return immediately if condition worsens"
+          ],
+          "followUp": "Review in 48 hours if symptoms persist. Return immediately if apnoea or poor feeding."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "Poor feeding (50-75% normal), mild-moderate chest indrawing, tachypnoea for age, SpO2 90-94% on room air.",
+          "treatment": [
+            "Admit for observation and supportive care",
+            "Oxygen via nasal prongs to keep SpO2 ≥92%",
+            "Nasal suction before feeds and PRN for congestion",
+            "Nasogastric or IV fluids if unable to feed adequately (use 80% maintenance to avoid SIADH)",
+            "Close monitoring of SpO2, RR, indrawing, feeding, and conscious level",
+            "No routine bronchodilators — trial of salbutamol ONLY if strong asthma overlap suspicion; discontinue if no objective improvement in first dose",
+            "No corticosteroids — not recommended in bronchiolitis"
+          ]
+        },
+        {
+          "severity": "severe",
+          "criteria": "Any danger sign: apnoea, SpO2 <90% despite low-flow oxygen, cyanosis, unable to feed (<50%), severe indrawing, exhaustion/lethargy, grunting.",
+          "treatment": [
+            "Admit to HDU/ICU",
+            "Oxygen to keep SpO2 ≥94%; escalate to high-flow nasal cannula (HFNC) if requiring >2 L/min",
+            "Consider CPAP if HFNC insufficient or rising CO2",
+            "IV fluids: 80% maintenance, monitor electrolytes (SIADH risk)",
+            "Apnoea monitoring — consider caffeine therapy if recurrent apnoea in preterm infants",
+            "No bronchodilators — per latest AAP/NICE guidelines, no role in bronchiolitis",
+            "No corticosteroids — not recommended",
+            "No antibiotics unless strong evidence of bacterial co-infection (positive culture, toxic appearance)",
+            "Prepare for mechanical ventilation if CO2 rising, exhaustion, or refractory hypoxia"
+          ]
+        }
+      ],
+      "hfncCriteria": {
+        "indications": ["SpO2 <90% on >2 L/min", "increasing work of breathing", "persistent tachypnoea"],
+        "startingSettings": "2 L/kg/min (max 12 L/min) with FiO2 titrated to SpO2 ≥92%",
+        "weaning": "Reduce FiO2 first, then flow rate as tolerated"
+      },
+      "feedingManagement": {
+        "mild": "Continue breastfeeding/feeds as tolerated",
+        "moderate": "Small frequent feeds; NG tube if <50% oral intake",
+        "severe": "IV fluids (80% maintenance). NBM if respiratory distress severe",
+        "note": "Avoid overhydration due to SIADH risk in bronchiolitis"
+      }
+    },
+    "treatmentResponseLogic": {
+      "typicalCourse": "Gradual improvement over 3-7 days; peak severity typically on day 3-5 of illness.",
+      "positiveResponse": {
+        "criteria": "Improved feeding, resolving chest indrawing, stable/improving SpO2, reduced tachypnoea.",
+        "action": "Continue supportive care; discharge when feeding well (≥75% normal) and SpO2 ≥90-92% off oxygen for 4-6 hours."
+      },
+      "noResponseOrWorseningAfter24_48h": {
+        "criteria": "Worsening hypoxia despite HFNC, increasing work of breathing, new apnoea, persistent poor feeding.",
+        "action": "Re-evaluate for complications (atelectasis, secondary bacterial pneumonia) and reconsider differential diagnosis: pneumonia, sepsis, cardiac failure, foreign body, aspiration."
+      }
+    },
+    "mimics": [
+      {
+        "diseaseId": "asthma",
+        "discriminators": ["recurrent_wheeze", "age_>_12_months", "bronchodilator_response", "family_atopy"],
+        "negativeImpactOnBronchiolitis": 6
+      },
+      {
+        "diseaseId": "pneumonia",
+        "discriminators": ["high_fever", "focal_crackles_or_bronchial_breathing", "toxic_appearance"],
+        "negativeImpactOnBronchiolitis": 5
+      },
+      {
+        "diseaseId": "foreign_body_aspiration",
+        "discriminators": ["sudden_onset", "unilateral_wheeze_or_decreased_air_entry", "choking_history"],
+        "negativeImpactOnBronchiolitis": 4
+      },
+      {
+        "diseaseId": "pertussis",
+        "discriminators": ["paroxysmal_cough", "whoop", "post_tussive_emesis", "apnoea_without_coryzal_prodrome"],
+        "negativeImpactOnBronchiolitis": 3
+      },
+      {
+        "diseaseId": "cardiac_heart_failure",
+        "discriminators": ["hepatomegaly", "cardiomegaly", "gallop_rhythm", "failure_to_thrive", "sweating_during_feeds"],
+        "negativeImpactOnBronchiolitis": 3
+      },
+      {
+        "diseaseId": "sepsis",
+        "discriminators": ["toxic_appearance", "temperature_instability", "poor_perfusion", "abnormal_fBC"],
+        "negativeImpactOnBronchiolitis": 3
+      }
+    ],
+    "complications": [
+      {
+        "id": "respiratory_failure",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["SpO2<88", "rising_pCO2", "apnoea", "exhaustion", "head_nodding"]
+      },
+      {
+        "id": "apnoea",
+        "probability": 0.1,
+        "ageRisk": "<3 months",
+        "severityBoost": 0.4,
+        "note": "Especially in preterm infants and those <3 months of age"
+      },
+      {
+        "id": "atelectasis",
+        "probability": 0.15,
+        "clues": ["mucus_plugging", "asymmetrical_breath_sounds", "persistent_focal_whiteness_on_CXR"]
+      },
+      {
+        "id": "secondary_bacterial_pneumonia",
+        "probability": 0.05,
+        "clues": ["persistent_fever_>48h", "new_focal_crackles", "worsening_consolidation_on_CXR"]
+      },
+      {
+        "id": "siadh",
+        "probability": 0.1,
+        "clues": ["hyponatraemia", "fluid_overload", "decreased_urine_output"],
+        "note": "Avoid fluid overload in bronchiolitis management"
+      }
+    ],
+    "syndromeTags": ["lower_airway_obstruction", "viral_infant_respiratory_distress", "pediatric_emergency"],
+    "mustNotMiss": false,
+    "emergencyPriority": "Apnoea, severe hypoxia, or inability to feed require immediate admission",
+    "diagnosticClues": [
+      "first_wheeze_episode_in_infant_under_12_months",
+      "viral_prodrome_followed_by_wheeze_and_crackles",
+      "diffuse_crackles_and_expiratory_wheeze",
+      "poor_feeding_as_early_severity_marker"
+    ],
+    "exclusionClues": [
+      "recurrent_wheeze_after_2_years_of_age",
+      "focal_bronchial_breathing_or_lobar_consolidation",
+      "high_fever_with_toxic_appearance",
+      "sudden_onset_without_viral_prodrome"
+    ]
+  }
+}

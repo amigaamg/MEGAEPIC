@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "urinary_incontinence",
+    "name": "Urinary Incontinence in Women",
+    "system": "GYN",
+    "agePeak_months": [360, 840],
+    "note": "Involuntary loss of urine. Types include stress urinary incontinence (SUI), urge urinary incontinence (UUI/OAB), mixed incontinence, and overflow incontinence. Significantly impacts quality of life.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["pelvic_floor_disorder", "urinary_dysfunction"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "severeCriteria": {
+        "anyDangerSign": false,
+        "additionalCriteria": [
+          { "sign": "constant_leakage_without_sensation", "weight": 5 },
+          { "sign": "incontinence_affecting_all_activities", "weight": 5 },
+          { "sign": "recurrent_UTIs_from_incontinence", "weight": 4 },
+          { "sign": "urinary_retention_with_overflow", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Total incontinence, retention with overflow, or severe impact -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "leakage_with_cough_sneeze_exercise", "weight": 5, "note": "Stress incontinence" },
+      { "symptomId": "sudden_strong_urge_with_leakage", "weight": 5, "note": "Urge incontinence" },
+      { "symptomId": "frequency_urinary", "weight": 4 },
+      { "symptomId": "nocturia", "weight": 3 },
+      { "symptomId": "leakage_without_sensation", "weight": 3 },
+      { "symptomId": "constant_dampness_or_wetness", "weight": 3 },
+      { "symptomId": "difficulty_emptying_bladder", "weight": 3 },
+      { "symptomId": "pad_usage_for_leakage", "weight": 4 },
+      { "symptomId": "impact_on_quality_of_life", "weight": 3 },
+      { "symptomId": "previous_vaginal_deliveries", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "cough_stress_test_positive", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pelvic_organ_prolapse_on_exam", "baseWeight": 3 },
+      { "signId": "urethral_hypermobility", "baseWeight": 3 },
+      { "signId": "urinary_retention_on_post_void_residual", "baseWeight": 3 },
+      { "signId": "atrophic_vaginitis", "baseWeight": 2 },
+      { "signId": "perineal_excoriation_rash", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "vaginal_childbirth_multiple", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 2.5 },
+      { "id": "chronic_cough_smoking_COPD", "multiplier": 2.0 },
+      { "id": "chronic_constipation", "multiplier": 1.5 },
+      { "id": "heavy_lifting_occupational", "multiplier": 1.5 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "menopause_estrogen_deficiency", "multiplier": 2.0 },
+      { "id": "pelvic_surgery_history", "multiplier": 1.5 },
+      { "id": "family_history_of_incontinence", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "stress_urinary_incontinence",
+        "name": "Stress Urinary Incontinence (SUI)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "leakage_with_exertion", "weight": 5 },
+          { "feature": "positive_cough_stress_test", "weight": 5 },
+          { "feature": "urethral_hypermobility", "weight": 4 },
+          { "feature": "no_urge_symptoms", "weight": 3 }
+        ],
+        "management": "Pelvic floor muscle training (PFMT) first line. Lifestyle: weight loss, smoking cessation. Duloxetine (SNRI). Surgical: Mid-urethral sling (TVT/TOT), Burch colposuspension, bulking agents."
+      },
+      {
+        "id": "urge_urinary_incontinence",
+        "name": "Urge Urinary Incontinence (Overactive Bladder)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "sudden_urge_with_leakage", "weight": 5 },
+          { "feature": "urinary_frequency_eight_or_more", "weight": 4 },
+          { "feature": "nocturia_two_or_more", "weight": 4 },
+          { "feature": "negative_cough_stress_test", "weight": 3 }
+        ],
+        "management": "Bladder training (timed voiding). PFMT. Anticholinergics (Oxybutynin, Tolterodine, Solifenacin). Mirabegron (beta-3 agonist). Botox intra-detrusor injections. Sacral neuromodulation."
+      },
+      {
+        "id": "mixed_urinary_incontinence",
+        "name": "Mixed Urinary Incontinence",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "both_stress_and_urge_components", "weight": 5 },
+          { "feature": "complex_symptomatology", "weight": 4 },
+          { "feature": "treat_dominant_component_first", "weight": 3 }
+        ],
+        "management": "Treat the most bothersome component first. Combined approach: PFMT + bladder training + lifestyle. Surgery for stress component if persistent."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "urinary_tract_infection",
+        "discriminators": ["dysuria", "fever", "positive_urine_culture"]
+      },
+      {
+        "diseaseId": "vesicovaginal_fistula",
+        "discriminators": ["constant_leakage", "no_urge", "history_of_surgery_radiation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Cough stress test", "priority": "immediate", "yield": 0.8, "indication": "demonstrate SUI" },
+        { "name": "Post-void residual volume (bladder scan)", "priority": "high", "yield": 0.6, "indication": "exclude retention" }
+      ],
+      "laboratory": [
+        { "name": "Urinalysis and culture", "priority": "high", "yield": 0.5, "indication": "exclude UTI" }
+      ],
+      "imaging": [
+        { "name": "Urodynamic studies", "priority": "high", "yield": 0.85, "indication": "before surgery or if diagnosis unclear" },
+        { "name": "Pelvic ultrasound (bladder wall thickness)", "priority": "low", "yield": 0.4, "indication": "research context" },
+        { "name": "Micturating cystourethrogram", "priority": "low", "yield": 0.4, "indication": "if fistula suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG123 - Urinary Incontinence in Women",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "mild SUI or UUI, good quality of life",
+          "treatment": "Conservative: PFMT (at least 3 months), bladder training. Lifestyle advice (weight loss, fluid management). Trial of anticholinergic (for urge) or duloxetine (for stress)."
+        },
+        {
+          "severity": "severe_or_failed_conservative",
+          "criteria": "failed conservative therapy, severe impact",
+          "treatment": "SUI: Mid-urethral sling (TVT/TOT). UUI: Mirabegron, high-dose anticholinergics, Botox, sacral neuromodulation. Mixed: treat dominant component first."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "urethral_hypermobility",
+      "intrinsic_sphincter_deficiency",
+      "detrusor_overactivity",
+      "pelvic_floor_muscle_weakness",
+      "urethral_support_defects"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrent_utis",
+        "probability": 0.2,
+        "lagDays": [30, 730],
+        "severityBoost": 0.2,
+        "clues": ["dysuria", "positive_cultures"]
+      },
+      {
+        "diseaseId": "perineal_dermatitis",
+        "probability": 0.1,
+        "lagDays": [0, 365],
+        "severityBoost": 0.1,
+        "clues": ["rash", "irritation"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["leakage_with_cough_sneeze", "sudden_urge", "pad_usage"],
+    "exclusionClues": ["normal_continence", "UTI_as_cause"]
+  }
+}

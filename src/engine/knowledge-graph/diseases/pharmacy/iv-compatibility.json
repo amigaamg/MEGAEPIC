@@ -1,0 +1,184 @@
+{
+  "disease": {
+    "id": "iv_compatibility",
+    "name": "Intravenous Drug Compatibility and Y-Site Administration",
+    "system": "PHARM",
+    "agePeak_months": [0, 1200],
+    "note": "IV compatibility assessment is essential for safe co-administration of medications through Y-sites, TPN lines, and infusion sets. Physical incompatibilities (precipitation, color change, gas evolution) and chemical incompatibilities (degradation, loss of potency) must be identified. Common incompatible pairs include ceftriaxone-calcium, phenytoin-D5W, and amphotericin B-normal saline.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["iv_compatibility", "y_site_administration", "drug_stability", "medication_safety", "infusion_pharmacy"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "visible_precipitate_in_iv_line_or_bag", "weight": 10 },
+        { "sign": "air_embolism_from_incompatibility_gas_evolution", "weight": 10 },
+        { "sign": "pulmonary_embolus_from_particulate_matter", "weight": 10 },
+        { "sign": "anaphylactoid_reaction_from_incompatible_mixture", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ceftriaxone_co_administered_with_calcium_nicu", "weight": 9 },
+          { "sign": "precipitation_of_phenytoin_in_d5w_solutions", "weight": 8 },
+          { "sign": "tp_n_and_iv_medication_mixed_in_same_line", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If visible precipitate or ceftriaxone-calcium -> EMERGENCY; if known incompatible pair co-infused -> SEVERE; if no compatibility data available -> MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "visible_particulate_matter_in_iv_line_EOL", "weight": 5, "modifiers": [
+          { "condition": "precipitate_observed_during_infusion", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "iv_line_occlusion_during_co_infusion", "weight": 4 },
+      { "symptomId": "color_change_or_hazing_in_iv_bag_or_tubing", "weight": 5 },
+      { "symptomId": "patient_reports_pain_at_iv_site_during_co_infusion", "weight": 3 },
+      { "symptomId": "crystallization_noted_in_catheter_or_tubing", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "visual_inspection_of_iv_solution_clarity_and_color", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "y_site_connection_verification_medications_identified", "baseWeight": 4 },
+      { "signId": "ph_of_combined_solutions", "baseWeight": 4 },
+      { "signId": "infusion_rate_and_dwell_time_at_y_site", "baseWeight": 3 },
+      { "signId": "filter_condition_before_vs_after_infusion", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "multiple_iv_medications_via_limited_lines", "multiplier": 4.0 },
+      { "id": "concurrent_tp_n_infusion", "multiplier": 5.0 },
+      { "id": "concentration_of_medication_above_standard", "multiplier": 3.0 },
+      { "id": "extreme_ph_drugs_ph_below_3_or_above_9", "multiplier": 4.0 },
+      { "id": "nicu_icu_high_risk_environment", "multiplier": 3.0 },
+      { "id": "lack_of_compatibility_data_available", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "y_site_incompatibility",
+        "name": "Y-Site Drug-Drug Incompatibility",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "two_drugs_mix_at_y_site_without_line_flush", "weight": 5 },
+          { "feature": "precipitation_occurs_when_ph_shift_exceeds_1_unit", "weight": 5 },
+          { "feature": "common_pairs_ceftriaxone_calcium_phenytoin_ns", "weight": 5 },
+          { "feature": "visible_or_subvisible_particles_form", "weight": 4 }
+        ],
+        "management": "Always flush line with compatible fluid (NS or D5W) before and after each medication. Use minimum 3-5mL flush. Check Trissel's or King Guide references. If incompatible, use separate lines or sequential administration with adequate flush. Consider using dedicated lumen for high-risk drugs."
+      },
+      {
+        "id": "tp_n_medication_incompatibility",
+        "name": "TPN-Drug Compatibility",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "divalent_cations_in_tp_n_reduce_drug_stability", "weight": 5 },
+          { "feature": "lipid_emulsion_destabilization_by_cations", "weight": 5 },
+          { "feature": "insulin_adsorption_to_tp_n_bag_and_tubing", "weight": 4 },
+          { "feature": "heparin_and_iron_in_tp_n_incompatible", "weight": 4 }
+        ],
+        "management": "Do NOT add medications to TPN bag unless specific compatibility documented. Only heparin, insulin, and H2 blockers are compatible in TPN (check specific formulations). Use separate line for other IV medications. If Y-site with TPN is unavoidable, use the least concentrated drug, infuse at slowest rate, and flush before and after."
+      },
+      {
+        "id": "light_sensitive_and_adsorptive_drugs",
+        "name": "Photodegradation and Sorption Considerations",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "nitroprusside_nitroglycerin_amphotericin_b_light_sensitive", "weight": 5 },
+          { "feature": "insulin_heparin_nitroglycerin_adsorb_to_pvc_tubing", "weight": 5 },
+          { "feature": "light_protected_infusion_sets_required", "weight": 4 },
+          { "feature": "low_concentration_drugs_most_affected_by_sorption", "weight": 4 }
+        ],
+        "management": "Use light-protective wrapping for light-sensitive drugs (nitroprusside, amphotericin B, dacarbazine). Use non-PVC (polyolefin) tubing for drugs with significant PVC sorption (insulin, nitroglycerin, diazepam, etoposide). Prime tubing with drug solution to saturate binding sites. Replace tubing per protocol."
+      },
+      {
+        "id": "common_incompatible_pairs",
+        "name": "Common High-Risk Incompatible Drug Pairs",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "ceftriaxone_and_calcium_containing_solutions_fatal", "weight": 5 },
+          { "feature": "phenytoin_and_dextrose_5_percent_precipitates", "weight": 5 },
+          { "feature": "amphotericin_b_deoxycholate_and_normal_saline", "weight": 5 },
+          { "feature": "sodium_bicarbonate_and_most_other_drugs", "weight": 4 }
+        ],
+        "management": "Ceftriaxone: DO NOT co-administer with calcium-containing IV solutions (Ringer's, TPN). Risk of fatal calcium-ceftriaxone precipitates in lungs and kidneys. Separate by 48h washout in neonates. Phenytoin: only compatible in NS, use 0.22 micron inline filter. Amphotericin B D: only compatible in D5W, avoid all electrolytes in same line."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "infusion_related_reaction_drug_itself",
+        "discriminators": ["symptoms_temporally_linked_to_single_drug", "no_precipitate_visible", "known_infusion_reaction_for_drug"]
+      },
+      {
+        "diseaseId": "catheter_related_thrombosis",
+        "discriminators": ["no_recent_drug_change", "no_precipitate_visible", "ultrasound_confirms_thrombus"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Visual inspection of IV bag, tubing, and Y-site for particulate", "priority": "immediate", "yield": 0.9, "indication": "before and during all co-infusions" },
+        { "name": "In-line filter inspection (0.22 or 1.2 micron)", "priority": "high", "yield": 0.7, "indication": "if filter clogged, incompatibility suspected" },
+        { "name": "pH test strip of mixed solution", "priority": "medium", "yield": 0.6, "indication": "if precipitation suspected" }
+      ],
+      "laboratory": [
+        { "name": "Visual clarity and color assessment against white background", "priority": "high", "yield": 0.8, "indication": "all co-infusions" },
+        { "name": "Droplet formation or Tyndall effect assessment", "priority": "medium", "yield": 0.5, "indication": "sub-visible particle detection" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "Trissel's Handbook on Injectable Drugs, King Guide to Parenteral Admixtures, ASHP Guidelines on IV Compatibility, ISMP Safe Practice Guidelines",
+      "pathways": [
+        {
+          "severity": "known_compatible_pair",
+          "criteria": "compatibility confirmed by Trissel's or King Guide; same pH range acceptable",
+          "treatment": "May co-infuse via Y-site. Use 0.22 micron in-line filter unless lipid emulsion. Ensure adequate flush before and after. Document co-administration."
+        },
+        {
+          "severity": "unknown_compatibility",
+          "criteria": "no published data available, or conflicting reports",
+          "treatment": "Use separate IV lines with dedicated lumen. If Y-site unavoidable, use slowest infusion rate and maximum dilution. Inspect for physical changes every 15min. Use 0.22 micron filter. Flush with 10mL NS before and after. Document observation."
+        },
+        {
+          "severity": "known_incompatible",
+          "criteria": "documented incompatibility in reference sources, visible precipitation",
+          "treatment": "NEVER co-infuse via Y-site. Use separate lines. If only one line, stop all infusions, flush, sequence one drug at a time with thorough flushes between. For TPN, use dedicated lumen. Report incident if inadvertent co-administration occurred."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "ph_shift_causes_weak_acid_base_drugs_to_precipitate",
+      "cation_bridging_between_anionic_drugs",
+      "lipid_emulsion_destabilized_by_electrolytes",
+      "visible_precipitation_indicates_physical_incompatibility",
+      "chemical_degradation_reduces_drug_potency",
+      "pvc_sorption_reduces_delivered_dose"
+    ],
+    "complications": [
+      {
+        "diseaseId": "pulmonary_embolism_particulate",
+        "probability": 0.01,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["visible_precipitate", "iv_line_particulate", "sudden_dyspnea", "hypoxia"]
+      },
+      {
+        "diseaseId": "phlebitis_chemical",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.3,
+        "clues": ["iv_site_pain", "erythema_along_vein", "palpable_cord"]
+      },
+      {
+        "diseaseId": "line_occlusion_from_precipitate",
+        "probability": 0.03,
+        "lagDays": [0, 2],
+        "severityBoost": 0.4,
+        "clues": ["pump_occlusion_alarm", "inability_to_flush", "visible_crystals"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["multiple_iv_drugs_through_single_line", "visible_particulate_or_hazing", "ph_extreme_medications_being_used", "ceftriaxone_and_calcium_prescribed"],
+    "exclusionClues": ["single_drug_infusion_only", "documented_compatibility_data_available", "dedicated_lines_for_each_drug", "recent_iv_line_change"]
+  }
+}

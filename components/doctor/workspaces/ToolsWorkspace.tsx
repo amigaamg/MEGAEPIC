@@ -3,12 +3,13 @@
 import React, { useState } from 'react';
 import DoctorToolsPanel from '@/components/DoctorToolsPanel';
 import ClinicalToolsHub from '../panels/ClinicalToolsHub';
+import ClinicalToolLauncher from '@/components/clinical-monitoring/ClinicalToolLauncher';
 
 interface Appointment { id: string; patientId: string; patientName?: string; specialty?: string; }
 
-interface Props { doctorId: string; appointments: Appointment[]; doctorSpecialty?: string; }
+interface Props { doctorId: string; appointments: Appointment[]; doctorSpecialty?: string; doctorName?: string; }
 
-export default function ToolsWorkspace({ doctorId, appointments, doctorSpecialty = 'General Practice' }: Props) {
+export default function ToolsWorkspace({ doctorId, appointments, doctorSpecialty = 'General Practice', doctorName }: Props) {
   const [showDoctorTools, setShowDoctorTools] = useState(false);
   const [launchedTool, setLaunchedTool] = useState<string | null>(null);
 
@@ -48,14 +49,14 @@ export default function ToolsWorkspace({ doctorId, appointments, doctorSpecialty
       </div>
 
       {launchedTool && (
-        <div className="panel">
-          <div className="panel-hd">
-            <div className="panel-title">🔧 Tool: {launchedTool}</div>
-            <button className="modal-close" onClick={() => setLaunchedTool(null)}>✕</button>
-          </div>
-          <div className="empty-sm">
-            <p>Tool interface for <strong>{launchedTool}</strong> would render here with full interactive functionality (calculator, scoring form, or reference guide).</p>
-          </div>
+        <div style={{ marginTop: 8 }}>
+          <ClinicalToolLauncher
+            toolId={launchedTool}
+            patientName="Demo Patient"
+            doctorId={doctorId}
+            doctorName={doctorName}
+            onClose={() => setLaunchedTool(null)}
+          />
         </div>
       )}
     </div>

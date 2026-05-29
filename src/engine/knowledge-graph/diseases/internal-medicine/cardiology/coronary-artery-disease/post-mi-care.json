@@ -1,0 +1,121 @@
+{
+  "disease": {
+    "id": "post_mi_care",
+    "name": "Post-Myocardial Infarction Care",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Comprehensive secondary prevention and rehabilitation following acute MI to prevent recurrence and improve outcomes.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["secondary_prevention", "cardiac_rehabilitation"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "recurrent_chest_pain", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "new_arrhythmia", "weight": 9 },
+        { "sign": "signs_of_heart_failure", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If recurrent ischemia/instability/arrhythmia -> ACUTE RE-ADMISSION; else -> STABLE for rehabilitation"
+    },
+    "historyFeatures": [
+      { "symptomId": "recent_mi_diagnosis", "weight": 5 },
+      { "symptomId": "adherence_to_medication", "weight": 4 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "chest_pain_recurrence", "weight": 4 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "lifestyle_factors", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "blood_pressure_control", "baseWeight": 3 },
+      { "signId": "heart_rate", "baseWeight": 2 },
+      { "signId": "signs_of_heart_failure", "baseWeight": 4 },
+      { "signId": "murmur_new_or_changed", "baseWeight": 3 },
+      { "signId": "perfusion_status", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "lv_ef_less_than_40", "multiplier": 2.5 },
+      { "id": "incomplete_revascularization", "multiplier": 1.8 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "continued_smoking", "multiplier": 2.5 },
+      { "id": "medication_nonadherence", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "early_post_mi_phase",
+        "name": "Early Post-MI (Days to 6 Weeks)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "within_6_weeks_of_mi", "weight": 5 },
+          { "feature": "wound_healing", "weight": 3 }
+        ],
+        "management": "Gradual mobilization. Medication optimization. Wound care if CABG. Monitor for complications."
+      },
+      {
+        "id": "long_term_secondary_prevention",
+        "name": "Long-Term Secondary Prevention",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "beyond_6_weeks", "weight": 5 },
+          { "feature": "stable_on_medications", "weight": 4 }
+        ],
+        "management": "Lifelong antiplatelet. Statin high-intensity. Beta-blocker. ACEi/ARB. Cardiac rehab exercise program."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "post_mi_pericarditis", "discriminators": ["pleuritic_pain", "pericardial_rub", "positional"] },
+      { "diseaseId": "anxiety_with_palpitations", "discriminators": ["normal_ecg", "negative_troponin", "hyperventilation"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate_if_symptoms", "yield": 0.7, "indication": "new ischemia or arrhythmia" }
+      ],
+      "laboratory": [
+        { "name": "Lipid profile", "priority": "high", "yield": 0.6, "indication": "assess LDL target achievement" },
+        { "name": "HbA1c", "priority": "high", "yield": 0.4, "indication": "glycemic control" },
+        { "name": "BNP/NT-proBNP", "priority": "medium", "yield": 0.6, "indication": "remodeling and prognosis" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "high", "yield": 0.9, "indication": "LVEF assessment at 6-12 weeks" },
+        { "name": "Exercise stress test", "priority": "medium", "yield": 0.7, "indication": "functional capacity, residual ischemia" },
+        { "name": "Holter monitor", "priority": "low", "yield": 0.4, "indication": "if palpitations or LVEF <35%" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Post-MI Secondary Prevention and Cardiac Rehabilitation",
+      "pathways": [
+        {
+          "severity": "low risk",
+          "criteria": "LVEF >40%, no residual ischemia, no arrhythmia, good functional capacity",
+          "treatment": "Aspirin + statin + beta-blocker + ACEi. Cardiac rehab program (exercise, education, counseling). Smoking cessation. Diet and weight management."
+        },
+        {
+          "severity": "moderate risk",
+          "criteria": "LVEF 35-40%, single vessel disease, well revascularized",
+          "treatment": "Dual antiplatelet for 12 months post-PCI. High-intensity statin. Beta-blocker titrated to HR 55-60. ACEi. Cardiac rehab. Monitor LVEF."
+        },
+        {
+          "severity": "high risk",
+          "criteria": "LVEF <35%, heart failure, multi-vessel disease, incomplete revascularization, diabetes",
+          "treatment": "Dual antiplatelet. High-intensity statin. Beta-blocker + ACEi + MRA. Consider ICD if LVEF <35% after 3 months. Consider SGLT2i. Cardiac rehab specialist."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "ventricular_remodeling",
+      "neurohormonal_activation",
+      "endothelial_dysfunction",
+      "atherosclerosis_progression",
+      "prothrombotic_state"
+    ],
+    "complications": [
+      { "diseaseId": "heart_failure", "probability": 0.15, "severityBoost": 0.4, "clues": ["dyspnea", "oedema", "low_lvef"] },
+      { "diseaseId": "reinfarction", "probability": 0.05, "severityBoost": 0.5, "clues": ["recurrent_chest_pain", "troponin_rise"] },
+      { "diseaseId": "ventricular_arrhythmia", "probability": 0.03, "severityBoost": 0.5, "clues": ["palpitations", "syncope", "low_lvef"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["recent_mi", "on_secondary_prevention", "risk_factor_management"],
+    "exclusionClues": ["acute_ischemia", "new_biomarker_elevation"]
+  }
+}

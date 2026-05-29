@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "suicide_risk",
+    "name": "Suicide Risk Assessment and Management",
+    "system": "PSYCH",
+    "agePeak_months": [180, 540],
+    "note": "Not a diagnosis but a critical risk state across psychiatric disorders. Requires immediate assessment of intent, plan, means, and protective factors.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["emergency_psychiatry", "suicide_risk", "crisis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "current_suicidal_intent_and_plan", "weight": 10 },
+        { "sign": "means_available_lethal", "weight": 10 },
+        { "sign": "recent_attempt_high_lethality", "weight": 10 },
+        { "sign": "command_hallucinations_to_harm_self", "weight": 10 },
+        { "sign": "hopelessness_and_no_protective_factors", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If intent/plan/means/recent attempt -> EMERGENCY HOSPITALIZATION; else -> OUTPATIENT with safety plan"
+    },
+    "historyFeatures": [
+      { "symptomId": "suicidal_ideation", "weight": 5 },
+      { "symptomId": "suicidal_plan", "weight": 5 },
+      { "symptomId": "suicide_attempt_history", "weight": 5 },
+      { "symptomId": "hopelessness", "weight": 4 },
+      { "symptomId": "feeling_of_burden_to_others", "weight": 3 },
+      { "symptomId": "recent_loss_or_separation", "weight": 3 },
+      { "symptomId": "social_isolation_or_withdrawal", "weight": 3 },
+      { "symptomId": "giving_away_possessions", "weight": 3, "note": "Behavioral sign of suicidal intent" },
+      { "symptomId": "sudden_calm_after_depression", "weight": 2, "note": "Decision made, relief felt" },
+      { "symptomId": "preparing_a_will_saying_goodbye", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "flat_or_depressed_affect", "baseWeight": 2 },
+      { "signId": "psychomotor_retardation_or_agitation", "baseWeight": 2 },
+      { "signId": "hopeless_helpless_demeanor", "baseWeight": 3 },
+      { "signId": "evasiveness_about_future", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "previous_suicide_attempt", "multiplier": 5.0 },
+      { "id": "major_depression", "multiplier": 4.0 },
+      { "id": "bipolar_disorder", "multiplier": 3.0 },
+      { "id": "schizophrenia", "multiplier": 3.0 },
+      { "id": "substance_abuse", "multiplier": 3.0 },
+      { "id": "family_history_suicide", "multiplier": 3.0 },
+      { "id": "male_sex", "multiplier": 2.5, "note": "Males complete suicide more frequently" },
+      { "id": "access_to_lethal_means_firearms", "multiplier": 4.0 },
+      { "id": "recent_bereavement_separation", "multiplier": 2.0 },
+      { "id": "chronic_pain_or_physical_illness", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "suicide_risk_acute",
+        "name": "Acute Suicide Risk",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "current_intent_plan_means", "weight": 5 },
+          { "feature": "acute_psychiatric_crisis", "weight": 4 }
+        ],
+        "management": "EMERGENCY HOSPITALIZATION (voluntary or involuntary). Remove means (weapons, medications). 1:1 observation. Start/optimize medication. ECT if severe depression. Safety plan. Involve family."
+      },
+      {
+        "id": "suicide_risk_chronic",
+        "name": "Chronic Suicide Risk",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "recurrent_ideation_without_intent", "weight": 3 },
+          { "feature": "borderline_personality_or_chronic_illness", "weight": 3 }
+        ],
+        "management": "Outpatient management with clear crisis plan. DBT (for BPD). Treat underlying disorder. Regular follow-up. Restrict access to means. Crisis hotline numbers. Collaborative safety plan."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "non_suicidal_self_injury", "discriminators": ["no_intent_to_die", "self_harm_for_emotional_regulation", "superficial_cuts", "relief_after_injury"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Columbia-Suicide Severity Rating Scale (C-SSRS)", "priority": "immediate", "yield": 0.95, "indication": "all patients with suicidal ideation" },
+        { "name": "Safety Plan", "priority": "immediate", "yield": 0.9, "indication": "structured intervention" }
+      ],
+      "laboratory": [
+        { "name": "Urine toxicology", "priority": "high", "yield": 0.4, "indication": "substance involvement" },
+        { "name": "Blood alcohol level", "priority": "high", "yield": 0.4, "indication": "intoxication increases risk" }
+      ]
+    },
+    "management": {
+      "protocolReference": "APA Practice Guidelines for Suicidal Behavior / NICE Self-Harm Guidelines",
+      "pathways": [
+        {
+          "severity": "imminent risk",
+          "criteria": "current intent + plan + means available, or recent high-lethality attempt",
+          "treatment": "EMERGENCY INVOLUNTARY HOSPITALIZATION if needed. 1:1 observation. Remove all harmful objects. Medication for underlying illness. ECT if severe depression. Contact family. Do not leave alone."
+        },
+        {
+          "severity": "moderate risk",
+          "criteria": "ideation without intent/plan, or plan with protective factors, no means",
+          "treatment": "Voluntary hospitalization or intensive outpatient. Collaborative safety plan. Remove means. Treat underlying disorder. Involve family/support. Frequent follow-up. Crisis hotline number."
+        },
+        {
+          "severity": "low risk",
+          "criteria": "passive ideation, no plan, no intent, strong protective factors",
+          "treatment": "Outpatient. Safety plan. Treat underlying psychiatric disorder. Means restriction. Regular monitoring (follow-up within 1 week). Crisis plan."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "serotonin_deficiency_prefrontal",
+      "noradrenergic_dysregulation",
+      "hpa_axis_overactivity",
+      "impulsivity_neurocircuitry",
+      "genetic_heritability_40_percent",
+      "stress_diathesis_model"
+    ],
+    "complications": [
+      { "diseaseId": "completed_suicide", "probability": 0.05, "severityBoost": 1.0, "clues": ["male_old_age", "lethal_means", "previous_attempts", "hopelessness"] },
+      { "diseaseId": "suicide_attempt_nonfatal_injury", "probability": 0.1, "severityBoost": 0.5, "clues": ["psychiatric_crisis", "substance_intoxication"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "immediate",
+    "diagnosticClues": ["suicidal_ideation_plan_and_intent", "previous_attempt", "hopelessness", "access_to_means"],
+    "exclusionClues": ["no_suicidal_ideation", "good_protective_factors", "positive_future_outlook"]
+  }
+}

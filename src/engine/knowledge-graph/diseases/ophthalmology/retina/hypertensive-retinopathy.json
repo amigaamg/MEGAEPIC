@@ -1,0 +1,176 @@
+{
+  "disease": {
+    "id": "hypertensive_retinopathy",
+    "name": "Hypertensive Retinopathy",
+    "system": "OPHTH",
+    "agePeak_months": [480, 840],
+    "note": "Retinal microvascular changes in response to systemic hypertension. Graded by severity (Keith-Wagener-Barker classification). Can indicate chronic hypertension severity and target organ damage.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["retinal_disorder", "hypertensive_complication"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "disc_edema_papilledema", "weight": 9 },
+        { "sign": "macular_star_hard_exudates", "weight": 8 },
+        { "sign": "severe_vision_loss", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "Keith_Wagener_grade_3_or_4", "weight": 8 },
+          { "sign": "cotton_wool_spots_widespread", "weight": 6 },
+          { "sign": "flame_shaped_hemorrhages", "weight": 5 },
+          { "sign": "arteriolar_AV_nicking_and_silver_wiring", "weight": 4 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Grade 3-4 (cotton wool spots, hemorrhages, disc edema) -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "asymptomatic_mild_cases", "weight": 5 },
+      { "symptomId": "blurred_vision_gradual", "weight": 3 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "visual_disturbances", "weight": 2 },
+      { "symptomId": "known_hypertension_history", "weight": 5 },
+      { "symptomId": "poor_blood_pressure_control", "weight": 4 },
+      { "symptomId": "sudden_vision_loss_in_malignant_HTN", "weight": 4 },
+      { "symptomId": "other_hypertensive_complications", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "generalized_or_focal_arteriolar_narrowing", "baseWeight": 4 },
+      { "signId": "AV_nicking_arteriovenous_nicking", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "silver_or_copper_wiring_of_arterioles", "baseWeight": 4 },
+      { "signId": "flame_shaped_hemorrhages", "baseWeight": 4 },
+      { "signId": "cotton_wool_spots", "baseWeight": 4 },
+      { "signId": "hard_exudates_macular_star", "baseWeight": 3 },
+      { "signId": "optic_disc_edema_papilledema", "baseWeight": 5 },
+      { "signId": "elevated_blood_pressure_on_measurement", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_hypertension", "multiplier": 5.0 },
+      { "id": "malignant_hypertension", "multiplier": 10.0 },
+      { "id": "poor_blood_pressure_control", "multiplier": 3.0 },
+      { "id": "duration_of_hypertension_long", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus_comorbidity", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.5 },
+      { "id": "african_caribbean_ancestry", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "chronic_hypertensive_retinopathy",
+        "name": "Chronic (Benign) Hypertensive Retinopathy",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "arteriolar_narrowing", "weight": 4 },
+          { "feature": "AV_nicking", "weight": 4 },
+          { "feature": "silver_wiring", "weight": 3 },
+          { "feature": "bilateral_symmetric", "weight": 4 },
+          { "feature": "no_disc_edema", "weight": 3 }
+        ],
+        "management": "Systemic BP control. Ophthalmology follow-up is not regularly needed (no sight-threatening changes). Cardiovascular risk assessment."
+      },
+      {
+        "id": "malignant_hypertensive_retinopathy",
+        "name": "Accelerated/Malignant Hypertensive Retinopathy",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "disc_edema_papilledema", "weight": 5 },
+          { "feature": "flame_hemorrhages", "weight": 5 },
+          { "feature": "cotton_wool_spots", "weight": 5 },
+          { "feature": "macular_star_exudates", "weight": 5 },
+          { "feature": "severe_hypertension_BP_over_200_120", "weight": 5 },
+          { "feature": "acute_vision_loss", "weight": 4 }
+        ],
+        "management": "URGENT: Immediate BP lowering (IV therapy). Admit to medical/ICU. Fundus photography. Serial BP monitoring. Check renal function. Prognosis: irreversible vision loss if not treated urgently."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "diabetic_retinopathy",
+        "discriminators": ["microaneurysms_more", "hard_exudates_different_pattern", "no_AV_nicking"]
+      },
+      {
+        "diseaseId": "central_retinal_vein_occlusion",
+        "discriminators": ["unilateral", "dilated_veins", "retinal_edema_more"]
+      },
+      {
+        "diseaseId": "papilledema_from_raised_ICP",
+        "discriminators": ["no_hemorrhages", "normal_BP", "elevated_CSF_pressure"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Blood pressure measurement", "priority": "immediate", "yield": 0.95, "indication": "essential" },
+        { "name": "Dilated fundus examination", "priority": "immediate", "yield": 0.9, "indication": "KW grading" }
+      ],
+      "laboratory": [
+        { "name": "Renal function (creatinine, eGFR)", "priority": "high", "yield": 0.6, "indication": "target organ damage" },
+        { "name": "Urinalysis (proteinuria)", "priority": "high", "yield": 0.5, "indication": "renal involvement" }
+      ],
+      "imaging": [
+        { "name": "Fundus photography", "priority": "medium", "yield": 0.9, "indication": "documentation" },
+        { "name": "OCT", "priority": "medium", "yield": 0.6, "indication": "macular edema if present" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "European Society of Hypertension / AAO Guidelines",
+      "pathways": [
+        {
+          "severity": "grade_1_2",
+          "criteria": "mild narrowing, AV nicking only",
+          "treatment": "No direct ophthalmology treatment. Ensure BP is controlled (target <140/90). Cardiovascular risk assessment. Annual exam."
+        },
+        {
+          "severity": "grade_3",
+          "criteria": "flame hemorrhages, cotton wool spots, hard exudates",
+          "treatment": "Urgent BP control (PO medications). Cardiovascular and renal workup. Close monitoring until BP stable. Fundus photography."
+        },
+        {
+          "severity": "malignant_grade_4",
+          "criteria": "disc edema, BP >200/120, acute vision loss",
+          "treatment": "EMERGENCY: Admit for IV antihypertensives. Prevent rapid BP drop (risk of optic nerve infarction). Target: reduce BP 20-25% in 24h. Fundus photos. Assess renal function. Long-term: oral agents."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "arteriolar_vasoconstriction",
+      "intimal_thickening",
+      "arteriosclerosis",
+      "blood_retinal_barrier_breakdown",
+      "fibrinoid_necrosis_in_malignant_phase"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "retinal_vein_occlusion",
+        "probability": 0.05,
+        "lagDays": [0, 1825],
+        "severityBoost": 0.5,
+        "clues": ["unilateral_vision_loss", "dilated_veins", "retinal_hemorrhages"]
+      },
+      {
+        "diseaseId": "optic_atrophy",
+        "probability": 0.02,
+        "lagDays": [30, 365],
+        "severityBoost": 0.8,
+        "clues": ["pale_disc", "pallor", "persistent_vision_loss"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["hypertension_history", "AV_nicking", "arteriolar_narrowing", "flame_hemorrhages"],
+    "exclusionClues": ["normal_fundus", "normal_BP"]
+  }
+}

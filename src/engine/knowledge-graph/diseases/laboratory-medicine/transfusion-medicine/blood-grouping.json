@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "blood_grouping",
+    "name": "ABO and Rh Blood Grouping",
+    "system": "LAB",
+    "agePeak_months": [0, 960],
+    "note": "ABO grouping is performed by forward typing (patient RBCs with anti-A, anti-B sera) and reverse typing (patient serum with A1 and B cells). Rh(D) typing determines positive/negative. Discrepancies require investigation before issuing blood products.",
+    "prevalenceWeight": 1.0,
+    "syndromeTags": ["transfusion_medicine", "blood_group", "pre_transfusion_testing"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "ab_discrepancy_between_forward_and_reverse", "weight": 9 },
+        { "sign": "weak_or_missing_reverse_grouping", "weight": 7 },
+        { "sign": "mixed_field_reaction", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "group_o_patient_needs_emergency_release", "weight": 8 },
+          { "sign": "rh_negative_female_childbearing_age", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If discrepancy -> RESOLVE BEFORE TRANSFUSION; if emergency -> release O negative"
+    },
+    "historyFeatures": [
+      { "symptomId": "first_time_transfusion_or_pregnancy", "weight": 3, "modifiers": [
+          { "condition": "or_previous_transfusion_reaction", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "stem_cell_transplant_history", "weight": 4 },
+      { "symptomId": "recent_blood_transfusion_3_months", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "forward_group_anti_a_anti_b_reaction", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "reverse_group_a1_b_cells_reaction", "baseWeight": 5 },
+      { "signId": "rh_d_typing_positive_or_negative", "baseWeight": 4 },
+      { "signId": "antibody_screen_positive_or_negative", "baseWeight": 4 }
+    ],
+    "riskFactors": [],
+    "subtypes": [
+      {
+        "id": "group_a",
+        "name": "Group A (A antigen on RBCs, anti-B in serum)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "forward_anti_a_positive_agglutination", "weight": 5 },
+          { "feature": "reverse_b_cells_positive_agglutination", "weight": 5 },
+          { "feature": "anti_a1_lectin_distinguishes_a1_a2", "weight": 3 }
+        ],
+        "management": "Can receive A or O RBCs. Can donate to A or AB. Type A1 vs A2 subgroup: A2 may have anti-A1 (rarely clinically significant)."
+      },
+      {
+        "id": "group_b",
+        "name": "Group B (B antigen on RBCs, anti-A in serum)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "forward_anti_b_positive_agglutination", "weight": 5 },
+          { "feature": "reverse_a1_cells_positive_agglutination", "weight": 5 }
+        ],
+        "management": "Can receive B or O RBCs. Can donate to B or AB."
+      },
+      {
+        "id": "group_ab",
+        "name": "Group AB (A and B antigens, no antibodies)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "forward_anti_a_and_anti_b_positive", "weight": 5 },
+          { "feature": "reverse_group_no_agglutination", "weight": 5 }
+        ],
+        "management": "Universal plasma donor. Can receive any ABO RBCs. Can donate to AB only."
+      },
+      {
+        "id": "group_o",
+        "name": "Group O (no A/B antigens, anti-A and anti-B)",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "forward_no_reaction_with_anti_a_or_b", "weight": 5 },
+          { "feature": "reverse_a1_and_b_cells_positive", "weight": 5 }
+        ],
+        "management": "Universal RBC donor. Can only receive O RBCs. Needs compatible plasma for plasma transfusion."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "acquired_b_phenotype",
+        "discriminators": ["acquired_in_gi_conditions", "weak_b_reaction", "rectal_cancer_colitis"]
+      },
+      {
+        "diseaseId": "chimerism_mixed_field",
+        "discriminators": ["dual_population", "post_stem_cell_transplant", "dizygotic_twin"]
+      },
+      {
+        "diseaseId": "rbc_membrane_defect_weak_antigen",
+        "discriminators": ["weak_forward_reaction", "genotyping_needed", "molecular_testing"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "ABO forward typing (anti-A, anti-B, anti-A,B reagents)", "priority": "immediate", "yield": 0.99, "indication": "all pre-transfusion patients" },
+        { "name": "ABO reverse typing (A1, B cells)", "priority": "immediate", "yield": 0.98, "indication": "confirm forward typing" },
+        { "name": "Rh(D) typing (anti-D reagent)", "priority": "immediate", "yield": 0.99, "indication": "all patients" },
+        { "name": "Antibody screen (IAT method)", "priority": "immediate", "yield": 0.95, "indication": "detect unexpected antibodies" },
+        { "name": "Discrepancy workup: extended phenotyping, adsorption, elution", "priority": "high", "yield": 0.9, "indication": "if forward/reverse mismatch" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "AABB Standards for Blood Banks and Transfusion Services",
+      "pathways": [
+        {
+          "severity": "routine_grouping",
+          "criteria": "forward and reverse match, no antibodies, clear Rh",
+          "treatment": "Issue type-specific RBCs and components. Use for crossmatch. Record in patient record."
+        },
+        {
+          "severity": "discrepancy",
+          "criteria": "forward-reverse mismatch, weak reactions, mixed field",
+          "treatment": "DO NOT issue blood until resolved. Extended workup. Notify transfusion medicine consultant. Use O negative RBCs if emergency. Molecular typing if available."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "abo_antigens_on_rbc_surface",
+      "naturally_occurring_antibodies_igm",
+      "ab_isoagglutinin_production",
+      "immune_response_to_mismatched_transfusion"
+    ],
+    "complications": [
+      {
+        "diseaseId": "transfusion_reaction_hemolytic",
+        "probability": 0.01,
+        "lagDays": [0, 1],
+        "severityBoost": 0.8,
+        "clues": ["grouping_error", "positive_crossmatch", "hemoglobinuria"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medim",
+    "diagnosticClues": ["forward_reverse_concordant", "clear_rh_result", "negative_antibody_screen"],
+    "exclusionClues": ["discrepancy_resolved", "previous_known_group"]
+  }
+}

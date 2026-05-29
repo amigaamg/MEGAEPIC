@@ -1,0 +1,158 @@
+{
+  "disease": {
+    "id": "respiratory-failure",
+    "name": "Respiratory Failure (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [0, 60],
+    "note": "Inadequate gas exchange: hypoxemic (type 1), hypercapnic (type 2), or mixed. Leading cause of PICU admission. Early recognition and ventilatory support critical.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["respiratory_distress", "ventilatory_failure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pao2_<60_fio2_>50_percent", "weight": 10 },
+        { "sign": "pco2_>70", "weight": 10 },
+        { "sign": "cardiac_arrest_hypoxic", "weight": 10 },
+        { "sign": "ph_<7_15", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_tachypnea_with_distress", "weight": 7 },
+          { "sign": "altered_consciousness_hypoxic", "weight": 7 },
+          { "sign": "spo2_<85_percent_on_o2", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": true,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If severe hypoxemia, hypercapnia, or acidosis -> SEVERE; else -> NON-SEVERE (mild-moderate respiratory distress)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "difficulty_breathing", "weight": 5 },
+      { "symptomId": "rapid_breathing", "weight": 5 },
+      { "symptomId": "cough", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "lethargy_irritability", "weight": 3 },
+      { "symptomId": "poor_feeding", "weight": 3 },
+      { "symptomId": "wheezing_or_stridor", "weight": 3 },
+      { "symptomId": "known_underlying_disease", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachypnea", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "chest_wall_retractions", "baseWeight": 5 },
+      { "signId": "nasal_flaring", "baseWeight": 4 },
+      { "signId": "grunting", "baseWeight": 5 },
+      { "signId": "cyanosis", "baseWeight": 5 },
+      { "signId": "reduced_air_entry", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "altered_consciousness_hypoxia", "baseWeight": 4 },
+      { "signId": "head_nodding", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "prematurity", "multiplier": 3.0 },
+      { "id": "congenital_heart_disease", "multiplier": 2.5 },
+      { "id": "neuromuscular_disease", "multiplier": 3.0 },
+      { "id": "immunodeficiency", "multiplier": 2.0 },
+      { "id": "chronic_lung_disease", "multiplier": 3.0 },
+      { "id": "recent_surgery_airway", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hypoxemic_respiratory_failure",
+        "name": "Hypoxemic Respiratory Failure (Type 1)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "pao2_<60_on_room_air", "weight": 5 },
+          { "feature": "normal_or_low_pco2", "weight": 3 },
+          { "feature": "v_q_mismatch_shunt", "weight": 4 }
+        ],
+        "management": "Oxygen therapy (head box, nasal cannula, HFNC). CPAP/NIV if refractory. Intubation + mechanical ventilation if fails. Treat underlying cause (pneumonia, asthma, bronchiolitis)."
+      },
+      {
+        "id": "hypercapnic_respiratory_failure",
+        "name": "Hypercapnic Respiratory Failure (Type 2)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "pco2_>60", "weight": 5 },
+          { "feature": "acidosis_ph_<7_30", "weight": 5 },
+          { "feature": "decreased_ventilation", "weight": 4 }
+        ],
+        "management": "Assess need for NIV (BiPAP) vs intubation. Treat underlying cause (neuromuscular, asthma, airway obstruction). May need chronic ventilation if neuromuscular cause."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cardiac_failure",
+        "discriminators": ["murmur", "hepatomegaly", "gallop", "normal_o2_sat_on_room_air_often"]
+      },
+      {
+        "diseaseId": "metabolic_acidosis_compensatory_tachypnea",
+        "discriminators": ["kussmaul_breathing", "normal_o2_sat", "abnormal_blood_gas_metabolic_acidosis"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.9, "indication": "oxygen saturation monitoring" },
+        { "name": "Blood gas analysis", "priority": "immediate", "yield": 0.95, "indication": "pH, PaO2, PaCO2, HCO3" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.4, "indication": "infection" },
+        { "name": "CRP", "priority": "medium", "yield": 0.4, "indication": "inflammation" },
+        { "name": "Electrolytes", "priority": "medium", "yield": 0.3, "indication": "metabolic assessment" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.8, "indication": "lung pathology, tube placement" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "PALS Guidelines for Respiratory Failure",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "PaO2 >60, PaCO2 <60, pH >7.3, mild-moderate distress, responsive to O2",
+          "treatment": "Oxygen to target SpO2 >94%. Treat underlying cause. Nebulized bronchodilators if wheeze. Corticosteroids if asthma/croup. Close monitoring. Consider HFNC/CPAP if worsening."
+        },
+        {
+          "severity": "severe",
+          "criteria": "PaO2 <60 on >50% O2, PaCO2 >70, pH <7.2, exhaustion, altered consciousness",
+          "treatment": "ICU. Intubation and mechanical ventilation. Pressure control or volume control modes. Lung protective strategy (tidal volume 6-8 mL/kg, PIP limited). Sedation and paralysis if needed. Inhaled nitric oxide if refractory hypoxia. ECMO as rescue."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "v_q_mismatch", "shunt", "hypoventilation", "diffusion_impairment", "increased_work_of_breathing", "respiratory_muscle_fatigue"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "ventilator_associated_pneumonia",
+        "probability": 0.2,
+        "lagDays": [3, 14],
+        "severityBoost": 0.3,
+        "clues": ["prolonged_ventilation", "new_infiltrate", "fever", "purulent_secretions"]
+      },
+      {
+        "diseaseId": "barotrauma_pneumothorax",
+        "probability": 0.1,
+        "lagDays": [0, 7],
+        "severityBoost": 0.4,
+        "clues": ["high_peak_pressures", "sudden_deterioration", "decreased_breath_sounds"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["tachypnea", "retractions", "grunting", "hypoxia", "hypercapnia"],
+    "exclusionClues": ["normal_sats_on_room_air", "no_distress", "normal_blood_gas"]
+  }
+}

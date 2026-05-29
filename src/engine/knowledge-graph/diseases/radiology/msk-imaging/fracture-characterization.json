@@ -1,0 +1,186 @@
+{
+  "disease": {
+    "id": "fracture_characterization",
+    "name": "Fracture Characterization on Imaging",
+    "system": "RAD",
+    "agePeak_months": [12, 960],
+    "note": "Radiographic evaluation of fractures includes assessment of location, alignment, displacement, angulation, comminution, and articular involvement. CT for complex fracture characterization, MRI for occult fractures and soft tissue assessment.",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["fracture", "bony_injury", "trauma"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture_skin_break", "weight": 9 },
+        { "sign": "neurovascular_compromise", "weight": 10 },
+        { "sign": "compartment_syndrome", "weight": 10 },
+        { "sign": "unstable_spine_fracture", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "intra_articular_displaced", "weight": 7 },
+          { "sign": "comminuted_segmental", "weight": 6 },
+          { "sign": "displacement_gt_bone_width", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If open/neurovascular compromise -> EMERGENT; if intra-articular/comminuted -> SURGICAL; else -> NON-SURGICAL"
+    },
+    "historyFeatures": [
+      { "symptomId": "trauma_mechanism", "weight": 5, "modifiers": [
+          { "condition": "high_velocity_or_fall_from_height", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "pain_with_weight_bearing_or_motion", "weight": 5 },
+      { "symptomId": "deformity_or_swelling", "weight": 4 },
+      { "symptomId": "inability_to_use_limb", "weight": 4 },
+      { "symptomId": "numbness_or_tingling", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "cortical_disruption_on_xr", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "displacement_or_angulation", "baseWeight": 5 },
+      { "signId": "shortening_or_rotation", "baseWeight": 4 },
+      { "signId": "joint_congruity_loss", "baseWeight": 4 },
+      { "signId": "soft_tissue_swelling_or_effusion", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "osteoporosis", "multiplier": 3.0 },
+      { "id": "age_over_65", "multiplier": 2.5 },
+      { "id": "pathologic_bone_lesion", "multiplier": 4.0 },
+      { "id": "high_energy_trauma", "multiplier": 2.0 },
+      { "id": "repetitive_stress_activities", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "long_bone_fracture",
+        "name": "Long Bone Fracture (Tibia/Femur)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "transverse_oblique_or_spiral_pattern", "weight": 4 },
+          { "feature": "cortical_disruption", "weight": 5 },
+          { "feature": "comminution_segments", "weight": 4 },
+          { "feature": "segmental_fracture", "weight": 4 },
+          { "feature": "angulation_degrees", "weight": 3 }
+        ],
+        "management": "Closed reduction and casting for non-displaced. Intramedullary nailing or plate fixation for displaced. Assess for compartment syndrome (especially tibia)."
+      },
+      {
+        "id": "hip_fracture",
+        "name": "Hip Fracture (Femoral Neck/Intertrochanteric)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "femoral_neck_fracture_garden_classification", "weight": 5 },
+          { "feature": "intertrochanteric_fracture", "weight": 5 },
+          { "feature": "displacement_or_impaction", "weight": 4 },
+          { "feature": "subtrochanteric_extension", "weight": 3 }
+        ],
+        "management": "Garden I-II (non-displaced): internal fixation (cannulated screws). Garden III-IV (displaced): hemiarthroplasty or total hip arthroplasty. Urgent ortho consult. DVT prophylaxis."
+      },
+      {
+        "id": "stress_fracture",
+        "name": "Stress/Fatigue Fracture",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "linear_periosteal_reaction", "weight": 4 },
+          { "feature": "t2_hyperintensity_and_stripe_on_mri", "weight": 5 },
+          { "feature": "cortical_lucency_or_horizontally_oriented", "weight": 4 },
+          { "feature": "xr_may_be_negative_early", "weight": 4 }
+        ],
+        "management": "Relative rest and activity modification. Low-risk (posteromedial tibia): activity modification. High-risk (femoral neck tension side, navicular): non-weight bearing ± surgical fixation."
+      },
+      {
+        "id": "pathologic_fracture",
+        "name": "Pathologic Fracture through Bone Lesion",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "lytic_or_blastic_lesion_at_fracture_site", "weight": 5 },
+          { "feature": "periosteal_reaction_aggressive", "weight": 4 },
+          { "feature": "soft_tissue_mass", "weight": 4 },
+          { "feature": "minimal_trauma_mechanism", "weight": 5 }
+        ],
+        "management": "Biopsy of lesion if unknown primary. Orthopedic fixation (IMN or MIPO with cement). Oncology referral. Radiation for pain control. Bisphosphonates for metastases."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "accessory_ossicle",
+        "discriminators": ["smooth_corticated_margins", "no_trauma_history", "characteristic_location"]
+      },
+      {
+        "diseaseId": "nutrient_vessel_canal",
+        "discriminators": ["oblique_linear_lucency", "cortical_tunnel", "bilateral_symmetric"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Neurovascular exam", "priority": "immediate", "yield": 0.9, "indication": "all fracture patients" }
+      ],
+      "laboratory": [
+        { "name": "Calcium, Vitamin D, ALP", "priority": "low", "yield": 0.2, "indication": "if fragility fracture, suspect metabolic bone disease" }
+      ],
+      "imaging": [
+        { "name": "Radiograph (AP and lateral views)", "priority": "immediate", "yield": 0.9, "indication": "first-line for all suspected fractures" },
+        { "name": "CT with 3D reconstructions", "priority": "high", "yield": 0.95, "indication": "complex articular fractures, pre-operative planning, spine/pelvis" },
+        { "name": "MRI with STIR/T2 fat-sat", "priority": "medium", "yield": 0.95, "indication": "occult fracture, stress fracture, bone bruise" },
+        { "name": "Bone scan (Tc-99m MDP)", "priority": "low", "yield": 0.85, "indication": "occult, stress, or pathologic fractures when MRI unavailable" }
+      ]
+    },
+    "management": {
+      "protocolReference": "OTA/AO Fracture Classification Compendium",
+      "pathways": [
+        {
+          "severity": "non_displaced_stable",
+          "criteria": "non-displaced, extra-articular, stable fracture pattern",
+          "treatment": "Closed reduction if needed. Casting/splinting. Orthopedic follow-up. Repeat radiographs at 1-2 weeks to assess alignment."
+        },
+        {
+          "severity": "displaced_unstable",
+          "criteria": "displaced, angulated, intra-articular step-off, shortened",
+          "treatment": "Closed or open reduction. Internal fixation (plates, screws, IM nail). External fixation if soft tissue compromised (open fracture Gustilo III)."
+        },
+        {
+          "severity": "emergent",
+          "criteria": "open fracture, neurovascular compromise, compartment syndrome",
+          "treatment": "Emergent orthopedic consult. IV antibiotics for open fractures. Tetanus prophylaxis. Emergent irrigation and debridement. Fasciotomy if compartment syndrome. Vascular repair if needed."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "bony_structural_failure",
+      "energy_transfer_trauma",
+      "periosteal_disruption",
+      "hematoma_formation",
+      "inflammation_and_repair",
+      "soft_tissue_envelope_injury"
+    ],
+    "complications": [
+      {
+        "diseaseId": "nonunion",
+        "probability": 0.05,
+        "lagDays": [180, 365],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fracture_gap", "no_callus", "atrophic_ends"]
+      },
+      {
+        "diseaseId": "malunion",
+        "probability": 0.1,
+        "lagDays": [90, 180],
+        "severityBoost": 0.2,
+        "clues": ["angular_deformity", "limb_length_discrepancy", "rotational_deformity"]
+      },
+      {
+        "diseaseId": "avascular_necrosis",
+        "probability": 0.08,
+        "lagDays": [180, 730],
+        "severityBoost": 0.4,
+        "clues": ["femoral_head_collapse", "scaphoid_nonunion", "talus_fracture"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["trauma_history", "pain_on_exam", "cortical_disruption", "deformity"],
+    "exclusionClues": ["negative_xr", "no_point_tenderness", "ability_to_weight_bear"]
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "acute-glomerulonephritis",
+    "name": "Acute Glomerulonephritis (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [24, 120],
+    "note": "Post-streptococcal glomerulonephritis is most common in children. Immune complex deposition leads to glomerular inflammation. Presents with hematuria, edema, hypertension.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["nephritic_syndrome", "acute_kidney_injury"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypertensive_encephalopathy", "weight": 10 },
+        { "sign": "pulmonary_edema", "weight": 10 },
+        { "sign": "anuria_>48_hours", "weight": 9 },
+        { "sign": "seizures_due_to_hypertension", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_hypertension", "weight": 8 },
+          { "sign": "oliguria", "weight": 7 },
+          { "sign": "rapidly_rising_creatinine", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If hypertensive crisis, pulmonary edema, or anuria -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "cola_colored_urine", "weight": 5 },
+      { "symptomId": "periorbital_edema", "weight": 5 },
+      { "symptomId": "decreased_urine_output", "weight": 4 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "sore_throat_1_to_3_weeks_ago", "weight": 5, "note": "Post-streptococcal classic history" },
+      { "symptomId": "skin_infection_impetigo", "weight": 4 },
+      { "symptomId": "fever", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "periorbital_edema", "baseWeight": 5 },
+      { "signId": "hypertension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "lower_limb_edema", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 2 },
+      { "signId": "pulmonary_crackles_pulmonary_edema", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_4_to_12_years", "multiplier": 3.0 },
+      { "id": "untreated_strep_pharyngitis", "multiplier": 3.0 },
+      { "id": "impetigo_skin_infection", "multiplier": 2.5 },
+      { "id": "overcrowding", "multiplier": 2.0 },
+      { "id": "previous_psgn_history", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "post_streptococcal_gn",
+        "name": "Post-Streptococcal Glomerulonephritis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "preceding_strep_infection_1_3_weeks", "weight": 5 },
+          { "feature": "hematuria_cola_colored", "weight": 5 },
+          { "feature": "elevated_aso_titer", "weight": 5 }
+        ],
+        "management": "Supportive: salt/fluid restriction. Diuretics for edema. Antihypertensives (nifedipine, labetalol). Penicillin to eradicate strep. Monitor renal function. Self-limiting in most."
+      },
+      {
+        "id": "rapidly_progressive_gn",
+        "name": "Rapidly Progressive Glomerulonephritis (Crescentic)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "rapid_deterioration_of_renal_function", "weight": 5 },
+          { "feature": "oliguria_anuria", "weight": 5 },
+          { "feature": "crescents_on_biopsy", "weight": 5 }
+        ],
+        "management": "IV methylprednisolone pulse. Cyclophosphamide. Plasma exchange if anti-GBM disease. Dialysis if refractory. Renal biopsy urgent."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "nephrotic_syndrome",
+        "discriminators": ["massive_proteinuria", "hypoalbuminemia", "hyperlipidemia", "no_hypertension_or_hematuria"]
+      },
+      {
+        "diseaseId": "iga_nephropathy",
+        "discriminators": ["hematuria_during_uri", "no_latent_period", "iga_deposits_on_biopsy"]
+      },
+      {
+        "diseaseId": "hemolytic_uremic_syndrome",
+        "discriminators": ["microangiopathic_hemolytic_anemia", "thrombocytopenia", "bloody_diarrhea_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urinalysis", "priority": "immediate", "yield": 0.95, "indication": "hematuria, proteinuria, RBC casts" }
+      ],
+      "laboratory": [
+        { "name": "Serum creatinine and BUN", "priority": "immediate", "yield": 0.8, "indication": "renal function" },
+        { "name": "ASO titer", "priority": "high", "yield": 0.8, "indication": "strep infection evidence" },
+        { "name": "C3 complement", "priority": "high", "yield": 0.85, "indication": "low in PSGN, normal in other GN" },
+        { "name": "Serum albumin", "priority": "medium", "yield": 0.5, "indication": "rule out nephrotic syndrome" },
+        { "name": "Throat swab culture", "priority": "medium", "yield": 0.4, "indication": "active strep infection" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "medium", "yield": 0.5, "indication": "echogenicity, size, rule out obstruction" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "KDIGO Guidelines for Glomerulonephritis",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "Normal BP or mild HTN, no oliguria, normal/elevated creatinine but stable",
+          "treatment": "Salt and fluid restriction. Oral furosemide 1-2 mg/kg if edema. Amlodipine/nifedipine for hypertension. Penicillin V for 10 days. Monitor I/O, weight, BP daily."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Severe hypertension, pulmonary edema, oliguria/anuria, rapidly rising creatinine",
+          "treatment": "ICU admission. IV furosemide. IV labetalol/hydralazine for hypertensive emergency. Fluid restriction. Dialysis for refractory fluid overload/uremia. Renal biopsy if RPGN suspected."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "immune_complex_deposition",
+      "complement_activation",
+      "glomerular_inflammation",
+      "endothelial_proliferation",
+      "decreased_gfr",
+      "salt_and_water_retention"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypertensive_encephalopathy",
+        "probability": 0.05,
+        "lagDays": [0, 7],
+        "severityBoost": 0.6,
+        "clues": ["severe_hypertension", "headache", "vomiting", "seizures"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.1,
+        "lagDays": [0, 7],
+        "severityBoost": 0.4,
+        "clues": ["oliguria", "rising_creatinine", "hyperkalemia"]
+      },
+      {
+        "diseaseId": "pulmonary_edema",
+        "probability": 0.05,
+        "lagDays": [0, 5],
+        "severityBoost": 0.5,
+        "clues": ["dyspnea", "crackles", "cardiomegaly"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["cola_colored_urine", "periorbital_edema", "hypertension", "low_c3", "post_strep_history"],
+    "exclusionClues": ["massive_proteinuria", "normal_c3", "no_latent_period"]
+  }
+}

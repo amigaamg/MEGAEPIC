@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "congenital-heart-disease",
+    "name": "Congenital Heart Disease",
+    "system": "PAED",
+    "agePeak_months": [0, 12],
+    "note": "Structural heart defects present from birth. Spectrum from benign (small VSD) to duct-dependent critical lesions presenting with shock or cyanosis.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["congenital_cardiac", "pediatric_cardiology"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cyanosis_unresponsive_to_o2", "weight": 10 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "absent_femoral_pulses", "weight": 9 },
+        { "sign": "severe_hypoxia", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "duct_dependent_lesion", "weight": 9 },
+          { "sign": "severe_congestive_heart_failure", "weight": 8 },
+          { "sign": "failure_to_thrive_cardiac", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If cyanotic spell, shock, or severe HF -> SEVERE (critical CHD); else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "cyanosis", "weight": 5 },
+      { "symptomId": "poor_feeding_fatigue", "weight": 4 },
+      { "symptomId": "tachypnea", "weight": 4 },
+      { "symptomId": "sweating_during_feeding", "weight": 4, "note": "Classic sign of CHD in infants" },
+      { "symptomId": "failure_to_thrive", "weight": 3 },
+      { "symptomId": "recurrent_respiratory_infections", "weight": 3 },
+      { "symptomId": "squatting", "weight": 3, "note": "In Tetralogy of Fallot" }
+    ],
+
+    "examFeatures": [
+      { "signId": "cardiac_murmur", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cyanosis", "baseWeight": 5 },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "clubbing", "baseWeight": 3 },
+      { "signId": "absent_femoral_pulses", "baseWeight": 5, "note": "Coarctation of aorta" },
+      { "signId": "differential_cyanosis", "baseWeight": 4 },
+      { "signId": "precordial_bulge", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "maternal_diabetes", "multiplier": 2.5 },
+      { "id": "maternal_rubella", "multiplier": 3.0 },
+      { "id": "maternal_teratogens", "multiplier": 2.5 },
+      { "id": "family_history_chd", "multiplier": 3.0 },
+      { "id": "maternal_alcohol", "multiplier": 2.0 },
+      { "id": "chromosomal_abnormality", "multiplier": 4.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "left_to_right_shunt",
+        "name": "Left-to-Right Shunt Lesions (VSD, ASD, PDA)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "murmur", "weight": 5 },
+          { "feature": "recurrent_chest_infections", "weight": 4 },
+          { "feature": "failure_to_thrive", "weight": 3 }
+        ],
+        "management": "Medical: diuretics, digoxin. Surgical/transcatheter closure if large shunt with pulmonary hypertension or failure to thrive."
+      },
+      {
+        "id": "cyanotic_chd",
+        "name": "Cyanotic CHD (TOF, TGA, Tricuspid Atresia)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "cyanosis", "weight": 5 },
+          { "feature": "hypercyanotic_spells", "weight": 5 },
+          { "feature": "clubbing", "weight": 4 }
+        ],
+        "management": "Prostaglandin E1 infusion for duct-dependent lesions. Corrective surgery (arterial switch for TGA, TOF repair). Blalock-Taussig shunt if palliative needed."
+      },
+      {
+        "id": "obstructive_chd",
+        "name": "Obstructive Lesions (Coarctation, Aortic Stenosis)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "absent_femoral_pulses", "weight": 5 },
+          { "feature": "upper_limb_hypertension", "weight": 5 },
+          { "feature": "syncope", "weight": 3 }
+        ],
+        "management": "Prostaglandin E1 for critical coarctation. Surgical repair (coarctectomy/subclavian flap). Balloon valvuloplasty for aortic stenosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "persistent_pulmonary_hypertension_newborn",
+        "discriminators": ["severe_hypoxia_echo_normal_structure", "history_of_meconium_aspiration"]
+      },
+      {
+        "diseaseId": "pneumonia",
+        "discriminators": ["fever", "cough", "consolidation_on_xray", "normal_echo"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry (pre and post ductal)", "priority": "immediate", "yield": 0.9, "indication": "all suspected CHD" },
+        { "name": "Four-limb blood pressure", "priority": "immediate", "yield": 0.7, "indication": "coarctation screening" }
+      ],
+      "laboratory": [
+        { "name": "Blood gas", "priority": "high", "yield": 0.6, "indication": "assess oxygenation and acidosis" }
+      ],
+      "imaging": [
+        { "name": "Echocardiogram (2D + Doppler)", "priority": "immediate", "yield": 0.95, "indication": "definitive diagnosis, anatomy and function" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "cardiomegaly, pulmonary vascularity" },
+        { "name": "ECG", "priority": "high", "yield": 0.5, "indication": "axis, hypertrophy, rhythms" },
+        { "name": "Cardiac CT/MRI", "priority": "medium", "yield": 0.9, "indication": "complex anatomy, vascular rings" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AHA Guidelines for Management of Congenital Heart Disease",
+      "pathways": [
+        {
+          "severity": "non_critical",
+          "criteria": "Stable, no cyanosis, no HF, good growth",
+          "treatment": "Elective repair at appropriate age. Medical management: diuretics if volume overload. SBE prophylaxis if indicated. Follow-up echo and cardiology."
+        },
+        {
+          "severity": "critical",
+          "criteria": "Cyanosis, shock, severe HF, duct-dependent lesion",
+          "treatment": "PGE1 infusion (0.01-0.1 mcg/kg/min). Inotropic support. Mechanical ventilation if needed. Emergency cardiac catheterization or surgical intervention. Corrective or palliative surgery."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "abnormal_embryogenesis",
+      "shunt_physiology",
+      "cyanosis",
+      "volume_overload",
+      "pressure_overload",
+      "pulmonary_hypertension"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pulmonary_hypertension",
+        "probability": 0.25,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.4,
+        "clues": ["large_shunt", "eisenmenger_physiology", "reversal_of_shunt"]
+      },
+      {
+        "diseaseId": "infective_endocarditis",
+        "probability": 0.05,
+        "lagDays": [365, 7300],
+        "severityBoost": 0.5,
+        "clues": ["fever", "new_murmur", "embolic_phenomena"]
+      },
+      {
+        "diseaseId": "heart_failure",
+        "probability": 0.2,
+        "lagDays": [30, 365],
+        "severityBoost": 0.4,
+        "clues": ["poor_feeding", "tachypnea", "hepatomegaly", "sweating"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["murmur", "cyanosis", "poor_feeding", "absent_femoral_pulses", "differential_cyanosis"],
+    "exclusionClues": ["normal_saturation", "normal_echo", "no_murmur"]
+  }
+}

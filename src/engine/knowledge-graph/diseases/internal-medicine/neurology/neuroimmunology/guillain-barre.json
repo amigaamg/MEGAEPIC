@@ -1,0 +1,135 @@
+{
+  "disease": {
+    "id": "guillain_barre",
+    "name": "Guillain-Barré Syndrome",
+    "system": "NEURO",
+    "agePeak_months": [240, 600],
+    "note": "Acute inflammatory demyelinating polyneuropathy. Post-infectious, ascending paralysis, areflexia. May require ICU for respiratory support.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["neuroinflammatory", "peripheral_neuropathy_acute", "neurological_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_failure_reduced_fvc", "weight": 10 },
+        { "sign": "bulbar_weakness_dysphagia", "weight": 9 },
+        { "sign": "autonomic_dysfunction_bp_hr", "weight": 9 },
+        { "sign": "rapidly_ascending_weakness", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If respiratory/bulbar/autonomic signs -> ICU ADMISSION; else -> MONITOR"
+    },
+    "historyFeatures": [
+      { "symptomId": "ascending_symmetric_weakness", "weight": 5 },
+      { "symptomId": "paresthesia_tingling_in_feet", "weight": 4 },
+      { "symptomId": "antecedent_infection_2_to_4_weeks", "weight": 4, "note": "Campylobacter, CMV, EBV, Zika, COVID-19" },
+      { "symptomId": "back_pain_myalgia", "weight": 2 },
+      { "symptomId": "facial_weakness_bilateral", "weight": 3 },
+      { "symptomId": "dysphagia_dysarthria", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "symmetric_ascending_flaccid_weakness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "areflexia_or_hyporeflexia", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "sensory_loss_distal", "baseWeight": 3 },
+      { "signId": "cranial_nerve_palsies", "baseWeight": 3 },
+      { "signId": "autonomic_signs_htn_hypotension_arrythmia", "baseWeight": 4 },
+      { "signId": "respiratory_muscle_weakness", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "antecedent_campylobacter_infection", "multiplier": 3.0 },
+      { "id": "antecedent_cmv_ebv_infection", "multiplier": 2.0 },
+      { "id": "zika_virus", "multiplier": 2.0 },
+      { "id": "vaccination_specific", "multiplier": 1.2 },
+      { "id": "male_sex", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_inflammatory_demyelinating_polyneuropathy",
+        "name": "AIDP (Acute Inflammatory Demyelinating Polyneuropathy)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "demyelinating_ncs_features", "weight": 5 },
+          { "feature": "anti_gm1_antibodies_less_common", "weight": 3 }
+        ],
+        "management": "IVIG 0.4 g/kg/day x 5 days or plasma exchange 5 sessions. Supportive care. FVC monitoring Q4-6h."
+      },
+      {
+        "id": "acute_motor_axonal_neuropathy",
+        "name": "AMAN (Acute Motor Axonal Neuropathy)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "pure_motor_weakness", "weight": 5 },
+          { "feature": "axonal_ncs_features", "weight": 4 },
+          { "feature": "anti_gm1_gd1a_antibodies", "weight": 4 }
+        ],
+        "management": "IVIG or plasma exchange. Slower recovery than AIDP. More common in children and Asia."
+      },
+      {
+        "id": "miller_fisher_syndrome",
+        "name": "Miller Fisher Syndrome",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "ophthalmoplegia", "weight": 5 },
+          { "feature": "ataxia", "weight": 5 },
+          { "feature": "areflexia", "weight": 5 },
+          { "feature": "anti_gq1b_antibodies", "weight": 5 }
+        ],
+        "management": "IVIG. Usually self-limited with good recovery. Supportive care. Monitor for GBS overlap."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "transverse_myelitis", "discriminators": ["sensory_level", "prominent_back_pain", "mri_spine_lesion", "csf_pleocytosis"] },
+      { "diseaseId": "myasthenia_gravis", "discriminators": ["fluctuating_weakness", "ocular_dominant", "fatigability", "positive_achr"] },
+      { "diseaseId": "diphtheritic_polyneuropathy", "discriminators": ["palatal_paralysis_early", "history_of_diphtheria", "elapsed_time"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "FVC (Forced Vital Capacity)", "priority": "immediate_serial", "yield": 0.9, "indication": "respiratory monitoring, Q4-6h" }
+      ],
+      "laboratory": [
+        { "name": "CSF analysis", "priority": "high", "yield": 0.8, "indication": "albuminocytologic dissociation (high protein, normal cells)" },
+        { "name": "Anti-ganglioside antibodies (GM1, GD1a, GQ1b)", "priority": "medium", "yield": 0.5, "indication": "subtype identification" },
+        { "name": "Campylobacter serology, CMV, EBV, Zika", "priority": "medium", "yield": 0.4, "indication": "identify antecedent infection" }
+      ],
+      "imaging": [
+        { "name": "MRI Spine (if diagnosis uncertain)", "priority": "medium", "yield": 0.4, "indication": "exclude myelopathy, nerve root enhancement" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Guillain-Barré Syndrome",
+      "pathways": [
+        {
+          "severity": "all (disease-modifying)",
+          "criteria": "confirmed GBS, within 4 weeks of onset, unable to walk independently",
+          "treatment": "IVIG 0.4 g/kg/day for 5 days (total 2 g/kg). OR plasma exchange 5 sessions (if IVIG contraindicated). Do both only if poor response."
+        },
+        {
+          "severity": "monitoring",
+          "criteria": "all patients",
+          "treatment": "Admit. FVC Q4-6h. Cardiac monitoring for autonomic instability. BP monitoring. DVT prophylaxis. Pain management (neuropathic: gabapentin, pregabalin). Avoid opiates."
+        },
+        {
+          "severity": "respiratory failure",
+          "criteria": "FVC <20 mL/kg or declining rapidly, bulbar weakness",
+          "treatment": "ICU admission. Elective intubation when FVC <15 mL/kg or clinical signs of fatigue. Mechanical ventilation (may be prolonged). Tracheostomy if prolonged. PEG if dysphagia."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "molecular_mimicry",
+      "antibody_mediated_demyelination_axonal",
+      "t_cell_activation",
+      "complement_deposition",
+      "nerve_demyelination",
+      "axonal_degeneration"
+    ],
+    "complications": [
+      { "diseaseId": "respiratory_failure", "probability": 0.25, "severityBoost": 0.5, "clues": ["declining_fvc", "orthopnea", "weak_cough"] },
+      { "diseaseId": "autonomic_dysfunction", "probability": 0.3, "severityBoost": 0.3, "clues": ["bp_lability", "bradycardia", "arrhythmia", "ileus"] },
+      { "diseaseId": "pain_neuropathic", "probability": 0.5, "severityBoost": 0.1, "clues": ["severe_back_pain", "dysesthesias"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["ascending_symmetric_flaccid_paralysis", "areflexia", "antecedent_infection", "albuminocytologic_dissociation"],
+    "exclusionClues": ["sensory_level", "persistent_asymmetry", "normal_csf_and_ncs"]
+  }
+}

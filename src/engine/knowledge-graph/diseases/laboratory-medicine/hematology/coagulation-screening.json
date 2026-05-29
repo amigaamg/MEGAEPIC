@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "coagulation_screening",
+    "name": "Coagulation Screening and Interpretation",
+    "system": "LAB",
+    "agePeak_months": [12, 960],
+    "note": "Coagulation tests: PT (INR), aPTT, fibrinogen, D-dimer, platelet count. Prolonged PT suggests extrinsic/common pathway defect (factor VII, warfarin, liver disease). Prolonged aPTT suggests intrinsic pathway defect (hemophilia, heparin, lupus anticoagulant). Mixing studies differentiate factor deficiency from inhibitor.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["bleeding_diathesis", "coagulopathy", "preoperative_lab"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "active_major_bleeding", "weight": 10 },
+        { "sign": "intracranial_hemorrhage", "weight": 10 },
+        { "sign": "dIC_with_clinical_bleeding", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "inr_gt_5_0", "weight": 8 },
+          { "sign": "aptt_ratio_gt_2_5", "weight": 7 },
+          { "sign": "fibrinogen_lt_100", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If active bleeding or INR >5 -> SEVERE; else -> NON-SEVERE (investigate cause)"
+    },
+    "historyFeatures": [
+      { "symptomId": "easy_bruising_bleeding", "weight": 5, "modifiers": [
+          { "condition": "since_childhood", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "hemarthrosis_or_muscle_hematoma", "weight": 5 },
+      { "symptomId": "prolonged_bleeding_after_surgery_dental", "weight": 4 },
+      { "symptomId": "family_history_bleeding_disorder", "weight": 4 },
+      { "symptomId": "anticoagulation_therapy", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "pt_prolonged", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "aptt_prolonged", "baseWeight": 5 },
+      { "signId": "both_pt_and_aptt_prolonged", "baseWeight": 4 },
+      { "signId": "mixing_study_correction_vs_no_correction", "baseWeight": 5 },
+      { "signId": "fibrinogen_level", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "anticoagulant_therapy_warfarin_heparin", "multiplier": 4.0 },
+      { "id": "liver_disease_cholestasis", "multiplier": 3.0 },
+      { "id": "vitamin_k_deficiency_malnutrition", "multiplier": 2.5 },
+      { "id": "dIC_sepsis_trauma", "multiplier": 3.0 },
+      { "id": "family_history_hemophilia_vwd", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "isolated_pt_prolongation",
+        "name": "Isolated PT Prolongation",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "pt_prolonged_aptt_normal", "weight": 5 },
+          { "feature": "warfarin_therapy_most_common", "weight": 5 },
+          { "feature": "vitamin_k_deficiency", "weight": 4 },
+          { "feature": "factor_vii_deficiency_rare", "weight": 3 },
+          { "feature": "mixing_study_corrects", "weight": 4 }
+        ],
+        "management": "Check INR. If on warfarin: adjust dose per INR target. If not on warfarin: check liver function, vitamin K status, factor VII assay. Correct underlying cause."
+      },
+      {
+        "id": "isolated_aptt_prolongation",
+        "name": "Isolated aPTT Prolongation",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "aptt_prolonged_pt_normal", "weight": 5 },
+          { "feature": "mixing_study_corrects_factor_deficiency", "weight": 4 },
+          { "feature": "mixing_study_no_correction_inhibitor", "weight": 5 },
+          { "feature": "hemophilia_a_factor_viii_low", "weight": 4 },
+          { "feature": "hemophilia_b_factor_ix_low", "weight": 3 },
+          { "feature": "lupus_anticoagulant_no_bleeding_correction", "weight": 4 }
+        ],
+        "management": "Do mixing study (immediate and 2-hour incubation). Corrects: measure factor VIII, IX, XI, XII. Does not correct: lupus anticoagulant panel (dRVVT, PTT-LA), factor VIII inhibitor assay. Hematology consult."
+      },
+      {
+        "id": "both_pt_and_aptt_prolonged",
+        "name": "Combined PT and aPTT Prolongation",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "dIC_low_fibrinogen_high_d_dimer", "weight": 5 },
+          { "feature": "liver_disease_decreased_production", "weight": 5 },
+          { "feature": "vitamin_k_deficiency_or_warfarin_overdose", "weight": 4 },
+          { "feature": "factor_v_x_prothrombin_deficiency", "weight": 2 },
+          { "feature": "massive_transfusion_dilution", "weight": 3 }
+        ],
+        "management": "Prioritize by clinical context. For DIC: treat underlying cause, replace factors (FFP, cryo, platelets). For liver disease: vitamin K, FFP if bleeding. For warfarin overdose: vitamin K, 4F-PCC if serious bleeding."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "platelet_function_disorder",
+        "discriminators": ["normal_pt_aptt", "prolonged_bleeding_time", "abnormal_platelet_aggregation"]
+      },
+      {
+        "diseaseId": "von_willebrand_disease",
+        "discriminators": ["prolonged_aptt_mild", "low_vwf_activity", "low_factor_viii", "bleeding_history"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Review for pre-analytical issues (hemolysis, clotted, underfilled tube)", "priority": "immediate", "yield": 0.6, "indication": "all abnormal coagulation results" }
+      ],
+      "laboratory": [
+        { "name": "PT/INR", "priority": "immediate", "yield": 0.9, "indication": "first-line coagulation screening" },
+        { "name": "aPTT", "priority": "immediate", "yield": 0.9, "indication": "first-line coagulation screening" },
+        { "name": "Fibrinogen (Clauss method)", "priority": "high", "yield": 0.7, "indication": "DIC, liver disease, bleeding" },
+        { "name": "D-dimer", "priority": "medium", "yield": 0.6, "indication": "DIC screen, thrombosis assessment" },
+        { "name": "Mixing studies (PT and aPTT)", "priority": "high", "yield": 0.85, "indication": "prolonged PT/aPTT of unknown cause" },
+        { "name": "Individual factor assays (VIII, IX, XI, VII, V, X, II)", "priority": "medium", "yield": 0.9, "indication": "based on pattern and mixing study" },
+        { "name": "Lupus anticoagulant panel (dRVVT, PTT-LA)", "priority": "medium", "yield": 0.7, "indication": "unexplained aPTT prolongation, thrombosis history" },
+        { "name": "Thrombin time and Reptilase time", "priority": "medium", "yield": 0.6, "indication": "rule out heparin contamination, dysfibrinogenemia" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "ISTH Guidelines for Laboratory Testing of Coagulation",
+      "pathways": [
+        {
+          "severity": "incidental_abnormality_no_bleeding",
+          "criteria": "mildly elevated INR/aPTT, no bleeding, no planned procedure",
+          "treatment": "Repeat with new sample. Review medications (antibiotics, anticonvulsants). Check LFTs. If persistent and unexplained, consider factor assay. Hematology referral."
+        },
+        {
+          "severity": "preoperative_abnormality",
+          "criteria": "abnormal coagulation pre-surgery, no bleeding history",
+          "treatment": "Detailed bleeding history (ISTH Bleeding Assessment Tool). If history negative and mild abnormality, proceed. If significantly abnormal or positive history, defer and investigate."
+        },
+        {
+          "severity": "acute_bleeding_coagulopathy",
+          "criteria": "active bleeding with abnormal labs, DIC, warfarin overdose",
+          "treatment": "Reverse anticoagulation (vitamin K, 4F-PCC for warfarin; protamine for heparin). FFP 15ml/kg if factor deficiency. Cryoprecipitate if fibrinogen <150. Platelets if <50k with bleeding. Treat underlying cause."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "factor_deficiency_congenital_or_acquired",
+      "inhibitor_antibody_formation",
+      "impaired_factor_synthesis_liver_disease",
+      "vitamin_k_deficiency",
+      "consumption_coagulopathy_dic",
+      "anticoagulant_effect"
+    ],
+    "complications": [
+      {
+        "diseaseId": "major_hemorrhage",
+        "probability": 0.1,
+        "lagDays": [1, 30],
+        "severityBoost": 0.5,
+        "clues": ["inr_gt_5", "aptt_gt_100", "platelets_lt_20k", "fibrinogen_lt_100"]
+      },
+      {
+        "diseaseId": "thrombosis_anticoagulant_paradox",
+        "probability": 0.05,
+        "lagDays": [1, 30],
+        "severityBoost": 0.3,
+        "clues": ["warfarin_induced_skin_necrosis", "heparin_induced_thrombocytopenia"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["abnormal_pt_aptt", "bleeding_history", "mixing_study_pattern", "clinical_context"],
+    "exclusionClues": ["normal_pt_aptt_with_isolated_bleeding", "preanalytical_error"]
+  }
+}

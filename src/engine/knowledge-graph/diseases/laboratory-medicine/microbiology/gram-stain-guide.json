@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "gram_stain_interpretation",
+    "name": "Gram Stain Interpretation Guide",
+    "system": "LAB",
+    "agePeak_months": [12, 960],
+    "note": "Gram stain is the first critical step in microbiologic diagnosis. Classifies bacteria as Gram-positive (purple) or Gram-negative (pink/red) based on cell wall peptidoglycan. Morphology (cocci, bacilli, coccobacilli, spirilla) and arrangement (clusters, chains, pairs) guide empiric therapy.",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["microbiology", "infection_diagnosis", "direct_examination"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "gram_positive_cocci_in_clusters_csf", "weight": 10 },
+        { "sign": "gram_negative_diplococci_csf", "weight": 10 },
+        { "sign": "gram_positive_bacilli_blood_culture", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "polymorphonuclear_leukocytes_present", "weight": 7 },
+          { "sign": "many_bacteria_per_oil_immersion_field", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If organisms seen in sterile site + PMNs -> INFECTION; if no organisms -> consider culture result"
+    },
+    "historyFeatures": [
+      { "symptomId": "suspected_infection_site_specific", "weight": 5, "modifiers": [
+          { "condition": "sterile_site_csf_joint_blood", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "immunosuppressed_state", "weight": 3 },
+      { "symptomId": "prior_antibiotic_use", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "gram_reaction_positive_or_negative", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "morphology_cocci_bacilli_spirilla", "baseWeight": 5 },
+      { "signId": "arrangement_clusters_chains_pairs", "baseWeight": 4 },
+      { "signId": "wbc_bacteria_ratio", "baseWeight": 3 },
+      { "signId": "quality_of_stain_overdecolorized", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "prior_antibiotics", "multiplier": 0.5 },
+      { "id": "neutropenia", "multiplier": 1.5 },
+      { "id": "cgd_chronic_granulomatous_disease", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "gpc_in_clusters",
+        "name": "Gram-Positive Cocci in Clusters (Staphylococci)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "grape_like_clusters", "weight": 5 },
+          { "feature": "catalase_positive", "weight": 5 },
+          { "feature": "coagulase_positive_s_aureus", "weight": 4 },
+          { "feature": "coagulase_negative_epidermidis_sapro", "weight": 3 },
+          { "feature": "blood_agar_colony_morphology", "weight": 3 }
+        ],
+        "management": "Presumptive Staph aureus (if coagulase+) or Staph epidermidis (if coagulase-). Start empiric vancomycin if MRSA risk. Nafcillin/cefazolin if MSSA. Follow-up with culture and sensitivity."
+      },
+      {
+        "id": "gpc_in_chains",
+        "name": "Gram-Positive Cocci in Chains (Streptococci)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "chains_or_pairs", "weight": 5 },
+          { "feature": "catalase_negative", "weight": 4 },
+          { "feature": "alpha_hemolytic_viridans_pneumo", "weight": 3 },
+          { "feature": "beta_hemolytic_pyogenes_agalactiae", "weight": 4 },
+          { "feature": "bile_soluble_pneumoniae", "weight": 3 }
+        ],
+        "management": "Empiric ceftriaxone or penicillin. Group A strep: penicillin + clindamycin. Group B: ampicillin. Strep pneumo: ceftriaxone + vancomycin until sensitivity (PCN/cef resistance common)."
+      },
+      {
+        "id": "gnb",
+        "name": "Gram-Negative Bacilli (Enteric/Rods)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "pink_red_rods", "weight": 5 },
+          { "feature": "lactose_fermenter_e_coli_klebsiella", "weight": 4 },
+          { "feature": "non_lactose_fermenter_pseudomonas_acinetobacter", "weight": 4 },
+          { "feature": "oxidase_positive_pseudomonas", "weight": 3 },
+          { "feature": "enterobacteriaceae_species", "weight": 3 }
+        ],
+        "management": "Empiric broad coverage (cefepime, piperacillin-tazobactam, or carbapenem if ESBL risk). Tailor per culture and sensitivity. Consider local antibiogram resistance patterns."
+      },
+      {
+        "id": "gncocci",
+        "name": "Gram-Negative Cocci (Neisseria, Moraxella)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "kidney_bean_diplococci", "weight": 5 },
+          { "feature": "intracellular_in_pmn_csf_genital", "weight": 5 },
+          { "feature": "oxidase_positive", "weight": 4 },
+          { "feature": "neisseria_meningitidis_meningitis", "weight": 5 },
+          { "feature": "neisseria_gonorrhoeae_urethritis", "weight": 4 }
+        ],
+        "management": "N. meningitidis: IV ceftriaxone + dexamethasone. N. gonorrhoeae: ceftriaxone 500mg IM + azithromycin 1g PO. Respiratory isolation for meningitidis until 24h of antibiotics."
+      },
+      {
+        "id": "gpb",
+        "name": "Gram-Positive Bacilli (Listeria, Bacillus, Clostridium)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "large_boxcar_bacilli_clostridium", "weight": 4 },
+          { "feature": "small_rod_listeria_palisades", "weight": 4 },
+          { "feature": "spore_formation_location", "weight": 3 },
+          { "feature": "listeria_monocytogenes_neonates_elderly", "weight": 4 }
+        ],
+        "management": "Listeria: ampicillin + gentamicin. Bacillus anthracis: ciprofloxacin + clindamycin. Clostridium: metronidazole. Anthrax requires public health notification."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "decolorized_artifact",
+        "discriminators": ["mixed_gram_variable", "thick_smear", "old_culture"]
+      },
+      {
+        "diseaseId": "crystal_artifact_precipitate",
+        "discriminators": ["extracellular", "variable_shape", "no_cell_wall_morphology"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Gram stain from appropriate specimen", "priority": "immediate", "yield": 0.85, "indication": "all suspected bacterial infections" },
+        { "name": "Culture and sensitivity on solid and liquid media", "priority": "high", "yield": 0.95, "indication": "confirm and identify organism" },
+        { "name": "Catalase test", "priority": "medium", "yield": 0.9, "indication": "differentiate Staph (positive) from Strep (negative)" },
+        { "name": "Coagulase test", "priority": "medium", "yield": 0.9, "indication": "differentiate S. aureus (positive) from other Staph" },
+        { "name": "Oxidase test", "priority": "medium", "yield": 0.8, "indication": "differentiate Pseudomonas (positive) from Enterobacteriaceae (negative)" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "CLSI Guidelines for Gram Stain, IDSA Treatment Guidelines",
+      "pathways": [
+        {
+          "severity": "presumed_infection",
+          "criteria": "organisms seen on Gram stain + PMNs from sterile site",
+          "treatment": "Begin empiric antibiotics based on Gram stain pattern. Adjust when culture and sensitivity available. Narrow spectrum when possible."
+        },
+        {
+          "severity": "no_organisms_seen",
+          "criteria": "no bacteria on Gram stain, PMNs present or absent",
+          "treatment": "Consider culture results (may still be positive). Start empiric therapy if clinical suspicion high. Consider atypical organisms (AFB, fungus) if negative repeatedly."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "cell_wall_composition_peptidoglycan_thickness",
+      "bacterial_morphology_and_arrangement",
+      "host_inflammatory_response",
+      "bacterial_load_and_site_of_infection"
+    ],
+    "complications": [],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["organism_morphology_and_gram_reaction", "wbc_presence", "specimen_type", "clinical_correlation"],
+    "exclusionClues": ["no_organisms_and_no_wbc", "contaminant_flora"]
+  }
+}

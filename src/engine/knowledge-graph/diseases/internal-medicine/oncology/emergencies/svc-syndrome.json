@@ -1,0 +1,125 @@
+{
+  "disease": {
+    "id": "superior_vena_cava_syndrome",
+    "name": "Superior Vena Cava (SVC) Syndrome",
+    "system": "ONCO",
+    "agePeak_months": [480, 840],
+    "note": "Obstruction of SVC by mediastinal mass. Lung cancer (most common), lymphoma, thymoma. Malignancy accounts for >90% of cases.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["oncologic_emergency", "mediastinal_mass", "venous_obstruction"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "upper_airway_obstruction_stridor", "weight": 10 },
+        { "sign": "laryngeal_edema", "weight": 9 },
+        { "sign": "cerebral_edema_altered_consciousness", "weight": 10 },
+        { "sign": "cardiovascular_collapse", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Grade 1 (mild edema, no symptoms) to Grade 4 (life-threatening laryngeal/cerebral edema)"
+    },
+    "historyFeatures": [
+      { "symptomId": "facial_swelling_fullness", "weight": 5 },
+      { "symptomId": "neck_swelling", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "cough", "weight": 3 },
+      { "symptomId": "dysphagia", "weight": 2 },
+      { "symptomId": "hoarseness", "weight": 2 },
+      { "symptomId": "chest_pain", "weight": 2 },
+      { "symptomId": "headache_worse_on_bending", "weight": 3 },
+      { "symptomId": "syncope", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "facial_edema_plethora", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "distended_neck_veins", "baseWeight": 5 },
+      { "signId": "distended_chest_wall_collateral_veins", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "stridor_wheezing", "baseWeight": 4 },
+      { "signId": "pemberton_sign_arm_raising_worsens", "baseWeight": 3 },
+      { "signId": "facial_cyanosis", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "lung_cancer_especially_sclc", "multiplier": 5.0 },
+      { "id": "lymphoma_mediastinal", "multiplier": 3.0 },
+      { "id": "central_line_or_pacemaker_related_thrombosis", "multiplier": 2.0 },
+      { "id": "thymoma_thymic_carcinoma", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "malignant_svc_syndrome",
+        "name": "Malignant SVC Syndrome",
+        "prevalenceModifier": 0.9,
+        "keyFeatures": [
+          { "feature": "lung_cancer_or_lymphoma", "weight": 5 },
+          { "feature": "progressive_onset", "weight": 4 },
+          { "feature": "chest_imaging_shows_mediastinal_mass", "weight": 5 }
+        ],
+        "management": "Treat underlying malignancy urgently. RT to mediastinum (especially SCLC, NSCLC, lymphoma). Chemotherapy for chemo-sensitive tumors (SCLC, lymphoma). Stenting of SVC (endovascular) for rapid relief - preferred first-line for severe symptoms. Steroids (dexamethasone) to reduce edema."
+      },
+      {
+        "id": "thrombotic_svc_syndrome",
+        "name": "Thrombotic SVC Syndrome",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "central_line_pacemaker_in_situ", "weight": 5 },
+          { "feature": "acute_symptoms", "weight": 4 },
+          { "feature": "no_mediastinal_mass_on_imaging", "weight": 4 }
+        ],
+        "management": "Anticoagulation (heparin then warfarin/DOAC). Catheter-directed thrombolysis. SVC stenting. Consider catheter removal if infected. May require venoplasty."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "superior_mediastinal_syndrome_benign", "discriminators": ["fibrosing_mediastinitis", "granulomatous_disease_histoplasma", "no_malignancy_on_biopsy"] },
+      { "diseaseId": "congestive_heart_failure", "discriminators": ["lower_limb_edema_more_than_upper", "cardiac_history", "bilateral_pleural_effusions", "raised_jvp_with_hepatomegaly"] },
+      { "diseaseId": "pericardial_tamponade", "discriminators": ["muffled_heart_sounds", "pulsus_paradoxus", "echocardiogram_shows_effusion"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pemberton maneuver", "priority": "immediate", "yield": 0.7, "indication": "facial flushing/edema on arm raise" }
+      ],
+      "imaging": [
+        { "name": "CT Chest with IV contrast (venogram phase)", "priority": "first-line", "yield": 0.95, "indication": "mediastinal mass, SVC compression/thrombosis, collaterals" },
+        { "name": "MR venography", "priority": "medium", "yield": 0.9, "indication": "if contrast contraindicated" },
+        { "name": "Tissue biopsy (EBUS-TBNA, CT-guided, mediastinoscopy)", "priority": "essential for diagnosis", "yield": 0.9, "indication": "histological diagnosis to guide treatment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/ESMO Guidelines for SVC Syndrome",
+      "pathways": [
+        {
+          "severity": "mild (grade 1)",
+          "criteria": "mild edema, no respiratory/neurological symptoms",
+          "treatment": "Tissue diagnosis first. Then treat underlying malignancy (chemotherapy, RT, or combination). SVC stenting if progressive."
+        },
+        {
+          "severity": "moderate (grade 2-3)",
+          "criteria": "significant edema, dyspnea, cough, symptomatic but stable airway",
+          "treatment": "Biopsy if feasible. SVC stenting for rapid symptom relief. Concurrent RT or chemo. Elevate head. Steroids (dexamethasone 8 mg IV then 4 mg QID)."
+        },
+        {
+          "severity": "severe/emergent (grade 4)",
+          "criteria": "stridor, laryngeal edema, cerebral edema, altered consciousness",
+          "treatment": "Emergency SVC stenting. Secure airway (intubation may be difficult - awake fiberoptic). IV dexamethasone. Elevate head. If stent not available, urgent RT. Definitive treatment based on histology."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "extrinsic_compression_by_mediastinal_mass",
+      "intraluminal_thrombosis",
+      "tumor_invasion_of_svc_wall",
+      "venous_hypertension_in_head_neck_upper_trunk",
+      "collateral_circulation_development",
+      "impaired_venous_return",
+      "reduced_cardiac_output_in_severe_cases"
+    ],
+    "complications": [
+      { "diseaseId": "cerebral_edema", "probability": 0.05, "severityBoost": 0.7, "clues": ["altered_consciousness", "headache", "papilledema", "seizures"] },
+      { "diseaseId": "upper_airway_obstruction", "probability": 0.08, "severityBoost": 0.6, "clues": ["stridor", "dysphonia", "distress", "hypoxia"] },
+      { "diseaseId": "svc_stent_complications", "probability": 0.1, "severityBoost": 0.2, "clues": ["stent_thrombosis", "stent_migration", "recurrent_symptoms"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["facial_edema_plethora", "distended_neck_veins", "collateral_chest_wall_veins", "known_or_suspected_mediastinal_malignancy"],
+    "exclusionClues": ["no_distended_veins", "normal_ct_chest", "cardiac_cause_of_upper_body_edema"]
+  }
+}

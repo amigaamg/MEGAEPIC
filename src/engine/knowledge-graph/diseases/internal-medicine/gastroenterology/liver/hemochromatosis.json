@@ -1,0 +1,155 @@
+﻿{
+  "disease": {
+    "id": "hemochromatosis",
+    "name": "Hemochromatosis",
+    "system": "gastroenterology",
+    "agePeak_months": [480, 720],
+    "note": "Autosomal recessive disorder of iron metabolism causing excessive iron absorption and deposition in organs (liver, heart, pancreas, joints, skin, pituitary).",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["iron_overload", "liver", "metabolic"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrhythmia_heart_failure", "weight": 9 },
+        { "sign": "hepatic_decompensation", "weight": 8 },
+        { "sign": "hepatocellular_carcinoma", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "elevated_ferritin_transferrin_saturation": true
+      },
+      "severityLabel": "If cardiac involvement or liver decompensation -> EMERGENCY; high ferritin -> URGENT phlebotomy; early stage -> OUTPATIENT management"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue_lethargy", "weight": 4 },
+      { "symptomId": "joint_pain_arthralgia", "weight": 4, "note": "Typically MCP and PIP joints, 'iron fist'" },
+      { "symptomId": "abdominal_pain", "weight": 3 },
+      { "symptomId": "loss_of_libido_impotence", "weight": 3 },
+      { "symptomId": "diabetes", "weight": 3, "note": "Pancreatic iron deposition" },
+      { "symptomId": "skin_bronze_discoloration", "weight": 3 },
+      { "symptomId": "palpitations_dyspnea", "weight": 2, "note": "Cardiomyopathy" },
+      { "symptomId": "family_history_hemochromatosis", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bronze_or_gray_skin_pigmentation", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 4 },
+      { "signId": "signs_of_cirrhosis", "baseWeight": 3 },
+      { "signId": "arthropathy_mcp_pip", "baseWeight": 3 },
+      { "signId": "testicular_atrophy", "baseWeight": 2 },
+      { "signId": "cardiac_enlargement_heart_failure", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_first_degree", "multiplier": 5.0 },
+      { "id": "c282y_homozygosity", "multiplier": 10.0 },
+      { "id": "c282y_h63d_compound_heterozygote", "multiplier": 3.0 },
+      { "id": "northern_european_ancestry", "multiplier": 2.0 },
+      { "id": "male_gender", "multiplier": 2.0 },
+      { "id": "alcohol_abuse", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "alcoholic_liver_disease",
+        "discriminators": ["alcohol_history", "no_iron_overload", "normal_transferrin_saturation"]
+      },
+      {
+        "diseaseId": "chronic_hepatitis_c",
+        "discriminators": ["positive_serology", "mild_ferritin_elevation", "no_high_transferrin_saturation"]
+      },
+      {
+        "diseaseId": "rheumatoid_arthritis",
+        "discriminators": ["inflammatory_arthritis", "positive_rheumatoid_factor", "no_iron_studies_abnormal"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Transferrin saturation (TSAT)", "priority": "immediate", "yield": 0.95, "indication": "first-line screening; >45% suggests iron overload" },
+        { "name": "Serum ferritin", "priority": "immediate", "yield": 0.9, "indication": "iron stores; elevated in iron overload" },
+        { "name": "HFE genotyping (C282Y, H63D)", "priority": "high", "yield": 0.99, "indication": "confirm genetic hemochromatosis" },
+        { "name": "LFTs", "priority": "high", "yield": 0.6, "indication": "liver involvement" },
+        { "name": "Fasting glucose / HbA1c", "priority": "high", "yield": 0.4, "indication": "screen for diabetes" }
+      ],
+      "imaging": [
+        { "name": "MRI with T2* or R2 relaxometry (FerriScan)", "priority": "high", "yield": 0.9, "indication": "non-invasive hepatic iron quantification" },
+        { "name": "MRI cardiac T2*", "priority": "high", "yield": 0.9, "indication": "cardiac iron assessment if TSAT >70% or ferritin >1000" },
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.5, "indication": "HCC surveillance if cirrhosis present" },
+        { "name": "Liver biopsy with iron quantification", "priority": "selected", "yield": 0.97, "indication": "if non-invasive tests equivocal or additional liver disease suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EASL Clinical Practice Guidelines: Hemochromatosis",
+      "pathways": [
+        {
+          "severity": "iron_overload_without_organ_damage",
+          "criteria": "TSAT >45%, ferritin elevated, no cirrhosis, no diabetes, no cardiomyopathy",
+          "treatment": "Phlebotomy: 500mL weekly until ferritin <50 ng/mL. Maintenance phlebotomy q2-4 months to keep ferritin <50-100. Screen family members."
+        },
+        {
+          "severity": "iron_overload_with_organ_damage",
+          "criteria": "Cirrhosis, diabetes, cardiomyopathy, arthropathy present",
+          "treatment": "Aggressive phlebotomy (500mL 1-2x/week until ferritin <50). Treat complications (diabetes management, heart failure therapy, joint pain management). HCC surveillance if cirrhosis."
+        },
+        {
+          "severity": "end_stage_iron_overload",
+          "criteria": "Decompensated cirrhosis, severe cardiomyopathy, HCC",
+          "treatment": "Therapeutic phlebotomy as tolerated. Liver transplant evaluation if decompensated cirrhosis. Manage cardiac complications. Monitor for HCC."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hfe_gene_mutation_c282y",
+      "decreased_hepcidin_production",
+      "increased_duodenal_iron_absorption",
+      "excessive_iron_deposition_in_parenchymal_organs",
+      "iron_catalyzed_oxidative_stress",
+      "lipid_peroxidation",
+      "dna_damage",
+      "fibrosis_and_cirrhosis",
+      "pancreatic_beta_cell_damage_diabetes",
+      "cardiac_myocyte_iron_deposition_cardiomyopathy",
+      "hepatocarcinogenesis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cirrhosis",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["ferritin_over_1000", "hepatomegaly", "elevated_lfts"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "probability": 0.15,
+        "severityBoost": 0.8,
+        "clues": ["cirrhosis_present", "rising_afp", "liver_mass"]
+      },
+      {
+        "diseaseId": "diabetes_mellitus",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["hyperglycemia", "pancreatic_iron_on_mri"]
+      },
+      {
+        "diseaseId": "dilated_cardiomyopathy",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["dyspnea", "arrhythmia", "cardiac_iron_on_mri"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium; high if cardiac involvement or decompensation",
+    "diagnosticClues": ["elevated_transferrin_saturation", "elevated_ferritin", "family_history", "c282y_mutation", "bronze_diabetes"],
+    "exclusionClues": ["normal_iron_studies", "anemia_of_chronic_disease", "secondary_iron_overload_from_transfusions"]
+  }
+}

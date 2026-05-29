@@ -1,0 +1,175 @@
+{
+  "disease": {
+    "id": "malaria",
+    "name": "Malaria (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [6, 60],
+    "note": "Mosquito-borne parasitic infection. P. falciparum causes severe malaria. Children under 5 are most vulnerable. High fever, chills, anemia, splenomegaly.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["parasitic_infection", "febrile_illness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cerebral_malaria_coma", "weight": 10 },
+        { "sign": "severe_anemia_hb_<5", "weight": 10 },
+        { "sign": "respiratory_distress_malaria", "weight": 9 },
+        { "sign": "hypoglycemia", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "parasitemia_>10_percent", "weight": 8 },
+          { "sign": "prostration", "weight": 7 },
+          { "sign": "multiple_convulsions", "weight": 7 },
+          { "sign": "jaundice_elevated_bilirubin", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If cerebral malaria, severe anemia, respiratory distress, or prostration -> SEVERE; else -> NON-SEVERE (uncomplicated malaria)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_paroxysmal", "weight": 5 },
+      { "symptomId": "chills_rigors", "weight": 4 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "vomiting", "weight": 3 },
+      { "symptomId": "reduced_consciousness_seizures", "weight": 4 },
+      { "symptomId": "travel_to_endemic_area", "weight": 5 },
+      { "symptomId": "dark_urine", "weight": 2 },
+      { "symptomId": "jaundice", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_high_grade", "baseWeight": 5 },
+      { "signId": "pallor", "baseWeight": 5 },
+      { "signId": "splenomegaly", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "altered_consciousness", "baseWeight": 5 },
+      { "signId": "prostration", "baseWeight": 4 },
+      { "signId": "convulsions", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_6_months_to_5_years", "multiplier": 3.0 },
+      { "id": "living_in_or_travel_to_endemic_area", "multiplier": 4.0 },
+      { "id": "no_itn_bed_net_use", "multiplier": 2.5 },
+      { "id": "pregnancy", "multiplier": 2.0 },
+      { "id": "sickle_cell_disease", "multiplier": 0.5, "note": "Protective against severe malaria" },
+      { "id": "hiv", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_malaria",
+        "name": "Uncomplicated Malaria",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "fever_paroxysmal_pattern", "weight": 5 },
+          { "feature": "splenomegaly", "weight": 3 },
+          { "feature": "positive_rdt_microscopy", "weight": 5 },
+          { "feature": "no_severe_features", "weight": 5 }
+        ],
+        "management": "Oral artemisinin-based combination therapy (ACT): artemether-lumefantrine or artesunate-amodiaquine. Treat for 3 days. Ensure adequate hydration. Monitor for complications."
+      },
+      {
+        "id": "severe_malaria",
+        "name": "Severe Malaria (P. falciparum)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "impaired_consciousness_coma", "weight": 5 },
+          { "feature": "severe_anemia_hb_<5", "weight": 5 },
+          { "feature": "respiratory_distress_acidosis", "weight": 5 },
+          { "feature": "parasitemia_>10%", "weight": 4 }
+        ],
+        "management": "IV artesunate (2.4 mg/kg at 0, 12, 24h then daily) or IV quinine if artesunate unavailable. Treat complications: blood transfusion for severe anemia, anticonvulsants for seizures, glucose for hypoglycemia, IV fluids cautiously."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sepsis_bacterial",
+        "discriminators": ["negative_malaria_smear", "positive_blood_culture", "other_source_of_infection"]
+      },
+      {
+        "diseaseId": "typhoid_fever",
+        "discriminators": ["step_ladder_fever_pattern", "abdominal_tenderness", "rose_spots", "positive_widal_culture"]
+      },
+      {
+        "diseaseId": "dengue",
+        "discriminators": ["severe_myalgia_arthralgia", "retro_orbital_pain", "rash", "thrombocytopenia"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Rapid diagnostic test (RDT) for malaria", "priority": "immediate", "yield": 0.95, "indication": "all febrile children in endemic area" }
+      ],
+      "laboratory": [
+        { "name": "Thick and thin blood film microscopy", "priority": "immediate", "yield": 0.98, "indication": "species identification, parasitemia quantification" },
+        { "name": "CBC (Hb, platelets)", "priority": "high", "yield": 0.7, "indication": "anemia, thrombocytopenia" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.5, "indication": "hypoglycemia in severe malaria" },
+        { "name": "Blood gas", "priority": "medium", "yield": 0.4, "indication": "metabolic acidosis" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Malaria Treatment",
+      "pathways": [
+        {
+          "severity": "uncomplicated",
+          "criteria": "Fever + positive test, no severe features, able to take oral",
+          "treatment": "Oral ACT (artemether-lumefantrine 3-day course). Paracetamol for fever. Monitor urine output. Follow-up at day 3 and 7. If no improvement or vomiting, admit for IV therapy."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Any WHO severe malaria criterion (coma, severe anemia, prostration, respiratory distress, convulsions, hypoglycemia)",
+          "treatment": "IV artesunate 2.4 mg/kg at 0, 12, 24h, then daily until able to take oral, then complete ACT course. Supportive: blood transfusion if Hb <5, anticonvulsants, glucose 10% 5 mL/kg for hypoglycemia, careful fluid balance."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "plasmodium_parasite_infection",
+      "rbc_invasion_and_lysis",
+      "hemolysis",
+      "cytokine_storm",
+      "sequestration_of_parasitized_rbcs",
+      "cerebral_microvascular_obstruction",
+      "metabolic_acidosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cerebral_malaria",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.7,
+        "clues": ["altered_consciousness", "seizures", "high_parasitemia"]
+      },
+      {
+        "diseaseId": "severe_anemia",
+        "probability": 0.3,
+        "lagDays": [0, 7],
+        "severityBoost": 0.4,
+        "clues": ["pallor", "tachycardia", "hepatosplenomegaly"]
+      },
+      {
+        "diseaseId": "hypoglycemia",
+        "probability": 0.1,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["lethargy", "sweating", "convulsions"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever_in_endemic_area", "pallor", "splenomegaly", "positive_blood_smear"],
+    "exclusionClues": ["negative_malaria_test", "alternative_diagnosis_confirmed"]
+  }
+}

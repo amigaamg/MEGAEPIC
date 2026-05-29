@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "esophageal_varices",
+    "name": "Esophageal Varices",
+    "system": "gastroenterology",
+    "agePeak_months": [480, 960],
+    "note": "Portal hypertension leads to dilated submucosal esophageal veins; highest risk of upper GI bleeding in cirrhosis patients.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["portal_hypertension", "upper_gi_bleeding", "liver"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hematemesis_massive", "weight": 10 },
+        { "sign": "melena_massive", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "hematochezia", "weight": 9 },
+        { "sign": "altered_consciousness_from_bleeding", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "known_cirrhosis": true,
+        "no_bleeding_history": true
+      },
+      "severityLabel": "Active bleeding -> EMERGENCY (immediate endoscopy + resuscitation); known varices without bleeding -> ELECTIVE surveillance"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hematemesis", "weight": 5 },
+      { "symptomId": "melena", "weight": 5 },
+      { "symptomId": "known_liver_disease", "weight": 4 },
+      { "symptomId": "alcohol_abuse", "weight": 3 },
+      { "symptomId": "abdominal_distension", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "jaundice_history", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "stigmata_of_chronic_liver_disease", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ascites", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "palmar_erythema", "baseWeight": 2 },
+      { "signId": "spider_angiomas", "baseWeight": 2 },
+      { "signId": "caput_medusae", "baseWeight": 3 },
+      { "signId": "hypotension_tachycardia_if_bleeding", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "cirrhosis", "multiplier": 5.0 },
+      { "id": "portal_hypertension", "multiplier": 4.0 },
+      { "id": "alcohol_abuse", "multiplier": 3.0 },
+      { "id": "hepatitis_b", "multiplier": 2.5 },
+      { "id": "hepatitis_c", "multiplier": 2.5 },
+      { "id": "nash", "multiplier": 2.0 },
+      { "id": "variceal_size_large", "multiplier": 2.0 },
+      { "id": "red_wale_signs", "multiplier": 1.8 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["epigastric_pain", "nsaid_use", "h_pylori_positive", "no_liver_disease"]
+      },
+      {
+        "diseaseId": "mallory_weiss_syndrome",
+        "discriminators": ["recurrent_vomiting_before_bleeding", "no_liver_disease", "self_limiting"]
+      },
+      {
+        "diseaseId": "gastric_varices",
+        "discriminators": ["endoscopic_differentiation", "fundal_location"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "NG tube aspiration", "priority": "immediate", "yield": 0.7, "indication": "confirm upper GI source of bleeding" },
+        { "name": "Vital signs + orthostatics", "priority": "immediate", "yield": 0.9, "indication": "assess hemodynamic status" }
+      ],
+      "laboratory": [
+        { "name": "FBC", "priority": "immediate", "yield": 0.9, "indication": "hemoglobin, platelet count" },
+        { "name": "LFTs", "priority": "immediate", "yield": 0.8, "indication": "liver synthetic function, Child-Pugh score" },
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.8, "indication": "coagulopathy assessment" },
+        { "name": "Creatinine", "priority": "high", "yield": 0.5, "indication": "hepatorenal syndrome risk" }
+      ],
+      "imaging": [
+        { "name": "Upper endoscopy (EGD)", "priority": "immediate", "yield": 0.98, "indication": "diagnose and treat variceal bleeding" },
+        { "name": "CT abdomen with contrast", "priority": "medium", "yield": 0.85, "indication": "if endoscopy unavailable, assess portal hypertension" },
+        { "name": "Doppler ultrasound liver", "priority": "medium", "yield": 0.7, "indication": "assess portal vein patency, hepatic vasculature" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines: Prevention and Management of Gastroesophageal Varices and Variceal Hemorrhage in Cirrhosis",
+      "pathways": [
+        {
+          "severity": "active_bleeding",
+          "criteria": "hematemesis/melena + known varices/cirrhosis + hemodynamic instability",
+          "treatment": "Resuscitation with blood products. IV Vasoactive drug (terlipressin/octreotide/somatostatin). IV Ceftriaxone 1g for prophylaxis. Urgent EGD with band ligation within 12 hours. Consider TIPS if uncontrolled."
+        },
+        {
+          "severity": "primary_prophylaxis",
+          "criteria": "Known varices on EGD, never bled",
+          "treatment": "Non-selective beta-blocker (propranolol/ nadolol) or variceal band ligation for medium/large varices with high-risk stigmata."
+        },
+        {
+          "severity": "secondary_prophylaxis",
+          "criteria": "Survived variceal bleed",
+          "treatment": "Beta-blocker + band ligation until varices obliterated. Avoid TIPS if possible. Transjugular intrahepatic portosystemic shunt (TIPS) for refractory cases."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "portal_hypertension",
+      "hepatic_venous_pressure_gradient_exceeds_10_mmhg",
+      "collateral_circulation_formation",
+      "submucosal_esophageal_vein_dilatation",
+      "wall_tension_laplace_law",
+      "variceal_rupture",
+      "coagulopathy_exacerbates_bleeding"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "variceal_hemorrhage",
+        "probability": 0.3,
+        "severityBoost": 0.8,
+        "clues": ["massive_hematemesis", "hypovolemic_shock", "known_cirrhosis"]
+      },
+      {
+        "diseaseId": "hepatic_encephalopathy",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["blood_in_gi_tract", "decompensation", "altered_mental_status"]
+      },
+      {
+        "diseaseId": "hepatorenal_syndrome",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["oliguria", "rising_creatinine", "diuretic_resistant_ascites"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if bleeding; medium for prophylaxis",
+    "diagnosticClues": ["upper_gi_bleeding_in_cirrhotic", "stigmata_of_liver_disease_on_exam", "endoscopic_varices"],
+    "exclusionClues": ["no_liver_disease_or_portal_hypertension", "isolated_gastric_ulcer"]
+  }
+}

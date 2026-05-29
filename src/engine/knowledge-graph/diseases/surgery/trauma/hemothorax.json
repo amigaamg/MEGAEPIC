@@ -1,0 +1,160 @@
+{
+  "disease": {
+    "id": "hemothorax",
+    "name": "Hemothorax",
+    "system": "surgical",
+    "agePeak_months": [120, 480],
+    "note": "Blood in the pleural cavity, usually from trauma. Chest pain, dyspnea, decreased breath sounds. Tube thoracostomy needed.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["chest_trauma", "respiratory_distress", "hemorrhage"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hemothorax", "weight": 10 },
+        { "sign": "hemorrhagic_shock", "weight": 10 },
+        { "sign": "tension_hemothorax", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "initial_drainage_more_than_1500ml", "weight": 9 },
+          { "sign": "ongoing_bleeding_more_than_200ml_per_hour", "weight": 8 },
+          { "sign": "hypotension_refractory_to_fluids", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Massive/ongoing bleeding -> SEVERE; small stable hemothorax -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "chest_pain_pleuritic", "weight": 4 },
+      { "symptomId": "dyspnea_shortness_of_breath", "weight": 5 },
+      { "symptomId": "blunt_or_penetrating_chest_trauma", "weight": 5 },
+      { "symptomId": "dizziness_syncope", "weight": 3 },
+      { "symptomId": "cough", "weight": 2 },
+      { "symptomId": "iatrogenic_central_line_or_surgery", "weight": 3, "note": "Iatrogenic cause" }
+    ],
+
+    "examFeatures": [
+      { "signId": "decreased_breath_sounds_on_affected_side", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "dull_percussion_on_affected_side", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "decreased_chest_wall_motion", "baseWeight": 3 },
+      { "signId": "distended_neck_veins", "baseWeight": 2, "note": "Tension hemothorax" },
+      { "signId": "tracheal_deviation", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "penetrating_chest_trauma", "multiplier": 3.0 },
+      { "id": "high_energy_blunt_trauma_mva", "multiplier": 2.5 },
+      { "id": "multiple_rib_fractures", "multiplier": 2.0 },
+      { "id": "anticoagulation_therapy", "multiplier": 2.5 },
+      { "id": "coagulopathy", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "small_hemothorax",
+        "name": "Small Hemothorax (<500mL)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "minimal_symptoms", "weight": 4 },
+          { "feature": "blunting_of_costophrenic_angle", "weight": 4 },
+          { "feature": "stable_vitals", "weight": 5 }
+        ],
+        "management": "Small bore chest drain (28-32Fr). Observation. Serial CXR. Remove drain when output <100-200mL/24h. Consider VATS if retained clot."
+      },
+      {
+        "id": "massive_hemothorax",
+        "name": "Massive Hemothorax (>1500mL initial output)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "hypotension_tachycardia", "weight": 5 },
+          { "feature": "significant_respiratory_distress", "weight": 5 },
+          { "feature": "absence_of_breath_sounds", "weight": 5 },
+          { "feature": "opaque_hemithorax_on_cxr", "weight": 5 }
+        ],
+        "management": "Large bore chest drain (36-40Fr). IV fluids + blood transfusion. Massive transfusion protocol if shocked. Emergency thoracotomy if initial output >1500mL or ongoing >200mL/h for 4h."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pneumothorax",
+        "discriminators": ["hyperresonant_percussion", "no_fluid_level", "air_on_cxr"]
+      },
+      {
+        "diseaseId": "pleural_effusion",
+        "discriminators": ["no_trauma_history", "gradual_onset", "no_blood_on_aspiration"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Chest X-Ray (erect if possible)", "priority": "immediate", "yield": 0.85, "indication": "diagnostic, estimate size" },
+        { "name": "E-FAST (Extended FAST)", "priority": "immediate", "yield": 0.9, "indication": "detect pleural fluid" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.6, "indication": "hemoglobin, hematocrit" },
+        { "name": "Cross-match", "priority": "immediate", "yield": 0.5, "indication": "preparation for transfusion" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.4, "indication": "assess coagulopathy" }
+      ],
+      "imaging": [
+        { "name": "Chest X-Ray", "priority": "immediate", "yield": 0.85, "indication": "opacification, blunted costophrenic angle" },
+        { "name": "CT Chest with IV contrast", "priority": "high", "yield": 0.98, "indication": "definitive for stable patient" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATLS/WSES Guidelines for Hemothorax",
+      "pathways": [
+        {
+          "severity": "small/stable",
+          "criteria": "output <500mL, hemodynamically stable, no ongoing bleeding",
+          "treatment": "Chest drain (28-32Fr). Monitor output. Repeat CXR. VATS if retained hemothorax."
+        },
+        {
+          "severity": "massive",
+          "criteria": "initial output >1500mL, ongoing >200mL/h, shock",
+          "treatment": "Massive transfusion protocol. Large chest drain (36Fr). Emergency thoracotomy (anterolateral). Control bleeding. Autotransfusion."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chest_trauma",
+      "bleeding_from_lung_chest_wall_or_great_vessels",
+      "blood_accumulation_in_pleural_space",
+      "lung_compression",
+      "impaired_ventilation",
+      "hypovolemic_shock"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "retained_hemothorax",
+        "probability": 0.1,
+        "lagDays": [3, 14],
+        "severityBoost": 0.2,
+        "clues": ["persistent_opacity_on_cxr", "fever", "empyema"]
+      },
+      {
+        "diseaseId": "empyema",
+        "probability": 0.05,
+        "lagDays": [5, 14],
+        "severityBoost": 0.2,
+        "clues": ["fever", "purulent_pleural_fluid", "elevated_crp"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["chest_trauma", "decreased_breath_sounds", "dull_percussion", "hypotension", "opaque_hemithorax"],
+    "exclusionClues": ["no_trauma", "hyperresonant_percussion", "clear_cxr"]
+  }
+}

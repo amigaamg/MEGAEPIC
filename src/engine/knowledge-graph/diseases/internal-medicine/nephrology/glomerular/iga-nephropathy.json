@@ -1,0 +1,138 @@
+{
+  "disease": {
+    "id": "iga_nephropathy",
+    "name": "IgA Nephropathy (Berger's Disease)",
+    "system": "RENAL",
+    "agePeak_months": [120, 480],
+    "note": "Most common glomerulonephritis worldwide. IgA deposits in mesangium. Classic presentation: hematuria coinciding with mucosal infections. Variable prognosis.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["glomerular_disease", "hematuria", "iga_related"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapidly_progressive_gn", "weight": 9 },
+        { "sign": "hypertensive_emergency", "weight": 8 },
+        { "sign": "acute_kidney_injury", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "MESAN (MEST-C) score: M (mesangial), E (endocapillary), S (segmental), A (tubular atrophy), N (crescents). M1, E1, S1, T1-2, C1-2 indicate worse prognosis."
+    },
+    "historyFeatures": [
+      { "symptomId": "hematuria_gross_visible", "weight": 5, "modifiers": [{ "condition": "following_upper_respiratory_infection_sympharyngitic", "suspectTB": false }] },
+      { "symptomId": "microscopic_hematuria_incidental", "weight": 3 },
+      { "symptomId": "loin_pain_flank_pain", "weight": 2 },
+      { "symptomId": "edema_peripheral_periorbital", "weight": 2 },
+      { "symptomId": "foamy_urine_proteinuria", "weight": 3 },
+      { "symptomId": "fatigue_malaise", "weight": 2 },
+      { "symptomId": "mucosal_infection_trigger_uti_gi", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "hypertension", "baseWeight": 3 },
+      { "signId": "periorbital_edema", "baseWeight": 2 },
+      { "signId": "peripheral_edema", "baseWeight": 2 },
+      { "signId": "signs_of_ckd_if_advanced", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "asian_caucasian_ethnicity", "multiplier": 2.0 },
+      { "id": "family_history_iga_nephropathy", "multiplier": 3.0 },
+      { "id": "mucosal_immune_dysregulation", "multiplier": 2.0 },
+      { "id": "liver_disease_cirrhosis_iga_secondary", "multiplier": 1.5 },
+      { "id": "celiac_disease", "multiplier": 2.0 },
+      { "id": "hiv_infection", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "iga_nephropathy_low_risk",
+        "name": "IgA Nephropathy - Low Risk",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "proteinuria_under_0_5_g_day", "weight": 4 },
+          { "feature": "normal_egfr", "weight": 5 },
+          { "feature": "normal_bp", "weight": 4 },
+          { "feature": "mest_score_0_or_1", "weight": 4 }
+        ],
+        "management": "ACEi/ARB for BP and proteinuria. Lifestyle modifications (low salt, exercise). Monitor BP, creatinine, urine ACR q3-6 months. No immunosuppression needed. Fish oil may slow progression (controversial)."
+      },
+      {
+        "id": "iga_nephropathy_high_risk",
+        "name": "IgA Nephropathy - High Risk",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "proteinuria_greater_than_1_g_day_persistent", "weight": 5 },
+          { "feature": "hypertension", "weight": 4 },
+          { "feature": "egfr_declining", "weight": 4 },
+          { "feature": "mest_score_high_e1_s1_t1_c1", "weight": 4 }
+        ],
+        "management": "Maximal supportive care (ACEi/ARB, SGLT2i, BP control, low salt). After 3 months, if proteinuria >1 g/day: consider corticosteroids (prednisolone 0.5 mg/kg alt days x 6 months) or targeted-release budesonide (TRF-budesonide). Mycophenolate mofetil if steroid contraindicated. SGLT2i (dapagliflozin). Consider tonsillectomy (controversial, reduces mucosal IgA triggers)."
+      },
+      {
+        "id": "iga_vasculitis_henoch_schonlein_purpura",
+        "name": "IgA Vasculitis (Henoch-Schönlein Purpura)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "palpable_purpuric_rash_lower_limbs", "weight": 5 },
+          { "feature": "arthralgia_arthritis", "weight": 4 },
+          { "feature": "abdominal_pain_gi_bleeding", "weight": 4 },
+          { "feature": "renal_involvement_hematuria_proteinuria", "weight": 4 },
+          { "feature": "children_predominant", "weight": 4 }
+        ],
+        "management": "Supportive care for mild cases. NSAIDs for arthritis. Corticosteroids for severe abdominal pain or GI bleeding. Renal involvement: treat like IgA nephropathy based on proteinuria. Severe crescentic disease: pulse steroids + cyclophosphamide. Usually self-limiting in children."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "post_streptococcal_gn", "discriminators": ["low_c3", "positive_aso", "strep_history", "different_biopsy_pattern"] },
+      { "diseaseId": "thin_basement_membrane_disease", "discriminators": ["benign_familial_hematuria", "no_proteinuria", "normal_egfr", "no_progression"] },
+      { "diseaseId": "alport_syndrome", "discriminators": ["family_history_renal_failure", "hearing_loss", "eye_abnormalities", "x_linked_inheritance"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Urinalysis + microscopy", "priority": "immediate", "yield": 0.95, "indication": "RBCs, RBC casts, proteinuria" },
+        { "name": "Serum creatinine, eGFR", "priority": "immediate", "yield": 0.9, "indication": "renal function" },
+        { "name": "Urine ACR or PCR", "priority": "high", "yield": 0.9, "indication": "quantify proteinuria" },
+        { "name": "Complement C3, C4", "priority": "high", "yield": 0.6, "indication": "normal in IgA (vs low in PSGN/lupus)" },
+        { "name": "IgA level", "priority": "medium", "yield": 0.5, "indication": "elevated in 50% but not diagnostic" }
+      ],
+      "imaging": [
+        { "name": "Renal biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "IgA deposition in mesangium on immunofluorescence, MEST-C score" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO 2024 Guidelines for IgA Nephropathy",
+      "pathways": [
+        {
+          "severity": "low risk",
+          "criteria": "proteinuria <0.5 g/day, normal GFR, normal BP",
+          "treatment": "ACEi/ARB if proteinuria >0.3 g/day. Optimize BP <130/80. Annual monitoring. Lifestyle measures."
+        },
+        {
+          "severity": "intermediate risk",
+          "criteria": "proteinuria 0.5-1 g/day despite 3 months of ACEi/ARB",
+          "treatment": "Maximize ACEi/ARB. Add SGLT2i (dapagliflozin). BP target <120/80. Consider TRF-budesonide 16 mg/day if proteinuria >1 g/day. Avoid prolonged steroids if possible."
+        },
+        {
+          "severity": "high risk",
+          "criteria": "proteinuria >1 g/day despite 3 months maximal supportive care, declining GFR",
+          "treatment": "Corticosteroids (prednisolone 0.5 mg/kg alt days x 6 months) OR TRF-budesonide. MMF if steroid failure/contraindication. Consider tonsillectomy. For RPGN: pulse steroids + cyclophosphamide."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "aberrantly_glycosylated_iga1",
+      "decreased_iga1_clearance_by_asialoglycoprotein_receptor",
+      "immune_complex_formation_galactose_deficient_iga1",
+      "mesangial_iga_deposition",
+      "complement_activation_lectin_pathway",
+      "mesangial_cell_proliferation",
+      "extracellular_matrix_expansion",
+      "progressive_glomerulosclerosis"
+    ],
+    "complications": [
+      { "diseaseId": "progressive_ckd", "probability": 0.25, "severityBoost": 0.3, "clues": ["persistent_proteinuria", "hypertension", "declining_egfr_over_time"] },
+      { "diseaseId": "end_stage_kidney_disease", "probability": 0.15, "severityBoost": 0.5, "clues": ["egfr_under_15", "uremic_symptoms", "dialysis_required"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["sympharyngitic_hematuria", "normal_complement", "rbc_casts", "mesangial_iga_on_biopsy"],
+    "exclusionClues": ["low_c3", "negative_biopsy_for_iga", "thin_gbm_on_electron_microscopy"]
+  }
+}

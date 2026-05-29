@@ -1,0 +1,133 @@
+{
+  "disease": {
+    "id": "testicular_torsion",
+    "name": "Testicular Torsion",
+    "system": "URO",
+    "agePeak_months": [12, 180],
+    "note": "Urological emergency. Twisting of spermatic cord causing testicular ischemia. Salvage rate depends on time to detorsion. Bell-clapper deformity predisposes.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["acute_scrotum", "urological_emergency", "testicular_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "testicular_necrosis_gangrene", "weight": 10 },
+        { "sign": "severe_pain_with_nausea_vomiting", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Time from onset critical: <6h (salvage 90%), 6-12h (50%), 12-24h (10%), >24h (<5%)"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_onset_severe_testicular_pain", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "pain_not_relieved_by_elevation", "weight": 4 },
+      { "symptomId": "prior_episodes_of_intermittent_pain", "weight": 3, "note": "Intermittent torsion" },
+      { "symptomId": "recent_trauma_or_exercise", "weight": 2 },
+      { "symptomId": "fever_absent_or_low_grade", "weight": 2 },
+      { "symptomId": "abdominal_pain_referred", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "testicular_tenderness_severe", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "affected_testis_high_riding_transverse_lie", "baseWeight": 5 },
+      { "signId": "absent_cremasteric_reflex", "baseWeight": 4 },
+      { "signId": "scrotal_erythema_edema", "baseWeight": 3 },
+      { "signId": "testicular_swelling_hard", "baseWeight": 3 },
+      { "signId": "prehn_sign_negative_elevation_does_not_relieve", "baseWeight": 3 },
+      { "signId": "twisted_cord_palpable_above_testis", "baseWeight": 3 },
+      { "signId": "contralateral_testis_may_have_bell_clapper", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_12_to_18", "multiplier": 5.0 },
+      { "id": "bell_clapper_deformity_anatomical", "multiplier": 10.0 },
+      { "id": "neonatal_period", "multiplier": 2.0 },
+      { "id": "prior_intermittent_torsion_episodes", "multiplier": 3.0 },
+      { "id": "family_history", "multiplier": 2.0 },
+      { "id": "cold_temperature_or_trauma", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "intravaginal_torsion",
+        "name": "Intravaginal Torsion (adolescent/adult)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "bell_clapper_deformity", "weight": 5 },
+          { "feature": "torsion_inside_tunica_vaginalis", "weight": 4 },
+          { "feature": "peak_incidence_12_18_years", "weight": 4 }
+        ],
+        "management": "EMERGENCY. Manual detorsion (medial to lateral, like opening a book). Scrotal exploration + orchiopexy (bilateral). If viable: detorsion + warmth + orchiopexy. If non-viable: orchiectomy + contralateral orchiopexy. <6h from onset is critical."
+      },
+      {
+        "id": "extravaginal_torsion",
+        "name": "Extravaginal Torsion (neonatal)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "neonate_first_days_of_life", "weight": 5 },
+          { "feature": "torsion_of_cord_outside_tunica", "weight": 4 },
+          { "feature": "painless_swollen_discolored_testis", "weight": 4 }
+        ],
+        "management": "Emergency scrotal exploration. Orchiectomy usually required (salvage rate extremely low). Contralateral orchiopexy. Bilateral exploration."
+      },
+      {
+        "id": "intermittent_torsion",
+        "name": "Intermittent Torsion",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "episodic_severe_testicular_pain", "weight": 5 },
+          { "feature": "spontaneous_resolution", "weight": 5 },
+          { "feature": "normal_exam_between_episodes", "weight": 3 }
+        ],
+        "management": "Elective bilateral scrotal exploration with orchiopexy. High risk of future torsion."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "epididymitis", "discriminators": ["gradual_onset", "positive_prehn_sign", "intact_cremasteric_reflex", "pyuria", "age_over_18"] },
+      { "diseaseId": "testicular_tumor", "discriminators": ["painless_mass", "firm_fixed", "normal_twist", "ultrasound_shows_mass"] },
+      { "diseaseId": "incarcerated_inguino_scrotal_hernia", "discriminators": ["bowel_sounds_in_scrotum", "mass_not_separable_from_inguinal_canal", "nausea_vomiting", "history_of_hernia"] },
+      { "diseaseId": "henoch_schonlein_purpura", "discriminators": ["palpable_purpura", "arthralgia", "abdominal_pain", "no_acute_scrotal_exam_findings"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Cre Masteric reflex test", "priority": "immediate", "yield": 0.6, "indication": "absent on affected side suggests torsion" }
+      ],
+      "imaging": [
+        { "name": "Scrotal Doppler Ultrasound (urgent)", "priority": "high - do NOT delay surgery", "yield": 0.95, "indication": "absent or severely decreased testicular flow. Twisted cord 'whirlpool sign'" },
+        { "name": "Color Doppler - may show absent flow", "priority": "high", "yield": 0.9, "indication": "compare with contralateral normal testis" }
+      ],
+      "laboratory": [
+        { "name": "Urinalysis", "priority": "bedside", "yield": 0.4, "indication": "pyuria suggests epididymitis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EAU Guidelines on Urological Emergencies / AUA Pediatric Urology",
+      "pathways": [
+        {
+          "severity": "suspected torsion - emergency",
+          "criteria": "acute scrotal pain <6h, any age, absent cremasteric, high-riding testis",
+          "treatment": "Immediate scrotal exploration (OR). Manual detorsion may be attempted while preparing for OR. Detorsion: medial to lateral (usually 540-720 deg). If successful, arrange urgent orchiopexy. Do NOT delay surgery for imaging if high suspicion."
+        },
+        {
+          "severity": "confirmed torsion - surgery",
+          "criteria": "intra-operative finding of twisted cord",
+          "treatment": "Detorsion. Soak in warm saline for 10-15 min. Assess viability: color, Doppler, bleeding from incision. If viable: bilateral orchiopexy (3-point fixation with non-absorbable suture). If non-viable: orchiectomy + contralateral orchiopexy."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "bell_clapper_deformity_high_tunica_vaginalis_insertion",
+      "spermatic_cord_rotation",
+      "venous_occlusion_first",
+      "arterial_occlusion_as_torsion_progresses",
+      "testicular_ischemia_and_infarction",
+      "reperfusion_injury_after_detorsion",
+      "testicular_necrosis_and_gangrene_if_prolonged"
+    ],
+    "complications": [
+      { "diseaseId": "testicular_loss_orchiectomy", "probability": 0.2, "severityBoost": 0.6, "clues": ["delayed_presentation_over_12h", "non_viable_intra_op", "necrosis"] },
+      { "diseaseId": "infertility_reduced_sperm_count", "probability": 0.05, "severityBoost": 0.3, "clues": ["testicular_loss", "anti_sperm_antibodies_from_reperfusion_injury"] },
+      { "diseaseId": "testicular_atrophy", "probability": 0.1, "severityBoost": 0.3, "clues": ["decreased_testis_size_on_follow_up", "failed_recovery"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_severe_testicular_pain", "adolescent_male", "high_riding_testis_absent_cremasteric", "time_since_onset_critical"],
+    "exclusionClues": ["gradual_onset_pain", "positive_prehn_sign", "pyuria", "normal_doppler_flow"]
+  }
+}

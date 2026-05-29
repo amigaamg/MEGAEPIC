@@ -1,0 +1,184 @@
+{
+  "disease": {
+    "id": "liver_function_test_interpretation",
+    "name": "Liver Function Test Interpretation",
+    "system": "LAB",
+    "agePeak_months": [120, 720],
+    "note": "Liver chemistry includes AST, ALT (hepatocellular injury), ALP, GGT (cholestatic injury), bilirubin (total/direct), albumin, and PT. Pattern recognition differentiates hepatocellular, cholestatic, and mixed patterns. R value = (ALT/ULN) / (ALP/ULN).",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["abnormal_liver_enzymes", "jaundice", "hepatic_dysfunction"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure_encephalopathy", "weight": 10 },
+        { "sign": "inr_gt_1_5_with_encephalopathy", "weight": 10 },
+        { "sign": "severe_ast_alt_gt_5000", "weight": 9 },
+        { "sign": "hypoglycemia_in_liver_failure", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bilirubin_gt_20_mg_dl", "weight": 7 },
+          { "sign": "ascites_or_variceal_bleeding", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If encephalopathy + coagulopathy -> ACUTE LIVER FAILURE; else -> NON-EMERGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "jaundice_or_scleral_icterus", "weight": 5, "modifiers": [
+          { "condition": "painless_and_progressive", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 4 },
+      { "symptomId": "dark_urine_pale_stools", "weight": 4 },
+      { "symptomId": "alcohol_use_history", "weight": 4 },
+      { "symptomId": "hepatotoxin_exposure_or_medication", "weight": 4 },
+      { "symptomId": "pruritus_cholestatic", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "ast_alt_elevation_pattern", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "alp_elevation_with_gGT", "baseWeight": 5 },
+      { "signId": "total_and_direct_bilirubin", "baseWeight": 4 },
+      { "signId": "albumin_decreased", "baseWeight": 3 },
+      { "signId": "r_value_calculation", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "heavy_alcohol_use", "multiplier": 3.0 },
+      { "id": "chronic_hepatitis_b_or_c", "multiplier": 4.0 },
+      { "id": "metabolic_syndrome_nash", "multiplier": 2.5 },
+      { "id": "hepatotoxic_medications", "multiplier": 2.0 },
+      { "id": "family_history_liver_disease", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "hepatocellular_injury",
+        "name": "Hepatocellular Injury Pattern",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "ast_alt_elevation_elevated", "weight": 5 },
+          { "feature": "r_value_gt_5", "weight": 5 },
+          { "feature": "ast_alt_ratio_gt_2_in_alcohol", "weight": 4 },
+          { "feature": "transaminases_gt_10x_uln", "weight": 4 },
+          { "feature": "viral_hepatitis_serology_positive", "weight": 4 }
+        ],
+        "management": "Check viral hepatitis serologies (HAV IgM, HBsAg, HBcIgM, HCV Ab/RNA). Review medications and toxins. Ultrasound to rule out hepatic steatosis. Autoimmune markers (ANA, ASMA, LKM-1). Acetaminophen level if suspected overdose."
+      },
+      {
+        "id": "cholestatic_injury",
+        "name": "Cholestatic Pattern",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "alp_elevation_predominant", "weight": 5 },
+          { "feature": "gGT_elevated_parallel", "weight": 5 },
+          { "feature": "r_value_lt_2", "weight": 5 },
+          { "feature": "direct_hyperbilirubinemia", "weight": 4 },
+          { "feature": "biliary_dilatation_on_ultrasound", "weight": 4 }
+        ],
+        "management": "Abdominal ultrasound: if biliary dilatation, refer for ERCP. If no dilatation: check AMA for PBC, MRCP for PSC. Review drugs causing cholestasis (amoxicillin-clavulanate, chlorpromazine)."
+      },
+      {
+        "id": "synthetic_dysfunction",
+        "name": "Synthetic Dysfunction (Low Albumin, High INR)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "albumin_low_lt_3_0", "weight": 5 },
+          { "feature": "inr_elevated_gt_1_3", "weight": 5 },
+          { "feature": "total_protein_albumin_only_low", "weight": 3 },
+          { "feature": "chronic_liver_disease_signs", "weight": 4 }
+        ],
+        "management": "Assess cirrhosis severity (Child-Pugh, MELD-Na). Screen for varices. Manage ascites (diuretics, paracentesis). HE prophylaxis (lactulose, rifaximin). Consider liver transplantation if decompensated."
+      },
+      {
+        "id": "isolated_hyperbilirubinemia",
+        "name": "Isolated Hyperbilirubinemia",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "elevated_bilirubin_normal_lft", "weight": 5 },
+          { "feature": "unconjugated_predominant_gilberts", "weight": 4 },
+          { "feature": "conjugated_elevated_dubin_johnson", "weight": 3 },
+          { "feature": "hemolysis_markers", "weight": 3 }
+        ],
+        "management": "Gilberts: benign, no treatment. Dubin-Johnson/Rotor: benign. Check for hemolysis (LDH, haptoglobin, reticulocyte count). If conjugated and elevated LFTs, investigate for biliary obstruction."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "hemolysis",
+        "discriminators": ["elevated_indirect_bilirubin", "low_haptoglobin", "elevated_ldh", "normal_gGT_ALP"]
+      },
+      {
+        "diseaseId": "biliary_obstruction_malignancy",
+        "discriminators": ["dilated_bile_ducts", "elevated_ca19_9", "weight_loss", "mass_on_imaging"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "ALT and AST", "priority": "immediate", "yield": 0.9, "indication": "all patients with suspected liver disease" },
+        { "name": "ALP and GGT", "priority": "immediate", "yield": 0.85, "indication": "cholestasis assessment" },
+        { "name": "Total and direct bilirubin", "priority": "immediate", "yield": 0.8, "indication": "jaundice workup" },
+        { "name": "Albumin, Total protein", "priority": "high", "yield": 0.7, "indication": "synthetic function" },
+        { "name": "PT/INR", "priority": "high", "yield": 0.7, "indication": "synthetic function, acute liver failure assessment" },
+        { "name": "Viral hepatitis serology (HAV, HBV, HCV, HEV)", "priority": "high", "yield": 0.6, "indication": "acute hepatitis evaluation" },
+        { "name": "Ceruloplasmin (Wilson disease)", "priority": "medium", "yield": 0.2, "indication": "young patient with unexplained liver disease" },
+        { "name": "Autoimmune markers (ANA, ASMA, Anti-LKM1)", "priority": "medium", "yield": 0.3, "indication": "suspected AIH" },
+        { "name": "Serum protein electrophoresis", "priority": "low", "yield": 0.2, "indication": "suspected alpha-1 antitrypsin deficiency" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound with Doppler", "priority": "high", "yield": 0.6, "indication": "steatosis, cirrhosis, masses, biliary dilatation, portal vein patency" },
+        { "name": "MRCP/ERCP", "priority": "medium", "yield": 0.8, "indication": "if cholestatic and ultrasound suggests obstruction" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines for Liver Chemistry Tests",
+      "pathways": [
+        {
+          "severity": "mild_transaminitis",
+          "criteria": "ALT/AST <3x ULN, no symptoms, normal bilirubin/albumin/PT",
+          "treatment": "Exclude NAFLD (most common). Check for meds, alcohol. Repeat in 3-6 months. If persistent, check viral hepatitis, iron studies, autoimmune markers."
+        },
+        {
+          "severity": "moderate_severe_injury",
+          "criteria": "ALT/AST >5x ULN, symptomatic, elevated bilirubin",
+          "treatment": "Hospital admission. Check acetaminophen level. Viral hepatitis serology. Autoimmune markers. Liver biopsy if indeterminate. N-acetylcysteine for acetaminophen. Steroids for AIH."
+        },
+        {
+          "severity": "acute_liver_failure",
+          "criteria": "encephalopathy + INR >1.5, rapid onset",
+          "treatment": "ICU. N-acetylcysteine. Lactulose for encephalopathy. Avoid sedation. Monitor ICP. Liver transplantation evaluation. Transfer to transplant center."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "hepatocellular_necrosis",
+      "bile_duct_obstruction_cholestasis",
+      "impaired_synthesis",
+      "impaired_excretion_hyperbilirubinemia",
+      "portal_hypertension",
+      "hepatic_encephalopathy"
+    ],
+    "complications": [
+      {
+        "diseaseId": "hepatic_encephalopathy",
+        "probability": 0.2,
+        "lagDays": [1, 30],
+        "severityBoost": 0.5,
+        "clues": ["confusion", "asterixis", "ammonia_elevated"]
+      },
+      {
+        "diseaseId": "variceal_hemorrhage",
+        "probability": 0.15,
+        "lagDays": [30, 365],
+        "severityBoost": 0.6,
+        "clues": ["hematemesis", "melena", "portal_hypertension"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["abnormal_lft_pattern", "r_value", "jaundice", "synthetic_dysfunction"],
+    "exclusionClues": ["normal_lft", "physiologic_neonatal_jaundice", "benign_gilberts"]
+  }
+}

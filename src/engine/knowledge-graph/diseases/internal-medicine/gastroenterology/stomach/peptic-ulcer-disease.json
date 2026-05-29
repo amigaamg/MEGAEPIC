@@ -1,0 +1,153 @@
+{
+  "disease": {
+    "id": "peptic_ulcer_disease",
+    "name": "Peptic Ulcer Disease",
+    "system": "gastroenterology",
+    "agePeak_months": [300, 720],
+    "note": "Mucosal defects in stomach or duodenum due to H. pylori infection or NSAID use.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["ulcer", "dyspepsia", "upper_gi_bleeding"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hematemesis", "weight": 10 },
+        { "sign": "melena", "weight": 10 },
+        { "sign": "perforation_peritonitis", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "gastric_outlet_obstruction", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "epigastric_pain_core": true
+      },
+      "severityLabel": "If bleeding, perforation, or obstruction -> EMERGENCY; else -> URGENT workup"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain", "weight": 5 },
+      { "symptomId": "nocturnal_pain_waking", "weight": 4 },
+      { "symptomId": "pain_relieved_by_food", "weight": 3, "note": "More typical of duodenal ulcer" },
+      { "symptomId": "pain_worsened_by_food", "weight": 2, "note": "More typical of gastric ulcer" },
+      { "symptomId": "dyspepsia_bloating", "weight": 2 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 2, "note": "More with gastric ulcer" },
+      { "symptomId": "hematemesis_coffee_ground", "weight": 4 },
+      { "symptomId": "melena", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_tenderness", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "guarding_or_rebound", "baseWeight": 5, "note": "Suggests perforation" },
+      { "signId": "pallor", "baseWeight": 3, "note": "Chronic blood loss anemia" },
+      { "signId": "fecal_occult_blood_positive", "baseWeight": 3 },
+      { "signId": "succussion_splash", "baseWeight": 4, "note": "Gastric outlet obstruction" }
+    ],
+
+    "riskFactors": [
+      { "id": "h_pylori_infection", "multiplier": 4.0 },
+      { "id": "nsaid_use", "multiplier": 3.0 },
+      { "id": "aspirin_use", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "alcohol_abuse", "multiplier": 1.5 },
+      { "id": "stress", "multiplier": 1.3 },
+      { "id": "zollinger_ellison_syndrome", "multiplier": 5.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "gerd",
+        "discriminators": ["retrosternal_burning", "acid_regurgitation", "no_h_pylori", "ppi_response_partial"]
+      },
+      {
+        "diseaseId": "gastritis",
+        "discriminators": ["diffuse_epigastric_discomfort", "nausea_predominant", "no_ulcer_on_endoscopy"]
+      },
+      {
+        "diseaseId": "gallstone_disease",
+        "discriminators": ["right_upper_quadrant_pain", "post_prandial_fatty_food", "murphy_sign", "normal_upper_endoscopy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fecal occult blood test", "priority": "high", "yield": 0.6, "indication": "all suspected PUD" }
+      ],
+      "laboratory": [
+        { "name": "H. pylori test (stool antigen/ UBT)", "priority": "immediate", "yield": 0.95, "indication": "all patients with PUD" },
+        { "name": "FBC", "priority": "high", "yield": 0.5, "indication": "anemia from chronic/acute blood loss" },
+        { "name": "LFTs", "priority": "medium", "yield": 0.2, "indication": "exclude biliary causes" },
+        { "name": "Gastrin level", "priority": "if_suspected", "yield": 0.8, "indication": "suspected Zollinger-Ellison syndrome (multiple/recurrent ulcers)" }
+      ],
+      "imaging": [
+        { "name": "Upper endoscopy (EGD)", "priority": "high", "yield": 0.98, "indication": "gold standard, allows biopsy of gastric ulcers to exclude malignancy" },
+        { "name": "Upper GI barium series", "priority": "medium", "yield": 0.7, "indication": "if endoscopy unavailable" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACG Clinical Guideline: Peptic Ulcer Disease",
+      "pathways": [
+        {
+          "severity": "h_pylori_positive",
+          "criteria": "Ulcer on EGD + positive H. pylori test",
+          "treatment": "Triple therapy: PPI + clarithromycin + amoxicillin (or metronidazole) for 14 days. Confirm eradication with stool antigen or UBT 4 weeks after therapy."
+        },
+        {
+          "severity": "nsaid_related",
+          "criteria": "Ulcer on EGD + NSAID/aspirin use",
+          "treatment": "Stop NSAID. PPI for 8 weeks. H. pylori test and treat if positive. Consider misoprostol or COX-2 inhibitor if NSAID must continue."
+        },
+        {
+          "severity": "bleeding_ulcer",
+          "criteria": "Active bleeding, visible vessel, adherent clot on EGD",
+          "treatment": "Endoscopic hemostasis (injection, cautery, clip). High-dose IV PPI bolus + continuous infusion for 72 hours. Re-endoscopy if rebleeding."
+        },
+        {
+          "severity": "perforated_ulcer",
+          "criteria": "Peritonitis, free air under diaphragm",
+          "treatment": "Urgent surgical repair. IV PPI. Broad-spectrum antibiotics. Fluid resuscitation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "h_pylori_colonization",
+      "mucosal_barrier_disruption",
+      "nsaid_inhibit_prostaglandin_synthesis",
+      "gastric_acid_hypersecretion",
+      "duodenal_defense_impaired",
+      "ulcer_formation",
+      "vascular_erosion_bleeding",
+      "full_thickness_necrosis_perforation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "upper_gi_bleeding",
+        "probability": 0.2,
+        "severityBoost": 0.6,
+        "clues": ["hematemesis", "melena", "hypotension", "tachycardia"]
+      },
+      {
+        "diseaseId": "perforation",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["acute_severe_abdominal_pain", "peritonitis", "free_air_on_cxr"]
+      },
+      {
+        "diseaseId": "gastric_outlet_obstruction",
+        "probability": 0.03,
+        "severityBoost": 0.5,
+        "clues": ["recurrent_vomiting", "early_satiety", "weight_loss", "succussion_splash"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if bleeding/perforation; medium otherwise",
+    "diagnosticClues": ["epigastric_pain_with_nocturnal_waking", "pain_relief_with_antacids", "h_pylori_positive", "ulcer_on_endoscopy"],
+    "exclusionClues": ["isolated_heartburn", "normal_endoscopy", "pain_in_right_upper_quadrant_only"]
+  }
+}

@@ -1,0 +1,77 @@
+import type { DepartmentDefinition } from './index';
+
+export const oncology: DepartmentDefinition = {
+  id: 'ONCO',
+  name: 'Oncology',
+  shortName: 'ONCO',
+  description: 'Diagnosis and comprehensive management of solid tumours including chemotherapy, immunotherapy, targeted therapy, radiation oncology and palliative care.',
+  icon: '⚕️',
+  color: '#6366f1',
+  sections: [
+    {
+      id: 'thoracic',
+      name: 'Thoracic Oncology',
+      description: 'Malignancies of the lung, mediastinum and chest wall',
+      diseaseCategories: ['Non-small cell lung cancer', 'Small cell lung cancer', 'Mesothelioma', 'Thymoma', 'Mediastinal tumours', 'Carcinoid tumours'],
+    },
+    {
+      id: 'breast-onco',
+      name: 'Breast Oncology',
+      description: 'Breast cancer diagnosis, staging and multimodal treatment',
+      diseaseCategories: ['Early breast cancer', 'Locally advanced breast cancer', 'Metastatic breast cancer', 'Triple-negative breast cancer', 'HER2-positive breast cancer', 'Inflammatory breast cancer', 'Male breast cancer'],
+    },
+    {
+      id: 'gi-onco',
+      name: 'Gastrointestinal Oncology',
+      description: 'Cancers of the digestive tract and associated organs',
+      diseaseCategories: ['Colorectal cancer', 'Gastric cancer', 'Pancreatic cancer', 'Hepatocellular carcinoma', 'Oesophageal cancer', 'Cholangiocarcinoma', 'Anal cancer'],
+    },
+    {
+      id: 'genitourinary',
+      name: 'Genitourinary Oncology',
+      description: 'Cancers of the urinary tract and male reproductive system',
+      diseaseCategories: ['Prostate cancer', 'Bladder cancer', 'Renal cell carcinoma', 'Testicular cancer', 'Penile cancer', 'Upper tract urothelial carcinoma'],
+    },
+    {
+      id: 'gynae-onco',
+      name: 'Gynaecological Oncology',
+      description: 'Cancers of the female reproductive system',
+      diseaseCategories: ['Ovarian cancer', 'Cervical cancer', 'Endometrial cancer', 'Vulval cancer', 'Gestational trophoblastic neoplasia'],
+    },
+    {
+      id: 'head-neck',
+      name: 'Head & Neck Oncology',
+      description: 'Squamous cell and other cancers of the head and neck region',
+      diseaseCategories: ['Oral cavity cancer', 'Laryngeal cancer', 'Pharyngeal cancer', 'Thyroid cancer', 'Salivary gland tumours', 'Nasopharyngeal carcinoma'],
+    },
+    {
+      id: 'palliative',
+      name: 'Palliative & Supportive Oncology',
+      description: 'Symptom management, pain control, end-of-life care, survivorship',
+      diseaseCategories: ['Cancer pain management', 'Nausea/vomiting management', 'Malignant bowel obstruction', 'Hypercalcaemia of malignancy', 'Superior vena cava obstruction', 'Spinal cord compression', 'Palliative radiotherapy'],
+    },
+  ],
+  commonSymptoms: [
+    'weight_loss', 'fatigue', 'anorexia', 'cachexia', 'night_sweats',
+    'fever_of_unknown_origin', 'pain', 'mass_or_lump',
+    'lymphadenopathy', 'dysphagia', 'dyspnoea', 'cough',
+    'haemoptysis', 'change_in_bowel_habit', 'haematochezia',
+    'melena', 'abdominal_pain', 'bloating', 'early_satiety',
+    'jaundice', 'bone_pain', 'fracture_pathological',
+    'headache', 'neurological_deficit', 'seizures',
+    'skin_lesion_changing', 'breast_lump', 'nipple_discharge',
+    'haematuria', 'testicular_mass', 'abnormal_Vaginal_bleeding',
+    'postmenopausal_bleeding',
+  ],
+  commonInvestigations: [
+    'Tissue biopsy (core needle/FNA)', 'Histopathology', 'Immunohistochemistry',
+    'CT chest/abdomen/pelvis', 'MRI (staging)', 'PET CT scan',
+    'Bone scan', 'Tumour markers (CEA, CA19-9, CA-125, AFP, hCG)',
+    'Complete blood count', 'LFT', 'U&E', 'LDH', 'Calcium',
+    'Genetic testing (EGFR, KRAS, BRAF, HER2)',
+    'PD-L1 immunohistochemistry', 'MSI/mismatch repair testing',
+    'Liquid biopsy/circulating tumour DNA', 'Echocardiogram', 'ECG',
+    'Pulmonary function tests', 'CT-guided biopsy',
+    'Endoscopic ultrasound biopsy', 'Bone marrow biopsy',
+  ],
+};

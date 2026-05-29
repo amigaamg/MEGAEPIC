@@ -1,0 +1,169 @@
+{
+  "disease": {
+    "id": "nephrotic-syndrome",
+    "name": "Nephrotic Syndrome (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [24, 72],
+    "note": "Glomerular disease characterized by massive proteinuria, hypoalbuminemia, edema, and hyperlipidemia. Minimal change disease (MCD) is most common in children.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["proteinuria", "edema"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sepsis_peritonitis", "weight": 10 },
+        { "sign": "pulmonary_edema", "weight": 9 },
+        { "sign": "thrombosis_renal_vein", "weight": 9 },
+        { "sign": "hypovolemic_shock", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "anasarca_severe", "weight": 7 },
+          { "sign": "pleural_effusion", "weight": 6 },
+          { "sign": "acute_kidney_injury", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If anasarca, peritonitis, thrombosis, or AKI -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "facial_edema_periorbital", "weight": 5 },
+      { "symptomId": "generalized_edema_anasarca", "weight": 5 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "frothy_urine", "weight": 4, "note": "Due to proteinuria" },
+      { "symptomId": "fatigue_lethargy", "weight": 3 },
+      { "symptomId": "abdominal_pain_distension", "weight": 3 },
+      { "symptomId": "recent_infection_upper_respiratory", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "periorbital_edema", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pitting_edema_lower_limbs", "baseWeight": 5 },
+      { "signId": "anasarca", "baseWeight": 5 },
+      { "signId": "ascites", "baseWeight": 4 },
+      { "signId": "pleural_effusion_signs", "baseWeight": 3 },
+      { "signId": "scrotal_labial_edema", "baseWeight": 3 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "hypertension", "baseWeight": 2, "note": "Uncommon in MCD, suggests other histology" }
+    ],
+
+    "riskFactors": [
+      { "id": "age_2_to_6_years", "multiplier": 3.0 },
+      { "id": "male_gender", "multiplier": 2.0 },
+      { "id": "allergy_atopy_history", "multiplier": 1.5 },
+      { "id": "family_history_nephrotic_syndrome", "multiplier": 1.5 },
+      { "id": "recent_infection", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "minimal_change_disease",
+        "name": "Minimal Change Disease",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "massive_proteinuria_>3+_dipstick", "weight": 5 },
+          { "feature": "hypoalbuminemia_<2.5_g_dL", "weight": 5 },
+          { "feature": "steroid_responsive", "weight": 4 },
+          { "feature": "no_hypertension", "weight": 3 }
+        ],
+        "management": "Prednisone 60 mg/m2/day (max 60 mg) for 4-6 weeks, then taper. Salt restriction. Diuretics cautiously. Monitor for relapse. Renal biopsy if atypical."
+      },
+      {
+        "id": "focal_segmental_glomerulosclerosis",
+        "name": "Focal Segmental Glomerulosclerosis (FSGS)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "steroid_resistant", "weight": 5 },
+          { "feature": "hypertension", "weight": 4 },
+          { "feature": "microscopic_hematuria", "weight": 3 }
+        ],
+        "management": "Prolonged steroid course (12-16 weeks). Calcineurin inhibitors (cyclosporine/tacrolimus). ACE inhibitors for proteinuria. Renal biopsy for diagnosis. Consider genetic testing."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_glomerulonephritis",
+        "discriminators": ["hematuria_predominant", "hypertension", "low_c3", "not_massive_proteinuria"]
+      },
+      {
+        "diseaseId": "congestive_heart_failure",
+        "discriminators": ["cardiomegaly", "murmur", "no_proteinuria", "no_hypoalbuminemia"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dipstick protein", "priority": "immediate", "yield": 0.95, "indication": "proteinuria screening" }
+      ],
+      "laboratory": [
+        { "name": "Spot urine protein:creatinine ratio", "priority": "immediate", "yield": 0.95, "indication": "quantify proteinuria" },
+        { "name": "Serum albumin", "priority": "immediate", "yield": 0.95, "indication": "hypoalbuminemia confirms" },
+        { "name": "Serum creatinine and BUN", "priority": "high", "yield": 0.6, "indication": "renal function" },
+        { "name": "Serum cholesterol and triglycerides", "priority": "high", "yield": 0.7, "indication": "hyperlipidemia" },
+        { "name": "C3 complement", "priority": "medium", "yield": 0.4, "indication": "rule out GN" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "low", "yield": 0.3, "indication": "rule out structural causes" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ISPN / KDIGO Guidelines for Nephrotic Syndrome",
+      "pathways": [
+        {
+          "severity": "initial_presentation",
+          "criteria": "First episode, no complications, normotensive",
+          "treatment": "Prednisone 60 mg/m2/day (max 60 mg) for 4-6 weeks. Salt restriction 1-2 g/day. Fluid restriction if hyponatremia. Monitor BP, weight, urine protein. Vaccinate (pneumococcal, varicella)."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "Anasarca, peritonitis, AKI, thrombosis, or steroid resistance",
+          "treatment": "Hospitalize. IV albumin 20% (0.5-1 g/kg) + IV furosemide for severe edema. IV antibiotics for peritonitis. Anticoagulation for thrombosis. Renal biopsy. Second-line agents (cyclophosphamide, cyclosporine, rituximab)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "podocyte_injury",
+      "loss_of_glomerular_charge_barrier",
+      "massive_proteinuria",
+      "hypoalbuminemia",
+      "edema_formation",
+      "hyperlipidemia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "spontaneous_bacterial_peritonitis",
+        "probability": 0.1,
+        "lagDays": [7, 365],
+        "severityBoost": 0.5,
+        "clues": ["abdominal_pain", "fever", "ascites_worsening"]
+      },
+      {
+        "diseaseId": "thromboembolism",
+        "probability": 0.05,
+        "lagDays": [7, 365],
+        "severityBoost": 0.5,
+        "clues": ["abdominal_pain_renal_vein", "hematuria", "dvt_symptoms"]
+      },
+      {
+        "diseaseId": "steroid_toxicity",
+        "probability": 0.3,
+        "lagDays": [30, 365],
+        "severityBoost": 0.2,
+        "clues": ["cushingoid_facies", "growth_retardation", "hypertension", "hyperglycemia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["periorbital_edema", "frothy_urine", "massive_proteinuria", "hypoalbuminemia", "hyperlipidemia"],
+    "exclusionClues": ["hematuria_predominant", "hypertension_predominant", "low_c3"]
+  }
+}

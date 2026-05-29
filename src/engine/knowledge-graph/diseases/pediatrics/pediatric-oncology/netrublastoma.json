@@ -1,0 +1,175 @@
+{
+  "disease": {
+    "id": "neuroblastoma",
+    "name": "Neuroblastoma",
+    "system": "PAED",
+    "agePeak_months": [0, 36],
+    "note": "Most common extracranial solid tumor in children. Arises from neural crest cells. Adrenal primary most common. MYCN amplification is key prognostic factor.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["neural_crest_tumor", "abdominal_mass"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "respiratory_distress_from_mass", "weight": 10 },
+        { "sign": "intracranial_metastasis", "weight": 9 },
+        { "sign": "superior_vena_cava_syndrome", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "mycn_amplified", "weight": 9 },
+          { "sign": "metastatic_disease_at_diagnosis", "weight": 8 },
+          { "sign": "age_>18_months_advanced_stage", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If MYCN amplified, metastasis to bone/marrow, or cord compression -> SEVERE (high risk); else -> NON-SEVERE (low/intermediate risk)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_mass_or_distension", "weight": 5 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "bone_pain_limping", "weight": 3 },
+      { "symptomId": "periorbital_ecchymosis_raccoon_eyes", "weight": 4, "note": "Orbital metastasis" },
+      { "symptomId": "proptosis", "weight": 3 },
+      { "symptomId": "paraplegia_weakness", "weight": 4, "note": "Spinal cord compression" },
+      { "symptomId": "opsoclonus_myoclonus_ataxia", "weight": 3, "note": "Paraneoplastic syndrome" }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_mass_firm_irregular", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "periorbital_bruising", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "lymphadenopathy", "baseWeight": 2 },
+      { "signId": "spinal_tenderness_or_kyphosis", "baseWeight": 3 },
+      { "signId": "skin_nodules_blueberry_muffin", "baseWeight": 3, "note": "Stage 4S skin deposits" },
+      { "signId": "proptosis", "baseWeight": 3 },
+      { "signId": "hypertension", "baseWeight": 3, "note": "Catecholamine secretion" }
+    ],
+
+    "riskFactors": [
+      { "id": "age_<18_months", "multiplier": 2.0 },
+      { "id": "mycn_amplification", "multiplier": 5.0 },
+      { "id": "diploid_dna_content", "multiplier": 2.5 },
+      { "id": "chromosome_1p_deletion", "multiplier": 3.0 },
+      { "id": "family_history_neuroblastoma", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "low_risk_neuroblastoma",
+        "name": "Low-Risk Neuroblastoma",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "localized_tumor", "weight": 5 },
+          { "feature": "no_mycn_amplification", "weight": 5 },
+          { "feature": "age_<18_months", "weight": 4 }
+        ],
+        "management": "Surgical resection alone. Observation for small localized tumors (may regress spontaneously). Chemotherapy only for symptomatic or unresectable. Excellent prognosis >95% survival."
+      },
+      {
+        "id": "intermediate_risk_neuroblastoma",
+        "name": "Intermediate-Risk Neuroblastoma",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "localized_unresectable_or_metastatic_infant", "weight": 4 },
+          { "feature": "no_mycn_amplification", "weight": 5 },
+          { "feature": "unfavorable_pathology", "weight": 3 }
+        ],
+        "management": "Neoadjuvant chemotherapy (carboplatin, etoposide, cyclophosphamide, doxorubicin). Surgical resection. Adjuvant chemotherapy. Survival >90%."
+      },
+      {
+        "id": "high_risk_neuroblastoma",
+        "name": "High-Risk Neuroblastoma",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "mycn_amplified", "weight": 5 },
+          { "feature": "age_>18_months_with_metastasis", "weight": 5 },
+          { "feature": "bone_marrow_involvement", "weight": 4 }
+        ],
+        "management": "Induction chemotherapy (5-7 cycles). Surgical resection. Myeloablative chemotherapy with autologous stem cell rescue. Radiation to primary and residual metastases. Maintenance immunotherapy (dinutuximab + IL-2 + GM-CSF) + isotretinoin."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "wilms_tumor",
+        "discriminators": ["intrarenal_origin", "no_catecholamines", "no_mycn", "different_histology"]
+      },
+      {
+        "diseaseId": "rhabdomyosarcoma",
+        "discriminators": ["extremity_or_head_neck_primary", "rhabdomyoblasts_on_biopsy", "different_immunohistochemistry"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Urinary catecholamines (VMA/HVA)", "priority": "immediate", "yield": 0.9, "indication": "95% sensitivity" },
+        { "name": "LDH", "priority": "medium", "yield": 0.5, "indication": "tumor burden" },
+        { "name": "Ferritin", "priority": "medium", "yield": 0.4, "indication": "prognostic marker" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.85, "indication": "adrenal mass, calcifications" },
+        { "name": "CT or MRI Abdomen", "priority": "high", "yield": 0.95, "indication": "tumor extent, vessel encasement" },
+        { "name": "MIBG scan (123I-MIBG)", "priority": "high", "yield": 0.95, "indication": "staging, metastatic evaluation" },
+        { "name": "Bone marrow aspirate and biopsy", "priority": "high", "yield": 0.7, "indication": "marrow involvement" },
+        { "name": "Chest CT", "priority": "high", "yield": 0.8, "indication": "chest metastases" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "COG / SIOP / GPOH Neuroblastoma Protocols",
+      "pathways": [
+        {
+          "severity": "low_risk",
+          "criteria": "Localized, MYCN not amplified, age <18 months or favorable INSS stage",
+          "treatment": "Complete surgical resection. Observation if small and favorable. Chemotherapy only if symptomatic or life-threatening. Survival >95%."
+        },
+        {
+          "severity": "high_risk",
+          "criteria": "MYCN amplified or age >18 months with stage 4 disease",
+          "treatment": "Induction chemo (cisplatin, etoposide, cyclophosphamide, doxorubicin, vincristine) x5-7 cycles. Surgical resection of primary. Stem cell harvest. Myeloablative chemo + autologous SCT. Radiation to primary and MIBG-avid metastases. Post-consolidation: dinutuximab + cytokines + cis-retinoic acid."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "neural_crest_cell_origin", "sympathoadrenal_lineage", "mycn_oncogene_amplification", "alk_mutation", "chromosomal_aberrations", "tumor_microenvironment"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "spinal_cord_compression",
+        "probability": 0.05,
+        "lagDays": [0, 90],
+        "severityBoost": 0.6,
+        "clues": ["paraplegia", "bladder_bowel_dysfunction", "dumbbell_tumor_on_mri"]
+      },
+      {
+        "diseaseId": "treatment_related_toxicity_high_dose_chemo",
+        "probability": 0.3,
+        "lagDays": [7, 90],
+        "severityBoost": 0.4,
+        "clues": ["mucositis", "neutropenic_sepsis", "hepatic_veno_occlusive_disease"]
+      },
+      {
+        "diseaseId": "relapse",
+        "probability": 0.4,
+        "lagDays": [180, 1825],
+        "severityBoost": 0.5,
+        "clues": ["rising_catecholamines", "new_mibg_avid_lesions"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["abdominal_mass_in_toddler", "periorbital_ecchymosis", "elevated_vma_hva", "mibg_avid_tumor"],
+    "exclusionClues": ["normal_catecholamines", "mibg_negative", "intrarenal_mass"]
+  }
+}

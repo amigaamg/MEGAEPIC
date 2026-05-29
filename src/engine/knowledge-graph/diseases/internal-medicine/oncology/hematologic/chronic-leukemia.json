@@ -1,0 +1,130 @@
+{
+  "disease": {
+    "id": "chronic_leukemia",
+    "name": "Chronic Leukemia",
+    "system": "ONCO",
+    "agePeak_months": [600, 960],
+    "note": "CLL and CML are distinct entities. CLL most common adult leukemia; CML characterized by Philadelphia chromosome.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["hematologic_malignancy", "lymphoproliferative", "myeloproliferative"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hyperviscosity_syndrome", "weight": 8 },
+        { "sign": "blast_crisis", "weight": 10 },
+        { "sign": "richter_transformation", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Rai/Binet staging for CLL. Chronic phase/accelerated phase/blast crisis for CML."
+    },
+    "historyFeatures": [
+      { "symptomId": "painless_lymphadenopathy", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "unintentional_weight_loss", "weight": 3 },
+      { "symptomId": "night_sweats", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "easy_bruising_bleeding", "weight": 2 },
+      { "symptomId": "splenic_fullness", "weight": 3 },
+      { "symptomId": "gout_symptoms", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "lymphadenopathy_generalized", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "petechiae", "baseWeight": 2 },
+      { "signId": "skin_infiltrates_leukemia_cutis", "baseWeight": 1 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 3.0 },
+      { "id": "family_history_hematologic_malignancy", "multiplier": 2.0 },
+      { "id": "ionizing_radiation", "multiplier": 2.0 },
+      { "id": "male_sex", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "cll",
+        "name": "Chronic Lymphocytic Leukemia",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "clonal_b_cells_cd5_cd19_cd23", "weight": 5 },
+          { "feature": "smudge_cells_on_smear", "weight": 4 },
+          { "feature": "lymphocytosis_5000", "weight": 5 },
+          { "feature": "older_adults", "weight": 4 }
+        ],
+        "management": "Watchful waiting if early/asymptomatic (Rai 0-II). Chemoimmunotherapy (FCR: fludarabine, cyclophosphamide, rituximab) for progressive/symptomatic. BTK inhibitors (ibrutinib, acalabrutinib) and BCL2 inhibitors (venetoclax) for high-risk/relapsed."
+      },
+      {
+        "id": "cml",
+        "name": "Chronic Myeloid Leukemia",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "philadelphia_chromosome_bcr_abl", "weight": 5 },
+          { "feature": "leukocytosis_all_stages", "weight": 5 },
+          { "feature": "basophilia", "weight": 4 },
+          { "feature": "splenomegaly_marked", "weight": 4 }
+        ],
+        "management": "TKI therapy first-line (imatinib, dasatinib, nilotinib, bosutinib). Chronic phase: TKI indefinitely. Accelerated phase/blast crisis: TKI + chemotherapy + allogeneic SCT. Monitor BCR-ABL transcript levels by PCR every 3 months."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "reactive_lymphocytosis", "discriminators": ["polyclonal_cells", "viral_infection_history", "self_limiting"] },
+      { "diseaseId": "leukemoid_reaction", "discriminators": ["no_basophilia", "no_bcr_abl", "underlying_inflammation", "laps_score_elevated"] },
+      { "diseaseId": "lymphoma_leukemic_phase", "discriminators": ["tissue_biopsy_nodal_architecture", "different_immunophenotype", "cd10_positive_in_follicular"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC with differential", "priority": "immediate", "yield": 0.95, "indication": "lymphocytosis (CLL), leukocytosis with left shift and basophilia (CML)" },
+        { "name": "Peripheral blood smear", "priority": "high", "yield": 0.9, "indication": "smudge cells (CLL), all stages of granulocytes (CML)" },
+        { "name": "Flow cytometry", "priority": "gold_standard", "yield": 0.98, "indication": "CLL: CD5+CD19+CD23+; CML: no specific marker" },
+        { "name": "BCR-ABL PCR (quantitative)", "priority": "gold_standard", "yield": 0.99, "indication": "CML diagnosis and molecular monitoring (MR)" },
+        { "name": "Serum free light chains, beta-2 microglobulin", "priority": "medium", "yield": 0.5, "indication": "CLL prognostic markers" }
+      ],
+      "imaging": [
+        { "name": "CT Neck/Chest/Abdomen/Pelvis", "priority": "medium", "yield": 0.6, "indication": "nodal and organ involvement assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/iWCLL/ELN Guidelines for Chronic Leukemia",
+      "pathways": [
+        {
+          "severity": "CLL early/asymptomatic (Rai 0-I, Binet A)",
+          "criteria": "no B symptoms, progressive lymphocytosis, or organ failure",
+          "treatment": "Watch and wait. Monitor FBC and clinical status every 3-6 months. No treatment benefit for early intervention."
+        },
+        {
+          "severity": "CLL progressive/symptomatic",
+          "criteria": "B symptoms, bulky nodes, cytopenias, rapid progression",
+          "treatment": "FCR (fit, IGHV mutated). BR (bendamustine + rituximab) if older/frail. BTK inhibitor (ibrutinib/acalabrutinib) frontline. Venetoclax + obinutuzumab (time-limited)."
+        },
+        {
+          "severity": "CML chronic phase",
+          "criteria": "<10% blasts in marrow, no blastic features",
+          "treatment": "First-line TKI (imatinib 400 mg, dasatinib 100 mg, nilotinib 300 mg BID). Monitor BCR-ABL PCR at 3, 6, 12 months. Switch if suboptimal response or intolerance."
+        },
+        {
+          "severity": "CML accelerated/blast crisis",
+          "criteria": "10-19% blasts (accelerated) or >=20% blasts (blast crisis)",
+          "treatment": "Higher dose TKI + AML-like induction if blast crisis. Allogeneic hematopoietic SCT. Clinical trials."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "clonal_b_cell_expansion_cll",
+      "trisomy_12_del_13q_del_11q_del_17p_cll",
+      "microenvironment_dependence_nurse_like_cells",
+      "bcr_abl_tyrosine_kinase_constitutive_active_cml",
+      "cml_triphasic_disease_chronic_accelerated_blast",
+      "stromal_interactions_drug_resistance"
+    ],
+    "complications": [
+      { "diseaseId": "richter_transformation", "probability": 0.05, "severityBoost": 0.6, "clues": ["rapid_nodal_enlargement", "fever", "elevated_ldh", "lymphoma_biopsy_showing_dlbcl"] },
+      { "diseaseId": "autoimmune_hemolytic_anemia", "probability": 0.1, "severityBoost": 0.3, "clues": ["positive_direct_coombs", "anemia", "reticulocytosis", "elevated_bilirubin"] },
+      { "diseaseId": "cml_blast_crisis", "probability": 0.05, "severityBoost": 0.7, "clues": ["rising_wbc_on_tki", "increasing_blasts_in_peripheral_blood", "new_cytogenetic_abnormalities"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["persistent_lymphocytosis", "splenomegaly", "bcr_abl_positive_cml", "smudge_cells_cll"],
+    "exclusionClues": ["reactive_lymphocytosis_resolved", "no_clonal_marker", "normal_wbc"]
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "disease": {
+    "id": "vaccine_preventable_diseases",
+    "name": "Vaccine-Preventable Travel-Related Diseases",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 960],
+    "note": "Cluster of infections preventable through pre-travel immunization: Yellow Fever, Typhoid, Hepatitis A, Rabies, Meningococcal, Cholera, Japanese Encephalitis, Tetanus/Diphtheria.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["travel_medicine", "vaccine_preventable", "pre_travel_consultation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rabies_encephalitis_hydrophobia", "weight": 10 },
+        { "sign": "yellow_fever_hemorrhage_liver_failure", "weight": 10 },
+        { "sign": "meningococcemia_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Disease-specific based on pathogen"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "unvaccinated_for_travel", "weight": 5 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "travel_to_endemic_region", "weight": 5 },
+      { "symptomId": "animal_bite_or_scratch", "weight": 4, "note": "Rabies risk" },
+      { "symptomId": "jaundice", "weight": 3 },
+      { "symptomId": "diarrhea", "weight": 3 },
+      { "symptomId": "headache_stiff_neck", "weight": 3 },
+      { "symptomId": "mosquito_bite_exposure", "weight": 4 },
+      { "symptomId": "last_minute_travel_no_preparation", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "lymphadenopathy", "baseWeight": 2 },
+      { "signId": "petechiae_rash", "baseWeight": 3 },
+      { "signId": "hydrophobia_aerophobia", "baseWeight": 5, "note": "Rabies" },
+      { "signId": "dehydration", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "unvaccinated_state", "multiplier": 5.0 },
+      { "id": "travel_to_endemic_rural_area", "multiplier": 3.0 },
+      { "id": "animal_contact", "multiplier": 3.0 },
+      { "id": "outdoor_exposure_at_dusk_dawn", "multiplier": 2.0 },
+      { "id": "adventure_backpacker_traveler", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "yellow_fever",
+        "name": "Yellow Fever",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "triphasic_illness_fever_jaundice_hemorrhage", "weight": 5 },
+          { "feature": "africa_south_america_travel", "weight": 5 },
+          { "feature": "unvaccinated", "weight": 5 }
+        ],
+        "management": "Supportive care. No specific antiviral. Vaccine preventable with 17D live attenuated vaccine (mandatory for some countries)."
+      },
+      {
+        "id": "rabies",
+        "name": "Rabies",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "animal_bite_exposure", "weight": 5 },
+          { "feature": "hydrophobia", "weight": 5 },
+          { "feature": "progressive_encephalitis", "weight": 5 }
+        ],
+        "management": "Post-exposure prophylaxis: wound washing + rabies vaccine + rabies immunoglobulin (RIG). Once symptomatic: fatal. Prevention critical."
+      },
+      {
+        "id": "hepatitis_a",
+        "name": "Hepatitis A",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "jaundice_elevated_transaminases", "weight": 5 },
+          { "feature": "contaminated_food_water", "weight": 4 },
+          { "feature": "abrupt_onset_fever_malaise", "weight": 3 }
+        ],
+        "management": "Supportive care. Self-limiting. Vaccine preventable (HAV vaccine 2 doses 6 months apart). Immune globulin for unprotected exposure."
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Disease-specific serology/PCR", "priority": "high", "yield": 0.9, "indication": "confirm diagnosis based on syndrome" },
+        { "name": "Rabies virus testing (skin biopsy, saliva, CSF)", "priority": "high", "yield": 0.8, "indication": "suspected rabies" },
+        { "name": "Yellow fever IgM/PCR", "priority": "high", "yield": 0.8, "indication": "suspected YF" },
+        { "name": "HAV IgM", "priority": "high", "yield": 0.95, "indication": "suspected hepatitis A" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CDC Health Information for International Travel (Yellow Book)",
+      "pathways": [
+        {
+          "severity": "pre-travel prevention",
+          "criteria": "all travelers to endemic regions",
+          "treatment": "Review travel itinerary. Administer required/recommended vaccines: Yellow Fever (live), Typhoid (oral or injectable), Hepatitis A, Hepatitis B, Rabies (pre-exposure), Meningococcal, JE, Cholera, Tdap."
+        },
+        {
+          "severity": "post-exposure / suspected disease",
+          "criteria": "exposure or symptoms after travel",
+          "treatment": "Rabies PEP: wound care + HRIG + vaccine series. Hepatitis A: supportive + IG if <14 days post-exposure. Yellow fever: supportive care. Reporting to public health."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "pathogen_specific_transmission",
+      "viral_bacterial_invasion",
+      "organ_specific_tropism",
+      "immune_mediated_protection_from_vaccination",
+      "herd_immunity"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "rabies_encephalitis_death",
+        "probability": 0.99,
+        "severityBoost": 0.9,
+        "clues": ["hydrophobia", "progressive_neuro", "animal_bite"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "disease dependent",
+    "diagnosticClues": ["inadequate_vaccination", "travel_exposure", "syndrome_specific"],
+    "exclusionClues": ["fully_vaccinated", "no_exposure", "alternative_pathogen"]
+  }
+}

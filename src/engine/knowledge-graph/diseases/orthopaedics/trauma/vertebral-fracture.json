@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "vertebral-fracture",
+    "name": "Vertebral Fracture",
+    "system": "ORTHO",
+    "agePeak_months": [240, 600],
+    "note": "Fracture of vertebral body/posterior elements. Common at thoracolumbar junction. Neurologic deficit requires urgent decompression.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["spine_trauma", "vertebral_injury"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "spinal_cord_injury_neurologic_deficit", "weight": 10 },
+        { "sign": "spinal_shock", "weight": 10 },
+        { "sign": "unstable_fracture_burst_flexion_distraction", "weight": 9 },
+        { "sign": "cauda_equina_syndrome", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "retropulsion_into_canal", "weight": 8 },
+          { "sign": "loss_of_vertebral_height_>50_percent", "weight": 7 },
+          { "sign": "kyphosis_>30_degrees", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If neurologic deficit or unstable pattern -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "high_energy_trauma_mva_fall", "weight": 5 },
+      { "symptomId": "back_pain_midline_tenderness", "weight": 5 },
+      { "symptomId": "numbness_weakness_limbs", "weight": 5 },
+      { "symptomId": "loss_of_bladder_bowel_control", "weight": 4 },
+      { "symptomId": "osteoporosis_history_low_energy", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "midline_back_tenderness_and_step_off", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "neurologic_exam_motor_sensory", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "spinal_deformity_kyphosis", "baseWeight": 4 },
+      { "signId": "bruising_swelling_over_spine", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "osteoporosis", "multiplier": 3.0 },
+      { "id": "high_energy_trauma", "multiplier": 3.0 },
+      { "id": "chronic_steroid_use", "multiplier": 2.5 },
+      { "id": "ankylosing_spondylitis", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "compression_fracture",
+        "name": "Compression (Wedge) Fracture",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "anterior_wedge_collapse", "weight": 5 },
+          { "feature": "posterior_wall_intact", "weight": 4 },
+          { "feature": "neurologically_intact", "weight": 3 }
+        ],
+        "management": "Brace (TLSO) for 6-12 weeks. Analgesia. Physical therapy. Consider kyphoplasty/vertebroplasty for painful osteoporotic fractures."
+      },
+      {
+        "id": "burst_fracture",
+        "name": "Burst Fracture",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "both_anterior_and_posterior_wall_involved", "weight": 5 },
+          { "feature": "retropulsion_into_spinal_canal", "weight": 5 },
+          { "feature": "±neurologic_deficit", "weight": 4 }
+        ],
+        "management": "Neurologically intact with <50% canal compromise: TLSO brace. Neurologic deficit or >50% canal compromise: posterior stabilization with pedicle screws ± decompression."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "disc_herniation",
+        "discriminators": ["normal_xray", "mri_shows_disc_herniation", "focal_nerve_root_symptoms"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Spine X-ray AP and lateral", "priority": "immediate", "yield": 0.8, "indication": "screening" },
+        { "name": "CT spine", "priority": "high", "yield": 0.95, "indication": "bony detail, canal compromise" },
+        { "name": "MRI spine", "priority": "high", "yield": 0.9, "indication": "neurologic deficit, ligamentous injury" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AO Spine Fracture Classification Guidelines",
+      "pathways": [
+        {
+          "severity": "stable_no_deficit",
+          "criteria": "Compression or non-displaced, no neurologic deficit, stable on imaging",
+          "treatment": "Brace (TLSO/cervical collar depending on level). Activity restriction. Serial X-rays. Pain management."
+        },
+        {
+          "severity": "unstable_or_deficit",
+          "criteria": "Burst with retropulsion, dislocation, flexion-distraction, neurologic deficit",
+          "treatment": "Spinal precautions (log roll). Methylprednisolone protocol per surgeon. Urgent neurosurgery/ortho spine consultation. Operative stabilization with pedicle screw fixation ± decompression."
+        }
+      ]
+    },
+
+    "pathophysiology": ["axial_loading_and_flexion", "burst_from_high_energy", "osteoporotic_insufficiency"]
+  }
+}

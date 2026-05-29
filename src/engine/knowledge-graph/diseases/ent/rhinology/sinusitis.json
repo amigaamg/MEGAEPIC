@@ -1,0 +1,205 @@
+{
+  "disease": {
+    "id": "sinusitis",
+    "name": "Acute Rhinosinusitis",
+    "system": "ent",
+    "agePeak_months": [120, 600],
+    "note": "Inflammation of the nasal cavity and paranasal sinuses, usually viral in origin. Bacterial superinfection occurs in a minority.",
+    "prevalenceWeight": 0.75,
+    "syndromeTags": ["facial_pain", "nasal_congestion", "rhinorrhea", "headache"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "periorbital_edema_erythema", "weight": 9 },
+        { "sign": "ophthalmoplegia", "weight": 10 },
+        { "sign": "decreased_visual_acuity", "weight": 10 },
+        { "sign": "meningism", "weight": 10 },
+        { "sign": "frontal_boss_swelling", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_fever_over_39", "weight": 6 },
+          { "sign": "severe_facial_pain", "weight": 5 },
+          { "sign": "double_sickening", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If orbital/intracranial involvement -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "nasal_congestion", "weight": 4 },
+      { "symptomId": "purulent_rhinorrhea", "weight": 4, "modifiers": [
+          { "condition": "bilateral", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "facial_pain_pressure", "weight": 4, "note": "Worse on bending forward" },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "hyposmia_anosmia", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "cough", "weight": 2, "note": "Worse at night due to postnasal drip" },
+      { "symptomId": "dental_pain", "weight": 2, "note": "Suggests maxillary sinusitis" },
+      { "symptomId": "double_sickening", "weight": 4, "note": "Worsening after initial improvement suggests bacterial infection" }
+    ],
+
+    "examFeatures": [
+      { "signId": "purulent_nasal_discharge", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "facial_tenderness_sinuses", "baseWeight": 4 },
+      { "signId": "nasal_mucosa_erythema_edema", "baseWeight": 3 },
+      { "signId": "postnasal_purulent_drainage", "baseWeight": 3 },
+      { "signId": "transillumination_dullness", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "recent_uri", "multiplier": 3.0 },
+      { "id": "allergic_rhinitis", "multiplier": 2.0 },
+      { "id": "immunodeficiency", "multiplier": 2.5 },
+      { "id": "cystic_fibrosis", "multiplier": 3.0 },
+      { "id": "dental_infection", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 1.8 },
+      { "id": "nasal_obstruction_polyps", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_viral_rhinosinusitis",
+        "name": "Acute Viral Rhinosinusitis (Common Cold)",
+        "prevalenceModifier": 0.9,
+        "keyFeatures": [
+          { "feature": "symptoms_under_10_days", "weight": 4 },
+          { "feature": "clear_discharge_initially", "weight": 3 },
+          { "feature": "sore_throat_cough", "weight": 2 }
+        ],
+        "management": "Symptomatic: saline irrigation, decongestants (max 7 days), analgesics, steam inhalation. No antibiotics."
+      },
+      {
+        "id": "acute_bacterial_rhinosinusitis",
+        "name": "Acute Bacterial Rhinosinusitis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "symptoms_over_10_days", "weight": 4 },
+          { "feature": "double_sickening", "weight": 5 },
+          { "feature": "purulent_discharge", "weight": 4 },
+          { "feature": "severe_pain_fever", "weight": 4 }
+        ],
+        "management": "First-line: Amoxicillin-Clavulanate 875/125 mg BID for 5-7 days. Alternatives: Doxycycline, respiratory fluoroquinolone if penicillin allergy. Intranasal corticosteroids."
+      },
+      {
+        "id": "chronic_rhinosinusitis",
+        "name": "Chronic Rhinosinusitis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "symptoms_over_12_weeks", "weight": 5 },
+          { "feature": "facial_fullness", "weight": 3 },
+          { "feature": "hyposmia", "weight": 3 },
+          { "feature": "mucopurulent_discharge", "weight": 3 }
+        ],
+        "management": "Intranasal corticosteroids long-term. Saline irrigations. Treat exacerbations with antibiotics. Consider CT sinuses. ESS if refractory to medical therapy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "migraine",
+        "discriminators": ["unilateral_throbbing", "nausea_vomiting", "aura", "photophobia_phonophobia"]
+      },
+      {
+        "diseaseId": "tension_headache",
+        "discriminators": ["bilateral_band_like", "no_nasal_symptoms", "no_facial_tenderness"]
+      },
+      {
+        "diseaseId": "dental_abscess",
+        "discriminators": ["tooth_pain", "percussion_tenderness", "gingival_swelling"]
+      },
+      {
+        "diseaseId": "giant_cell_arteritis",
+        "discriminators": ["age_over_50", "jaw_claudication", "elevated_ESR", "temporal_artery_tenderness"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Anterior Rhinoscopy", "priority": "immediate", "yield": 0.6, "indication": "all cases" },
+        { "name": "Nasal Endoscopy", "priority": "medium", "yield": 0.8, "indication": "refractory cases, view middle meatus purulence" }
+      ],
+      "laboratory": [
+        { "name": "CRP", "priority": "medium", "yield": 0.6, "indication": "differentiate viral vs bacterial" }
+      ],
+      "imaging": [
+        { "name": "CT Sinuses (Non-Contrast)", "priority": "medium", "yield": 0.9, "indication": "chronic sinusitis, pre-surgical planning, suspected complications" },
+        { "name": "MRI Sinuses", "priority": "low", "yield": 0.85, "indication": "suspected fungal sinusitis, neoplasm, orbital/intracranial extension" },
+        { "name": "Sinus X-ray", "priority": "low", "yield": 0.4, "indication": "limited role, largely replaced by CT" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Guidelines for Acute Bacterial Rhinosinusitis",
+      "pathways": [
+        {
+          "severity": "viral",
+          "criteria": "symptoms <10 days, no double sickening, clear discharge",
+          "treatment": "Symptomatic treatment. Saline nasal irrigation. Decongestants (max 7 days). Analgesics. No antibiotics indicated."
+        },
+        {
+          "severity": "mild-moderate bacterial",
+          "criteria": "symptoms >10 days OR double sickening, purulent discharge, no danger signs",
+          "treatment": "Amoxicillin-Clavulanate 875/125 mg BID for 5-7 days. Add intranasal corticosteroids. If PCN allergy: Doxycycline 100 mg BID or respiratory fluoroquinolone."
+        },
+        {
+          "severity": "severe bacterial",
+          "criteria": "high fever >39C, severe pain, orbital signs, suspected intracranial extension",
+          "treatment": "IV antibiotics (Ceftriaxone + Metronidazole). CT sinuses urgent. ENT consultation. Consider surgical drainage if orbital abscess or intracranial spread."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "sinus_ostial_obstruction",
+      "mucociliary_dysfunction",
+      "mucus_stasis",
+      "bacterial_superinfection",
+      "mucosal_inflammation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "periorbital_cellulitis",
+        "probability": 0.03,
+        "lagDays": [3, 10],
+        "severityBoost": 0.5,
+        "clues": ["periorbital_swelling", "erythema", "eye_pain"]
+      },
+      {
+        "diseaseId": "orbital_cellulitis",
+        "probability": 0.01,
+        "lagDays": [4, 14],
+        "severityBoost": 0.7,
+        "clues": ["proptosis", "ophthalmoplegia", "vision_loss", "chemosis"]
+      },
+      {
+        "diseaseId": "cavernous_sinus_thrombosis",
+        "probability": 0.003,
+        "lagDays": [5, 14],
+        "severityBoost": 0.8,
+        "clues": ["bilateral_symptoms", "high_fever", "HEADACHE", "CN_III_IV_VI_palsies"]
+      },
+      {
+        "diseaseId": "meningitis",
+        "probability": 0.005,
+        "lagDays": [5, 14],
+        "severityBoost": 0.7,
+        "clues": ["neck_stiffness", "photophobia", "altered_consciousness"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["facial_pain", "purulent_discharge", "nasal_congestion", "double_sickening", "symptom_duration"],
+    "exclusionClues": ["clear_discharge", "no_facial_pain", "symptoms_resolving", "no_fever"]
+  }
+}

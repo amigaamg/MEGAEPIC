@@ -1,0 +1,170 @@
+{
+  "disease": {
+    "id": "pertussis",
+    "name": "Pertussis (Whooping Cough)",
+    "system": "PAED",
+    "agePeak_months": [0, 12],
+    "note": "Highly contagious respiratory infection caused by Bordetella pertussis. Paroxysmal cough with inspiratory whoop. Most severe in young infants with apnea and cyanosis.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["vaccine_preventable", "respiratory_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "apnea_cyanosis", "weight": 10 },
+        { "sign": "bradycardia_during_paroxysms", "weight": 10 },
+        { "sign": "severe_hypoxia", "weight": 10 },
+        { "sign": "seizures_hypoxic", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "paroxysmal_cough_with_cyanosis", "weight": 9 },
+          { "sign": "age_<3_months", "weight": 8 },
+          { "sign": "leukocytosis_>30_000", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If apnea, cyanosis, or severe hypoxia -> SEVERE; else -> NON-SEVERE (older children with catarrhal/paroxysmal phase)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "paroxysmal_cough", "weight": 5 },
+      { "symptomId": "inspiratory_whoop", "weight": 5 },
+      { "symptomId": "post_tussive_vomiting", "weight": 4 },
+      { "symptomId": "apnea_in_infants", "weight": 5 },
+      { "symptomId": "cyanosis_during_cough", "weight": 5 },
+      { "symptomId": "catarrah_stage_runny_nose_mild_cough", "weight": 3 },
+      { "symptomId": "not_vaccinated_incomplete_vaccination", "weight": 4 },
+      { "symptomId": "exposure_to_prolonged_cough_contact", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "paroxysmal_cough", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "inspiratory_whoop", "baseWeight": 5 },
+      { "signId": "cyanosis_during_episodes", "baseWeight": 5 },
+      { "signId": "apnea", "baseWeight": 5 },
+      { "signId": "subconjunctival_hemorrhage", "baseWeight": 3 },
+      { "signId": "fever_absent_or_mild", "baseWeight": 2 },
+      { "signId": "fatigue_exhaustion_paroxysms", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_<6_months", "multiplier": 4.0 },
+      { "id": "unvaccinated", "multiplier": 5.0 },
+      { "id": "waning_immunity", "multiplier": 2.0 },
+      { "id": "exposure_to_household_contact_with_cough", "multiplier": 3.0 },
+      { "id": "daycare_attendance", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "infant_pertussis_severe",
+        "name": "Severe Pertussis in Infants (<6 months)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "age_<3_months", "weight": 5 },
+          { "feature": "apnea_cyanosis", "weight": 5 },
+          { "feature": "no_whoop_but_paroxysms_with_cyanosis", "weight": 4 },
+          { "feature": "poor_feeding_lethargy", "weight": 4 }
+        ],
+        "management": "Hospitalize all infants <6 months with suspected pertussis. Azithromycin 10 mg/kg/day x 5 days. Oxygen. Apnea monitoring. Suctioning. ICU if severe (apnea, seizures, pulmonary hypertension)."
+      },
+      {
+        "id": "older_child_pertussis",
+        "name": "Pertussis in Older Children (>6 months)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "paroxysmal_cough_>2_weeks", "weight": 5 },
+          { "feature": "inspiratory_whoop", "weight": 5 },
+          { "feature": "post_tussive_vomiting", "weight": 4 },
+          { "feature": "no_apnea", "weight": 3 }
+        ],
+        "management": "Azithromycin for 5 days (or clarithromycin for 7 days). Cough suppressants ineffective. Avoid triggers. Hydration. Infection control (droplet precautions until 5 days of antibiotics completed)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bronchiolitis_rsv",
+        "discriminators": ["wheezing", "rsv_positive", "young_infant", "no_whoop"]
+      },
+      {
+        "diseaseId": "croup",
+        "discriminators": ["barking_cough", "stridor_inspiratory", "worse_at_night"]
+      },
+      {
+        "diseaseId": "foreign_body_aspiration",
+        "discriminators": ["sudden_onset_cough", "choking_history", "unilateral_air_trapping_on_xray"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC with differential", "priority": "high", "yield": 0.5, "indication": "lymphocytosis in catarrhal/paroxysmal phase" },
+        { "name": "Nasopharyngeal swab PCR (Bordetella pertussis)", "priority": "immediate", "yield": 0.95, "indication": "definitive diagnosis" },
+        { "name": "Culture on Bordet-Gengou medium", "priority": "medium", "yield": 0.6, "indication": "confirmatory, but takes 5-7 days" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.4, "indication": "rule out pneumonia, atelectasis, 'shaggy heart border' sign" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / CDC / NICE Guidelines for Pertussis",
+      "pathways": [
+        {
+          "severity": "infant_severe",
+          "criteria": "Age <6 months, apnea, cyanosis, or severe paroxysms",
+          "treatment": "Hospitalize/ICU. Azithromycin 10 mg/kg/day x 5 days. Oxygen. Nasopharyngeal suctioning. Apnea monitoring. IV fluids if poor feeding. Consider exchange transfusion if extreme leukocytosis >100K with pulmonary hypertension."
+        },
+        {
+          "severity": "older_mild_moderate",
+          "criteria": "Age >6 months, no apnea, no cyanosis, able to feed",
+          "treatment": "Azithromycin x 5 days. Isolation until 5 days of antibiotics completed. Symptom relief: avoid triggers, humidified air. Hydration. Vaccinate household contacts."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bordetella_pertussis_infection",
+      "tracheal_cytotoxin_damage",
+      "pertussis_toxin_effects",
+      "lymphocytosis",
+      "paroxysmal_cough_due_to_irritation",
+      "hypoxia_during_paroxysms"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pneumonia",
+        "probability": 0.15,
+        "lagDays": [3, 14],
+        "severityBoost": 0.4,
+        "clues": ["fever", "persistent_tachypnea", "new_infiltrate_on_xray"]
+      },
+      {
+        "diseaseId": "pulmonary_hypertension",
+        "probability": 0.02,
+        "lagDays": [3, 14],
+        "severityBoost": 0.7,
+        "clues": ["extreme_leukocytosis_>100k", "right_heart_failure"]
+      },
+      {
+        "diseaseId": "hypoxic_encephalopathy",
+        "probability": 0.01,
+        "lagDays": [0, 14],
+        "severityBoost": 0.7,
+        "clues": ["severe_apnea", "seizures", "prolonged_cyanosis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["paroxysmal_cough_with_whoop", "post_tussive_vomiting", "apnea_in_infant", "lymphocytosis", "unvaccinated"],
+    "exclusionClues": ["cough_<2_weeks_without_paroxysms", "negative_pcr", "fully_vaccinated"]
+  }
+}

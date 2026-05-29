@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "peripheral_neuropathy",
+    "name": "Peripheral Neuropathy",
+    "system": "NEURO",
+    "agePeak_months": [480, 960],
+    "note": "Damage to peripheral nerves. Length-dependent (stocking-glove) pattern. Many causes: diabetes, vitamin deficiency, toxins, inflammatory.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["peripheral_nerve_disorder", "neuropathic_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapidly_ascending_weakness", "weight": 9 },
+        { "sign": "respiratory_muscle_weakness", "weight": 10 },
+        { "sign": "autonomic_dysfunction_severe", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If ascending/rapid/respiratory -> URGENT (GBS); else -> CHRONIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "numbness_tingling_distal", "weight": 5 },
+      { "symptomId": "burning_pain_in_feet", "weight": 4 },
+      { "symptomId": "distal_weakness", "weight": 4 },
+      { "symptomId": "unsteady_gait", "weight": 3 },
+      { "symptomId": "autonomic_symptoms", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "distal_sensory_loss_stocking_glove", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "reduced_ankle_reflexes", "baseWeight": 4 },
+      { "signId": "distal_muscle_weakness", "baseWeight": 4 },
+      { "signId": "vibration_sense_loss", "baseWeight": 3 },
+      { "signId": "intrinsic_foot_hand_muscle_wasting", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 3.0 },
+      { "id": "alcohol_excess", "multiplier": 2.5 },
+      { "id": "vitamin_b12_deficiency", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 1.5 },
+      { "id": "hypothyroidism", "multiplier": 1.5 },
+      { "id": "chemotherapy_taxanes_platinum", "multiplier": 2.0 },
+      { "id": "hiv_infection", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "diabetic_neuropathy",
+        "name": "Diabetic Peripheral Neuropathy",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "known_diabetes", "weight": 5 },
+          { "feature": "distal_symmetric", "weight": 5 }
+        ],
+        "management": "Glycemic control. Neuropathic pain: gabapentin, pregabalin, amitriptyline, duloxetine. Foot care education. Monitor for ulcers."
+      },
+      {
+        "id": "idiopathic_neuropathy",
+        "name": "Idiopathic/Cryptogenic Sensory Neuropathy",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "sensory_predominant", "weight": 5 },
+          { "feature": "no_cause_identified", "weight": 4 }
+        ],
+        "management": "Symptomatic pain management. Follow-up for evolving cause. Monitor progression."
+      },
+      {
+        "id": "inflammatory_neuropathy",
+        "name": "Inflammatory (CIDP, vasculitic)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "proximal_and_distal_weakness", "weight": 5 },
+          { "feature": "csf_protein_elevated", "weight": 4 },
+          { "feature": "demyelinating_ncs", "weight": 5 }
+        ],
+        "management": "Immunotherapy: IVIG, steroids, or plasma exchange. Underlying cause treatment (vasculitis)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "myelopathy_cervical", "discriminators": ["upper_motor_neuron_signs", "sensory_level", "imaging_spine_lesion"] },
+      { "diseaseId": "polymyalgia_rheumatica", "discriminators": ["proximal_pain_stiffness", "elevated_crp_esr", "steroid_response_rapid"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Monofilament test", "priority": "high", "yield": 0.7, "indication": "screening for loss of protective sensation" }
+      ],
+      "laboratory": [
+        { "name": "HbA1c, fasting glucose", "priority": "high", "yield": 0.5, "indication": "diabetes screening" },
+        { "name": "Vitamin B12, folate, TSH", "priority": "high", "yield": 0.3, "indication": "treatable causes" },
+        { "name": "Serum protein electrophoresis, immunofixation", "priority": "medium", "yield": 0.2, "indication": "MGUS, amyloidosis" }
+      ],
+      "advanced": [
+        { "name": "Nerve conduction studies + EMG", "indication": "confirm neuropathy, axonal vs demyelinating, pattern", "priority": "high" },
+        { "name": "Nerve biopsy", "indication": "vasculitis, amyloid, specific diagnosis", "priority": "low" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Peripheral Neuropathy",
+      "pathways": [
+        {
+          "severity": "pain management",
+          "criteria": "neuropathic pain (burning, shooting, allodynia)",
+          "treatment": "First-line: gabapentin 300-3600 mg or pregabalin 150-600 mg. Second-line: amitriptyline 10-75 mg or duloxetine 60 mg. Third-line: tramadol. Topical: lidocaine patches or capsaicin."
+        },
+        {
+          "severity": "treatable cause",
+          "criteria": "diabetes, B12 deficiency, hypothyroidism, etc.",
+          "treatment": "Optimize glycemic control. B12 replacement. Thyroid hormone. Remove toxic agent (alcohol, chemotherapy). Foot care and podiatry."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "axonal_degeneration",
+      "demyelination",
+      "metabolic_toxic_damage",
+      "microvascular_ischemia",
+      "inflammatory_attack"
+    ],
+    "complications": [
+      { "diseaseId": "diabetic_foot_ulcer", "probability": 0.2, "severityBoost": 0.2, "clues": ["loss_of_sensation", "callus_pressure_point", "deformity"] },
+      { "diseaseId": "falls_from_sensory_ataxia", "probability": 0.2, "severityBoost": 0.2, "clues": ["unsteady_gait", "impaired_vibration"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["stocking_glove_sensory_loss", "distal_weakness", "reduced_reflexes", "abnormal_ncs"],
+    "exclusionClues": ["upper_motor_neuron_signs", "normal_ncs"]
+  }
+}

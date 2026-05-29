@@ -1,0 +1,184 @@
+{
+  "disease": {
+    "id": "pneumothorax",
+    "name": "Pneumothorax",
+    "system": "surgical",
+    "agePeak_months": [120, 480],
+    "note": "Air in the pleural cavity. Spontaneous (tall thin males, COPD), traumatic, or tension. Tension pneumothorax is immediately life-threatening.",
+    "prevalenceWeight": 0.45,
+    "syndromeTags": ["chest_pain", "dyspnea", "chest_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "tension_pneumothorax", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "severe_respiratory_distress", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tracheal_deviation_away", "weight": 10 },
+          { "sign": "absent_breath_sounds", "weight": 8 },
+          { "sign": "hyperresonant_percussion", "weight": 7 },
+          { "sign": "distended_neck_veins", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Tension pneumothorax -> SEVERE; small/closed -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_pleuritic_chest_pain", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 5 },
+      { "symptomId": "chest_trauma", "weight": 4 },
+      { "symptomId": "cough", "weight": 2 },
+      { "symptomId": "respiratory_distress_worsening", "weight": 4 },
+      { "symptomId": "mechanical_ventilation_positive_pressure", "weight": 3 },
+      { "symptomId": "previous_pneumothorax", "weight": 3 },
+      { "symptomId": "tall_thin_habitus", "weight": 3, "note": "Spontaneous pneumothorax" },
+      { "symptomId": "copd_or_lung_disease", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "absent_breath_sounds_on_affected_side", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hyperresonant_percussion", "baseWeight": 5 },
+      { "signId": "decreased_chest_expansion", "baseWeight": 4 },
+      { "signId": "tracheal_deviation_away", "baseWeight": 5, "note": "In tension pneumothorax" },
+      { "signId": "distended_neck_veins", "baseWeight": 3 },
+      { "signId": "tachycardia_hypotension", "baseWeight": 4 },
+      { "signId": "subcutaneous_emphysema", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "tall_thin_young_male", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "copd_emphysema", "multiplier": 2.5 },
+      { "id": "mechanical_ventilation", "multiplier": 3.0 },
+      { "id": "previous_pneumothorax", "multiplier": 3.0 },
+      { "id": "marfan_syndrome", "multiplier": 3.0 },
+      { "id": "catamenial_endometriosis", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "primary_spontaneous_pneumothorax",
+        "name": "Primary Spontaneous Pneumothorax",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "young_tall_thin_male", "weight": 5 },
+          { "feature": "sudden_onset_rest", "weight": 5 },
+          { "feature": "no_lung_disease", "weight": 4 }
+        ],
+        "management": "Small (<2cm apex): observation. Large: needle aspiration or chest drain (16-20Fr). Recurrence prevention: pleurodesis or VATS bullectomy + pleurectomy."
+      },
+      {
+        "id": "traumatic_pneumothorax",
+        "name": "Traumatic Pneumothorax",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "chest_trauma_history", "weight": 5 },
+          { "feature": "rib_fractures", "weight": 4 },
+          { "feature": "may_be_open_or_closed", "weight": 4 }
+        ],
+        "management": "Chest drain (28-32Fr). Assess for hemothorax. Open pneumothorax: occlusive dressing + chest drain. Positive pressure ventilation can convert to tension."
+      },
+      {
+        "id": "tension_pneumothorax",
+        "name": "Tension Pneumothorax",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "tracheal_deviation_away", "weight": 5 },
+          { "feature": "severe_respiratory_distress", "weight": 5 },
+          { "feature": "hypotension_distended_veins", "weight": 5 },
+          { "feature": "cardiac_arrest_impending", "weight": 5 }
+        ],
+        "management": "Immediate needle decompression (2nd ICS MCL or 5th ICS AAL). Followed by chest drain. Do NOT wait for CXR if clinical suspicion."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hemothorax",
+        "discriminators": ["dull_percussion", "no_hyperresonance", "fluid_on_cxr", "blood_on_aspiration"]
+      },
+      {
+        "diseaseId": "myocardial_infarction",
+        "discriminators": ["ecg_changes", "cardiac_enzymes", "no_respiratory_signs", "normal_cxr"]
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["dvt_history", "ecg_s1q3t3", "d_dimer_elevated", "ctpa_confirms"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Chest X-Ray (erect)", "priority": "immediate", "yield": 0.9, "indication": "visible pleural line, deep sulcus sign" },
+        { "name": "E-FAST", "priority": "immediate", "yield": 0.85, "indication": "absence of lung sliding" }
+      ],
+      "laboratory": [
+        { "name": "Blood gas", "priority": "medium", "yield": 0.4, "indication": "hypoxia assessment" }
+      ],
+      "imaging": [
+        { "name": "Chest X-Ray", "priority": "immediate", "yield": 0.9, "indication": "first-line" },
+        { "name": "CT Chest", "priority": "medium", "yield": 0.98, "indication": "if complex, or assess underlying lung disease" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BTS Guidelines for Pneumothorax",
+      "pathways": [
+        {
+          "severity": "small spontaneous",
+          "criteria": "apical <2cm, no dyspnea, first episode",
+          "treatment": "Observation. Repeat CXR in 24h. Discharge if stable. Advise no flying, no diving until resolved."
+        },
+        {
+          "severity": "large or symptomatic",
+          "criteria": "apical >2cm, dyspnea, large size",
+          "treatment": "Needle aspiration (16-18G cannula, 2nd ICS MCL). If fails: chest drain (16-20Fr). Consider pleurodesis after second episode."
+        },
+        {
+          "severity": "tension",
+          "criteria": "tracheal deviation, hypotension, severe distress",
+          "treatment": "Immediate needle decompression (2nd ICS MCL, 5th ICS AAL). Then chest drain. No delay for imaging."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "alveolar_rupture",
+      "visceral_pleural_tear",
+      "air_leak_into_pleural_space",
+      "lung_collapse",
+      "mediastinal_shift",
+      "venous_return_compromise_tension"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tension_pneumothorax",
+        "probability": 0.1,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["worsening_respiratory_distress", "tracheal_deviation", "hypotension"]
+      },
+      {
+        "diseaseId": "recurrence",
+        "probability": 0.3,
+        "lagDays": [30, 360],
+        "severityBoost": 0.1,
+        "clues": ["recurrent_chest_pain", "recurrent_pneumothorax_on_cxr"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_chest_pain_dyspnea", "absent_breath_sounds", "hyperresonance", "tracheal_deviation_in_tension"],
+    "exclusionClues": ["clear_cxr", "normal_breath_sounds", "no_hyperresonance"]
+  }
+}

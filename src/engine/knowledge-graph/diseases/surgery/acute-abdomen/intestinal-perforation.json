@@ -1,0 +1,178 @@
+{
+  "disease": {
+    "id": "intestinal_perforation",
+    "name": "Intestinal Perforation",
+    "system": "surgical",
+    "agePeak_months": [240, 840],
+    "note": "Full-thickness breach of bowel wall leading to peritonitis. Requires emergency surgical intervention.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["acute_abdomen", "peritonitis", "surgical_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "anuria", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "free_intraperitoneal_air", "weight": 9 },
+          { "sign": "rigidity", "weight": 8 },
+          { "sign": "lactate_elevated", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Generalized peritonitis/sepsis -> SEVERE; contained perforation -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_severe_abdominal_pain", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "abdominal_distension", "weight": 3 },
+      { "symptomId": "typhoid_fever_history", "weight": 3, "note": "Cause in endemic areas" },
+      { "symptomId": "tuberculosis_history", "weight": 3, "note": "TB enteritis leading to perforation" },
+      { "symptomId": "trauma_history", "weight": 4, "note": "Blunt or penetrating abdominal trauma" },
+      { "symptomId": "foreign_body_ingestion", "weight": 3, "note": "Rare cause" }
+    ],
+
+    "examFeatures": [
+      { "signId": "generalized_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "rigidity", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "rebound_tenderness", "baseWeight": 4 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 4 },
+      { "signId": "liver_dullness_obliteration", "baseWeight": 3, "note": "Gas in peritoneal cavity" },
+      { "signId": "tachycardia_hypotension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "peptic_ulcer_disease", "multiplier": 2.0 },
+      { "id": "typhoid_fever", "multiplier": 3.0 },
+      { "id": "tuberculosis", "multiplier": 2.5 },
+      { "id": "crohn_disease", "multiplier": 2.0 },
+      { "id": "nsaid_use", "multiplier": 1.8 },
+      { "id": "steroid_use", "multiplier": 2.0 },
+      { "id": "malignancy", "multiplier": 1.5 },
+      { "id": "abdominal_trauma", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "duodenal_perforation",
+        "name": "Duodenal Perforation",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "sudden_epigastric_pain", "weight": 5 },
+          { "feature": "board_like_rigidity", "weight": 5 },
+          { "feature": "gas_under_diaphragm", "weight": 5 }
+        ],
+        "management": "Emergency laparotomy. Graham patch (omental patch) repair. IV PPI. IV antibiotics."
+      },
+      {
+        "id": "jejunal_ileal_perforation",
+        "name": "Jejunal/Ileal Perforation",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "diffuse_abdominal_pain", "weight": 5 },
+          { "feature": "peritonitis", "weight": 5 },
+          { "feature": "sepsis", "weight": 4 },
+          { "feature": "typhoid_or_tb_history", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy. Primary closure or resection with anastomosis. Peritoneal lavage. IV antibiotics. Treat underlying cause."
+      },
+      {
+        "id": "colonic_perforation",
+        "name": "Colonic Perforation",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "severe_abdominal_pain", "weight": 5 },
+          { "feature": "peritonitis", "weight": 5 },
+          { "feature": "feculent_ascites", "weight": 5 },
+          { "feature": "septic_shock", "weight": 5 }
+        ],
+        "management": "Emergency laparotomy. Hartmann procedure (resection with end colostomy). Peritoneal lavage. Broad-spectrum IV antibiotics. ICU admission."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_pancreatitis",
+        "discriminators": ["elevated_amylase", "pain_radiating_to_back", "no_free_air"]
+      },
+      {
+        "diseaseId": "mesenteric_ischemia",
+        "discriminators": ["atrial_fibrillation", "pain_out_of_proportion", "lactate_elevated"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Erect CXR", "priority": "immediate", "yield": 0.8, "indication": "free air under diaphragm" },
+        { "name": "Left lateral decubitus XR", "priority": "immediate", "yield": 0.75, "indication": "free air if CXR equivocal" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.75, "indication": "elevated in peritonitis" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "tissue hypoperfusion" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.4, "indication": "guide antibiotic therapy" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV contrast", "priority": "immediate", "yield": 0.95, "indication": "detect free air, fluid, and site of perforation" },
+        { "name": "Erect CXR", "priority": "immediate", "yield": 0.8, "indication": "first-line for pneumoperitoneum" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Intestinal Perforation",
+      "pathways": [
+        {
+          "severity": "contained perforation",
+          "criteria": "localized tenderness, no generalized peritonitis, no sepsis",
+          "treatment": "NBM, NG tube, IV broad-spectrum antibiotics. Close monitoring. Surgical intervention if deterioration or if no improvement in 24h."
+        },
+        {
+          "severity": "free perforation",
+          "criteria": "generalized peritonitis, free air, sepsis, shock",
+          "treatment": "Emergency laparotomy. Resuscitation with IV fluids. Source control (resection/repair). Peritoneal lavage. IV broad-spectrum antibiotics. ICU admission."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "full_thickness_bowel_wall_defect",
+      "enteric_content_spillage",
+      "chemical_peritonitis",
+      "bacterial_contamination",
+      "systemic_inflammatory_response",
+      "sepsis",
+      "multi_organ_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "probability": 0.15,
+        "lagDays": [5, 14],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "ileus", "abdominal_mass"]
+      },
+      {
+        "diseaseId": "wound_infection",
+        "probability": 0.25,
+        "lagDays": [3, 7],
+        "severityBoost": 0.1,
+        "clues": ["wound_erythema", "purulent_discharge", "wound_dehiscence"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_severe_pain", "peritonitis", "free_air", "rigidity"],
+    "exclusionClues": ["mild_localized_pain", "normal_bowel_sounds", "no_free_air"]
+  }
+}

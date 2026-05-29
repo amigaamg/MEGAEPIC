@@ -1,0 +1,186 @@
+{
+  "disease": {
+    "id": "encephalitis",
+    "name": "Encephalitis (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [12, 60],
+    "note": "Inflammation of brain parenchyma causing neurologic dysfunction. Viral etiology most common but also autoimmune (ADEM, anti-NMDA).",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["central_nervous_system_infection", "brain_inflammation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "altered_consciousness_gcs_less_than_9", "weight": 10 },
+        { "sign": "status_epilepticus", "weight": 10 },
+        { "sign": "raised_icp", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "focal_neurologic_signs", "weight": 7 },
+          { "sign": "autonomic_instability", "weight": 7 },
+          { "sign": "prolonged_seizures", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If GCS <9, status epilepticus, or respiratory failure -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "altered_mental_status", "weight": 5 },
+      { "symptomId": "headache", "weight": 4 },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "behavioral_changes", "weight": 4 },
+      { "symptomId": "hallucinations", "weight": 3 },
+      { "symptomId": "speech_difficulty", "weight": 3 },
+      { "symptomId": "viral_prodrome", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "altered_mental_status", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "neck_stiffness", "baseWeight": 4 },
+      { "signId": "focal_neurologic_signs", "baseWeight": 4 },
+      { "signId": "seizures", "baseWeight": 4 },
+      { "signId": "ataxia", "baseWeight": 3 },
+      { "signId": "movement_disorder", "baseWeight": 3, "note": "Anti-NMDA encephalitis" },
+      { "signId": "autonomic_dysfunction", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_less_than_5_years", "multiplier": 2.5 },
+      { "id": "immunocompromised_state", "multiplier": 3.0 },
+      { "id": "mosquito_vector_exposure", "multiplier": 2.0, "note": "Arboviruses" },
+      { "id": "herpes_simplex_exposure", "multiplier": 1.5 },
+      { "id": "recent_vaccination", "multiplier": 0.5, "note": "Protective for some" },
+      { "id": "travel_to_endemic_area", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "viral_encephalitis",
+        "name": "Viral Encephalitis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "fever_and_altered_consciousness", "weight": 5 },
+          { "feature": "seizures_focal", "weight": 4 },
+          { "feature": "csf_pleocytosis", "weight": 5 }
+        ],
+        "management": "IV Acyclovir (60 mg/kg/day) for HSV. Supportive care. Antiepileptics. ICP monitoring if needed. Specific treatment per virus (e.g., ganciclovir for CMV)."
+      },
+      {
+        "id": "autoimmune_encephalitis",
+        "name": "Autoimmune Encephalitis (Anti-NMDA, ADEM)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "behavioral_psychiatric_symptoms", "weight": 5 },
+          { "feature": "movement_disorder", "weight": 4 },
+          { "feature": "seizures", "weight": 4 }
+        ],
+        "management": "IV methylprednisolone 30 mg/kg/day for 5 days. IVIG 2 g/kg. Rituximab if refractory. Plasma exchange for severe cases. Tumor search (ovarian teratoma in anti-NMDA)."
+      },
+      {
+        "id": "post_infectious_encephalitis",
+        "name": "Post-Infectious Encephalitis (ADEM)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "onset_1_to_4_weeks_post_infection", "weight": 5 },
+          { "feature": "multifocal_neurologic_signs", "weight": 5 },
+          { "feature": "mri_demyelinating_lesions", "weight": 5 }
+        ],
+        "management": "High-dose IV methylprednisolone. IVIG if steroid-resistant. Supportive care. Usually monophasic, good recovery."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bacterial_meningitis",
+        "discriminators": ["meningismus_prominent", "cloudy_csf_with_polymorphs", "positive_bacterial_culture"]
+      },
+      {
+        "diseaseId": "cerebral_abscess",
+        "discriminators": ["focal_signs_predominate", "mass_lesion_on_imaging"]
+      },
+      {
+        "diseaseId": "metabolic_encephalopathy",
+        "discriminators": ["no_csf_pleocytosis", "metabolic_derangement", "no_fever"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "GCS charting", "priority": "immediate", "yield": 0.6, "indication": "monitor consciousness" }
+      ],
+      "laboratory": [
+        { "name": "CSF analysis (cell count, protein, glucose)", "priority": "immediate", "yield": 0.85, "indication": "pleocytosis, viral vs bacterial differentiation" },
+        { "name": "CSF PCR (HSV, VZV, enterovirus)", "priority": "immediate", "yield": 0.9, "indication": "viral etiology" },
+        { "name": "CSF anti-NMDA receptor antibodies", "priority": "high", "yield": 0.85, "indication": "if autoimmune suspected" },
+        { "name": "Serum autoimmune antibody panel", "priority": "high", "yield": 0.6, "indication": "autoimmune encephalitis workup" },
+        { "name": "Blood culture", "priority": "high", "yield": 0.2, "indication": "systemic infection" }
+      ],
+      "imaging": [
+        { "name": "Brain MRI with contrast", "priority": "immediate", "yield": 0.85, "indication": "temporal lobe involvement (HSV), demyelination (ADEM)" },
+        { "name": "EEG", "priority": "high", "yield": 0.7, "indication": "seizure detection, periodic lateralized epileptiform discharges (HSV)" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Guidelines for Encephalitis Management",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "Alert, no seizures, no focal signs, stable vitals",
+          "treatment": "IV Acyclovir until HSV PCR negative. Supportive care: antipyretics, hydration, monitoring. Await CSF PCR results. Consider steroids if ADEM."
+        },
+        {
+          "severity": "severe",
+          "criteria": "GCS <9, status epilepticus, respiratory failure, autonomic instability",
+          "treatment": "ICU admission. IV Acyclovir 20 mg/kg q8h. Antiepileptic therapy. Manage raised ICP. Mechanical ventilation. IVIG/steroids for autoimmune. EEG monitoring. Consider plasma exchange."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "viral_invasion_brain_parenchyma",
+      "neuronal_inflammation",
+      "cerebral_edema",
+      "autoimmune_neuronal_antibodies",
+      "demyelination",
+      "neuronal_loss"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "epilepsy",
+        "probability": 0.2,
+        "lagDays": [30, 365],
+        "severityBoost": 0.3,
+        "clues": ["prolonged_acute_seizures", "hs_encephalitis", "mri_temporal_lobe_damage"]
+      },
+      {
+        "diseaseId": "cognitive_decline",
+        "probability": 0.25,
+        "lagDays": [30, 365],
+        "severityBoost": 0.3,
+        "clues": ["severe_illness", "prolonged_icu_stay"]
+      },
+      {
+        "diseaseId": "behavioral_personality_change",
+        "probability": 0.15,
+        "lagDays": [30, 365],
+        "severityBoost": 0.2,
+        "clues": ["anti_nmda_encephalitis", "severe_disease"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever_and_behavioral_change", "altered_consciousness", "seizures", "csf_pleocytosis", "temporal_lobe_mri_signals"],
+    "exclusionClues": ["normal_csf", "normal_mri", "no_neurologic_signs"]
+  }
+}

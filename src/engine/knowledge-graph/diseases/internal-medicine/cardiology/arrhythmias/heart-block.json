@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "heart_block",
+    "name": "Atrioventricular (AV) Heart Block",
+    "system": "CARD",
+    "agePeak_months": [600, 1080],
+    "note": "Impaired conduction from atria to ventricles. Degrees: first-degree, second-degree (Mobitz I/II), third-degree (complete).",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["arrhythmia", "bradyarrhythmia", "conduction_disorder"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "complete_heart_block", "weight": 10 },
+        { "sign": "symptomatic_bradycardia", "weight": 9 },
+        { "sign": "ventricular_asystole", "weight": 10 },
+        { "sign": "syncope", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If complete block/symptomatic bradycardia/asystole/syncope -> URGENT pacing; else -> MONITOR"
+    },
+    "historyFeatures": [
+      { "symptomId": "syncope_or_presyncope", "weight": 4 },
+      { "symptomId": "dizziness_lightheadedness", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "chest_pain", "weight": 2 },
+      { "symptomId": "palpitations", "weight": 1 },
+      { "symptomId": "reduced_exercise_tolerance", "weight": 3 },
+      { "symptomId": "stokes_adams_attacks", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "bradycardia_heart_rate_less_60", "baseWeight": 4 },
+      { "signId": "cannon_a_waves", "baseWeight": 3, "note": "Atrial contraction against closed AV valve in complete heart block" },
+      { "signId": "variable_s1_intensity", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "signs_of_heart_failure", "baseWeight": 3 },
+      { "signId": "wide_qrs_on_ecg", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "advanced_age", "multiplier": 2.0 },
+      { "id": "type_2_diabetes", "multiplier": 1.3 },
+      { "id": "hypertension", "multiplier": 1.3 },
+      { "id": "structural_heart_disease", "multiplier": 2.0 },
+      { "id": "inferior_mi", "multiplier": 2.5 },
+      { "id": "anterior_mi", "multiplier": 3.0 },
+      { "id": "lyme_carditis", "multiplier": 2.0 },
+      { "id": "drugs_beta_blockers_ccb_digoxin", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "first_degree_av_block",
+        "name": "First-Degree AV Block",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "pr_interval_greater_200ms", "weight": 5 },
+          { "feature": "all_p_waves_conducted", "weight": 5 }
+        ],
+        "management": "No treatment needed unless symptomatic. Review medications. Monitor if progressive."
+      },
+      {
+        "id": "mobitz_type_1",
+        "name": "Second-Degree AV Block Mobitz Type I (Wenckebach)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "progressive_pr_lengthening", "weight": 5 },
+          { "feature": "dropped_qrs", "weight": 5 },
+          { "feature": "grouped_beating", "weight": 4 }
+        ],
+        "management": "Usually benign. Remove offending drugs. Monitor. Rarely needs pacing unless symptomatic or infranodal."
+      },
+      {
+        "id": "mobitz_type_2",
+        "name": "Second-Degree AV Block Mobitz Type II",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "constant_pr_interval", "weight": 5 },
+          { "feature": "sudden_dropped_qrs", "weight": 5 },
+          { "feature": "wide_qrs_frequently", "weight": 4 }
+        ],
+        "management": "Urgent pacemaker (temporary then permanent). High risk of progression to complete heart block."
+      },
+      {
+        "id": "third_degree_av_block",
+        "name": "Third-Degree (Complete) AV Block",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "complete_av_dissociation", "weight": 5 },
+          { "feature": "atrial_rate_faster_than_ventricular", "weight": 5 },
+          { "feature": "escape_rhythm_junctional_or_ventricular", "weight": 5 }
+        ],
+        "management": "Urgent temporary pacing (transcutaneous then transvenous). Permanent pacemaker. Treat reversible cause (MI, Lyme, drugs)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "sick_sinus_syndrome", "discriminators": ["sinus_bradycardia", "sinus_arrest", "tachy_brady_syndrome"] },
+      { "diseaseId": "concealed_junctional_extrasystoles", "discriminators": ["pseudo_av_block", "holter_shows_junctional_beats"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.98, "indication": "diagnosis, degree of block, QRS width" },
+        { "name": "Continuous cardiac monitoring", "priority": "immediate", "yield": 0.9, "indication": "assess progression, worst block" }
+      ],
+      "laboratory": [
+        { "name": "Electrolytes (K+, Mg2+, Ca2+)", "priority": "high", "yield": 0.4, "indication": "correctable causes" },
+        { "name": "Troponin", "priority": "high", "yield": 0.3, "indication": "rule out MI as cause" },
+        { "name": "Lyme serology", "priority": "low", "yield": 0.1, "indication": "in endemic areas" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "medium", "yield": 0.4, "indication": "structural heart disease assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACC/AHA/HRS Guidelines for Cardiac Pacing",
+      "pathways": [
+        {
+          "severity": "asymptomatic first-degree or Mobitz I",
+          "criteria": "no symptoms, stable vital signs",
+          "treatment": "Observation. Review medications (stop AV nodal blockers). No pacing indicated. Monitor progression."
+        },
+        {
+          "severity": "symptomatic high-grade block",
+          "criteria": "symptoms, Mobitz II, wide QRS escape",
+          "treatment": "Atropine 0.5-1 mg IV (may not work for infranodal). Transcutaneous pacing. Urgent transvenous pacing. Permanent pacemaker."
+        },
+        {
+          "severity": "complete heart block with instability",
+          "criteria": "Stokes-Adams, hypotension, heart failure",
+          "treatment": "Immediate transcutaneous pacing. Transvenous pacing. Isoproterenol infusion if pacing delayed. Permanent pacemaker. Treat underlying cause."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "av_node_dysfunction",
+      "infranodal_conduction_disease",
+      "his_purkinje_system_fibrosis",
+      "ischemic_injury",
+      "vagal_hyperactivity",
+      "drug_induced_conduction_block"
+    ],
+    "complications": [
+      { "diseaseId": "stokes_adams_attack", "probability": 0.15, "severityBoost": 0.4, "clues": ["sudden_syncope", "seizure_like_activity"] },
+      { "diseaseId": "heart_failure", "probability": 0.05, "severityBoost": 0.2, "clues": ["chronic_bradycardia", "low_output_symptoms"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if high-grade",
+    "diagnosticClues": ["bradycardia", "pr_prolongation", "dropped_qrs", "av_dissociation"],
+    "exclusionClues": ["normal_pr_and_qrs", "sinus_arrhythmia_only"]
+  }
+}

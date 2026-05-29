@@ -1,0 +1,193 @@
+{
+  "disease": {
+    "id": "keratitis",
+    "name": "Keratitis (Corneal Inflammation)",
+    "system": "OPHTH",
+    "agePeak_months": [120, 600],
+    "note": "Inflammation of the cornea. Can be infectious (bacterial, viral, fungal, parasitic) or non-infectious (contact lens overwear, UV keratitis, neurotrophic). Sight-threatening condition requiring urgent treatment.",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["red_eye", "corneal_disorder", "sight_threatening"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "corneal_perforation", "weight": 10 },
+        { "sign": "corneal_opacity_worsening", "weight": 9 },
+        { "sign": "endophthalmitis", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "central_corneal_location", "weight": 8 },
+          { "sign": "large_infiltrate_over_2mm", "weight": 7 },
+          { "sign": "hypopyon", "weight": 8 },
+          { "sign": "severe_photophobia", "weight": 6 },
+          { "sign": "stromal_thinning_or_descmetocele", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Central infiltrate, hypopyon, perforation risk -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "eye_pain_severe", "weight": 5 },
+      { "symptomId": "redness_eye", "weight": 5 },
+      { "symptomId": "photophobia", "weight": 5 },
+      { "symptomId": "blurred_vision_or_vision_loss", "weight": 4 },
+      { "symptomId": "foreign_body_sensation", "weight": 4 },
+      { "symptomId": "excess_lacrimation", "weight": 3 },
+      { "symptomId": "contact_lens_wear_overuse", "weight": 4 },
+      { "symptomId": "corneal_trauma_history", "weight": 4 },
+      { "symptomId": "previous_herpes_simplex_keratitis", "weight": 3 },
+      { "symptomId": "discharge_purulent", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "corneal_ulcer_or_infiltrate_on_slit_lamp", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fluorescein_uptake_positive", "baseWeight": 5 },
+      { "signId": "conjunctival_injection_corneal_limbal", "baseWeight": 4 },
+      { "signId": "hypopyon", "baseWeight": 5 },
+      { "signId": "corneal_stromal_opacity", "baseWeight": 4 },
+      { "signId": "stromal_thinning_or_descentocele", "baseWeight": 5 },
+      { "signId": "anterior_chamber_cells_and_flare", "baseWeight": 3 },
+      { "signId": "reduced_visual_acuity", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "contact_lens_wear", "multiplier": 5.0 },
+      { "id": "corneal_trauma", "multiplier": 4.0 },
+      { "id": "ocular_surface_disease", "multiplier": 3.0 },
+      { "id": "dry_eye_syndrome", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "previous_herpes_simplex_keratitis", "multiplier": 3.0 },
+      { "id": "corticosteroid_eye_drops", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "bacterial_keratitis",
+        "name": "Bacterial Keratitis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "purulent_discharge", "weight": 4 },
+          { "feature": "rapid_onset", "weight": 4 },
+          { "feature": "white_suppurative_infiltrate", "weight": 5 },
+          { "feature": "hypopyon", "weight": 4 },
+          { "feature": "contact_lens_use", "weight": 4 }
+        ],
+        "management": "Intensive topical antibiotics: Fortified Cefazolin 5% + Gentamicin 1.4% hourly alternating. or Monotherapy: Moxifloxacin 0.5% hourly. Cycloplegics. Scraping for culture. Consider systemic if severe."
+      },
+      {
+        "id": "herpetic_keratitis",
+        "name": "Herpes Simplex Keratitis (HSK)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "dendritic_ulcer_on_fluorescein", "weight": 5 },
+          { "feature": "corneal_hypesthesia", "weight": 4 },
+          { "feature": "recurrent_episodes", "weight": 4 },
+          { "feature": "unilateral", "weight": 3 },
+          { "feature": "mild_conjunctival_injection", "weight": 2 }
+        ],
+        "management": "Topical antivirals: Acyclovir 3% ointment 5x/day or Ganciclovir 0.15% gel 5x/day. Debridement. Oral Acyclovir 400mg PO 5x/day for stromal disease. AVOID steroids in epithelial disease."
+      },
+      {
+        "id": "fungal_keratitis",
+        "name": "Fungal Keratitis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "feathery_hyphate_border", "weight": 5 },
+          { "feature": "raised_infiltrate", "weight": 4 },
+          { "feature": "indolent_slow_progression", "weight": 4 },
+          { "feature": "vegetable_matter_trauma", "weight": 4 },
+          { "feature": "satellite_lesions", "weight": 3 }
+        ],
+        "management": "Topical antifungals: Natamycin 5% suspension hourly, Voriconazole 1% hourly. Oral Voriconazole or Itraconazole. Corneal scraping for culture. Therapeutic penetrating keratoplasty if refractory."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "corneal_abrasion",
+        "discriminators": ["trauma_history", "epithelial_defect_only", "no_infiltrate"]
+      },
+      {
+        "diseaseId": "conjunctivitis",
+        "discriminators": ["clear_cornea", "no_photophobia", "minimal_pain"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Slit lamp examination + fluorescein", "priority": "immediate", "yield": 0.95, "indication": "diagnostic" },
+        { "name": "Visual acuity", "priority": "immediate", "yield": 0.8, "indication": "baseline" }
+      ],
+      "laboratory": [
+        { "name": "Corneal scraping (culture + Gram stain)", "priority": "high", "yield": 0.7, "indication": "identify organism, guide treatment" },
+        { "name": "PCR for HSV/VZV", "priority": "medium", "yield": 0.8, "indication": "if herpetic suspected" },
+        { "name": "Confocal microscopy", "priority": "low", "yield": 0.8, "indication": "detect fungal hyphae or Acanthamoeba cysts" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "AAO Preferred Practice Pattern - Bacterial Keratitis",
+      "pathways": [
+        {
+          "severity": "mild_bacterial",
+          "criteria": "<2mm infiltrate, peripheral, no hypopyon",
+          "treatment": "Topical Moxifloxacin 0.5% q1h for 48h then q2h. Cycloplegic (Cyclopentolate 1% or Atropine 1%). Scraping for culture. Review daily."
+        },
+        {
+          "severity": "severe_bacterial",
+          "criteria": ">2mm, central, hypopyon, corneal thinning",
+          "treatment": "Intensive fortified antibiotics (Cefazolin 5% + Gentamicin/Tobramycin 1.4% alternating q30min). Cycloplegics. Hospitalization if severe. Oral antibiotics if scleral extension. Consider therapeutic keratoplasty."
+        },
+        {
+          "severity": "herpetic",
+          "criteria": "dendritic ulcer",
+          "treatment": "Topical Acyclovir 3% 5x/day or Ganciclovir 0.15% gel. No steroids. Debridement. Oral antivirals if frequent recurrences. Stromal disease: topical steroids + antiviral cover."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "corneal_epithelial_breach",
+      "microbial_invasion",
+      "inflammatory_cell_infiltration",
+      "collagenolysis_stromal_thinning",
+      "vascularization_or_perforation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "corneal_perforation",
+        "probability": 0.05,
+        "lagDays": [1, 14],
+        "severityBoost": 0.9,
+        "clues": ["descentocele", "iris_prolapse", "shallow_AC"]
+      },
+      {
+        "diseaseId": "corneal_scarring_leucoma",
+        "probability": 0.2,
+        "lagDays": [14, 90],
+        "severityBoost": 0.4,
+        "clues": ["persistent_opacity", "vision_loss"]
+      },
+      {
+        "diseaseId": "endophthalmitis",
+        "probability": 0.01,
+        "lagDays": [2, 14],
+        "severityBoost": 0.9,
+        "clues": ["severe_pain", "hypopyon_increasing", "vitritis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painful_red_eye_with_corneal_opacity", "fluorescein_positive", "photophobia"],
+    "exclusionClues": ["clear_cornea", "normal_fluorescein"]
+  }
+}

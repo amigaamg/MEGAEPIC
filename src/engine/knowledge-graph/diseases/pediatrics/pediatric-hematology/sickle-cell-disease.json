@@ -1,0 +1,181 @@
+{
+  "disease": {
+    "id": "sickle-cell-disease",
+    "name": "Sickle Cell Disease",
+    "system": "PAED",
+    "agePeak_months": [6, 120],
+    "note": "Autosomal recessive hemoglobinopathy causing sickle-shaped RBCs. Presents after 6 months of age when HbF declines. Vaso-occlusive crises, acute chest syndrome, stroke risk.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["hemoglobinopathy", "chronic_hemolytic_anemia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_chest_syndrome", "weight": 10 },
+        { "sign": "stroke_neurologic_deficit", "weight": 10 },
+        { "sign": "priapism_>4_hours", "weight": 9 },
+        { "sign": "septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_pain_crisis", "weight": 7 },
+          { "sign": "hemoglobin_<5", "weight": 8 },
+          { "sign": "splenic_sequestration", "weight": 9 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If ACS, stroke, sequestration, or priapism -> SEVERE; else -> NON-SEVERE (simple VOC)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "pain_in_hands_feet_dactylitis", "weight": 4, "note": "First manifestation in infants" },
+      { "symptomId": "bone_pain_crisis", "weight": 5 },
+      { "symptomId": "pallor_fatigue", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "fever_and_cough_acs", "weight": 4 },
+      { "symptomId": "family_history_sickle_cell", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "jaundice", "baseWeight": 4 },
+      { "signId": "splenomegaly_early_splenic_atrophy_late", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "tachypnea_acs", "baseWeight": 4 },
+      { "signId": "leg_ulcers", "baseWeight": 2 },
+      { "signId": "hand_foot_swelling", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_sickle_cell", "multiplier": 4.0 },
+      { "id": "african_or_caribbean_ethnicity", "multiplier": 3.0 },
+      { "id": "carrier_state_both_parents", "multiplier": 4.0 },
+      { "id": "homozygous_hbs", "multiplier": 5.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "vaso_occlusive_crisis",
+        "name": "Vaso-Occlusive Crisis (VOC)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "acute_bone_pain", "weight": 5 },
+          { "feature": "dactylitis_in_young_children", "weight": 4 },
+          { "feature": "precipitated_by_infection_dehydration", "weight": 3 }
+        ],
+        "management": "IV fluids, oxygen if hypoxic. Analgesia (NSAIDs + opioids as needed). Identify and treat triggers. Transfusion if severe anemia. Hydroxyurea for prevention."
+      },
+      {
+        "id": "acute_chest_syndrome",
+        "name": "Acute Chest Syndrome",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "fever", "weight": 5 },
+          { "feature": "cough_dyspnea", "weight": 5 },
+          { "feature": "new_pulmonary_infiltrate", "weight": 5 },
+          { "feature": "chest_pain", "weight": 4 }
+        ],
+        "management": "ICU admission. Oxygen to maintain SpO2 >95%. Empirical antibiotics (cephalosporin + macrolide). Bronchodilators. Simple or exchange transfusion for severe hypoxemia. Incentive spirometry."
+      },
+      {
+        "id": "splenic_sequestration",
+        "name": "Acute Splenic Sequestration",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "rapid_enlargement_of_spleen", "weight": 5 },
+          { "feature": "acute_fall_in_hemoglobin", "weight": 5 },
+          { "feature": "hypovolemic_shock", "weight": 5 }
+        ],
+        "management": "Emergency transfusion (10-20 mL/kg PRBC). IV fluids to maintain perfusion. Splenectomy if recurrent severe episodes. Educate parents on spleen palpation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "thalassemia",
+        "discriminators": ["microcytic_hypochromic", "normal_hb_electrophoresis_for_hbs", "family_history_thalassemia"]
+      },
+      {
+        "diseaseId": "iron_deficiency_anemia",
+        "discriminators": ["microcytic_hypochromic", "low_ferritin", "no_pain_crises"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.7, "indication": "oxygen saturation in all crises" }
+      ],
+      "laboratory": [
+        { "name": "CBC with reticulocyte count", "priority": "immediate", "yield": 0.9, "indication": "anemia severity, reticulocytosis" },
+        { "name": "Hb electrophoresis", "priority": "high", "yield": 1.0, "indication": "definitive diagnosis" },
+        { "name": "Blood culture", "priority": "high", "yield": 0.3, "indication": "fever, suspect infection" },
+        { "name": "CRP", "priority": "medium", "yield": 0.4, "indication": "inflammation marker" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.8, "indication": "suspected ACS" },
+        { "name": "Abdominal Ultrasound", "priority": "medium", "yield": 0.6, "indication": "spleen size in sequestration" },
+        { "name": "Transcranial Doppler", "priority": "medium", "yield": 0.8, "indication": "stroke risk screening (regular)" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NHLBI Evidence-Based Management of Sickle Cell Disease",
+      "pathways": [
+        {
+          "severity": "mild_voc",
+          "criteria": "Mild to moderate pain, no fever, no ACS, no sequestration",
+          "treatment": "Hydration (PO/IV). NSAIDs + acetaminophen. Opioids if needed. Incentive spirometry. Warm compresses. Identify triggers. Follow-up in 24h."
+        },
+        {
+          "severity": "severe_crisis_complication",
+          "criteria": "ACS, stroke, sequestration, severe VOC, priapism, or Hb <5",
+          "treatment": "Hospitalize. IV hydration. IV opioids (patient-controlled). Oxygen. Broad-spectrum antibiotics if febrile. Simple or exchange transfusion. ICU for ACS/stroke. Hydroxyurea for recurrent crises."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hemoglobin_s_polymerization",
+      "rbc_sickling",
+      "vaso_occlusion",
+      "hemolysis",
+      "endothelial_dysfunction",
+      "chronic_inflammation",
+      "organ_ischemia_infarction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_chest_syndrome",
+        "probability": 0.2,
+        "lagDays": [0, 14],
+        "severityBoost": 0.5,
+        "clues": ["fever", "cough", "chest_pain", "pulmonary_infiltrate"]
+      },
+      {
+        "diseaseId": "stroke",
+        "probability": 0.1,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.6,
+        "clues": ["abnormal_tcd", "hemiplegia", "seizure", "slurred_speech"]
+      },
+      {
+        "diseaseId": "splenic_sequestration",
+        "probability": 0.15,
+        "lagDays": [180, 1825],
+        "severityBoost": 0.5,
+        "clues": ["rapid_spleen_enlargement", "pallor", "shock"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["bone_pain_crisis", "dactylitis", "pallor_jaundice", "positive_family_history", "sickle_cells_on_film"],
+    "exclusionClues": ["normal_hb_electrophoresis", "no_pain_crises", "normal_cbc"]
+  }
+}

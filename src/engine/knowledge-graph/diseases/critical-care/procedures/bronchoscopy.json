@@ -1,0 +1,112 @@
+{
+  "disease": {
+    "id": "bronchoscopy_icu",
+    "name": "Bronchoscopy - ICU Procedure",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Flexible bronchoscopy in the ICU. Indications: diagnostic (BAL, biopsies, airway evaluation) and therapeutic (aspiration clearance, foreign body, hemoptysis). Ventilator-compatible.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["icu_procedure", "airway_management", "pulmonary_diagnostic"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hypoxia_during_procedure", "weight": 10 },
+        { "sign": "major_hemorrhage_bleeding", "weight": 10 },
+        { "sign": "tension_pneumothorax", "weight": 9 },
+        { "sign": "laryngospasm_bronchospasm_severe", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Complication -> SEVERE; uncomplicated -> PROCEDURE COMPLETE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "clinical_indication_bal_biopsy_hemoptysis", "weight": 5 },
+      { "symptomId": "mechanical_ventilation", "weight": 4 },
+      { "symptomId": "coagulopathy_bleeding_diathesis", "weight": 4 },
+      { "symptomId": "severe_hypoxia_preexisting", "weight": 4 },
+      { "symptomId": "recent_myocardial_infarction", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypoxia_preoxygenation_required", "baseWeight": 4 },
+      { "signId": "high_ventilator_requirements", "baseWeight": 3 },
+      { "signId": "oral_nasal_lesions_or_infection", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "coagulopathy_inr_greater_1.5_platelets_less_50", "multiplier": 3.0 },
+      { "id": "severe_hypoxia_pf_less_100", "multiplier": 2.5 },
+      { "id": "pulmonary_hypertension", "multiplier": 2.0 },
+      { "id": "recent_mi_less_6_weeks", "multiplier": 2.0 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pre-procedure ABG", "priority": "high", "yield": 0.8, "indication": "baseline oxygenation and ventilation" }
+      ],
+      "laboratory": [
+        { "name": "FBC, platelets, coagulation (INR, aPTT)", "priority": "high", "yield": 0.7, "indication": "bleeding risk assessment" }
+      ],
+      "imaging": [
+        { "name": "Chest CT (if available)", "priority": "medium", "yield": 0.8, "indication": "target lesion localization" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATS/ERS Guidelines for Bronchoscopy / SCCM ICU Procedure Guidelines",
+      "pathways": [
+        {
+          "severity": "pre-procedure",
+          "criteria": "indication confirmed, consent, risk assessment",
+          "treatment": "NPO. Pre-oxygenate (FiO2 100%). Sedation (midazolam/fentanyl, propofol). Topical lidocaine. Ventilator: increase FiO2, adjust PEEP, use T-piece or bronchoscopy adapter. Monitor SpO2, ETCO2, BP."
+        },
+        {
+          "severity": "during and post-procedure",
+          "criteria": "procedure in progress or completed",
+          "treatment": "BAL: wedge scope, instill 20-60mL saline x 3, suction. Biopsy: caution with forceps, monitor for bleeding. After: resume prior vent settings, CXR for pneumothorax, monitor for hemoptysis. Treat any complications."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bronchoscope_passing_through_airway",
+      "reduction_of_airway_cross_section",
+      "increased_airway_resistance_during_ventilation",
+      "risk_of_bleeding_with_biopsy",
+      "risk_of_pneumothorax_with_transbronchial_biopsy",
+      "vagal_stimulation_and_hypoxia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.02,
+        "severityBoost": 0.4,
+        "clues": ["sudden_hypoxia", "hyperresonance", "cxr_positive"]
+      },
+      {
+        "diseaseId": "hemorrhage_pulmonary",
+        "probability": 0.01,
+        "severityBoost": 0.5,
+        "clues": ["bleeding_from_scope", "hemoptysis", "hypoxia"]
+      },
+      {
+        "diseaseId": "post_bronchoscopy_fever",
+        "probability": 0.1,
+        "severityBoost": 0.1,
+        "clues": ["fever_within_24h", "self_limiting"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["indication_for_diagnostic_or_therapeutic_bronchoscopy", "icu_patient_on_ventilator"],
+    "exclusionClues": ["contraindication_uncorrected_hypoxia_coagulopathy"]
+  }
+}

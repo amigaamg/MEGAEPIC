@@ -1,0 +1,79 @@
+{
+  "disease": {
+    "id": "pneumonia_radiology",
+    "name": "Pneumonia - Radiological Findings",
+    "system": "radiology",
+    "note": "Pattern of pneumonia findings across imaging modalities. Guides differentiation of bacterial, viral, fungal, and aspiration causes.",
+    "prevalenceWeight": 0.65,
+    "syndromeTags": ["thoracic_imaging", "pulmonary_consolidation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "multilobar_consolidation", "weight": 8 },
+        { "sign": "cavitation", "weight": 8 },
+        { "sign": "large_pleural_effusion", "weight": 7 },
+        { "sign": "pneumothorax", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Extent and complications on imaging guide severity"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "cough", "weight": 4 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "sputum_production", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "crackles", "baseWeight": 4 },
+      { "signId": "bronchial_breathing", "baseWeight": 4 },
+      { "signId": "dullness_to_percussion", "baseWeight": 3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "bacterial_pneumonia_imaging",
+        "name": "Bacterial Pneumonia (Imaging)",
+        "keyFeatures": [
+          { "feature": "lobar_consolidation", "weight": 5 },
+          { "feature": "air_bronchogram", "weight": 5 },
+          { "feature": "round_opacity_in_children", "weight": 3 }
+        ],
+        "imagingFeatures": ["air_bronchogram", "lobar_consolidation", "pleural_effusion"],
+        "management": "CT if complications suspected (cavitation, empyema)"
+      },
+      {
+        "id": "viral_pneumonia_imaging",
+        "name": "Viral Pneumonia (Imaging)",
+        "keyFeatures": [
+          { "feature": "bilateral_interstitial_opacities", "weight": 5 },
+          { "feature": "peribronchial_thickening", "weight": 4 },
+          { "feature": "hyperinflation", "weight": 3 }
+        ],
+        "imagingFeatures": ["ground_glass", "reticular_pattern", "bilateral_distribution"],
+        "management": "CT for assessment of complications in persistent cases"
+      }
+    ],
+
+    "investigations": {
+      "imaging": [
+        { "name": "Chest X-ray (PA and Lateral)", "priority": "first_line", "yield": 0.85, "indication": "consolidation, air bronchogram, effusion" },
+        { "name": "CT Chest (high resolution)", "priority": "medium", "yield": 0.95, "indication": "complications, atypical patterns, immunocompromised" },
+        { "name": "Lung Ultrasound", "priority": "bedside_alternative", "yield": 0.88, "indication": "consolidation, B-lines, effusion, especially in children" }
+      ],
+      "advanced": [
+        { "name": "CT-guided biopsy", "indication": "persistent consolidation not resolving, suspected malignancy", "priority": "low" }
+      ]
+    },
+
+    "diagnosticClues": ["lobar_consolidation_with_air_bronchogram", "bilateral_interstitial_opacities", "pleural_effusion"],
+    "mustNotMiss": true
+  }
+}

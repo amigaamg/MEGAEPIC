@@ -1,0 +1,196 @@
+{
+  "disease": {
+    "id": "transfusion_reactions",
+    "name": "Transfusion Reaction Workup",
+    "system": "LAB",
+    "agePeak_months": [12, 960],
+    "note": "Transfusion reactions range from mild allergic to life-threatening hemolytic and septic reactions. Immediate reporting and workup: clerical check, visual inspection, DAT, repeat type and crossmatch, plasma free hemoglobin, cultures, and bilirubin/LDH.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["transfusion_medicine", "adverse_event", "hemovigilance"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypotension_shock_during_transfusion", "weight": 10 },
+        { "sign": "acute_hemolysis_hemoglobinuria", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "sepsis_bacterial_contamination", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "fever_gt_2c_rise", "weight": 7 },
+          { "sign": "rigors_hypotension", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If hypotension/hemoglobinuria -> MAJOR REACTION; if fever alone -> MINOR REACTION"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_during_or_after_transfusion", "weight": 5, "modifiers": [
+          { "condition": "with_rigors", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "urticaria_or_pruritus", "weight": 4 },
+      { "symptomId": "dyspnea_wheezing_hypoxia", "weight": 4 },
+      { "symptomId": "flank_or_back_pain", "weight": 5 },
+      { "symptomId": "dark_urine_hemoglobinuria", "weight": 5 },
+      { "symptomId": "hypotension", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "clerical_check_mismatch", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "positive_dAT_new_onset", "baseWeight": 5 },
+      { "signId": "plasma_hemoglobin_elevated_pink_plasma", "baseWeight": 5 },
+      { "signId": "elevated_bilirubin_ldh", "baseWeight": 4 },
+      { "signId": "gram_stain_of_unit_positive", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "multiple_prior_transfusions", "multiplier": 2.0 },
+      { "id": "multiparous_female", "multiplier": 1.5 },
+      { "id": "history_of_allergic_transfusion", "multiplier": 2.5 },
+      { "id": "iga_deficiency", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_hemolytic_reaction",
+        "name": "Acute Hemolytic Transfusion Reaction (AHTR)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "clerical_error_abo_mismatch", "weight": 5 },
+          { "feature": "onset_during_or_within_24h", "weight": 5 },
+          { "feature": "fever_chills_back_pain", "weight": 5 },
+          { "feature": "hemoglobinuria_red_urine", "weight": 5 },
+          { "feature": "positive_dat", "weight": 5 },
+          { "feature": "elevated_ldh_bilirubin", "weight": 4 }
+        ],
+        "management": "STOP transfusion immediately. Maintain IV access with NS. Monitor vitals, urine output. Check coagulation (DIC screen). Support BP with vasopressors. Manage hyperkalemia. Transfusion medicine consultation. Report to blood bank."
+      },
+      {
+        "id": "febrile_non_hemolytic",
+        "name": "Febrile Non-Hemolytic Transfusion Reaction (FNHTR)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "fever_gt_1c_rise_during_or_within_4h", "weight": 5 },
+          { "feature": "no_hemolysis_markers", "weight": 5 },
+          { "feature": "rigors_and_chills", "weight": 4 },
+          { "feature": "caused_by_cytokines_or_antibodies_to_wbc", "weight": 3 }
+        ],
+        "management": "Stop transfusion. Antipyretics (acetaminophen). Rule out hemolytic and septic reactions. Premedicate with antipyretics for future transfusions. Leukoreduced products reduce risk."
+      },
+      {
+        "id": "allergic_transfusion_reaction",
+        "name": "Allergic Transfusion Reaction",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "urticaria_pruritus_flushing", "weight": 5 },
+          { "feature": "angioedema_wheezing", "weight": 4 },
+          { "feature": "anaphylaxis_rare", "weight": 4 },
+          { "feature": "no_fever", "weight": 4 },
+          { "feature": "iga_deficiency_related", "weight": 3 }
+        ],
+        "management": "Mild: slow transfusion, give antihistamine. Moderate: stop transfusion, antihistamine + steroid. Severe (anaphylaxis): stop, epinephrine, steroids, IV fluids. Future: premedicate with antihistamines, use washed products for recurrent."
+      },
+      {
+        "id": "transfusion_related_acute_lung_injury",
+        "name": "Transfusion-Related Acute Lung Injury (TRALI)",
+        "prevalenceModifier": 0.02,
+        "keyFeatures": [
+          { "feature": "acute_hypoxia_during_or_within_6h", "weight": 5 },
+          { "feature": "pulmonary_edema_non_cardiogenic", "weight": 5 },
+          { "feature": "bilateral_infiltrates_on_cxr", "weight": 5 },
+          { "feature": "no_evidence_of_fluid_overload", "weight": 4 },
+          { "feature": "antibodies_in_donor_plasma", "weight": 3 }
+        ],
+        "management": "STOP transfusion. Oxygen support (may require mechanical ventilation). Diuretics NOT indicated (non-cardiogenic). Supportive care. Report to blood bank. Use male-only plasma components to reduce risk."
+      },
+      {
+        "id": "bacterial_sepsis",
+        "name": "Bacterial Contamination / Septic Reaction",
+        "prevalenceModifier": 0.01,
+        "keyFeatures": [
+          { "feature": "rapid_onset_high_fever_rigors", "weight": 5 },
+          { "feature": "hypotension_shock", "weight": 5 },
+          { "feature": "gram_stain_of_unit_positive", "weight": 5 },
+          { "feature": "platelet_product_most_common_yersinia_staph", "weight": 4 }
+        ],
+        "management": "STOP transfusion. Blood cultures from recipient and unit. Broad-spectrum IV antibiotics. IV fluids, vasopressors. ICU management. Notify blood bank and FDA/hemovigilance."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "transfusion_associated_circulatory_overload",
+        "discriminators": ["pulmonary_edema_with_jvd", "positive_fluid_balance", "elevated_bnp", "improves_with_diuresis"]
+      },
+      {
+        "diseaseId": "underlying_disease_progression",
+        "discriminators": ["symptoms_not_temporally_related", "negative_workup", "alternative_explanation"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Clerical check: verify patient ID, product ID", "priority": "immediate", "yield": 0.9, "indication": "all reactions" },
+        { "name": "Visual inspection of plasma for hemolysis (pre vs post)", "priority": "immediate", "yield": 0.7, "indication": "all reactions" }
+      ],
+      "laboratory": [
+        { "name": "DAT (Direct Antiglobulin Test)", "priority": "immediate", "yield": 0.8, "indication": "hemolytic reaction workup" },
+        { "name": "Repeat ABO/Rh on pre and post samples", "priority": "immediate", "yield": 0.9, "indication": "identify ABO mismatch" },
+        { "name": "Plasma free hemoglobin", "priority": "immediate", "yield": 0.8, "indication": "intravascular hemolysis" },
+        { "name": "Serum bilirubin, LDH, haptoglobin", "priority": "high", "yield": 0.7, "indication": "hemolysis markers" },
+        { "name": "Blood cultures (recipient pre/post and donor unit)", "priority": "high", "yield": 0.5, "indication": "suspected septic reaction" },
+        { "name": "Gram stain of product", "priority": "high", "yield": 0.6, "indication": "suspected contamination" },
+        { "name": "BNP or NT-proBNP", "priority": "medium", "yield": 0.6, "indication": "differentiate TACO vs TRALI" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.7, "indication": "pulmonary edema, infiltrates" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AABB Hemovigilance Guidelines, Serious Hazards of Transfusion (SHOT)",
+      "pathways": [
+        {
+          "severity": "mild_reaction",
+          "criteria": "urticaria alone, low-grade fever, no hemodynamic compromise",
+          "treatment": "Slow transfusion rate. Antihistamine (diphenhydramine 25-50mg). If improves, complete transfusion at slower rate. Document reaction."
+        },
+        {
+          "severity": "moderate_reaction",
+          "criteria": "fever >1C rise, rigors, widespread urticaria, no hypotension/hypoxia",
+          "treatment": "STOP transfusion. Maintain IV access. Antipyretics. Antihistamines. Send reaction workup. Observe for 4 hours. Do NOT restart transfusion."
+        },
+        {
+          "severity": "severe_life_threatening",
+          "criteria": "hypotension, hemoglobinuria, severe dyspnea, anaphylaxis, cardiac arrest",
+          "treatment": "STOP transfusion IMMEDIATELY. ABCs. IV fluids. Vasopressors. Epinephrine for anaphylaxis. ICU. Transfusion reaction workup. Notify blood bank. Save all products and tubing."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "immune_mediated_hemolysis_abo_antibody",
+      "cytokine_release_from_stored_blood",
+      "mast_cell_degranulation_allergic",
+      "neutrophil_antibody_trali",
+      "bacterial_endotoxin_sepsis"
+    ],
+    "complications": [
+      {
+        "diseaseId": "dIC_acute_hemolytic",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.6,
+        "clues": ["bleeding", "low_fibrinogen", "thrombocytopenia"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.15,
+        "lagDays": [1, 7],
+        "severityBoost": 0.4,
+        "clues": ["hemoglobinuria", "oliguria", "creatinine_rise"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["temporal_relation_to_transfusion", "fever_hypotension", "positive_workup"],
+    "exclusionClues": ["symptoms_pre_existed_transfusion", "negative_workup", "stable_patient"]
+  }
+}

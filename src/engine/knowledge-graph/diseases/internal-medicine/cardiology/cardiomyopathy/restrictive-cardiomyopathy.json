@@ -1,0 +1,138 @@
+{
+  "disease": {
+    "id": "restrictive_cardiomyopathy",
+    "name": "Restrictive Cardiomyopathy",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Impaired ventricular filling with preserved systolic function. Walls are stiff. Causes: infiltrative (amyloid, sarcoid), storage, idiopathic.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["cardiomyopathy", "diastolic_dysfunction"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "refractory_heart_failure", "weight": 9 },
+        { "sign": "low_cardiac_output", "weight": 9 },
+        { "sign": "arrhythmia", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If refractory HF/low output/arrhythmia -> SEVERE; else -> MILD/MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 5 },
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "lower_limb_swelling", "weight": 4 },
+      { "symptomId": "orthopnea", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "systemic_disease_symptoms", "weight": 3, "note": "Amyloid: carpal tunnel, macroglossia. Sarcoid: cough, skin lesions" }
+    ],
+    "examFeatures": [
+      { "signId": "jugular_venous_distension", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "kussmaul_sign", "baseWeight": 3, "note": "Rise in JVP with inspiration" },
+      { "signId": "peripheral_oedema", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "ascites", "baseWeight": 3 },
+      { "signId": "s3_gallop", "baseWeight": 2 },
+      { "signId": "s4_gallop", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "amyloidosis", "multiplier": 4.0 },
+      { "id": "sarcoidosis", "multiplier": 3.0 },
+      { "id": "hemochromatosis", "multiplier": 3.0 },
+      { "id": "radiation_therapy", "multiplier": 2.5 },
+      { "id": "eosinophilic_syndromes", "multiplier": 2.0 },
+      { "id": "carcinoid_syndrome", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "cardiac_amyloidosis",
+        "name": "Cardiac Amyloidosis (Light Chain or Transthyretin)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "left_ventricular_hypertrophy_with_low_voltage", "weight": 5 },
+          { "feature": "apical_sparing_strain", "weight": 5 },
+          { "feature": "myocardial_pearling_appearance", "weight": 4 }
+        ],
+        "management": "Treat underlying amyloid type (chemotherapy for AL, tafamidis for ATTR). Diuretics. Avoid calcium channel blockers."
+      },
+      {
+        "id": "cardiac_sarcoidosis",
+        "name": "Cardiac Sarcoidosis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "av_block_or_arrhythmia", "weight": 5 },
+          { "feature": "basal_septal_thinning", "weight": 4 },
+          { "feature": "lge_in_non_ischemic_pattern", "weight": 5 }
+        ],
+        "management": "Corticosteroids. Immunosuppression. Pacemaker if AV block. ICD if arrhythmia. Treat systemic sarcoid."
+      },
+      {
+        "id": "idiopathic_restrictive_cmp",
+        "name": "Idiopathic Restrictive Cardiomyopathy",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "restrictive_filling_pattern", "weight": 5 },
+          { "feature": "no_infiltrative_cause", "weight": 4 },
+          { "feature": "preserved_lvef", "weight": 4 }
+        ],
+        "management": "Diuretics for congestion. Rate control. Anticoagulation for AF. Heart transplant for end-stage."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "constrictive_pericarditis", "discriminators": ["septal_bounce", "respiratory_variation_filling", "pericardial_calcification"] },
+      { "diseaseId": "hfpef", "discriminators": ["less_severe_right_heart", "no_infiltrative_markers"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "high", "yield": 0.5, "indication": "low voltage (amyloid), AV block (sarcoid), pseudoinfarct" }
+      ],
+      "laboratory": [
+        { "name": "Serum free light chains", "priority": "high", "yield": 0.7, "indication": "AL amyloidosis screening" },
+        { "name": "Serum ACE and calcium", "priority": "medium", "yield": 0.4, "indication": "sarcoidosis screening" },
+        { "name": "Ferritin, transferrin saturation", "priority": "medium", "yield": 0.3, "indication": "hemochromatosis" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.9, "indication": "biatrial enlargement, restrictive filling, LVH without dilation, strain imaging" },
+        { "name": "Cardiac MRI", "priority": "high", "yield": 0.9, "indication": "LGE patterns, T1 mapping (amyloid), edema (sarcoid)" },
+        { "name": "Pyrophosphate scintigraphy", "priority": "medium", "yield": 0.85, "indication": "ATTR amyloid detection" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Cardiomyopathies",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "NYHA I-II, no congestion",
+          "treatment": "Diuretics PRN. Monitor for progression. Treat underlying disease. AVOID high-dose diuretics (preload dependent)."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "NYHA II-III, congestion, right heart failure",
+          "treatment": "Loop diuretics. MRA cautiously. Rate control for AF. Anticoagulation for AF/atrial stasis. Treat underlying infiltrative cause."
+        },
+        {
+          "severity": "severe/refractory",
+          "criteria": "NYHA III-IV, refractory to medical therapy",
+          "treatment": "Heart transplant evaluation. Treat underlying infiltrative disease (chemotherapy, tafamidis, steroids). Palliative care."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "myocardial_infiltration",
+      "interstitial_fibrosis",
+      "stiff_ventricular_walls",
+      "impaired_passive_filling",
+      "elevated_filling_pressures",
+      "biatrial_enlargement",
+      "restrictive_filling_pattern",
+      "low_cardiac_output"
+    ],
+    "complications": [
+      { "diseaseId": "heart_failure_refractory", "probability": 0.35, "severityBoost": 0.4, "clues": ["persistent_congestion", "right_hf"] },
+      { "diseaseId": "atrial_fibrillation", "probability": 0.3, "severityBoost": 0.2, "clues": ["biatrial_enlargement"] },
+      { "diseaseId": "thromboembolism", "probability": 0.15, "severityBoost": 0.3, "clues": ["af", "low_velocity_atria"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["right_hf_dominant", "kussmaul_sign", "lvh_with_low_voltage_ecg", "biatrial_enlargement"],
+    "exclusionClues": ["constrictive_pericarditis_physiology", "normal_filling_pattern"]
+  }
+}

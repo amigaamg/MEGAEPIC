@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "biopsy_guidance",
+    "name": "Image-Guided Biopsy Procedures",
+    "system": "RAD",
+    "agePeak_months": [360, 780],
+    "note": "Percutaneous image-guided biopsies using ultrasound, CT, or fluoroscopy. Core needle biopsy preferred for histology, FNA for cytology. Pre-procedure planning includes access route, risk assessment, and clotting parameters.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["interventional_radiology", "tissue_diagnosis", "minimally_invasive"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "active_bleeding_after_biopsy", "weight": 10 },
+        { "sign": "pneumothorax_tension", "weight": 10 },
+        { "sign": "sepsis_post_procedure", "weight": 9 },
+        { "sign": "vasovagal_shock", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "uncorrectable_coagulopathy", "weight": 7 },
+          { "sign": "difficult_access_route", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If active bleeding/pneumothorax -> COMPLICATION; else -> NON-COMPLICATED"
+    },
+    "historyFeatures": [
+      { "symptomId": "indeterminate_mass_needing_biopsy", "weight": 5, "modifiers": [
+          { "condition": "suspected_malignancy", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "bleeding_diathesis_or_anticoagulation", "weight": 5 },
+      { "symptomId": "allergy_to_anesthetics_or_contrast", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "coagulation_status_normal", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "platelet_count_gt_50000", "baseWeight": 5 },
+      { "signId": "accessible_target_on_imaging", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "anticoagulation_or_antiplatelet", "multiplier": 3.0 },
+      { "id": "thrombocytopenia_plt_less_50k", "multiplier": 4.0 },
+      { "id": "coagulopathy_inr_gt_1_5", "multiplier": 3.5 },
+      { "id": "renal_failure_uremic_platelet_dysfunction", "multiplier": 2.0 },
+      { "id": "emphysematous_lung", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "ct_guided_biopsy",
+        "name": "CT-Guided Biopsy",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "deep_lesions_lung_liver_retroperitoneum", "weight": 5 },
+          { "feature": "precise_needle_tip_localization", "weight": 5 },
+          { "feature": "multiplanar_reconstruction_guidance", "weight": 4 },
+          { "feature": "coaxial_technique_multiple_samples", "weight": 3 }
+        ],
+        "management": "Requires breath-hold for lung/upper abdominal. Post-procedure CT for immediate complication assessment. Pneumothorax rate 10-30% for lung. Risk of hemorrhage for liver."
+      },
+      {
+        "id": "ultrasound_guided_biopsy",
+        "name": "Ultrasound-Guided Biopsy",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "real_time_needle_visualization", "weight": 5 },
+          { "feature": "no_ionizing_radiation", "weight": 4 },
+          { "feature": "superficial_and_some_deep_lesions", "weight": 4 },
+          { "feature": "color_doppler_to_avoid_vessels", "weight": 4 }
+        ],
+        "management": "Preferred for liver, kidney, thyroid, breast, superficial lymph nodes, soft tissue. Real-time guidance of needle. Doppler to avoid vascular structures. Faster and less costly than CT."
+      },
+      {
+        "id": "fluoroscopy_guided_biopsy",
+        "name": "Fluoroscopy-Guided Biopsy",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "bony_lesions_with_fluoroscopic_landmarks", "weight": 5 },
+          { "feature": "used_with_ct_for_complex_spine_biopsies", "weight": 4 }
+        ],
+        "management": "Common for spine and bone biopsies. Often combined with CT guidance. Biopsy needle confirmed in AP and lateral planes."
+      }
+    ],
+    "mimics": [],
+    "investigations": {
+      "bedside": [
+        { "name": "Pre-procedure checklist", "priority": "immediate", "yield": 0.95, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "PT/PTT/INR", "priority": "immediate", "yield": 0.8, "indication": "all patients" },
+        { "name": "Platelet count", "priority": "immediate", "yield": 0.8, "indication": "all patients" },
+        { "name": "Creatinine/eGFR", "priority": "high", "yield": 0.5, "indication": "if contrast needed for guidance" }
+      ],
+      "imaging": [
+        { "name": "Pre-procedure diagnostic CT/MRI/US", "priority": "immediate", "yield": 1.0, "indication": "target lesion characterization and access planning" },
+        { "name": "Doppler ultrasound for vascular mapping", "priority": "high", "yield": 0.7, "indication": "to avoid vessels along needle path" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACR-SIR Practice Parameter for Image-Guided Percutaneous Biopsy",
+      "pathways": [
+        {
+          "severity": "low_risk",
+          "criteria": "no coagulopathy, superficial target, easy access",
+          "treatment": "Consent. Local anesthesia. US or CT guidance. Core or FNA biopsy. 16-20G needle. Minimal post-procedure observation (1-2 hours)."
+        },
+        {
+          "severity": "moderate_risk",
+          "criteria": "deep target (lung, liver), corrected mild coagulopathy, single antiplatelet held",
+          "treatment": "Hold anticoagulation per guidelines. Bridging if needed. CT guidance preferred. Coaxial technique. Post-procedure observation (4-6 hours). Check imaging for complications."
+        },
+        {
+          "severity": "high_risk",
+          "criteria": "uncorrectable coagulopathy, risky access, deep lesions near vessels",
+          "treatment": "Multidisciplinary discussion. Consider alternative (EBUS, surgical biopsy). Correct coagulopathy if possible. Prep blood products. ICU bed post-procedure."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "needle_trauma_tract",
+      "hemorrhage_coagulation_cascade",
+      "air_leak_pneumothorax",
+      "infection_risk",
+      "tumor_seeding_track"
+    ],
+    "complications": [
+      {
+        "diseaseId": "hemorrhage_post_biopsy",
+        "probability": 0.05,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["hypotension", "hematoma", "falling_hgb"]
+      },
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.15,
+        "lagDays": [0, 1],
+        "severityBoost": 0.3,
+        "clues": ["chest_pain", "dyspnea", "decreased_breath_sounds"]
+      }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["indeterminate_lesion_imaging", "planned_procedure", "safe_access_route"],
+    "exclusionClues": ["contraindication_to_biopsy", "risk_outweighs_benefit"]
+  }
+}

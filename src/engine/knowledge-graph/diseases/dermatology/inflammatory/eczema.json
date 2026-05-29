@@ -1,0 +1,111 @@
+{
+  "disease": {
+    "id": "eczema",
+    "name": "Atopic Dermatitis (Eczema)",
+    "system": "dermatology",
+    "agePeak_months": [0, 240],
+    "note": "Chronic relapsing inflammatory skin condition. Part of the atopic triad (asthma, allergic rhinitis, eczema).",
+    "prevalenceWeight": 0.65,
+    "syndromeTags": ["inflammatory_skin", "pruritic_dermatitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "widespread_erythroderma", "weight": 9 },
+        { "sign": "secondary_infection_cellulitis", "weight": 8 },
+        { "sign": "eczema_herpeticum", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Eczema herpeticum/erythroderma -> URGENT; else -> MILD/MODERATE/SEVERE based on extent"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "intense_itching", "weight": 5 },
+      { "symptomId": "dry_skin", "weight": 4 },
+      { "symptomId": "recurrent_skin_rashes", "weight": 4 },
+      { "symptomId": "onset_in_early_childhood", "weight": 3 },
+      { "symptomId": "family_history_atopy", "weight": 3 },
+      { "symptomId": "flare_triggers", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "erythematous_papules_plaques", "baseWeight": 4 },
+      { "signId": "xerosis_dry_skin", "baseWeight": 3 },
+      { "signId": "lichenification", "baseWeight": 3, "note": "Chronic scratching" },
+      { "signId": "excoriations", "baseWeight": 3 },
+      { "signId": "flexural_distribution", "baseWeight": 4 },
+      { "signId": "facial_involvement_infants", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_atopy", "multiplier": 2.5 },
+      { "id": "personal_history_asthma", "multiplier": 1.5 },
+      { "id": "filaggrin_mutation", "multiplier": 2.0 },
+      { "id": "urban_environment", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "seborrheic_dermatitis",
+        "discriminators": ["greasy_scales", "scalp_face_center", "less_pruritic"]
+      },
+      {
+        "diseaseId": "psoriasis",
+        "discriminators": ["well_demarcated_plaques", "silvery_scales", "nail_changes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "SCORAD or EASI score", "priority": "high", "yield": 0.9, "indication": "severity assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Atopic Eczema",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "limited areas, mild itch",
+          "treatment": "Emollients regularly. Mild topical corticosteroids (hydrocortisone 1%) for flares. Avoid triggers."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "more extensive, significant itch",
+          "treatment": "Moderate-potency topical corticosteroids. Topical calcineurin inhibitors for sensitive areas. Wet wraps. Treat infection if present."
+        },
+        {
+          "severity": "severe",
+          "criteria": "widespread, resistant, significant impact on QoL",
+          "treatment": "Specialist referral. Potent topical corticosteroids. Phototherapy. Systemic therapy (cyclosporine, methotrexate, dupilumab)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "skin_barrier_dysfunction",
+      "immune_dysregulation_th2",
+      "filaggrin_deficiency",
+      "increased_allergen_penetration",
+      "staphylococcal_colonization"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "eczema_herpeticum",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["vesicles", "fever", "rapid_worsening"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["chronic_pruritic_flexural_dermatitis", "early_onset", "atopy_history"],
+    "exclusionClues": ["no_itching", "well_demarcated_plaques", "scalp_only"]
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "disease": {
+    "id": "breast_abscess",
+    "name": "Breast Abscess",
+    "system": "surgical",
+    "agePeak_months": [120, 480],
+    "note": "Localized pus collection in the breast. Most commonly lactational (puerperal). Painful, erythematous, fluctuant mass.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["breast_pain", "breast_mass", "mastitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "necrotizing_fasciitis", "weight": 10 },
+        { "sign": "systemic_sepsis", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "abscess_size_large", "weight": 5 },
+          { "sign": "immunosuppressed", "weight": 6 },
+          { "sign": "failed_outpatient_treatment", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Sepsis/extensive/necrotizing -> SEVERE; small localized abscess -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "breast_pain_swelling", "weight": 5 },
+      { "symptomId": "breast_redness_warmth", "weight": 4 },
+      { "symptomId": "fever_chills", "weight": 4 },
+      { "symptomId": "lactating_breastfeeding", "weight": 5, "note": "Most common setting" },
+      { "symptomId": "nipple_crack_or_bleb", "weight": 3, "note": "Portal of entry for bacteria" },
+      { "symptomId": "previous_mastitis", "weight": 3 },
+      { "symptomId": "failed_antibiotic_therapy", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_fluctuant_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "overlying_erythema", "baseWeight": 4 },
+      { "signId": "local_warmth", "baseWeight": 4 },
+      { "signId": "tenderness", "baseWeight": 4 },
+      { "signId": "axillary_lymphadenopathy_tender", "baseWeight": 3 },
+      { "signId": "fever_tachycardia", "baseWeight": 3 },
+      { "signId": "nipple_discharge_purulent", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "lactation", "multiplier": 4.0 },
+      { "id": "nipple_trauma_crack", "multiplier": 2.5 },
+      { "id": "poor_breastfeeding_technique", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "previous_mastitis", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "lactational_abscess",
+        "name": "Lactational (Puerperal) Abscess",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "breastfeeding_mother", "weight": 5 },
+          { "feature": "recent_mastitis", "weight": 5 },
+          { "feature": "fluctuant_mass", "weight": 5 },
+          { "feature": "staphylococcus_aureus", "weight": 4 }
+        ],
+        "management": "US-guided needle aspiration or incision and drainage. IV/PO antibiotics (Flucloxacillin or Cephalexin + Metronidazole). Continue breastfeeding/pumping. Arrange follow-up."
+      },
+      {
+        "id": "non_lactational_abscess",
+        "name": "Non-Lactational Abscess",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "not_lactating", "weight": 5 },
+          { "feature": "peripheral_location", "weight": 3 },
+          { "feature": "risk_factor_diabetes_smoking", "weight": 3 },
+          { "feature": "often_mixed_organisms", "weight": 3 }
+        ],
+        "management": "Incision and drainage (I&D). Pus culture. IV antibiotics. Workup for underlying cause (diabetes, inflammatory breast cancer if recurrent). Biopsy of cavity wall if suspicious."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "inflammatory_breast_cancer",
+        "discriminators": ["no_fluctuance", "no_fever_systemic", "diffuse_involvement", "no_response_to_antibiotics", "skin_biopsy_shows_cancer"]
+      },
+      {
+        "diseaseId": "mastitis",
+        "discriminators": ["diffuse_not_fluctuant", "responds_to_antibiotics", "no_pus_on_aspiration"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Needle aspiration", "priority": "immediate", "yield": 0.9, "indication": "diagnostic and therapeutic" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "elevated" },
+        { "name": "Pus culture + sensitivity", "priority": "high", "yield": 0.8, "indication": "guide antibiotic therapy" },
+        { "name": "Blood cultures", "priority": "medium", "yield": 0.3, "indication": "if septic" }
+      ],
+      "imaging": [
+        { "name": "Breast Ultrasound", "priority": "immediate", "yield": 0.9, "indication": "confirm abscess, guide drainage" },
+        { "name": "Mammogram", "priority": "medium", "yield": 0.5, "indication": "after resolution if non-lactational" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Royal College of Surgeons Guidelines for Breast Abscess",
+      "pathways": [
+        {
+          "severity": "small (<3cm)",
+          "criteria": "abscess <3cm, no systemic sepsis",
+          "treatment": "US-guided needle aspiration. Antibiotics (Flucloxacillin + Metronidazole). Repeat aspiration if needed. Continue breastfeeding."
+        },
+        {
+          "severity": "large (>3cm) or failed aspiration",
+          "criteria": "abscess >3cm, failed aspiration, systemic symptoms",
+          "treatment": "Incision and drainage under GA. Pus culture. Loculi breakdown. Packing or drain placement. IV antibiotics. Breastfeeding support."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bacterial_entry_through_nipple",
+      "milk_stasis",
+      "acute_mastitis",
+      "abscess_formation",
+      "fluctuant_pus_collection"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrent_abscess",
+        "probability": 0.15,
+        "lagDays": [14, 60],
+        "severityBoost": 0.1,
+        "clues": ["persistent_lump", "return_of_symptoms_after_treatment"]
+      },
+      {
+        "diseaseId": "milk_fistula",
+        "probability": 0.03,
+        "lagDays": [7, 30],
+        "severityBoost": 0.1,
+        "clues": ["persistent_wound_discharge", "milky_drainage"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["painful_red_breast_mass", "lactating", "fever", "fluctuant_on_exam", "pus_on_aspiration"],
+    "exclusionClues": ["afebrile", "non_fluctuant_mass", "no_erythema", "no_response_to_aspiration"]
+  }
+}

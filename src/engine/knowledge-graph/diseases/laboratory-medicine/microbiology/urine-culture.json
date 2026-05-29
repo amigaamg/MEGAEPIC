@@ -1,0 +1,166 @@
+{
+  "disease": {
+    "id": "urine_culture_interpretation",
+    "name": "Urine Culture Interpretation",
+    "system": "LAB",
+    "agePeak_months": [12, 960],
+    "note": "Urine culture with colony count is the gold standard for UTI diagnosis. Significant bacteriuria: >10^5 CFU/mL for voided midstream, >10^2 CFU/mL for catheterized, any growth for suprapubic aspirate. Contamination vs true infection assessed by pyuria, symptoms, and organism type.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["urinary_tract_infection", "bacteriuria", "dysuria"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "urosepsis_positive_blood_cultures", "weight": 10 },
+        { "sign": "obstructive_uropathy_with_infection", "weight": 9 },
+        { "sign": "emphysematous_pyelonephritis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "gram_negative_bacilli_with_sepsis", "weight": 8 },
+          { "sign": "mdro_organism_carbapenem_resistant", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If urosepsis/obstruction -> SEVERE; else -> NON-SEVERE (treat per sensitivity)"
+    },
+    "historyFeatures": [
+      { "symptomId": "dysuria_frequency_urgency", "weight": 5, "modifiers": [
+          { "condition": "acute_onset", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "suprapubic_or_flank_pain", "weight": 4 },
+      { "symptomId": "fever_chills", "weight": 4 },
+      { "symptomId": "hematuria", "weight": 2 },
+      { "symptomId": "catheter_in_place", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "colony_count_gt_threshold", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "single_organism_growth", "baseWeight": 4 },
+      { "signId": "pyuria_wbc_gt_10_per_hpf", "baseWeight": 4 },
+      { "signId": "positive_nitrite_or_leukocyte_esterase", "baseWeight": 3 },
+      { "signId": "organism_identification_and_susceptibility", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 3.0 },
+      { "id": "catheterization_indwelling", "multiplier": 5.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 2.5 },
+      { "id": "recent_antibiotic_use", "multiplier": 1.5 },
+      { "id": "anatomical_abnormality_reflux", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "simple_cystitis",
+        "name": "Uncomplicated Cystitis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "e_coli_most_common", "weight": 5 },
+          { "feature": "colony_count_gt_10e5_cfu_ml", "weight": 5 },
+          { "feature": "no_fever_or_flank_pain", "weight": 4 },
+          { "feature": "female_non_pregnant", "weight": 4 },
+          { "feature": "no_structural_abnormality", "weight": 3 }
+        ],
+        "management": "Empiric antibiotics (nitrofurantoin 100mg BID x5d, TMP-SMX DS BID x3d, fosfomycin 3g single dose). Adjust per culture sensitivity. No routine post-treatment culture if asymptomatic."
+      },
+      {
+        "id": "complicated_uti_pyelonephritis",
+        "name": "Complicated UTI / Pyelonephritis",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "fever_gt_38_rigors", "weight": 5 },
+          { "feature": "flank_pain_cva_tenderness", "weight": 5 },
+          { "feature": "catheter_associated", "weight": 4 },
+          { "feature": "mdro_risk_esbl_cre", "weight": 4 },
+          { "feature": "male_or_pregnant_or_immunocompromised", "weight": 4 }
+        ],
+        "management": "Urine culture + blood cultures. IV antibiotics initially (ceftriaxone, cefepime, or piperacillin-tazobactam). Tailor per sensitivity. Imaging to rule out obstruction. May need prolonged course (10-14 days)."
+      },
+      {
+        "id": "asymptomatic_bacteriuria",
+        "name": "Asymptomatic Bacteriuria (ASB)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "significant_bacteriuria_no_symptoms", "weight": 5 },
+          { "feature": "pregnancy_positive_screen", "weight": 4 },
+          { "feature": "pre_urological_procedure", "weight": 4 },
+          { "feature": "elderly_or_catheter_no_treatment", "weight": 3 }
+        ],
+        "management": "Do NOT treat in non-pregnant, elderly, or catheterized patients (no benefit, promotes resistance). Treat only in pregnancy and pre-urologic procedure. Nitrofurantoin or amoxicillin for pregnancy."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "contaminated_specimen",
+        "discriminators": ["mixed_flora_gt_2_organisms", "lactobacillus_or_diptheroids", "squamous_epithelial_cells_gt_5"]
+      },
+      {
+        "diseaseId": "sterile_pyuria",
+        "discriminators": ["wbc_present_no_growth", "tb_std_interstitial_nephritis", "afb_culture_chlamydia_test"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Urinalysis with microscopy", "priority": "immediate", "yield": 0.7, "indication": "screening for pyuria, nitrite, LE" }
+      ],
+      "laboratory": [
+        { "name": "Urine culture with colony count", "priority": "immediate", "yield": 0.95, "indication": "definitive diagnosis" },
+        { "name": "Gram stain of uncentrifuged urine", "priority": "high", "yield": 0.8, "indication": "rapid identification of organism type" },
+        { "name": "Antimicrobial susceptibility testing (AST)", "priority": "high", "yield": 0.95, "indication": "guide targeted therapy" },
+        { "name": "Blood cultures", "priority": "medium", "yield": 0.3, "indication": "if septic or complicated UTI" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound or CT", "priority": "low", "yield": 0.3, "indication": "if complicated, obstructive, or recurrent UTIs" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IDSA Guidelines for Diagnosis and Treatment of UTIs",
+      "pathways": [
+        {
+          "severity": "uncomplicated_uti",
+          "criteria": "symptomatic, premenopausal female, no fever, no flank pain",
+          "treatment": "Empiric treatment per local antibiogram. Adjust when sensitivities available. Nitrofurantoin, TMP-SMX, or fosfomycin for 3-5 days."
+        },
+        {
+          "severity": "complicated_pyelonephritis",
+          "criteria": "fever, flank pain, male, pregnant, catheter, healthcare-associated",
+          "treatment": "Urine and blood cultures. Empiric broad-spectrum IV antibiotics. Tailor per sensitivity. Imaging for obstruction. 10-14 day course."
+        },
+        {
+          "severity": "asb_no_treatment",
+          "criteria": "positive culture, no symptoms, elderly, catheterized",
+          "treatment": "No antibiotics. Reassure. Avoid unnecessary treatment."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "bacterial_ascending_infection",
+      "urothelial_adherence",
+      "biofilm_formation_on_catheter",
+      "inflammatory_response_pyuria",
+      "bacteremia_if_ascending_to_kidney"
+    ],
+    "complications": [
+      {
+        "diseaseId": "urosepsis",
+        "probability": 0.05,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "altered_mental_status", "mdr_organism"]
+      },
+      {
+        "diseaseId": "recurrent_uti",
+        "probability": 0.3,
+        "lagDays": [30, 365],
+        "severityBoost": 0.1,
+        "clues": ["multiple_cultures_positive", "different_organisms", "same_organism_relapse"]
+      }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["positive_urine_culture", "symptoms_uti", "pyuria", "single_organism"],
+    "exclusionClues": ["mixed_flora", "no_symptoms_asb", "contaminated_specimen"]
+  }
+}

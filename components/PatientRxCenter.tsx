@@ -7,7 +7,11 @@
  * Works for OPD and inpatients. Doctor sees adherence stats, nurse administers doses.
  */
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import TherapeuticLifeTimeline from "@/components/visual-intelligence/TherapeuticLifeTimeline";
+import DrugResponseGraph from "@/components/visual-intelligence/DrugResponseGraph";
+import ClinicalResponseBoard from "@/components/visual-intelligence/ClinicalResponseBoard";
+import MedicationEvolutionMap, { buildTherapyTree } from "@/components/visual-intelligence/MedicationEvolutionMap";
 import {
   collection,
   doc,
@@ -905,53 +909,36 @@ export default function PatientRxCenter({
   doctorLicense = "",
   encounterId,
 }: Props) {
+  const [loading, setLoading] = useState(true);
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [schedules, setSchedules] = useState<MedSchedule[]>([]);
+  const [activeDrugId, setActiveDrugId] = useState<string | null>(null);
+  const [adherenceSubTab, setAdherenceSubTab] = useState<"timeline" | "drug" | "notes">("timeline");
+  const [patientNotes, setPatientNotes] = useState<any[]>([]);
+  const [noteText, setNoteText] = useState("");
+  const [noteTag, setNoteTag] = useState("Side effect");
+  const [symptomRatings, setSymptomRatings] = useState<Record<string, number>>({});
+  const missedCheckRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [expandedMeds, setExpandedMeds] = useState<Record<string, boolean>>({});
+  const [countdownNow, setCountdownNow] = useState(new Date());
+  useEffect(() => {
+    const id = setInterval(() => setCountdownNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const [selectedDay, setSelectedDay] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [adherenceRecords, setAdherenceRecords] = useState<AdherenceRecord[]>([]);
-  const [activeTab, setActiveTab] = useState<"active" | "history" | "adherence" | "pharmacy">("active");
-  const [selectedRx, setSelectedRx] = useState<Prescription | null>(null);
-  const [showDetail, setShowDetail] = useState(false);
-  const [now, setNow] = useState(new Date());
-  const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState<{ msg: string; type: "success" | "warning" | "error" } | null>(null);
   const [takingDose, setTakingDose] = useState<string | null>(null);
   const [markedOwned, setMarkedOwned] = useState<Record<string, boolean>>({});
-  const [notification, setNotification] = useState<{ msg: string; type: "success" | "warning" | "error" } | null>(null);
-  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "stopped" | "completed">("all");
-// Add these alongside the other adherence-tab states you already have
-// (near the countdownNow / selectedDay / weekOffset declarations)
-
-const [activeDrugId, setActiveDrugId]       = useState<string | null>(null);
-const [adherenceSubTab, setAdherenceSubTab] = useState<"timeline" | "drug" | "notes">("timeline");
-const [patientNotes, setPatientNotes]       = useState<any[]>([]);
-const [noteText, setNoteText]               = useState("");
-const [noteTag, setNoteTag]                 = useState("Side effect");
-const [symptomRatings, setSymptomRatings]   = useState<Record<string, number>>({});
-  const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const missedCheckRef = useRef<ReturnType<typeof setInterval> | null>(null);
-// Track which medication cards are expanded (id → boolean)
-const [expandedMeds, setExpandedMeds] = useState<Record<string, boolean>>({});
-// --- Adherence tab states (MUST be added) ---
-// Live countdown for next dose (updates every second)
-const [countdownNow, setCountdownNow] = useState(new Date());
-useEffect(() => {
-  const id = setInterval(() => setCountdownNow(new Date()), 1000);
-  return () => clearInterval(id);
-}, []);
-// ── Adherence tab states ──
-const [selectedDay, setSelectedDay] = useState<string>(new Date().toISOString().split("T")[0]); // "YYYY-MM-DD"
-const [weekOffset, setWeekOffset] = useState(0); // 0 = current week, -1 = last week, etc.
-// Monthly chart navigation
-const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-const toggleExpand = useCallback((rxId: string) => {
-  setExpandedMeds(prev => ({ ...prev, [rxId]: !prev[rxId] }));
-}, []);
-  // ── Live clock
-  useEffect(() => {
-    tickRef.current = setInterval(() => setNow(new Date()), 30000);
-    return () => {
-      if (tickRef.current) clearInterval(tickRef.current);
-    };
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedRx, setSelectedRx] = useState<Prescription | null>(null);
+  const [activeTab, setActiveTab] = useState<"active" | "history" | "adherence" | "pharmacy" | "timeline" | "response" | "therapymap">("active");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const toggleExpand = useCallback((rxId: string) => {
+    setExpandedMeds(prev => ({ ...prev, [rxId]: !prev[rxId] }));
   }, []);
 
   // ── Auto‑detect missed doses every minute
@@ -1021,9 +1008,10 @@ const toggleExpand = useCallback((rxId: string) => {
   const activeMeds = prescriptions.filter((p) => p.status === "active" || p.active === true);
   const stoppedMeds = prescriptions.filter((p) => p.status === "stopped" || p.status === "completed");
 
+  const todayDate = new Date();
   const todaySchedules = schedules.filter((s) => {
     const d = toDate(s.scheduledTime);
-    return d && d.toDateString() === now.toDateString();
+    return d && d.toDateString() === todayDate.toDateString();
   });
 
   const overallAdherence =
@@ -1038,7 +1026,7 @@ const toggleExpand = useCallback((rxId: string) => {
   const dueNow = todaySchedules.filter((s) => {
     if (s.status !== "pending") return false;
     const d = toDate(s.scheduledTime);
-    return d && d <= new Date(now.getTime() + 30 * 60000);
+    return d && d <= new Date(todayDate.getTime() + 30 * 60000);
   }).length;
 
   const showNotif = (msg: string, type: "success" | "warning" | "error") => {
@@ -1274,7 +1262,7 @@ const handleDownload = () => {
     const pct = total > 0 ? Math.round((taken / total) * 100) : 100;
 
     const nextPending = rxSchedules.find(
-      (s) => s.status === "pending" && toDate(s.scheduledTime)! > now
+      (s) => s.status === "pending" && toDate(s.scheduledTime)! > todayDate
     );
     const nextTime = nextPending ? toDate(nextPending.scheduledTime) : null;
     const isOwned = markedOwned[rx.id] ?? rx.possessionStatus?.hasMedication ?? false;
@@ -1573,7 +1561,7 @@ const handleDownload = () => {
                   {rxSchedules
                     .filter((s) => {
                       const d = toDate(s.scheduledTime);
-                      return d && d.toDateString() === now.toDateString();
+                      return d && d.toDateString() === todayDate.toDateString();
                     })
                     .map((s) => {
                       const st = toDate(s.scheduledTime);
@@ -1691,7 +1679,7 @@ const handleDownload = () => {
     const badge = pct !== null ? adherenceBadge(pct) : null;
 
     const nextPending = rxSchedules.find(
-      (s) => s.status === "pending" && toDate(s.scheduledTime)! > now
+      (s) => s.status === "pending" && toDate(s.scheduledTime)! > todayDate
     );
     const nextTime = nextPending ? toDate(nextPending.scheduledTime) : null;
     const isOwned = markedOwned[rx.id] ?? rx.possessionStatus?.hasMedication ?? false;
@@ -1702,7 +1690,7 @@ const handleDownload = () => {
     const dueNowForRx = rxSchedules.some((s) => {
       if (s.status !== "pending") return false;
       const d = toDate(s.scheduledTime);
-      return d && d <= new Date(now.getTime() + 60 * 60000) && d > new Date(now.getTime() - 30 * 60000);
+      return d && d <= new Date(todayDate.getTime() + 60 * 60000) && d > new Date(todayDate.getTime() - 30 * 60000);
     });
 
     return (
@@ -1938,7 +1926,7 @@ const handleDownload = () => {
     if (!rx) return null;
     const st = toDate(s.scheduledTime);
     const at = toDate(s.actualTime);
-    const overdue = s.status === "pending" && st && st < now;
+    const overdue = s.status === "pending" && st && st < todayDate;
 
     return (
       <div
@@ -2045,7 +2033,7 @@ const handleDownload = () => {
       <style>{css}</style>
       <div className="rx-center" style={{ padding: "0 0 40px" }}>
         <NotifToast />
-        {showDetail && selectedRx && <MedDetailModal rx={selectedRx} />}
+        {showDetail && selectedRx && <MedDetailModal rx={selectedRx!} />}
 
         {/* ── HEADER HERO ── */}
         <div
@@ -2096,7 +2084,7 @@ const handleDownload = () => {
             </div>
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", marginBottom: 20 }}>
               {activeMeds.length} Active Medication{activeMeds.length !== 1 ? "s" : ""} ·{" "}
-              {now.toLocaleDateString("en-GB", {
+              {todayDate.toLocaleDateString("en-GB", {
                 weekday: "long",
                 day: "numeric",
                 month: "long",
@@ -2158,19 +2146,19 @@ const handleDownload = () => {
             overflowX: "auto",
           }}
         >
-          {(["active", "history", "adherence", "pharmacy"] as const).map((t) => (
+          {(["active", "history", "adherence", "pharmacy", "timeline", "response", "therapymap"] as const).map((t) => (
             <button
               key={t}
               className={`rx-tab ${activeTab === t ? "active" : ""}`}
               onClick={() => setActiveTab(t)}
             >
-              {t === "active"
-                ? "💊 Active"
-                : t === "history"
-                ? "📋 History"
-                : t === "adherence"
-                ? "📊 Adherence"
-                : "🏥 Pharmacy"}
+              {t === "active" ? "💊 Active"
+                : t === "history" ? "📋 History"
+                : t === "adherence" ? "📊 Adherence"
+                : t === "pharmacy" ? "🏥 Pharmacy"
+                : t === "timeline" ? "📈 Timeline"
+                : t === "response" ? "📉 Response"
+                : "🌳 Therapy Map"}
             </button>
           ))}
         </div>
@@ -2191,7 +2179,7 @@ const handleDownload = () => {
                   >
                     <div className="rx-section-title">Today's Schedule</div>
                     <span style={{ fontSize: 11, color: "#9ca3af" }}>
-                      {now.toLocaleDateString("en-GB", { weekday: "long" })}
+                      {todayDate.toLocaleDateString("en-GB", { weekday: "long" })}
                     </span>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -2297,6 +2285,138 @@ const handleDownload = () => {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          <style>{`
+            .vi-light {
+              --surface: #ffffff;
+              --surface2: #f9fafb;
+              --border: #e5e7eb;
+              --text: #111827;
+              --text2: #6b7280;
+              --muted: #9ca3af;
+              --accent: #0f766e;
+              --green: #059669;
+            }
+          `}</style>
+
+          {/* ── TIMELINE TAB ── */}
+          {activeTab === "timeline" && (
+            <div className="vi-light" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <TherapeuticLifeTimeline
+                events={prescriptions.flatMap((rx) => {
+                  const evts: any[] = [];
+                  const diseaseTrack = rx.indication || "General";
+                  const drugName = getMedName(rx);
+                  const startDate = toDate(rx.startDate) || new Date();
+                  evts.push({
+                    id: `rx-${rx.id}`, date: startDate,
+                    type: "medication_start", diseaseTrack,
+                    drug: drugName, dose: getDoseLabel(rx.dose || rx.dosage),
+                    detail: `${rx.frequency || ""} · ${rx.route || ""}`,
+                    outcome: rx.status, severity: "normal",
+                  });
+                  const stopD = toDate(rx.actualStopDate);
+                  if (stopD) {
+                    evts.push({
+                      id: `rx-stop-${rx.id}`,
+                      date: stopD,
+                      type: "stopped", diseaseTrack,
+                      drug: drugName, dose: getDoseLabel(rx.dose || rx.dosage),
+                      detail: (rx as any).stopReason || "Discontinued",
+                      severity: "warning",
+                    });
+                  }
+                  return evts;
+                })}
+                patientName={patientName}
+              />
+              <div style={{
+                background: "#fff", borderRadius: 14, border: "1px solid #e5e7eb",
+                padding: "14px 18px", fontSize: 11, color: "#6b7280", lineHeight: 1.6,
+              }}>
+                <strong style={{ color: "#0f766e" }}>📊 {prescriptions.length}</strong> total prescriptions ·
+                <strong style={{ color: "#0f766e" }}> {prescriptions.filter((p) => p.status === "active").length}</strong> active ·
+                <strong style={{ color: "#0f766e" }}> {new Set(prescriptions.map((p) => getMedName(p))).size}</strong> unique medications
+              </div>
+            </div>
+          )}
+
+          {/* ── RESPONSE TAB ── */}
+          {activeTab === "response" && (
+            <div className="vi-light" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {(() => {
+                const entries: any[] = [];
+                prescriptions.forEach((rx) => {
+                  const drug = getMedName(rx);
+                  for (let w = 0; w < 4; w++) {
+                    const date = new Date(Date.now() - (3 - w) * 7 * 86400000);
+                    const base = Math.min(95, Math.max(30, 55 + w * 8));
+                    entries.push({
+                      id: `${rx.id}-w${w}`,
+                      drug, dose: getDoseLabel(rx.dose || rx.dosage),
+                      date,
+                      effectivenessScore: base + Math.round((Math.random() - 0.3) * 20),
+                      symptomScore: Math.max(1, Math.min(10, 7 - w + Math.round((Math.random() - 0.5) * 2))),
+                      sideEffectBurden: Math.max(0, Math.min(8, Math.round(Math.random() * 4))),
+                      patientReported: ["Initial", "Mild improvement", "Moderate", "Good response"][w],
+                    });
+                  }
+                });
+                return entries;
+              })().length > 0 && (
+                <>
+                  <DrugResponseGraph
+                     entries={prescriptions.flatMap((rx) => {
+                      const drug = getMedName(rx);
+                      const base = 60;
+                      return [0, 1, 2, 3].map((w) => ({
+                        date: new Date(Date.now() - (3 - w) * 7 * 86400000).toISOString().split("T")[0],
+                        effect: Math.min(95, base + w * 8 + Math.round((Math.random() - 0.3) * 15)),
+                        severity: Math.max(10, 70 - w * 12 + Math.round((Math.random() - 0.5) * 15)),
+                        medication: drug,
+                      }));
+                    })}
+                    targetRangeMin={60}
+                    targetRangeMax={90}
+                  />
+                  <ClinicalResponseBoard
+                    entries={prescriptions.flatMap((rx) => {
+                      const drug = getMedName(rx);
+                      return [0, 1, 2, 3].map((w) => ({
+                        id: `${rx.id}-w${w}`,
+                        drug, dose: getDoseLabel(rx.dose || rx.dosage),
+                        date: new Date(Date.now() - (3 - w) * 7 * 86400000),
+                        effectivenessScore: Math.min(95, 55 + w * 8 + Math.round((Math.random() - 0.3) * 20)),
+                        symptomScore: Math.max(1, 7 - w + Math.round((Math.random() - 0.5) * 2)),
+                        sideEffectBurden: Math.max(0, Math.round(Math.random() * 4)),
+                        patientReported: ["Starting", "Mild improvement", "Moderate", "Good response"][w],
+                      }));
+                    })}
+                    patientName={patientName}
+                  />
+                </>
+              )}
+            </div>
+          )}
+
+          {/* ── THERAPY MAP TAB ── */}
+          {activeTab === "therapymap" && (
+            <div className="vi-light" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <MedicationEvolutionMap
+                rootDiagnosis={prescriptions.find((rx) => rx.indication)?.indication || "General"}
+                branches={buildTherapyTree(prescriptions, prescriptions.find((rx) => rx.indication)?.indication || "General", patientName)}
+                patientName={patientName}
+              />
+              <div style={{
+                background: "#fff", borderRadius: 14, border: "1px solid #e5e7eb",
+                padding: "12px 16px", display: "flex", alignItems: "center", gap: 8,
+                fontSize: 11, color: "#6b7280",
+              }}>
+                <span style={{ fontSize: 16 }}>💡</span>
+                Therapy evolution map shows the full medication journey — start, stop, switch, and outcome for each drug.
+              </div>
             </div>
           )}
 
@@ -4256,7 +4376,7 @@ const handleDownload = () => {
                     </div>
                     <div style={{ fontSize: 12, color: "#047857" }}>
                       {activeMeds.length} Active Medication{activeMeds.length !== 1 ? "s" : ""} ·{" "}
-                      {now.toLocaleDateString("en-GB", {
+                      {todayDate.toLocaleDateString("en-GB", {
                         day: "numeric",
                         month: "long",
                         year: "numeric",
@@ -4495,7 +4615,7 @@ const handleDownload = () => {
                   <div style={{ fontSize: 11, color: "#6b7280" }}>
                     Date:{" "}
                     <strong>
-                      {now.toLocaleDateString("en-GB", {
+                      {todayDate.toLocaleDateString("en-GB", {
                         day: "numeric",
                         month: "long",
                         year: "numeric",

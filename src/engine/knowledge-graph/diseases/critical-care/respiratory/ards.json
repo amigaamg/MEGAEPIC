@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "ards",
+    "name": "Acute Respiratory Distress Syndrome",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Acute onset hypoxic respiratory failure with bilateral pulmonary infiltrates. Not primarily due to cardiac failure.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["hypoxic_respiratory_failure", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hypoxemia_pf_less_100", "weight": 10 },
+        { "sign": "refractory_hypoxia", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Mild (P/F 200-300), Moderate (P/F 100-200), Severe (P/F <100)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_onset_severe_dyspnea", "weight": 5 },
+      { "symptomId": "known_trigger_sepsis_pancreatitis", "weight": 4 },
+      { "symptomId": "cough", "weight": 2 },
+      { "symptomId": "rapid_deterioration", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "severe_hypoxia", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "bilateral_crackles", "baseWeight": 4 },
+      { "signId": "accessory_muscle_use", "baseWeight": 3 },
+      { "signId": "cyanosis", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "sepsis", "multiplier": 3.0 },
+      { "id": "severe_pancreatitis", "multiplier": 2.5 },
+      { "id": "pneumonia_severe", "multiplier": 2.0 },
+      { "id": "aspiration", "multiplier": 2.0 },
+      { "id": "massive_transfusion", "multiplier": 1.5 },
+      { "id": "trauma", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_ards",
+        "name": "Mild ARDS (P/F 200-300)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "pf_ratio_200_300", "weight": 5 },
+          { "feature": "non_invasive_ventilation", "weight": 3 }
+        ],
+        "management": "Treat underlying cause. Non-invasive ventilation if able. Low tidal volume ventilation if intubated."
+      },
+      {
+        "id": "moderate_ards",
+        "name": "Moderate ARDS (P/F 100-200)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "pf_ratio_100_200", "weight": 5 },
+          { "feature": "PEEP_required", "weight": 4 }
+        ],
+        "management": "Intubation. LPVS (6 mL/kg). PEEP titration. Prone positioning. Conservative fluid management."
+      },
+      {
+        "id": "severe_ards",
+        "name": "Severe ARDS (P/F <100)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "pf_ratio_less_100", "weight": 5 },
+          { "feature": "refractory_hypoxia", "weight": 5 }
+        ],
+        "management": "Prone positioning 16+ hours. Neuromuscular blockade. Consider ECMO. Rescue therapies (inhaled nitric oxide, high-frequency oscillation)."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ABG/VBG", "priority": "immediate", "yield": 0.95, "indication": "PaO2/FiO2 ratio, CO2, pH" },
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.8, "indication": "continuous monitoring" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.6, "indication": "infection/inflammatory markers" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.3, "indication": "identify sepsis source" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.85, "indication": "bilateral infiltrates" },
+        { "name": "CT Chest", "priority": "medium", "yield": 0.9, "indication": "assess lung morphology, complications" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ARDSNet / Berlin Definition Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "P/F 200-300, bilateral infiltrates on CXR",
+          "treatment": "Treat underlying cause. Lung-protective ventilation if intubated (TV 6 mL/kg PBW, plateau pressure <30). Conservative fluid strategy."
+        },
+        {
+          "severity": "moderate-severe",
+          "criteria": "P/F <200",
+          "treatment": "Intubation and LPVS. PEEP according to PEEP-FiO2 table. Prone positioning for P/F <150. Neuromuscular blockade for 48h if severe. Rescue therapies if refractory."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "alveolar_capillary_barrier_injury",
+      "increased_permeability_pulmonary_edema",
+      "surfactant_dysfunction",
+      "ventilation_perfusion_mismatch",
+      "intrapulmonary_shunt",
+      "severe_hypoxemia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "ventilator_associated_pneumonia",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["new_fever", "increased_secretions", "worsening_oxygenation"]
+      },
+      {
+        "diseaseId": "barotrauma",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["pneumothorax", "subcutaneous_emphysema"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["acute_hypoxic_respiratory_failure", "bilateral_infiltrates", "pf_ratio_less_300", "non_cardiac"],
+    "exclusionClues": ["cardiogenic_pulmonary_oedema", "pf_ratio_over_300"]
+  }
+}

@@ -171,3 +171,10 @@ export function initDoctorTheme() {
   applyDoctorTheme(theme);
   return theme;
 }
+
+// Apply unified theme variables on top for compatibility
+export function applyUnifiedThemeVars(theme: AmxDoctorTheme) {
+  if (typeof document === 'undefined') return;
+  const { applyUnifiedTheme } = require('./unified-theme');
+  applyUnifiedTheme(theme);
+}

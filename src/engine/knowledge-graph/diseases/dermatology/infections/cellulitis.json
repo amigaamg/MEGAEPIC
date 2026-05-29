@@ -1,0 +1,148 @@
+{
+  "disease": {
+    "id": "cellulitis",
+    "name": "Cellulitis",
+    "system": "dermatology",
+    "agePeak_months": [0, 960],
+    "note": "Acute bacterial infection of the dermis and subcutaneous tissue. Usually caused by Streptococcus pyogenes or Staphylococcus aureus. Lower leg most common site.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["skin_infection", "soft_tissue_infection", "bacterial_dermatosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "necrotizing_fasciitis_suspected", "weight": 10 },
+        { "sign": "rapid_spreading_with_bullae_hemorrhage", "weight": 9 },
+        { "sign": "compartment_syndrome", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Systemic sepsis/necrotizing -> CRITICAL; extensive/rapidly spreading -> MODERATE-SEVERE; localized -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "redness_swelling_pain_in_limb", "weight": 5 },
+      { "symptomId": "fever_chills", "weight": 3 },
+      { "symptomId": "skin_break_trauma_ulcer_tinea_pedis", "weight": 4 },
+      { "symptomId": "rapid_progression_over_hours_days", "weight": 3 },
+      { "symptomId": "diabetes_or_immunosuppression", "weight": 3 },
+      { "symptomId": "lymphedema_or_chronic_venous_insufficiency", "weight": 3 },
+      { "symptomId": "recurrent_cellulitis_same_site", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "erythema_warmth_edema", "baseWeight": 5 },
+      { "signId": "poorly_demarcated_border", "baseWeight": 4 },
+      { "signId": "tenderness_to_palpation", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "lymphangitic_streaks", "baseWeight": 3 },
+      { "signId": "regional_lymphadenopathy", "baseWeight": 3 },
+      { "signId": "bullae_or_hemorrhagic_blebs", "baseWeight": 4, "note": "May suggest deeper infection" }
+    ],
+
+    "riskFactors": [
+      { "id": "skin_breach_trauma_ulcer_tinea", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.5 },
+      { "id": "lymphedema_or_cvi", "multiplier": 2.5 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "peripheral_vascular_disease", "multiplier": 2.0 },
+      { "id": "prior_cellulitis_at_site", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_cellulitis",
+        "name": "Uncomplicated Cellulitis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "localized_erythema_swelling", "weight": 5 },
+          { "feature": "no_systemic_toxicity", "weight": 4 },
+          { "feature": "no_necrosis_or_bullae", "weight": 4 }
+        ],
+        "management": "Oral antibiotics: Flucloxacillin 500mg Q6H or Cephalexin 500mg Q6H for 7-10 days. Rest, elevation. Analgesia. Mark erythema border for monitoring."
+      },
+      {
+        "id": "severe_cellulitis",
+        "name": "Severe Cellulitis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "systemic_fevers_tachycardia", "weight": 4 },
+          { "feature": "rapidly_spreading", "weight": 4 },
+          { "feature": "comorbidities_or_immunosuppression", "weight": 4 }
+        ],
+        "management": "IV antibiotics: Flucloxacillin 2g Q6H + Benzylpenicillin 1.2g Q6H (or Cefazolin 2g Q8H). If MRSA risk: add Vancomycin or Clindamycin. Elevation. Surgical debridement if necrotizing fasciitis suspected."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "necrotizing_fasciitis",
+        "discriminators": ["severe_pain_out_of_proportion", "crepitus", "systemic_toxicity_rapid", "gas_on_imaging"]
+      },
+      {
+        "diseaseId": "deep_vein_thrombosis",
+        "discriminators": ["no_fever", "no_erythema_border", "positive_doppler"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC, CRP, blood cultures", "priority": "high", "yield": 0.5, "indication": "if fever, systemic signs" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.1, "indication": "low yield but important if toxic" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound/CT of soft tissue", "priority": "medium", "yield": 0.6, "indication": "if abscess suspected or to exclude necrotizing fasciitis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA / NICE Guidelines for Cellulitis and Erysipelas",
+      "pathways": [
+        {
+          "severity": "mild-moderate (outpatient)",
+          "criteria": "no systemic signs, small area, no comorbidities",
+          "treatment": "Flucloxacillin 500mg PO Q6H x 7-10 days. Cephalexin if penicillin allergic. Elevation. Rest. Mark erythema margin. Review in 48h."
+        },
+        {
+          "severity": "severe (inpatient IV)",
+          "criteria": "systemic illness, rapid spread, comorbidities, failed oral",
+          "treatment": "IV Flucloxacillin 2g Q6H + Benzylpenicillin 1.2g Q6H. Switch to oral when improving. Total 7-14 days. If MRSA: Vancomycin or Daptomycin. Manage comorbidities (diabetes, edema)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bacterial_entry_via_skin_breach",
+      "streptococcal_enzymes_mediating_spread",
+      "dermal_and_subcutaneous_inflammation",
+      "lymphatic_involvement",
+      "systemic_inflammatory_response"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "abscess_formation",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["fluctuance", "failure_to_improve", "pus_on_imaging"]
+      },
+      {
+        "diseaseId": "lymphangitis_lymphadenitis",
+        "probability": 0.15,
+        "severityBoost": 0.2,
+        "clues": ["red_streaks_up_limb", "tender_lymph_nodes"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if rapid/systemic",
+    "diagnosticClues": ["acute_erythema_swelling_warmth_tenderness", "skin_breach_history", "lower_leg"],
+    "exclusionClues": ["bilateral_symmetric", "well_demarcated_plaque", "no_tenderness"]
+  }
+}

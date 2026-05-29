@@ -795,7 +795,7 @@ export default function Home() {
             {[["Features", "features"], ["How It Works", "how"], ["Stories", "stories"]].map(([label, id]) => (
               <a key={id} href={`#${id}`} className="nav-a" onClick={smoothScroll(id)}>{label}</a>
             ))}
-            <Link href="/consultation/respiratory" className="nav-a">Try Builder</Link>
+            <Link href="/clinical-auth" className="nav-a">Clinical Workspace</Link>
             <div style={{ position: "relative" }}>
               <button className="theme-btn" onClick={() => setThemeOpen(!themeOpen)} aria-label="Change theme">
                 {THEMES[theme].icon}
@@ -810,7 +810,7 @@ export default function Home() {
                 </div>
               )}
             </div>
-            <Link href="/consultation/respiratory" className="nav-cta">Try HPI Builder <span className="arrow">→</span></Link>
+            <Link href="/clinical-auth" className="nav-cta">Enter Clinical Workspace <span className="arrow">→</span></Link>
           </div>
           <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
             <span style={menuOpen ? { transform: "rotate(45deg) translateY(7px)" } : {}} />
@@ -823,13 +823,13 @@ export default function Home() {
           {[["Features", "features"], ["How It Works", "how"], ["Stories", "stories"]].map(([label, id]) => (
             <a key={id} href={`#${id}`} className="nav-a" onClick={smoothScroll(id)}>{label}</a>
           ))}
-          <Link href="/consultation/respiratory" className="nav-a" onClick={() => setMenuOpen(false)}>Try Builder</Link>
+          <Link href="/clinical-auth" className="nav-a" onClick={() => setMenuOpen(false)}>Clinical Workspace</Link>
           <div style={{ display: "flex", gap: ".5rem" }}>
             {(Object.entries(THEMES) as [Theme, typeof THEMES[Theme]][]).map(([key, t]) => (
               <button key={key} className={`theme-btn${key === theme ? " active" : ""}`} onClick={() => setTheme(key)} title={t.label}>{t.icon}</button>
             ))}
           </div>
-          <Link href="/consultation/respiratory" className="nav-cta" style={{ width: "fit-content" }} onClick={() => setMenuOpen(false)}>Try HPI Builder →</Link>
+          <Link href="/clinical-auth" className="nav-cta" style={{ width: "fit-content" }} onClick={() => setMenuOpen(false)}>Enter Clinical Workspace →</Link>
         </div>
 
         {/* HERO */}
@@ -839,7 +839,7 @@ export default function Home() {
             <h1 className="hero-h1">The Operating System<br />for <em>Lifelong Healthcare.</em></h1>
             <p className="hero-p">Connecting patients, clinicians, and healthcare systems through intelligent clinical infrastructure. A unified platform for chronic condition management, consultant-level clinical reasoning, and lifelong health records.</p>
             <div className="hero-actions">
-              <Link href="/consultation/respiratory" className="btn-g">Try the HPI Builder <span className="arrow">→</span></Link>
+              <Link href="/clinical-auth" className="btn-g">Enter Clinical Workspace <span className="arrow">→</span></Link>
               <Link href="/register" className="btn-o">Build Your Lifetime Record <span className="arrow">→</span></Link>
             </div>
             <div className="hero-note">
@@ -1082,7 +1082,7 @@ export default function Home() {
             <h2 className="cta-h">One Intelligent System<br />for <em>Lifelong Health.</em></h2>
             <p className="cta-sub">Join thousands of patients and clinicians who chose the platform built for the future of healthcare. No wait times. No lost records. Just intelligent clinical infrastructure — from the first visit to a lifetime of care.</p>
             <div className="cta-btns">
-              <Link href="/consultation/respiratory" className="btn-cream">Try the HPI Builder <span className="arrow">→</span></Link>
+              <Link href="/clinical-auth" className="btn-cream">Enter Clinical Workspace <span className="arrow">→</span></Link>
               <Link href="/register" className="btn-ghost-cta">Start Your Health Story <span className="arrow">→</span></Link>
             </div>
             <div className="cta-fine">Patients: lifelong health story &nbsp;·&nbsp; <span>Clinicians: clinical reasoning engine</span> &nbsp;·&nbsp; Built for a lifetime of care</div>

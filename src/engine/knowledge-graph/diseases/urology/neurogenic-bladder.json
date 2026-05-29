@@ -1,0 +1,116 @@
+{
+  "disease": {
+    "id": "neurogenic_bladder",
+    "name": "Neurogenic Bladder",
+    "system": "urology",
+    "alsoPresentIn": ["neurology"],
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["voiding_dysfunction", "urinary_retention", "incontinence"],
+    "mustNotMiss": true,
+    "emergencyPriority": "non-urgent",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_urinary_retention_with_pain", "weight": 5, "description": "Requires immediate catheterization" },
+        { "sign": "recurrent_uti_with_sepsis", "weight": 5, "description": "Urosepsis from poor emptying" },
+        { "sign": "hydronephrosis_on_ultrasound", "weight": 5, "description": "Upper tract damage from high-pressure bladder" },
+        { "sign": "autonomic_dysreflexia_in_SCI", "weight": 5, "description": "Life-threatening hypertensive crisis" }
+      ],
+      "severeCriteria": { "anyDangerSign": true, "additionalCriteria": [ { "sign": "new_onset_incontinence_after_neurologic_event", "weight": 4 } ] },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "voiding-dysfunction"
+    },
+    "historyFeatures": [
+      { "symptomId": "urinary_incontinence", "weight": 4 },
+      { "symptomId": "urinary_retention", "weight": 4 },
+      { "symptomId": "hesitancy_poor_stream", "weight": 3 },
+      { "symptomId": "frequency_urgency", "weight": 3 },
+      { "symptomId": "recurrent_urinary_tract_infections", "weight": 4 },
+      { "symptomId": "spinal_cord_injury_or_disease", "weight": 5 },
+      { "symptomId": "multiple_sclerosis", "weight": 4 },
+      { "symptomId": "diabetes_mellitus_longstanding", "weight": 3 },
+      { "symptomId": "spina_bifida", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "palpable_bladder_distension", "baseWeight": 4, "severityIndicator": true },
+      { "signId": "absent_or_diminished_bulbocavernosus_reflex", "baseWeight": 4 },
+      { "signId": "decreased_perineal_sensation", "baseWeight": 3 },
+      { "signId": "reduced_anal_sphincter_tone", "baseWeight": 3 },
+      { "signId": "autonomic_dysreflexia_during_exam", "baseWeight": 5, "severityIndicator": true }
+    ],
+    "riskFactors": [
+      { "id": "spinal_cord_injury", "multiplier": 4.0 },
+      { "id": "multiple_sclerosis", "multiplier": 3.0 },
+      { "id": "spina_bifida", "multiplier": 4.0 },
+      { "id": "longstanding_diabetes", "multiplier": 2.0 },
+      { "id": "pelvic_surgery_or_radiation", "multiplier": 1.5 }
+    ],
+    "diagnosticClues": [
+      "urinary retention or incontinence after known neurological injury",
+      "palpable distended bladder in SCI patient",
+      "recurrent UTIs with high post-void residual"
+    ],
+    "exclusionClues": [ "normal PVR <50 mL on repeated measures", "no neurologic history or findings", "normal urodynamics" ],
+    "subtypes": [
+      {
+        "id": "spastic_hyperreflexic_bladder", "name": "Spastic / Hyperreflexic Bladder (UMN lesion)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [ { "feature": "involuntary_detrusor_contractions", "weight": 5 }, { "feature": "urgency_incontinence", "weight": 5 }, { "feature": "detrusor_sphincter_dyssynergia", "weight": 4 } ],
+        "management": { "management": "Anticholinergics, beta-3 agonists, botulinum toxin A, CIC" }
+      },
+      {
+        "id": "flaccid_atonic_bladder", "name": "Flaccid / Acontractile Bladder (LMN lesion)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [ { "feature": "absent_detrusor_contraction", "weight": 5 }, { "feature": "high_post_void_residual", "weight": 5 }, { "feature": "overflow_incontinence", "weight": 4 } ],
+        "management": { "management": "Clean intermittent catheterization (CIC), Valsalva/Credé if low pressure" }
+      },
+      {
+        "id": "diabetic_cystopathy", "name": "Diabetic Cystopathy",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [ { "feature": "impaired_bladder_sensation", "weight": 5 }, { "feature": "increased_bladder_capacity", "weight": 4 }, { "feature": "high_post_void_residual", "weight": 4 } ],
+        "management": { "management": "Glycemic control, timed voiding, CIC, treat UTIs aggressively" }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "benign_prostatic_hyperplasia", "discriminators": ["men >50", "no neurologic findings", "PSA elevated"] },
+      { "diseaseId": "stress_urinary_incontinence", "discriminators": ["coughing/sneezing", "no neurologic history", "normal PVR"] },
+      { "diseaseId": "urethral_stricture", "discriminators": ["poor stream but strong urge", "instrumentation history", "RUG positive"] }
+    ],
+    "investigations": {
+      "bedside": [ { "name": "Bladder Scan / Post-Void Residual", "priority": "first-line", "yield": 5, "indication": "elevated PVR >100 mL suggests inadequate emptying" }, { "name": "Urinalysis and Culture", "priority": "essential", "yield": 4, "indication": "screen for UTI" } ],
+      "laboratory": [ { "name": "Serum Creatinine", "priority": "essential", "yield": 4, "indication": "assess renal function" }, { "name": "Urodynamic Studies (CMG, P/Q, EMG)", "priority": "gold-standard", "yield": 5, "indication": "detrusor pressure, compliance, sphincter coordination" }, { "name": "Uroflowmetry", "priority": "screening", "yield": 3, "indication": "flow pattern and voiding efficiency" } ],
+      "imaging": [ { "name": "Renal Ultrasound", "priority": "essential", "yield": 4, "indication": "hydronephrosis, stones" }, { "name": "VCUG", "priority": "if indicated", "yield": 4, "indication": "detect VUR and urethral pathology" }, { "name": "MRI Spine", "priority": "if indicated", "yield": 5, "indication": "spinal cord lesion or tethered cord" } ]
+    },
+    "management": {
+      "protocolReference": "EAU Guidelines on Neuro-Urology; AUA/SUFU Guidelines",
+      "pathways": [
+        {
+          "severity": "first-line",
+          "criteria": "new diagnosis, mild symptoms, able to void",
+          "treatment": [ "CIC 4-6 times daily if elevated PVR", "Oxybutynin 5 mg PO TDS or mirabegron 25-50 mg OD", "Timed voiding Q3-4h, avoid bladder irritants" ]
+        },
+        {
+          "severity": "second-line",
+          "criteria": "failed medical therapy, persistent incontinence, high detrusor pressure",
+          "treatment": [ "Intradetrusor Botulinum Toxin A 100-300 U cystoscopically", "Increase catheterization frequency" ]
+        },
+        {
+          "severity": "surgical",
+          "criteria": "failed conservative management, upper tract deterioration",
+          "treatment": [ "Augmentation cystoplasty, sacral neuromodulation", "Urinary diversion (ileal conduit) for intractable cases", "Annual renal ultrasound surveillance" ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Suprasacral SCI removes cortical inhibition causing detrusor hyperreflexia",
+      "Sacral/cauda equina injury destroys parasympathetic motor neurons causing acontractile bladder",
+      "Detrusor-sphincter dyssynergia: loss of coordination between bladder and sphincter",
+      "Chronic high-pressure bladder leads to VUR, hydronephrosis, and renal failure"
+    ],
+    "complications": [
+      { "diseaseId": "hydronephrosis_renal_failure", "probability": 0.2, "severityBoost": 0.7, "lagDays": [180, 3650] },
+      { "diseaseId": "recurrent_utis", "probability": 0.5, "severityBoost": 0.3 },
+      { "diseaseId": "urosepsis", "probability": 0.1, "severityBoost": 0.7 },
+      { "diseaseId": "autonomic_dysreflexia", "probability": 0.3, "severityBoost": 0.5 }
+    ]
+  }
+}

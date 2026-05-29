@@ -1,0 +1,166 @@
+{
+  "disease": {
+    "id": "unintentional_weight_loss",
+    "name": "Unintentional Weight Loss",
+    "system": "IM",
+    "agePeak_months": [480, 960],
+    "note": "Involuntary loss of >5% body weight over 6-12 months. Broad differential including malignancy, GI disorders, endocrine, infection, and psychiatric causes.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["constitutional_symptoms", "cachexia", "failure_to_thrive"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_cachexia_bmi_under_16", "weight": 9 },
+        { "sign": "active_malignancy", "weight": 8 },
+        { "sign": "uncontrolled_diabetes_ketosis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "weight_loss_gt_10_percent_3mo", "weight": 7 },
+          { "sign": "severe_functional_decline", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If cachexia/malignancy -> SEVERE; else -> NON-SEVERE (investigate cause)"
+    },
+    "historyFeatures": [
+      { "symptomId": "unintentional_weight_loss", "weight": 5, "modifiers": [
+          { "condition": "duration_weeks_to_months", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "reduced_appetite", "weight": 4 },
+      { "symptomId": "dysphagia", "weight": 3 },
+      { "symptomId": "early_satiety", "weight": 3 },
+      { "symptomId": "diarrhea_steatorrhea", "weight": 3 },
+      { "symptomId": "fever_night_sweats", "weight": 4 },
+      { "symptomId": "fatigue_malaise", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "temporal_wasting", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "muscle_atrophy", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "lymphadenopathy", "baseWeight": 4 },
+      { "signId": "goiter_or_thyroid_nodules", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "smoking_history", "multiplier": 1.5 },
+      { "id": "family_history_malignancy", "multiplier": 1.3 },
+      { "id": "chronic_disease", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "malignancy_associated",
+        "name": "Malignancy-Associated Weight Loss",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "rapid_weight_loss", "weight": 5 },
+          { "feature": "night_sweats", "weight": 4 },
+          { "feature": "mass_or_lymphadenopathy", "weight": 5 }
+        ],
+        "management": "Age-appropriate cancer screening. CT chest/abdomen/pelvis. PET-CT if indicated. Tissue biopsy."
+      },
+      {
+        "id": "gi_cause",
+        "name": "GI-Related Weight Loss",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "dysphagia_or_odynophagia", "weight": 5 },
+          { "feature": "diarrhea_steatorrhea", "weight": 4 },
+          { "feature": "abdominal_pain", "weight": 3 }
+        ],
+        "management": "Upper endoscopy + colonoscopy. Stool studies. Celiac serology. Abdominal imaging."
+      },
+      {
+        "id": "endocrine_cause",
+        "name": "Endocrine Causes",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "heat_intolerance", "weight": 4 },
+          { "feature": "tremor_palpitations", "weight": 4 },
+          { "feature": "polyuria_polydipsia", "weight": 3 }
+        ],
+        "management": "Thyroid function tests. HbA1c. Adrenal function tests."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "major_depressive_disorder",
+        "discriminators": ["low_mood", "anhedonia", "sleep_disturbance", "hopelessness"]
+      },
+      {
+        "diseaseId": "hyperthyroidism",
+        "discriminators": ["tremor", "tachycardia", "heat_intolerance", "goiter"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "BMI calculation", "priority": "immediate", "yield": 1.0, "indication": "all patients" },
+        { "name": "Malnutrition Universal Screening Tool", "priority": "immediate", "yield": 0.9, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "CBC with differential", "priority": "high", "yield": 0.5, "indication": "screen for anemia, infection" },
+        { "name": "CMP", "priority": "high", "yield": 0.6, "indication": "liver/renal function, calcium" },
+        { "name": "Thyroid function (TSH, fT4)", "priority": "high", "yield": 0.4, "indication": "rule out hyperthyroidism" },
+        { "name": "HbA1c", "priority": "high", "yield": 0.3, "indication": "screen for diabetes" },
+        { "name": "Celiac serology (tTG-IgA)", "priority": "medium", "yield": 0.2, "indication": "if GI symptoms" },
+        { "name": "HIV test", "priority": "medium", "yield": 0.1, "indication": "risk factors" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.3, "indication": "screen for lung cancer/TB" },
+        { "name": "CT chest/abdomen/pelvis", "priority": "medium", "yield": 0.6, "indication": "if malignancy suspected" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guideline CG32 - Nutrition Support in Adults",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "weight loss 5-10%, no danger signs",
+          "treatment": "Dietary counseling. Oral nutritional supplements. Treat underlying cause."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "weight loss >10%, functional decline",
+          "treatment": "Dietitian referral. Oral supplements + consider appetite stimulants. Investigate cause as outpatient."
+        },
+        {
+          "severity": "severe",
+          "criteria": "cachexia BMI <16, danger signs",
+          "treatment": "Hospital admission. NG tube or parenteral nutrition if needed. Urgent workup for malignancy/ infection."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "negative_energy_balance",
+      "cytokine_mediated_cachexia",
+      "increased_metabolic_rate",
+      "decreased_nutrient_intake",
+      "malabsorption"
+    ],
+    "complications": [
+      {
+        "diseaseId": "sarcopenia",
+        "probability": 0.4,
+        "lagDays": [30, 180],
+        "severityBoost": 0.2,
+        "clues": ["muscle_wasting", "weakness", "falls"]
+      },
+      {
+        "diseaseId": "refeeding_syndrome",
+        "probability": 0.1,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["hypophosphatemia", "hypokalemia", "edema"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["weight_loss_documented", "directional_trend", "associated_symptoms_guide_workup"],
+    "exclusionClues": ["intentional_weight_loss", "isolated_fluid_loss_diuresis"]
+  }
+}

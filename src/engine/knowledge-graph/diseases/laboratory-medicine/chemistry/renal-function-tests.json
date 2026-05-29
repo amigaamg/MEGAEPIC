@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "renal_function_test_interpretation",
+    "name": "Renal Function Test Interpretation",
+    "system": "LAB",
+    "agePeak_months": [240, 960],
+    "note": "Renal function assessment includes serum creatinine, BUN, eGFR (CKD-EPI), electrolytes, urinalysis, and urine albumin-to-creatinine ratio (ACR). Acute vs chronic kidney disease distinguished by history, imaging, and lab trends.",
+    "prevalenceWeight": 0.75,
+    "syndromeTags": ["renal_function", "acute_kidney_injury", "chronic_kidney_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anuria_lt_100ml_per_day", "weight": 10 },
+        { "sign": "hyperkalemia_gt_6_5", "weight": 10 },
+        { "sign": "severe_acidosis_ph_lt_7_1", "weight": 10 },
+        { "sign": "uremic_pericarditis_or_encephalopathy", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "egfr_lt_15_ckd_stage_5", "weight": 8 },
+          { "sign": "creatinine_rise_gt_3x_baseline_aki_3", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If hyperkalemia/anuria -> URGENT DIALYSIS; if AKI stage 1-2 -> MONITOR; CKD stable -> NON-URGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "decreased_urine_output", "weight": 5, "modifiers": [
+          { "condition": "over_24_hours", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "hematuria_or_foamy_urine", "weight": 3 },
+      { "symptomId": "edema_peripheral_or_periorbital", "weight": 4 },
+      { "symptomId": "history_of_diabetes_or_hypertension", "weight": 4 },
+      { "symptomId": "nsaid_or_contrast_exposure", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "serum_creatinine_elevated", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bun_creatinine_ratio", "baseWeight": 4 },
+      { "signId": "egfr_less_than_60", "baseWeight": 5 },
+      { "signId": "urinalysis_protein_blood_casts", "baseWeight": 4 },
+      { "signId": "potassium_and_bicarbonate", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 2.5 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "nsaid_use_chronic", "multiplier": 2.0 },
+      { "id": "cardiovascular_disease", "multiplier": 1.8 }
+    ],
+    "subtypes": [
+      {
+        "id": "pre_renal_aki",
+        "name": "Pre-Renal Acute Kidney Injury",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "bun_cr_ratio_gt_20", "weight": 5 },
+          { "feature": "fena_less_than_1_percent", "weight": 5 },
+          { "feature": "urine_osmolality_gt_500", "weight": 4 },
+          { "feature": "reversible_with_volume_resuscitation", "weight": 5 },
+          { "feature": "clinical_dehydration_or_hypotension", "weight": 4 }
+        ],
+        "management": "Volume repletion (isotonic crystalloid). Hold NSAIDs, ACEi/ARBs if hypotensive. Treat underlying cause (diarrhea, vomiting, hemorrhage, heart failure). Monitor urine output and creatinine."
+      },
+      {
+        "id": "intrinsic_renal_aki_atn",
+        "name": "Intrinsic AKI (Acute Tubular Necrosis)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "fena_gt_2_percent", "weight": 5 },
+          { "feature": "muddy_brown_granular_casts_on_urinalysis", "weight": 5 },
+          { "feature": "recent_ischemia_or_nephrotoxin_exposure", "weight": 4 },
+          { "feature": "creatinine_rise_over_24_72h", "weight": 4 },
+          { "feature": "renal_failure_index_gt_1", "weight": 3 }
+        ],
+        "management": "Remove nephrotoxin. Optimize hemodynamics. Avoid further insults. Supportive care. May require dialysis. Recovery over 1-3 weeks with diuretic phase."
+      },
+      {
+        "id": "chronic_kidney_disease",
+        "name": "Chronic Kidney Disease (Staging)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "egfr_lt_60_for_gt_3_months", "weight": 5 },
+          { "feature": "albuminuria_acr_gt_30", "weight": 5 },
+          { "feature": "small_kidneys_on_ultrasound", "weight": 4 },
+          { "feature": "anemia_of_chronic_disease", "weight": 3 },
+          { "feature": "renal_osteodystrophy_labs", "weight": 3 }
+        ],
+        "management": "CKD staging (G1-G5) based on eGFR. Renoprotection: ACEi/ARB for proteinuria. BP target <130/80. SGLT2 inhibitors for proteinuric CKD. Manage complications: anemia (ESA), bone disease (vitamin D, phosphate binders), acidosis (bicarbonate)."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "pseudo_aki_from_creatinine_interference",
+        "discriminators": ["ketoacids_affect_assay", "cimetidine_trimethoprim_block_secretion", "normal_cystatin_c"]
+      },
+      {
+        "diseaseId": "acute_glomerulonephritis",
+        "discriminators": ["active_urine_sediment_rbc_casts", "dysmorphic_rbc", "proteinuria_nephrotic_range"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Urine output monitoring", "priority": "immediate", "yield": 0.8, "indication": "all AKI patients" }
+      ],
+      "laboratory": [
+        { "name": "Serum creatinine with eGFR (CKD-EPI)", "priority": "immediate", "yield": 0.95, "indication": "all patients with known or suspected renal disease" },
+        { "name": "BUN", "priority": "immediate", "yield": 0.7, "indication": "assess prerenal component, urea clearance" },
+        { "name": "Electrolytes (Na, K, Cl, HCO3)", "priority": "immediate", "yield": 0.8, "indication": "monitor for hyperkalemia, acidosis" },
+        { "name": "Urinalysis with microscopy", "priority": "high", "yield": 0.7, "indication": "casts, cells, protein, crystals" },
+        { "name": "Urine electrolytes (FENa, FEUrea)", "priority": "high", "yield": 0.75, "indication": "differentiate prerenal vs intrinsic AKI" },
+        { "name": "Urine ACR (albumin-to-creatinine ratio)", "priority": "medium", "yield": 0.8, "indication": "CKD staging, proteinuria quantification" },
+        { "name": "Cystatin C", "priority": "low", "yield": 0.7, "indication": "alternative eGFR if creatinine unreliable" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "high", "yield": 0.6, "indication": "hydronephrosis, kidney size, cortical thickness" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO Clinical Practice Guideline for AKI and CKD",
+      "pathways": [
+        {
+          "severity": "aki_stage_1",
+          "criteria": "creatinine 1.5-1.9x baseline or UOP <0.5ml/kg/h for 6-12h",
+          "treatment": "Discontinue nephrotoxins. Optimize volume status. Monitor creatinine daily. Renal ultrasound. Consider cause (prerenal, intrinsic, postrenal)."
+        },
+        {
+          "severity": "aki_stage_2_3",
+          "criteria": "creatinine 2-2.9x or >3x baseline; UOP <0.5 or <0.3ml/kg/h",
+          "treatment": "Nephrology consultation. Strict I/O. Avoid contrast. Consider RRT if refractory hyperkalemia, acidosis, volume overload, or uremia. ICU if oliguric."
+        },
+        {
+          "severity": "ckd_stable",
+          "criteria": "eGFR <60 for >3 months, stable or slow progression",
+          "treatment": "Nephrology referral. Manage BP, proteinuria, DM. Diet: low sodium, moderate protein. Vaccinations (Hep B, influenza, pneumococcal). Prepare for RRT if eGFR <20."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "reduced_gfr",
+      "decreased_excretory_function",
+      "fluid_and_electrolyte_imbalance",
+      "acid_base_disturbance",
+      "accumulation_of_uremic_toxins",
+      "anemia_and_bone_disease"
+    ],
+    "complications": [
+      {
+        "diseaseId": "hyperkalemia",
+        "probability": 0.3,
+        "lagDays": [1, 30],
+        "severityBoost": 0.5,
+        "clues": ["egfr_lt_30", "potassium_sparing_diuretics", "acidosis"]
+      },
+      {
+        "diseaseId": "metabolic_acidosis",
+        "probability": 0.2,
+        "lagDays": [1, 90],
+        "severityBoost": 0.3,
+        "clues": ["low_bicarbonate", "anion_gap_normal_or_elevated", "egfr_lt_30"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["elevated_creatinine", "low_egfr", "abnormal_urinalysis", "temporal_trend"],
+    "exclusionClues": ["normal_creatinine_and_urinalysis", "normal_kidney_size"]
+  }
+}

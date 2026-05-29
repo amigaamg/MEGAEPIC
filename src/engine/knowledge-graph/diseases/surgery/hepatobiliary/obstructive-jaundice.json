@@ -1,0 +1,191 @@
+{
+  "disease": {
+    "id": "obstructive_jaundice",
+    "name": "Obstructive Jaundice",
+    "system": "surgical",
+    "agePeak_months": [360, 840],
+    "note": "Jaundice due to obstruction of bile flow. Causes: gallstones, strictures, tumors. Requires biliary drainage.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["jaundice", "pruritus", "cholestasis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock_cholangitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "coagulopathy_severe", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bilirubin_greater_than_15", "weight": 6 },
+          { "sign": "complete_biliary_obstruction", "weight": 7 },
+          { "sign": "cholangitis_superimposed", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Cholangitis/coagulopathy -> SEVERE; uncomplicated obstruction -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 5 },
+      { "symptomId": "dark_urine", "weight": 4 },
+      { "symptomId": "pale_stools_clay_colored", "weight": 4 },
+      { "symptomId": "pruritus_severe", "weight": 3, "note": "Intense itching from bile salt deposition" },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3 },
+      { "symptomId": "known_gallstones", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 3, "note": "Suggests malignancy" },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "fever_rigors", "weight": 4, "note": "Suggests cholangitis" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "icterus_scleral", "baseWeight": 4 },
+      { "signId": "excoriations_from_scratching", "baseWeight": 2 },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 3 },
+      { "signId": "courvoisier_gallbladder", "baseWeight": 4, "note": "Palpable, non-tender GB in malignant obstruction" },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "signs_of_cholangitis", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "gallstones", "multiplier": 2.5 },
+      { "id": "pancreatic_cancer", "multiplier": 2.0 },
+      { "id": "cholangiocarcinoma", "multiplier": 2.0 },
+      { "id": "biliary_stricture", "multiplier": 2.0 },
+      { "id": "previous_biliary_surgery", "multiplier": 1.5 },
+      { "id": "sclerosing_cholangitis", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "gallstone_obstruction",
+        "name": "Obstructive Jaundice from Choledocholithiasis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "gallstones_on_us", "weight": 5 },
+          { "feature": "dilated_cbd", "weight": 5 },
+          { "feature": "colicky_ruq_pain", "weight": 3 },
+          { "feature": "intermittent_jaundice", "weight": 3 }
+        ],
+        "management": "ERCP with sphincterotomy and stone extraction. Laparoscopic cholecystectomy after ERCP. If failed ERCP: laparoscopic CBD exploration or open surgery."
+      },
+      {
+        "id": "malignant_obstruction",
+        "name": "Obstructive Jaundice from Malignancy",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "painless_progressive_jaundice", "weight": 5 },
+          { "feature": "courvoisier_sign", "weight": 4 },
+          { "feature": "weight_loss", "weight": 5 },
+          { "feature": "dilated_biliary_tree", "weight": 5 },
+          { "feature": "mass_on_imaging", "weight": 5 }
+        ],
+        "management": "Staging CT/MRI. Biliary drainage (ERCP stent or PTC). Pancreaticoduodenectomy for resectable tumors. Palliative stenting for unresectable. Chemotherapy."
+      },
+      {
+        "id": "biliary_stricture",
+        "name": "Benign Biliary Stricture",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "history_of_biliary_surgery", "weight": 5 },
+          { "feature": "no_mass_on_imaging", "weight": 5 },
+          { "feature": "hyperbilirubinemia_conjugated", "weight": 4 }
+        ],
+        "management": "ERCP with balloon dilatation and stenting. Multiple stents for complex strictures. Hepaticojejunostomy for failed endoscopic management."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatocellular_jaundice",
+        "discriminators": ["elevated_alt_ast_more_than_alp", "normal_bile_ducts", "hepatitis_history", "no_pruritus"]
+      },
+      {
+        "diseaseId": "hemolytic_jaundice",
+        "discriminators": ["unconjugated_hyperbilirubinemia", "normal_alp_ggt", "anemia", "reticulocytosis"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["recent_drug_exposure", "hepatocellular_pattern", "normal_biliary_tree"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dipstick", "priority": "immediate", "yield": 0.5, "indication": "bilirubin positive, urobilinogen negative" }
+      ],
+      "laboratory": [
+        { "name": "Bilirubin (total + direct)", "priority": "immediate", "yield": 0.9, "indication": "conjugated hyperbilirubinemia" },
+        { "name": "ALP, GGT", "priority": "immediate", "yield": 0.85, "indication": "cholestatic enzymes elevated" },
+        { "name": "ALT, AST", "priority": "high", "yield": 0.5, "indication": "mild elevation" },
+        { "name": "CA 19-9", "priority": "medium", "yield": 0.5, "indication": "elevated in malignant obstruction" },
+        { "name": "INR", "priority": "high", "yield": 0.5, "indication": "coagulopathy from vitamin K malabsorption" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.8, "indication": "dilated bile ducts, gallstones, mass" },
+        { "name": "MRCP", "priority": "high", "yield": 0.95, "indication": "gold standard for biliary tree anatomy" },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.85, "indication": "detect mass, staging" },
+        { "name": "ERCP", "priority": "high", "yield": 0.95, "indication": "diagnostic and therapeutic" },
+        { "name": "EUS", "priority": "medium", "yield": 0.85, "indication": "detect small tumors, tissue sampling" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASGE Guidelines for Obstructive Jaundice",
+      "pathways": [
+        {
+          "severity": "benign (gallstones)",
+          "criteria": "gallstones in CBD, dilated ducts, no mass",
+          "treatment": "ERCP + sphincterotomy + stone extraction. Laparoscopic cholecystectomy after clearance. IV antibiotics if cholangitis present."
+        },
+        {
+          "severity": "malignant obstruction",
+          "criteria": "mass on imaging, progressive jaundice, weight loss",
+          "treatment": "ERCP with biliary stent (plastic or metal). Staging CT/MRI. Resection if resectable (Whipple/distal pancreatectomy). Palliative treatment if unresectable."
+        },
+        {
+          "severity": "cholangitis",
+          "criteria": "fever, jaundice, RUQ pain, sepsis",
+          "treatment": "IV antibiotics. Urgent ERCP with drainage. ICU if septic."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "biliary_obstruction",
+      "increased_biliary_pressure",
+      "bile_stasis",
+      "conjugated_hyperbilirubinemia",
+      "bile_salt_accumulation",
+      "pruritus",
+      "vitamin_k_malabsorption",
+      "coagulopathy"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cholangitis",
+        "probability": 0.2,
+        "lagDays": [1, 14],
+        "severityBoost": 0.4,
+        "clues": ["fever_rigors", "increasing_jaundice", "ruq_pain"]
+      },
+      {
+        "diseaseId": "hepatorenal_failure",
+        "probability": 0.05,
+        "lagDays": [7, 30],
+        "severityBoost": 0.5,
+        "clues": ["prolonged_obstruction", "rising_creatinine", "oliguria"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["jaundice", "dark_urine_pale_stool", "pruritus", "elevated_alp_ggt", "dilated_bile_ducts"],
+    "exclusionClues": ["unconjugated_hyperbilirubinemia", "normal_ducts_on_imaging", "hepatocellular_pattern_lfts"]
+  }
+}

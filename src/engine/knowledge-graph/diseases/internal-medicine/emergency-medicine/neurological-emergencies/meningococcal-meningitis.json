@@ -1,0 +1,143 @@
+{
+  "disease": {
+    "id": "meningococcal_meningitis",
+    "name": "Meningococcal Meningitis",
+    "system": "emergency_medicine",
+    "agePeak_months": [0, 240],
+    "note": "Medical emergency caused by Neisseria meningitidis. Can present as meningitis, meningococcemia, or both. Non-blanching purpuric rash is a hallmark. Rapidly fatal if untreated.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["neurological_emergency", "infection", "meningitis", "sepsis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapidly_progressive_purpuric_rash", "weight": 10 },
+        { "sign": "hypotension_shock", "weight": 10 },
+        { "sign": "altered_consciousness_coma", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "seizures", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Suspected meningococcal disease = CRITICAL EMERGENCY. IV antibiotics within 1 hour."
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_sudden_onset", "weight": 5 },
+      { "symptomId": "headache_severe", "weight": 4 },
+      { "symptomId": "neck_stiffness", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 4 },
+      { "symptomId": "photophobia", "weight": 3 },
+      { "symptomId": "non_blanching_rash", "weight": 5 },
+      { "symptomId": "myalgia_leg_pain", "weight": 3 },
+      { "symptomId": "cold_hands_and_feet", "weight": 3 },
+      { "symptomId": "drowsiness_confusion", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "non_blanching_purpuric_rash", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "meningism_neck_stiffness", "baseWeight": 5 },
+      { "signId": "fever_high", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "kernig_sign_positive", "baseWeight": 4 },
+      { "signId": "brudzinski_sign_positive", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 3 },
+      { "signId": "petechiae", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "age_under_5", "multiplier": 3.0 },
+      { "id": "adolescents_young_adults", "multiplier": 2.5 },
+      { "id": "asplenia_or_splenectomy", "multiplier": 5.0 },
+      { "id": "terminal_complement_deficiency", "multiplier": 5.0 },
+      { "id": "household_contact", "multiplier": 2.0 },
+      { "id": "crowded_living_dorms_barracks", "multiplier": 2.0 },
+      { "id": "previous_upper_respiratory_infection", "multiplier": 1.5 }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "viral_meningitis",
+        "discriminators": ["less_acute_onset", "no_purpuric_rash", "less_severe_illness"]
+      },
+      {
+        "diseaseId": "immune_thrombocytopenic_purpura",
+        "discriminators": ["no_fever", "no_menigeal_signs", "low_platelets_stable"]
+      },
+      {
+        "diseaseId": "haemolytic_uraemic_syndrome",
+        "discriminators": ["microangiopathic_haemolytic_anaemia", "akl"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Rash glass test", "priority": "immediate", "yield": 0.9, "indication": "non-blanching = suspect meningococcus" },
+        { "name": "ABCDE assessment", "priority": "immediate", "yield": 1.0, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "Blood cultures x2 (before antibiotics if possible)", "priority": "high", "yield": 0.7, "indication": "identify organism" },
+        { "name": "FBC with differential", "priority": "high", "yield": 0.6, "indication": "WBC, platelets" },
+        { "name": "CRP, procalcitonin", "priority": "high", "yield": 0.7, "indication": "infection severity" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.7, "indication": "DIC screen" },
+        { "name": "U&E, Cr, LFTs", "priority": "high", "yield": 0.5, "indication": "organ function" },
+        { "name": "CSF analysis (after stabilization, if safe)", "priority": "high", "yield": 0.95, "indication": "gram stain, culture, PCR" },
+        { "name": "Meningococcal PCR (blood/CSF)", "priority": "high", "yield": 0.9, "indication": "rapid confirmation" },
+        { "name": "ABG/VBG", "priority": "high", "yield": 0.6, "indication": "acid-base, lactate" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Meningitis Research Foundation / NICE Meningitis Guidelines",
+      "pathways": [
+        {
+          "severity": "suspected meningococcal disease",
+          "criteria": "fever + non-blanching rash OR fever + meningism + petechiae/ecchymoses",
+          "treatment": "IMMEDIATE IV antibiotics: ceftriaxone 2g IV (or cefotaxime). Do not wait for LP or imaging. Steroids: dexamethasone 0.15mg/kg IV if bacterial meningitis suspected (controversial in meningococcal). IV fluids (sepsis protocol). Vasopressors if shock. ICU admission. Notify public health. Chemoprophylaxis for close contacts (ciprofloxacin or rifampicin)."
+        },
+        {
+          "severity": "meningococcal sepsis / Waterhouse-Friderichsen",
+          "criteria": "purpura fulminans, shock, DIC, adrenal haemorrhage",
+          "treatment": "Aggressive fluid resuscitation. Vasopressors (norepinephrine). Stress-dose hydrocortisone (if adrenal failure suspected). Correct coagulopathy (FFP, platelets, cryoprecipitate). Consider activated protein C (controversial). Surgical debridement of necrotic tissue. ECMO if refractory shock."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "nasopharyngeal_colonization",
+      "bacterial_invasion_of_bloodstream",
+      "cerebrospinal_fluid_invasion",
+      "meningococcal_endotoxin_induced_inflammatory_cascade",
+      "cytokine_storm",
+      "endothelial_damage",
+      "increased_vascular_permeability",
+      "disseminated_intravascular_coagulation",
+      "adrenal_haemorrhage",
+      "multi_organ_failure"
+    ],
+    "complications": [
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["purpura_fulminans", "thrombocytopenia", "prolonged_coagulation", "bleeding"]
+      },
+      {
+        "diseaseId": "adrenal_haemorrhage",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["refractory_hypotension", "hyponatremia", "hyperkalemia"]
+      },
+      {
+        "diseaseId": "hearing_loss",
+        "probability": 0.1,
+        "severityBoost": 0.2,
+        "clues": ["post_meningitic"]
+      },
+      {
+        "diseaseId": "limb_ischaemia_necrosis",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["purpura_fulminans", "digital_ischaemia"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever", "non_blanching_purpuric_rash", "neck_stiffness", "photophobia", "rapid_deterioration", "shock"],
+    "exclusionClues": ["blanching_rash", "no_fever", "alternative_diagnosis_from_csf", "neisseria_not_isolated"]
+  }
+}

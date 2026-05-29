@@ -1,0 +1,170 @@
+{
+  "disease": {
+    "id": "preoperative_assessment",
+    "name": "Preoperative Medical Assessment",
+    "system": "IM",
+    "agePeak_months": [360, 960],
+    "note": "Preoperative risk stratification and medical optimization before elective or emergency surgery. Includes cardiac, pulmonary, and bleeding risk assessment as per guidelines.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["perioperative_medicine", "risk_stratification", "medical_clearance"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "unstable_acs", "weight": 10 },
+        { "sign": "decompensated_hf", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "active_sepsis", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "rca_high_risk", "weight": 7 },
+          { "sign": "poor_functional_capacity_less_4_mets", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If unstable condition -> postpone surgery; else -> proceed with optimization"
+    },
+    "historyFeatures": [
+      { "symptomId": "chest_pain", "weight": 5, "modifiers": [
+          { "condition": "exertional", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "dyspnea_on_exertion", "weight": 4 },
+      { "symptomId": "orthopnea_paroxysmal_nocturnal_dyspnea", "weight": 4 },
+      { "symptomId": "syncope_presyncope", "weight": 3 },
+      { "symptomId": "bleeding_history", "weight": 5 },
+      { "symptomId": "anesthetic_complications_family", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "vital_sign_abnormalities", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "murmur", "baseWeight": 4 },
+      { "signId": "lung_auscultation_abnormal", "baseWeight": 3 },
+      { "signId": "mallampati_score", "baseWeight": 3 },
+      { "signId": "pedal_edema", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 1.5 },
+      { "id": "copd", "multiplier": 1.8 },
+      { "id": "cad_or_hf", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.4 },
+      { "id": "ckd", "multiplier": 1.6 },
+      { "id": "obesity_bmi_over_35", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "cardiac_risk_assessment",
+        "name": "Cardiac Risk Assessment",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "mace_risk_factors", "weight": 5 },
+          { "feature": "poor_functional_capacity", "weight": 5 },
+          { "feature": "high_risk_surgery", "weight": 4 }
+        ],
+        "management": "RCRI score. ECG. Consider echo/ stress testing if RCRI >=2 and poor functional capacity. Beta-blocker optimization. Statin continuation."
+      },
+      {
+        "id": "pulmonary_risk_assessment",
+        "name": "Pulmonary Risk Assessment",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "copd_or_asthma", "weight": 5 },
+          { "feature": "smoking_history", "weight": 4 },
+          { "feature": "obstructive_sleep_apnea", "weight": 4 },
+          { "feature": "upper_abdominal_surgery", "weight": 3 }
+        ],
+        "management": "Smoking cessation at least 4 weeks before surgery. PFTs if indicated. Inhaler optimization. CPAP for OSA."
+      },
+      {
+        "id": "bleeding_risk_assessment",
+        "name": "Bleeding Risk Assessment",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "anticoagulant_or_antiplatelet", "weight": 5 },
+          { "feature": "thrombocytopenia", "weight": 4 },
+          { "feature": "liver_disease", "weight": 4 },
+          { "feature": "history_of_excessive_bleeding", "weight": 5 }
+        ],
+        "management": "PT/PTT/INR, CBC. Bleeding risk vs thrombosis risk. Anticoagulation bridging plan per CHEST guidelines. Consult anesthesia and hematology if complex."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "anxiety_disorder",
+        "discriminators": ["panic_attacks", "tachycardia_without_ischemia", "hyperventilation"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "all patients >45 years or with cardiac risk factors" },
+        { "name": "Functional capacity assessment (METs)", "priority": "immediate", "yield": 0.8, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.5, "indication": "all patients for elective surgery" },
+        { "name": "CMP", "priority": "high", "yield": 0.4, "indication": "renal and liver function" },
+        { "name": "PT/PTT/INR", "priority": "high", "yield": 0.4, "indication": "if bleeding history or anticoagulation" },
+        { "name": "HbA1c", "priority": "medium", "yield": 0.3, "indication": "known diabetes or risk factors" },
+        { "name": "BNP or NT-proBNP", "priority": "medium", "yield": 0.4, "indication": "if suspicion of HF" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.2, "indication": "if age >70 or cardiopulmonary disease" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACC/AHA Guideline on Perioperative Cardiovascular Evaluation",
+      "pathways": [
+        {
+          "severity": "low_risk",
+          "criteria": "age <45, no comorbidities, low-risk surgery",
+          "treatment": "No further testing indicated. Proceed with surgery. Standard monitoring."
+        },
+        {
+          "severity": "intermediate_risk",
+          "criteria": "stable comorbidities, reasonable functional capacity, intermediate-risk surgery",
+          "treatment": "Optimize chronic conditions. Continue medications. ECG. Consider echo if murmur/new symptoms. Proceed after optimization."
+        },
+        {
+          "severity": "high_risk",
+          "criteria": "unstable cardiac condition, poor functional capacity <4 METs, high-risk surgery",
+          "treatment": "Postpone elective surgery. Cardiology consultation. Non-invasive stress testing or coronary angiography if indicated. Optimize and reassess."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "surgical_stress_response",
+      "hemodynamic_fluctuations",
+      "sympathetic_activation",
+      "coagulation_activation",
+      "inflammatory_response"
+    ],
+    "complications": [
+      {
+        "diseaseId": "myocardial_infarction",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["chest_pain", "ecg_changes", "troponin_elevation"]
+      },
+      {
+        "diseaseId": "postoperative_delirium",
+        "probability": 0.15,
+        "lagDays": [1, 3],
+        "severityBoost": 0.3,
+        "clues": ["confusion", "inattention", "fluctuating_consciousness"]
+      },
+      {
+        "diseaseId": "venous_thromboembolism",
+        "probability": 0.1,
+        "lagDays": [3, 14],
+        "severityBoost": 0.4,
+        "clues": ["calf_pain", "sudden_dyspnea", "hypoxia"]
+      }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["elective_surgery_planned", "medical_comorbidities_present", "functional_capacity_assessment_needed"],
+    "exclusionClues": ["emergency_surgery", "life_limiting_prognosis"]
+  }
+}

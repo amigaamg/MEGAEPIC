@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "gout",
+    "name": "Gout",
+    "system": "rheumatology",
+    "agePeak_months": [480, 840],
+    "note": "Crystal arthropathy caused by monosodium urate deposition in joints due to hyperuricemia. Presents with acute inflammatory monoarthritis, most commonly at the first metatarsophalangeal joint.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["crystal_arthropathy", "inflammatory_arthritis", "monoarthritis", "metabolic"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_arthritis", "weight": 10 },
+        { "sign": "tophaceous_ulceration", "weight": 6 },
+        { "sign": "acute_renal_failure_tumor_lysis", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If septic joint excluded -> NON-URGENT; acute attack treat symptomatically"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_monoarticular_pain_mtp", "weight": 5 },
+      { "symptomId": "podagra_first_mtp", "weight": 5 },
+      { "symptomId": "rapid_onset_severe_pain", "weight": 4 },
+      { "symptomId": "erythema_over_joint", "weight": 4 },
+      { "symptomId": "previous_similar_attacks", "weight": 4 },
+      { "symptomId": "precipitating_factor_alcohol_meat", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tender_swollen_erythematous_mtp", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tophi", "baseWeight": 4 },
+      { "signId": "periarticular_erythema_desquamation", "baseWeight": 3 },
+      { "signId": "limited_range_of_motion", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "hyperuricemia", "multiplier": 5.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 3.0 },
+      { "id": "diuretic_use", "multiplier": 2.5 },
+      { "id": "high_purine_diet", "multiplier": 2.0 },
+      { "id": "alcohol_consumption", "multiplier": 2.5 },
+      { "id": "male_sex", "multiplier": 3.0 },
+      { "id": "metabolic_syndrome", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_intermittent_gout",
+        "name": "Acute Intermittent Gout",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "self_limiting_attacks_days", "weight": 5 },
+          { "feature": "asymptomatic_intercritical_periods", "weight": 4 },
+          { "feature": "monoarticular_typical", "weight": 5 }
+        ],
+        "management": "NSAIDs or colchicine. Intra-articular steroids. ULT after attack resolves."
+      },
+      {
+        "id": "chronic_tophaceous_gout",
+        "name": "Chronic Tophaceous Gout",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "tophi_deposits", "weight": 5 },
+          { "feature": "chronic_polyarticular", "weight": 4 },
+          { "feature": "joint_damage_erosions", "weight": 4 }
+        ],
+        "management": "ULT (allopurinol or febuxostat). Urate-lowering to target < 360 umol/L."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pseudogout",
+        "discriminators": ["calcium_pyrophosphate_crystals", "chondrocalcinosis_on_xray", "knee_common", "older_adults"]
+      },
+      {
+        "diseaseId": "septic_arthritis",
+        "discriminators": ["positive_culture", "single_joint", "toxic_appearance", "no_crystals", "normal_urate"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Joint aspiration and polarized microscopy", "priority": "immediate", "yield": 0.95, "indication": "gold standard: negative birefringent urate crystals" }
+      ],
+      "laboratory": [
+        { "name": "Serum urate", "priority": "high", "yield": 0.8, "indication": "may be normal during acute attack" },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "elevated in acute attack" },
+        { "name": "Renal function", "priority": "high", "yield": 0.5, "indication": "CKD increases risk" }
+      ],
+      "imaging": [
+        { "name": "Joint X-ray", "priority": "medium", "yield": 0.4, "indication": "punched-out erosions, overhanging edges" },
+        { "name": "Dual-energy CT", "priority": "low", "yield": 0.85, "indication": "urate deposition mapping" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACR/EULAR Gout Management Guidelines",
+      "pathways": [
+        {
+          "severity": "acute",
+          "criteria": "severe pain < 24 hours, single joint",
+          "treatment": "NSAIDs (naproxen, indomethacin) or colchicine 0.5 mg TDS. Intra-articular steroids if contraindicated."
+        },
+        {
+          "severity": "intercritical",
+          "criteria": "between attacks, no active inflammation",
+          "treatment": "ULT if recurrent attacks, tophi, or urate > 480. Allopurinol starting 100 mg daily (start after inflammation resolved)."
+        },
+        {
+          "severity": "chronic",
+          "criteria": "tophaceous, erosive, frequent attacks",
+          "treatment": "ULT target < 360 umol/L. Consider febuxostat or uricosuric (benzbromarone). Prophylaxis with colchicine or NSAID."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hyperuricemia",
+      "monosodium_urate_crystal_formation",
+      "nlrp3_inflammasome_activation",
+      "il_1_beta_release",
+      "neutrophil_recruitment",
+      "crystal_deposition_tissue"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "chronic_kidney_disease",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["hyperuricemia", "hypertension", "reduced_e_gfr"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low (exclude septic arthritis first)",
+    "diagnosticClues": ["podagra", "monoarticular_acute", "hyperuricemia", "urate_crystals"],
+    "exclusionClues": ["cppd_crystals", "negative_birefringent", "chondrocalcinosis", "normal_urate_no_crystals"]
+  }
+}

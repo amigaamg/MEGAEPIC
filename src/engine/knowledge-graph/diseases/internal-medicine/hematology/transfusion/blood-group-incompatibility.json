@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "blood_group_incompatibility",
+    "name": "Blood Group Incompatibility",
+    "system": "hematology",
+    "agePeak_months": [0, 12, 240, 480],
+    "note": "Hemolytic disease of the newborn (HDN) due to Rh or ABO incompatibility, or transfusion-related hemolysis from ABO/Rh mismatch. Maternal antibodies cross placenta and cause fetal RBC destruction.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["hemolysis", "newborn", "incompatibility", "jaundice"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hydrops_fetalis", "weight": 10 },
+        { "sign": "severe_neonatal_jaundice", "weight": 9 },
+        { "sign": "kernicterus", "weight": 10 },
+        { "sign": "severe_anemia_hb_below_5", "weight": 9 },
+        { "sign": "acute_hemolytic_reaction", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "mild_jaundice_only": true
+      },
+      "severityLabel": "If hydrops, severe jaundice, or acute hemolysis -> EMERGENCY; mild ABO incompatibility -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "neonatal_jaundice_within_24_hours", "weight": 5 },
+      { "symptomId": "maternal_rh_negative", "weight": 5 },
+      { "symptomId": "previous_affected_child", "weight": 4 },
+      { "symptomId": "pallor", "weight": 3 },
+      { "symptomId": "poor_feeding", "weight": 3 },
+      { "symptomId": "lethargy", "weight": 3 },
+      { "symptomId": "dark_urine", "weight": 2 },
+      { "symptomId": "transfusion_mismatch_history", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 3 },
+      { "signId": "signs_of_hydrops", "baseWeight": 5, "note": "Ascites, pleural effusion, edema" },
+      { "signId": "neurologic_signs_kernicterus", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "maternal_rh_negative_status", "multiplier": 5.0 },
+      { "id": "maternal_blood_type_o", "multiplier": 3.0, "note": "ABO incompatibility" },
+      { "id": "previous_affected_pregnancy", "multiplier": 4.0 },
+      { "id": "lack_of_anti_d_prophylaxis", "multiplier": 3.0 },
+      { "id": "maternal_sensitization", "multiplier": 5.0 },
+      { "id": "prior_transfusion", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "rh_incompatibility_hdn",
+        "name": "Rh Incompatibility (HDN)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "rh_negative_mother_rh_positive_baby", "weight": 5 },
+          { "feature": "igg_anti_d_antibodies", "weight": 5 },
+          { "feature": "severe_hydrops_possible", "weight": 4 }
+        ],
+        "management": "Anti-D prophylaxis in pregnancy. IVIG and intrauterine transfusion for affected fetus. Exchange transfusion after birth if severe."
+      },
+      {
+        "id": "abo_incompatibility_hdn",
+        "name": "ABO Incompatibility (HDN)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "mother_type_o_baby_a_or_b", "weight": 5 },
+          { "feature": "mild_to_moderate_jaundice", "weight": 4 },
+          { "feature": "positive_direct_coombs", "weight": 3 }
+        ],
+        "management": "Phototherapy. IVIG if bilirubin rising despite phototherapy. Exchange transfusion if severe hyperbilirubinemia."
+      },
+      {
+        "id": "transfusion_incompatibility",
+        "name": "Transfusion ABO/Rh Incompatibility",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "wrong_blood_type_transfused", "weight": 5 },
+          { "feature": "acute_hemolysis", "weight": 5 },
+          { "feature": "febrile_reaction", "weight": 4 }
+        ],
+        "management": "STOP transfusion. IV fluids. Monitor for DIC and AKI. Supportive care. Report to blood bank."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "physiologic_jaundice",
+        "discriminators": ["onset_after_24_hours", "self_limited", "normal_coombs", "no_maternal_incompatibility"]
+      },
+      {
+        "diseaseId": "autoimmune_hemolytic_anemia",
+        "discriminators": ["positive_coombs_all_ages", "no_maternal_incompatibility", "autoantibodies"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Maternal and infant blood type", "priority": "immediate", "yield": 0.98, "indication": "ABO and Rh typing" },
+        { "name": "Direct Coombs test (infant)", "priority": "immediate", "yield": 0.9, "indication": "Positive in HDN" },
+        { "name": "Bilirubin (total and unconjugated)", "priority": "immediate", "yield": 0.95, "indication": "Elevated in hemolysis" }
+      ],
+      "laboratory": [
+        { "name": "Maternal antibody screen", "priority": "high", "yield": 0.85, "indication": "Identify specific antibody" },
+        { "name": "Fetal / newborn Hb", "priority": "high", "yield": 0.8, "indication": "Anemia severity" },
+        { "name": "Reticulocyte count", "priority": "high", "yield": 0.7, "indication": "High (compensatory)" },
+        { "name": "Kleihauer-Betke test", "priority": "medium", "yield": 0.6, "indication": "Fetal-maternal hemorrhage quantification" }
+      ],
+      "imaging": [
+        { "name": "Middle cerebral artery Doppler (MCA-PSV)", "priority": "high", "yield": 0.8, "indication": "Fetal anemia assessment" },
+        { "name": "Fetal ultrasound", "priority": "medium", "yield": 0.6, "indication": "Signs of hydrops" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG / AAP Guidelines for HDN and Blood Group Incompatibility",
+      "pathways": [
+        {
+          "severity": "severe_hdn",
+          "criteria": "Severe anemia, hydrops, bilirubin rising despite phototherapy",
+          "treatment": "Exchange transfusion. IVIG 1g/kg. Intensive phototherapy. Monitor for kernicterus. Intrauterine transfusion if fetal."
+        },
+        {
+          "severity": "mild_moderate_hdn",
+          "criteria": "Hyperbilirubinemia, mild anemia, no hydrops",
+          "treatment": "Phototherapy. Monitor bilirubin q4-6h. IVIG if phototherapy insufficient. Adequate hydration and feeding."
+        },
+        {
+          "severity": "transfusion_reaction",
+          "criteria": "ABO-incompatible transfusion given",
+          "treatment": "STOP transfusion. IV fluids. Furosemide. Monitor for DIC, AKI, hemolysis. Notify blood bank and hospital transfusion committee."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "maternal_sensitization_to_rbc_antigens",
+      "igg_antibody_placental_transfer",
+      "fetal_rbc_destruction",
+      "extramedullary_hematopoiesis",
+      "hyperbilirubinemia",
+      "anemia",
+      "hydrops_fetalis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "kernicterus",
+        "probability": 0.02,
+        "severityBoost": 0.9,
+        "clues": ["severe_hyperbilirubinemia", "bili_above_exchange_threshold", "neurologic_symptoms"]
+      },
+      {
+        "diseaseId": "hydrops_fetalis",
+        "probability": 0.05,
+        "severityBoost": 0.7,
+        "clues": ["fetal_edema", "ascites", "pleural_effusion", "severe_anemia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["maternal_fetal_incompatibility", "positive_coombs", "neonatal_jaundice_under_24_hours"],
+    "exclusionClues": ["negative_coombs", "no_maternal_antibodies", "onset_after_48_hours"]
+  }
+}

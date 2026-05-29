@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "spinal-stenosis",
+    "name": "Spinal Stenosis",
+    "system": "ORTHO",
+    "agePeak_months": [480, 960],
+    "note": "Narrowing of spinal canal causing compression of neural elements. Lumbar most common (neurogenic claudication). Cervical may cause myelopathy.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["degenerative_spine", "canal_stenosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "myelopathy_signs_hofmann_babinski", "weight": 10 },
+        { "sign": "cauda_equina_syndrome", "weight": 10 },
+        { "sign": "acute_paraplegia", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "neurogenic_claudication_unable_to_walk", "weight": 7 },
+          { "sign": "motor_deficit_grade_3_5", "weight": 7 },
+          { "sign": "bowel_bladder_dysfunction", "weight": 9 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If myelopathy, cauda equina, or significant motor deficit -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "leg_pain_cramping_with_walking", "weight": 5 },
+      { "symptomId": "relief_with_sitting_forward_bending", "weight": 5, "note": "Neurogenic claudication classic" },
+      { "symptomId": "numbness_heaviness_in_legs", "weight": 4 },
+      { "symptomId": "balance_difficulty_myelopathy", "weight": 4 },
+      { "symptomId": "no_pain_when_cycling_shopping_cart", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "normal_vascular_exam_pedal_pulses", "baseWeight": 4, "note": "Differentiates from vascular claudication" },
+      { "signId": "relief_of_symptoms_with_flexion", "baseWeight": 4 },
+      { "signId": "neurologic_exam_may_be_normal_at_rest", "baseWeight": 3 },
+      { "signId": "wide_based_gait_myelopathy", "baseWeight": 4 },
+      { "signId": "long_tract_signs_cervical_stenosis", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_>60", "multiplier": 5.0 },
+      { "id": "congenital_short_pedicles", "multiplier": 2.0 },
+      { "id": "degenerative_spondylolisthesis", "multiplier": 2.5 },
+      { "id": "previous_spine_surgery", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "lumbar_stenosis",
+        "name": "Lumbar Spinal Stenosis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "neurogenic_claudication", "weight": 5 },
+          { "feature": "bilateral_leg_symptoms", "weight": 4 },
+          { "feature": "relief_with_sitting", "weight": 5 }
+        ],
+        "management": "Conservative: PT (flexion-based), NSAIDs, epidural injections. Surgical: decompressive laminectomy ± fusion if instability."
+      },
+      {
+        "id": "cervical_stenosis",
+        "name": "Cervical Spinal Stenosis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "clumsy_hands", "weight": 5 },
+          { "feature": "gait_disturbance", "weight": 5 },
+          { "feature": "long_tract_signs", "weight": 5 }
+        ],
+        "management": "Surgical for myelopathy: ACDF or posterior decompression (laminoplasty/laminectomy + fusion). Non-myelopathic: observation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "vascular_claudication_pvd",
+        "discriminators": ["absent_pulses", "relief_with_standing_not_bending", "abnormal_abi"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Spine X-ray", "priority": "high", "yield": 0.4, "indication": "spondylolisthesis, degenerative changes" },
+        { "name": "MRI spine", "priority": "high", "yield": 0.95, "indication": "canal dimensions, neural compression" },
+        { "name": "CT myelogram", "priority": "medium", "yield": 0.9, "indication": "if MRI contraindicated or prior hardware" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NASS Clinical Guidelines for Spinal Stenosis",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "No myelopathy, walking distance >200m, tolerable pain",
+          "treatment": "Physical therapy (flexion-based). NSAIDs. Epidural steroid injections. Activity modification. Walking aids (rollator walker)."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Myelopathy, walking distance <200m, bowel/bladder, or failed conservative",
+          "treatment": "Decompressive laminectomy. ± Fusion if instability or spondylolisthesis. Cervical: ACDF or laminoplasty."
+        }
+      ]
+    },
+
+    "pathophysiology": ["canal_narrowing_disc_osteophyte_ligamentum_flavum", "neural_compression", "neurogenic_claudication", "myelopathy"]
+  }
+}

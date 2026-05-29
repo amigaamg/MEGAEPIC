@@ -1,0 +1,189 @@
+{
+  "disease": {
+    "id": "bone_tumor_radiology",
+    "name": "Bone Tumor Imaging Characterization",
+    "system": "RAD",
+    "agePeak_months": [120, 720],
+    "note": "Radiographic evaluation is the first step in bone tumor assessment. Key features: location (epiphysis, metaphysis, diaphysis), margin (geographic, moth-eaten, permeative), periosteal reaction, matrix mineralization, and soft tissue mass.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["bone_lesion", "osseous_tumor", "skeletal_neoplasm"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pathologic_fracture_through_lesion", "weight": 9 },
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "malignant_hypercalcemia", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "aggressive_periosteal_reaction", "weight": 7 },
+          { "sign": "cortical_break_with_soft_tissue_mass", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If pathologic fracture/cord compression -> EMERGENT; aggressive features -> URGENT; benign pattern -> NON-URGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "bone_pain_persistent", "weight": 5, "modifiers": [
+          { "condition": "night_pain_or_at_rest", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "palpable_mass_or_swelling", "weight": 4 },
+      { "symptomId": "pathologic_fracture_minimal_trauma", "weight": 5 },
+      { "symptomId": "history_of_malignancy", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "lesion_location_epiphysis_metaphysis_diaphysis", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "margin_type_geographic_vs_permeative", "baseWeight": 5 },
+      { "signId": "periosteal_reaction_pattern", "baseWeight": 5 },
+      { "signId": "matrix_mineralization", "baseWeight": 4 },
+      { "signId": "cortical_destruction", "baseWeight": 4 },
+      { "signId": "soft_tissue_mass", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "pagets_disease_of_bone", "multiplier": 3.0 },
+      { "id": "prior_radiation_therapy", "multiplier": 2.5 },
+      { "id": "multiple_osteochondromas_hme", "multiplier": 5.0 },
+      { "id": "retinoblastoma_history", "multiplier": 5.0 },
+      { "id": "li_fraumeni_syndrome", "multiplier": 10.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "osteosarcoma",
+        "name": "Osteosarcoma (Conventional)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "metaphyseal_predilection_distal_femur_proximal_tibia", "weight": 5 },
+          { "feature": "osteoid_matrix_fluffy_cloudlike_mineralization", "weight": 5 },
+          { "feature": "aggressive_periosteal_reaction_sunburst_codman", "weight": 5 },
+          { "feature": "wide_transition_zone", "weight": 4 },
+          { "feature": "cortical_destruction_and_soft_tissue_mass", "weight": 4 },
+          { "feature": "age_10_to_25_peak", "weight": 4 }
+        ],
+        "management": "Neoadjuvant chemotherapy (MAP protocol). Wide surgical resection with negative margins. Limb salvage vs amputation. Post-op chemo. Pulmonary surveillance for metastases."
+      },
+      {
+        "id": "chondrosarcoma",
+        "name": "Chondrosarcoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "axial_skeleton_pelvis_ribs_proximal_femur", "weight": 5 },
+          { "feature": "rings_and_arcs_mineralization_chondroid", "weight": 5 },
+          { "feature": "endosteal_scalloping_gt_2_3_cortex", "weight": 4 },
+          { "feature": "age_gt_40_years", "weight": 4 },
+          { "feature": "lobulated_enhancing_soft_tissue", "weight": 3 }
+        ],
+        "management": "Surgical resection with wide margins. Chemotherapy not effective for conventional chondrosarcoma. Grade 1 (low grade): intralesional curettage + adjuvants. Grade 2-3: wide resection."
+      },
+      {
+        "id": "ewing_sarcoma",
+        "name": "Ewing Sarcoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "diaphyseal_predilection_femur_tibia_humerus", "weight": 5 },
+          { "feature": "permeative_moth_eaten_destruction", "weight": 5 },
+          { "feature": "onion_skin_layered_periosteal_reaction", "weight": 4 },
+          { "feature": "large_soft_tissue_mass_relative_to_bone", "weight": 5 },
+          { "feature": "age_5_to_20_peak", "weight": 4 },
+          { "feature": "t2_markedly_hyperintense", "weight": 3 }
+        ],
+        "management": "Neoadjuvant chemotherapy (VDC/IE). Local control with surgery and/or radiation. Stem cell transplant for metastatic disease. FUS-EWS gene rearrangement testing."
+      },
+      {
+        "id": "metastatic_bone_disease",
+        "name": "Metastatic Bone Disease",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "multiple_lesions", "weight": 5 },
+          { "feature": "known_primary_malignancy", "weight": 5 },
+          { "feature": "lytic_breast_lung_renal", "weight": 4 },
+          { "feature": "blastic_prostate", "weight": 4 },
+          { "feature": "mixed_breast", "weight": 3 },
+          { "feature": "pedunculated_expansile_renal_thyroid", "weight": 3 }
+        ],
+        "management": "Bone scan or PET-CT for staging. Orthopedic prophylaxis for impending pathologic fracture (Mirels score >8). Radiation for pain control. Bisphosphonates/denosumab. Treat primary."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "bone_infection_osteomyelitis",
+        "discriminators": ["clinical_signs_infection", "sequestrum_involucrum", "permeative_changes", "clinically_acute"]
+      },
+      {
+        "diseaseId": "eosinophilic_granuloma",
+        "discriminators": ["beveled_edge", "skull_predilection", "self_limiting", "younger_age"]
+      },
+      {
+        "diseaseId": "giant_cell_tumor",
+        "discriminators": ["epiphyseal_extension", "eccentric", "soap_bubble", "no_matrix"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "ALP (alkaline phosphatase)", "priority": "medium", "yield": 0.4, "indication": "elevated in osteosarcoma, Paget's" },
+        { "name": "LDH", "priority": "medium", "yield": 0.3, "indication": "prognostic in Ewing sarcoma" },
+        { "name": "Serum protein electrophoresis", "priority": "medium", "yield": 0.3, "indication": "rule out multiple myeloma" }
+      ],
+      "imaging": [
+        { "name": "Radiograph (AP and lateral)", "priority": "immediate", "yield": 0.85, "indication": "first-line for any bone lesion" },
+        { "name": "MRI with contrast (whole bone imaging)", "priority": "high", "yield": 0.95, "indication": "local staging, medullary extent, soft tissue mass, skip lesions" },
+        { "name": "CT with 3D of affected bone", "priority": "medium", "yield": 0.8, "indication": "cortical destruction, matrix, surgical planning" },
+        { "name": "CT Chest (staging)", "priority": "medium", "yield": 0.4, "indication": "pulmonary metastases most common" },
+        { "name": "Bone scan (Tc-99m MDP)", "priority": "medium", "yield": 0.7, "indication": "polyostotic disease, metastases, skip lesions" },
+        { "name": "PET-CT (FDG)", "priority": "medium", "yield": 0.8, "indication": "staging, response assessment, recurrence" }
+      ]
+    },
+    "management": {
+      "protocolReference": "WHO Classification of Bone Tumors and ESMO Guidelines",
+      "pathways": [
+        {
+          "severity": "benign_non_aggressive",
+          "criteria": "geographic margin, sclerotic rim, no periosteal reaction, no soft tissue mass",
+          "treatment": "Radiographic follow-up or no further action. Orthopedic referral if symptomatic or diagnostic uncertainty."
+        },
+        {
+          "severity": "aggressive_benign_or_indeterminate",
+          "criteria": "geographic but no sclerotic rim, thinned cortex, pathological fracture risk",
+          "treatment": "Orthopedic oncology referral. MRI for further characterization. Biopsy (planned by surgeon performing definitive resection)."
+        },
+        {
+          "severity": "malignant",
+          "criteria": "permeative destruction, aggressive periosteal reaction, soft tissue mass, pathologic fracture",
+          "treatment": "Biopsy at referral center. Neoadjuvant chemo if indicated (osteosarcoma, Ewing). Wide surgical resection. Limb salvage vs amputation. Reconstruction."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "neoplastic_transformation",
+      "osteoid_or_chondroid_production",
+      "angiogenesis",
+      "cortical_destruction",
+      "extraosseous_extension",
+      "hematogenous_metastasis_to_lung"
+    ],
+    "complications": [
+      {
+        "diseaseId": "pathologic_fracture",
+        "probability": 0.15,
+        "lagDays": [1, 180],
+        "severityBoost": 0.4,
+        "clues": ["lytic_lesion_gt_2_5cm", "cortical_involvement", "pain_with_weight_bearing"]
+      },
+      {
+        "diseaseId": "local_recurrence",
+        "probability": 0.1,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.3,
+        "clues": ["inadequate_margins", "new_bone_formation", "pain_at_surgical_site"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["bone_pain_at_rest_night", "aggressive_imaging_features", "age_appropriate_location", "soft_tissue_mass"],
+    "exclusionClues": ["chronic_stable_lesion", "sclerotic_rim_stable", "no_soft_tissue_mass"]
+  }
+}

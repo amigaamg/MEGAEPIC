@@ -1,0 +1,172 @@
+{
+  "disease": {
+    "id": "pressure_sore",
+    "name": "Pressure Sore / Pressure Ulcer",
+    "system": "surgical",
+    "agePeak_months": [600, 960],
+    "note": "Localized injury to skin/underlying tissue due to prolonged pressure. Common over bony prominences. Graded I-IV by NPUAP.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["skin_breakdown", "immobility", "wound_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "necrotizing_fasciitis", "weight": 10 },
+        { "sign": "sepsis_from_pressure_ulcer", "weight": 9 },
+        { "sign": "deep_osteomyelitis", "weight": 8 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "grade_iii_iv_ulcer", "weight": 8 },
+          { "sign": "extensive_tissue_necrosis", "weight": 7 },
+          { "sign": "exposed_bone_joint", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Grade III-IV/deep infection/osteomyelitis -> SEVERE; Grade I-II -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prolonged_immobility_bedridden", "weight": 5 },
+      { "symptomId": "skin_breakdown_over_bony_prominence", "weight": 5 },
+      { "symptomId": "sacrum_heel_hip_location", "weight": 4 },
+      { "symptomId": "incontinence_urine_stool", "weight": 4, "note": "Moisture contributes to breakdown" },
+      { "symptomId": "poor_nutritional_status", "weight": 3 },
+      { "symptomId": "pain_at_ulcer_site", "weight": 3 },
+      { "symptomId": "fever_signs_of_infection", "weight": 3 },
+      { "symptomId": "previous_pressure_ulcers", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "skin_breakdown_over_bony_prominence", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "grading_npuap_classification", "baseWeight": 4 },
+      { "signId": "size_depth_tunneling", "baseWeight": 3 },
+      { "signId": "wound_bed_slough_eschar_granulation", "baseWeight": 3 },
+      { "signId": "signs_of_infection", "baseWeight": 3 },
+      { "signId": "surrounding_skin_maceration", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "immobility_bed_rest", "multiplier": 4.0 },
+      { "id": "spinal_cord_injury_paralysis", "multiplier": 4.0 },
+      { "id": "malnutrition_low_albumin", "multiplier": 3.0 },
+      { "id": "incontinence", "multiplier": 2.5 },
+      { "id": "age_over_70", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "peripheral_vascular_disease", "multiplier": 2.0 },
+      { "id": "post_operative_prolonged_surgery", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "grade_i_ii_pressure_ulcer",
+        "name": "Grade I-II Pressure Ulcer",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "non_blanchable_erythema_or_partial_thickness", "weight": 5 },
+          { "feature": "intact_skin_or_shallow_ulcer", "weight": 4 },
+          { "feature": "reversible_with_pressure_relief", "weight": 4 }
+        ],
+        "management": "Pressure relief (turning every 2h, special mattress). Moisture management. Nutritional support. Barrier creams. Regular repositioning."
+      },
+      {
+        "id": "grade_iii_iv_pressure_ulcer",
+        "name": "Grade III-IV Pressure Ulcer",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "full_thickness_skin_loss_to_fascia_or_bone", "weight": 5 },
+          { "feature": "deep_tissue_necrosis", "weight": 5 },
+          { "feature": "tunneling_undermining", "weight": 4 },
+          { "feature": "high_risk_of_osteomyelitis", "weight": 4 }
+        ],
+        "management": "Surgical debridement (sharp or surgical). Wound culture and antibiotics. NPWT (negative pressure wound therapy). Pressure redistribution. Nutritional optimization. Reconstructive surgery (flap) for definitive closure. Osteomyelitis treatment if present."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "ischemic_ulcer",
+        "discriminators": ["distal_leg", "absent_pulses", "low_abi", "not_over_bony_prominence"]
+      },
+      {
+        "diseaseId": "venous_ulcer",
+        "discriminators": ["gaiter_area_medial", "venous_pigmentation", "present_pulses"]
+      },
+      {
+        "diseaseId": "diabetic_foot_ulcer",
+        "discriminators": ["plantar_weight_bearing", "neuropathic", "callus"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Braden Scale assessment", "priority": "immediate", "yield": 0.7, "indication": "risk assessment" },
+        { "name": "Wound measurement + photography", "priority": "high", "yield": 0.6, "indication": "baseline documentation" }
+      ],
+      "laboratory": [
+        { "name": "CBC, CRP", "priority": "medium", "yield": 0.5, "indication": "infection assessment" },
+        { "name": "Albumin, prealbumin", "priority": "high", "yield": 0.5, "indication": "nutritional assessment" },
+        { "name": "ESR (elevated in osteomyelitis)", "priority": "medium", "yield": 0.4, "indication": "bone infection suspicion" },
+        { "name": "Wound swab / deep tissue culture", "priority": "high", "yield": 0.6, "indication": "guide antibiotics" }
+      ],
+      "imaging": [
+        { "name": "MRI with contrast", "priority": "high", "yield": 0.85, "indication": "assess depth, osteomyelitis, abscess" },
+        { "name": "X-Ray area", "priority": "medium", "yield": 0.4, "indication": "rule out osteomyelitis, Charcot" },
+        { "name": "CT", "priority": "medium", "yield": 0.7, "indication": "assess deep extension" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NPUAP/EPUAP Guidelines for Pressure Ulcers",
+      "pathways": [
+        {
+          "severity": "Grade I-II",
+          "criteria": "intact skin or partial thickness, no deep necrosis",
+          "treatment": "Pressure redistribution (q2h turning, special mattress). Moisture barrier. Nutritional support. Wound dressings (hydrocolloid, foam). No debridement needed."
+        },
+        {
+          "severity": "Grade III-IV",
+          "criteria": "full thickness, deep necrosis, exposed bone",
+          "treatment": "Surgical debridement. NPWT. Antibiotics. Osteomyelitis treatment. Nutritional optimization. Reconstructive surgery (flap coverage). Pressure redistribution."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "prolonged_compression_of_soft_tissues",
+      "capillary_occlusion",
+      "tissue_hypoxia",
+      "ischemia_reperfusion_injury",
+      "cell_death",
+      "tissue_necrosis",
+      "ulcer_formation",
+      "deep_extension_to_bone"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "osteomyelitis",
+        "probability": 0.15,
+        "lagDays": [14, 90],
+        "severityBoost": 0.4,
+        "clues": ["exposed_bone", "persistent_non_healing_wound", "elevated_esr", "positive_mri"]
+      },
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.05,
+        "lagDays": [3, 14],
+        "severityBoost": 0.5,
+        "clues": ["fever", "hypotension", "worsening_mental_status", "positive_blood_cultures"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["skin_breakdown_over_sacrum_heel_bony_prominence", "immobility", "incontinence", "grading_i_iv"],
+    "exclusionClues": ["walking_fully_mobile", "acute_traumatic_wound", "no_risk_factors"]
+  }
+}

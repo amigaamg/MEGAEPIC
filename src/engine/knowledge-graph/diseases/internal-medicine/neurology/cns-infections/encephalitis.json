@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "encephalitis",
+    "name": "Encephalitis",
+    "system": "NEURO",
+    "agePeak_months": [0, 720],
+    "note": "Inflammation of brain parenchyma. HSV most common sporadic cause. Presents with fever, altered consciousness, seizures, focal signs.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["cns_infection", "neurological_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "status_epilepticus", "weight": 10 },
+        { "sign": "coma_gcs_less_8", "weight": 10 },
+        { "sign": "raised_icp", "weight": 9 },
+        { "sign": "rapid_deterioration", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If status/coma/raised ICP -> ICU; else -> MONITOR"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "altered_mental_status", "weight": 5 },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "behavioral_changes", "weight": 3 },
+      { "symptomId": "focal_neurological_symptoms", "weight": 3 },
+      { "symptomId": "viral_prodrome", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "decreased_gcs", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "focal_neurological_signs", "baseWeight": 4 },
+      { "signId": "seizures", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "dysphasia_aphasia", "baseWeight": 3, "note": "Temporal lobe involvement in HSV" },
+      { "signId": "meningismus", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "hsv_infection_primary", "multiplier": 1.5 },
+      { "id": "immunocompromise", "multiplier": 3.0 },
+      { "id": "mosquito_vector_exposure", "multiplier": 2.0 },
+      { "id": "tick_exposure", "multiplier": 2.0 },
+      { "id": "age_very_young_or_elderly", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "hsv_encephalitis",
+        "name": "Herpes Simplex Virus Encephalitis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "temporal_lobe_signs", "weight": 5 },
+          { "feature": "temporal_lobe_lesions_mri", "weight": 5 },
+          { "feature": "hsv_pcr_csf_positive", "weight": 5 }
+        ],
+        "management": "Acyclovir 10 mg/kg IV TDS x 14-21 days. ICU monitoring. Seizure control. Treat raised ICP. Prognosis improved with early treatment."
+      },
+      {
+        "id": "autoimmune_encephalitis",
+        "name": "Autoimmune Encephalitis (Anti-NMDA, LGI1, etc.)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "psychiatric_features", "weight": 5 },
+          { "feature": "dyskinesias", "weight": 3 },
+          { "feature": "seizures_refractory", "weight": 4 },
+          { "feature": "antibody_positive_csf_serum", "weight": 5 }
+        ],
+        "management": "IV methylprednisolone 1g x 5 days. IVIG. Plasma exchange. Rituximab/cyclophosphamide if refractory. Tumor search (teratoma in anti-NMDA)."
+      },
+      {
+        "id": "viral_other",
+        "name": "Other Viral Encephalitis (VZV, EBV, Arbovirus)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "viral_syndrome_and_encephalopathy", "weight": 4 },
+          { "feature": "pcr_or_serology_positive", "weight": 5 }
+        ],
+        "management": "Supportive care. Specific antivirals if available. Manage seizures. Rehab."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "cerebral_malaria", "discriminators": ["endemic_area", "parasite_on_blood_film", "rapid_test_positive"] },
+      { "diseaseId": "cns_vascultis", "discriminators": ["multifocal_strokes", "vasculitis_angiogram", "systemic_vascultis_markers"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "CSF analysis + HSV/VZV/enterovirus PCR", "priority": "immediate", "yield": 0.95, "indication": "cell count, protein, glucose, pathogen identification" },
+        { "name": "Autoimmune encephalitis antibodies (CSF/serum)", "priority": "high", "yield": 0.6, "indication": "NMDA, LGI1, CASPR2, GABA-B, AMPA" },
+        { "name": "EEG", "priority": "high", "yield": 0.7, "indication": "focal slowing, PLEDs (HSV), extreme delta brush (anti-NMDA)" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain with contrast", "priority": "immediate", "yield": 0.85, "indication": "temporal lobe hyperintensity (HSV), multifocal (other), normal (autoimmune)" },
+        { "name": "CT Head", "priority": "emergency", "yield": 0.3, "indication": "rule out mass, hemorrhage before LP" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IDSA Guidelines for Encephalitis",
+      "pathways": [
+        {
+          "severity": "suspected viral encephalitis",
+          "criteria": "fever + altered mentation + CSF pleocytosis",
+          "treatment": "Start acyclovir 10 mg/kg IV TDS empirically while awaiting HSV PCR. ICU if GCS <12 or seizures. Manage ICP. Seizure prophylaxis. Brain MRI."
+        },
+        {
+          "severity": "suspected autoimmune",
+          "criteria": "subacute psychiatric, seizures, movement disorder, normal CSF or mild lymphocytosis",
+          "treatment": "IV methylprednisolone 1g/day x 5. IVIG 2 g/kg. Plasma exchange. Screen for malignancy. Rituximab if refractory."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "direct_viral_invasion",
+      "neuronal_injury",
+      "cerebral_inflammation",
+      "immune_mediated_damage",
+      "cerebral_edema",
+      "neuronal_death"
+    ],
+    "complications": [
+      { "diseaseId": "status_epilepticus", "probability": 0.2, "severityBoost": 0.4, "clues": ["refractory_seizures"] },
+      { "diseaseId": "cognitive_decline", "probability": 0.3, "severityBoost": 0.2, "clues": ["post_encephalitis_cognitive_deficits"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever_plus_altered_consciousness_plus_seizures", "csf_pleocytosis", "mri_lesions", "pcr_positive"],
+    "exclusionClues": ["normal_csf_mri", "meningitis_only"]
+  }
+}

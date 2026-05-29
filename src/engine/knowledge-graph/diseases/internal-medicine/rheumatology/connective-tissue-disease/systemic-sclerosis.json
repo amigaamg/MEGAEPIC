@@ -1,0 +1,158 @@
+{
+  "disease": {
+    "id": "systemic_sclerosis",
+    "name": "Systemic Sclerosis (Scleroderma)",
+    "system": "rheumatology",
+    "agePeak_months": [480, 720],
+    "note": "Chronic autoimmune disease characterized by fibrosis of skin and internal organs, vasculopathy, and immune dysfunction. Classified into limited cutaneous and diffuse cutaneous subtypes.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["connective_tissue_disease", "autoimmune", "fibrosis", "scleroderma", "raynaud"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "scleroderma_renal_crisis", "weight": 10 },
+        { "sign": "pulmonary_arterial_hypertension", "weight": 9 },
+        { "sign": "interstitial_lung_disease", "weight": 8 },
+        { "sign": "digital_ischemia_gangrene", "weight": 7 },
+        { "sign": "cardiac_involvement_arrhythmia", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If renal crisis, PAH, ILD, or digital ischemia -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "raynaud_phenomenon", "weight": 5 },
+      { "symptomId": "skin_thickening_sclerodactyly", "weight": 5 },
+      { "symptomId": "telangiectasias", "weight": 4 },
+      { "symptomId": "calcinosis", "weight": 3 },
+      { "symptomId": "dysphagia_crd", "weight": 4 },
+      { "symptomId": "dyspnea_exertion", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "sclerodactyly", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "digital_pitting_scars", "baseWeight": 4 },
+      { "signId": "telangiectasia", "baseWeight": 3 },
+      { "signId": "calcinosis_cutis", "baseWeight": 3 },
+      { "signId": "beaked_nose_microstomia", "baseWeight": 3 },
+      { "signId": "bibasilar_crackles_ild", "baseWeight": 4 },
+      { "signId": "p2_loud_pah", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 4.0 },
+      { "id": "family_history_autoimmune", "multiplier": 1.5 },
+      { "id": "silica_exposure", "multiplier": 2.0 },
+      { "id": "specific_hla_types", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "limited_cutaneous_ssc",
+        "name": "Limited Cutaneous Systemic Sclerosis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "skin_thickening_distal_knees_elbows", "weight": 5 },
+          { "feature": "anti_centromere_antibody", "weight": 5 },
+          { "feature": "crsy_calcinosis_raynaud_esophageal_telangiectasia", "weight": 4 }
+        ],
+        "management": "Raynaud management. PPI for reflux. PAH screening. No disease-modifying therapy proven."
+      },
+      {
+        "id": "diffuse_cutaneous_ssc",
+        "name": "Diffuse Cutaneous Systemic Sclerosis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "skin_thickening_proximal_sites_trunk", "weight": 5 },
+          { "feature": "anti_sc170_topoisomerase", "weight": 5 },
+          { "feature": "high_risk_renal_lung_crisis", "weight": 5 }
+        ],
+        "management": "Mycophenolate mofetil or cyclophosphamide. ACE inhibitors mandatory. Screen PAH and ILD regularly."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "eosinophilic_fasciitis",
+        "discriminators": ["spares_fingers_toes", "groove_sign", "eosinophilia", "mri_deep_fascia"]
+      },
+      {
+        "diseaseId": "nephrogenic_systemic_fibrosis",
+        "discriminators": ["gadolinium_exposure", "renal_failure", "no_raynaud", "no_antibodies"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Modified Rodnan skin score", "priority": "immediate", "yield": 0.9, "indication": "quantify skin thickness" },
+        { "name": "Nailfold capillaroscopy", "priority": "high", "yield": 0.8, "indication": "megacapillaries, dropouts" }
+      ],
+      "laboratory": [
+        { "name": "ANA", "priority": "high", "yield": 0.9, "indication": "nucleolar or speckled pattern" },
+        { "name": "Anti-centromere", "priority": "high", "yield": 0.5, "indication": "limited cutaneous subtype" },
+        { "name": "Anti-Scl-70 (topoisomerase I)", "priority": "high", "yield": 0.4, "indication": "diffuse cutaneous subtype" },
+        { "name": "Anti-RNA polymerase III", "priority": "high", "yield": 0.2, "indication": "renal crisis risk" }
+      ],
+      "imaging": [
+        { "name": "Pulmonary function tests + DLCO", "priority": "high", "yield": 0.8, "indication": "ILD screening, PAH detection" },
+        { "name": "HRCT chest", "priority": "high", "yield": 0.9, "indication": "NSIP pattern, ILD extent" },
+        { "name": "Echocardiography", "priority": "high", "yield": 0.7, "indication": "PAH screening" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR Recommendations for Systemic Sclerosis",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "limited cutaneous, no organ involvement",
+          "treatment": "CCB for Raynaud. PPI. Phototherapy for skin. Annual PAH screening."
+        },
+        {
+          "severity": "diffuse",
+          "criteria": "diffuse skin, early disease, organ risk",
+          "treatment": "Mycophenolate mofetil or cyclophosphamide. ACE inhibitor for renal protection. Screen and treat PAH (bosentan, sildenafil)."
+        },
+        {
+          "severity": "crisis",
+          "criteria": "acute renal crisis: hypertension, AKI, MAHA",
+          "treatment": "ACE inhibitor (captopril) aggressively. Dialysis if needed. Avoid corticosteroids."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "endothelial_injury",
+      "vasculopathy_raynaud",
+      "fibroblast_activation",
+      "excess_collagen_deposition",
+      "autoantibody_production",
+      "tgf_beta_signaling"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pulmonary_arterial_hypertension",
+        "probability": 0.15,
+        "severityBoost": 0.7,
+        "clues": ["dyspnea", "fatigue", "loud_p2", "right_heart_strain", "low_dlco"]
+      },
+      {
+        "diseaseId": "scleroderma_renal_crisis",
+        "probability": 0.1,
+        "severityBoost": 0.9,
+        "clues": ["hypertension", "rapid_aki", "microangiopathic_hemolytic_anemia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if renal crisis or PAH",
+    "diagnosticClues": ["raynaud_plus_skin_thickening", "nailfold_capillary_changes", "specific_autoantibodies"],
+    "exclusionClues": ["no_raynaud", "no_skin_changes", "negative_ana", "spares_fingers"]
+  }
+}

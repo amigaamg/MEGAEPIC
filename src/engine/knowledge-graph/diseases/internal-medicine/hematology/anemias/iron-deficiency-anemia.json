@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "iron_deficiency_anemia",
+    "name": "Iron Deficiency Anemia",
+    "system": "hematology",
+    "agePeak_months": [12, 48, 180, 960],
+    "note": "Most common anemia worldwide. Results from inadequate iron intake, chronic blood loss, or poor absorption.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["anemia", "microcytic", "pallor"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "severe_pallor_hb_below_5", "weight": 9 },
+        { "sign": "high_output_heart_failure", "weight": 8 },
+        { "sign": "angina", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "hb_above_7": true
+      },
+      "severityLabel": "If Hb <5 or hemodynamically unstable -> EMERGENCY; else if Hb 5-7 -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "pallor", "weight": 4 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 4 },
+      { "symptomId": "pica", "weight": 3, "note": "Craving for ice, dirt, or starch" },
+      { "symptomId": "restless_legs", "weight": 2 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "hair_loss", "weight": 1 },
+      { "symptomId": "brittle_nails", "weight": 1 },
+      { "symptomId": "melena_or_hematochezia", "weight": 3, "note": "Suggests GI blood loss" },
+      { "symptomId": "menorrhagia", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "koilonychia", "baseWeight": 4, "note": "Spoon-shaped nails" },
+      { "signId": "glossitis", "baseWeight": 2 },
+      { "signId": "cheilitis", "baseWeight": 2 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "angular_stomatitis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "heavy_menstrual_bleeding", "multiplier": 2.0 },
+      { "id": "chronic_gi_blood_loss", "multiplier": 2.5 },
+      { "id": "poor_dietary_intake", "multiplier": 1.8 },
+      { "id": "pregnancy", "multiplier": 2.0 },
+      { "id": "gastric_surgery", "multiplier": 1.5 },
+      { "id": "celiac_disease", "multiplier": 1.8 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_ida",
+        "name": "Mild Iron Deficiency Anemia",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "hb_10_to_12", "weight": 4 },
+          { "feature": "minimal_symptoms", "weight": 3 }
+        ],
+        "management": "Oral iron supplementation (ferrous sulfate 65mg elemental iron TID). Treat underlying cause."
+      },
+      {
+        "id": "severe_ida",
+        "name": "Severe Iron Deficiency Anemia",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "hb_below_7", "weight": 5 },
+          { "feature": "signs_of_decompensation", "weight": 4 }
+        ],
+        "management": "IV iron (iron sucrose or ferric carboxymaltose). Consider PRBC transfusion if hemodynamically unstable."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "beta_thalassemia_trait",
+        "discriminators": ["mcv_very_low", "rdw_normal", "hb_elevated_a2", "ferritin_normal_or_high"]
+      },
+      {
+        "diseaseId": "anemia_of_chronic_disease",
+        "discriminators": ["ferritin_normal_or_high", "transferrin_saturation_low", "normal_or_low_mcv", "elevated_crp"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "Hb, MCV, RDW" },
+        { "name": "Blood film", "priority": "high", "yield": 0.8, "indication": "Microcytic hypochromic cells, pencil cells" }
+      ],
+      "laboratory": [
+        { "name": "Serum ferritin", "priority": "immediate", "yield": 0.95, "indication": "Low in IDA, gold standard" },
+        { "name": "Serum iron and TIBC", "priority": "high", "yield": 0.85, "indication": "Low iron, high TIBC, low saturation" },
+        { "name": "CRP", "priority": "medium", "yield": 0.5, "indication": "Rule out ACD" }
+      ],
+      "imaging": [
+        { "name": "Upper GI endoscopy", "priority": "medium", "yield": 0.4, "indication": "Evaluate GI source in non-menstruating patients" },
+        { "name": "Colonoscopy", "priority": "medium", "yield": 0.4, "indication": "Evaluate lower GI source" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / BSH Guidelines for Iron Deficiency Anemia",
+      "pathways": [
+        {
+          "severity": "severe_unstable",
+          "criteria": "Hb <5, hemodynamic instability, active bleeding",
+          "treatment": "PRBC transfusion. IV iron. Urgent endoscopy/colonoscopy to identify source."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "Hb 5-10, stable",
+          "treatment": "Oral ferrous sulfate 325mg daily. Recheck Hb in 4 weeks. Treat underlying cause."
+        },
+        {
+          "severity": "mild",
+          "criteria": "Hb >10, asymptomatic",
+          "treatment": "Oral iron supplementation. Dietary counseling. Identify and treat cause."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "depleted_iron_stores",
+      "decreased_heme_synthesis",
+      "microcytic_hypochromic_erythropoiesis",
+      "impaired_oxygen_delivery",
+      "compensatory_tachycardia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "high_output_heart_failure",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "clues": ["low_hb", "tachycardia", "elevated_nt_probnp"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if severe",
+    "diagnosticClues": ["microcytic_hypochromic", "low_ferritin", "low_transferrin_saturation"],
+    "exclusionClues": ["normal_ferritin", "macrocytic_indices"]
+  }
+}

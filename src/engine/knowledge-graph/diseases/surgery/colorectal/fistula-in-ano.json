@@ -1,0 +1,178 @@
+{
+  "disease": {
+    "id": "fistula_in_ano",
+    "name": "Fistula-in-Ano",
+    "system": "surgical",
+    "agePeak_months": [240, 480],
+    "note": "Abnormal tract connecting the anal canal to the perianal skin. Usually sequelae of perianal abscess.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["anal_discharge", "perianal_pain", "recurrent_abscess"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "systemic_sepsis", "weight": 9 },
+        { "sign": "fournier_gangrene", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "horseshoe_extension", "weight": 6 },
+          { "sign": "supralevator_extension", "weight": 7 },
+          { "sign": "recurrent_abscess", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Complex/horseshoe/supralevator -> SEVERE; simple intersphincteric -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "persistent_perianal_discharge", "weight": 5, "note": "Purulent or serous discharge" },
+      { "symptomId": "history_of_perianal_abscess", "weight": 5 },
+      { "symptomId": "perianal_pain", "weight": 3 },
+      { "symptomId": "recurrent_swelling_drainage", "weight": 4 },
+      { "symptomId": "pruritus_soreness", "weight": 2 },
+      { "symptomId": "crohns_disease_history", "weight": 4, "note": "Associated with Crohn's" }
+    ],
+
+    "examFeatures": [
+      { "signId": "external_opening_on_perineum", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "palpable_cord_subcutaneously", "baseWeight": 4 },
+      { "signId": "internal_opening_on_digital_exam", "baseWeight": 4 },
+      { "signId": "goodsall_rule_assessment", "baseWeight": 3, "note": "Anterior fistulas open radially; posterior fistulas curve" },
+      { "signId": "purulent_discharge_on_expression", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "perianal_abscess", "multiplier": 4.0 },
+      { "id": "crohn_disease", "multiplier": 3.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "tuberculosis", "multiplier": 2.5 },
+      { "id": "previous_anal_surgery", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "intersphincteric_fistula",
+        "name": "Intersphincteric Fistula (Parks I)",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "tract_between_internal_external_sphincter", "weight": 5 },
+          { "feature": "low_type", "weight": 4 },
+          { "feature": "external_opening_near_anus", "weight": 4 }
+        ],
+        "management": "Fistulotomy (lay-open) if tract involves <30% of external sphincter. Fistulectomy. Seton for high trans-sphincteric component."
+      },
+      {
+        "id": "transphincteric_fistula",
+        "name": "Transsphincteric Fistula (Parks II)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "tract_through_external_sphincter", "weight": 5 },
+          { "feature": "horseshoe_extension_possible", "weight": 4 },
+          { "feature": "external_opening_farther_from_anus", "weight": 4 }
+        ],
+        "management": "Seton (cutting or non-cutting) to preserve continence. Fistulotomy if low trans-sphincteric. Fistula plug or LIFT procedure for higher types."
+      },
+      {
+        "id": "suprasphincteric_fistula",
+        "name": "Suprasphincteric Fistula (Parks III)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "tract_above_puborectalis", "weight": 5 },
+          { "feature": "complex_high_fistula", "weight": 5 },
+          { "feature": "risk_of_incontinence_with_surgery", "weight": 5 }
+        ],
+        "management": "Seton drainage. LIFT procedure. Advancement flap (mucosal or anodermal). VAAFT (Video-Assisted Anal Fistula Treatment). Infliximab if Crohn's related."
+      },
+      {
+        "id": "extrasphincteric_fistula",
+        "name": "Extrasphincteric Fistula (Parks IV)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "tract_outside_external_sphincter", "weight": 5 },
+          { "feature": "through_levator_ani", "weight": 5 },
+          { "feature": "trauma_or_crohns_usually", "weight": 4 }
+        ],
+        "management": "Treat underlying cause. Seton drainage. Proctectomy in selected Crohn's cases."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pilonidal_sinus",
+        "discriminators": ["posterior_sacrococcygeal_location", "hair_in_sinus", "no_connection_to_anal_canal"]
+      },
+      {
+        "diseaseId": "hidradenitis_suppurativa",
+        "discriminators": ["multiple_sinuses", "axillary_groin_involvement", "no_connection_to_anal_canal"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Goodsall's Rule", "priority": "high", "yield": 0.7, "indication": "predict tract direction" }
+      ],
+      "laboratory": [
+        { "name": "CRP", "priority": "medium", "yield": 0.3, "indication": "inflammatory marker" },
+        { "name": "Fistula culture", "priority": "medium", "yield": 0.4, "indication": "guide antibiotics if infection" }
+      ],
+      "imaging": [
+        { "name": "Pelvic MRI", "priority": "high", "yield": 0.9, "indication": "gold standard for complex fistula assessment" },
+        { "name": "Endoanal Ultrasound", "priority": "medium", "yield": 0.8, "indication": "alternative to MRI" },
+        { "name": "Fistulography", "priority": "low", "yield": 0.5, "indication": "rarely used now" },
+        { "name": "Examination Under Anesthesia (EUA)", "priority": "high", "yield": 0.85, "indication": "definitive assessment by experienced surgeon" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASCRS Practice Parameters for Fistula-in-Ano",
+      "pathways": [
+        {
+          "severity": "simple (intersphincteric, low trans-sphincteric)",
+          "criteria": "low fistula, <30% external sphincter involvement",
+          "treatment": "Fistulotomy (lay-open). Fistulectomy. High cure rate, low recurrence."
+        },
+        {
+          "severity": "complex (high trans-sphincteric, suprasphincteric, extrasphincteric, Crohn's)",
+          "criteria": ">30% external sphincter, high tract, female anterior fistula, Crohn's",
+          "treatment": "Non-cutting seton for drainage. LIFT procedure. Mucosal advancement flap. VAAFT. Fistula plug. Anti-TNF (Infliximab) for Crohn's. Stoma for refractory cases."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "perianal_gland_infection",
+      "cryptoglandular_abscess",
+      "spontaneous_drainage_or_incision",
+      "persistent_epithelialized_tract",
+      "chronic_infection",
+      "extension_along_anatomical_planes"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrent_abscess",
+        "probability": 0.2,
+        "lagDays": [7, 60],
+        "severityBoost": 0.2,
+        "clues": ["pain", "swelling", "fever", "discharge_ceases"]
+      },
+      {
+        "diseaseId": "fecal_incontinence",
+        "probability": 0.05,
+        "lagDays": [1, 30],
+        "severityBoost": 0.2,
+        "clues": ["post_surgical", "sphincter_involvement_greater_than_30_percent", "anterior_fistula_in_female"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["persistent_perianal_discharge", "previous_abscess", "external_opening", "palpable_cord"],
+    "exclusionClues": ["isolated_abscess_without_tract", "pilonidal_location", "healed_after_single_drainage"]
+  }
+}

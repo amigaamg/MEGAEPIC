@@ -1,0 +1,148 @@
+{
+  "disease": {
+    "id": "fungal_skin_infections",
+    "name": "Dermatophyte/Tinea Infection (Fungal Skin Infections)",
+    "system": "dermatology",
+    "agePeak_months": [0, 960],
+    "note": "Superficial fungal infections of skin, hair, and nails caused by dermatophytes (Trichophyton, Microsporum, Epidermophyton). Tinea corporis, cruris, pedis, capitis, unguium.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["skin_infection", "fungal_dermatosis", "tinea"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "kerion_severe_inflammatory_scalp", "weight": 7 },
+        { "sign": "secondary_bacterial_infection", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Widespread/kerion/nail -> MODERATE; localized skin -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "annular_red_ringworm_lesion", "weight": 5 },
+      { "symptomId": "itchy_scaly_patch", "weight": 4 },
+      { "symptomId": "central_clearing_with_active_border", "weight": 4 },
+      { "symptomId": "contact_with_infected_person_or_pet", "weight": 3 },
+      { "symptomId": "excessive_sweating_humid_environment", "weight": 3 },
+      { "symptomId": "sharing_towels_linen_gym", "weight": 3 },
+      { "symptomId": "diabetes_or_immunosuppression", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "annular_scaly_plaque_with_raised_border", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "central_clearing", "baseWeight": 4 },
+      { "signId": "active_red_scaly_border", "baseWeight": 4 },
+      { "signId": "crural_fold_redness_tinea_cruris", "baseWeight": 3 },
+      { "signId": "interdigital_maceration_tinea_pedis", "baseWeight": 3 },
+      { "signId": "hair_loss_scaly_scalp_tinea_capitis", "baseWeight": 4 },
+      { "signId": "thick_discolored_nail_tinea_unguium", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "close_contact_with_pets", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.5 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "hyperhidrosis_excessive_sweating", "multiplier": 2.0 },
+      { "id": "athletes_or_gym_use", "multiplier": 2.0 },
+      { "id": "tropical_or_humid_climate", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "tinea_corporis",
+        "name": "Tinea Corporis (Ringworm)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "annular_scaly_plaque_trunk_limbs", "weight": 5 },
+          { "feature": "pruritic", "weight": 3 },
+          { "feature": "central_clearing", "weight": 4 }
+        ],
+        "management": "Topical terbinafine 1% cream OD x 1-2 weeks. Clotrimazole 1% BD x 2-4 weeks. Extensive: oral terbinafine 250mg OD x 2-4 weeks."
+      },
+      {
+        "id": "tinea_pedis",
+        "name": "Tinea Pedis (Athletes Foot)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "interdigital_maceration_itching", "weight": 5 },
+          { "feature": "scaly_hyperkeratotic_sole", "weight": 3 },
+          { "feature": "moccasin_distribution", "weight": 3 }
+        ],
+        "management": "Topical terbinafine/clotrimazole. Keep feet dry. Change socks. Oral terbinafine if moccasin type or chronic."
+      },
+      {
+        "id": "tinea_capitis",
+        "name": "Tinea Capitis (Scalp Ringworm)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "scaly_patch_with_hair_loss", "weight": 5 },
+          { "feature": "black_dots_broken_hairs", "weight": 4 },
+          { "feature": "kerion_inflammatory_nodule", "weight": 3 }
+        ],
+        "management": "Oral terbinafine (children: weight-based). Griseofulvin (if Microsporum). Selenium sulfide shampoo adjunct. Do NOT use topical alone for capitis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "eczema",
+        "discriminators": ["no_central_clearing", "flexural", "no_annular_shape"]
+      },
+      {
+        "diseaseId": "pityriasis_rosea",
+        "discriminators": ["christmas_tree_pattern", "herald_patch", "self_limiting"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Skin scraping for KOH (potassium hydroxide) microscopy", "priority": "high", "yield": 0.85, "indication": "hyphae visualization" }
+      ],
+      "laboratory": [
+        { "name": "Fungal culture (Sabouraud agar)", "priority": "medium", "yield": 0.7, "indication": "species identification" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "British Association of Dermatologists Guidelines for Tinea",
+      "pathways": [
+        {
+          "severity": "mild-moderate skin tinea",
+          "criteria": "localized, tinea corporis/cruris/pedis",
+          "treatment": "Topical terbinafine 1% cream OD x 7 days. Azole creams (clotrimazole, miconazole) are alternatives but longer course. Keep area dry."
+        },
+        {
+          "severity": "extensive/chronic/tinea capitis/unguium",
+          "criteria": "widespread, scalp, nails, or fails topical",
+          "treatment": "Oral terbinafine 250mg OD (skin 2-4 weeks, nail 6-12 weeks). Tinea capitis: oral agent only. Itraconazole or fluconazole alternative. Check LFTs before oral."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "dermatophyte_keratin_degradation",
+      "hyphal_invasion_of_stratum_corneum",
+      "cell_mediated_immune_response",
+      "annular_pattern_from_radial_growth",
+      "central_clearing_due_to_immune_response"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "secondary_bacterial_infection",
+        "probability": 0.05,
+        "severityBoost": 0.2,
+        "clues": ["purulent_discharge", "increased_pain"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["annular_ringworm_lesion", "central_clearing", "scaly_border", "koh_positive"],
+    "exclusionClues": ["negative_koh_and_culture", "good_response_to_steroid_only"]
+  }
+}

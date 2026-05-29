@@ -1,0 +1,167 @@
+{
+  "disease": {
+    "id": "umbilical_hernia",
+    "name": "Umbilical Hernia",
+    "system": "surgical",
+    "agePeak_months": [0, 60],
+    "note": "Protrusion through the umbilical ring. Common in infants, also in adults with increased intra-abdominal pressure. Small defects high strangulation risk.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["umbilical_mass", "abdominal_wall_hernia", "reducible_lump"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "strangulation", "weight": 10 },
+        { "sign": "incarceration", "weight": 9 },
+        { "sign": "peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "painful_irreducible_mass", "weight": 7 },
+          { "sign": "small_defect_with_incarceration", "weight": 7 },
+          { "sign": "obstruction_symptoms", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Incarcerated/strangulated -> SEVERE; reducible -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "umbilical_lump", "weight": 5 },
+      { "symptomId": "mass_increases_with_straining", "weight": 4 },
+      { "symptomId": "pain_at_site", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3, "note": "Suggests incarceration" },
+      { "symptomId": "infant_born_with_umbilical_protrusion", "weight": 4 },
+      { "symptomId": "obesity_or_multiple_pregnancies", "weight": 3 },
+      { "symptomId": "recent_onset_in_adult", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_mass_at_umbilicus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cough_impulse", "baseWeight": 4 },
+      { "signId": "defect_size_assessment", "baseWeight": 3 },
+      { "signId": "reducibility_test", "baseWeight": 4 },
+      { "signId": "irreducible_tender_mass", "baseWeight": 4 },
+      { "signId": "overlying_skin_thinning", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "obesity", "multiplier": 2.5 },
+      { "id": "multiple_pregnancies", "multiplier": 2.0 },
+      { "id": "ascites", "multiplier": 2.5 },
+      { "id": "chronic_constipation", "multiplier": 1.3 },
+      { "id": "chronic_cough", "multiplier": 1.3 },
+      { "id": "diastasis_recti", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "infantile_umbilical_hernia",
+        "name": "Infantile Umbilical Hernia",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "present_by_age_1", "weight": 5 },
+          { "feature": "reducible", "weight": 5 },
+          { "feature": "defect_small", "weight": 3 },
+          { "feature": "usually_spontaneously_resolves", "weight": 4 }
+        ],
+        "management": "Observe until age 4-5 years. Majority close spontaneously. Surgical repair if persists beyond age 5, enlarges, or becomes symptomatic. Small defects may be repaired earlier."
+      },
+      {
+        "id": "adult_umbilical_hernia",
+        "name": "Adult Umbilical Hernia",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "acquired_in_adulthood", "weight": 5 },
+          { "feature": "associated_with_obesity", "weight": 4 },
+          { "feature": "may_contain_omentum_or_bowel", "weight": 4 },
+          { "feature": "risk_of_incarceration", "weight": 3 }
+        ],
+        "management": "Elective surgical repair (open or laparoscopic). Small defects (<2cm): primary sutured repair (Mayo or simple closure). Larger defects (>2cm): mesh repair (onlay, sublay, or IPOM). Emergency repair if incarcerated/strangulated."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "paraumbilical_hernia",
+        "discriminators": ["above_or_below_umbilicus", "not_through_umbilical_ring"]
+      },
+      {
+        "diseaseId": "epigastric_hernia",
+        "discriminators": ["midline_above_umbilicus", "small_fascial_defect"]
+      },
+      {
+        "diseaseId": "umbilical_granuloma",
+        "discriminators": ["infant", "moist_red_lesion", "no_cough_impulse", "no_reduction"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Reducibility assessment", "priority": "immediate", "yield": 0.7, "indication": "determine urgency" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.5, "indication": "if strangulation suspected" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.85, "indication": "confirm diagnosis, contents, defect size" },
+        { "name": "CT Abdomen", "priority": "medium", "yield": 0.9, "indication": "if complicated or obese patient" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "International Endohernia Society Guidelines for Umbilical Hernia",
+      "pathways": [
+        {
+          "severity": "infantile",
+          "criteria": "age <5 years, reducible, asymptomatic",
+          "treatment": "Observation. Most close by age 4-5. Repair if persists beyond age 5, enlarges, or becomes symptomatic."
+        },
+        {
+          "severity": "adult elective",
+          "criteria": "reducible, symptomatic or enlarging",
+          "treatment": "Elective repair. Small defect (<2cm): Mayo repair or primary closure. Large defect: mesh repair (open onlay/sublay or laparoscopic IPOM)."
+        },
+        {
+          "severity": "emergency",
+          "criteria": "incarceration, strangulation, obstruction",
+          "treatment": "Emergency repair. Assess bowel viability. Resection if non-viable. Mesh may be avoided if contamination present. Primary repair in contaminated field."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "failure_of_umbilical_ring_closure",
+      "increased_intra_abdominal_pressure",
+      "protrusion_of_intra_abdominal_contents",
+      "incarceration",
+      "strangulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "incarceration",
+        "probability": 0.1,
+        "lagDays": [0, 30],
+        "severityBoost": 0.3,
+        "clues": ["irreducible_mass", "pain", "tenderness"]
+      },
+      {
+        "diseaseId": "strangulation",
+        "probability": 0.05,
+        "lagDays": [0, 14],
+        "severityBoost": 0.5,
+        "clues": ["irreducible_painful_mass", "obstruction", "sepsis"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["midline_mass_at_umbilicus", "cough_impulse", "reducible", "infant_or_obese_adult"],
+    "exclusionClues": ["mass_not_at_umbilicus", "non_midline", "solid_tumor"]
+  }
+}

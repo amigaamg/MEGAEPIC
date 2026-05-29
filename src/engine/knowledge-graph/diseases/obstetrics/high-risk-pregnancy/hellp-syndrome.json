@@ -1,0 +1,197 @@
+{
+  "disease": {
+    "id": "hellp_syndrome",
+    "name": "HELLP Syndrome",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Hemolysis, Elevated Liver enzymes, Low Platelets variant of severe preeclampsia. Life-threatening condition with significant maternal and perinatal mortality.",
+    "prevalenceWeight": 0.003,
+    "syndromeTags": ["hypertensive_disorder_pregnancy", "maternal_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hepatic_rupture", "weight": 10 },
+        { "sign": "disseminated_intravascular_coagulation", "weight": 10 },
+        { "sign": "cerebral_hemorrhage", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "platelets_below_50000", "weight": 9 },
+          { "sign": "ast_alt_over_1000", "weight": 8 },
+          { "sign": "epigastric_pain_severe", "weight": 8 },
+          { "sign": "hemoglobin_falling", "weight": 7 },
+          { "sign": "renal_failure", "weight": 8 },
+          { "sign": "pulmonary_edema", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "All HELLP is high-risk; Mississippi class 1 (platelets <50,000) is most severe"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_or_right_upper_quadrant_pain", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "malaise_fatigue", "weight": 4 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "visual_disturbances", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 2 },
+      { "symptomId": "bleeding_tendency", "weight": 3 },
+      { "symptomId": "dark_urine", "weight": 2 },
+      { "symptomId": "fever", "weight": 1 },
+      { "symptomId": "known_preeclampsia_or_eclampsia", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypertension", "baseWeight": 4 },
+      { "signId": "jaundice_pallor", "baseWeight": 3 },
+      { "signId": "edema", "baseWeight": 2 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "petechiae_or_bruising", "baseWeight": 3 },
+      { "signId": "altered_mental_status", "baseWeight": 3 },
+      { "signId": "fetal_distress_signs", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_HELLP_syndrome", "multiplier": 5.0 },
+      { "id": "preeclampsia", "multiplier": 10.0 },
+      { "id": "family_history_of_HELLP", "multiplier": 2.0 },
+      { "id": "nulliparity", "multiplier": 2.0 },
+      { "id": "age_over_35", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mississippi_class_1",
+        "name": "HELLP Class 1 (Severe)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "platelets_below_50000", "weight": 5 },
+          { "feature": "AST_or_ALT_over_70", "weight": 4 },
+          { "feature": "hemolysis_evidence", "weight": 5 },
+          { "feature": "severe_epigastric_pain", "weight": 4 }
+        ],
+        "management": "Immediate delivery regardless of gestational age. ICU admission. Platelet transfusion if <20,000 or before surgery. Dexamethasone 10mg IV q12h. Plasma exchange if refractory."
+      },
+      {
+        "id": "mississippi_class_2",
+        "name": "HELLP Class 2 (Moderate)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "platelets_50000_to_100000", "weight": 4 },
+          { "feature": "AST_or_ALT_over_70", "weight": 4 },
+          { "feature": "hemolysis_evidence", "weight": 4 }
+        ],
+        "management": "Delivery within 24-48h after corticosteroid course if <34 weeks. Magnesium sulfate. Antihypertensives. Close monitoring of platelets and LFTs."
+      },
+      {
+        "id": "mississippi_class_3",
+        "name": "HELLP Class 3 (Mild)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "platelets_100000_to_150000", "weight": 3 },
+          { "feature": "AST_or_ALT_over_40", "weight": 3 },
+          { "feature": "hemolysis_evidence", "weight": 3 }
+        ],
+        "management": "Delivery at 37 weeks or earlier if deteriorates. Monitor labs every 12h. Conservative management only if very preterm and stable."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_fatty_liver_of_pregnancy",
+        "discriminators": ["hypoglycemia", "coagulopathy_without_thrombocytopenia", "encephalopathy"]
+      },
+      {
+        "diseaseId": "thrombotic_thrombocytopenic_purpura",
+        "discriminators": ["fever", "neurological_symptoms", "renal_failure", "normal_lft"]
+      },
+      {
+        "diseaseId": "hemolytic_uremic_syndrome",
+        "discriminators": ["acute_kidney_injury", "normal_lft", "postpartum_onset"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Blood pressure", "priority": "immediate", "yield": 0.8, "indication": "hypertension common" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count with smear", "priority": "immediate", "yield": 0.95, "indication": "thrombocytopenia, schistocytes" },
+        { "name": "Liver function tests", "priority": "immediate", "yield": 0.95, "indication": "AST, ALT, bilirubin" },
+        { "name": "LDH", "priority": "immediate", "yield": 0.9, "indication": "marker of hemolysis" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.8, "indication": "DIC assessment" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.7, "indication": "renal function" },
+        { "name": "Haptoglobin", "priority": "medium", "yield": 0.7, "indication": "low in hemolysis" },
+        { "name": "Urine protein or protein/creatinine ratio", "priority": "high", "yield": 0.7, "indication": "quantify proteinuria" }
+      ],
+      "imaging": [
+        { "name": "Liver ultrasound or CT", "priority": "medium", "yield": 0.4, "indication": "if hepatic rupture or hematoma suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACOG / RCOG Guidelines for HELLP Syndrome",
+      "pathways": [
+        {
+          "severity": "all_cases",
+          "criteria": "confirmed HELLP syndrome",
+          "treatment": "Stabilize: Magnesium sulfate for seizure prophylaxis. Antihypertensives for BP >160/110. Corticosteroids (Dexamethasone 10mg IV q12h) to improve platelet count (controversial). Delivery: the definitive treatment. Timing: Class 1: deliver immediately; Class 2: deliver within 24-48h; Class 3: deliver at 37w or if deteriorates. Anesthesia: avoid regional if platelets <75,000. Transfuse platelets if <20,000 or before surgical intervention."
+        },
+        {
+          "severity": "postpartum_persistent",
+          "criteria": "HELLP persisting >72h postpartum",
+          "treatment": "Consider plasma exchange if not improving. Monitor for complications. Continue supportive care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "endothelial_injury",
+      "microangiopathic_hemolytic_anemia",
+      "hepatic_ischemia",
+      "platelet_consumption",
+      "complement_activation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.2,
+        "lagDays": [0, 2],
+        "severityBoost": 0.9,
+        "clues": ["bleeding", "falling_fibrinogen", "elevated_d_dimer"]
+      },
+      {
+        "diseaseId": "hepatic_rupture_or_hematoma",
+        "probability": 0.02,
+        "lagDays": [0, 2],
+        "severityBoost": 1.0,
+        "clues": ["severe_ruq_pain", "hypotension", "distended_abdomen"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.1,
+        "lagDays": [0, 5],
+        "severityBoost": 0.6,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "pulmonary_edema",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.6,
+        "clues": ["dyspnea", "crackles", "hypoxia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["epigastric_pain", "thrombocytopenia", "hemolysis", "elevated_lfts"],
+    "exclusionClues": ["normal_platelets", "normal_lft", "no_hemolysis"]
+  }
+}

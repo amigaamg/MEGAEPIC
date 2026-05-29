@@ -1,0 +1,200 @@
+{
+  "disease": {
+    "id": "essential_hypertension",
+    "name": "Essential Hypertension",
+    "system": "IMED",
+    "agePeak_months": [360, 1080],
+    "note": "Hypertension is the leading modifiable risk factor for cardiovascular disease. Staging per ACC-AHA (2017): Elevated 120-129/<80, Stage 1 130-139/80-89, Stage 2 >=140/>=90. JNC 8 recommends thiazide, ACEi, ARB, or CCB as first-line in non-black patients; thiazide or CCB in black patients. Resistant hypertension requires workup for secondary causes (renal artery stenosis, primary aldosteronism, pheochromocytoma, sleep apnea).",
+    "prevalenceWeight": 4.0,
+    "syndromeTags": ["hypertension", "cardiovascular_risk", "antihypertensive_therapy", "blood_pressure_control"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypertensive_emergency_with_target_organ_damage", "weight": 10 },
+        { "sign": "hypertensive_encephalopathy", "weight": 10 },
+        { "sign": "aortic_dissection_suspected", "weight": 10 },
+        { "sign": "acute_pulmonary_edema_from_hypertensive_crisis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "blood_pressure_above_180_110", "weight": 8 },
+          { "sign": "accelerated_malignant_hypertension_papilledema", "weight": 8 },
+          { "sign": "rapidly_worsening_renal_function", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If BP >180/110 with TOD -> EMERGENCY; if >140/90 persistently -> STAGE 2; if >130/80 -> STAGE 1"
+    },
+    "historyFeatures": [
+      { "symptomId": "elevated_blood_pressure_readings_on_multiple_occasions", "weight": 5, "modifiers": [
+          { "condition": "sustained_above_140_90_despite_lifestyle", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "family_history_of_hypertension_or_cvd", "weight": 4 },
+      { "symptomId": "headache_occipital_throbbing_morning", "weight": 2 },
+      { "symptomId": "chest_pain_or_dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "history_of_sleep_apnea_snoring_daytime_sleepiness", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "office_bp_measurement_appropriate_cuff_size", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ambulatory_bp_monitoring_24h_average", "baseWeight": 5 },
+      { "signId": "fundoscopic_exam_retinopathy_grades", "baseWeight": 3 },
+      { "signId": "body_mass_index_and_waist_circumference", "baseWeight": 3 },
+      { "signId": "cardiac_auscultation_s3_s4_or_murmur", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_above_65", "multiplier": 3.0 },
+      { "id": "obesity_bmi_above_30", "multiplier": 2.5 },
+      { "id": "high_sodium_diet_low_potassium", "multiplier": 2.0 },
+      { "id": "sedentary_lifestyle", "multiplier": 1.5 },
+      { "id": "african_american_ethnicity", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 3.0 },
+      { "id": "obstructive_sleep_apnea", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "stage_1_hypertension",
+        "name": "Stage 1 Hypertension (ACC-AHA: 130-139/80-89)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "systolic_130_139_or_diastolic_80_89", "weight": 5 },
+          { "feature": "ascvd_risk_above_10_percent_pharmacotherapy", "weight": 5 },
+          { "feature": "lifestyle_modification_first_line", "weight": 4 },
+          { "feature": "single_agent_therapy_if_ascvd_risk_high", "weight": 3 }
+        ],
+        "management": "Lifestyle modifications: DASH diet (low Na <1500mg/day, high K), exercise 150min/week, weight loss, alcohol moderation. If ASCVD risk >10%, start pharmacotherapy. First-line options: thiazide diuretic, ACEi, ARB, or CCB. Target BP <130/80 if tolerated."
+      },
+      {
+        "id": "stage_2_hypertension",
+        "name": "Stage 2 Hypertension (>=140/90)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "systolic_above_140_or_diastolic_above_90", "weight": 5 },
+          { "feature": "two_drug_therapy_initial_approach", "weight": 5 },
+          { "feature": "consider_combination_pill_acei_ccb_or_acei_thiazide", "weight": 4 },
+          { "feature": "bp_above_target_20_10_above_goal", "weight": 4 }
+        ],
+        "management": "Initiate two-drug therapy. Preferred combinations: ACEi/ARB + CCB, or ACEi/ARB + thiazide diuretic. Avoid ACEi + ARB combination. If black patients, use CCB + thiazide. Add third agent if BP not at target. Check compliance and consider secondary causes if resistant."
+      },
+      {
+        "id": "resistant_hypertension",
+        "name": "Resistant Hypertension (>=3 agents + diuretic at optimal doses)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "bp_above_goal_despite_three_optimal_dose_agents", "weight": 5 },
+          { "feature": "requires_diuretic_in_most_cases_chlorthalidone_preferred", "weight": 5 },
+          { "feature": "mineralocorticoid_receptor_antagonist_as_fourth_line", "weight": 5 },
+          { "feature": "exclude_pseudoresistance_noncompliance_white_coat", "weight": 4 }
+        ],
+        "management": "Confirm adherence and accurate measurement. Use 24h ABPM. Maximize diuretic (chlorthalidone 25-50mg or torsemide if CKD). Add MRA (spironolactone 25-50mg or eplerenone). Screen for secondary causes: plasma aldosterone/renin ratio, sleep study, renal artery imaging, metanephrines. Consider referral to hypertension specialist."
+      },
+      {
+        "id": "secondary_hypertension",
+        "name": "Secondary Hypertension Workup",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "age_of_onset_below_30_or_above_55", "weight": 5 },
+          { "feature": "resistant_to_three_or_more_agents", "weight": 5 },
+          { "feature": "hypokalemia_spontaneous_or_diuretic_induced", "weight": 4 },
+          { "feature": "symptoms_paroxysmal_hypertension_palpitations_sweating", "weight": 4 }
+        ],
+        "management": "Screen: plasma aldosterone/renin ratio (primary aldosteronism), renal artery duplex/MRA (renovascular), overnight polysomnography (sleep apnea), plasma metanephrines (pheochromocytoma), thyroid function, renal US. Treat underlying cause. Medical management if surgical correction not feasible."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "white_coat_hypertension",
+        "discriminators": ["normal_home_or_abpm_readings", "normal_end_organ_status", "no_cv_risk_above_baseline"]
+      },
+      {
+        "diseaseId": "pseudohypertension_arteriosclerotic",
+        "discriminators": ["osler_sign_positive", "advanced_age", "calcified_vessels_on_xray"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Office BP measured per AHA protocol (seated 5min, correct cuff)", "priority": "immediate", "yield": 0.8, "indication": "all visits" },
+        { "name": "Ambulatory BP monitoring (ABPM) 24h", "priority": "high", "yield": 0.9, "indication": "confirm diagnosis, white coat, masked HTN" },
+        { "name": "Home BP monitoring log", "priority": "high", "yield": 0.7, "indication": "ongoing management" }
+      ],
+      "laboratory": [
+        { "name": "CBC, CMP (Na, K, Cl, HCO3, BUN, Cr, glucose)", "priority": "immediate", "yield": 0.7, "indication": "baseline and annual" },
+        { "name": "Lipid panel (fasting)", "priority": "high", "yield": 0.6, "indication": "ASCVD risk assessment" },
+        { "name": "Urinalysis with microalbuminuria", "priority": "high", "yield": 0.4, "indication": "renal involvement" },
+        { "name": "Plasma aldosterone/renin ratio", "priority": "medium", "yield": 0.3, "indication": "resistant HTN, hypokalemia" },
+        { "name": "TSH", "priority": "medium", "yield": 0.1, "indication": "screen thyroid dysfunction" },
+        { "name": "Plasma metanephrines", "priority": "low", "yield": 0.05, "indication": "paroxysmal HTN, pheochromocytoma suspicion" }
+      ],
+      "imaging": [
+        { "name": "ECG", "priority": "high", "yield": 0.4, "indication": "LVH, ischemia, baseline" },
+        { "name": "Echocardiogram", "priority": "medium", "yield": 0.3, "indication": "LVH assessment, diastolic function" },
+        { "name": "Renal artery duplex or CT angiography", "priority": "low", "yield": 0.1, "indication": "suspected renovascular HTN" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACC-AHA 2017 Hypertension Guideline, JNC 8 Report, ESC/ESH 2023 Guidelines",
+      "pathways": [
+        {
+          "severity": "elevated_bp_no_cvd",
+          "criteria": "BP 120-129/<80, no ASCVD, lifestyle modification alone",
+          "treatment": "Lifestyle modification: DASH diet, Na <1500mg/day, exercise 150min/week, weight loss if BMI >25, limit alcohol to 2 drinks/day. Recheck BP in 3-6 months."
+        },
+        {
+          "severity": "stage_1_or_2_hypertension",
+          "criteria": "BP >130/80 confirmed, ASCVD risk assessment performed",
+          "treatment": "Stage 1 + ASCVD >10% or Stage 2: initiate pharmacology. Non-black: thiazide, ACEi, ARB, or CCB monotherapy. Black: thiazide or CCB. Stage 2: start two-drug combination. Target <130/80. Follow up monthly until controlled."
+        },
+        {
+          "severity": "refractory_to_three_drugs",
+          "criteria": "not at target despite 3 optimal dose agents including diuretic",
+          "treatment": "Maximize diuretic (chlorthalidone). Add MRA (spironolactone 25-50mg). Consider beta-blocker if CAD or HR >80. Screen for secondary causes. Refer to hypertension specialist. Assess medication adherence and confirm measurements."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "increased_sympathetic_nervous_system_activity",
+      "renin_angiotensin_aldosterone_system_activation",
+      "sodium_retention_and_volume_expansion",
+      "increased_systemic_vascular_resistance",
+      "endothelial_dysfunction_and_vasoconstriction",
+      "arterial_remodeling_and_increased_stiffness"
+    ],
+    "complications": [
+      {
+        "diseaseId": "left_ventricular_hypertrophy_and_diastolic_dysfunction",
+        "probability": 0.2,
+        "lagDays": [730, 3650],
+        "severityBoost": 0.3,
+        "clues": ["s4_gallop", "ecg_lv_criteria", "diastolic_dysfunction_on_echo"]
+      },
+      {
+        "diseaseId": "cerebrovascular_accident_stroke",
+        "probability": 0.05,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.8,
+        "clues": ["uncontrolled_bp", "atrial_fibrillation", "carotid_bruit"]
+      },
+      {
+        "diseaseId": "chronic_kidney_disease_hypertensive_nephropathy",
+        "probability": 0.08,
+        "lagDays": [730, 3650],
+        "severityBoost": 0.4,
+        "clues": ["rising_creatinine", "proteinuria", "microalbuminuria"]
+      },
+      {
+        "diseaseId": "aortic_dissection",
+        "probability": 0.001,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["tearing_chest_pain", "bp_differential_arms", "wide_mediastinum"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sustained_bp_above_130_80", "multiple_readings_elevated", "family_history_htn", "obesity_sedentary_lifestyle"],
+    "exclusionClues": ["normal_ambulatory_monitoring", "transient_elevation_pain_anxiety", "normal_end_organ_exam"]
+  }
+}

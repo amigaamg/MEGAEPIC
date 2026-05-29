@@ -1,0 +1,177 @@
+{
+  "disease": {
+    "id": "acute-gastroenteritis",
+    "name": "Acute Gastroenteritis",
+    "system": "PAED",
+    "agePeak_months": [6, 36],
+    "note": "Common infectious diarrhea in children. Rotavirus and norovirus most common. Mainstay is rehydration - assess dehydration severity.",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["infectious_diarrhea", "dehydration"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "shock", "weight": 10 },
+        { "sign": "altered_consciousness_lethargic", "weight": 10 },
+        { "sign": "convulsions", "weight": 9 },
+        { "sign": "severe_dehydration_>10%", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "sunken_eyes", "weight": 7 },
+          { "sign": "skin_turgor_loss", "weight": 7 },
+          { "sign": "dry_mucous_membranes", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If shock, severe dehydration, or altered consciousness -> SEVERE; else -> NON-SEVERE (some dehydration or no dehydration)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "watery_diarrhea", "weight": 5 },
+      { "symptomId": "vomiting", "weight": 4 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "abdominal_pain_cramps", "weight": 2 },
+      { "symptomId": "decreased_urine_output", "weight": 4 },
+      { "symptomId": "contact_with_diarrhea_person", "weight": 2 },
+      { "symptomId": "blood_in_stool", "weight": 3, "note": "Dysentery - invasive pathogen" }
+    ],
+
+    "examFeatures": [
+      { "signId": "decreased_skin_turgor", "baseWeight": 4 },
+      { "signId": "sunken_eyes", "baseWeight": 4 },
+      { "signId": "dry_mucous_membranes", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "lethargy", "baseWeight": 4 },
+      { "signId": "abdominal_tenderness_diffuse", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_6_to_24_months", "multiplier": 3.0 },
+      { "id": "attending_daycare", "multiplier": 2.5 },
+      { "id": "lack_of_breastfeeding", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 2.5 },
+      { "id": "immunodeficiency", "multiplier": 2.0 },
+      { "id": "poor_sanitation", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "viral_gastroenteritis",
+        "name": "Viral Gastroenteritis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "watery_diarrhea", "weight": 5 },
+          { "feature": "vomiting_prominent", "weight": 4 },
+          { "feature": "low_grade_fever", "weight": 3 },
+          { "feature": "no_blood_in_stool", "weight": 3 }
+        ],
+        "management": "Oral rehydration therapy (ORS) according to Plan A/B/C. Zinc supplementation (20 mg/day x 14 days). Early feeding. No antibiotics. No antidiarrheals."
+      },
+      {
+        "id": "bacterial_dysentery",
+        "name": "Bacterial Dysentery",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "blood_in_stool", "weight": 5 },
+          { "feature": "high_fever", "weight": 4 },
+          { "feature": "tenesmus", "weight": 3 },
+          { "feature": "abdominal_cramping_severe", "weight": 3 }
+        ],
+        "management": "Stool culture and sensitivity. Oral/IV antibiotics based on likely pathogen (ciprofloxacin or azithromycin for Shigella). ORS/IV fluids. Infection control precautions."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "intussusception",
+        "discriminators": ["currant_jelly_stools", "episodic_screaming", "palpable_abdominal_mass", "red_currant_jelly_stool"]
+      },
+      {
+        "diseaseId": "acute_abdomen_appendicitis",
+        "discriminators": ["localized_rlq_pain", "pain_before_vomiting", "anorexia"]
+      },
+      {
+        "diseaseId": "uti",
+        "discriminators": ["fever_without_diarrhea", "dysuria", "positive_urinalysis"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Dehydration assessment (WHO classification)", "priority": "immediate", "yield": 0.9, "indication": "all cases" },
+        { "name": "Stool microscopy", "priority": "high", "yield": 0.5, "indication": "WBC, RBC, ova, parasites" }
+      ],
+      "laboratory": [
+        { "name": "Serum electrolytes", "priority": "medium", "yield": 0.5, "indication": "severe dehydration, IV fluids" },
+        { "name": "Stool culture", "priority": "medium", "yield": 0.4, "indication": "bloody diarrhea, suspected bacterial" },
+        { "name": "Stool rotavirus antigen", "priority": "low", "yield": 0.7, "indication": "confirm viral etiology" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO/UNICEF Guidelines for Acute Diarrhea Management",
+      "pathways": [
+        {
+          "severity": "no_dehydration_plan_a",
+          "criteria": "Well, normal thirst, no signs of dehydration",
+          "treatment": "Home management: ORS after each loose stool, zinc 20 mg x 14 days, continued feeding, extra fluids. Return immediately if worsens."
+        },
+        {
+          "severity": "some_dehydration_plan_b",
+          "criteria": "Restless/irritable, sunken eyes, thirsty, skin pinch slow",
+          "treatment": "ORS 75 mL/kg over 4 hours under observation. Reassess after 4h. Continue breastfeeding. If child vomits, wait 10 min then resume slowly."
+        },
+        {
+          "severity": "severe_dehydration_plan_c",
+          "criteria": "Lethargic/unconscious, unable to drink, very slow skin pinch",
+          "treatment": "IV Ringer's lactate 100 mL/kg over 3-6 hours (30 mL/kg in first 30 min, then 70 mL/kg over 2.5h). Monitor urine output. Switch to ORS when drinking."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "viral_bacterial_infection_gi_tract",
+      "enterotoxin_production",
+      "damage_to_intestinal_villi",
+      "increased_secretions",
+      "decreased_absorption",
+      "fluid_and_electrolyte_loss"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "dehydration",
+        "probability": 0.5,
+        "lagDays": [0, 2],
+        "severityBoost": 0.3,
+        "clues": ["decreased_urine", "sunken_eyes", "lethargy"]
+      },
+      {
+        "diseaseId": "electrolyte_imbalance",
+        "probability": 0.2,
+        "lagDays": [0, 2],
+        "severityBoost": 0.3,
+        "clues": ["severe_dehydration", "vomiting", "poor_ors_intake"]
+      },
+      {
+        "diseaseId": "persistent_diarrhea",
+        "probability": 0.05,
+        "lagDays": [7, 14],
+        "severityBoost": 0.2,
+        "clues": ["diarrhea_>7_days", "malnutrition"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["watery_stools", "vomiting", "dehydration_signs", "reduced_urine_output"],
+    "exclusionClues": ["bloody_diarrhea_with_fever_only", "no_dehydration", "symptoms_resolved"]
+  }
+}

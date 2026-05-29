@@ -1,0 +1,164 @@
+{
+  "disease": {
+    "id": "colorectal_bowel_obstruction",
+    "name": "Colorectal Bowel Obstruction",
+    "system": "surgical",
+    "agePeak_months": [480, 960],
+    "note": "Mechanical obstruction of the large bowel. Most common causes: cancer, diverticulitis, volvulus. Presents with distension, constipation, and late vomiting.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["bowel_obstruction", "abdominal_distension", "constipation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "colonic_perforation", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "cecal_dilation_more_than_12cm", "weight": 9 },
+          { "sign": "lactate_elevated", "weight": 7 },
+          { "sign": "signs_of_strangulation", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Perforation/ischemia/shock -> SEVERE; simple obstruction -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_distension", "weight": 5 },
+      { "symptomId": "absolute_constipation", "weight": 5, "note": "No stool or flatus" },
+      { "symptomId": "colicky_abdominal_pain", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 3, "note": "Late and often feculent" },
+      { "symptomId": "weight_loss", "weight": 3, "note": "Suggests malignancy" },
+      { "symptomId": "change_in_bowel_habit", "weight": 3, "note": "Prior to complete obstruction" },
+      { "symptomId": "rectal_bleeding", "weight": 3, "note": "Suggests colorectal cancer" }
+    ],
+
+    "examFeatures": [
+      { "signId": "massive_abdominal_distension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tympanic_percussion", "baseWeight": 4 },
+      { "signId": "high_pitched_or_absent_bowel_sounds", "baseWeight": 4 },
+      { "signId": "palpable_mass", "baseWeight": 3 },
+      { "signId": "guarding_rigidity", "baseWeight": 3 },
+      { "signId": "rectal_exam_reveals_tumor_or_impaction", "baseWeight": 4 },
+      { "signId": "signs_of_dehydration", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "colorectal_cancer", "multiplier": 2.5 },
+      { "id": "diverticulitis", "multiplier": 1.5 },
+      { "id": "previous_abdominal_surgery", "multiplier": 1.8 },
+      { "id": "volvulus_history", "multiplier": 2.0 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "chronic_constipation", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "obstruction_due_to_cancer",
+        "name": "Malignant Large Bowel Obstruction",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "progressive_constipation", "weight": 5 },
+          { "feature": "weight_loss", "weight": 4 },
+          { "feature": "rectal_bleeding", "weight": 3 },
+          { "feature": "palpable_abdominal_mass", "weight": 3 }
+        ],
+        "management": "Staging CT. Self-expanding metallic stent (SEMS) as bridge to surgery or palliation. Elective resection with primary anastomosis after decompression. Emergency surgery if perforation or failed stenting."
+      },
+      {
+        "id": "pseudo_obstruction_ogilvies",
+        "name": "Acute Colonic Pseudo-Obstruction (Ogilvie's)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "massive_distension", "weight": 5 },
+          { "feature": "no_mechanical_cause", "weight": 5 },
+          { "feature": "hospitalized_elderly", "weight": 4 },
+          { "feature": "recent_surgery_or_illness", "weight": 3 }
+        ],
+        "management": "Conservative: NBM, NG tube, rectal tube, correct electrolytes. Neostigmine (IV) if no improvement. Colonoscopic decompression. Surgical decompression if failed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "small_bowel_obstruction",
+        "discriminators": ["central_colicky_pain", "early_vomiting", "mild_distension", "air_fluid_levels_in_jejunum_ileum"]
+      },
+      {
+        "diseaseId": "severe_constipation",
+        "discriminators": ["passes_flatus", "no_pain", "distension_less", "responds_to_enemas"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Rectal exam", "priority": "immediate", "yield": 0.4, "indication": "palpate tumor, impaction" }
+      ],
+      "laboratory": [
+        { "name": "Electrolytes", "priority": "high", "yield": 0.6, "indication": "dehydration assessment" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "ischemia marker" },
+        { "name": "WBC count", "priority": "high", "yield": 0.6, "indication": "leukocytosis with strangulation" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-Ray supine + erect", "priority": "immediate", "yield": 0.8, "indication": "dilated colon, haustra visible" },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.95, "indication": "identify cause, site, and degree" },
+        { "name": "Water-soluble contrast enema", "priority": "medium", "yield": 0.7, "indication": "if CT inconclusive" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASCRS Guidelines for Large Bowel Obstruction",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "no peritonitis, no ischemia, no perforation",
+          "treatment": "NBM, NG tube, IV fluids. SEMS for left-sided malignant obstruction. Elective single-stage resection. For pseudo-obstruction: conservative + Neostigmine."
+        },
+        {
+          "severity": "severe",
+          "criteria": "peritonitis, ischemia, perforation, cecal dilation >12cm",
+          "treatment": "Emergency laparotomy. Resection with end colostomy (Hartmann) or primary anastomosis with covering stoma. IV antibiotics. ICU."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mechanical_obstruction_of_large_bowel",
+      "proximal_colonic_dilation",
+      "cecal_distension",
+      "compromised_blood_supply",
+      "ischemia",
+      "perforation",
+      "peritonitis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cecal_perforation",
+        "probability": 0.1,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["sudden_worsening_pain", "peritonitis", "free_air", "cecal_diameter_greater_12cm"]
+      },
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.15,
+        "lagDays": [1, 4],
+        "severityBoost": 0.4,
+        "clues": ["fever", "tachycardia", "leukocytosis", "hypotension"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["massive_distension", "absolute_constipation", "colicky_pain", "previous_colorectal_cancer_history"],
+    "exclusionClues": ["diarrhea", "passing_flatus", "mild_symptoms"]
+  }
+}

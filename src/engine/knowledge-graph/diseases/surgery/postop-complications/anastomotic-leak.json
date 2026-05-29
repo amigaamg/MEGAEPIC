@@ -1,0 +1,191 @@
+{
+  "disease": {
+    "id": "anastomotic_leak",
+    "name": "Anastomotic Leak",
+    "system": "surgical",
+    "agePeak_months": [],
+    "note": "A catastrophic complication following gastrointestinal anastomosis. Leakage of intraluminal contents through a suture/staple line dehiscence. Presents typically 5-10 days postoperatively. Highest mortality in esophageal and colorectal leaks.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["postoperative_complication", "acute_abdomen", "sepsis_postop"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "hypotension_refractory", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "fever_high", "weight": 7 },
+          { "sign": "tachycardia_out_of_proportion", "weight": 8 },
+          { "sign": "oliguria", "weight": 7 },
+          { "sign": "abdominal_rigidity", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If peritonitis/shock/organ failure -> SEVERE; else -> NON-SEVERE (contained/minimal leak)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "postoperative_fever", "weight": 5 },
+      { "symptomId": "tachycardia_persistent", "weight": 5 },
+      { "symptomId": "abdominal_pain_worsening", "weight": 5 },
+      { "symptomId": "oliguria", "weight": 4 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "confusion", "weight": 3 },
+      { "symptomId": "enteral_drain_content", "weight": 5, "note": "Feculent or bilious drainage from wound or drain" },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "ileus_persistent", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachycardia", "baseWeight": 5, "doubleWeight": true, "note": "Often the earliest sign" },
+      { "signId": "fever", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "abdominal_tenderness", "baseWeight": 5 },
+      { "signId": "guarding_rigidity", "baseWeight": 5 },
+      { "signId": "rebound_tenderness", "baseWeight": 4 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 3 },
+      { "signId": "drain_content_abnormal", "baseWeight": 5 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "oliguria", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "emergency_surgery", "multiplier": 2.5 },
+      { "id": "contaminated_peritoneal_cavity", "multiplier": 2.0 },
+      { "id": "malnutrition_albumin_low", "multiplier": 3.0 },
+      { "id": "steroid_therapy", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 1.8 },
+      { "id": "diabetes_mellitus", "multiplier": 1.6 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "neoadjuvant_radiotherapy", "multiplier": 2.0 },
+      { "id": "distal_anastomosis", "multiplier": 1.5, "note": "Lower rectal anastomoses at higher risk" }
+    ],
+
+    "subtypes": [
+      {
+        "id": "contained_leak",
+        "name": "Contained Leak",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "localized_pain", "weight": 4 },
+          { "feature": "low_grade_fever", "weight": 3 },
+          { "feature": "drain_abnormal", "weight": 5 },
+          { "feature": "no_peritonitis", "weight": 5 }
+        ],
+        "management": "Conservative: IV antibiotics, NPO, parenteral nutrition, percutaneous drainage of collection if needed. CT-guided drain placement."
+      },
+      {
+        "id": "free_leak",
+        "name": "Free (Uncontained) Leak with Peritonitis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "generalized_peritonitis", "weight": 5 },
+          { "feature": "septic_shock", "weight": 5 },
+          { "feature": "high_fever", "weight": 5 },
+          { "feature": "tachycardia_persistent", "weight": 5 }
+        ],
+        "management": "Emergency re-laparotomy. Take down anastomosis and end stoma (Hartmann's procedure or esophageal diversion). Peritoneal lavage. IV broad-spectrum antibiotics. ICU admission."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "postoperative_pancreatitis",
+        "discriminators": ["elevated_amylase_lipase", "upper_abdominal_pain", "retroperitoneal_signs"]
+      },
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "discriminators": ["more_indolent_course", "localized_collection_on_ct", "less_severe_tachycardia"]
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["sudden_onset_dyspnea", "pleuritic_chest_pain", "normal_abdominal_exam"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical assessment (tachycardia + fever + pain)", "priority": "immediate", "yield": 0.85, "indication": "persistent suspicion" },
+        { "name": "Drain fluid amylase/bilirubin", "priority": "immediate", "yield": 0.9, "indication": "drain in situ" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leukocytosis or left shift" },
+        { "name": "CRP", "priority": "high", "yield": 0.8, "indication": "rising trend highly suspicious" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "tissue hypoperfusion" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.5, "indication": "fever or sepsis" },
+        { "name": "Procalcitonin", "priority": "medium", "yield": 0.7, "indication": "differentiate infectious vs inflammatory" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV + oral contrast", "priority": "immediate", "yield": 0.95, "indication": "gold standard; look for extraluminal contrast, free air, collection" },
+        { "name": "Water-soluble contrast enema", "priority": "high", "yield": 0.85, "indication": "for low rectal anastomosis evaluation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ISREC (International Study Group of Rectal Cancer) Leak Definition; WSES Guidelines",
+      "pathways": [
+        {
+          "severity": "contained",
+          "criteria": "hemodynamically stable, no peritonitis, CT shows localized collection",
+          "treatment": "NPO, IV fluids, IV broad-spectrum antibiotics (Piperacillin-Tazobactam). CT-guided percutaneous drainage of collection. Parenteral nutrition. Monitor closely — if deteriorates, proceed to OR."
+        },
+        {
+          "severity": "free_leak",
+          "criteria": "generalized peritonitis, septic shock, organ failure",
+          "treatment": "Emergency re-laparotomy. Resuscitate with IV fluids and vasopressors. IV antibiotics (Piperacillin-Tazobactam + Gentamicin). Take down anastomosis, end stoma (Hartmann's or diversion). Peritoneal lavage. ICU admission."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "anastomotic_ischemia",
+      "tension_on_anastomosis",
+      "technical_failure",
+      "poor_tissue_healing",
+      "infection_at_anastomotic_site",
+      "increased_intraluminal_pressure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "generalized_peritonitis",
+        "probability": 0.6,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["rigidity", "rebound", "absent_bowel_sounds"]
+      },
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.4,
+        "lagDays": [0, 1],
+        "severityBoost": 0.6,
+        "clues": ["hypotension", "tachycardia", "lactate_elevated"]
+      },
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "probability": 0.3,
+        "lagDays": [5, 14],
+        "severityBoost": 0.2,
+        "clues": ["persistent_fever", "localized_pain"]
+      },
+      {
+        "diseaseId": "incisional_hernia",
+        "probability": 0.15,
+        "lagDays": [90, 365],
+        "severityBoost": 0.1,
+        "clues": ["bulge_at_re_laparotomy_wound"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["tachycardia_out_of_proportion", "fever_postop_day_5_to_10", "drain_content_abnormal", "oliguria_unexplained"],
+    "exclusionClues": ["normal_vital_signs", "tolerating_diet", "falling_crp", "normal_abdominal_exam"]
+  }
+}

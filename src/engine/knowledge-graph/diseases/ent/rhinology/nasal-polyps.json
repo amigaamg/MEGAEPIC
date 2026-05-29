@@ -1,0 +1,184 @@
+{
+  "disease": {
+    "id": "nasal_polyps",
+    "name": "Nasal Polyps",
+    "system": "ent",
+    "agePeak_months": [240, 720],
+    "note": "Chronic inflammatory lesions of sinonasal mucosa. Bilateral in most cases. Associated with asthma, aspirin sensitivity, and cystic fibrosis.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["nasal_obstruction", "hyposmia", "rhinorrhea"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "meningism", "weight": 10 },
+        { "sign": "periorbital_edema_erythema", "weight": 9 },
+        { "sign": "proptosis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "complete_nasal_obstruction", "weight": 6 },
+          { "sign": "anosmia", "weight": 5 },
+          { "sign": "sleep_apnea", "weight": 5 },
+          { "sign": "refractory_to_therapy", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If obstructive sleep apnea/refractory -> SEVERE; else -> mild/moderate"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "nasal_congestion", "weight": 5 },
+      { "symptomId": "hyposmia_anosmia", "weight": 4, "note": "One of the most characteristic symptoms" },
+      { "symptomId": "rhinorrhea", "weight": 3 },
+      { "symptomId": "postnasal_drip", "weight": 3 },
+      { "symptomId": "sneezing", "weight": 2 },
+      { "symptomId": "facial_fullness_pressure", "weight": 3 },
+      { "symptomId": "snoring", "weight": 2 },
+      { "symptomId": "asthma_history", "weight": 3 },
+      { "symptomId": "aspirin_sensitivity", "weight": 3, "note": "Samter's triad: asthma, nasal polyps, aspirin sensitivity" }
+    ],
+
+    "examFeatures": [
+      { "signId": "bilateral_grape_like_masses", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pale_gray_mucosa", "baseWeight": 4 },
+      { "signId": "gelatinous_appearance", "baseWeight": 4 },
+      { "signId": "naris_obstruction", "baseWeight": 3 },
+      { "signId": "turbinate_hypertrophy", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "asthma", "multiplier": 3.0 },
+      { "id": "aspirin_exacerbated_respiratory_disease", "multiplier": 5.0 },
+      { "id": "cystic_fibrosis", "multiplier": 5.0 },
+      { "id": "chronic_rhinosinusitis", "multiplier": 3.0 },
+      { "id": "allergic_fungal_sinusitis", "multiplier": 4.0 },
+      { "id": "age_over_40", "multiplier": 2.0 },
+      { "id": "male_gender", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "eosinophilic_nasal_polyps",
+        "name": "Eosinophilic Nasal Polyps",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "bilateral_polyps", "weight": 5 },
+          { "feature": "asthma_association", "weight": 4 },
+          { "feature": "hyposmia", "weight": 4 },
+          { "feature": "high_recurrence_rate", "weight": 3 }
+        ],
+        "management": "Intranasal corticosteroids first-line. Oral corticosteroids for acute exacerbations. Endoscopic sinus surgery for refractory cases. Biologics (Dupilumab, Omalizumab, Mepolizumab) for severe disease."
+      },
+      {
+        "id": "cystic_fibrosis_nasal_polyps",
+        "name": "CF-Related Nasal Polyps",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "polyps_in_children", "weight": 5 },
+          { "feature": "cf_symptoms", "weight": 5 },
+          { "feature": "neutrophilic_inflammation", "weight": 3 }
+        ],
+        "management": "Intranasal steroids. Saline irrigations. Endoscopic sinus surgery. Address underlying CF. CFTR modulators may reduce polyp burden."
+      },
+      {
+        "id": "antral_choanal_polyp",
+        "name": "Antrochoanal Polyp",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "unilateral", "weight": 5 },
+          { "feature": "originates_from_maxillary_sinus", "weight": 4 },
+          { "feature": "extends_to_choana_nasopharynx", "weight": 4 },
+          { "feature": "no_asthma_association", "weight": 3 }
+        ],
+        "management": "Endoscopic removal with complete excision of origin in maxillary sinus. Caldwell-Luc approach if recurrence."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "inverted_papilloma",
+        "discriminators": ["unilateral", "firm_irregular_mass", "epistaxis", "requires_biopsy"]
+      },
+      {
+        "diseaseId": "juvenile_nasopharyngeal_angiofibroma",
+        "discriminators": ["adolescent_male", "epistaxis", "vascular_mass", "imaging_shows_enhancement"]
+      },
+      {
+        "diseaseId": "encephalocele",
+        "discriminators": ["soft_pulsatile_mass", "positive_halo_sign", "history_meningitis"]
+      },
+      {
+        "diseaseId": "squamous_cell_carcinoma",
+        "discriminators": ["unilateral", "friable_bleeding", "rapid_growth", "destructive_on_imaging"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Nasal Endoscopy", "priority": "immediate", "yield": 0.95, "indication": "gold standard - assess extent and origin" }
+      ],
+      "laboratory": [
+        { "name": "Sweat Chloride Test", "priority": "medium", "yield": 0.5, "indication": "suspect CF in children with polyps" }
+      ],
+      "imaging": [
+        { "name": "CT Sinuses (Non-Contrast)", "priority": "high", "yield": 0.9, "indication": "pre-surgical planning, assess extent, exclude unilateral lesion" },
+        { "name": "Sinonasal MRI", "priority": "medium", "yield": 0.85, "indication": "differentiate from neoplasm, assess fungal elements" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "European Position Paper on Rhinosinusitis and Nasal Polyps (EPOS)",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "limited polyps (grade 1), mild symptoms",
+          "treatment": "Intranasal corticosteroid spray (Fluticasone or Mometasone) daily. Saline nasal irrigation. Avoid aspirin if AERD."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "moderate polyps (grade 2), moderate-to-severe symptoms",
+          "treatment": "Intranasal corticosteroids + oral corticosteroids (Prednisolone 30-40 mg daily for 7-14 days). Consider Doxycycline for anti-inflammatory effect."
+        },
+        {
+          "severity": "refractory",
+          "criteria": "extensive polyps (grade 3-4), failed medical therapy, recurrence after surgery",
+          "treatment": "Endoscopic sinus surgery (complete ethmoidectomy with polyp removal). Continue medical therapy post-op. Biologics (Dupilumab 300 mg SC Q2W) for severe eosinophilic disease."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_mucosal_inflammation",
+      "epithelial_disruption",
+      "eosinophilic_infiltration",
+      "edematous_stromal_prolapse",
+      "tissue_remodeling"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "obstructive_sleep_apnea",
+        "probability": 0.15,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.3,
+        "clues": ["snoring", "daytime_sleepiness", "apneas"]
+      },
+      {
+        "diseaseId": "recurrent_acute_sinusitis",
+        "probability": 0.3,
+        "lagDays": [90, 730],
+        "severityBoost": 0.15,
+        "clues": ["purulent_discharge", "facial_pain", "fever"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["bilateral_nasal_masses", "hyposmia", "nasal_obstruction", "asthma", "aspirin_sensitivity"],
+    "exclusionClues": ["unilateral_mass", "normal_endoscopy", "acute_symptoms_only"]
+  }
+}

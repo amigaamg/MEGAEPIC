@@ -1,0 +1,131 @@
+{
+  "disease": {
+    "id": "dialysis_indications",
+    "name": "Dialysis Indications and Initiation",
+    "system": "RENAL",
+    "agePeak_months": [480, 960],
+    "note": "RRT (hemodialysis or peritoneal dialysis) for ESKD. Timing of initiation guided by symptoms and complications, not eGFR alone. Urgent indications: life-threatening complications.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["renal_replacement_therapy", "end_stage_kidney_disease", "dialysis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "life_threatening_hyperkalemia", "weight": 10 },
+        { "sign": "uremic_pericarditis_tamponade", "weight": 10 },
+        { "sign": "pulmonary_edema_refractory_to_diuretics", "weight": 9 },
+        { "sign": "uremic_encephalopathy_seizures", "weight": 10 },
+        { "sign": "severe_metabolic_acidosis", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Urgent (life-threatening complications) vs Elective (chronic ESKD management)"
+    },
+    "historyFeatures": [
+      { "symptomId": "uremic_symptoms_nausea_vomiting_anorexia", "weight": 5 },
+      { "symptomId": "progressive_fatigue_weakness", "weight": 4 },
+      { "symptomId": "dyspnea_orthopnea_diuretic_resistant", "weight": 4 },
+      { "symptomId": "intractable_pruritus", "weight": 3 },
+      { "symptomId": "weight_loss_malnutrition", "weight": 3 },
+      { "symptomId": "confusion_lethargy_sleepiness", "weight": 3 },
+      { "symptomId": "bleeding_tendency", "weight": 2 },
+      { "symptomId": "restless_legs_muscle_cramps", "weight": 2 },
+      { "symptomId": "edema_weight_gain", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "uremic_fetor", "baseWeight": 3 },
+      { "signId": "pericardial_rub_muffled_hearts", "baseWeight": 4 },
+      { "signId": "asterixis", "baseWeight": 3 },
+      { "signId": "pulmonary_edema_crackles", "baseWeight": 4 },
+      { "signId": "peripheral_edema_anasarca", "baseWeight": 3 },
+      { "signId": "hypertension_refractory", "baseWeight": 3 },
+      { "signId": "uremic_snowflake_crystals_on_skin", "baseWeight": 2 },
+      { "signId": "signs_of_hyperkalemia_on_ecg", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "egfr_under_15", "multiplier": 5.0 },
+      { "id": "rapid_decline_egfr_greater_5_per_year", "multiplier": 2.0 },
+      { "id": "proteinuria_a3", "multiplier": 1.5 },
+      { "id": "diabetes_as_cause", "multiplier": 1.3 },
+      { "id": "poor_glycemic_control", "multiplier": 1.5 },
+      { "id": "hypertension_uncontrolled", "multiplier": 1.5 },
+      { "id": "missed_nephrology_follow_up", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "urgent_emergent_dialysis",
+        "name": "Urgent/Emergent Dialysis Indications",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "life_threatening_hyperkalemia", "weight": 5 },
+          { "feature": "severe_metabolic_acidosis", "weight": 4 },
+          { "feature": "pulmonary_edema_refractory", "weight": 4 },
+          { "feature": "uremic_pericarditis_or_encephalopathy", "weight": 5 },
+          { "feature": "intoxication_dialyzable_poison", "weight": 3 }
+        ],
+        "management": "Emergency HD (or CRRT if unstable). Temporary central venous catheter (IJ or femoral). K <6.5: medical management first. If refractory or severe: urgent HD. Severe acidosis (pH <7.15): HD with bicarbonate bath. Pulmonary edema: ultrafiltration. Uremic emergencies: daily HD until resolved."
+      },
+      {
+        "id": "elective_planned_dialysis_initiation",
+        "name": "Elective/Planned Dialysis Initiation",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "egfr_5_to_10", "weight": 4 },
+          { "feature": "persistent_uremic_symptoms", "weight": 5 },
+          { "feature": "progressive_malnutrition", "weight": 4 },
+          { "feature": "uncontrolled_fluid_overload_despite_diuretics", "weight": 4 },
+          { "feature": "planned_start_with_functioning_access", "weight": 5 }
+        ],
+        "management": "Plan start when eGFR 5-10 mL/min (or earlier if symptomatic). Establish permanent access months before: AVF (preferred) or AVG for HD; PD catheter for PD. Discuss modality: HD vs PD vs home HD vs transplant. Pre-dialysis education. Multidisciplinary team: nephrologist, dietitian, nurse, social worker."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "reversible_aki_requiring_rrt", "discriminators": ["acute_onset", "potential_for_recovery", "may_not_need_chronic_dialysis"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, eGFR, BUN", "priority": "immediate", "yield": 0.95, "indication": "renal function assessment" },
+        { "name": "Serum potassium, bicarbonate", "priority": "high", "yield": 0.9, "indication": "hyperkalemia, acidosis" },
+        { "name": "Albumin, prealbumin, nPCR", "priority": "high", "yield": 0.6, "indication": "nutritional status" },
+        { "name": "ECG", "priority": "high", "yield": 0.7, "indication": "hyperkalemia changes, LVH, pericarditis" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "pulmonary edema, pericardial effusion" },
+        { "name": "Echocardiogram", "priority": "medium", "yield": 0.5, "indication": "pericardial effusion, LV function" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO / Renal Association Guidelines for Dialysis Initiation",
+      "pathways": [
+        {
+          "severity": "emergent (life-threatening)",
+          "criteria": "K >6.5 with ECG changes, pH <7.15, pulmonary edema, uremic encephalopathy/pericarditis",
+          "treatment": "Emergency HD via temporary dialysis catheter. Daily HD until stable. ICU if unstable. CRRT if hypotensive. Address underlying cause."
+        },
+        {
+          "severity": "planned elective start",
+          "criteria": "eGFR 5-10, uremic symptoms, malnutrition, fluid overload",
+          "treatment": "HD: AVF creation 3-6 months before. Start HD 2-3x/week, 4h/session. PD: catheter insertion 2-4 weeks before. Start PD with low volumes. Refer for transplant evaluation. Continue renal protective measures (ACEi, SGLT2i, BP control)."
+        },
+        {
+          "severity": "peritoneal dialysis initiation",
+          "criteria": "chose PD modality, motivation for home therapy"
+        }
+      ]
+    },
+    "pathophysiology": [
+      "accumulation_of_uremic_toxins",
+      "fluid_and_electrolyte_imbalance",
+      "metabolic_acidosis_from_decreased_ammonia_genesis",
+      "increased_cardiovascular_strain",
+      "neurotoxicity_from_uremic_retention",
+      "platelet_dysfunction_from_uremia"
+    ],
+    "complications": [
+      { "diseaseId": "uremic_pericarditis", "probability": 0.05, "severityBoost": 0.5, "clues": ["chest_pain", "pericardial_rub", "fever", "ecg_diffuse_st_elevation"] },
+      { "diseaseId": "cardiac_arrhythmia_hyperkalemia", "probability": 0.1, "severityBoost": 0.5, "clues": ["k_greater_than_6", "ecg_peaked_t_widened_qrs", "syncope"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["egfr_under_10_with_uremic_symptoms", "hyperkalemia_refractory", "pulmonary_edema_diuretic_resistant", "uremic_pericarditis_or_encephalopathy"],
+    "exclusionClues": ["egfr_over_15_asymptomatic", "no_uremic_complications", "reversible_aki"]
+  }
+}

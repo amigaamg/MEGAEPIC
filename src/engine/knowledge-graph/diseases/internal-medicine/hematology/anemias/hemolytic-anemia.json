@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "autoimmune_hemolytic_anemia",
+    "name": "Autoimmune Hemolytic Anemia",
+    "system": "hematology",
+    "agePeak_months": [360, 720, 960],
+    "note": "Destruction of red blood cells by autoantibodies. Can be warm (IgG) or cold (IgM) agglutinin type. Associated with lymphoproliferative disorders and SLE.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["anemia", "hemolysis", "jaundice", "spherocytosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "rapid_hb_drop", "weight": 9 },
+        { "sign": "acute_renal_failure", "weight": 8 },
+        { "sign": "severe_hemoglobinuria", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "hb_stable": true
+      },
+      "severityLabel": "If rapidly dropping Hb or instability -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "jaundice", "weight": 4 },
+      { "symptomId": "dark_urine", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "cold_intolerance", "weight": 3, "note": "Cold agglutinin type" },
+      { "symptomId": "acrocyanosis", "weight": 2 },
+      { "symptomId": "splenic_discomfort", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "acrocyanosis", "baseWeight": 3, "note": "Cold agglutinin disease" }
+    ],
+
+    "riskFactors": [
+      { "id": "lymphoproliferative_disorder", "multiplier": 2.5 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "drug_exposure", "multiplier": 1.8 },
+      { "id": "infection", "multiplier": 1.5 },
+      { "id": "sle", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "warm_aiha",
+        "name": "Warm Autoimmune Hemolytic Anemia",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "igg_autoantibody", "weight": 5 },
+          { "feature": "spherocytes_on_film", "weight": 4 },
+          { "feature": "positive_direct_coombs_igg", "weight": 5 }
+        ],
+        "management": "Corticosteroids first-line. Rituximab if refractory. Splenectomy if failed medical therapy."
+      },
+      {
+        "id": "cold_agglutinin_disease",
+        "name": "Cold Agglutinin Disease",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "igm_autoantibody", "weight": 5 },
+          { "feature": "cold_exposure_triggers", "weight": 4 },
+          { "feature": "positive_direct_coombs_c3d", "weight": 5 }
+        ],
+        "management": "Avoid cold exposure. Rituximab. Bendamustine if associated with lymphoproliferative disorder."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hereditary_spherocytosis",
+        "discriminators": ["negative_direct_coombs", "family_history", "spherocytes_present_from_birth"]
+      },
+      {
+        "diseaseId": "hemoglobinuria_pnh",
+        "discriminators": ["flow_cytometry_pnh_clone", "negative_coombs", "thrombosis_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.9, "indication": "Low Hb, high MCV (reticulocytosis)" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.9, "indication": "Spherocytes, polychromasia" }
+      ],
+      "laboratory": [
+        { "name": "Direct Coombs test (DAT)", "priority": "immediate", "yield": 0.98, "indication": "Positive in AIHA" },
+        { "name": "Reticulocyte count", "priority": "high", "yield": 0.85, "indication": "High (compensatory)" },
+        { "name": "Bilirubin (unconjugated)", "priority": "high", "yield": 0.8, "indication": "Elevated" },
+        { "name": "LDH", "priority": "high", "yield": 0.8, "indication": "Elevated in hemolysis" },
+        { "name": "Haptoglobin", "priority": "high", "yield": 0.9, "indication": "Low/absent" },
+        { "name": "Cold agglutinin titer", "priority": "medium", "yield": 0.7, "indication": "High in cold type" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "BSH Guidelines for AIHA",
+      "pathways": [
+        {
+          "severity": "severe_life_threatening",
+          "criteria": "Hb <6, rapidly falling, cardiac instability",
+          "treatment": "Methylprednisolone IV 1g daily x3 days. IVIG. Consider rituximab. Transfusion with cross-match compatible blood."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "Hb 6-10, stable",
+          "treatment": "Prednisone 1mg/kg/day PO. Monitor Hb and reticulocytes. Taper slowly. Folic acid supplementation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "autoantibody_mediated_hemolysis",
+      "igg_opsonization",
+      "splenic_macrophage_clearance",
+      "intravascular_hemolysis",
+      "complement_activation",
+      "reticulocytosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "venous_thromboembolism",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "clues": ["elevated_ldh", "splenomegaly", "cold_agglutinin"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if rapidly progressive",
+    "diagnosticClues": ["hemolytic_anemia", "positive_coombs", "spherocytosis", "elevated_ldh"],
+    "exclusionClues": ["negative_coombs", "normal_lactate_dehydrogenase", "normal_hepatoglobin"]
+  }
+}

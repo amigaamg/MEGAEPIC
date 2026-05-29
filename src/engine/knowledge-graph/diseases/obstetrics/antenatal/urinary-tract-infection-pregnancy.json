@@ -1,0 +1,194 @@
+{
+  "disease": {
+    "id": "urinary_tract_infection_pregnancy",
+    "name": "Urinary Tract Infection in Pregnancy",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Increased risk due to ureteral dilation, decreased peristalsis, and urinary stasis. Asymptomatic bacteriuria (ASB) in 2-10% of pregnancies. Can progress to pyelonephritis.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["maternal_infection", "urinary_tract_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "severe_sepsis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_fever_over_39", "weight": 7 },
+          { "sign": "costovertebral_angle_tenderness", "weight": 6 },
+          { "sign": "rigors", "weight": 7 },
+          { "sign": "nausea_vomiting_dehydration", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Pyelonephritis (fever, CVA tenderness, rigors) -> SEVERE; Cystitis or ASB -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dysuria", "weight": 5 },
+      { "symptomId": "urinary_frequency", "weight": 4 },
+      { "symptomId": "urgency", "weight": 4 },
+      { "symptomId": "suprapubic_pain", "weight": 3 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "rigors", "weight": 4 },
+      { "symptomId": "flank_pain", "weight": 4, "note": "Suggests pyelonephritis" },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "hematuria", "weight": 2 },
+      { "symptomId": "foul_smelling_urine", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "costovertebral_angle_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "suprapubic_tenderness", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "dehydration_signs", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_UTI", "multiplier": 2.0 },
+      { "id": "asymptomatic_bacteriuria", "multiplier": 3.0 },
+      { "id": "multiparity", "multiplier": 1.3 },
+      { "id": "low_socioeconomic_status", "multiplier": 1.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "sickle_cell_trait", "multiplier": 1.5 },
+      { "id": "anatomical_abnormalities_urinary_tract", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "asymptomatic_bacteriuria",
+        "name": "Asymptomatic Bacteriuria",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "no_urinary_symptoms", "weight": 5 },
+          { "feature": "positive_urine_culture", "weight": 5 },
+          { "feature": "bacteria_on_dipstick", "weight": 4 }
+        ],
+        "management": "Treat with nitrofurantoin 100mg nocte for 7 days. Repeat culture after treatment."
+      },
+      {
+        "id": "cystitis_pregnancy",
+        "name": "Acute Cystitis in Pregnancy",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "dysuria", "weight": 5 },
+          { "feature": "frequency", "weight": 4 },
+          { "feature": "suprapubic_pain", "weight": 3 },
+          { "feature": "no_systemic_symptoms", "weight": 3 }
+        ],
+        "management": "Oral antibiotics: Nitrofurantoin (avoid in third trimester), Cephalexin, or Amoxicillin-clavulanate for 7 days."
+      },
+      {
+        "id": "acute_pyelonephritis",
+        "name": "Acute Pyelonephritis in Pregnancy",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "fever_over_38", "weight": 5 },
+          { "feature": "CVA_tenderness", "weight": 5 },
+          { "feature": "rigors", "weight": 4 },
+          { "feature": "nausea_vomiting", "weight": 4 },
+          { "feature": "dehydration", "weight": 3 }
+        ],
+        "management": "Hospital admission. IV fluids. IV antibiotics (Ceftriaxone 1-2g IV daily, or Cefazolin). Monitor for preterm labor. Switch to oral after 48h afebrile. Continue for 14 days."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "preterm_labor",
+        "discriminators": ["regular_contractions", "cervical_change", "negative_urine_culture"]
+      },
+      {
+        "diseaseId": "abruptio_placenta",
+        "discriminators": ["vaginal_bleeding", "abdominal_pain", "fetal_distress"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dipstick", "priority": "immediate", "yield": 0.8, "indication": "nitrites, leukocyte esterase, blood" }
+      ],
+      "laboratory": [
+        { "name": "Urine culture and sensitivity", "priority": "immediate", "yield": 0.95, "indication": "gold standard; >10^5 CFU/mL" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.7, "indication": "leukocytosis in pyelonephritis" },
+        { "name": "CRP", "priority": "medium", "yield": 0.6, "indication": "inflammatory marker" },
+        { "name": "Blood cultures", "priority": "medium", "yield": 0.4, "indication": "if pyelonephritis suspected" }
+      ],
+      "imaging": [
+        { "name": "Renal ultrasound", "priority": "medium", "yield": 0.5, "indication": "if recurrent UTI or suspected obstruction" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACOG Practice Bulletin on Urinary Tract Infections in Pregnancy",
+      "pathways": [
+        {
+          "severity": "asymptomatic_bacteriuria",
+          "criteria": "positive culture, no symptoms",
+          "treatment": "Nitrofurantoin 100mg PO nocte x 7 days. Avoid in third trimester (risk of hemolytic anemia in newborn). Alternative: Cephalexin 500mg QID x 7 days."
+        },
+        {
+          "severity": "cystitis",
+          "criteria": "lower UTI symptoms, no fever or CVA tenderness",
+          "treatment": "Oral antibiotics 7 days: Nitrofurantoin 100mg PO BD (first/second trimester) or Cephalexin 500mg PO QID. Urine culture after treatment."
+        },
+        {
+          "severity": "pyelonephritis",
+          "criteria": "fever, CVA tenderness, rigors, systemic symptoms",
+          "treatment": "Admit. IV Ceftriaxone 1-2g daily. IV fluids. Antipyretics. Monitor fetal status. Switch to oral when afebrile 48h. Total 14-day course. Recurrent pyelonephritis: suppressive nitrofurantoin for rest of pregnancy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ureteral_dilation_progesterone_mediated",
+      "decreased_ureteral_peristalsis",
+      "urinary_stasis",
+      "glycosuria",
+      "short_urethra"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "preterm_labor",
+        "probability": 0.2,
+        "lagDays": [1, 14],
+        "severityBoost": 0.4,
+        "clues": ["uterine_contractions", "cervical_change"]
+      },
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.7,
+        "clues": ["high_fever", "hypotension", "organ_dysfunction"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.02,
+        "lagDays": [1, 5],
+        "severityBoost": 0.5,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "recurrent_UTI",
+        "probability": 0.2,
+        "lagDays": [14, 90],
+        "severityBoost": 0.2,
+        "clues": ["repeated_positive_cultures"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["dysuria_frequency_in_pregnancy", "positive_dipstick", "CVA_tenderness"],
+    "exclusionClues": ["labor_pain", "ruptured_membranes", "negative_urine_culture"]
+  }
+}

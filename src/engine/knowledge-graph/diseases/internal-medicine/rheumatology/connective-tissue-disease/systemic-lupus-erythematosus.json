@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "systemic_lupus_erythematosus",
+    "name": "Systemic Lupus Erythematosus",
+    "system": "rheumatology",
+    "agePeak_months": [240, 480],
+    "note": "Chronic multisystem autoimmune disease with variable presentation. Characterized by autoantibodies against nuclear antigens. Can affect skin, joints, kidneys, nervous system, serosal surfaces, and blood cells.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["autoimmune", "connective_tissue_disease", "multisystem", "rash_arthritis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "lupus_nephritis_class_iv", "weight": 9 },
+        { "sign": "neuropsychiatric_lupus", "weight": 9 },
+        { "sign": "lupus_pneumonitis", "weight": 8 },
+        { "sign": "hemolytic_anemia", "weight": 7 },
+        { "sign": "thrombotic_thrombocytopenic_purpura", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If renal, CNS, or hematologic involvement -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "malar_butterfly_rash", "weight": 5 },
+      { "symptomId": "photosensitivity", "weight": 4 },
+      { "symptomId": "oral_nasal_ulcers", "weight": 4 },
+      { "symptomId": "non_erosive_arthritis", "weight": 4 },
+      { "symptomId": "pleuritic_chest_pain", "weight": 3 },
+      { "symptomId": "fatigue_fever_malaise", "weight": 3 },
+      { "symptomId": "alopecia", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "malar_rash", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "discoid_rash", "baseWeight": 5 },
+      { "signId": "oral_ulcers", "baseWeight": 3 },
+      { "signId": "alopecia", "baseWeight": 3 },
+      { "signId": "synovitis_non_deforming", "baseWeight": 3 },
+      { "signId": "pleural_pericardial_rub", "baseWeight": 3 },
+      { "signId": "peripheral_edema_nephrosis", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_sex_childbearing", "multiplier": 9.0 },
+      { "id": "african_caribbean_ethnicity", "multiplier": 3.0 },
+      { "id": "family_history_sle", "multiplier": 2.5 },
+      { "id": "complement_deficiency", "multiplier": 3.0 },
+      { "id": "drug_lupus_trigger", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_musccutaneous_sle",
+        "name": "Mild Musccutaneous SLE",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "rash_arthritis_serositis", "weight": 5 },
+          { "feature": "no_major_organ_threat", "weight": 4 },
+          { "feature": "responsive_to_hcq_nsaids", "weight": 3 }
+        ],
+        "management": "Hydroxychloroquine. NSAIDs. Sunscreen. Topical steroids for rash."
+      },
+      {
+        "id": "severe_organ_threatening_sle",
+        "name": "Severe Organ-Threatening SLE",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "lupus_nephritis", "weight": 5 },
+          { "feature": "cns_lupus", "weight": 5 },
+          { "feature": "hematologic_involvement", "weight": 4 }
+        ],
+        "management": "High-dose corticosteroids. Mycophenolate mofetil or cyclophosphamide. Rituximab if refractory."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "rheumatoid_arthritis",
+        "discriminators": ["erosive_symmetric_arthritis", "anti_ccp_positive", "no_malar_rash", "no_renal"]
+      },
+      {
+        "diseaseId": "dermatomyositis",
+        "discriminators": ["heliotrope_rash", "gottron_papules", "proximal_muscle_weakness", "anti_jo1"]
+      },
+      {
+        "diseaseId": "mixed_connective_tissue_disease",
+        "discriminators": ["anti_rnp", "scleroderma_features", "myositis", "overlap_syndrome"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urinalysis", "priority": "immediate", "yield": 0.7, "indication": "proteinuria, hematuria (nephritis screen)" }
+      ],
+      "laboratory": [
+        { "name": "ANA", "priority": "high", "yield": 0.95, "indication": "highly sensitive screening test" },
+        { "name": "Anti-dsDNA", "priority": "high", "yield": 0.7, "indication": "specific, correlates with disease activity" },
+        { "name": "Anti-Smith (Sm)", "priority": "high", "yield": 0.3, "indication": "highly specific for SLE" },
+        { "name": "C3 and C4 complement", "priority": "high", "yield": 0.7, "indication": "low levels suggest active disease" },
+        { "name": "FBC", "priority": "high", "yield": 0.6, "indication": "cytopenias (anemia, leukopenia, thrombocytopenia)" }
+      ],
+      "imaging": [
+        { "name": "Renal biopsy", "priority": "high", "yield": 0.9, "indication": "lupus nephritis class, treatment guidance" },
+        { "name": "Echocardiography", "priority": "medium", "yield": 0.4, "indication": "pericarditis, Libman-Sacks endocarditis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR/ACR Guidelines for Lupus",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "rash, arthralgia, serositis, no organ threat",
+          "treatment": "Hydroxychloroquine. NSAIDs. Topical steroids. Sun protection."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "persistent disease despite HCQ, mild hematologic",
+          "treatment": "Hydroxychloroquine + low-dose corticosteroids. Consider azathioprine or mycophenolate."
+        },
+        {
+          "severity": "severe",
+          "criteria": "nephritis, CNS lupus, severe hematologic, vasculitis",
+          "treatment": "High-dose corticosteroids. Mycophenolate mofetil or cyclophosphamide induction. Rituximab for refractory. Anticoagulation for antiphospholipid."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "loss_of_self_tolerance",
+      "autoantibody_production",
+      "immune_complex_deposition",
+      "complement_activation",
+      "type_i_ifn_pathway",
+      "t_b_cell_dysregulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "lupus_nephritis",
+        "probability": 0.4,
+        "severityBoost": 0.6,
+        "clues": ["proteinuria", "hematuria", "hypertension", "reduced_gfr"]
+      },
+      {
+        "diseaseId": "antiphospholipid_syndrome",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["thrombosis", "recurrent_miscarriage", "livedo_reticularis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if renal or CNS",
+    "diagnosticClues": ["malar_rash", "photosensitivity", "arthritis_serositis", "positive_ana_dsdna", "low_complement"],
+    "exclusionClues": ["erosive_arthritis", "anti_ccp_positive", "no_dsdna", "normal_complement", "negative_ana"]
+  }
+}

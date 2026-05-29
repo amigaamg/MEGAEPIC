@@ -1,0 +1,198 @@
+{
+  "disease": {
+    "id": "preeclampsia",
+    "name": "Preeclampsia",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Hypertensive disorder of pregnancy with proteinuria, developing after 20 weeks of gestation. Leading cause of maternal and perinatal morbidity and mortality worldwide.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["hypertensive_disorder_pregnancy", "high_risk_pregnancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "eclamptic_seizure", "weight": 10 },
+        { "sign": "cerebral_hemorrhage", "weight": 10 },
+        { "sign": "pulmonary_edema", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "blood_pressure_over_160_110", "weight": 9 },
+          { "sign": "severe_proteinuria_over_5g", "weight": 7 },
+          { "sign": "oliguria_less_400ml_24h", "weight": 7 },
+          { "sign": "epigastric_or_ruq_pain", "weight": 6 },
+          { "sign": "thrombocytopenia", "weight": 7 },
+          { "sign": "pulmonary_edema", "weight": 8 },
+          { "sign": "visual_disturbances", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "BP >160/110, proteinuria >5g, end-organ damage -> SEVERE preeclampsia"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "headache", "weight": 4 },
+      { "symptomId": "visual_disturbances_blurring", "weight": 4 },
+      { "symptomId": "epigastric_or_right_upper_quadrant_pain", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "excessive_weight_gain", "weight": 3 },
+      { "symptomId": "pedal_edema", "weight": 3 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "reduced_fetal_movements", "weight": 2 },
+      { "symptomId": "oliguria", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypertension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "proteinuria_on_dipstick", "baseWeight": 5 },
+      { "signId": "pedal_pitting_edema", "baseWeight": 3 },
+      { "signId": "epigastric_tenderness", "baseWeight": 3 },
+      { "signId": "hyperreflexia", "baseWeight": 3 },
+      { "signId": "clonus", "baseWeight": 3 },
+      { "signId": "papilledema_on_fundoscopy", "baseWeight": 2 },
+      { "signId": "oliguria_urine_output", "baseWeight": 3 },
+      { "signId": "weight_gain_excessive", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "nulliparity", "multiplier": 2.0 },
+      { "id": "previous_preeclampsia", "multiplier": 7.0 },
+      { "id": "chronic_hypertension", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.5 },
+      { "id": "multiple_gestation", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "advanced_maternal_age_over_40", "multiplier": 2.5 },
+      { "id": "antiphospholipid_syndrome", "multiplier": 3.0 },
+      { "id": "family_history_of_preeclampsia", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "preeclampsia_without_severe_features",
+        "name": "Preeclampsia Without Severe Features",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "BP_140_90_to_159_109", "weight": 4 },
+          { "feature": "proteinuria_over_300mg", "weight": 4 },
+          { "feature": "no_end_organ_damage", "weight": 4 },
+          { "feature": "maternal_and_fetal_stable", "weight": 3 }
+        ],
+        "management": "Outpatient monitoring if compliant. Twice-weekly BP and urine protein. Once-weekly platelet, LFT, creatinine. Fetal growth scans. Delivery at 37 weeks or earlier if deteriorates."
+      },
+      {
+        "id": "preeclampsia_with_severe_features",
+        "name": "Preeclampsia With Severe Features",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "BP_over_160_110", "weight": 5 },
+          { "feature": "severe_headache", "weight": 4 },
+          { "feature": "visual_disturbances", "weight": 4 },
+          { "feature": "epigastric_pain", "weight": 4 },
+          { "feature": "thrombocytopenia", "weight": 4 },
+          { "feature": "impaired_liver_function", "weight": 4 }
+        ],
+        "management": "Hospital admission. Antihypertensives (labetalol, nifedipine, hydralazine). Magnesium sulfate seizure prophylaxis. Corticosteroids for fetal lung maturity if <34 weeks. Delivery planning (timing based on gestational age and severity)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "chronic_hypertension",
+        "discriminators": ["BP_elevated_before_20_weeks", "no_proteinuria"]
+      },
+      {
+        "diseaseId": "gestational_hypertension",
+        "discriminators": ["no_proteinuria", "no_end_organ_damage"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Blood pressure measurement", "priority": "immediate", "yield": 0.99, "indication": "diagnostic" },
+        { "name": "Urine protein dipstick", "priority": "immediate", "yield": 0.8, "indication": "proteinuria screening" },
+        { "name": "Weight measurement", "priority": "routine", "yield": 0.5, "indication": "assess fluid retention" }
+      ],
+      "laboratory": [
+        { "name": "24-hour urine protein", "priority": "high", "yield": 0.9, "indication": "quantify proteinuria" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.8, "indication": "platelet count, Hb, Hct" },
+        { "name": "Liver function tests", "priority": "high", "yield": 0.8, "indication": "elevated transaminases" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.7, "indication": "renal function" },
+        { "name": "Uric acid", "priority": "medium", "yield": 0.6, "indication": "elevated in preeclampsia" },
+        { "name": "Coagulation profile", "priority": "medium", "yield": 0.5, "indication": "if severe or HELLP suspected" }
+      ],
+      "imaging": [
+        { "name": "Fetal growth ultrasound", "priority": "medium", "yield": 0.7, "indication": "assess for IUGR" },
+        { "name": "Umbilical artery Doppler", "priority": "medium", "yield": 0.6, "indication": "assess placental function" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG133 - Hypertension in Pregnancy",
+      "pathways": [
+        {
+          "severity": "without_severe_features",
+          "criteria": "BP <160/110, no symptoms, normal labs, term or near-term",
+          "treatment": "Antihypertensives (labetalol 100-200mg PO BD, nifedipine MR 10-20mg BD, or methyldopa). Twice-weekly monitoring. Delivery at 37-38 weeks. Magnesium sulfate not indicated."
+        },
+        {
+          "severity": "with_severe_features",
+          "criteria": "BP >160/110, severe headache, proteinuria, thrombocytopenia, elevated LFTs",
+          "treatment": "Admit. IV labetalol (20mg IV then infusion) or oral nifedipine. Magnesium sulfate 4g IV loading then 1g/h infusion for 24h. Dexamethasone 12mg IM q12h x 2 doses if <34 weeks. Plan delivery (C-section or induction) after stabilization."
+        },
+        {
+          "severity": "refractory",
+          "criteria": "BP uncontrolled despite three agents, pulmonary edema, oliguric renal failure",
+          "treatment": "ICU admission. IV hydralazine. Consider delivery regardless of gestational age. Invasive BP monitoring. Central line. Dialysis if AKI. Discuss with maternal-fetal medicine specialist."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "abnormal_placentation",
+      "endothelial_dysfunction",
+      "vasospasm",
+      "increased_systemic_vascular_resistance",
+      "imbalance_of_prostacyclin_and_thromboxane"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "eclampsia",
+        "probability": 0.05,
+        "lagDays": [0, 7],
+        "severityBoost": 0.8,
+        "clues": ["seizures", "severe_hypertension", "reflexes_brisk"]
+      },
+      {
+        "diseaseId": "HELLP_syndrome",
+        "probability": 0.1,
+        "lagDays": [0, 5],
+        "severityBoost": 0.8,
+        "clues": ["epigastric_pain", "thrombocytopenia", "hemolysis"]
+      },
+      {
+        "diseaseId": "placental_abruption",
+        "probability": 0.03,
+        "lagDays": [0, 7],
+        "severityBoost": 0.6,
+        "clues": ["abdominal_pain", "vaginal_bleeding", "fetal_distress"]
+      },
+      {
+        "diseaseId": "intrauterine_growth_restriction",
+        "probability": 0.2,
+        "lagDays": [7, 90],
+        "severityBoost": 0.4,
+        "clues": ["decreased_fetal_growth", "abnormal_doppler"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["hypertension_after_20_weeks", "proteinuria", "headache_epigastric_pain"],
+    "exclusionClues": ["hypertension_before_20_weeks", "no_proteinuria"]
+  }
+}

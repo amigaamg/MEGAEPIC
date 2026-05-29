@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "tic_disorders",
+    "name": "Tic Disorders (Tourette Syndrome and Related)",
+    "system": "psychiatry",
+    "agePeak_months": [60, 144],
+    "note": "Tic disorders encompass Tourette syndrome, chronic motor/vocal tic disorder, and provisional tic disorder. Characterized by sudden, rapid, recurrent, nonrhythmic motor movements or vocalizations. Tourette syndrome requires both multiple motor tics and at least one vocal tic for >1 year with onset before age 18. Yale Global Tic Severity Scale (YGTSS) quantifies severity. Habit reversal therapy is first-line behavioral treatment. Pharmacotherapy includes clonidine, guanfacine, and antipsychotics.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["tic_disorder", "tourette", "movement_disorder", "neurodevelopmental"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "self_injurious_tics", "weight": 9 },
+        { "sign": "social_isolation_due_to_tics", "weight": 6 },
+        { "sign": "severe_functional_impairment", "weight": 7 },
+        { "sign": "school_refusal_due_to_tics", "weight": 5 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "mild_tics": true
+      },
+      "severityLabel": "If self-injurious or severe functional impairment -> HIGH; else -> MILD/MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "motor_tics", "weight": 5, "note": "Eye blinking, facial grimacing, head jerking, shoulder shrugging" },
+      { "symptomId": "vocal_tics", "weight": 5, "note": "Throat clearing, grunting, sniffing, barking, coprolalia (rare)" },
+      { "symptomId": "premonitory_urge", "weight": 4, "note": "Sensation preceding tic, relieved by performing tic" },
+      { "symptomId": "suppressibility_of_tics", "weight": 3, "note": "Temporarily suppressible, worsens with stress" },
+      { "symptomId": "waxing_and_waning_course", "weight": 4 },
+      { "symptomId": "onset_before_age_18", "weight": 5 },
+      { "symptomId": "symptom_worsening_with_stress_or_anxiety", "weight": 3 },
+      { "symptomId": "family_history_of_tics", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "motor_tics_observed", "baseWeight": 5 },
+      { "signId": "vocal_phonic_tics", "baseWeight": 5 },
+      { "signId": "coprolalia_or_echophenomena", "baseWeight": 2 },
+      { "signId": "self_injurious_behavior", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_tics", "multiplier": 5.0 },
+      { "id": "male_sex", "multiplier": 3.0 },
+      { "id": "prenatal_perinatal_insults", "multiplier": 1.5 },
+      { "id": "streptococcal_infection", "multiplier": 1.2 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "tourette_syndrome",
+        "name": "Tourette Syndrome",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "multiple_motor_and_one_vocal_tic", "weight": 5 },
+          { "feature": "duration_greater_than_1_year_onset_before_18", "weight": 5 }
+        ],
+        "management": "Psychoeducation. Habit reversal therapy. Clonidine/guanfacine first-line. Aripiprazole/risperidone if refractory."
+      },
+      {
+        "id": "chronic_motor_tic_disorder",
+        "name": "Chronic Motor Tic Disorder",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "motor_tics_only_duration_over_1_year", "weight": 5 }
+        ],
+        "management": "Behavioral therapy. Alpha-2 agonists if functionally impairing."
+      },
+      {
+        "id": "chronic_vocal_tic_disorder",
+        "name": "Chronic Vocal Tic Disorder",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "vocal_tics_only_duration_over_1_year", "weight": 5 }
+        ],
+        "management": "Alpha-2 agonists first-line. Antipsychotic if severe."
+      },
+      {
+        "id": "provisional_tic_disorder",
+        "name": "Provisional Tic Disorder",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "motor_or_vocal_tics_under_1_year", "weight": 5 }
+        ],
+        "management": "Reassurance and monitoring. Most remit spontaneously."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "stereotypic_movement_disorder",
+        "discriminators": ["rhythmic_rocking", "no_premonitory_urge", "predictable_pattern"]
+      },
+      {
+        "diseaseId": "tardive_dyskinesia",
+        "discriminators": ["antipsychotic_history", "oro_buccal_lingual", "no_premonitory_urge"]
+      },
+      {
+        "diseaseId": "myoclonus_or_huntingtons",
+        "discriminators": ["adult_onset", "progressive", "not_suppressible", "no_premonitory_urge"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Yale Global Tic Severity Scale (YGTSS)", "priority": "immediate", "yield": 0.95, "indication": "Quantify motor/vocal tic severity and impairment" },
+        { "name": "Clinical observation across settings", "priority": "immediate", "yield": 0.8, "indication": "Confirm tic presence and suppressibility" }
+      ],
+      "laboratory": [
+        { "name": "ASO titer / Anti-DNase B", "priority": "low", "yield": 0.2, "indication": "Only if acute onset after strep (PANDAS)" }
+      ],
+      "imaging": [
+        { "name": "Brain MRI", "priority": "low", "yield": 0.05, "indication": "Only if atypical late onset or neurological signs" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AACAP Practice Parameter for Tic Disorders",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "YGTSS <15, no functional impairment",
+          "treatment": "Psychoeducation. Regular monitoring. Most resolve spontaneously."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "YGTSS 15-30, some distress or interference",
+          "treatment": "Habit reversal therapy (HRT) / CBIT. Clonidine 0.05-0.2 mg/day or guanfacine 0.5-3 mg/day."
+        },
+        {
+          "severity": "severe",
+          "criteria": "YGTSS >30, marked impairment, self-injurious",
+          "treatment": "Alpha-2 agonist plus antipsychotic (aripiprazole 2-15 mg, risperidone 0.5-4 mg). Topiramate adjunct. DBS for refractory adults."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cortico_striato_thalamo_cortical_loop_dysfunction",
+      "basal_ganglia_dopamine_hyperactivity",
+      "genetic_linkage_slitrk1_cntnap2"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "adhd_comorbidity",
+        "probability": 0.5,
+        "severityBoost": 0.3,
+        "clues": ["inattention", "hyperactivity", "impulsivity", "poor_school_performance"]
+      },
+      {
+        "diseaseId": "ocd_comorbidity",
+        "probability": 0.4,
+        "severityBoost": 0.3,
+        "clues": ["repetitive_thoughts", "compulsive_rituals", "symmetry_ordering"]
+      },
+      {
+        "diseaseId": "social_anxiety_bullying",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["social_withdrawal", "school_avoidance", "peers_teasing"]
+      },
+      {
+        "diseaseId": "anger_control_problems",
+        "probability": 0.2,
+        "severityBoost": 0.1,
+        "clues": ["irritability", "rage_attacks", "impulsive_aggression"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low overall; high if self-injurious tics",
+    "diagnosticClues": ["multiple_tics", "premonitory_urge", "waxing_waning", "suppressible", "childhood_onset", "ygtss_elevated"],
+    "exclusionClues": ["adult_onset", "progressive_neurologic_decline", "rhythmic_stereotypies", "treatment_emergent_window"]
+  }
+}

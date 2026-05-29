@@ -1,0 +1,139 @@
+{
+  "disease": {
+    "id": "myasthenia_gravis",
+    "name": "Myasthenia Gravis",
+    "system": "NEURO",
+    "agePeak_months": [240, 720],
+    "note": "Autoimmune neuromuscular disorder with fatigable weakness. Ocular, bulbar, limb, or generalized. Acetylcholine receptor antibodies in most.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["neuromuscular_junction_disorder", "autoimmune_neurological"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "myasthenic_crisis", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "severe_bulbar_weakness", "weight": 9 },
+        { "sign": "cholinergic_crisis", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If myasthenic crisis/respiratory failure -> ICU; else -> CHRONIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "ptosis_diplopia", "weight": 5 },
+      { "symptomId": "fatigable_weakness_worsens_with_use", "weight": 5 },
+      { "symptomId": "dysphagia_dysarthria", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "limb_weakness_proximal", "weight": 3 },
+      { "symptomId": "neck_weakness_head_drop", "weight": 3 },
+      { "symptomId": "symptoms_worse_evening", "weight": 4 },
+      { "symptomId": "improvement_with_rest", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "fatigable_ptosis_on_upward_gaze", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "diplopia_on_lateral_gaze", "baseWeight": 4 },
+      { "signId": "facial_weakness", "baseWeight": 3 },
+      { "signId": "proximal_limb_weakness_fatigable", "baseWeight": 4 },
+      { "signId": "bulbar_weakness_palatal", "baseWeight": 3 },
+      { "signId": "normal_or_brisk_tendon_reflexes", "baseWeight": 2 },
+      { "signId": "no_sensory_impairment", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "female_sex_young", "multiplier": 2.0 },
+      { "id": "thymic_abnormality", "multiplier": 4.0 },
+      { "id": "hladr3_other_mg_associated", "multiplier": 2.0 },
+      { "id": "other_autoimmune_disease", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "ocular_mg",
+        "name": "Ocular Myasthenia Gravis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "ptosis_diplopia_only", "weight": 5 },
+          { "feature": "no_limb_or_bulbar_involvement", "weight": 5 }
+        ],
+        "management": "Pyridostigmine 30-60 mg TDS. If inadequate: prednisolone 10-40 mg OD. May progress to generalized MG within 2 years."
+      },
+      {
+        "id": "generalized_mg",
+        "name": "Generalized MG",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "ocular_plus_limb_bulbar_respiratory", "weight": 5 },
+          { "feature": "positive_achr_antibodies", "weight": 5 }
+        ],
+        "management": "Pyridostigmine. Immunosuppression: prednisolone, azathioprine, mycophenolate, rituximab. Thymectomy if thymoma or AChR-positive non-thymomatous. IVIG/PLEX if crisis."
+      },
+      {
+        "id": "refractory_mg",
+        "name": "Refractory Myasthenia Gravis",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "failed_multiple_immunosuppressants", "weight": 5 },
+          { "feature": "frequent_crises", "weight": 5 }
+        ],
+        "management": "Rituximab. Eculizumab (compliment inhibitor). Cyclophosphamide. Chronic IVIG. Tocilizumab (consider). Thymectomy if not done."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "lambert_eaton_myasthenic_syndrome", "discriminators": ["proximal_weakness_improves_with_exercise", "autonomic_symptoms", "anti_vgcc_positive", "small_cell_lung_cancer"] },
+      { "diseaseId": "cranial_neuropathy", "discriminators": ["no_fatigability", "no_fluctuation", "single_cranial_nerve", "mg_negative"] },
+      { "diseaseId": "congenital_myasthenic_syndromes", "discriminators": ["onset_early_childhood", "no_antibodies", "no_response_to_immunotherapy", "family_history"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Ice pack test (for ptosis)", "priority": "immediate", "yield": 0.8, "indication": "improvement of ptosis with ice confirms MG" },
+        { "name": "Fatigability testing", "priority": "immediate", "yield": 0.7, "indication": "sustained upgaze, repetitive arm abduction" }
+      ],
+      "laboratory": [
+        { "name": "Acetylcholine receptor antibodies (AChR-Ab)", "priority": "high", "yield": 0.85, "indication": "positive in 85% of generalized MG" },
+        { "name": "MuSK antibodies", "priority": "high", "yield": 0.4, "indication": "if AChR-negative, especially bulbar/neck weakness" },
+        { "name": "LRP4, Agrin antibodies", "priority": "low", "yield": 0.1, "indication": "if double seronegative" }
+      ],
+      "imaging": [
+        { "name": "CT Chest (thymus)", "priority": "high", "yield": 0.7, "indication": "thymoma detection, thymic hyperplasia" }
+      ],
+      "advanced": [
+        { "name": "Repetitive nerve stimulation", "indication": "decrementing response at 3 Hz", "priority": "high" },
+        { "name": "Single-fiber EMG", "indication": "most sensitive (increased jitter)", "priority": "high" }
+      ]
+    },
+    "management": {
+      "protocolReference": "MGFA/International Consensus Guidelines for MG",
+      "pathways": [
+        {
+          "severity": "mild generalized",
+          "criteria": "MGFA class II-III, no crisis, ambulatory",
+          "treatment": "Pyridostigmine 60 mg TDS-QID. Prednisolone 10-60 mg OD (taper to lowest effective). Azathioprine 2-3 mg/kg (steroid-sparing). Thymectomy surgery."
+        },
+        {
+          "severity": "severe/flare",
+          "criteria": "MGFA class IV-V, bulbar weakness, declining FVC",
+          "treatment": "IVIG 2 g/kg over 5 days. Plasma exchange (5 sessions, faster onset). IV methylprednisolone (caution: may worsen initially). ICU if crisis."
+        },
+        {
+          "severity": "myasthenic crisis",
+          "criteria": "respiratory failure requiring ventilation",
+          "treatment": "ICU admission. Mechanical ventilation. Withhold pyridostigmine (cholinergic overload risk). PLEX (preferred) or IVIG. Identify trigger (infection, stress, rapid steroid taper)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "ach_receptor_antibodies",
+      "complement_mediated_nm_junction_destruction",
+      "postsynaptic_membrane_damage",
+      "neuromuscular_junction_fatigue",
+      "thymic_abnormality",
+      "muSK_antibody_disrupts_clustering"
+    ],
+    "complications": [
+      { "diseaseId": "myasthenic_crisis", "probability": 0.1, "severityBoost": 0.6, "clues": ["respiratory_distress", "bulbar_weakness", "infection_trigger"] },
+      { "diseaseId": "cholinergic_crisis", "probability": 0.02, "severityBoost": 0.5, "clues": ["excessive_salivation", "diarrhea", "muscle_fasciculations", "bradycardia"] },
+      { "diseaseId": "thymoma", "probability": 0.1, "severityBoost": 0.2, "clues": ["anterior_mediastinal_mass"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if crisis",
+    "diagnosticClues": ["fatigable_fluctuating_weakness", "ocular_diplopia_ptosis", "positive_achr_ab", "decrement_on_rns"],
+    "exclusionClues": ["bulbar_onset_only_lower_cranial_nerves", "sensory_abnormalities", "no_response_to_pyridostigmine"]
+  }
+}

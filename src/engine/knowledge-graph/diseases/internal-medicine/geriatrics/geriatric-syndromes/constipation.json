@@ -1,0 +1,129 @@
+{
+  "disease": {
+    "id": "constipation_geriatric",
+    "name": "Constipation",
+    "system": "geriatrics",
+    "agePeak_months": [660, 1080],
+    "note": "Very common in older adults. Chronic constipation significantly impacts quality of life. Can lead to fecal impaction and obstruction.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["bowel_dysfunction", "geriatric_giant"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "fecal_impaction", "weight": 8 },
+        { "sign": "obstructive_symptoms_vomiting", "weight": 9 },
+        { "sign": "suspected_bowel_perforation", "weight": 10 },
+        { "sign": "rectal_bleeding", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "mild_constipation": true,
+        "no_obstruction_signs": true,
+        "passing_flatus": true
+      },
+      "severityLabel": "If fecal impaction, obstruction, or perforation -> EMERGENCY; chronic constipation -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "less_than_3_bowel_movements_per_week", "weight": 5 },
+      { "symptomId": "straining_during_defecation", "weight": 4 },
+      { "symptomId": "hard_lumpy_stools", "weight": 4 },
+      { "symptomId": "sensation_of_incomplete_evacuation", "weight": 3 },
+      { "symptomId": "manual_maneuvers_to_pass_stool", "weight": 3 },
+      { "symptomId": "abdominal_bloating_or_discomfort", "weight": 3 },
+      { "symptomId": "laxative_dependence", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hard_feces_on_rectal_exam", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "distended_abdomen", "baseWeight": 3 },
+      { "signId": "palpable_fecal_mass", "baseWeight": 4 },
+      { "signId": "decreased_bowel_sounds", "baseWeight": 2 },
+      { "signId": "fissure_or_hemorrhoids", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "opioid_use", "multiplier": 3.0 },
+      { "id": "anticholinergic_medications", "multiplier": 2.0 },
+      { "id": "low_fiber_diet", "multiplier": 1.8 },
+      { "id": "dehydration", "multiplier": 1.6 },
+      { "id": "immobility", "multiplier": 1.6 },
+      { "id": "diabetes", "multiplier": 1.4 },
+      { "id": "hypothyroidism", "multiplier": 1.5 },
+      { "id": "dementia", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bowel_obstruction",
+        "discriminators": ["vomiting", "absolute_constipation", "distension", "air_fluid_levels_on_xray"]
+      },
+      {
+        "diseaseId": "irritable_bowel_syndrome",
+        "discriminators": ["abdominal_pain_related_to_defecation", "alternating_with_diarrhea", "younger_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Rome IV criteria assessment", "priority": "immediate", "yield": 0.9, "indication": "diagnostic criteria" },
+        { "name": "Digital rectal examination", "priority": "immediate", "yield": 0.85, "indication": "fecal impaction, mass, tone" }
+      ],
+      "laboratory": [
+        { "name": "TSH, calcium, glucose", "priority": "high", "yield": 0.4, "indication": "secondary causes" },
+        { "name": "FOBT/colorectal cancer screening", "priority": "medium", "yield": 0.3, "indication": "if alarm features" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-ray", "priority": "medium", "yield": 0.6, "indication": "fecal loading or obstruction" },
+        { "name": "CT abdomen", "priority": "low", "yield": 0.7, "indication": "if obstruction or mass suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline CG99 – Constipation in adults",
+      "pathways": [
+        {
+          "severity": "fecal_impaction",
+          "criteria": "hard rectal mass, inability to pass stool",
+          "treatment": "Manual disimpaction. Enema (phosphate or arachis oil). Oral polyethylene glycol (Movicol) high dose. Review medications causing constipation."
+        },
+        {
+          "severity": "chronic_constipation",
+          "criteria": "Rome IV positive, no impaction",
+          "treatment": "Increase dietary fiber (if no bloating) and fluids. Bulk-forming laxatives (ispaghula). Second-line: osmotic (lactulose, PEG). Third-line: stimulant (senna, bisacodyl) short-term. Review opioid use and anticholinergics."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "prolonged_colonic_transit",
+      "impaired_defecatory_coordination",
+      "poor_dietary_fiber_intake",
+      "dehydration",
+      "medication_side_effects",
+      "pelvic_floor_dyssynergia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "fecal_impaction",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["no_bowel_movement_for_days", "overflow_diarrhea", "abdominal_pain"]
+      },
+      {
+        "diseaseId": "obstruction",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["vomiting", "distension", "absolute_constipation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low unless obstruction or impaction",
+    "diagnosticClues": ["infrequent_stools", "straining", "hard_stools", "age_over_60"],
+    "exclusionClues": ["normal_bowel_frequency", "soft_stools", "no_straining"]
+  }
+}

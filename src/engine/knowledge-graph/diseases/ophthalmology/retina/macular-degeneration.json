@@ -1,0 +1,191 @@
+{
+  "disease": {
+    "id": "macular_degeneration",
+    "name": "Age-Related Macular Degeneration (AMD)",
+    "system": "OPHTH",
+    "agePeak_months": [600, 960],
+    "note": "Progressive degeneration of the macula, leading to central vision loss. Leading cause of irreversible blindness in the elderly. Two forms: dry (non-neovascular, 85-90%) and wet (neovascular, 10-15%).",
+    "prevalenceWeight": 0.08,
+    "syndromeTags": ["retinal_disorder", "macular_disease", "vision_loss_central"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sudden_vision_loss_central", "weight": 9 },
+        { "sign": "metamorphopsia_severe", "weight": 7 },
+        { "sign": "disciform_scar_formation", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "choroidal_neovascularization_active", "weight": 8 },
+          { "sign": "subretinal_fluid_or_hemorrhage", "weight": 7 },
+          { "sign": "RPE_tear", "weight": 8 },
+          { "sign": "visual_acuity_20_200_or_worse", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Wet AMD (active CNV) or central GA -> SEVERE; Early/intermediate dry AMD -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "blurred_central_vision_gradual", "weight": 5 },
+      { "symptomId": "difficulty_reading_recognizing_faces", "weight": 5 },
+      { "symptomId": "metamorphopsia_distortion_straight_lines", "weight": 5, "note": "Wet AMD" },
+      { "symptomId": "scotoma_central_or_paracentral", "weight": 4 },
+      { "symptomId": "sudden_worsening_of_vision", "weight": 4, "note": "May indicate CNV" },
+      { "symptomId": "colors_appear_duller_or_faded", "weight": 2 },
+      { "symptomId": "difficulty_adapting_to_dim_light", "weight": 2 },
+      { "symptomId": "hallucinations_Charles_Bonnet", "weight": 2 },
+      { "symptomId": "family_history_of_AMD", "weight": 3 },
+      { "symptomId": "smoking_history", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "drusen_on_fundus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "retinal_pigment_epithelium_changes", "baseWeight": 4 },
+      { "signId": "geographic_atrophy", "baseWeight": 5 },
+      { "signId": "subretinal_fluid_or_hemorrhage", "baseWeight": 5 },
+      { "signId": "RPE_detachment", "baseWeight": 4 },
+      { "signId": "disciform_scar", "baseWeight": 5 },
+      { "signId": "reduced_visual_acuity_central", "baseWeight": 4 },
+      { "signId": "Amsler_grid_abnormalities", "baseWeight": 4 },
+      { "signId": "subretinal_CNV_membrane_on_OCT", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 5.0 },
+      { "id": "smoking_current_or_past", "multiplier": 3.0 },
+      { "id": "family_history_first_degree", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "hypertension_cardiovascular_disease", "multiplier": 1.5 },
+      { "id": "light_eye_color", "multiplier": 1.3 },
+      { "id": "hyperlipidemia", "multiplier": 1.3 },
+      { "id": "sun_exposure_chronic", "multiplier": 1.2 },
+      { "id": "female_sex", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "dry_amd",
+        "name": "Non-Neovascular (Dry) AMD",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "drusen_soft_confluent", "weight": 5 },
+          { "feature": "RPE_atrophy", "weight": 4 },
+          { "feature": "geographic_atrophy_advances", "weight": 4 },
+          { "feature": "no_CNV", "weight": 5 },
+          { "feature": "slow_progressive_vision_loss", "weight": 3 }
+        ],
+        "management": "AREDS2 vitamin supplements (vitamins C, E, zinc, copper, lutein, zeaxanthin). Smoking cessation. Amsler grid self-monitoring. Low vision aids. No specific treatment for geographic atrophy (except investigational)."
+      },
+      {
+        "id": "wet_amd",
+        "name": "Neovascular (Wet) AMD",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "choroidal_neovascularization_CNV", "weight": 5 },
+          { "feature": "subretinal_fluid_or_hemorrhage", "weight": 5 },
+          { "feature": "rapid_vision_decline", "weight": 5 },
+          { "feature": "metamorphopsia", "weight": 5 },
+          { "feature": "RPE_detachment", "weight": 4 }
+        ],
+        "management": "Intravitreal anti-VEGF injections (Ranibizumab, Aflibercept, Bevacizumab) as monthly or treat-and-extend. Regular OCT monitoring. Prompt treatment needed (<2 weeks)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "diabetic_macular_edema",
+        "discriminators": ["diabetes_history", "microaneurysms", "retinopathy_signs"]
+      },
+      {
+        "diseaseId": "central_serous_chorioretinopathy",
+        "discriminators": ["younger_male", "stress", "subretinal_fluid_no_CNV"]
+      },
+      {
+        "diseaseId": "inherited_macular_dystrophies",
+        "discriminators": ["early_onset", "family_history", "specific_OCT_patterns"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Amsler grid testing", "priority": "immediate", "yield": 0.7, "indication": "self-assessment for metamorphopsia" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Dilated fundus exam with slit lamp biomicroscopy", "priority": "immediate", "yield": 0.85, "indication": "drusen, atrophy, CNV signs" },
+        { "name": "OCT (macular cube + line scan)", "priority": "first_line", "yield": 0.95, "indication": "subretinal/intraretinal fluid, CNV, GA, drusen" },
+        { "name": "Fluorescein angiography (FFA)", "priority": "high", "yield": 0.9, "indication": "confirm CNV, classify type 1/2" },
+        { "name": "OCT angiography", "priority": "medium", "yield": 0.85, "indication": "non-invasive CNV detection" },
+        { "name": "Fundus autofluorescence (FAF)", "priority": "medium", "yield": 0.7, "indication": "GA delineation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO Preferred Practice Pattern - Age-Related Macular Degeneration",
+      "pathways": [
+        {
+          "severity": "early_dry_amd",
+          "criteria": "medium drusen, no atrophy, good vision",
+          "treatment": "No AREDS2 vitamins (not indicated for early AMD). Healthy lifestyle. Smoking cessation. Amsler grid monitoring. Annual follow-up."
+        },
+        {
+          "severity": "intermediate_dry_amd",
+          "criteria": "large drusen or pigment changes, good vision",
+          "treatment": "AREDS2 formula (500mg Vitamin C, 400IU Vitamin E, 80mg Zinc, 2mg Copper, 10mg Lutein, 2mg Zeaxanthin). Amsler grid. Annual exam. Monitor for conversion to wet AMD."
+        },
+        {
+          "severity": "geographic_atrophy",
+          "criteria": "GA involving fovea, vision loss",
+          "treatment": "Low vision rehabilitation. AREDS2. No proven therapy for GA (investigational complement inhibitors). Annual follow-up."
+        },
+        {
+          "severity": "active_wet_amd",
+          "criteria": "CNV with subretinal fluid, hemorrhage, vision loss",
+          "treatment": "Prompt intravitreal anti-VEGF (Ranibizumab 0.5mg, Aflibercept 2mg, or Bevacizumab 1.25mg). Loading phase: monthly for 3 months. Maintenance: treat-and-extend or PRN. Urgent referral if sudden vision loss."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "lipofuscin_accumulation",
+      "drusen_formation",
+      "complement_dysregulation",
+      "RPE_atrophy",
+      "VEGF_driven_neovascularization"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "disciform_scar",
+        "probability": 0.3,
+        "lagDays": [180, 1825],
+        "severityBoost": 0.6,
+        "clues": ["end_stage_wet_AMD", "permanent_vision_loss"]
+      },
+      {
+        "diseaseId": "RPE_tear",
+        "probability": 0.02,
+        "lagDays": [0, 14],
+        "severityBoost": 0.7,
+        "clues": ["sudden_worsening", "OCT_findings"]
+      },
+      {
+        "diseaseId": "Charles_Bonnet_syndrome",
+        "probability": 0.15,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.1,
+        "clues": ["visual_hallucinations", "insight_preserved"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["age_over_60", "central_vision_loss", "metamorphopsia", "drusen_or_CNV_on_OCT"],
+    "exclusionClues": ["normal_macula", "normal_vision"]
+  }
+}

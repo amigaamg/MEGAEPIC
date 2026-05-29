@@ -1,0 +1,132 @@
+{
+  "disease": {
+    "id": "frailty_syndrome",
+    "name": "Frailty Syndrome",
+    "system": "geriatrics",
+    "agePeak_months": [720, 1080],
+    "note": "State of increased vulnerability to stressors due to age-related decline in physiological reserve across multiple systems.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["frailty", "functional_decline", "geriatric_giant"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_functional_decline", "weight": 8 },
+        { "sign": "inability_to_mobilize", "weight": 7 },
+        { "sign": "severe_weight_loss", "weight": 7 },
+        { "sign": "recurrent_falls", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "slow_gait_only": true,
+        "no_weight_loss": true,
+        "independent_basic_adl": true
+      },
+      "severityLabel": "Acute decompensation -> URGENT; stable frailty -> NON-URGENT comprehensive assessment"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "unintentional_weight_loss", "weight": 4 },
+      { "symptomId": "exhaustion_and_fatigue", "weight": 4 },
+      { "symptomId": "slow_walking_speed", "weight": 4 },
+      { "symptomId": "low_physical_activity", "weight": 3 },
+      { "symptomId": "recent_falls", "weight": 3 },
+      { "symptomId": "recurrent_hospitalizations", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "slow_gait_speed_less_than_0.8mps", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "low_grip_strength", "baseWeight": 4 },
+      { "signId": "low_bmi_or_muscle_wasting", "baseWeight": 4 },
+      { "signId": "positive_exhaustion_self_report", "baseWeight": 3 },
+      { "signId": "impaired_balance", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_80", "multiplier": 2.5 },
+      { "id": "multimorbidity", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 2.0 },
+      { "id": "sedentary_lifestyle", "multiplier": 1.6 },
+      { "id": "polypharmacy", "multiplier": 1.5 },
+      { "id": "social_isolation", "multiplier": 1.4 },
+      { "id": "cognitive_impairment", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sarcopenia",
+        "discriminators": ["low_muscle_mass_primary", "grip_strength_criterion", "no_exhaustion_criterion"]
+      },
+      {
+        "diseaseId": "depression",
+        "discriminators": ["low_mood_anhedonia", "early_morning_wakening", "guilt", "response_to_antidepressants"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "FRAIL scale or Fried Frailty Phenotype", "priority": "immediate", "yield": 0.9, "indication": "frailty diagnosis" },
+        { "name": "Gait speed (4m walk test)", "priority": "immediate", "yield": 0.85, "indication": "mobility assessment" }
+      ],
+      "laboratory": [
+        { "name": "Vitamin D, B12, albumin", "priority": "high", "yield": 0.5, "indication": "nutritional status" },
+        { "name": "FBC, U&E, Cr, HbA1c", "priority": "high", "yield": 0.5, "indication": "organ function and comorbidities" }
+      ],
+      "imaging": [
+        { "name": "DXA body composition", "priority": "medium", "yield": 0.6, "indication": "muscle mass assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BGS Frailty Toolkit / NICE Guideline",
+      "pathways": [
+        {
+          "severity": "acute_decompensation",
+          "criteria": "rapid functional decline, fall, infection, confusion",
+          "treatment": "Comprehensive geriatric assessment. Treat precipitant. Optimize nutrition and hydration. Medication review. Mobilization plan."
+        },
+        {
+          "severity": "stable_frailty",
+          "criteria": "slow progressive decline, community dwelling",
+          "treatment": "Multicomponent intervention: resistance and balance exercise. Nutritional optimization (protein 1.2 g/kg/day). Vitamin D supplementation. Polypharmacy reduction. Social engagement. Falls prevention."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_low_grade_inflammation",
+      "mitochondrial_dysfunction",
+      "neuroendocrine_dysregulation",
+      "sarcopenia",
+      "immune_senescence",
+      "multi_system_physiological_decline"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrent_falls",
+        "probability": 0.35,
+        "severityBoost": 0.5,
+        "clues": ["slow_gait", "low_grip_strength"]
+      },
+      {
+        "diseaseId": "delirium",
+        "probability": 0.25,
+        "severityBoost": 0.5,
+        "clues": ["hospitalization", "infection", "dehydration"]
+      },
+      {
+        "diseaseId": "pressure_ulcer",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["immobility", "malnutrition", "incontinence"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium unless acute decompensation",
+    "diagnosticClues": ["age_over_70", "weight_loss", "exhaustion", "slow_gait", "weakness"],
+    "exclusionClues": ["robust_appearance", "normal_gait_speed", "no_weight_loss", "high_activity_level"]
+  }
+}

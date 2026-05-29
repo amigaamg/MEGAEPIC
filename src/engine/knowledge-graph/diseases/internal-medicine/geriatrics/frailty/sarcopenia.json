@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "sarcopenia",
+    "name": "Sarcopenia",
+    "system": "geriatrics",
+    "agePeak_months": [720, 1080],
+    "note": "Age-related progressive loss of muscle mass, strength, and function. Core component of frailty and physical disability.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["muscle_loss", "weakness", "frailty"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "inability_to_stand_from_chair", "weight": 8 },
+        { "sign": "severe_grip_strength_impairment", "weight": 7 },
+        { "sign": "recurrent_falls_due_to_weakness", "weight": 7 },
+        { "sign": "dysphagia", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "mild_strength_loss_only": true,
+        "no_functional_limitation": true
+      },
+      "severityLabel": "If severe weakness or falls -> URGENT; mild sarcopenia -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "progressive_muscle_weakness", "weight": 5 },
+      { "symptomId": "difficulty_rising_from_chair", "weight": 4 },
+      { "symptomId": "reduced_walking_speed", "weight": 4 },
+      { "symptomId": "unintentional_weight_loss", "weight": 3 },
+      { "symptomId": "difficulty_with_stairs_or_carrying", "weight": 3 },
+      { "symptomId": "increased_falls", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "low_grip_strength_dynamometry", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "reduced_muscle_bulk_temporal_or_quadriceps", "baseWeight": 4 },
+      { "signId": "slow_5_times_sit_to_stand", "baseWeight": 4 },
+      { "signId": "reduced_gait_speed_less_than_0.8", "baseWeight": 4 },
+      { "signId": "positive_chair_rise_test", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_age", "multiplier": 2.5 },
+      { "id": "physical_inactivity", "multiplier": 2.0 },
+      { "id": "low_protein_intake", "multiplier": 1.8 },
+      { "id": "vitamin_d_deficiency", "multiplier": 1.5 },
+      { "id": "chronic_disease_hf_copd_ckd", "multiplier": 1.6 },
+      { "id": "corticosteroid_use", "multiplier": 1.6 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "frailty_syndrome",
+        "discriminators": ["multisystem_decline", "exhaustion", "weight_loss", "not_muscle_specific"]
+      },
+      {
+        "diseaseId": "cachexia",
+        "discriminators": ["inflammation_driven", "cytokine_mediated", "underlying_illness", "weight_loss_prominent"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Handgrip dynamometry", "priority": "immediate", "yield": 0.9, "indication": "muscle strength assessment" },
+        { "name": "Chair stand test (5 times)", "priority": "immediate", "yield": 0.85, "indication": "lower limb function" }
+      ],
+      "laboratory": [
+        { "name": "Vitamin D, albumin, prealbumin", "priority": "high", "yield": 0.5, "indication": "nutritional assessment" },
+        { "name": "Testosterone (male), TSH", "priority": "medium", "yield": 0.3, "indication": "endocrine causes" }
+      ],
+      "imaging": [
+        { "name": "DXA with body composition", "priority": "high", "yield": 0.9, "indication": "appendicular lean mass assessment" },
+        { "name": "CT or MRI muscle cross-section", "priority": "medium", "yield": 0.8, "indication": "research or specialized assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EWGSOP2 Sarcopenia Guidelines",
+      "pathways": [
+        {
+          "severity": "confirmed_sarcopenia",
+          "criteria": "low muscle strength + low muscle quantity/quality",
+          "treatment": "Resistance exercise training (2-3x/week). Protein intake 1.2-1.5 g/kg/day. Vitamin D supplementation if deficient. Consider referral to dietitian and physiotherapy."
+        },
+        {
+          "severity": "severe_sarcopenia",
+          "criteria": "above plus low physical performance",
+          "treatment": "Supervised exercise program. Nutritional support. Fall prevention. Assess for testosterone therapy if hypogonadal. Review contributory medications."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "motor_unit_remodeling",
+      "type_ii_fiber_atrophy",
+      "mitochondrial_dysfunction",
+      "anabolic_resistance",
+      "increased_protein_breakdown",
+      "neuromuscular_junction_degeneration",
+      "adipose_infiltration_of_muscle"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "frailty_syndrome",
+        "probability": 0.5,
+        "severityBoost": 0.5,
+        "clues": ["progressive_weakness", "weight_loss", "exhaustion"]
+      },
+      {
+        "diseaseId": "recurrent_falls",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["low_grip_strength", "slow_gait"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low unless severe functional impairment",
+    "diagnosticClues": ["age_related_weakness", "low_grip_strength", "reduced_muscle_mass"],
+    "exclusionClues": ["normal_muscle_strength", "normal_gait_speed", "normal_muscle_mass"]
+  }
+}

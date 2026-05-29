@@ -1,0 +1,186 @@
+﻿{
+  "disease": {
+    "id": "acute_pancreatitis",
+    "name": "Acute Pancreatitis",
+    "system": "gastroenterology",
+    "agePeak_months": [360, 720],
+    "note": "Acute inflammatory process of the pancreas with variable involvement of other organs. Gallstones and alcohol are the leading causes.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["abdominal_pain", "pancreas", "inflammation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemodynamic_instability_shock", "weight": 10 },
+        { "sign": "severe_hypoxia_respiratory_failure", "weight": 10 },
+        { "sign": "acute_renal_failure", "weight": 9 },
+        { "sign": "sepsis", "weight": 9 },
+        { "sign": "gastrointestinal_bleeding", "weight": 8 },
+        { "sign": "multiorgan_dysfunction", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ransom_score_3_or_more", "weight": 8 },
+          { "sign": "apache_ii_score_8_or_more", "weight": 7 },
+          { "sign": "c_reactive_protein_over_150", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "mild_abdominal_pain": true,
+        "normal_organ_function": true
+      },
+      "severityLabel": "If organ failure (persistent >48h) or pancreatic necrosis -> SEVERE (ICU); no organ failure -> MILD (ward)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "severe_epigastric_pain", "weight": 5 },
+      { "symptomId": "pain_radiating_to_back", "weight": 5 },
+      { "symptomId": "pain_relieved_by_leaning_forward", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "anorexia", "weight": 3 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "gallstone_history", "weight": 3 },
+      { "symptomId": "alcohol_binge_history", "weight": 3 },
+      { "symptomId": "known_hypertriglyceridemia", "weight": 2 },
+      { "symptomId": "previous_pancreatitis", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_tenderness_severe", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "guarding_or_rebound", "baseWeight": 4 },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "decreased_bowel_sounds_ileus", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 2 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "gray_turner_sign_flank_ecchymosis", "baseWeight": 5, "note": "Retroperitoneal hemorrhage, indicates severe necrotizing pancreatitis" },
+      { "signId": "cullen_sign_periumbilical_ecchymosis", "baseWeight": 5, "note": "Same as Gray-Turner" },
+      { "signId": "hypoxia", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "gallstones", "multiplier": 4.0 },
+      { "id": "alcohol_abuse", "multiplier": 3.0 },
+      { "id": "hypertriglyceridemia_above_1000", "multiplier": 4.0 },
+      { "id": "hypercalcemia", "multiplier": 2.0 },
+      { "id": "post_ercp", "multiplier": 2.0 },
+      { "id": "abdominal_trauma", "multiplier": 1.5 },
+      { "id": "drugs_azathioprine_valproate_thiazides", "multiplier": 2.0 },
+      { "id": "genetic_cftr_spink1_prss1", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_cholecystitis",
+        "discriminators": ["right_upper_quadrant_pain", "murphy_sign_positive", "gallbladder_wall_thickening", "normal_lipase"]
+      },
+      {
+        "diseaseId": "perforated_peptic_ulcer",
+        "discriminators": ["acute_onset_peritonitis", "free_air_under_diaphragm", "normal_lipase"]
+      },
+      {
+        "diseaseId": "acute_myocardial_infarction_inferior",
+        "discriminators": ["ecg_changes", "cardiac_enzymes_elevated", "normal_lipase", "chest_pain_more_than_abdominal"]
+      },
+      {
+        "diseaseId": "mesenteric_ischemia",
+        "discriminators": ["pain_out_of_proportion_to_exam", "atrial_fibrillation", "lactic_acidosis", "normal_lipase"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Vital signs monitoring", "priority": "immediate", "yield": 1.0, "indication": "all patients, assess hemodynamic status" }
+      ],
+      "laboratory": [
+        { "name": "Serum lipase", "priority": "immediate", "yield": 0.98, "indication": "diagnosis - >3x ULN is diagnostic, more specific than amylase" },
+        { "name": "Serum amylase", "priority": "immediate", "yield": 0.9, "indication": "elevated in first 24h, returns to normal faster than lipase" },
+        { "name": "FBC, CRP", "priority": "immediate", "yield": 0.7, "indication": "severity assessment, infection monitoring" },
+        { "name": "LFTs, bilirubin, ALP, GGT", "priority": "immediate", "yield": 0.6, "indication": "biliary etiology" },
+        { "name": "Triglycerides", "priority": "high", "yield": 0.4, "indication": "identify hypertriglyceridemia as cause" },
+        { "name": "Calcium, glucose", "priority": "high", "yield": 0.5, "indication": "prognostic markers" },
+        { "name": "Arterial blood gas", "priority": "if_severe", "yield": 0.7, "indication": "hypoxia assessment, metabolic acidosis" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.7, "indication": "gallstones, biliary dilatation, pseudocyst" },
+        { "name": "CT abdomen with IV contrast (pancreatic protocol)", "priority": "medium", "yield": 0.95, "indication": "not in first 48h unless diagnosis uncertain; best at 72-96h to assess necrosis" },
+        { "name": "MRCP", "priority": "medium", "yield": 0.9, "indication": "if suspected choledocholithiasis, better than CT for common bile duct stones" },
+        { "name": "ERCP", "priority": "therapeutic", "yield": 0.95, "indication": "therapeutic only - for cholangitis or persistent biliary obstruction" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IAP/APA Evidence-Based Guidelines for Acute Pancreatitis",
+      "pathways": [
+        {
+          "severity": "mild_pancreatitis",
+          "criteria": "No organ failure, no local complications, Ranson <3, APACHE II <8",
+          "treatment": "Aggressive IV fluids (Ringer's lactate). Pain management (IV opioids). NPO initially, oral feeding as tolerated (low-fat diet). No routine antibiotics. Monitor vitals and labs."
+        },
+        {
+          "severity": "severe_pancreatitis",
+          "criteria": "Persistent organ failure >48h, pancreatic necrosis, Ranson >=3",
+          "treatment": "ICU admission. Goal-directed fluid resuscitation (LR). Enteral nutrition (nasojejunal) within 24-48h. Pain management. Monitor for infection after 7 days. CT-guided fine needle aspiration for suspected infected necrosis."
+        },
+        {
+          "severity": "infected_necrosis",
+          "criteria": "Worsening after 7-10 days, fever, positive culture",
+          "treatment": "Antibiotics (carbapenem preferred). Delay surgical/source control to at least 4 weeks if possible (step-up approach: percutaneous drainage then minimally invasive necrosectomy)."
+        },
+        {
+          "severity": "biliary_pancreatitis_with_cholangitis",
+          "criteria": "Fever + jaundice + biliary obstruction on imaging",
+          "treatment": "Urgent ERCP with sphincterotomy within 24-48h. Cholecystectomy after resolution of pancreatitis (same admission for mild, delayed for severe)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "premature_trypsinogen_activation",
+      "acinar_cell_injury",
+      "autodigestion_of_pancreas",
+      "inflammatory_cascade_cytokine_release",
+      "systemic_inflammatory_response_syndrome",
+      "local_pancreatic_necrosis",
+      "peripancreatic_fat_necrosis",
+      "retroperitoneal_inflammation",
+      "third_spacing_and_hypovolemia",
+      "organ_failure_mechanisms"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pancreatic_pseudocyst",
+        "probability": 0.1,
+        "lagDays": [14, 28],
+        "severityBoost": 0.3,
+        "clues": ["persistent_abdominal_pain", "palpable_mass", "elevated_lipase", "cyst_on_imaging"]
+      },
+      {
+        "diseaseId": "pancreatic_necrosis",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["persistent_organ_failure", "fever", "ct_non_enhancing_pancreas"]
+      },
+      {
+        "diseaseId": "acute_respiratory_distress_syndrome",
+        "probability": 0.1,
+        "severityBoost": 0.8,
+        "clues": ["hypoxia", "bilateral_infiltrates", "pao2_fio2_ratio_less_than_200"]
+      },
+      {
+        "diseaseId": "chronic_pancreatitis",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["recurrent_attacks", "pancreatic_calcifications", "steatorrhea"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high; severe pancreatitis requires ICU",
+    "diagnosticClues": ["severe_epigastric_pain_radiating_to_back", "elevated_lipase_or_amylase", "relief_by_leaning_forward", "gallstones_or_alcohol_history"],
+    "exclusionClues": ["normal_lipase", "isolated_right_upper_quadrant_pain_without_back_radiation"]
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "disease": {
+    "id": "colonic_diverticulitis",
+    "name": "Colonic Diverticulitis",
+    "system": "surgical",
+    "agePeak_months": [480, 960],
+    "note": "Inflammation of colonic diverticula. Left-sided pain, fever, and altered bowel habit. CT is gold standard for diagnosis.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["left_lower_quadrant_pain", "colonic_inflammation", "acute_abdomen"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hinchey_iii_or_iv", "weight": 9 },
+          { "sign": "abscess_formation", "weight": 6 },
+          { "sign": "high_fever_rigors", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Generalized peritonitis/sepsis -> SEVERE; localized -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "left_lower_quadrant_pain", "weight": 5 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "constipation_or_diarrhea", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "known_diverticulosis", "weight": 3 },
+      { "symptomId": "dysuria", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "left_lower_quadrant_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "guarding", "baseWeight": 3 },
+      { "signId": "palpable_mass", "baseWeight": 3 },
+      { "signId": "fever_tachycardia", "baseWeight": 3 },
+      { "signId": "rebound_tenderness", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 2.0 },
+      { "id": "low_fiber_diet", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.6 },
+      { "id": "smoking", "multiplier": 1.8 },
+      { "id": "nsaid_use", "multiplier": 1.5 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_diverticulitis",
+        "name": "Uncomplicated (Hinchey I-II)",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "localized_llq_pain", "weight": 5 },
+          { "feature": "mild_fever", "weight": 3 },
+          { "feature": "no_peritonitis", "weight": 5 }
+        ],
+        "management": "Outpatient or short stay. Oral antibiotics (Amoxicillin-Clavulanic acid). Bowel rest, liquid diet. Analgesia."
+      },
+      {
+        "id": "complicated_diverticulitis",
+        "name": "Complicated (Hinchey III-IV)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "generalized_abdominal_pain", "weight": 5 },
+          { "feature": "high_fever_sepsis", "weight": 5 },
+          { "feature": "peritonitis", "weight": 5 },
+          { "feature": "abscess_or_perforation", "weight": 5 }
+        ],
+        "management": "IV antibiotics (Piperacillin-Tazobactam). CT-guided drainage of abscess. Hartmann procedure or primary resection with anastomosis if generalized peritonitis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "appendicitis",
+        "discriminators": ["pain_migration_to_rlq", "anorexia", "right_sided"]
+      },
+      {
+        "diseaseId": "ovarian_torsion",
+        "discriminators": ["sudden_pain", "adnexal_mass", "nausea"]
+      },
+      {
+        "diseaseId": "colorectal_cancer",
+        "discriminators": ["chronic_symptoms", "weight_loss", "rectal_bleeding", "no_fever"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature", "priority": "immediate", "yield": 0.6, "indication": "fever assessment" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.75, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.8, "indication": "inflammation marker" },
+        { "name": "Urinalysis", "priority": "medium", "yield": 0.3, "indication": "rule out UTI" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV contrast", "priority": "immediate", "yield": 0.97, "indication": "gold standard" },
+        { "name": "Abdominal Ultrasound", "priority": "medium", "yield": 0.7, "indication": "alternative in young/pregnant" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Diverticulitis",
+      "pathways": [
+        {
+          "severity": "uncomplicated",
+          "criteria": "Hinchey I-II, localized pain, no peritonitis",
+          "treatment": "Outpatient oral antibiotics. Liquid diet. Colonoscopy in 6-8 weeks after resolution."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "Hinchey III-IV, generalized peritonitis, abscess >4cm",
+          "treatment": "IV antibiotics. CT drainage of abscess. Emergency surgery (Hartmann or resection). ICU care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "diverticulum_inflammation",
+      "micro_perforation",
+      "localized_infection",
+      "phlegmon_abscess",
+      "free_perforation",
+      "generalized_peritonitis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "diverticular_abscess",
+        "probability": 0.15,
+        "lagDays": [3, 7],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "palpable_mass", "elevated_crp"]
+      },
+      {
+        "diseaseId": "colovesical_fistula",
+        "probability": 0.05,
+        "lagDays": [30, 180],
+        "severityBoost": 0.1,
+        "clues": ["pneumaturia", "fecaluria", "recurrent_uti"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["left_lower_quadrant_pain", "fever", "age_over_50", "known_diverticulosis"],
+    "exclusionClues": ["right_upper_quadrant_pain", "bloody_diarrhea_primary"]
+  }
+}

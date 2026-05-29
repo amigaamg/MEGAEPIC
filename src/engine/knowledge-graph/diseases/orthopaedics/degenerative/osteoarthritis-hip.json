@@ -1,0 +1,125 @@
+{
+  "disease": {
+    "id": "osteoarthritis-hip",
+    "name": "Hip Osteoarthritis",
+    "system": "ORTHO",
+    "agePeak_months": [480, 960],
+    "note": "Degenerative joint disease of the hip. Progressive cartilage loss leading to pain, stiffness, and functional limitation. Common in elderly.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["degenerative_joint_disease", "hip_pathology"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "avascular_necrosis_suspected", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "joint_space_loss_severe", "weight": 7 },
+          { "sign": "night_pain_rest_pain", "weight": 6 },
+          { "sign": "fixed_flexion_contracture", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If end-stage with significant functional limitation -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "groin_pain_referred_to_medial_thigh_knee", "weight": 5 },
+      { "symptomId": "pain_with_walking_weight_bearing", "weight": 5 },
+      { "symptomId": "morning_stiffness_<30_min", "weight": 4 },
+      { "symptomId": "decreased_range_of_motion", "weight": 4 },
+      { "symptomId": "limping_antalgic_gait", "weight": 3 },
+      { "symptomId": "difficulty_putting_on_shoes_socks", "weight": 3 },
+      { "symptomId": "night_pain_advanced", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "limited_internal_rotation_hip", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "groin_pain_on_passive_range_of_motion", "baseWeight": 5 },
+      { "signId": "antalgic_gait", "baseWeight": 4 },
+      { "signId": "fixed_flexion_deformity_positive_thomas_test", "baseWeight": 3 },
+      { "signId": "leg_length_discrepancy_functional", "baseWeight": 3 },
+      { "signId": "tenderness_over_groin", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_>50_years", "multiplier": 4.0 },
+      { "id": "obesity", "multiplier": 2.5 },
+      { "id": "previous_hip_trauma_surgery", "multiplier": 2.5 },
+      { "id": "developmental_hip_dysplasia", "multiplier": 3.0 },
+      { "id": "family_history_oa", "multiplier": 2.0 },
+      { "id": "occupational_heavy_lifting", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_moderate_oa",
+        "name": "Mild-Moderate Hip OA",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "preserved_joint_space", "weight": 4 },
+          { "feature": "pain_with_activity_relieved_by_rest", "weight": 4 },
+          { "feature": "no_deformity", "weight": 3 }
+        ],
+        "management": "Activity modification. Physical therapy (strengthening hip abductors/extensors). NSAIDs or acetaminophen. Intra-articular corticosteroid injection. Weight loss."
+      },
+      {
+        "id": "severe_end_stage_oa",
+        "name": "Severe End-Stage Hip OA",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "severe_joint_space_loss", "weight": 5 },
+          { "feature": "night_pain", "weight": 4 },
+          { "feature": "fixed_deformity", "weight": 4 }
+        ],
+        "management": "Total hip arthroplasty (cemented/cementless/press-fit). Pre-op templating. Post-op: WBAT, hip precautions (no adduction/past 90 degrees flexion early)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "lumbar_spine_radiculopathy",
+        "discriminators": ["back_pain_predominant", "radicular_symptoms_down_leg", "no_groin_pain", "spine_signs"]
+      },
+      {
+        "diseaseId": "trochanteric_bursitis",
+        "discriminators": ["lateral_hip_pain", "tenderness_over_trochanter", "normal_rom"]
+      },
+      {
+        "diseaseId": "avascular_necrosis",
+        "discriminators": ["mri_shows_avn", "steroid_or_alcohol_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Hip X-ray (AP pelvis, cross-table lateral)", "priority": "high", "yield": 0.95, "indication": "joint space narrowing, osteophytes, sclerosis, cysts" },
+        { "name": "MRI hip", "priority": "medium", "yield": 0.9, "indication": "early OA, AVN, labral tear" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAOS Osteoarthritis of the Hip Guidelines",
+      "pathways": [
+        {
+          "severity": "conservative",
+          "criteria": "Mild-moderate OA, pain controlled with medication, functional",
+          "treatment": "Activity modification, PT (strengthening, ROM), NSAIDs/acetaminophen, weight loss, walking aids (cane in opposite hand). Intra-articular steroid injection if pain exacerbation."
+        },
+        {
+          "severity": "surgical",
+          "criteria": "Severe pain, functional limitation, failed conservative treatment, advanced X-ray changes",
+          "treatment": "Total hip arthroplasty (cementless or hybrid). Spinal/epidural anesthesia. Post-op: immediate WBAT, hip precautions, VTE prophylaxis."
+        }
+      ]
+    },
+
+    "pathophysiology": ["articular_cartilage_wear", "subchondral_bone_remodeling", "osteophyte_formation", "synovial_inflammation"]
+  }
+}

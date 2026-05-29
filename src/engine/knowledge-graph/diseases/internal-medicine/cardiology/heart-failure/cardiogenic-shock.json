@@ -1,0 +1,155 @@
+{
+  "disease": {
+    "id": "cardiogenic_shock_cardiology",
+    "name": "Cardiogenic Shock",
+    "system": "CARD",
+    "agePeak_months": [540, 960],
+    "note": "Persistent hypotension with end-organ hypoperfusion due to primary cardiac dysfunction. High mortality.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["shock", "cardiac_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "refractory_hypotension", "weight": 10 },
+        { "sign": "profound_acidosis", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "All patients are SEVERE by definition. Classify by SCAI stage."
+    },
+    "historyFeatures": [
+      { "symptomId": "chest_pain", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "syncope_near_syncope", "weight": 3 },
+      { "symptomId": "oliguria", "weight": 4 },
+      { "symptomId": "confusion", "weight": 3 },
+      { "symptomId": "preceding_viral_illness", "weight": 2, "note": "Consider myocarditis" }
+    ],
+    "examFeatures": [
+      { "signId": "hypotension_sbp_less_90", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "cold_clammy_skin", "baseWeight": 4 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 4 },
+      { "signId": "weak_thready_pulses", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "decreased_consciousness", "baseWeight": 4 },
+      { "signId": "oliguria", "baseWeight": 4 },
+      { "signId": "jugular_venous_distension", "baseWeight": 3 },
+      { "signId": "crackles", "baseWeight": 3 },
+      { "signId": "mottled_skin", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "acute_mi", "multiplier": 3.0 },
+      { "id": "advanced_age", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 1.3 },
+      { "id": "prior_hf", "multiplier": 2.0 },
+      { "id": "mechanical_complication", "multiplier": 3.0 },
+      { "id": "myocarditis", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "scai_stage_b",
+        "name": "SCAI Stage B - Pre-shock",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "bp_normal_or_low", "weight": 4 },
+          { "feature": "signs_of_hypoperfusion", "weight": 3 }
+        ],
+        "management": "Close monitoring. Treat underlying cause. Early vasopressor if needed. Assess for clinical deterioration."
+      },
+      {
+        "id": "scai_stage_c",
+        "name": "SCAI Stage C - Classic Shock",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "hypotension_sbp_less_90", "weight": 5 },
+          { "feature": "lactate_greater_2", "weight": 5 },
+          { "feature": "inotrope_requirement", "weight": 5 }
+        ],
+        "management": "Pressor + inotrope. Urgent revascularization (if ischemic etiology). IABP consideration. ICU management."
+      },
+      {
+        "id": "scai_stage_d",
+        "name": "SCAI Stage D - Deteriorating",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "escalating_pressor_need", "weight": 5 },
+          { "feature": "worsening_lactate", "weight": 5 },
+          { "feature": "multi_organ_failure", "weight": 5 }
+        ],
+        "management": "Multi-pressor support. Mechanical circulatory support (Impella, VA-ECMO). Revascularization. CVICU."
+      },
+      {
+        "id": "scai_stage_e",
+        "name": "SCAI Stage E - Extremis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "cardiac_arrest_or_cpr", "weight": 5 },
+          { "feature": "refractory_to_escalation", "weight": 5 }
+        ],
+        "management": "VA-ECMO. Therapeutic hypothermia if post-arrest. Full circulatory support. Consider transplant evaluation."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "hypovolemic_shock", "discriminators": ["flat_jvp", "low_echo_filling_pressures", "dehydration_history"] },
+      { "diseaseId": "septic_shock", "discriminators": ["fever", "vasodilation", "warm_peripheries", "high_cardiac_output"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.7, "indication": "identify ischemia, arrhythmia" },
+        { "name": "Lactate", "priority": "immediate", "yield": 0.95, "indication": "tissue hypoperfusion marker, prognostic" }
+      ],
+      "laboratory": [
+        { "name": "ABG", "priority": "immediate", "yield": 0.9, "indication": "acidosis, oxygenation" },
+        { "name": "Troponin", "priority": "high", "yield": 0.6, "indication": "myocardial injury" },
+        { "name": "FBC, U&E, Cr, LFT", "priority": "high", "yield": 0.5, "indication": "end-organ assessment" },
+        { "name": "BNP/NT-proBNP", "priority": "medium", "yield": 0.6, "indication": "HF severity" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.95, "indication": "LVEF, mechanical complication, tamponade, filling pressures" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "pulmonary oedema, wide mediastinum" }
+      ],
+      "advanced": [
+        { "name": "Right heart catheterization", "indication": "hemodynamic confirmation, SCAI staging", "priority": "medium" },
+        { "name": "Coronary angiography", "indication": "if ischemic etiology suspected", "priority": "high" }
+      ]
+    },
+    "management": {
+      "protocolReference": "SCAI Shock Classification and AHA/ESC Guidelines for Cardiogenic Shock",
+      "pathways": [
+        {
+          "severity": "pre-shock (SCAI B)",
+          "criteria": "normal BP but signs of hypoperfusion, lactate 1.5-2",
+          "treatment": "Monitor. Identify etiology. Volume status assessment. Consider early low-dose pressor."
+        },
+        {
+          "severity": "classic shock (SCAI C)",
+          "criteria": "SBP <90, lactate 2-4, requiring one pressor",
+          "treatment": "Norepinephrine as first-line pressor. Dobutamine if low cardiac output. Urgent revascularization if STEMI. IABP if mechanical complication. ICU."
+        },
+        {
+          "severity": "deteriorating (SCAI D-E)",
+          "criteria": "escalating pressor need, lactate >4, multi-organ failure",
+          "treatment": "Mechanical circulatory support (VA-ECMO or Impella). Multi-pressor. CVICU. Revascularization. Consider therapeutic hypothermia if arrest."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "severe_left_ventricular_dysfunction",
+      "decreased_stroke_volume",
+      "compensatory_vasoconstriction",
+      "tissue_hypoperfusion",
+      "lactic_acidosis",
+      "multi_organ_dysfunction",
+      "progressive_myocardial_depression"
+    ],
+    "complications": [
+      { "diseaseId": "multi_organ_failure", "probability": 0.3, "severityBoost": 0.5, "clues": ["rising_lactate", "oliguria", "altered_lfts"] },
+      { "diseaseId": "refractory_shock", "probability": 0.15, "severityBoost": 0.6, "clues": ["increasing_pressor_need", "worsening_acidosis"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["hypotension_plus_hypoperfusion", "cold_peripheries", "impaired_cardiac_function"],
+    "exclusionClues": ["normal_bp_plus_warm_peripheries", "responsive_to_fluids"]
+  }
+}

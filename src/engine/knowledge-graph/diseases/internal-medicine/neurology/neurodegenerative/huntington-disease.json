@@ -1,0 +1,120 @@
+{
+  "disease": {
+    "id": "huntington_disease",
+    "name": "Huntington Disease",
+    "system": "NEURO",
+    "agePeak_months": [360, 600],
+    "note": "Autosomal dominant neurodegenerative disorder. Triad: chorea, cognitive decline, psychiatric disturbances. CAG repeat expansion in HTT gene.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["movement_disorder", "neurodegenerative", "genetic_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_ideation", "weight": 10 },
+        { "sign": "severe_chorea_with_falls", "weight": 8 },
+        { "sign": "severe_dysphagia", "weight": 9 },
+        { "sign": "psychosis_agitation", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If suicidal/severe chorea/dysphagia/psychosis -> URGENT; else -> STABLE/MONITOR"
+    },
+    "historyFeatures": [
+      { "symptomId": "involuntary_choreiform_movements", "weight": 5 },
+      { "symptomId": "cognitive_decline", "weight": 4 },
+      { "symptomId": "psychiatric_symptoms", "weight": 3, "note": "Depression, irritability, apathy, OCD, psychosis" },
+      { "symptomId": "family_history_hd", "weight": 5 },
+      { "symptomId": "mood_irritability_depression", "weight": 3 },
+      { "symptomId": "gait_unsteadiness", "weight": 3 },
+      { "symptomId": "dysarthria_dysphagia", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "chorea", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "impaired_saccades", "baseWeight": 3 },
+      { "signId": "dystonia", "baseWeight": 2 },
+      { "signId": "gait_disorder", "baseWeight": 3 },
+      { "signId": "cognitive_impairment_on_testing", "baseWeight": 3 },
+      { "signId": "motor_impersistence", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "huntingtin_gene_mutation", "multiplier": 10.0 },
+      { "id": "cag_repeat_length_greater_40", "multiplier": 10.0 },
+      { "id": "parent_with_hd", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "adult_onset_hd",
+        "name": "Adult-Onset HD (typical)",
+        "prevalenceModifier": 0.95,
+        "keyFeatures": [
+          { "feature": "onset_age_30_to_50", "weight": 5 },
+          { "feature": "chorea_predominant", "weight": 5 }
+        ],
+        "management": "Tetrabenazine or deutetrabenazine for chorea. SSRIs for depression. Antipsychotics for psychosis/agitation. Multidisciplinary care. Genetic counseling."
+      },
+      {
+        "id": "juvenile_onset_hd",
+        "name": "Juvenile-Onset HD (Westphal variant)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "onset_age_less_20", "weight": 5 },
+          { "feature": "bradykinesia_rigidity_more_than_chorea", "weight": 5 },
+          { "feature": "large_cag_repeat_greater_60", "weight": 5 }
+        ],
+        "management": "Bradykinesia/rigidity: levodopa trial (limited response). Seizures: AEDs. Special education. Supportive care. Palliative approach."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "drug_induced_chorea", "discriminators": ["typical_neuroleptic_or_antidopaminergic_exposure", "no_family_history", "resolution_with_drug_stop"] },
+      { "diseaseId": "benign_hereditary_chorea", "discriminators": ["non_progressive", "no_cognitive_psychiatric", "family_history"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Unified HD Rating Scale (UHDRS)", "priority": "high", "yield": 0.9, "indication": "motor, cognitive, behavioral assessment" }
+      ],
+      "laboratory": [
+        { "name": "Genetic testing (CAG repeats in HTT)", "priority": "confirmatory", "yield": 1.0, "indication": "DEFINITIVE: >39 CAG repeats confirms HD" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain", "priority": "high", "yield": 0.8, "indication": "caudate atrophy, putamen atrophy, enlarged frontal horns" },
+        { "name": "PET (FDG)", "priority": "low", "yield": 0.7, "indication": "striatal hypometabolism" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EHDN Guidelines for Huntington Disease",
+      "pathways": [
+        {
+          "severity": "early/mild",
+          "criteria": "mild chorea, early cognitive decline, functional independence",
+          "treatment": "Tetrabenazine 12.5-50 mg if chorea bothersome. SSRI if depression. Occupational therapy. Speech therapy. Genetic counseling. Driving assessment."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "progressive chorea, cognitive decline, some dependence",
+          "treatment": "Optimize tetrabenazine/deutetrabenazine. Add antipsychotic (olanzapine, risperidone) for chorea + psychiatric symptoms. Physiotherapy for balance. Swallow assessment."
+        },
+        {
+          "severity": "advanced/severe",
+          "criteria": "severe functional impairment, dysphagia, full dependence in ADLs",
+          "treatment": "Palliative care. Feeding tube if severe dysphagia. Minimize medications. Prevent pressure sores. Manage infections. Advanced care planning. Multidisciplinary team."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "cag_trinucleotide_repeat_expansion",
+      "mutant_huntingtin_protein",
+      "striatal_gabaergic_neuron_loss",
+      "caudate_atrophy",
+      "basal_ganglia_dysfunction",
+      "excitotoxicity",
+      "mitochondrial_dysfunction"
+    ],
+    "complications": [
+      { "diseaseId": "falls_with_injury", "probability": 0.4, "severityBoost": 0.2, "clues": ["chorea", "imbalance"] },
+      { "diseaseId": "aspiration_pneumonia", "probability": 0.2, "severityBoost": 0.3, "clues": ["dysphagia", "weight_loss"] },
+      { "diseaseId": "suicide", "probability": 0.05, "severityBoost": 0.6, "clues": ["depression", "hopelessness", "previous_attempts"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["chorea_onset_midlife", "family_history_autosomal_dominant", "caudate_atrophy_mri", "cag_expansion"],
+    "exclusionClues": ["no_caudate_atrophy", "negative_genetic_test", "drug_induced"]
+  }
+}

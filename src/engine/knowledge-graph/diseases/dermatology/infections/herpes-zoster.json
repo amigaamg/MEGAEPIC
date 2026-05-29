@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "herpes_zoster",
+    "name": "Herpes Zoster (Shingles)",
+    "system": "dermatology",
+    "agePeak_months": [480, 960],
+    "note": "Reactivation of varicella-zoster virus (VZV) in dorsal root ganglia. Unilateral vesicular eruption in a dermatomal distribution. Can cause postherpetic neuralgia.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["viral_skin_infection", "vesiculobullous", "neurocutaneous"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "disseminated_zoster_visceral", "weight": 10 },
+        { "sign": "herpes_zoster_ophthalmicus_eye", "weight": 9 },
+        { "sign": "ramsay_hunt_syndrome_facial_palsy", "weight": 8 },
+        { "sign": "postherpetic_neuralgia_severe", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Ophthalmic/disseminated/immunocompromised -> SEVERE; localized -> MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "unilateral_painful_vesicular_rash", "weight": 5 },
+      { "symptomId": "prodromal_pain_burning_before_rash", "weight": 4 },
+      { "symptomId": "dermatomal_distribution", "weight": 5 },
+      { "symptomId": "prior_history_of_chickenpox", "weight": 4 },
+      { "symptomId": "age_over_50_or_immunosuppressed", "weight": 4 },
+      { "symptomId": "stress_or_illness_trigger", "weight": 2 },
+      { "symptomId": "pain_persisting_after_rash_heals", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "unilateral_vesicles_on_erythematous_base", "baseWeight": 5 },
+      { "signId": "dermatomal_pattern", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "new_vesicles_crusting_lesions", "baseWeight": 3 },
+      { "signId": "pain_to_light_touch_allodynia", "baseWeight": 3 },
+      { "signId": "eye_involvement_conjunctival_keratitis", "baseWeight": 4 },
+      { "signId": "ear_canal_vesicles_ramsay_hunt", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50_years", "multiplier": 3.0 },
+      { "id": "immunosuppression_hiv_transplant_steroids", "multiplier": 3.5 },
+      { "id": "malignancy_especially_hematological", "multiplier": 2.5 },
+      { "id": "physical_or_emotional_stress", "multiplier": 2.0 },
+      { "id": "not_vaccinated_against_shingles", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_zoster",
+        "name": "Uncomplicated Herpes Zoster",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "localized_dermatomal_vesicles", "weight": 5 },
+          { "feature": "no_eye_or_ear_involvement", "weight": 4 },
+          { "feature": "immunocompetent_patient", "weight": 3 }
+        ],
+        "management": "Antivirals: Acyclovir 800mg 5x/day x 7 days or Valacyclovir 1g TID x 7 days. Analgesia (NSAIDs, gabapentin for neuralgia). Keep rash clean and dry. Calamine lotion."
+      },
+      {
+        "id": "herpes_zoster_ophthalmicus",
+        "name": "Herpes Zoster Ophthalmicus (V1 Distribution)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "rash_on_forehead_eyelid_nose_tip", "weight": 5 },
+          { "feature": "eye_redness_pain_photophobia", "weight": 5 },
+          { "feature": "hutchinson_sign_nose_tip", "weight": 4 }
+        ],
+        "management": "Immediate ophthalmology referral. IV Acyclovir 10mg/kg Q8H if eye involvement. Topical antivirals. Cycloplegics. Analgesia. High risk of keratitis, uveitis, glaucoma."
+      },
+      {
+        "id": "disseminated_zoster",
+        "name": "Disseminated Zoster",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "more_than_20_vesicles_outside_primary_dermatome", "weight": 5 },
+          { "feature": "visceral_involvement_pneumonitis_hepatitis_meningitis", "weight": 5 },
+          { "feature": "immunocompromised_host", "weight": 5 }
+        ],
+        "management": "IV Acyclovir 10mg/kg Q8H. Contact and airborne isolation. ICU monitoring. Manage visceral complications. Antivirals until all lesions crusted."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "herpes_simplex",
+        "discriminators": ["recurrent_same_site", "smaller_lesions", "no_dermatomal_pattern"]
+      },
+      {
+        "diseaseId": "contact_dermatitis",
+        "discriminators": ["exposure_history", "linear_not_dermatomal", "no_pain_prodrome"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Tzanck smear (from vesicle base)", "priority": "medium", "yield": 0.7, "indication": "multinucleated giant cells" }
+      ],
+      "laboratory": [
+        { "name": "VZV PCR (vesicle swab)", "priority": "gold_standard", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "VZV serology (IgM/IgG)", "priority": "medium", "yield": 0.6, "indication": "immune status" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CDC / NICE Guidelines for Herpes Zoster",
+      "pathways": [
+        {
+          "severity": "uncomplicated (immunocompetent)",
+          "criteria": "dermatomal, <72h onset, no eye/ear, immunocompetent",
+          "treatment": "Valacyclovir 1g PO TID x 7 days. Analgesia. Pain management (e.g., gabapentin if neuropathic). Avoid contact with at-risk individuals. Shingles vaccine for prevention."
+        },
+        {
+          "severity": "complicated (ophthalmic/disseminated/immunocompromised)",
+          "criteria": "eye involvement, disseminated, immunocompromised, or >72h with severe pain",
+          "treatment": "IV Acyclovir 10mg/kg Q8H (renal dose adjust). Ophthalmology for HZO. Pain management. Isolation. Treat complications. Consider foscarnet if acyclovir-resistant."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "vzv_latency_in_dorsal_root_ganglia",
+      "reactivation_due_to_immunosuppression_aging_stress",
+      "viral_transport_down_sensory_nerve",
+      "vesicle_formation_in_dermatome",
+      "neuronal_inflammation_and_damage",
+      "postherpetic_neuralgia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "postherpetic_neuralgia",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["pain_persisting_beyond_3_months", "age_over_60", "severe_acute_pain"]
+      },
+      {
+        "diseaseId": "secondary_bacterial_infection",
+        "probability": 0.05,
+        "severityBoost": 0.2,
+        "clues": ["cellulitis", "purulence"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if ophthalmic/disseminated",
+    "diagnosticClues": ["unilateral_dermatomal_vesicles", "pain_before_rash", "older_or_immunosuppressed"],
+    "exclusionClues": ["bilateral", "non_dermatomal", "no_pain"]
+  }
+}

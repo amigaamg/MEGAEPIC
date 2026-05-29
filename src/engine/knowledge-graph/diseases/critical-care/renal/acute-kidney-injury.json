@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "acute_kidney_injury",
+    "name": "Acute Kidney Injury",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Rapid decline in kidney function. Classified by RIFLE/AKIN/KDIGO criteria. Prerenal, intrinsic renal, or postrenal.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["renal_failure", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anuria", "weight": 10 },
+        { "sign": "severe_hyperkalemia", "weight": 10 },
+        { "sign": "severe_metabolic_acidosis", "weight": 9 },
+        { "sign": "pulmonary_oedema", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "KDIGO Stage 1 (Cr 1.5x), Stage 2 (Cr 2x), Stage 3 (Cr 3x or RRT)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "decreased_urine_output", "weight": 5 },
+      { "symptomId": "hypotension_or_sepsis", "weight": 4 },
+      { "symptomId": "nephrotoxic_drug_exposure", "weight": 4 },
+      { "symptomId": "fluid_overload_oedema", "weight": 3 },
+      { "symptomId": "nausea_fatigue_confusion", "weight": 2 },
+      { "symptomId": "comorbidities_diabetes_htn", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension_or_volume_depletion", "baseWeight": 3 },
+      { "signId": "peripheral_oedema", "baseWeight": 3 },
+      { "signId": "pulmonary_crackles", "baseWeight": 3 },
+      { "signId": "oliguria_trend", "baseWeight": 4 },
+      { "signId": "hyperkalemia_signs_ecg", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "sepsis", "multiplier": 2.5 },
+      { "id": "hypovolemia", "multiplier": 2.0 },
+      { "id": "nephrotoxic_drugs", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.5 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "age_over_60", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "prerenal_aki",
+        "name": "Prerenal AKI",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "hypotension_dehydration", "weight": 5 },
+          { "feature": "fe_na_less_1", "weight": 4 },
+          { "feature": "bun_cr_ratio_more_20", "weight": 3 },
+          { "feature": "rapid_response_to_fluids", "weight": 4 }
+        ],
+        "management": "Volume resuscitation (crystalloid). Hold diuretics. Treat underlying cause. Monitor urine output and creatinine."
+      },
+      {
+        "id": "intrinsic_aki",
+        "name": "Intrinsic AKI (Acute Tubular Necrosis)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "prolonged_ischemia_or_toxin", "weight": 5 },
+          { "feature": "fe_na_greater_2", "weight": 4 },
+          { "feature": "muddy_brown_casts", "weight": 3 }
+        ],
+        "management": "Supportive care. Correct volume status. Avoid nephrotoxins. Adjust drug dosing. Dialysis if indicated."
+      },
+      {
+        "id": "postrenal_aki",
+        "name": "Postrenal AKI (Obstructive)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "abdominal_pain_distension", "weight": 3 },
+          { "feature": "hydronephrosis_on_uss", "weight": 5 },
+          { "feature": "fluctuating_urine_output", "weight": 3 }
+        ],
+        "management": "Relieve obstruction (catheter, nephrostomy). Treat underlying cause (stones, BPH, malignancy)."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine output monitoring", "priority": "immediate", "yield": 0.9, "indication": "all patients" },
+        { "name": "ECG for hyperkalemia", "priority": "high", "yield": 0.7, "indication": "if K+ >6.0" }
+      ],
+      "laboratory": [
+        { "name": "Serum creatinine, BUN, eGFR", "priority": "immediate", "yield": 0.95, "indication": "diagnosis and staging" },
+        { "name": "Serum electrolytes (especially K+)", "priority": "immediate", "yield": 0.9, "indication": "hyperkalemia assessment" },
+        { "name": "Urinalysis with microscopy", "priority": "high", "yield": 0.7, "indication": "casts, cells, protein" },
+        { "name": "ABG", "priority": "high", "yield": 0.6, "indication": "metabolic acidosis" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "high", "yield": 0.8, "indication": "hydronephrosis, kidney size, cortical thickness" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "KDIGO Clinical Practice Guideline for AKI",
+      "pathways": [
+        {
+          "severity": "stage 1",
+          "criteria": "Cr 1.5-1.9x baseline or UOP <0.5 mL/kg/h for 6-12h",
+          "treatment": "Identify and treat cause. Correct volume status. Review medications. Avoid nephrotoxins."
+        },
+        {
+          "severity": "stage 2",
+          "criteria": "Cr 2-2.9x baseline or UOP <0.5 mL/kg/h for >=12h",
+          "treatment": "Nephrology consultation. Strict fluid balance. Adjust drug dosing. Monitor K+, pH, UOP closely."
+        },
+        {
+          "severity": "stage 3",
+          "criteria": "Cr >=3x baseline or Cr >=4 mg/dL or UOP <0.3 mL/kg/h for >=24h or anuria for >=12h or RRT initiated",
+          "treatment": "Nephrology co-management. RRT if refractory hyperkalemia, acidosis, fluid overload, or uremia. Consider continuous RRT in ICU."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "decreased_renal_perfusion",
+      "tubular_ischemia",
+      "tubular_necrosis",
+      "glomerular_filtration_rate_decrease",
+      "uremic_retention",
+      "electrolyte_imbalance"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hyperkalemia",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["k_greater_5.5", "ecg_changes"]
+      },
+      {
+        "diseaseId": "fluid_overload_pulmonary_oedema",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["oedema", "crackles", "weight_gain"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if oligoanuric",
+    "diagnosticClues": ["rising_creatinine", "oliguria", "fluid_overload_or_hyperkalemia"],
+    "exclusionClues": ["normal_creatinine", "normal_urine_output"]
+  }
+}

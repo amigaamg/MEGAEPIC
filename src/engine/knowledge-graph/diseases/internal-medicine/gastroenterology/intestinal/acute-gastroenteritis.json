@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "acute_gastroenteritis",
+    "name": "Acute Gastroenteritis",
+    "system": "gastroenterology",
+    "agePeak_months": [0, 60],
+    "note": "Acute onset of diarrhea with or without vomiting, caused by infectious agents (viral, bacterial, parasitic). Leading cause of morbidity in children.",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["diarrhea", "dehydration", "infectious"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_dehydration_shock", "weight": 10 },
+        { "sign": "altered_consciousness_lethargy", "weight": 10 },
+        { "sign": "sunken_eyes_and_fontanelle", "weight": 9 },
+        { "sign": "skin_turgor_loss", "weight": 9 },
+        { "sign": "prolonged_capillary_refill", "weight": 9 },
+        { "sign": "anuria_6_hours", "weight": 8 },
+        { "sign": "blood_in_stool_dysentery", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "some_dehydration": true
+      },
+      "severityLabel": "If any severe dehydration sign -> EMERGENCY IV fluids; some dehydration -> URGENT ORS; no dehydration -> OUTPATIENT management"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_watery_diarrhea", "weight": 5 },
+      { "symptomId": "vomiting", "weight": 4 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "abdominal_pain_cramping", "weight": 3 },
+      { "symptomId": "nausea", "weight": 3 },
+      { "symptomId": "decreased_urine_output", "weight": 4 },
+      { "symptomId": "blood_in_stool", "weight": 3, "note": "Suggests bacterial etiology (Shigella, Salmonella, Campylobacter, EHEC)" },
+      { "symptomId": "mucus_in_stool", "weight": 2 },
+      { "symptomId": "travel_history", "weight": 2 },
+      { "symptomId": "contact_with_sick", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "sunken_eyes", "baseWeight": 4 },
+      { "signId": "dry_mucous_membranes", "baseWeight": 3 },
+      { "signId": "decreased_skin_turgor", "baseWeight": 4 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 4, "severityIndicator": true },
+      { "signId": "fever", "baseWeight": 2 },
+      { "signId": "abdominal_tenderness", "baseWeight": 2 },
+      { "signId": "hyperactive_bowel_sounds", "baseWeight": 1 },
+      { "signId": "lethargy_or_irritability", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_under_5", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 2.5 },
+      { "id": "immunosuppression", "multiplier": 3.0 },
+      { "id": "lack_of_breastfeeding", "multiplier": 1.5 },
+      { "id": "poor_sanitation", "multiplier": 2.0 },
+      { "id": "travel_to_endemic_area", "multiplier": 2.0 },
+      { "id": "daycare_attendance", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_appendicitis",
+        "discriminators": ["localized_right_lower_quadrant_pain", "anorexia", "fever_and_vomiting_before_pain", "guarding", "no_diarrhea"]
+      },
+      {
+        "diseaseId": "intussusception",
+        "discriminators": ["colicky_abdominal_pain", "currant_jelly_stool", "palpable_mass", "age_3_12_months"]
+      },
+      {
+        "diseaseId": "inflammatory_bowel_disease",
+        "discriminators": ["chronic_relapsing_course", "bloody_diarrhea_over_weeks", "weight_loss", "extraintestinal_manifestations"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "WHO dehydration assessment", "priority": "immediate", "yield": 1.0, "indication": "all patients, classify dehydration severity" },
+        { "name": "Stool dipstick", "priority": "high", "yield": 0.6, "indication": "rapid assessment for blood, leukocytes" }
+      ],
+      "laboratory": [
+        { "name": "Stool culture + sensitivity", "priority": "if_dysentery", "yield": 0.4, "indication": "bloody diarrhea, severe, travel, immunocompromised, outbreak" },
+        { "name": "Stool antigen (Rotavirus, Norovirus)", "priority": "if_indicated", "yield": 0.7, "indication": "nosocomial, outbreak, severe" },
+        { "name": "Electrolytes, urea, creatinine", "priority": "if_severe", "yield": 0.6, "indication": "dehydration assessment, metabolic acidosis" },
+        { "name": "FBC", "priority": "if_severe", "yield": 0.3, "indication": "leukocytosis, hemolytic uremic syndrome monitoring" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "low", "yield": 0.3, "indication": "if atypical presentation, rule out surgical abdomen" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for the Treatment of Diarrhea in Children",
+      "pathways": [
+        {
+          "severity": "no_dehydration",
+          "criteria": "Normal general condition, eyes not sunken, drinks normally, normal skin turgor",
+          "treatment": "Plan A: Home management. Increased fluids, continued feeding. ORS as needed. Zinc supplementation (children 20mg/day for 10 days). Return if worsens."
+        },
+        {
+          "severity": "some_dehydration",
+          "criteria": "Restless/irritable, sunken eyes, thirsty/drinks eagerly, skin pinch goes back slowly",
+          "treatment": "Plan B: ORS 75ml/kg over 4 hours under observation. Reassess after 4 hours. Continue breastfeeding. Zinc supplementation."
+        },
+        {
+          "severity": "severe_dehydration",
+          "criteria": "Lethargic/unconscious, very sunken eyes, unable to drink/drinks poorly, skin pinch goes back very slowly",
+          "treatment": "Plan C: IV Ringer's Lactate (or NS) 100ml/kg over 3 hours (30ml/kg in first 30 min, then 70ml/kg over 2.5 hours). Reassess every 15-30 min."
+        },
+        {
+          "severity": "dysentery",
+          "criteria": "Blood in stool + fever + tenesmus",
+          "treatment": "Antibiotics per local sensitivity (ciprofloxacin or azithromycin for Shigella). Avoid antimotility drugs. Rehydration as per dehydration status."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "infectious_agent_ingestion",
+      "mucosal_attachment_and_invasion",
+      "enterotoxin_production",
+      "increased_intestinal_secretion",
+      "decreased_absorption",
+      "loss_of_water_and_electrolytes",
+      "metabolic_acidosis",
+      "dehydration",
+      "hypovolemic_shock_if_severe"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypovolemic_shock",
+        "probability": 0.1,
+        "severityBoost": 0.9,
+        "clues": ["lethargy_unconsciousness", "very_sunken_eyes", "skin_pinch_very_slow", "prolonged_cap_refill"]
+      },
+      {
+        "diseaseId": "hemolytic_uremic_syndrome",
+        "probability": 0.02,
+        "severityBoost": 0.8,
+        "clues": ["ehec_infection", "bloody_diarrhea", "oliguria", "microangiopathic_hemolytic_anemia", "thrombocytopenia"]
+      },
+      {
+        "diseaseId": "electrolyte_imbalance",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["hyponatremia", "hypokalemia", "metabolic_acidosis", "seizures"]
+      },
+      {
+        "diseaseId": "secondary_lactose_intolerance",
+        "probability": 0.2,
+        "severityBoost": 0.1,
+        "clues": ["persistent_diarrhea_beyond_14_days", "bloating_after_milk"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if severe dehydration; medium if some dehydration; low if none",
+    "diagnosticClues": ["acute_onset_watery_diarrhea", "vomiting", "dehydration_assessment", "recent_exposure"],
+    "exclusionClues": ["focal_abdominal_pain", "surgical_abdomen", "chronic_symptoms"]
+  }
+}

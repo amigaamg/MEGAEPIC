@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "prosthetic_valve",
+    "name": "Prosthetic Valve Dysfunction",
+    "system": "CARD",
+    "agePeak_months": [540, 960],
+    "note": "Complications of prosthetic heart valves: thrombosis, pannus, endocarditis, structural deterioration, paravalvular leak.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["valvular_heart_disease", "post_cardiac_surgery"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "obstructive_thrombosis", "weight": 10 },
+        { "sign": "prosthetic_valve_endocarditis", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "acute_pulmonary_oedema", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If obstruction/endocarditis/instability -> URGENT; else -> MONITOR"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "chest_pain", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "previous_valve_surgery", "weight": 5 },
+      { "symptomId": "change_in_valve_sound", "weight": 3 },
+      { "symptomId": "embolic_event", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "absent_or_muffled_valve_clicks", "baseWeight": 4 },
+      { "signId": "new_or_changed_murmur", "baseWeight": 4 },
+      { "signId": "signs_of_heart_failure", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "mechanical_valve", "multiplier": 2.0 },
+      { "id": "subtherapeutic_inr", "multiplier": 3.0 },
+      { "id": "prior_thromboembolism", "multiplier": 2.0 },
+      { "id": "infectious_source", "multiplier": 2.5 },
+      { "id": "poor_dental_hygiene", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "prosthetic_valve_thrombosis",
+        "name": "Prosthetic Valve Thrombosis",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "increased_transvalvular_gradient", "weight": 5 },
+          { "feature": "reduced_valve_mobility", "weight": 5 },
+          { "feature": "subtherapeutic_inr", "weight": 4 }
+        ],
+        "management": "Obstructive: urgent surgery or fibrinolysis. Non-obstructive: IV heparin bridging and optimize anticoagulation."
+      },
+      {
+        "id": "prosthetic_valve_endocarditis",
+        "name": "Prosthetic Valve Endocarditis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "fever", "weight": 5 },
+          { "feature": "new_murmur", "weight": 5 },
+          { "feature": "positive_blood_cultures", "weight": 5 }
+        ],
+        "management": "Early surgery often indicated. IV antibiotics (empiric vancomycin + gentamicin + rifampin). Remove prosthetic valve if severe."
+      },
+      {
+        "id": "structural_valve_deterioration",
+        "name": "Structural Valve Deterioration",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "bioprosthetic_valve", "weight": 4 },
+          { "feature": "years_since_implantation", "weight": 5 },
+          { "feature": "progressive_gradient_increase", "weight": 5 }
+        ],
+        "management": "Re-do valve replacement (SAVR or valve-in-valve TAVI for bioprosthetic). Surgical risk assessment."
+      },
+      {
+        "id": "paravalvular_leak",
+        "name": "Paravalvular Leak",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "new_murmur_post_op", "weight": 5 },
+          { "feature": "hemolysis", "weight": 4 },
+          { "feature": "leak_on_echo", "weight": 5 }
+        ],
+        "management": "Small leaks: observe. Significant leak with hemolysis or HF: re-intervention (percutaneous closure or re-operation)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "native_valve_endocarditis", "discriminators": ["no_prosthetic_valve_history", "normal_valve_appearance"] },
+      { "diseaseId": "cardiac_tamponade", "discriminators": ["post_op_effusion", "tamponade_physiology", "pulsus_paradoxus"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Blood cultures x 3", "priority": "immediate", "yield": 0.9, "indication": "if endocarditis suspected" },
+        { "name": "INR/PTT", "priority": "immediate", "yield": 0.8, "indication": "anticoagulation adequacy" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP", "priority": "high", "yield": 0.5, "indication": "infection markers" },
+        { "name": "LDH, haptoglobin, bilirubin", "priority": "medium", "yield": 0.6, "indication": "hemolysis assessment" }
+      ],
+      "imaging": [
+        { "name": "Transthoracic echocardiography", "priority": "immediate", "yield": 0.7, "indication": "valve mobility, gradients, paravalvular leak" },
+        { "name": "Transesophageal echocardiography", "priority": "high", "yield": 0.95, "indication": "superior for thrombus, vegetation, abscess" },
+        { "name": "Fluoroscopy", "priority": "medium", "yield": 0.8, "indication": "mechanical valve leaflet motion" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC/EACTS Guidelines for Valvular Heart Disease - Prosthetic Valve Management",
+      "pathways": [
+        {
+          "severity": "thrombosis (obstructive)",
+          "criteria": "NYHA III-IV, large thrombus, immobile leaflet",
+          "treatment": "Urgent surgery: valve replacement or thrombectomy. If high surgical risk: fibrinolysis (alteplase). IV heparin. Optimize warfarin."
+        },
+        {
+          "severity": "endocarditis",
+          "criteria": "vegetation >10 mm, abscess, valve dehiscence, persistent fever despite antibiotics",
+          "treatment": "Urgent surgical removal and re-replacement. IV antibiotics (vancomycin + gentamicin + rifampin). Blood cultures before antibiotics."
+        },
+        {
+          "severity": "deterioration/leak",
+          "criteria": "progressive stenosis or regurgitation, hemolysis, HF symptoms",
+          "treatment": "Re-do SAVR or valve-in-valve TAVI for bioprosthetic. Percutaneous closure of paravalvular leak. Medical therapy if not redo candidate."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "valve_obstruction_thrombus_pannus",
+      "infectious_vegetation",
+      "structural_fatigue_calcification",
+      "paravalvular_dehiscence",
+      "hemolytic_anemia",
+      "thromboembolism"
+    ],
+    "complications": [
+      { "diseaseId": "embolic_stroke", "probability": 0.15, "severityBoost": 0.4, "clues": ["sudden_neurological_deficit", "mechanical_valve"] },
+      { "diseaseId": "hemolytic_anemia", "probability": 0.1, "severityBoost": 0.2, "clues": ["fatigue", "elevated_ldh", "low_haptoglobin"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["previous_valve_surgery", "new_symptoms", "echocardiographic_abnormality"],
+    "exclusionClues": ["normal_valve_function", "no_gradient_change"]
+  }
+}

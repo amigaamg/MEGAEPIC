@@ -1,0 +1,181 @@
+{
+  "disease": {
+    "id": "prematurity-complications",
+    "name": "Prematurity Complications",
+    "system": "PAED",
+    "agePeak_months": [0, 3],
+    "note": "Preterm infants (<37 weeks) face multiple organ immaturity complications. Severity inversely proportional to gestational age.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["prematurity", "neonatal_complications"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "apnea_requiring_ventilation", "weight": 10 },
+        { "sign": "intraventricular_hemorrhage_grade_3_4", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "pneumoperitoneum", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "gestational_age_less_than_28_weeks", "weight": 9 },
+          { "sign": "birth_weight_less_than_1000g", "weight": 8 },
+          { "sign": "severe_rds", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If extreme prematurity (<28w) or organ failure -> SEVERE; else -> NON-SEVERE (moderate/late preterm)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "gestational_age_less_than_37_weeks", "weight": 5 },
+      { "symptomId": "birth_weight_low", "weight": 5 },
+      { "symptomId": "antenatal_steroids_given", "weight": -2, "note": "Protective factor" },
+      { "symptomId": "prolonged_rupture_of_membranes", "weight": 3 },
+      { "symptomId": "maternal_hypertension_pre_eclampsia", "weight": 3 },
+      { "symptomId": "multiple_gestation", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "grunting", "baseWeight": 4 },
+      { "signId": "hypotonia", "baseWeight": 3 },
+      { "signId": "poor_reflexes", "baseWeight": 3 },
+      { "signId": "temperature_instability", "baseWeight": 4 },
+      { "signId": "hypoglycemia_symptoms", "baseWeight": 3 },
+      { "signId": "jaundice", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "gestational_age_less_than_28w", "multiplier": 5.0 },
+      { "id": "gestational_age_28_to_32w", "multiplier": 3.0 },
+      { "id": "gestational_age_32_to_36w", "multiplier": 1.5 },
+      { "id": "birth_weight_less_than_1500g", "multiplier": 3.0 },
+      { "id": "male_gender", "multiplier": 1.3 },
+      { "id": "multiple_gestation", "multiplier": 1.8 },
+      { "id": "maternal_infection", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "respiratory_prematurity",
+        "name": "Respiratory Complications of Prematurity",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "rds", "weight": 5 },
+          { "feature": "apnea_of_prematurity", "weight": 4 },
+          { "feature": "bronchopulmonary_dysplasia", "weight": 3 }
+        ],
+        "management": "CPAP or mechanical ventilation. Surfactant if indicated. Caffeine citrate for apnea. Bronchopulmonary dysplasia management with diuretics and steroids."
+      },
+      {
+        "id": "neurologic_prematurity",
+        "name": "Neurologic Complications of Prematurity",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "intraventricular_hemorrhage", "weight": 5 },
+          { "feature": "periventricular_leukomalacia", "weight": 4 },
+          { "feature": "hydrocephalus", "weight": 3 }
+        ],
+        "management": "Serial cranial US. Seizure management. VP shunt for post-hemorrhagic hydrocephalus. Early intervention and neurodevelopmental follow-up."
+      },
+      {
+        "id": "metabolic_prematurity",
+        "name": "Metabolic Complications of Prematurity",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "hypoglycemia", "weight": 5 },
+          { "feature": "hypocalcemia", "weight": 3 },
+          { "feature": "hyperbilirubinemia", "weight": 4 }
+        ],
+        "management": "Monitor blood glucose. IV dextrose if needed. Calcium supplementation. Phototherapy per AAP nomogram."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sepsis_neonatal",
+        "discriminators": ["positive_blood_culture", "elevated_crp", "maternal_infection_history"]
+      },
+      {
+        "diseaseId": "congenital_anomalies",
+        "discriminators": ["specific_anomaly_pattern", "dysmorphic_features", "normal_gestational_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Gestational age assessment (Ballard score)", "priority": "immediate", "yield": 0.8, "indication": "all preterm infants" },
+        { "name": "Blood glucose monitoring", "priority": "immediate", "yield": 0.7, "indication": "hypoglycemia screening" }
+      ],
+      "laboratory": [
+        { "name": "CBC with differential", "priority": "high", "yield": 0.4, "indication": "screen for infection" },
+        { "name": "CRP", "priority": "medium", "yield": 0.4, "indication": "infection marker" },
+        { "name": "Blood gas", "priority": "high", "yield": 0.6, "indication": "respiratory and metabolic status" },
+        { "name": "Serum bilirubin", "priority": "high", "yield": 0.7, "indication": "jaundice monitoring" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.7, "indication": "respiratory distress evaluation" },
+        { "name": "Cranial Ultrasound", "priority": "high", "yield": 0.85, "indication": "IVH screening, serial studies" },
+        { "name": "Abdominal X-ray", "priority": "medium", "yield": 0.5, "indication": "suspected NEC" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAP Guidelines for Perinatal Care / NICHD Neonatal Care Protocols",
+      "pathways": [
+        {
+          "severity": "late_preterm_34_to_36w",
+          "criteria": "GA 34-36w, stable vitals, mild or no respiratory distress, feeding well",
+          "treatment": "Thermoregulation (incubator/warmer). Blood glucose monitoring. Feeding support. Observation for jaundice. Parent education."
+        },
+        {
+          "severity": "very_preterm_less_than_32w",
+          "criteria": "GA <32w, respiratory distress, IVH risk, multiple organ immaturity",
+          "treatment": "NICU admission. Thermoregulated incubator. Respiratory support (CPAP/ventilator). Surfactant if RDS. Caffeine. IV fluids/parenteral nutrition. Serial cranial US. Infection surveillance. Minimal handling."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "organ_immaturity",
+      "surfactant_deficiency",
+      "incomplete_capillary_development",
+      "immature_thermoregulation",
+      "immature_immune_system",
+      "immature_hepatic_conjugation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bronchopulmonary_dysplasia",
+        "probability": 0.3,
+        "lagDays": [28, 90],
+        "severityBoost": 0.4,
+        "clues": ["prolonged_ventilation", "oxygen_dependency", "chronic_changes_on_cxr"]
+      },
+      {
+        "diseaseId": "retinopathy_of_prematurity",
+        "probability": 0.2,
+        "lagDays": [30, 90],
+        "severityBoost": 0.3,
+        "clues": ["low_gestational_age", "high_oxygen_exposure"]
+      },
+      {
+        "diseaseId": "necrotizing_enterocolitis",
+        "probability": 0.1,
+        "lagDays": [7, 42],
+        "severityBoost": 0.5,
+        "clues": ["abdominal_distension", "feeding_intolerance", "bloody_stools"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["gestational_age_less_than_37w", "low_birth_weight", "respiratory_distress", "temperature_instability"],
+    "exclusionClues": ["term_gestation", "normal_birth_weight", "no_respiratory_support_needed"]
+  }
+}

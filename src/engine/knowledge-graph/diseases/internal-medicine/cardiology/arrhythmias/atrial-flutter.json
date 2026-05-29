@@ -1,0 +1,110 @@
+{
+  "disease": {
+    "id": "atrial_flutter",
+    "name": "Atrial Flutter",
+    "system": "CARD",
+    "agePeak_months": [600, 1080],
+    "note": "Supraventricular tachycardia with a reentrant circuit in the right atrium. Typical atrial flutter has sawtooth pattern.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["arrhythmia", "palpitations", "supraventricular_tachycardia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "rapid_ventricular_rate_greater_200", "weight": 8 },
+        { "sign": "syncope", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If unstable/syncope/very rapid rate -> URGENT; else -> STABLE"
+    },
+    "historyFeatures": [
+      { "symptomId": "palpitations", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "chest_discomfort", "weight": 2 },
+      { "symptomId": "syncope_presyncope", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "tachycardia_regular", "baseWeight": 4 },
+      { "signId": "flutter_waves_on_ecg", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "variable_av_block", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "structural_heart_disease", "multiplier": 2.0 },
+      { "id": "prior_cardiac_surgery", "multiplier": 1.8 },
+      { "id": "copd", "multiplier": 1.5 },
+      { "id": "pulmonary_embolism", "multiplier": 1.5 },
+      { "id": "thyrotoxicosis", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "typical_atrial_flutter",
+        "name": "Typical (Cavotricuspid Isthmus-Dependent) Atrial Flutter",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "negative_sawtooth_inferior_leads", "weight": 5 },
+          { "feature": "atrial_rate_300", "weight": 5 },
+          { "feature": "ventricular_rate_150", "weight": 4 }
+        ],
+        "management": "Rate control (beta-blocker, CCB). Anticoagulation (same as AF). Elective cardioversion. Catheter ablation (curative)."
+      },
+      {
+        "id": "atypical_atrial_flutter",
+        "name": "Atypical Atrial Flutter",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "not_cavotricuspid_isthmus_dependent", "weight": 5 },
+          { "feature": "atypical_ecg_pattern", "weight": 4 },
+          { "feature": "post_cardiac_surgery", "weight": 3 }
+        ],
+        "management": "Rate control. Anticoagulation. Electrophysiology study and ablation. Manage underlying heart disease."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "atrial_fibrillation", "discriminators": ["irregularly_irregular", "no_sawtooth", "random_atrial_activity"] },
+      { "diseaseId": "sinus_tachycardia", "discriminators": ["p_waves", "gradual_onset", "physiological_cause"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.98, "indication": "diagnostic sawtooth pattern, atrial rate ~300" }
+      ],
+      "laboratory": [
+        { "name": "Thyroid function tests", "priority": "high", "yield": 0.4, "indication": "rule out thyrotoxicosis" },
+        { "name": "Serum electrolytes", "priority": "high", "yield": 0.3, "indication": "electrolyte imbalance" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "high", "yield": 0.7, "indication": "structural heart disease, LA size" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACC/AHA/ESC Guidelines for Atrial Flutter",
+      "pathways": [
+        {
+          "severity": "unstable",
+          "criteria": "hypotension, chest pain, heart failure, syncope",
+          "treatment": "Emergency synchronized cardioversion (50-100 J biphasic). IV heparin. Rate control if not shocking."
+        },
+        {
+          "severity": "stable",
+          "criteria": "hemodynamically stable, ventricular rate <150",
+          "treatment": "Rate control (beta-blocker or CCB). Anticoagulation per CHA2DS2-VASc. Elective cardioversion or catheter ablation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "right_atrial_reentry",
+      "cavotricuspid_isthmus",
+      "atrial_activation_wavefront",
+      "functional_block",
+      "av_node_conduction"
+    ],
+    "complications": [
+      { "diseaseId": "ischemic_stroke", "probability": 0.04, "severityBoost": 0.5, "clues": ["sudden_neurological_deficit"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if unstable",
+    "diagnosticClues": ["sawtooth_ecg", "regular_narrow_complex_tachycardia", "atrial_rate_300"],
+    "exclusionClues": ["irregular_rhythm", "sinus_p_waves"]
+  }
+}

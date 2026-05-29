@@ -1,0 +1,91 @@
+{
+  "disease": {
+    "id": "cerebral_venous_thrombosis",
+    "name": "Cerebral Venous Sinus Thrombosis",
+    "system": "NEURO",
+    "agePeak_months": [240, 480],
+    "note": "Thrombosis of cerebral veins and dural sinuses. Uncommon but important cause of stroke in young adults. Presentation: headache, seizures, focal deficits.",
+    "prevalenceWeight": 0.08,
+    "syndromeTags": ["cerebrovascular_event", "headache", "seizures"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "decreased_consciousness", "weight": 10 },
+        { "sign": "status_epilepticus", "weight": 9 },
+        { "sign": "signs_of_herniation", "weight": 10 },
+        { "sign": "progressive_neurological_deficit", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If decreased consciousness/status/herniation -> SEVERE; else -> MILD/MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "headache", "weight": 5, "modifiers": [{ "condition": "persistent_progressive_worse_with_coughing", "suspectTB": false }] },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "focal_neurological_deficit", "weight": 4 },
+      { "symptomId": "papilloedema_visual_disturbance", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "puerperium_ocp_states", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "papilloedema", "baseWeight": 4 },
+      { "signId": "focal_signs_hemiparesis", "baseWeight": 3 },
+      { "signId": "seizures", "baseWeight": 3 },
+      { "signId": "signs_of_raised_icp", "baseWeight": 3 },
+      { "signId": "sixth_nerve_palsy", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "pregnancy_puerperium", "multiplier": 5.0 },
+      { "id": "oral_contraceptives", "multiplier": 3.0 },
+      { "id": "thrombophilia", "multiplier": 3.0 },
+      { "id": "dehydration", "multiplier": 2.0 },
+      { "id": "malignancy", "multiplier": 2.5 },
+      { "id": "infection_local_ear_sinus_face", "multiplier": 2.5 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Fundoscopy", "priority": "high", "yield": 0.6, "indication": "papilloedema" }
+      ],
+      "laboratory": [
+        { "name": "D-dimer", "priority": "high", "yield": 0.8, "indication": "elevated in 90%, but normal does not exclude" },
+        { "name": "Thrombophilia screen", "priority": "medium", "yield": 0.4, "indication": "protein C/S, antithrombin, factor V Leiden, prothrombin mutation" }
+      ],
+      "imaging": [
+        { "name": "CT venography (CTV)", "priority": "immediate", "yield": 0.95, "indication": "empty delta sign, sinus occlusion" },
+        { "name": "MRI/MRV brain", "priority": "high", "yield": 0.95, "indication": "ischemic changes not arterial territory, venous infarct, clot signal" },
+        { "name": "Non-contrast CT Head", "priority": "immediate", "yield": 0.3, "indication": "cord sign, dense vein, hemorrhagic venous infarct" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ASA Guidelines for Cerebral Venous Thrombosis",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "no coma, no major hemorrhage, no herniation",
+          "treatment": "Anticoagulation: LMWH (enoxaparin 1 mg/kg BD) followed by warfarin (INR 2-3) for 3-6 months if provoked, 6-12 if unprovoked. Treat underlying cause."
+        },
+        {
+          "severity": "severe (coma, hemorrhage, herniation)",
+          "criteria": "GCS <9, large hemorrhagic infarct, impending herniation",
+          "treatment": "ICU admission. Anticoagulation even with hemorrhage (LMWH reduces mortality). Decompressive hemicraniectomy if malignant edema. Endovascular thrombectomy if deteriorating despite anticoagulation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "sinus_occlusion",
+      "venous_outflow_obstruction",
+      "increased_venous_pressure",
+      "csf_absorption_impaired",
+      "intracranial_hypertension",
+      "venous_infarction",
+      "hemorrhagic_transformation"
+    ],
+    "complications": [
+      { "diseaseId": "intracranial_hypertension", "probability": 0.3, "severityBoost": 0.3, "clues": ["papilloedema", "headache"] },
+      { "diseaseId": "status_epilepticus", "probability": 0.1, "severityBoost": 0.4, "clues": ["recurrent_seizures", "decreased_gcs"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["young_woman_with_headache_and_seizures", "puerperium_or_ocp", "sinus_occlusion_on_ctv_mrv"],
+    "exclusionClues": ["normal_venous_sinuses", "arterial_stroke_pattern"]
+  }
+}

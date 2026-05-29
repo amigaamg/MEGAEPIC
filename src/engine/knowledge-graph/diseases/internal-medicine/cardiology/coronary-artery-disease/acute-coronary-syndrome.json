@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "acute_coronary_syndrome",
+    "name": "Acute Coronary Syndrome",
+    "system": "cardiology",
+    "agePeak_months": [480, 960],
+    "note": "Spectrum from unstable angina to NSTEMI to STEMI. Time-critical emergency.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["chest_pain", "cardiac_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "sustained_vt_vf", "weight": 10 },
+        { "sign": "pulmonary_oedema", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If shock/arrest/arrythmia/oedema -> SEVERE (STEMI); else -> NON-SEVERE (UA/NSTEMI)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "chest_pain", "weight": 5, "modifiers": [
+          { "condition": "retrosternal_crushing", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "radiation_to_left_arm_jaw", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "diaphoresis", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "syncope", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "chest_discomfort_on_palpation", "baseWeight": 1, "note": "Often absent; presence suggests MSK cause" },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "gallop_rhythm", "baseWeight": 3 },
+      { "signId": "crackles_lung_bases", "baseWeight": 3 },
+      { "signId": "jugular_venous_distension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "dyslipidemia", "multiplier": 1.5 },
+      { "id": "family_history_cad", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "stemi",
+        "name": "ST-Elevation Myocardial Infarction",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "st_elevation_on_ecg", "weight": 5 },
+          { "feature": "prolonged_chest_pain", "weight": 5 },
+          { "feature": "troponin_elevation", "weight": 5 }
+        ],
+        "management": "Emergency PCI within 90 minutes or fibrinolysis within 30 minutes if PCI not available."
+      },
+      {
+        "id": "nstemi",
+        "name": "Non-ST Elevation Myocardial Infarction",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "st_depression_t_inversion", "weight": 5 },
+          { "feature": "troponin_elevation", "weight": 5 },
+          { "feature": "chest_pain_at_rest", "weight": 4 }
+        ],
+        "management": "Risk stratify (GRACE score). Anticoagulation + antiplatelet. Early invasive strategy if high risk."
+      },
+      {
+        "id": "unstable_angina",
+        "name": "Unstable Angina",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "chest_pain_at_rest", "weight": 5 },
+          { "feature": "crescendo_pattern", "weight": 4 },
+          { "feature": "normal_troponin", "weight": 4 }
+        ],
+        "management": "Anticoagulation + antiplatelet. Coronary angiography. Revascularization if significant stenosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "aortic_dissection",
+        "discriminators": ["tearing_back_pain", "bp_difference_arms", "wide_mediastinum"]
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["pleuritic_pain", "hemoptysis", "dvt_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.95, "indication": "all patients with chest pain within 10 minutes" },
+        { "name": "Continuous ECG monitoring", "priority": "high", "yield": 0.8, "indication": "monitor for arrhythmias" }
+      ],
+      "laboratory": [
+        { "name": "High-sensitivity Troponin I/T", "priority": "immediate", "yield": 0.95, "indication": "at presentation and 3 hours" },
+        { "name": "CK-MB", "priority": "medium", "yield": 0.7, "indication": "when troponin unavailable" },
+        { "name": "FBC, U&E, Cr, Glucose, Lipids", "priority": "high", "yield": 0.6, "indication": "baseline assessment" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "rule out aortic dissection, pulmonary oedema" },
+        { "name": "Echocardiography", "priority": "high", "yield": 0.8, "indication": "assess wall motion abnormalities, LV function" },
+        { "name": "Coronary Angiography", "priority": "immediate", "yield": 0.98, "indication": "diagnostic and therapeutic" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESC Guidelines for the Management of Acute Coronary Syndromes",
+      "pathways": [
+        {
+          "severity": "STEMI",
+          "criteria": "ST elevation >1mm in 2 contiguous leads or new LBBB",
+          "treatment": "MONA (Morphine, Oxygen, Nitrates, Aspirin). Emergency PCI. If >120 min to PCI: fibrinolysis (Tenecteplase). Dual antiplatelet (Aspirin + Ticagrelor). Anticoagulation (Heparin)."
+        },
+        {
+          "severity": "NSTEMI/UA",
+          "criteria": "ST depression/T inversion or normal ECG with positive troponin",
+          "treatment": "Risk stratify (GRACE). Dual antiplatelet. Anticoagulation. Early invasive (<24h) if GRACE >140. Conservative if low risk."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "cardiogenic shock, arrhythmia, mechanical complication",
+          "treatment": "ICU admission. Inotropic support. IABP. Emergency revascularization. Treat arrhythmia per ACLS."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "plaque_rupture",
+      "coronary_thrombosis",
+      "myocardial_ischemia",
+      "myocardial_necrosis",
+      "ventricular_dysfunction",
+      "reperfusion_injury"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cardiogenic_shock",
+        "probability": 0.08,
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "cold_peripheries", "oliguria"]
+      },
+      {
+        "diseaseId": "ventricular_fibrillation",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["collapse", "pulseless"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["crushing_retrosternal_chest_pain", "ecg_changes", "troponin_elevation"],
+    "exclusionClues": ["negative_troponin_x2", "normal_ecg", "pain_reproducible_on_palpation"]
+  }
+}

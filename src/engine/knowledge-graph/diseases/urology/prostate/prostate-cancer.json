@@ -1,0 +1,117 @@
+{
+  "disease": {
+    "id": "prostate_cancer",
+    "name": "Prostate Cancer",
+    "system": "urology",
+    "agePeak_months": [600, 960],
+    "note": "Second most common cancer in men. Screening with PSA controversial. Adenocarcinoma most common type.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["genitourinary_malignancy", "male_cancer"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "acute_urinary_retention", "weight": 8 },
+        { "sign": "renal_failure_obstruction", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Based on Gleason score, PSA, and TNM stage"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "lower_urinary_tract_symptoms", "weight": 3 },
+      { "symptomId": "hematuria", "weight": 3 },
+      { "symptomId": "hematospermia", "weight": 2 },
+      { "symptomId": "bone_pain_back_pain", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "elevated_psa", "weight": 4 },
+      { "symptomId": "family_history_prostate_cancer", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hard_nodular_prostate_dre", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "loss_of_prostate_sulcus", "baseWeight": 4 },
+      { "signId": "spinal_tenderness", "baseWeight": 3 },
+      { "signId": "lower_limb_oedema", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 3.0 },
+      { "id": "family_history", "multiplier": 2.5 },
+      { "id": "african_caribbean_ethnicity", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.3 },
+      { "id": "brca2_mutation", "multiplier": 3.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bph",
+        "discriminators": ["smooth_enlarged_prostate", "normal_psa", "no_metastases"]
+      },
+      {
+        "diseaseId": "prostatitis",
+        "discriminators": ["fever", "perineal_pain", "tender_prostate", "uti"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "PSA (total, free-to-total ratio)", "priority": "high", "yield": 0.7, "indication": "screening and monitoring" },
+        { "name": "Serum creatinine, ALP", "priority": "high", "yield": 0.5, "indication": "renal and bone involvement" }
+      ],
+      "imaging": [
+        { "name": "Transrectal Ultrasound (TRUS) with biopsy", "priority": "gold_standard", "yield": 0.9, "indication": "definitive diagnosis" },
+        { "name": "MRI Prostate (mpMRI)", "priority": "high", "yield": 0.85, "indication": "lesion detection, staging, biopsy targeting" },
+        { "name": "Bone scan", "priority": "medium", "yield": 0.8, "indication": "bone metastases if high risk" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Prostate Cancer",
+      "pathways": [
+        {
+          "severity": "low risk (Gleason <=6, PSA <10, T1-T2a)",
+          "criteria": "localized, favorable risk",
+          "treatment": "Active surveillance with serial PSA and MRI. Radical prostatectomy or radiotherapy if progression."
+        },
+        {
+          "severity": "intermediate/high risk",
+          "criteria": "Gleason 7+, PSA >10, T2b+",
+          "treatment": "Radical prostatectomy or radiotherapy + ADT. Multimodal therapy."
+        },
+        {
+          "severity": "metastatic",
+          "criteria": "bone or visceral metastases",
+          "treatment": "ADT (androgen deprivation therapy) first-line. Abiraterone, enzalutamide, chemotherapy (docetaxel) for CRPC. Palliative radiotherapy for bone pain."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "androgen_receptor_signaling",
+      "genetic_mutations_tmprss2_erg",
+      "prostatic_intraepithelial_neoplasia",
+      "local_invasion",
+      "lymphatic_and_bone_metastasis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "spinal_cord_compression",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["back_pain", "leg_weakness", "sensory_loss", "bladder_bowel_dysfunction"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["elevated_psa", "hard_nodular_dre", "family_history"],
+    "exclusionClues": ["normal_psa", "smooth_prostate", "low_suspicion_mpmri"]
+  }
+}

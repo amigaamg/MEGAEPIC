@@ -1,0 +1,159 @@
+{
+  "disease": {
+    "id": "amniotic_fluid_embolism",
+    "name": "Amniotic Fluid Embolism",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Rare but catastrophic obstetric emergency where fetal material enters the maternal circulation, causing anaphylactic shock, DIC, and cardiopulmonary collapse. High mortality rate.",
+    "prevalenceWeight": 0.0005,
+    "syndromeTags": ["intrapartum_emergency", "maternal_collapse", "obstetric_shock"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "cardiorespiratory_collapse", "weight": 10 },
+        { "sign": "severe_hypoxia", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "sudden_onset_dyspnea", "weight": 10 },
+          { "sign": "seizures", "weight": 9 },
+          { "sign": "cyanosis", "weight": 9 },
+          { "sign": "coagulopathy_dic", "weight": 9 },
+          { "sign": "fetal_bradycardia_or_demise", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "All AFE cases are SEVERE (mortality 25-60%)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_onset_breathlessness", "weight": 5 },
+      { "symptomId": "chest_pain", "weight": 4 },
+      { "symptomId": "feeling_of_dread", "weight": 4, "note": "Sense of impending doom" },
+      { "symptomId": "seizure_activity", "weight": 4 },
+      { "symptomId": "hemorrhage_unexplained", "weight": 4 },
+      { "symptomId": "loss_of_consciousness", "weight": 5 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension_sudden", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypoxia_pulse_oximetry_low", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia_or_bradycardia", "baseWeight": 4 },
+      { "signId": "seizures", "baseWeight": 4 },
+      { "signId": "cyanosis", "baseWeight": 5 },
+      { "signId": "bleeding_from_multiple_sites", "baseWeight": 4 },
+      { "signId": "cardiac_arrest", "baseWeight": 5 },
+      { "signId": "pulmonary_edema_signs", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_maternal_age", "multiplier": 2.0 },
+      { "id": "induction_of_labor_with_oxytocin", "multiplier": 2.0 },
+      { "id": "prolonged_labor", "multiplier": 1.5 },
+      { "id": "multiple_gestation", "multiplier": 2.5 },
+      { "id": "fetal_male_sex", "multiplier": 1.5 },
+      { "id": "cesarean_section_or_instrumental_delivery", "multiplier": 2.0 },
+      { "id": "eclampsia", "multiplier": 2.0 },
+      { "id": "placenta_previa_or_abruption", "multiplier": 2.0 },
+      { "id": "cervical_tear_or_uterine_rupture", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "pulmonary_embolism_thrombotic",
+        "discriminators": ["slower_onset", "leg_swelling", "no_dic", "imaging_evidence"]
+      },
+      {
+        "diseaseId": "myocardial_infarction",
+        "discriminators": ["ecg_changes", "cardiac_enzymes", "no_dic"]
+      },
+      {
+        "diseaseId": "septic_shock",
+        "discriminators": ["gradual_onset", "fever", "preceding_infection"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.95, "indication": "severe hypoxia" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "tachyarrhythmia, ST changes, right heart strain" },
+        { "name": "Blood pressure monitoring", "priority": "immediate", "yield": 0.9, "indication": "hypotension" },
+        { "name": "Fetal heart rate monitoring", "priority": "immediate", "yield": 0.8, "indication": "fetal bradycardia" }
+      ],
+      "laboratory": [
+        { "name": "Coagulation profile (PT, aPTT, fibrinogen, D-dimer)", "priority": "immediate", "yield": 0.9, "indication": "DIC pattern" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.7, "indication": "thrombocytopenia" },
+        { "name": "Arterial blood gas", "priority": "immediate", "yield": 0.9, "indication": "hypoxia, mixed acidosis" },
+        { "name": "Tryptase and complement levels", "priority": "low", "yield": 0.3, "indication": "post-hoc confirmation" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.5, "indication": "pulmonary edema pattern" },
+        { "name": "Echocardiography", "priority": "medium", "yield": 0.6, "indication": "right ventricular dysfunction, pulmonary hypertension" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "UKOSS / RCOG Guidelines on Amniotic Fluid Embolism",
+      "pathways": [
+        {
+          "severity": "all_cases",
+          "criteria": "cardiorespiratory collapse during labor or delivery",
+          "treatment": "Multidisciplinary team response. High-flow oxygen / intubation and ventilation. CPR if cardiac arrest. IV fluids and vasopressors (noradrenaline, dobutamine). Treat DIC: transfusion of RBC, FFP, platelets, cryoprecipitate. Uterotonics for hemorrhage. Emergency delivery (C-section if not already delivered, preferably within 5 minutes of arrest). Consider ECMO in refractory cases. ICU admission. Discuss termination of pregnancy if antenatal."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "fetal_squamous_cells_in_maternal_circulation",
+      "anaphylactic_reaction",
+      "pulmonary_vasospasm",
+      "right_heart_failure",
+      "consumptive_coagulopathy"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "maternal_death",
+        "probability": 0.4,
+        "lagDays": [0, 1],
+        "severityBoost": 1.0,
+        "clues": ["cardiac_arrest", "refractory_hypotension"]
+      },
+      {
+        "diseaseId": "hypoxic_ischemic_encephalopathy_maternal",
+        "probability": 0.2,
+        "lagDays": [0, 3],
+        "severityBoost": 0.8,
+        "clues": ["prolonged_cpr", "low_gcs"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.8,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["bleeding", "abnormal_coag"]
+      },
+      {
+        "diseaseId": "perinatal_death",
+        "probability": 0.3,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["fetal_bradycardia", "delayed_delivery"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_collapse_during_labor", "hypoxia", "dic", "seizures"],
+    "exclusionClues": ["preexisting_cardiac_disease_explaining_collapse"]
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "disease": {
+    "id": "ovarian_cancer",
+    "name": "Ovarian Cancer",
+    "system": "ONCO",
+    "agePeak_months": [540, 840],
+    "note": "Silent killer - presents late with vague abdominal symptoms. High-grade serous most common and aggressive subtype.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["gynecologic_malignancy", "pelvic_mass"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "bowel_obstruction", "weight": 8 },
+        { "sign": "massive_ascites_respiratory_distress", "weight": 7 },
+        { "sign": "pulmonary_embolism", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "FIGO Stage I-IV. Majority present at Stage III-IV due to late detection."
+    },
+    "historyFeatures": [
+      { "symptomId": "abdominal_bloating", "weight": 4 },
+      { "symptomId": "early_satiety", "weight": 3 },
+      { "symptomId": "pelvic_abdominal_pain", "weight": 3 },
+      { "symptomId": "increased_abdominal_girth", "weight": 4 },
+      { "symptomId": "urinary_frequency_urgency", "weight": 2 },
+      { "symptomId": "change_in_bowel_habit", "weight": 2 },
+      { "symptomId": "fatigue_weight_loss", "weight": 3 },
+      { "symptomId": "postmenopausal_bleeding", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "pelvic_mass_on_bimanual_exam", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ascites", "baseWeight": 4 },
+      { "signId": "abdominal_distension", "baseWeight": 4 },
+      { "signId": "omental_cake", "baseWeight": 3 },
+      { "signId": "adnexal_mass_fixed_irregular", "baseWeight": 5 },
+      { "signId": "pleural_effusion", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_breast_ovarian", "multiplier": 3.0 },
+      { "id": "brca1_mutation", "multiplier": 10.0 },
+      { "id": "brca2_mutation", "multiplier": 6.0 },
+      { "id": "nulliparity", "multiplier": 1.5 },
+      { "id": "early_menarche_late_menopause", "multiplier": 1.3 },
+      { "id": "endometriosis", "multiplier": 1.5 },
+      { "id": "age_over_50", "multiplier": 2.0 },
+      { "id": "lynch_syndrome", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "high_grade_serous_ovarian",
+        "name": "High-Grade Serous Ovarian Carcinoma",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "tp53_mutation_universal", "weight": 5 },
+          { "feature": "high_ca125", "weight": 4 },
+          { "feature": "advanced_stage_at_presentation", "weight": 5 },
+          { "feature": "fallopian_tube_origin_serous_tubal", "weight": 3 }
+        ],
+        "management": "Primary cytoreductive surgery (debulking) + platinum/taxane chemotherapy. Interval debulking if neoadjuvant chemo. PARP inhibitors if HRD/BRCA. Bevacizumab."
+      },
+      {
+        "id": "borderline_ovarian_tumor",
+        "name": "Borderline Ovarian Tumor (LMP)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "younger_age", "weight": 4 },
+          { "feature": "low_malignant_potential", "weight": 4 },
+          { "feature": "no_stromal_invasion", "weight": 5 }
+        ],
+        "management": "Fertility-sparing surgery (USO/cystectomy). No chemotherapy. Long-term follow-up. Excellent prognosis."
+      },
+      {
+        "id": "mucinous_ovarian",
+        "name": "Mucinous Ovarian Carcinoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "large_cystic_mass", "weight": 4 },
+          { "feature": "gastrointestinal_markers_cea_ca199", "weight": 3 },
+          { "feature": "pseudomyxoma_peritonei_risk", "weight": 3 }
+        ],
+        "management": "Surgery (often large, may require bowel resection). Platinum/taxane chemotherapy. Exclude GI primary (appendix/colon)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "benign_ovarian_cyst", "discriminators": ["simple_cyst_imaging", "normal_ca125", "younger_age", "unilocular"] },
+      { "diseaseId": "endometrioma", "discriminators": ["cyclical_pain", "ground_glass_appearance_on_uss", "ca125_moderately_elevated"] },
+      { "diseaseId": "tubo_ovarian_abscess", "discriminators": ["fever", "tenderness", "elevated_wbc", "response_to_antibiotics"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "CA-125", "priority": "high", "yield": 0.75, "indication": "tumor marker; elevated in >80% serous" },
+        { "name": "HE4", "priority": "medium", "yield": 0.7, "indication": "ROMA index with CA-125 improves specificity" },
+        { "name": "CEA, CA19-9", "priority": "medium", "yield": 0.4, "indication": "rule out GI primary in mucinous tumors" },
+        { "name": "FBC, LFT, U&E, ALP", "priority": "high", "yield": 0.4, "indication": "baseline and metastatic screen" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal/Pelvic Ultrasound", "priority": "first-line", "yield": 0.85, "indication": "characterize ovarian mass (IOTA simple rules)" },
+        { "name": "CT Chest/Abdomen/Pelvis with contrast", "priority": "high", "yield": 0.9, "indication": "staging, peritoneal disease, metastases" },
+        { "name": "MRI Pelvis", "priority": "medium", "yield": 0.85, "indication": "indeterminate adnexal mass characterization" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "recurrent disease, equivocal findings" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/ESGO Guidelines for Ovarian Cancer",
+      "pathways": [
+        {
+          "severity": "early stage (I-IIA)",
+          "criteria": "confined to ovaries/pelvis, optimally resectable",
+          "treatment": "Comprehensive surgical staging: TAH + BSO + omentectomy + peritoneal biopsies + PLND. Adjuvant carboplatin + paclitaxel if high-risk (IC, II, clear cell). Fertility-sparing in selected IA."
+        },
+        {
+          "severity": "advanced stage (IIB-IV)",
+          "criteria": "peritoneal spread, distant metastases",
+          "treatment": "Primary cytoreductive surgery aiming for R0 (no visible residual). IV/IP carboplatin + paclitaxel. Neoadjuvant chemotherapy if unresectable. Bevacizumab. PARP inhibitors for BRCA/HRD."
+        },
+        {
+          "severity": "recurrent",
+          "criteria": "platinum-sensitive (>6 months) or platinum-resistant",
+          "treatment": "Platinum-sensitive: re-challenge carboplatin + gemcitabine/liposomal doxorubicin ± bevacizumab. Platinum-resistant: non-platinum agents (weekly paclitaxel, topotecan, gemcitabine). Clinical trials."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "fallopian_tube_epithelial_origin_serous",
+      "tp53_mutation_in_hgsc",
+      "brca_dna_repair_deficiency",
+      "peritoneal_seeding_transcoelomic",
+      "omental_involvement",
+      "malignant_ascites_formation",
+      "lymphatic_and_hematogenous_spread"
+    ],
+    "complications": [
+      { "diseaseId": "bowel_obstruction", "probability": 0.3, "severityBoost": 0.4, "clues": ["vomiting", "abdominal_distension", "carcinomatosis_on_ct"] },
+      { "diseaseId": "malignant_pleural_effusion", "probability": 0.15, "severityBoost": 0.2, "clues": ["dyspnea", "pleural_fluid_on_cxr", "pleural_cytology_positive"] },
+      { "diseaseId": "venous_thromboembolism", "probability": 0.1, "severityBoost": 0.3, "clues": ["leg_swelling", "dyspnea", "elevated_d_dimer"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["persistent_abdominal_bloating", "pelvic_mass_ascites", "elevated_ca125", "family_history_breast_ovarian"],
+    "exclusionClues": ["benign_simple_cyst", "normal_ca125_he4", "non_solid_adnexal_mass"]
+  }
+}

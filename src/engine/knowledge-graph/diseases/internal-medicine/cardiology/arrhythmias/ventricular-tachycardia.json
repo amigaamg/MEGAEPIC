@@ -1,0 +1,141 @@
+{
+  "disease": {
+    "id": "ventricular_tachycardia",
+    "name": "Ventricular Tachycardia",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Wide complex tachycardia originating from the ventricles. Sustained VT requires immediate attention.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["arrhythmia", "cardiac_emergency", "wide_complex_tachycardia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pulseless_vt", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "degeneration_to_vf", "weight": 10 },
+        { "sign": "syncope", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If pulseless/unstable/syncope -> EMERGENCY requiring cardioversion; else -> STABLE VT"
+    },
+    "historyFeatures": [
+      { "symptomId": "palpitations", "weight": 4 },
+      { "symptomId": "syncope", "weight": 4 },
+      { "symptomId": "chest_discomfort", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "lightheadedness", "weight": 3 },
+      { "symptomId": "history_of_mi", "weight": 4 },
+      { "symptomId": "prior_vt_or_icd_shock", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "wide_qrs_tachycardia", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "av_dissociation", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fusion_or_capture_beats", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "decreased_consciousness", "baseWeight": 4 },
+      { "signId": "signs_of_hf", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "prior_mi_with_scar", "multiplier": 3.0 },
+      { "id": "ischemic_cardiomyopathy", "multiplier": 3.0 },
+      { "id": "nonischemic_cardiomyopathy", "multiplier": 2.5 },
+      { "id": "lv_ef_less_35", "multiplier": 3.5 },
+      { "id": "electrolyte_disturbance", "multiplier": 2.0 },
+      { "id": "hereditary_channelopathy", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "sustained_monomorphic_vt",
+        "name": "Sustained Monomorphic VT",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "uniform_qrs_morphology", "weight": 5 },
+          { "feature": "duration_30_seconds", "weight": 5 },
+          { "feature": "rate_100_250", "weight": 4 }
+        ],
+        "management": "Stable: Amiodarone 150 mg IV over 10 min. Lidocaine. Unstable: Synchronized cardioversion. ICD if structural disease."
+      },
+      {
+        "id": "sustained_polymorphic_vt",
+        "name": "Sustained Polymorphic VT",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "changing_qrs_morphology", "weight": 5 },
+          { "feature": "often_ischemic", "weight": 4 },
+          { "feature": "rate_200_400", "weight": 5 }
+        ],
+        "management": "Immediate defibrillation if VF features. Correct ischemia. Magnesium 2 g IV. Amiodarone. Urgent revascularization."
+      },
+      {
+        "id": "torsades_de_pointes",
+        "name": "Torsades de Pointes",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "twisting_qrs_axis", "weight": 5 },
+          { "feature": "prolonged_qt_interval_baseline", "weight": 5 },
+          { "feature": "bradycardia_dependent", "weight": 4 }
+        ],
+        "management": "IV magnesium 2 g. Isoproterenol or pacing if bradycardic. Correct electrolytes. Avoid QT-prolonging drugs."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "svt_with_aberrancy", "discriminators": ["av_dissociation_absent", "rs_pattern_v1_v6", "preexisting_bbb"] },
+      { "diseaseId": "accelerated_idioventricular_rhythm", "discriminators": ["rate_50_100", "gradual_onset_offset", "benign"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.98, "indication": "wide QRS, AV dissociation, morphology criteria" },
+        { "name": "Continuous monitoring", "priority": "immediate", "yield": 0.9, "indication": "detect recurrence, degeneration" }
+      ],
+      "laboratory": [
+        { "name": "Potassium, Magnesium", "priority": "immediate", "yield": 0.5, "indication": "correct electrolytes" },
+        { "name": "Troponin", "priority": "high", "yield": 0.5, "indication": "rule out acute ischemia" },
+        { "name": "ABG", "priority": "medium", "yield": 0.3, "indication": "acid-base status" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "high", "yield": 0.8, "indication": "LVEF, structural disease" },
+        { "name": "Coronary angiography", "priority": "medium", "yield": 0.5, "indication": "if ischemic cause suspected" }
+      ],
+      "advanced": [
+        { "name": "Electrophysiology study", "indication": "inducibility, ablation guidance", "priority": "medium" },
+        { "name": "Cardiac MRI", "indication": "scar detection, ARVC evaluation", "priority": "low" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ACC/ESC Guidelines for Ventricular Arrhythmias",
+      "pathways": [
+        {
+          "severity": "pulseless VT",
+          "criteria": "no pulse, wide complex tachycardia",
+          "treatment": "Defibrillate 200 J (biphasic). CPR. Epinephrine Q3-5 min. Amiodarone 300 mg IV after 3rd shock. Treat reversible causes."
+        },
+        {
+          "severity": "unstable VT",
+          "criteria": "hypotension, chest pain, heart failure, syncope",
+          "treatment": "Synchronized cardioversion 100-200 J. Sedation. Amiodarone 150 mg IV. Identify and correct precipitant."
+        },
+        {
+          "severity": "stable VT",
+          "criteria": "hemodynamically tolerated",
+          "treatment": "Amiodarone 150 mg IV over 10 min (may repeat 150 mg). Lidocaine 1-1.5 mg/kg IV. Procainamide alternative. Elective cardioversion if refractory."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "myocardial_scar_reentry",
+      "ischemic_substrate",
+      "enhanced_automaticity",
+      "triggered_activity",
+      "structural_heart_disease",
+      "electrical_storm"
+    ],
+    "complications": [
+      { "diseaseId": "ventricular_fibrillation", "probability": 0.1, "severityBoost": 0.6, "clues": ["degeneration_to_vf", "pulseless"] },
+      { "diseaseId": "electrical_storm", "probability": 0.05, "severityBoost": 0.5, "clues": ["multiple_vt_episodes_24h", "icd_shocks"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["wide_qrs_tachycardia", "av_dissociation", "structural_heart_disease"],
+    "exclusionClues": ["narrow_qrs", "preexcited_af", "svt_with_aberrancy"]
+  }
+}

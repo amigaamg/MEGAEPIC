@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // referral_hospital, county_hospital, clinic, etc.
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  departments Department[]
+  users       User[]
+}
+
+model Department {
+  id             String    @id @default(cuid())
+  organizationId String
+  key            String    // PAED, CARD, SURG, etc.
+  name           String
+  color          String
+  icon           String
+  description    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  units        Unit[]
+  encounters   Encounter[]
+  users        User[]
+
+  @@unique([organizationId, key])
+}
+
+model Unit {
+  id           String   @id @default(cuid())
+  departmentId String
+  name         String
+  description  String?
+  icon         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  department Department @relation(fields: [departmentId], references: [id])
+  encounters Encounter[]
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String?
+  role           String   // doctor, nurse, admin, etc.
+  specialty      String?
+  licenseNumber  String?
+  organizationId String?
+  departmentId   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+  department      Department?   @relation(fields: [departmentId], references: [id])
+  encounters      Encounter[]
+  clinicalNotes   ClinicalNote[]
+}
+
+model Patient {
+  id            String   @id @default(cuid())
+  organizationId String?
+  firstName     String
+  lastName      String
+  dateOfBirth   DateTime
+  sex           String   // male, female
+  phone         String?
+  address       String?
+  bloodType     String?
+  allergies     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  encounters   Encounter[]
+  clinicalNotes ClinicalNote[]
+}
+
+model Encounter {
+  id           String   @id @default(cuid())
+  patientId    String
+  departmentId String?
+  unitId       String?
+  userId       String?
+  type         String   // outpatient, emergency, inpatient, etc.
+  phase        String   // triage, hpi, exam, ddx, etc.
+  status       String   @default("active") // active, completed, cancelled
+  chiefComplaint String?
+  diagnosis    String?
+  severity     String?
+  startedAt    DateTime @default(now())
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  patient      Patient    @relation(fields: [patientId], references: [id])
+  department   Department? @relation(fields: [departmentId], references: [id])
+  unit         Unit?       @relation(fields: [unitId], references: [id])
+  user         User?       @relation(fields: [userId], references: [id])
+
+  clinicalNotes ClinicalNote[]
+  encounterData EncounterData[]
+}
+
+model EncounterData {
+  id          String   @id @default(cuid())
+  encounterId String
+  phase       String
+  data        Json
+  createdAt   DateTime @default(now())
+
+  encounter Encounter @relation(fields: [encounterId], references: [id])
+}
+
+model ClinicalNote {
+  id          String   @id @default(cuid())
+  encounterId String?
+  patientId   String?
+  userId      String?
+  type        String   // consultation, discharge_summary, operative_note, referral
+  content     Json
+  summary     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  encounter Encounter? @relation(fields: [encounterId], references: [id])
+  patient   Patient?   @relation(fields: [patientId], references: [id])
+  user      User?      @relation(fields: [userId], references: [id])
+}
+
+model Disease {
+  id               String   @id
+  name             String
+  system           String
+  departmentId     String
+  section          String?
+  prevalenceWeight Int      @default(50)
+  mustNotMiss      Boolean  @default(false)
+  emergencyPriority String?
+  severityLabel    String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Investigation {
+  id          String   @id @default(cuid())
+  name        String
+  category    String   // bedside, laboratory, imaging, advanced
+  diseaseId   String
+  priority    String   // high, medium, low
+  indication  String?
+  yield       Int?
+  createdAt   DateTime @default(now())
+
+  disease Disease @relation(fields: [diseaseId], references: [id])
+}
+
+model Medication {
+  id             String   @id @default(cuid())
+  name           String
+  genericName    String?
+  category       String?
+  route          String?
+  dose           String?
+  frequency      String?
+  contraindications String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

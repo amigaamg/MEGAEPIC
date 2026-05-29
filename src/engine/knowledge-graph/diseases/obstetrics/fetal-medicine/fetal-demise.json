@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "fetal_demise",
+    "name": "Fetal Demise (Intrauterine Fetal Death)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Death of the fetus in utero after 20 weeks of gestation. A devastating event requiring sensitive management and investigation to determine cause and guide future pregnancies.",
+    "prevalenceWeight": 0.006,
+    "syndromeTags": ["pregnancy_loss", "fetal_death"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "disseminated_intravascular_coagulation", "weight": 9 },
+        { "sign": "sepsis_septic_shock", "weight": 9 },
+        { "sign": "maternal_hemorrhage", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "prolonged_retained_dead_fetus_over_4_weeks", "weight": 8 },
+          { "sign": "coagulopathy_evident", "weight": 9 },
+          { "sign": "fever_or_infection_signs", "weight": 8 },
+          { "sign": "maternal_psychological_distress_severe", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "DIC, sepsis, or prolonged retention -> SEVERE; Recent demise without complications -> NON-SEVERE but requires urgent management"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "absent_fetal_movements", "weight": 5 },
+      { "symptomId": "loss_of_pregnancy_symptoms", "weight": 4 },
+      { "symptomId": "breast_tenderness_resolved", "weight": 2 },
+      { "symptomId": "vaginal_spotting_bleeding", "weight": 2 },
+      { "symptomId": "abdominal_cramping", "weight": 2 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "fundal_height_static_or_decreased", "weight": 3 },
+      { "symptomId": "maternal_trauma", "weight": 2 },
+      { "symptomId": "known_risk_factors_preeclampsia_diabetes", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "absence_of_fetal_heart_rate_on_exam", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "absence_of_fetal_movements_on_palpation", "baseWeight": 5 },
+      { "signId": "fundal_height_lower_than_expected", "baseWeight": 3 },
+      { "signId": "uterine_size_smaller_than_dates", "baseWeight": 3 },
+      { "signId": "no_fetal_heart_on_doppler", "baseWeight": 5 },
+      { "signId": "signs_of_coagulopathy", "baseWeight": 3 },
+      { "signId": "fever_if_infection_present", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "preeclampsia_eclampsia", "multiplier": 3.0 },
+      { "id": "gestational_or_pregestational_diabetes", "multiplier": 2.5 },
+      { "id": "advanced_maternal_age_over_35", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "previous_stillbirth", "multiplier": 5.0 },
+      { "id": "thrombophilia", "multiplier": 3.0 },
+      { "id": "IUGR", "multiplier": 3.0 },
+      { "id": "multiple_gestation", "multiplier": 2.0 },
+      { "id": "placental_abruption", "multiplier": 5.0 },
+      { "id": "cord_accident", "multiplier": 3.0 },
+      { "id": "postterm_pregnancy", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "antepartum_stillbirth",
+        "name": "Antepartum Fetal Demise",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "death_occurring_before_labor", "weight": 5 },
+          { "feature": "usually_cause_identifiable", "weight": 3 },
+          { "feature": "fetus_retained_in_utero", "weight": 4 }
+        ],
+        "management": "Confirm with ultrasound. Offer options: induction of labor (preferred) or expectant management. Coagulation screen weekly if expectant. Miscarriage/bereavement care."
+      },
+      {
+        "id": "intrapartum_stillbirth",
+        "name": "Intrapartum Fetal Demise",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "death_during_labor", "weight": 5 },
+          { "feature": "fetal_heart_present_at_onset_of_labor", "weight": 5 },
+          { "feature": "often_due_to_obstetric_complication", "weight": 4 }
+        ],
+        "management": "Continue labor if vaginal delivery imminent. C-section rarely indicated for maternal reasons (DIC). Autopsy recommended. Debrief and counselling."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "intrauterine_growth_restriction_severe",
+        "discriminators": ["fetal_heart_still_present", "weak_Doppler_signals_may_be_misleading"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fetal heart rate auscultation / Doppler", "priority": "immediate", "yield": 0.9, "indication": "absent fetal heart" }
+      ],
+      "laboratory": [
+        { "name": "Coagulation profile (PT, aPTT, fibrinogen)", "priority": "immediate", "yield": 0.9, "indication": "DIC risk assessment" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.7, "indication": "baseline" },
+        { "name": "Blood group and Rh type", "priority": "high", "yield": 0.99, "indication": "Rhogam if Rh-negative" },
+        { "name": "Kleihauer-Betke test", "priority": "high", "yield": 0.6, "indication": "feto-maternal hemorrhage" },
+        { "name": "TORCH screen", "priority": "medium", "yield": 0.3, "indication": "investigate cause" },
+        { "name": "Thrombophilia screen", "priority": "medium", "yield": 0.3, "indication": "if recurrent or unexplained" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound (confirm demise)", "priority": "immediate", "yield": 0.99, "indication": "no fetal heart, no fetal movements" },
+        { "name": "Placental pathology after delivery", "priority": "high", "yield": 0.8, "indication": "investigate cause" },
+        { "name": "Autopsy / PM examination", "priority": "high", "yield": 0.7, "indication": "if consent given, to determine cause" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 55 - Late Intrauterine Fetal Death and Stillbirth",
+      "pathways": [
+        {
+          "severity": "uncomplicated_fetal_demise",
+          "criteria": "recent demise, no DIC, no infection, no medical contraindication",
+          "treatment": "Offer induction of labor (mifepristone 200mg PO, 24-48h later misoprostol 50mcg PV 4-hourly). Vaginal delivery preferred. Pain relief (epidural). Bereavement care: memory box, footprints, photos. Offer autopsy. Discuss future pregnancy planning."
+        },
+        {
+          "severity": "complicated_fetal_demise",
+          "criteria": "DIC, infection, or medical complication",
+          "treatment": "Correct coagulopathy (FFP, cryoprecipitate). Treat infection (antibiotics). Induction of labor or evacuation (depending on gestation). Hysterotomy rarely needed. ICU if DIC/sepsis. Multidisciplinary approach."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uteroplacental_insufficiency",
+      "cord_accident",
+      "infection_ascending",
+      "maternal_disease",
+      "fetal_anomaly"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.05,
+        "lagDays": [14, 28],
+        "severityBoost": 0.9,
+        "clues": ["prolonged_retention_over_4_weeks", "bleeding", "abnormal_coag"]
+      },
+      {
+        "diseaseId": "postpartum_hemorrhage",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["uterine_atony", "retained_placenta"]
+      },
+      {
+        "diseaseId": "postpartum_depression",
+        "probability": 0.3,
+        "lagDays": [14, 90],
+        "severityBoost": 0.3,
+        "clues": ["prolonged_grief", "difficulty_coping"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["absent_fetal_movements", "no_fetal_heart", "static_fundal_height"],
+    "exclusionClues": ["fetal_heart_detected", "fetal_movements_present"]
+  }
+}

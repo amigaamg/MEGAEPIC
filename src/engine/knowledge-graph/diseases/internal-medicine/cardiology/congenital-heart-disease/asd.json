@@ -1,0 +1,120 @@
+{
+  "disease": {
+    "id": "asd",
+    "name": "Atrial Septal Defect",
+    "system": "CARD",
+    "agePeak_months": [0, 240],
+    "note": "Communication between left and right atria. Most common congenital heart disease in adults. Types: secundum (80%), primum, sinus venosus.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["congenital_heart_disease", "left_to_right_shunt"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "heart_failure", "weight": 8 },
+        { "sign": "pulmonary_hypertension", "weight": 7 },
+        { "sign": "arrhythmia", "weight": 7 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If HF/PH/arrhythmia -> SEVERE; else -> MILD/MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "asymptomatic", "weight": 4, "note": "Often asymptomatic until adulthood" },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "recurrent_respiratory_infections", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "exercise_intolerance", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "wide_fixed_splitting_s2", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ejection_systolic_murmur_pulmonic_area", "baseWeight": 4 },
+      { "signId": "right_ventricular_heave", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "down_syndrome", "multiplier": 3.0 },
+      { "id": "family_history_chd", "multiplier": 2.0 },
+      { "id": "maternal_diabetes", "multiplier": 2.0 },
+      { "id": "maternal_rubella", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "secundum_asd",
+        "name": "Secundum ASD (Ostium Secundum)",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [{ "feature": "central_defect_fossa_ovalis", "weight": 5 }],
+        "management": "Closure if Qp:Qs >1.5:1 or RV dilation. Transcatheter device closure preferred. Surgical closure if anatomy unsuitable."
+      },
+      {
+        "id": "primum_asd",
+        "name": "Primum ASD (Ostium Primum - Partial AVSD)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "low_defect_near_av_valves", "weight": 5 },
+          { "feature": "associated_cleft_mv", "weight": 4 }
+        ],
+        "management": "Surgical patch closure + MV repair if cleft. Follow-up for LVOT obstruction, MR."
+      },
+      {
+        "id": "sinus_venosus_asd",
+        "name": "Sinus Venosus ASD",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "high_defect_near_svc_ivc", "weight": 5 },
+          { "feature": "associated_anomalous_pulmonary_venous_return", "weight": 5 }
+        ],
+        "management": "Surgical closure + redirection of anomalous pulmonary veins."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "pulmonic_stenosis", "discriminators": ["normal_s2_splitting", "crescendo_decrescendo_murmur", "thrill"] },
+      { "diseaseId": "pulmonary_hypertension", "discriminators": ["loud_p2", "no_fixed_splitting", "right_ventricular_hypertrophy"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "high", "yield": 0.6, "indication": "right axis, RVH, incomplete RBBB, prolonged PR" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "defect visualization, RV size, shunt ratio, pulmonary pressure" },
+        { "name": "Transesophageal echo", "priority": "medium", "yield": 0.95, "indication": "sinus venosus, device sizing" },
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.5, "indication": "cardiomegaly, increased vascular markings" },
+        { "name": "Cardiac MRI", "priority": "medium", "yield": 0.9, "indication": "RV volume, shunt quantification" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Congenital Heart Disease",
+      "pathways": [
+        {
+          "severity": "small ASD",
+          "criteria": "diameter <10 mm, no RV dilation, no symptoms",
+          "treatment": "Observe. Echo Q2-3y. Endocarditis prophylaxis not needed. Spontaneous closure possible in <8 mm."
+        },
+        {
+          "severity": "moderate-large ASD",
+          "criteria": "diameter >10 mm, RV dilation, Qp:Qs >1.5:1",
+          "treatment": "Closure indicated. Transcatheter device (secundum) or surgical (primum, sinus venosus). Usually performed at age 2-5 years or at diagnosis."
+        },
+        {
+          "severity": "ASD with PAH",
+          "criteria": "pulmonary vascular resistance >5 WU, Eisenmenger physiology",
+          "treatment": "Closure contraindicated if Eisenmenger. Pulmonary vasodilator therapy (ambrisentan, sildenafil). Heart-lung transplant evaluation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "left_to_right_atrial_shunt",
+      "right_ventricular_volume_overload",
+      "increased_pulmonary_blood_flow",
+      "pulmonary_arterial_hypertension",
+      "right_heart_dilation",
+      "atrial_arrhythmias"
+    ],
+    "complications": [
+      { "diseaseId": "pulmonary_hypertension", "probability": 0.1, "severityBoost": 0.4, "clues": ["loud_p2", "rvh"] },
+      { "diseaseId": "atrial_arrhythmia", "probability": 0.15, "severityBoost": 0.2, "clues": ["palpitations", "af_flutter"] },
+      { "diseaseId": "eisenmenger_syndrome", "probability": 0.02, "severityBoost": 0.6, "clues": ["cyanosis", "reversal_shunt"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["wide_fixed_splitting_s2", "ejection_systolic_murmur_pulmonic", "rv_dilation_echo"],
+    "exclusionClues": ["normal_rv_size", "split_s2_normal_respiratory_variation"]
+  }
+}

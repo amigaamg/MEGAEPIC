@@ -1,0 +1,108 @@
+{
+  "disease": {
+    "id": "central_venous_catheter_placement",
+    "name": "Central Venous Catheter (CVC) Placement - ICU Procedure",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "CVC insertion for hemodynamic monitoring, drug administration, parenteral nutrition, and dialysis. Sites: IJV, SCV, femoral. Ultrasound-guided preferred. Bundled infection prevention.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["icu_procedure", "vascular_access", "central_line"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "carotid_artery_puncture_with_hematoma", "weight": 10 },
+        { "sign": "pneumothorax_tension", "weight": 10 },
+        { "sign": "air_embolism", "weight": 10 },
+        { "sign": "hemothorax", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Complication present -> SEVERE; uncomplicated -> PROCEDURE COMPLETE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "need_for_central_access_vasopressors_tpn_dialysis_monitoring", "weight": 5 },
+      { "symptomId": "difficult_peripheral_iv_access", "weight": 3 },
+      { "symptomId": "coagulopathy_or_anticoagulation", "weight": 4 },
+      { "symptomId": "previous_central_line_scarring", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "anatomical_landmarks_assessed", "baseWeight": 3 },
+      { "signId": "skin_infection_at_insertion_site", "baseWeight": 4 },
+      { "signId": "distorted_anatomy_trauma_surgery", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "coagulopathy_inr_greater_1.5_platelets_less_50", "multiplier": 2.5 },
+      { "id": "obesity_difficult_landmarks", "multiplier": 2.0 },
+      { "id": "emergency_insertion", "multiplier": 2.0 },
+      { "id": "multiple_previous_lines", "multiplier": 1.5 },
+      { "id": "inexperienced_operator", "multiplier": 2.0 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Ultrasound (pre-procedure scan)", "priority": "immediate", "yield": 0.9, "indication": "identify vein, patency, depth" }
+      ],
+      "laboratory": [
+        { "name": "Coagulation (PT, aPTT, INR, platelets)", "priority": "high", "yield": 0.7, "indication": "bleeding risk assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CDC / Epic III Central Line Insertion Bundle",
+      "pathways": [
+        {
+          "severity": "pre-insertion",
+          "criteria": "indication confirmed, consent, ultrasound available",
+          "treatment": "Maximal sterile barrier precautions (cap, mask, sterile gown, full body drape). Chlorhexidine skin prep. Ultrasound guidance. Landmark technique only if US unavailable. Preferred site: IJV (lowest infection risk)."
+        },
+        {
+          "severity": "post-insertion",
+          "criteria": "line placed, tip confirmed",
+          "treatment": "Confirm tip position on CXR (above carina for upper body). Dress with sterile transparent dressing. Document date/time/operator. Daily assessment of necessity. Remove when no longer needed (to prevent CLABSI)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "needle_puncture_of_vein",
+      "guidewire_advancement",
+      "catheter_dilation_and_placement",
+      "risk_of_arterial_puncture_pneumothorax_hemothorax",
+      "infection_risk_with_prolonged_dwell"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.02,
+        "severityBoost": 0.4,
+        "clues": ["dyspnea_post_procedure", "decreased_breath_sounds", "cxr_shows_pneumothorax"]
+      },
+      {
+        "diseaseId": "catheter_related_bloodstream_infection",
+        "probability": 0.01,
+        "severityBoost": 0.4,
+        "clues": ["fever", "redness_at_site", "positive_line_culture"]
+      },
+      {
+        "diseaseId": "carotid_artery_puncture",
+        "probability": 0.01,
+        "severityBoost": 0.5,
+        "clues": ["bright_red_pulsatile_blood", "hematoma_expanding"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["vascular_access_needed", "planned_procedure", "ultrasound_guided"],
+    "exclusionClues": ["peripheral_access_sufficient", "contraindication_present"]
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "basal_cell_carcinoma",
+    "name": "Basal Cell Carcinoma (BCC)",
+    "system": "dermatology",
+    "agePeak_months": [480, 960],
+    "note": "Most common skin cancer. Slow-growing, locally invasive, rarely metastasizes. Arises from basal layer of epidermis. Strongly UV-associated. Multiple subtypes.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["skin_malignancy", "non_melanoma_skin_cancer", "uv_related"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "locally_advanced_destructive", "weight": 8 },
+        { "sign": "perineural_invasion", "weight": 8 },
+        { "sign": "neglected_giant_bcc", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Advanced/destructive/morpheaform -> MODERATE-SEVERE; nodular/superficial -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "pearly_waxy_lump_on_sun_exposed_skin", "weight": 5 },
+      { "symptomId": "non_healing_sore_that_bleeds_easily", "weight": 4 },
+      { "symptomId": "telangiectasia_on_surface", "weight": 4 },
+      { "symptomId": "slow_growth_over_months_years", "weight": 4 },
+      { "symptomId": "chronic_sun_exposure_history", "weight": 5 },
+      { "symptomId": "history_of_previous_bcc_or_skin_cancer", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pearly_papule_with_telangiectasia", "baseWeight": 5 },
+      { "signId": "rolled_translucent_border", "baseWeight": 4 },
+      { "signId": "central_ulceration_crust", "baseWeight": 3 },
+      { "signId": "scaly_erythematous_plaque_superficial", "baseWeight": 3 },
+      { "signId": "waxy_scar_like_plaque_morpheaform", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "cumulative_sun_exposure", "multiplier": 3.0 },
+      { "id": "fair_skin_type_i_ii", "multiplier": 2.5 },
+      { "id": "age_over_50", "multiplier": 2.5 },
+      { "id": "previous_bcc_or_nmsc", "multiplier": 3.0 },
+      { "id": "immunosuppression_transplant", "multiplier": 2.5 },
+      { "id": "arsenic_exposure_or_radiation", "multiplier": 2.0 },
+      { "id": "gorlin_syndrome_basal_cell_nevus", "multiplier": 5.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "nodular_bcc",
+        "name": "Nodular BCC (most common)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "pearly_papule_telangiectasia", "weight": 5 },
+          { "feature": "rolled_border", "weight": 4 },
+          { "feature": "face_scalp_neck", "weight": 4 }
+        ],
+        "management": "Surgical excision with 4-5 mm margin (gold standard). Mohs micrographic surgery for high-risk facial/lesions. Electrodesiccation and curettage for small low-risk lesions."
+      },
+      {
+        "id": "superficial_bcc",
+        "name": "Superficial BCC",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "erythematous_scaly_plaque", "weight": 4 },
+          { "feature": "trunk_shoulders_low_risk_sites", "weight": 3 },
+          { "feature": "slow_growth", "weight": 3 }
+        ],
+        "management": "Topical 5-fluorouracil 5% cream BD x 4-6 weeks. Imiquimod 5% cream 5x/week x 6 weeks. Cryotherapy. Curettage. Excision for uncertain margins."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "intradermal_nevus",
+        "discriminators": ["no_telangiectasia", "no_pearly_border", "stable"]
+      },
+      {
+        "diseaseId": "seborrheic_keratosis",
+        "discriminators": ["stuck_on", "waxy", "no_telangiectasia"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Dermatoscopy (arborizing vessels, blue-gray ovoid nests)", "priority": "high", "yield": 0.9, "indication": "enhanced diagnosis" }
+      ],
+      "imaging": [
+        { "name": "Shave/punch/excisional biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "histopathological confirmation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / BAD Guidelines for Basal Cell Carcinoma",
+      "pathways": [
+        {
+          "severity": "low-risk BCC",
+          "criteria": "nodular/superficial, <2cm, low-risk site (trunk), clear borders",
+          "treatment": "Standard excision 4-5mm margin. Destructive methods: curettage, cryosurgery, topical 5-FU/imiquimod. Mohs for difficult sites."
+        },
+        {
+          "severity": "high-risk BCC",
+          "criteria": "morpheaform, >2cm, central face, perineural, recurrent, immunocompromised",
+          "treatment": "Mohs micrographic surgery. Radiation therapy if non-surgical candidate. Vismodegib or sonidegib for locally advanced/metastatic. Regular surveillance."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uv_induced_dna_damage",
+      "ptch1_sonic_hedgehog_pathway_mutation",
+      "basal_cell_proliferation",
+      "local_invasion",
+      "rarely_metastasizes"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "local_recurrence",
+        "probability": 0.05,
+        "severityBoost": 0.2,
+        "clues": ["positive_margins", "morpheaform_subtype"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["pearly_papule_with_telangiectasia", "sun_exposed_area", "slow_growing", "non_healing"],
+    "exclusionClues": ["rapid_growth", "pigmented_unstable", "healed_spontaneously"]
+  }
+}

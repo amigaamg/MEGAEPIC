@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "allergic_rhinitis",
+    "name": "Allergic Rhinitis",
+    "system": "ent",
+    "agePeak_months": [60, 480],
+    "note": "IgE-mediated inflammation of nasal mucosa triggered by airborne allergens. Classified as seasonal or perennial.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["nasal_congestion", "sneezing", "rhinorrhea", "allergy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anaphylaxis", "weight": 10 },
+        { "sign": "stridor", "weight": 9 },
+        { "sign": "respiratory_distress", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_nasal_obstruction", "weight": 6 },
+          { "sign": "significant_quality_of_life_impairment", "weight": 5 },
+          { "sign": "poor_asthma_control", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If anaphylaxis/stridor -> SEVERE; else -> mild/moderate based on symptom impact"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sneezing_paroxysms", "weight": 4 },
+      { "symptomId": "nasal_congestion", "weight": 4 },
+      { "symptomId": "clear_rhinorrhea", "weight": 4 },
+      { "symptomId": "nasal_itching", "weight": 3 },
+      { "symptomId": "itchy_watery_eyes", "weight": 3, "note": "Suggests coexisting allergic conjunctivitis" },
+      { "symptomId": "seasonal_variation", "weight": 3 },
+      { "symptomId": "symptoms_triggers", "weight": 3, "note": "Pollen, dust, pet dander, mold" },
+      { "symptomId": "postnasal_drip", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pale_bluish_nasal_mucosa", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "turbinate_hypertrophy", "baseWeight": 3 },
+      { "signId": "clear_nasal_discharge", "baseWeight": 3 },
+      { "signId": "allergic_shiners", "baseWeight": 2 },
+      { "signId": "allergic_salute_crease", "baseWeight": 2 },
+      { "signId": "cobblestone_pharynx", "baseWeight": 2 },
+      { "signId": "conjunctival_injection", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_atopy", "multiplier": 3.0 },
+      { "id": "personal_history_asthma", "multiplier": 2.5 },
+      { "id": "eczema_dermatitis", "multiplier": 2.0 },
+      { "id": "high_pollen_exposure", "multiplier": 1.5 },
+      { "id": "urban_environment", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "seasonal_allergic_rhinitis",
+        "name": "Seasonal Allergic Rhinitis (Hay Fever)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "symptoms_specific_months", "weight": 5 },
+          { "feature": "pollen_allergens", "weight": 4 },
+          { "feature": "associated_conjunctivitis", "weight": 3 }
+        ],
+        "management": "Antihistamines (oral or intranasal). Intranasal corticosteroids. Allergen avoidance. Immunotherapy if severe."
+      },
+      {
+        "id": "perennial_allergic_rhinitis",
+        "name": "Perennial Allergic Rhinitis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "symptoms_year_round", "weight": 5 },
+          { "feature": "dust_mite_pet_triggers", "weight": 4 },
+          { "feature": "nasal_congestion_predominant", "weight": 4 }
+        ],
+        "management": "Intranasal corticosteroids first-line. Antihistamines add-on. Leukotriene receptor antagonists if asthma. Allergen avoidance measures. Immunotherapy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "non_allergic_rhinitis",
+        "discriminators": ["no_allergic_triggers", "normal_IgE", "negative_skin_test", "older_age_of_onset"]
+      },
+      {
+        "diseaseId": "chronic_rhinosinusitis",
+        "discriminators": ["facial_pain_pressure", "purulent_discharge", "nasal_polyps", "hyposmia"]
+      },
+      {
+        "diseaseId": "nasal_polyps",
+        "discriminators": ["bilateral_masses", "anosmia", "poor_response_to_antihistamines"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Anterior Rhinoscopy", "priority": "immediate", "yield": 0.7, "indication": "assess nasal mucosa and turbinates" },
+        { "name": "Nasal Endoscopy", "priority": "medium", "yield": 0.8, "indication": "detailed assessment, exclude polyps or structural issues" }
+      ],
+      "laboratory": [
+        { "name": "Serum Total IgE", "priority": "medium", "yield": 0.6, "indication": "supportive evidence" },
+        { "name": "Allergen Specific IgE (RAST)", "priority": "medium", "yield": 0.85, "indication": "identify specific triggers" }
+      ],
+      "imaging": [],
+      "specialTests": [
+        { "name": "Skin Prick Test", "priority": "high", "yield": 0.9, "indication": "gold standard - identify specific allergens" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ARIA (Allergic Rhinitis and its Impact on Asthma) Guidelines",
+      "pathways": [
+        {
+          "severity": "mild intermittent",
+          "criteria": "symptoms <4 days/week or <4 weeks, no sleep disturbance, no impairment",
+          "treatment": "Oral or intranasal antihistamine PRN. Avoid trigger exposure. Saline nasal irrigation."
+        },
+        {
+          "severity": "moderate-severe intermittent or mild persistent",
+          "criteria": "symptoms affecting sleep/daily activities, <4 weeks intermittent or mild persistent",
+          "treatment": "Intranasal corticosteroid daily (e.g., Fluticasone, Mometasone). Add oral antihistamine if needed. Leukotriene receptor antagonist if asthma."
+        },
+        {
+          "severity": "moderate-severe persistent",
+          "criteria": "symptoms >4 days/week and >4 weeks, significant QoL impairment",
+          "treatment": "Intranasal corticosteroid + intranasal antihistamine combination. Consider sublingual or subcutaneous immunotherapy. Omalizumab if severe refractory and high IgE."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "allergen_exposure",
+      "ige_sensitization",
+      "mast_cell_degranulation",
+      "histamine_release",
+      "eosinophilic_inflammation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_sinusitis",
+        "probability": 0.15,
+        "lagDays": [30, 365],
+        "severityBoost": 0.1,
+        "clues": ["facial_pain", "purulent_discharge", "fever"]
+      },
+      {
+        "diseaseId": "asthma_exacerbation",
+        "probability": 0.2,
+        "lagDays": [1, 30],
+        "severityBoost": 0.3,
+        "clues": ["wheezing", "SOB", "cough", "chest_tightness"]
+      },
+      {
+        "diseaseId": "nasal_polyps",
+        "probability": 0.05,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.15,
+        "clues": ["progressive_congestion", "anosmia", "bilateral_masses"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["sneezing", "clear_rhinorrhea", "nasal_itching", "allergic_mucosa", "trigger_exposure"],
+    "exclusionClues": ["purulent_discharge", "fever", "facial_pain", "unilateral_symptoms"]
+  }
+}

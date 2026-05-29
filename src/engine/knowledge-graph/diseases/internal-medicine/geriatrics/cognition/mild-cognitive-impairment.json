@@ -1,0 +1,118 @@
+{
+  "disease": {
+    "id": "mild_cognitive_impairment",
+    "name": "Mild Cognitive Impairment",
+    "system": "geriatrics",
+    "agePeak_months": [660, 960],
+    "note": "Intermediate state between normal cognitive aging and dementia. Cognitive decline greater than expected for age but without significant functional impairment.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["cognitive_decline", "memory_complaints", "pre_dementia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapid_cognitive_decline", "weight": 8 },
+        { "sign": "functional_impairment", "weight": 7 },
+        { "sign": "psychotic_symptoms", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "subjective_complaints_only": true,
+        "independent_adl": true,
+        "stable_course": true
+      },
+      "severityLabel": "Rapid progression or functional decline -> URGENT; stable, isolated memory complaint -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "subjective_memory_loss", "weight": 5 },
+      { "symptomId": "forgetting_appointments_or_names", "weight": 4 },
+      { "symptomId": "difficulty_finding_words", "weight": 3 },
+      { "symptomId": "concern_from_family", "weight": 3 },
+      { "symptomId": "preserved_daily_function", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "memory_impairment_below_age_norm", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "normal_general_cognitive_function", "baseWeight": 3 },
+      { "signId": "intact_adl", "baseWeight": 3 },
+      { "signId": "impaired_delayed_recall", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "apoe_epsilon4_carrier", "multiplier": 2.5 },
+      { "id": "cardiovascular_risk_factors", "multiplier": 1.5 },
+      { "id": "low_cognitive_reserve", "multiplier": 1.4 },
+      { "id": "depression", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "dementia",
+        "discriminators": ["functional_impairment", "moca_score_below_20", "progressive_global_decline"]
+      },
+      {
+        "diseaseId": "depression_pseudodementia",
+        "discriminators": ["affective_symptoms", "effort_dependent_performance", "prior_psychiatric_history"]
+      },
+      {
+        "diseaseId": "normal_age_related_cognitive_decline",
+        "discriminators": ["within_normative_limits", "no_corroborating_history", "normal_objective_testing"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "MoCA (Montreal Cognitive Assessment)", "priority": "immediate", "yield": 0.9, "indication": "detect MCI" },
+        { "name": "Informant history (IQCODE)", "priority": "high", "yield": 0.7, "indication": "corroboration of decline" }
+      ],
+      "laboratory": [
+        { "name": "Vitamin B12, folate, TSH", "priority": "high", "yield": 0.3, "indication": "reversible cognitive impairment" },
+        { "name": "Lipid profile, HbA1c", "priority": "medium", "yield": 0.3, "indication": "vascular risk assessment" }
+      ],
+      "imaging": [
+        { "name": "MRI brain", "priority": "medium", "yield": 0.6, "indication": "medial temporal atrophy, vascular disease" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG97 – Dementia (MCI section)",
+      "pathways": [
+        {
+          "severity": "new_diagnosis",
+          "criteria": "cognitive complaint with objective impairment, preserved ADL",
+          "treatment": "No pharmacological treatment currently approved. Cardiovascular risk factor optimization. Cognitive stimulation. Exercise. Regular monitoring every 6-12 months for progression to dementia."
+        },
+        {
+          "severity": "rapid_progression",
+          "criteria": "declining function or cognitive scores over months",
+          "treatment": "Reassess for reversible causes. Refer to memory clinic. Consider neuropsychological testing. Advance care planning."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "early_amyloid_deposition",
+      "tau_pathology_in_entorhinal_cortex",
+      "synaptic_dysfunction",
+      "vascular_contributions",
+      "compensatory_mechanisms_still_active"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "dementia",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["progressive_decline", "functional_impairment_developing", "moca_score_dropping"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low unless rapid progression",
+    "diagnosticClues": ["subjective_memory_complaint", "objective_impairment_on_testing", "preserved_daily_function"],
+    "exclusionClues": ["normal_cognitive_testing", "functional_impairment_present", "acute_onset"]
+  }
+}

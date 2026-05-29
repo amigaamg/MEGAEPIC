@@ -1,0 +1,104 @@
+{
+  "disease": {
+    "id": "tension_headache",
+    "name": "Tension-Type Headache",
+    "system": "NEURO",
+    "agePeak_months": [240, 600],
+    "note": "Most common primary headache disorder. Bilateral, pressing/tightening quality, mild-moderate intensity. No nausea or photophobia/phonophobia (or just one).",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["headache_disorder", "primary_headache"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "worst_headache_of_life", "weight": 10 },
+        { "sign": "focal_neurological_deficit", "weight": 9 },
+        { "sign": "fever_meningismus", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If thunderclap/meningismus/focal signs -> EXCLUDE SECONDARY CAUSE; else -> BENIGN"
+    },
+    "historyFeatures": [
+      { "symptomId": "bilateral_pressing_tightening_headache", "weight": 5 },
+      { "symptomId": "mild_to_moderate_intensity", "weight": 4 },
+      { "symptomId": "not_aggravated_by_activity", "weight": 3 },
+      { "symptomId": "no_nausea_or_vomiting", "weight": 3 },
+      { "symptomId": "no_photophobia_and_phonophobia", "weight": 2 },
+      { "symptomId": "stress_triggers", "weight": 3 },
+      { "symptomId": "scalp_tenderness", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "pericranial_muscle_tenderness", "baseWeight": 3 },
+      { "signId": "normal_neurological_exam", "baseWeight": 3 },
+      { "signId": "no_focal_signs", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "stress_anxiety", "multiplier": 2.0 },
+      { "id": "poor_sleep", "multiplier": 1.5 },
+      { "id": "temporomandibular_joint_dysfunction", "multiplier": 1.5 },
+      { "id": "cervical_spine_disease", "multiplier": 1.3 },
+      { "id": "poor_posture", "multiplier": 1.3 }
+    ],
+    "subtypes": [
+      {
+        "id": "episodic_tth",
+        "name": "Episodic Tension-Type Headache",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "fewer_than_15_days_per_month", "weight": 5 },
+          { "feature": "minutes_to_days_duration", "weight": 4 }
+        ],
+        "management": "Simple analgesics (paracetamol, NSAIDs). Avoid medication overuse. Stress management. Heat/cold therapy. Massage."
+      },
+      {
+        "id": "chronic_tth",
+        "name": "Chronic Tension-Type Headache",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "15_or_more_days_per_month", "weight": 5 },
+          { "feature": "months_to_years_duration", "weight": 4 }
+        ],
+        "management": "Amitriptyline 10-75 mg nocte. Avoid medication overuse. CBT. Physiotherapy. Trigger point injections. Biofeedback."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "migraine", "discriminators": ["unilateral", "throbbing", "nausea", "photophobia_phonophobia", "aggravated_by_activity"] },
+      { "diseaseId": "medication_overuse_headache", "discriminators": ["frequent_analgesic_use", "daily_headache", "withdrawal_relief"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Headache diary", "priority": "high", "yield": 0.8, "indication": "diagnostic confirmation, trigger identification" }
+      ],
+      "imaging": [
+        { "name": "CT/MRI Head", "priority": "only_if_red_flag", "yield": 0.05, "indication": "red flags: thunderclap onset, focal signs, age >50, progressive, systemic symptoms" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IHS International Classification of Headache Disorders (ICHD-3)",
+      "pathways": [
+        {
+          "severity": "episodic",
+          "criteria": "<15 days/month, mild-moderate pain",
+          "treatment": "Simple analgesia: paracetamol 1 g or ibuprofen 400 mg PRN. Limit to <10 days/month to avoid MOH. Stress reduction. Sleep hygiene."
+        },
+        {
+          "severity": "chronic",
+          "criteria": "≥15 days/month, moderate intensity",
+          "treatment": "Amitriptyline 10-75 mg OD (start 10 mg, titrate up). CBT. Physiotherapy. Biofeedback. TCA alternatives: nortriptyline. Withdraw overused analgesics."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "pericranial_muscle_tension",
+      "myofascial_trigger_points",
+      "central_sensitization",
+      "impaired_descending_pain_inhibition",
+      "stress_response"
+    ],
+    "complications": [
+      { "diseaseId": "medication_overuse_headache", "probability": 0.1, "severityBoost": 0.2, "clues": ["frequent_analgesic_use", "worsening_frequency"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["bilateral_pressing_headache", "mild_moderate", "no_nausea", "no_activity_aggravation"],
+    "exclusionClues": ["unilateral_throbbing", "nausea_vomiting", "severe_intensity"]
+  }
+}

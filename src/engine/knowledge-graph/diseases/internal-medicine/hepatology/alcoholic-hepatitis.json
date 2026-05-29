@@ -1,0 +1,214 @@
+{
+  "disease": {
+    "id": "alcoholic_hepatitis",
+    "name": "Alcoholic Hepatitis",
+    "system": "hepatology",
+    "agePeak_months": [480, 720],
+    "note": "Acute inflammatory liver syndrome occurring in patients with heavy alcohol use. Severity assessed by Maddrey's Discriminant Function (mDF) and Lille score. High short-term mortality in severe disease (30-50% at 28 days).",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["liver", "alcohol_related", "acute_hepatitis", "liver_failure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "maddrey_df_greater_than_32", "weight": 10 },
+        { "sign": "hepatic_encephalopathy", "weight": 10 },
+        { "sign": "hepatorenal_syndrome", "weight": 9 },
+        { "sign": "spontaneous_bacterial_peritonitis", "weight": 8 },
+        { "sign": "variceal_hemorrhage", "weight": 9 },
+        { "sign": "prolonged_inr_greater_than_2", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "maddrey_df_greater_than_32": true,
+        "meld_score_greater_than_20": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "maddrey_df_less_than_32": true,
+        "no_encephalopathy": true,
+        "meld_less_than_20": true
+      },
+      "severityLabel": "Severe AH (DF >=32) -> URGENT steroid/Lille evaluation; Mild-moderate (DF <32) -> SUPPORTIVE care; Very severe (DF >60, MELD >30) -> ICU"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "heavy_alcohol_use_recent", "weight": 5, "note": "Typically >40g/day women, >60g/day men for >10 years; recent binge common" },
+      { "symptomId": "jaundice_rapid_onset", "weight": 5 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "anorexia_weight_loss", "weight": 3 },
+      { "symptomId": "fatigue_profound", "weight": 4 },
+      { "symptomId": "abdominal_distension_ascites", "weight": 4 },
+      { "symptomId": "confusion_somnolence", "weight": 4, "note": "Hepatic encephalopathy" },
+      { "symptomId": "hematemesis_melena", "weight": 3, "note": "Variceal bleed or portal hypertensive gastropathy" },
+      { "symptomId": "prior_alcohol_rehabilitation_attempts", "weight": 2 },
+      { "symptomId": "previous_episodes_of_ah", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_deep", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly_tender", "baseWeight": 4 },
+      { "signId": "ascites", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "asterixis", "baseWeight": 4, "note": "Encephalopathy" },
+      { "signId": "spider_angiomas", "baseWeight": 2 },
+      { "signId": "palmar_erythema", "baseWeight": 2 },
+      { "signId": "parotid_gland_enlargement", "baseWeight": 1 },
+      { "signId": "dupytrens_contracture", "baseWeight": 1 },
+      { "signId": "muscle_wasting", "baseWeight": 2 },
+      { "signId": "peripheral_edema", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "heavy_alcohol_consumption_40g_day_women_60g_day_men", "multiplier": 10.0 },
+      { "id": "female_gender", "multiplier": 2.0 },
+      { "id": "genetic_polymorphisms_pnpla3_tm6sf2", "multiplier": 2.0 },
+      { "id": "obesity_metabolic_syndrome", "multiplier": 1.5 },
+      { "id": "chronic_hcv_infection", "multiplier": 2.0 },
+      { "id": "hiv_infection", "multiplier": 1.5 },
+      { "id": "iron_overload", "multiplier": 1.5 },
+      { "id": "cigarette_smoking", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_hepatitis_b",
+        "discriminators": ["hbsag_positive", "igm_anti_hbc_positive", "sex_transmission_or_needle_risk", "ast_alt_often_elevated_alt_ast"]
+      },
+      {
+        "diseaseId": "acute_hepatitis_c",
+        "discriminators": ["anti_hcv_positive", "hcv_rna_positive", "injection_drug_use_risk", "mild_acute_presentation"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["temporal_relation_to_medication", "acetoaminophen_level_if_suspected", "no_long_term_alcohol_history", "eosinophilia"]
+      },
+      {
+        "diseaseId": "autoimmune_hepatitis",
+        "discriminators": ["a_na_anti_smooth_muscle_positive", "igg_elevated", "no_alcohol_history", "female_predominance"]
+      },
+      {
+        "diseaseId": "non_alcoholic_steatohepatitis_nash",
+        "discriminators": ["no_significant_alcohol_history", "metabolic_syndrome", "slower_onset", "steatosis_on_imaging"]
+      },
+      {
+        "diseaseId": "ischemic_hepatitis_shock_liver",
+        "discriminators": ["precipitating_hypotension_hemodynamic_compromise", "dramatic_ast_alt_elevation_100x", "rapidly_normalizes_after_hemodynamic_restoration"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine output monitoring", "priority": "high", "yield": 0.5, "indication": "monitor for hepatorenal syndrome" }
+      ],
+      "laboratory": [
+        { "name": "AST and ALT", "priority": "immediate", "yield": 0.9, "indication": "AST > ALT (ratio typically 2:1), neither >500 IU/L; hallmark pattern" },
+        { "name": "GGT", "priority": "high", "yield": 0.8, "indication": "markedly elevated, disproportionate to ALT; GGT/ALP ratio >1.5" },
+        { "name": "Total and direct bilirubin", "priority": "immediate", "yield": 0.85, "indication": "elevated, used in mDF and MELD scores" },
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.8, "indication": "prolonged in severe disease; used in mDF = 4.6 x (PT_patient - PT_control) + bilirubin" },
+        { "name": "Serum albumin", "priority": "high", "yield": 0.6, "indication": "low in severe disease" },
+        { "name": "FBC with platelets", "priority": "high", "yield": 0.6, "indication": "macrocytosis (MCV >100); thrombocytopenia if underlying cirrhosis" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.6, "indication": "AKI/hepatorenal syndrome; component of MELD" },
+        { "name": "Serum sodium", "priority": "high", "yield": 0.5, "indication": "prognostic; hyponatremia associated with poor outcomes" },
+        { "name": "Maddrey Discriminant Function (mDF)", "priority": "immediate", "yield": 0.95, "indication": "4.6 x (PT_patient - PT_control) + serum bilirubin mg/dL; >=32 defines severe AH" },
+        { "name": "MELD score", "priority": "high", "yield": 0.9, "indication": "prognostic; MELD >20 associated with high mortality" },
+        { "name": "Lille score", "priority": "high", "yield": 0.9, "indication": "calculated at day 7 of steroids; <0.45 = responder continue steroids; >0.45 = non-responder stop steroids" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.3, "indication": "rule out infection/SBP as precipitant" },
+        { "name": "Ascitic fluid analysis (if ascites present)", "priority": "high", "yield": 0.9, "indication": "SBP diagnosis; PMN count, culture, albumin for SAAG" },
+        { "name": "Viral hepatitis serology (HBsAg, HBcAb, anti-HCV)", "priority": "high", "yield": 0.3, "indication": "rule out viral cofactor" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound with Doppler", "priority": "high", "yield": 0.6, "indication": "liver morphology, ascites, hepatic vein patency (rule out Budd-Chiari)" },
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.2, "indication": "rule out pneumonia or aspiration" },
+        { "name": "CT abdomen (if clinical uncertainty)", "priority": "medium", "yield": 0.7, "indication": "assess for other causes; hepatomegaly with fatty infiltration; cirrhosis if chronic" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines: Alcoholic Liver Disease; EASL Clinical Practice Guidelines: Alcohol-Related Liver Disease",
+      "pathways": [
+        {
+          "severity": "mild_to_moderate_ah_df_less_than_32",
+          "criteria": "Maddrey's DF <32, no encephalopathy, stable INR/bilirubin, no organ failure",
+          "treatment": "Supportive care. Abstinence from alcohol (counseling, medical management of alcohol withdrawal). Nutritional support: 1.2-1.5g/kg protein, 25-35 kcal/kg/day. Thiamine 100mg IV daily x 5 days + folic acid 1mg PO daily. Multivitamin supplementation. Monitor LFTs, INR, bilirubin, creatinine. No corticosteroid therapy (no benefit if mDF <32)."
+        },
+        {
+          "severity": "severe_ah_df_32_or_higher",
+          "criteria": "Maddrey's DF >=32, no contraindications to steroids, no active infection",
+          "treatment": "Rule out infection (blood cultures, ascitic fluid, chest X-ray, urine). Methylprednisolone 32mg IV daily OR prednisolone 40mg PO daily x 28 days + taper. Calculate Lille score at day 7. If Lille <0.45 (responder): complete 28-day course. If Lille >0.45 (non-responder): STOP steroids (no benefit; increased infection risk). Alternative to steroids: pentoxifylline 400mg PO TID (weaker evidence; never first-line). Nutritional support (enteral preferred if unable to eat). Manage alcohol withdrawal with benzodiazepines (monitor for encephalopathy confusion). Monitor for infection during steroid therapy."
+        },
+        {
+          "severity": "very_severe_ah_df_60_or_meld_30",
+          "criteria": "Maddrey's DF >=60, MELD >30, or multiple organ failure",
+          "treatment": "ICU admission. Corticosteroids as above if no contraindication. Evaluate Lille score at day 7. Consider N-acetylcysteine (NAC) 150mg/kg IV load + 50mg/kg over 4h + 100mg/kg over 16h — may reduce 28-day mortality. Supportive intensive care: renal replacement therapy if needed; vasopressors for shock; mechanical ventilation for airway protection. Early transplant evaluation: selected patients with no contraindications (good psychosocial support, first episode, commitment to abstinence) may be candidates for early liver transplantation. Abstinence counseling mandatory."
+        },
+        {
+          "severity": "ah_non_responder_to_steroids_lille_0_45",
+          "criteria": "Lille score >0.45 at day 7 on steroids",
+          "treatment": "STOP corticosteroids immediately. No benefit from continuing; risk of infection increases. No alternative pharmacotherapy proven effective (pentoxifylline not recommended as salvage). Supportive care + nutritional support + abstinence. Early transplant evaluation if candidate. Manage complications (ascites, encephalopathy, renal failure, infection). Consider palliative approach if not transplant candidate and progressive multiorgan failure."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_heavy_alcohol_consumption",
+      "hepatic_alcohol_metabolism_via_alcohol_dehydrogenase_and_cyp2e1",
+      "acetaldehyde_production_direct_hepatotoxin",
+      "cyp2e1_induction_and_reactive_oxygen_species_generation",
+      "glutathione_depletion_and_oxidative_stress",
+      "lipid_peroxidation_and_membrane_damage",
+      "endotoxin_mediated_kupffer_cell_activation_lps_tlr4",
+      "tnf_alpha_il_1_il_8_mediated_inflammatory_cascade",
+      "neutrophil_infiltration_into_hepatic_parenchyma",
+      "hepatocyte_ballooning_mallory_denk_bodies",
+      "megamitochondria_steatosis",
+      "acute_on_chronic_inflammation_on_background_of_alcohol_related_fibrosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hepatorenal_syndrome_aki",
+        "probability": 0.25,
+        "severityBoost": 0.7,
+        "clues": ["rising_creatinine", "oliguria", "low_urine_sodium_less_than_10", "no_response_to_albumin_volume_expansion"]
+      },
+      {
+        "diseaseId": "spontaneous_bacterial_peritonitis",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["ascites", "fever_abdominal_pain", "pmn_greater_than_250"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["rising_creatinine", "oliguria", "volume_depletion", "nephrotoxin_exposure"]
+      },
+      {
+        "diseaseId": "variceal_bleeding",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["hematemesis_melena", "portal_hypertension", "known_varices"]
+      },
+      {
+        "diseaseId": "alcohol_withdrawal_syndrome",
+        "probability": 0.5,
+        "severityBoost": 0.3,
+        "clues": ["tremor", "tachycardia", "hypertension", "agitation", "seizures_in_severe"]
+      },
+      {
+        "diseaseId": "progressive_fibrosis_to_cirrhosis",
+        "probability": 0.3,
+        "lagYears": [1, 5],
+        "severityBoost": 0.5,
+        "clues": ["continued_alcohol_use", "persistent_lft_elevation", "fibrosis_on_elastography"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if DF >=32; medium if DF <32",
+    "diagnosticClues": ["heavy_alcohol_use", "jaundice", "ast_alt_ratio_greater_than_2", "elevated_ggt", "maddrey_df_32_or_higher"],
+    "exclusionClues": ["no_alcohol_use", "viral_serology_positive", "ast_or_alt_over_500", "normal_bilirubin_inr"]
+  }
+}

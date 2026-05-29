@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "drug_rash",
+    "name": "Drug Rash (Morbilliform Drug Eruption)",
+    "system": "dermatology",
+    "agePeak_months": [0, 960],
+    "note": "Most common cutaneous adverse drug reaction. Generalized maculopapular rash. Typically self-limiting after drug withdrawal. Can be confused with viral exanthem.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["drug_reaction", "maculopapular_rash", "cutaneous_adverse_reaction"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "dress_syndrome_suspected", "weight": 9 },
+        { "sign": "blistering_or_skin_detachment", "weight": 10 },
+        { "sign": "systemic_symptoms_fever_lymphadenopathy_organ", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Simple exanthem -> MILD; DRESS -> SEVERE; SJS/TEN -> CRITICAL"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "new_drug_started_in_last_7_to_14_days", "weight": 5 },
+      { "symptomId": "generalized_red_itchy_rash", "weight": 4 },
+      { "symptomId": "rash_starts_on_trunk_and_spreads_to_limbs", "weight": 4 },
+      { "symptomId": "fever_malaise", "weight": 2 },
+      { "symptomId": "known_drug_allergy_history", "weight": 3 },
+      { "symptomId": "concurrent_viral_illness_or_ebv_amonxacillin", "weight": 3, "note": "Amoxicillin rash with EBV" }
+    ],
+
+    "examFeatures": [
+      { "signId": "generalized_blanchable_macules_papules", "baseWeight": 5 },
+      { "signId": "trunk_proximal_initial_distal_spread", "baseWeight": 3 },
+      { "signId": "confluent_in_flexures", "baseWeight": 2 },
+      { "signId": "pruritus", "baseWeight": 3 },
+      { "signId": "no_mucosal_involvement", "baseWeight": 2 },
+      { "signId": "petechiae_or_purpura_if_systemic", "baseWeight": 3 },
+      { "signId": "lymphadenopathy_or_organomegaly", "baseWeight": 3, "note": "DRESS" }
+    ],
+
+    "riskFactors": [
+      { "id": "antibiotics_beta_lactams_sulfonamides", "multiplier": 3.0 },
+      { "id": "anticonvulsants_especially_aromatic", "multiplier": 2.5 },
+      { "id": "allopurinol", "multiplier": 2.5 },
+      { "id": "concurrent_viral_infection_ebv_hiv", "multiplier": 2.0 },
+      { "id": "prior_history_of_drug_rash", "multiplier": 2.0 },
+      { "id": "slow_acetylation", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "simple_morbilliform_exanthem",
+        "name": "Simple Morbilliform Drug Eruption",
+        "prevalenceModifier": 0.9,
+        "keyFeatures": [
+          { "feature": "symmetric_confluent_maculopapular", "weight": 5 },
+          { "feature": "rash_after_7_14_days", "weight": 4 },
+          { "feature": "no_systemic_toxicity", "weight": 4 }
+        ],
+        "management": "Withdraw offending drug (if safe). Antihistamines for itch. Topical corticosteroids. Rash resolves over 7-14 days. Rechallenge contraindicated."
+      },
+      {
+        "id": "dress_syndrome_drug_reaction_with_eosinophilia",
+        "name": "DRESS (Drug Reaction with Eosinophilia and Systemic Symptoms)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "rash_plus_eosinophilia_plus_organ_involvement", "weight": 5 },
+          { "feature": "lymphadenopathy_fever_malaise", "weight": 5 },
+          { "feature": "latency_2_to_8_weeks", "weight": 4 },
+          { "feature": "hepatitis_renal_lung_cardiac", "weight": 5 }
+        ],
+        "management": "Remove culprit drug. Systemic corticosteroids (prednisolone 0.5-1mg/kg/day). Topical steroids. Antihistamines. Monitor LFTs. Hospitalization if significant organ involvement."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "viral_exanthem",
+        "discriminators": ["no_drug_history", "viral_symptoms_prodrome", "self_limiting_even_on_drug"]
+      },
+      {
+        "diseaseId": "urticaria",
+        "discriminators": ["wheals", "transient_less_24h", "angioedema"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC with eosinophil count", "priority": "high", "yield": 0.6, "indication": "eosinophilia suggests DRESS or simple drug rash" },
+        { "name": "LFT, U&E, Cr", "priority": "high", "yield": 0.5, "indication": "organ involvement, especially DRESS" },
+        { "name": "HIV serology", "priority": "medium", "yield": 0.1, "indication": "HIV associated with increased drug rash" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "British Association of Dermatologists / EAACI Guidelines",
+      "pathways": [
+        {
+          "severity": "simple morbilliform (mild)",
+          "criteria": "no fever, no eosinophilia, no organ involvement, no blistering",
+          "treatment": "Stop culprit drug (substitute essential drugs). Oral antihistamines. Topical corticosteroids. Reassure (usually resolves in 1-2 weeks). Document allergy."
+        },
+        {
+          "severity": "DRESS / severe drug reaction",
+          "criteria": "eosinophilia >1.5, fever, lymphadenopathy, organ involvement",
+          "treatment": "Hospitalization. Stop drug. Systemic corticosteroids (prednisolone 0.5-1mg/kg/day, slow taper). Supportive care. Monitor organ function. Antihistamines. Avoid rechallenge. Drug allergy alert."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "type_iv_hypersensitivity_reaction",
+      "drug_specific_t_cell_activation",
+      "cytokine_release",
+      "eosinophil_recruitment_in_dress",
+      "organ_involvement",
+      "cross_reactive_metabolites"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hepatitis_liver_failure_in_dress",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["elevated_transaminases", "jaundice", "eosinophilia"]
+      },
+      {
+        "diseaseId": "progression_to_sjs_ten",
+        "probability": 0.01,
+        "severityBoost": 0.6,
+        "clues": ["blistering", "mucosal_involvement", "positive_nikolsky"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["generalized_maculopapular_rash", "temporal_drug_relationship", "pruritus", "trunk_first"],
+    "exclusionClues": ["negative_temporal_association", "vesicles_bullae", "mucosal_involvement"]
+  }
+}

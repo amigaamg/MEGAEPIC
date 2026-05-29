@@ -1,0 +1,139 @@
+{
+  "disease": {
+    "id": "squamous_cell_carcinoma",
+    "name": "Cutaneous Squamous Cell Carcinoma (cSCC)",
+    "system": "dermatology",
+    "agePeak_months": [480, 960],
+    "note": "Second most common skin cancer. Arises from keratinocytes. Can metastasize. UV exposure, HPV, immunosuppression risk factors. Actinic keratosis precursor.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["skin_malignancy", "non_melanoma_skin_cancer", "keratinocyte_carcinoma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "nodal_metastasis", "weight": 10 },
+        { "sign": "perineural_invasion", "weight": 9 },
+        { "sign": "rapid_growth_verrucous", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Metastatic/high-risk site/recurrent -> SEVERE; low-risk -> MILD-MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "scaly_or_warty_growth", "weight": 4 },
+      { "symptomId": "rapidly_enlarging_nodule_or_ulcer", "weight": 4 },
+      { "symptomId": "pain_tenderness_bleeding", "weight": 3 },
+      { "symptomId": "non_healing_sore", "weight": 4 },
+      { "symptomId": "history_of_actinic_keratosis", "weight": 3 },
+      { "symptomId": "sun_exposed_site", "weight": 4 },
+      { "symptomId": "immunosuppression_transplant", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hyperkeratotic_papule_plaque", "baseWeight": 4 },
+      { "signId": "indurated_base_with_rolled_border", "baseWeight": 4 },
+      { "signId": "central_ulceration_crusting", "baseWeight": 3 },
+      { "signId": "cutaneous_horn", "baseWeight": 3 },
+      { "signId": "palpable_lymph_node", "baseWeight": 5 },
+      { "signId": "induration_on_palpation", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_sun_exposure", "multiplier": 3.0 },
+      { "id": "immunosuppression_solid_organ_transplant", "multiplier": 5.0 },
+      { "id": "fair_skin_type_i_ii", "multiplier": 2.5 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "hpv_infection_high_risk", "multiplier": 2.0 },
+      { "id": "chronic_scar_burn_or_ulcer_marjolin", "multiplier": 2.5 },
+      { "id": "arsenic_or_tar_exposure", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "low_risk_scc",
+        "name": "Low-Risk Cutaneous SCC",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "small_less_than_2cm", "weight": 3 },
+          { "feature": "trunk_extremities_low_risk_site", "weight": 3 },
+          { "feature": "well_differentiated", "weight": 3 }
+        ],
+        "management": "Standard excision with 4-6mm margin. Mohs for facial lesions. Curettage is NOT recommended for SCC. Cure rate >95%."
+      },
+      {
+        "id": "high_risk_scc",
+        "name": "High-Risk Cutaneous SCC",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "depth_over_2mm_breslow", "weight": 4 },
+          { "feature": "poorly_differentiated_perineural_lymphovascular", "weight": 5 },
+          { "feature": "site_lip_ear_scalp_recurrent", "weight": 4 },
+          { "feature": "immunosuppressed_patient", "weight": 4 }
+        ],
+        "management": "Mohs micrographic surgery. Sentinel lymph node biopsy if high-risk. Post-op radiation. Systemic therapy (PD-1 inhibitors) for metastatic. Regular surveillance."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "keratoacanthoma",
+        "discriminators": ["rapid_growth_in_weeks", "central_keratin_plug", "may_regress"]
+      },
+      {
+        "diseaseId": "basal_cell_carcinoma",
+        "discriminators": ["pearly_rolled_border", "telangiectasia", "slower"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Dermatoscopy (white circles, keratin, blood spots)", "priority": "high", "yield": 0.8, "indication": "differentiate from BCC" }
+      ],
+      "imaging": [
+        { "name": "Excisional or punch biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "histology: keratinocyte atypia/dysplasia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Squamous Cell Skin Cancer",
+      "pathways": [
+        {
+          "severity": "low-risk cSCC",
+          "criteria": "<2cm, low-risk site (trunk/extremities), well-differentiated, no perineural",
+          "treatment": "Standard excision 4-6mm margins. Mohs for facial/cosmetically sensitive. Regular follow-up."
+        },
+        {
+          "severity": "high-risk cSCC",
+          "criteria": ">2cm, ear/lip/scalp/genital, depth >2mm, poorly diff, perineural, immunosuppressed",
+          "treatment": "Mohs micrographic surgery. SLNB if high risk. Consider adjuvant radiation. Check regional nodes. Anti-PD-1 (cemiplimab) for metastatic. Surveillance q3-6 months."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uv_dna_damage_tp53_mutation",
+      "actinic_keratosis_to_scc_progression",
+      "keratinocyte_hyperplasia",
+      "dermal_invasion",
+      "lymphatic_metastasis_potential"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "lymph_node_metastasis",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["palpable_node", "high_risk_features", "recurrence"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["scaly_hyperkeratotic_indurated_lesion", "sun_exposed_site", "rapid_growth", "non_healing"],
+    "exclusionClues": ["spontaneous_resolution", "negative_biopsy"]
+  }
+}

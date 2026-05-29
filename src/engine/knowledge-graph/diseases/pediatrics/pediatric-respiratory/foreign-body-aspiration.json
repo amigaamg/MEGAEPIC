@@ -1,0 +1,280 @@
+﻿{
+  "disease": {
+    "id": "pediatric_foreign_body_aspiration",
+    "name": "Pediatric Foreign Body Aspiration",
+    "system": "pediatric_respiratory",
+    "syndromeType": "acute_mechanical_airway_obstruction",
+    "corePathophysiology": [
+      "airway_obstruction",
+      "air_trapping_one_way_valve_effect",
+      "distal_lung_hyperinflation",
+      "atelectasis_complete_obstruction",
+      "hypoventilation",
+      "ventilation_perfusion_mismatch",
+      "laryngospasm",
+      "mucus_hypersecretion"
+    ],
+    "ageLogic": {
+      "peak_months": [12, 48],
+      "highestRisk_months": [12, 36],
+      "description": "Peak incidence 1-3 years. Mobile toddlers explore environment orally. Common aspirated items: peanuts, seeds, popcorn, small toy parts, beads, coins."
+    },
+    "prevalenceWeight": 0.4,
+    "note": "Foreign body aspiration is a mechanical, event-driven airway emergency. Sudden onset, unilateral signs, and a history of choking are diagnostic. Never delay rigid bronchoscopy for imaging when clinical suspicion is high. It is the great asthma mimic.",
+    "syndromeTags": ["airway_obstruction", "mechanical", "pediatric_emergency", "aspiration"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "complete_airway_obstruction", "weight": 10, "description": "Unable to cough, speak, or breathe. Universal choking sign." },
+        { "sign": "cyanosis", "weight": 10 },
+        { "sign": "silent_chest", "weight": 10, "description": "No air entry despite respiratory effort" },
+        { "sign": "unconsciousness", "weight": 10 },
+        { "sign": "severe_stridor", "weight": 9 },
+        { "sign": "spo2_less_than_90", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true, "description": "Complete or near-complete obstruction requiring immediate life-saving maneuvers" },
+      "nonSevereCriteria": { "description": "Partial obstruction with air entry present, no cyanosis, SpO2 >= 90%." },
+      "obstructionLevels": {
+        "laryngeal": ["stridor", "aphonia", "complete_obstruction"],
+        "tracheal": ["biphasic_stridor", "cough", "variable_obstruction"],
+        "bronchial": ["unilateral_reduced_air_entry", "wheeze", "air_trapping"]
+      }
+    },
+    "historyFeatures": [
+      { "symptomId": "choking_episode", "weight": 7, "criticalEvent": true, "description": "Witnessed or reported sudden choking while eating or playing" },
+      { "symptomId": "sudden_onset_cough", "weight": 6, "description": "Abrupt onset of paroxysmal coughing" },
+      { "symptomId": "acute_dyspnea", "weight": 5 },
+      { "symptomId": "wheeze_unilateral", "weight": 6, "keyDiscriminator": true, "description": "Unilateral wheeze on a previously well child is highly suspicious" },
+      { "symptomId": "cyanosis_episode", "weight": 6, "description": "Transient cyanosis at time of aspiration" },
+      { "symptomId": "playing_with_small_objects", "weight": 5, "description": "Access to peanuts, seeds, popcorn, small toys" },
+      { "symptomId": "recurrent_pneumonia_same_lobe", "weight": 4, "description": "Chronic undiagnosed FBA can present as recurrent pneumonia in same lobe" },
+      { "symptomId": "persistent_cough_after_initial_event", "weight": 4 }
+    ],
+    "negativePredictors": [
+      { "feature": "gradual_onset_symptoms", "scoreReduction": 6, "favorsAlternative": ["asthma", "bronchiolitis", "pneumonia"] },
+      { "feature": "fever_predominant_illness", "scoreReduction": 5, "favorsAlternative": ["pneumonia", "bronchiolitis"] },
+      { "feature": "bilateral_wheeze", "scoreReduction": 4, "favorsAlternative": ["asthma", "bronchiolitis"] },
+      { "feature": "viral_prodrome", "scoreReduction": 5, "favorsAlternative": ["bronchiolitis"] },
+      { "feature": "bronchodilator_response", "scoreReduction": 3, "favorsAlternative": ["asthma"] }
+    ],
+    "examFeatures": [
+      { "signId": "asymmetrical_air_entry", "baseWeight": 7, "criticalSign": true, "description": "Reduced or absent breath sounds on affected side" },
+      { "signId": "unilateral_wheeze", "baseWeight": 6, "keyMarker": true, "description": "Focal monophonic wheeze on affected side" },
+      { "signId": "reduced_breath_sounds_unilateral", "baseWeight": 7 },
+      { "signId": "hyperinflation_unilateral", "baseWeight": 5, "description": "Hyperresonance on affected side due to air trapping" },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "stridor", "baseWeight": 4, "description": "If laryngeal or tracheal obstruction" },
+      { "signId": "tracheal_deviation", "baseWeight": 4, "description": "Mediastinal shift away from affected side with air trapping" },
+      { "signId": "accessory_muscle_use", "baseWeight": 3 },
+      { "signId": "cyanosis", "baseWeight": 6, "criticalSign": true }
+    ],
+    "riskFactors": [
+      { "id": "age_1_to_3_years", "multiplier": 3.0, "description": "Peak incidence in toddlers" },
+      { "id": "access_to_small_objects_or_nuts", "multiplier": 2.0 },
+      { "id": "inadequate_supervision", "multiplier": 1.5 },
+      { "id": "neurological_impairment_swallowing_dysfunction", "multiplier": 2.5, "note": "Cerebral palsy, neuromuscular disorders increase risk" },
+      { "id": "male_sex", "multiplier": 1.4, "note": "Males are affected more commonly" }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "asthma",
+        "discriminators": ["recurrent_wheeze", "bronchodilator_response", "no_choking_history", "bilateral_wheeze", "atopy_history"],
+        "negativeImpactOnFBA": 6
+      },
+      {
+        "diseaseId": "bronchiolitis",
+        "discriminators": ["viral_prodrome", "age_under_12_months", "bilateral_crackles_and_wheeze", "seasonal", "no_choking"],
+        "negativeImpactOnFBA": 5
+      },
+      {
+        "diseaseId": "pneumonia",
+        "discriminators": ["fever", "crackles", "gradual_onset", "systemic_symptoms"],
+        "negativeImpactOnFBA": 5
+      },
+      {
+        "diseaseId": "croup",
+        "discriminators": ["barking_cough", "inspiratory_stridor", "viral_prodrome", "no_unilateral_signs"],
+        "negativeImpactOnFBA": 3
+      },
+      {
+        "diseaseId": "pertussis",
+        "discriminators": ["paroxysmal_cough", "whoop", "post_tussive_vomiting", "no_choking_history"],
+        "negativeImpactOnFBA": 2
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 1.0, "indication": "all suspected FBA" },
+        { "name": "Clinical assessment of obstruction level", "priority": "immediate", "indication": "identify laryngeal/tracheal/bronchial level" }
+      ],
+      "imaging": [
+        {
+          "name": "Chest X-ray inspiratory and expiratory views",
+          "priority": "high if stable, do NOT delay bronchoscopy if high suspicion",
+          "yield": 0.7,
+          "findings": [
+            "air trapping hyperinflation on affected side most common finding",
+            "mediastinal shift away from affected side during expiration",
+            "atelectasis if complete obstruction",
+            "radiopaque foreign body only 10-20 percent of foreign bodies are radiopaque",
+            "unilateral hyperlucency"
+          ],
+          "indication": "all suspected but do not delay definitive management if high suspicion",
+          "note": "Normal CXR does NOT rule out FBA. Expiratory decubitus views increase sensitivity."
+        },
+        {
+          "name": "Decubitus chest X-ray or fluoroscopy",
+          "priority": "if equivocal inspiratory-expiratory views",
+          "indication": "uncooperative child who cannot perform expiration",
+          "findings": "Dependent lung deflates normally while obstructed side remains hyperinflated"
+        }
+      ],
+      "definitive": [
+        {
+          "name": "Rigid bronchoscopy",
+          "role": "diagnostic and therapeutic GOLD STANDARD",
+          "note": "Never delay for imaging if clinical suspicion is high"
+        }
+      ]
+    },
+    "management": {
+      "protocolReference": "Kenya Paediatric Guidelines + Pediatric Foreign Body Aspiration Emergency Protocol",
+      "airwayEmergencyNote": "If complete airway obstruction with cyanosis and unconsciousness, immediate life-saving maneuvers while activating emergency airway team.",
+      "completeObstructionProtocol": {
+        "infant_under_1_year": [
+          "5 back blows with infant positioned face-down on forearm",
+          "Alternate with 5 chest thrusts (similar to CPR but sharper) with infant supine",
+          "Do NOT perform blind finger sweep",
+          "If becomes unconscious: start CPR, call anaesthesia for emergency intubation"
+        ],
+        "child_over_1_year": [
+          "Heimlich maneuver (abdominal thrusts): stand behind child, fist above umbilicus, thrust inward and upward",
+          "If becomes unconscious: start CPR, call anaesthesia for emergency intubation",
+          "Do NOT perform blind finger sweep"
+        ]
+      },
+      "pathways": [
+        {
+          "severity": "complete_obstruction_unconscious",
+          "criteria": "Cyanosis, unconscious, no air entry, unable to cough or speak",
+          "action": [
+            "Activate emergency response",
+            "Perform age-appropriate life-saving maneuvers (back blows + chest thrusts in infant, Heimlich in child)",
+            "If unconscious: start CPR, call anaesthesia for emergency intubation",
+            "If intubation fails: emergency cricothyrotomy or rigid bronchoscopy",
+            "Once stabilized: proceed to rigid bronchoscopy for removal"
+          ]
+        },
+        {
+          "severity": "partial_obstruction_stable",
+          "criteria": "Air entry present, SpO2 >= 92%, conscious, coughing effectively",
+          "action": [
+            "Keep child calm, maintain upright position",
+            "Nil by mouth",
+            "Oxygen via face mask if SpO2 below 92%",
+            "Urgent ENT and anaesthesia consultation for rigid bronchoscopy",
+            "Chest X-ray inspiratory-expiratory if immediately available and not delaying bronchoscopy",
+            "Do NOT attempt blind removal or finger sweep",
+            "Do NOT give bronchodilators or steroids for suspected FB"
+          ]
+        },
+        {
+          "severity": "chronic_undiagnosed_fba",
+          "criteria": "History of possible aspiration days-weeks ago, recurrent pneumonia same lobe, persistent cough or unilateral wheeze",
+          "action": [
+            "Chest X-ray inspiratory-expiratory",
+            "Rigid bronchoscopy for diagnosis and removal",
+            "Post-removal antibiotics if secondary infection present",
+            "Monitor for bronchiectasis if long-standing"
+          ]
+        }
+      ],
+      "postBronchoscopyCare": [
+        "Observe for 24-48 hours for airway edema, pneumothorax, or infection",
+        "Nebulised adrenaline 0.5 mL/kg of 1:1000 if post-obstruction stridor",
+        "Chest X-ray to confirm resolution of air trapping and rule out pneumothorax",
+        "Treat secondary pneumonia with antibiotics if indicated",
+        "Discharge if stable, feeding well, and no respiratory distress"
+      ],
+      "laryngospasmProtocol": {
+        "recognition": "Complete obstruction with no air movement after partial obstruction event, often during attempts at removal",
+        "initial": "100% oxygen via bag-valve-mask with continuous positive airway pressure",
+        "ifNoResponse": "Small dose of IV propofol 1 mg/kg or succinylcholine 1-2 mg/kg IV to relax larynx",
+        "definitive": "Re-intubation or rigid bronchoscopy"
+      }
+    },
+    "treatmentResponseLogic": {
+      "expectedCourse": "Immediate improvement in air entry, oxygenation, and work of breathing after FB removal.",
+      "positiveResponse": "Bilateral air entry restored, SpO2 normalizes, respiratory distress resolves.",
+      "warningSignsFailure": [
+        "Persistent air trapping or wheeze post-removal suggests residual FB or edema",
+        "New respiratory distress post-procedure: suspect pneumothorax or airway perforation",
+        "Post-obstruction pulmonary edema may develop after relief of obstruction"
+      ],
+      "postRemovalMonitoring": "High vigilance for 24-48 hours for airway edema, stridor, pneumothorax, or retention pneumonia"
+    },
+    "pathophysiology": [
+      "aspiration_of_foreign_object_into_airway",
+      "laryngeal_or_tracheal_or_bronchial_obstruction",
+      "one_way_valve_ball_valve_effect_air_trapping",
+      "hyperinflation_of_affected_lung_segment",
+      "mediastinal_shift",
+      "atelectasis_from_complete_obstruction",
+      "post_obstructive_pneumonia",
+      "chronic_inflammation_and_granulation_tissue_formation"
+    ],
+    "complications": [
+      {
+        "id": "complete_airway_obstruction_and_asphyxiation",
+        "severity": "life_threatening",
+        "prevention": "Prompt recognition and intervention"
+      },
+      {
+        "id": "pneumothorax",
+        "probability": 0.05,
+        "clues": ["sudden_deterioration", "chest_asymmetry", "hyperresonance"],
+        "note": "Can occur spontaneously from ball-valve effect or as procedural complication"
+      },
+      {
+        "id": "post_obstructive_pneumonia",
+        "probability": 0.15,
+        "clues": ["fever", "persistent_cough", "new_infiltrate_on_CXR"],
+        "note": "More common with prolonged FB retention (organic material like nuts)"
+      },
+      {
+        "id": "bronchiectasis",
+        "probability": 0.05,
+        "note": "Long-term complication of chronic undiagnosed FBA"
+      },
+      {
+        "id": "airway_granulation_tissue",
+        "probability": 0.1,
+        "note": "Chronic FB can become embedded in granulation tissue making removal difficult"
+      },
+      {
+        "id": "post_obstruction_pulmonary_edema",
+        "probability": 0.03,
+        "note": "Negative pressure pulmonary edema after relief of acute obstruction"
+      },
+      {
+        "id": "laryngospasm",
+        "probability": 0.1,
+        "note": "Can occur during bronchoscopy or attempted removal"
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "Complete airway obstruction = immediate life-threatening emergency. Partial obstruction with high suspicion = urgent ENT/anaesthesia for rigid bronchoscopy. Do NOT delay definitive management for imaging.",
+    "diagnosticClues": [
+      "sudden_onset_choking_witnessed_reported",
+      "acute_cough_and_wheeze_in_previously_well_toddler",
+      "unilateral_wheeze_and_reduced_air_entry",
+      "asymmetrical_hyperinflation_on_chest_Xray",
+      "recurrent_pneumonia_same_lobe_in_young_child"
+    ],
+    "exclusionClues": [
+      "gradual_onset_with_viral_prodrome_suggests_bronchiolitis_or_pneumonia",
+      "bilateral_expiratory_wheeze_responding_to_bronchodilators_suggests_asthma",
+      "fever_and_toxic_appearance_suggests_infection_not_FB",
+      "barking_cough_and_inspiratory_stridor_suggest_croup"
+    ]
+  }
+}

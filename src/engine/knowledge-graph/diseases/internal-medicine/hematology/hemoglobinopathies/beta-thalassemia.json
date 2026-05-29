@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "beta_thalassemia",
+    "name": "Beta Thalassemia",
+    "system": "hematology",
+    "agePeak_months": [6, 180, 360, 480],
+    "note": "Autosomal recessive disorder with reduced or absent beta-globin chain synthesis. Common in Mediterranean, Middle Eastern, and Southeast Asian populations.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["anemia", "microcytic", "hemolysis", "iron_overload"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_anemia_hb_below_5", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 9 },
+        { "sign": "heart_failure_due_to_iron", "weight": 9 },
+        { "sign": "arrhythmia", "weight": 8 },
+        { "sign": "sepsis_post_splenectomy", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "hb_stable_above_7": true
+      },
+      "severityLabel": "If severe anemia, cardiac complications, or sepsis -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "pallor", "weight": 4 },
+      { "symptomId": "jaundice", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "poor_growth", "weight": 3 },
+      { "symptomId": "bone_pain", "weight": 3 },
+      { "symptomId": "abdominal_distension", "weight": 2, "note": "Due to hepatosplenomegaly" },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "leg_ulcers", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 5 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "frontal_bossing", "baseWeight": 3, "note": "Bone marrow expansion" },
+      { "signId": "maxillary_hypertrophy", "baseWeight": 2 },
+      { "signId": "short_stature", "baseWeight": 2 },
+      { "signId": "tachycardia", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_thalassemia", "multiplier": 4.0 },
+      { "id": "mediterranean_ancestry", "multiplier": 3.0 },
+      { "id": "southeast_asian_ancestry", "multiplier": 3.0 },
+      { "id": "middle_eastern_ancestry", "multiplier": 2.5 },
+      { "id": "microcytic_anemia_in_family", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "beta_thalassemia_major",
+        "name": "Beta Thalassemia Major (Cooley Anemia)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "presentation_under_age_2", "weight": 5 },
+          { "feature": "transfusion_dependent", "weight": 5 },
+          { "feature": "severe_microcytic_anemia", "weight": 4 }
+        ],
+        "management": "Lifelong regular PRBC transfusions. Iron chelation therapy. Consider HSCT or gene therapy."
+      },
+      {
+        "id": "beta_thalassemia_intermedia",
+        "name": "Beta Thalassemia Intermedia",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "later_presentation", "weight": 4 },
+          { "feature": "intermittent_transfusion_needs", "weight": 4 },
+          { "feature": "hb_7_to_10", "weight": 3 }
+        ],
+        "management": "Intermittent transfusion. Splenectomy if hypersplenism. Folic acid. Iron chelation as needed."
+      },
+      {
+        "id": "beta_thalassemia_minor",
+        "name": "Beta Thalassemia Minor (Trait)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "asymptomatic", "weight": 5 },
+          { "feature": "incidental_microcytosis", "weight": 5 },
+          { "feature": "hb_mostly_normal", "weight": 4 }
+        ],
+        "management": "No treatment needed. Genetic counseling. Differentiate from IDA."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "iron_deficiency_anemia",
+        "discriminators": ["ferritin_low", "rdw_high", "normal_hb_a2", "absent_hb_f"]
+      },
+      {
+        "diseaseId": "anemia_of_chronic_disease",
+        "discriminators": ["elevated_crp", "normal_hb_electrophoresis"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "Low MCV, low MCH, variable Hb" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.9, "indication": "Target cells, basophilic stippling, microcytosis" }
+      ],
+      "laboratory": [
+        { "name": "Hb electrophoresis / HPLC", "priority": "immediate", "yield": 0.99, "indication": "Elevated HbA2 and/or HbF" },
+        { "name": "Serum ferritin", "priority": "high", "yield": 0.5, "indication": "Normal/high in thalassemia (iron overload)" },
+        { "name": "Iron studies", "priority": "high", "yield": 0.5, "indication": "Rule out iron deficiency" },
+        { "name": "DNA analysis", "priority": "medium", "yield": 0.9, "indication": "Confirm mutation type" }
+      ],
+      "imaging": [
+        { "name": "MRI T2* liver and heart", "priority": "medium", "yield": 0.7, "indication": "Iron overload assessment in transfused patients" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Thalassemia International Federation Guidelines",
+      "pathways": [
+        {
+          "severity": "thalassemia_major",
+          "criteria": "Hb <7 at presentation, transfusion-dependent",
+          "treatment": "Regular PRBC transfusion q2-4wk to maintain Hb >9.5. Iron chelation (deferasirox, desferrioxamine). Monitor growth, cardiac, and endocrine function."
+        },
+        {
+          "severity": "thalassemia_intermedia",
+          "criteria": "Hb 7-10, intermittent transfusion need",
+          "treatment": "Folic acid 5mg daily. Transfusion if needed. Splenectomy if hypersplenism. Avoid unnecessary iron supplementation."
+        },
+        {
+          "severity": "trait",
+          "criteria": "Microcytosis, normal or near-normal Hb",
+          "treatment": "Reassurance. Genetic counseling. No transfusion needed."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "beta_globin_gene_mutation",
+      "reduced_or_absent_beta_chain",
+      "alpha_chain_excess",
+      "ineffective_erythropoiesis",
+      "hemolysis",
+      "iron_absorption_increase",
+      "transfusional_iron_overload"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "iron_overload_cardiomyopathy",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["ferritin_above_2500", "mri_t2_star_less_than_20", "arrhythmia"]
+      },
+      {
+        "diseaseId": "hypersplenism",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["progressive_splenomegaly", "falling_counts", "transfusion_requirement_increase"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["microcytic_hypochromic", "target_cells", "elevated_hb_a2", "family_history"],
+    "exclusionClues": ["normal_hb_electrophoresis", "low_ferritin"]
+  }
+}

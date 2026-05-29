@@ -1,0 +1,114 @@
+{
+  "disease": {
+    "id": "cannabis_use_disorder",
+    "name": "Cannabis Use Disorder",
+    "system": "PSYCH",
+    "agePeak_months": [180, 360],
+    "note": "Problematic cannabis use leading to clinically significant impairment. Withdrawal syndrome recognized. Most common illicit substance use disorder.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["substance_use_disorder", "addiction", "cannabis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cannabis_psychosis_acute", "weight": 8 },
+        { "sign": "suicidal_intent", "weight": 10 },
+        { "sign": "severe_anxiety_or_panic_attack", "weight": 7 },
+        { "sign": "hyperemesis_syndrome", "weight": 6 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If psychosis/severe anxiety/hyperemesis -> URGENT CARE; else -> OUTPATIENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "daily_or_near_daily_cannabis_use", "weight": 5 },
+      { "symptomId": "failed_attempts_to_quit", "weight": 4 },
+      { "symptomId": "cannabis_craving", "weight": 3 },
+      { "symptomId": "tolerance_to_cannabis", "weight": 3 },
+      { "symptomId": "cannabis_withdrawal_irritability_anxiety", "weight": 3 },
+      { "symptomId": "continued_use_despite_harm_to_self_family", "weight": 3 },
+      { "symptomId": "neglect_of_work_school_duties", "weight": 3 },
+      { "symptomId": "use_in_dangerous_situations_driving", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "conjunctival_injection_red_eyes", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "anxiety_or_panic_during_use", "baseWeight": 3 },
+      { "signId": "impaired_time_perception", "baseWeight": 2 },
+      { "signId": "slowed_reaction_time", "baseWeight": 2 },
+      { "signId": "chronic_bronchitis_cough", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "early_age_of_onset_before_16", "multiplier": 4.0 },
+      { "id": "daily_or_heavy_use_pattern", "multiplier": 5.0 },
+      { "id": "family_history_addiction", "multiplier": 2.5 },
+      { "id": "male_sex", "multiplier": 2.0 },
+      { "id": "comorbid_psychiatric_disorder", "multiplier": 3.0 },
+      { "id": "peer_group_cannabis_use", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "cannabis_dependence_mild",
+        "name": "Mild Cannabis Use Disorder",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "2_to_3_criteria", "weight": 4 },
+          { "feature": "occasional_weekly_use", "weight": 3 }
+        ],
+        "management": "Brief intervention. Motivational interviewing. CBT. Cut-down or quit plan. Monitor. Treat comorbid anxiety/depression."
+      },
+      {
+        "id": "cannabis_dependence_severe",
+        "name": "Severe Cannabis Use Disorder",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "6_or_more_criteria", "weight": 5 },
+          { "feature": "daily_all_day_use", "weight": 5 },
+          { "feature": "failed_multiple_quit_attempts", "weight": 4 }
+        ],
+        "management": "CBT + motivational enhancement therapy. Contingency management. Support groups. Treat withdrawal symptoms (irritability, sleep: sleep hygiene, exercise). No FDA-approved pharmacotherapy."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "generalized_anxiety", "discriminators": ["anxiety_precedes_use", "no_withdrawal", "no_craving"] },
+      { "diseaseId": "adult_adhd", "discriminators": ["symptoms_precede_substance_use", "no_cannabis_craving", "clear_attentional_deficits_since_childhood"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "CUDIT-R (Cannabis Use Disorder Identification Test)", "priority": "high", "yield": 0.85, "indication": "screening and severity" }
+      ],
+      "laboratory": [
+        { "name": "Urine THC", "priority": "medium", "yield": 0.8, "indication": "confirm use, detect heavy use" },
+        { "name": "Urine toxicology (full panel)", "priority": "medium", "yield": 0.4, "indication": "polysubstance use" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines / ASAM Criteria for Substance Use",
+      "pathways": [
+        {
+          "severity": "acute cannabis psychosis",
+          "criteria": "psychotic symptoms temporally related to cannabis, agitation, anxiety",
+          "treatment": "Benzodiazepines (lorazepam 1-2 mg) for agitation. Antipsychotics if psychosis persists (olanzapine 5-10 mg). Supportive care. Symptoms usually resolve within days."
+        },
+        {
+          "severity": "moderate-severe CUD, outpatient",
+          "criteria": "daily use, failed attempts, craving, withdrawal",
+          "treatment": "CBT + MET. Contingency management. Treat comorbid psychiatric disorders. Sleep hygiene for insomnia from withdrawal. Exercise. Peer support."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "cb1_receptor_stimulation",
+      "dopamine_reward_pathway",
+      "endocannabinoid_system_dysregulation",
+      "tolerance_receptor_downregulation",
+      "withdrawal_endocannabinoid_deficiency"
+    ],
+    "complications": [
+      { "diseaseId": "cannabis_hyperemesis_syndrome", "probability": 0.03, "severityBoost": 0.2, "clues": ["cyclic_vomiting", "hot_showers_relief", "long_term_heavy_use"] },
+      { "diseaseId": "psychotic_disorder_acute", "probability": 0.05, "severityBoost": 0.3, "clues": ["high_potency_cannabis", "early_onset", "family_psychosis"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["daily_cannabis_use", "failed_quit_attempts", "craving", "use_despite_harm"],
+    "exclusionClues": ["experimental_use", "no_impairment", "controlled_use"]
+  }
+}

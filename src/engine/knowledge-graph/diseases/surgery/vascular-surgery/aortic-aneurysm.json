@@ -1,0 +1,176 @@
+{
+  "disease": {
+    "id": "aortic_aneurysm",
+    "name": "Abdominal Aortic Aneurysm (AAA)",
+    "system": "surgical",
+    "agePeak_months": [600, 960],
+    "note": "Permanent dilation of the abdominal aorta >3cm. Risk of rupture increases with size. Screening reduces mortality.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["abdominal_mass", "vascular_disease", "aneurysm"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "ruptured_aaa", "weight": 10 },
+        { "sign": "hemorrhagic_shock", "weight": 10 },
+        { "sign": "impending_rupture", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tender_aneurysm", "weight": 8 },
+          { "sign": "hypotension_painful_pulsatile_mass", "weight": 10 },
+          { "sign": "size_more_than_5_5cm", "weight": 7 },
+          { "sign": "rapid_expansion_more_than_1cm_per_year", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Ruptured/symptomatic -> SEVERE; small asymptomatic -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_or_back_pain", "weight": 4, "note": "Warning sign of expansion or rupture" },
+      { "symptomId": "pulsatile_abdominal_mass", "weight": 4 },
+      { "symptomId": "asymptomatic_incidental_finding", "weight": 5 },
+      { "symptomId": "syncope_hypotension", "weight": 5, "note": "Rupture presentation" },
+      { "symptomId": "smoking_history", "weight": 5 },
+      { "symptomId": "family_history_of_aaa", "weight": 3 },
+      { "symptomId": "hypertension", "weight": 3 },
+      { "symptomId": "known_copd", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_pulsatile_abdominal_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "abdominal_bruit", "baseWeight": 2 },
+      { "signId": "hypotension_tachycardia", "baseWeight": 4, "note": "If ruptured" },
+      { "signId": "abdominal_distension_rigidity", "baseWeight": 3 },
+      { "signId": "femoral_pulse_deficit", "baseWeight": 2 },
+      { "signId": "signs_of_distal_embolization", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 4.0 },
+      { "id": "age_over_65", "multiplier": 3.0 },
+      { "id": "male_gender", "multiplier": 3.0 },
+      { "id": "family_history_of_aaa", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 2.0 },
+      { "id": "copd", "multiplier": 2.0 },
+      { "id": "atherosclerosis", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "asymptomatic_aaa",
+        "name": "Asymptomatic AAA",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "incidental_finding", "weight": 5 },
+          { "feature": "no_pain", "weight": 5 },
+          { "feature": "size_measured_on_us", "weight": 5 }
+        ],
+        "management": "Surveillance: US every 6-12 months (if 4-5.4cm) or every 3 years (3-4cm). Medical management: statin, antiplatelet, BP control, smoking cessation. Elective repair if >5.5cm or rapid expansion."
+      },
+      {
+        "id": "symptomatic_or_ruptured_aaa",
+        "name": "Symptomatic/Ruptured AAA",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "abdominal_or_back_pain", "weight": 5 },
+          { "feature": "hypotension_shock", "weight": 5 },
+          { "feature": "pulsatile_mass_with_tenderness", "weight": 5 },
+          { "feature": "syncope", "weight": 4 }
+        ],
+        "management": "Emergency repair. Open: cross-clamping + graft interposition. EVAR: if anatomically suitable. Massive transfusion protocol. ICU."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pancreatitis",
+        "discriminators": ["elevated_amylase", "no_pulsatile_mass", "no_aneurysm_on_ct"]
+      },
+      {
+        "diseaseId": "renal_colic",
+        "discriminators": ["flank_pain_radiating_to_groin", "hematuria", "no_pulsatile_mass"]
+      },
+      {
+        "diseaseId": "mesenteric_ischemia",
+        "discriminators": ["pain_out_of_proportion", "lactate_elevated", "af_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Abdominal palpation", "priority": "immediate", "yield": 0.5, "indication": "may feel pulsatile mass" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.5, "indication": "assess blood loss if ruptured" },
+        { "name": "Cross-match", "priority": "immediate", "yield": 0.5, "indication": "prepare transfusion" },
+        { "name": "Creatinine", "priority": "high", "yield": 0.4, "indication": "renal function, contrast risk" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.95, "indication": "screening and surveillance, size measurement" },
+        { "name": "CT Aorta with IV contrast (CT Angio)", "priority": "immediate", "yield": 0.99, "indication": "definitive, assess morphology for EVAR" },
+        { "name": "CT Abdomen without contrast", "priority": "immediate", "yield": 0.9, "indication": "if ruptured and unstable, limited study" },
+        { "name": "Plain X-Ray Abdomen", "priority": "low", "yield": 0.4, "indication": "calcified aortic wall outline" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESVS Guidelines for AAA Management",
+      "pathways": [
+        {
+          "severity": "small AAA (3-5.4cm)",
+          "criteria": "asymptomatic, <5.5cm, no rapid expansion",
+          "treatment": "Surveillance US (3-4cm: 3yr; 4-5.4cm: 6-12mo). Medical: smoking cessation, statin, antiplatelet, BP control."
+        },
+        {
+          "severity": "large AAA (>=5.5cm) or rapid expansion",
+          "criteria": "size >=5.5cm or expansion >1cm/yr or symptomatic",
+          "treatment": "Elective repair. EVAR if suitable anatomy (neck length >15mm, angle <60°). Open repair if unfit for EVAR or complex anatomy."
+        },
+        {
+          "severity": "ruptured AAA",
+          "criteria": "pain, hypotension, known AAA, free/contained rupture",
+          "treatment": "Emergency repair (open or EVAR). Permissive hypotension. Massive transfusion. ICU."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "atherosclerosis",
+      "chronic_inflammation",
+      "elastin_degradation",
+      "collagen_remodeling",
+      "aortic_wall_weakening",
+      "progressive_dilation",
+      "wall_stress_laplace_law",
+      "rupture"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "rupture",
+        "probability": 0.1,
+        "lagDays": [0, 360],
+        "severityBoost": 0.5,
+        "clues": ["sudden_abdominal_back_pain", "hypotension", "pulsatile_mass_shock"]
+      },
+      {
+        "diseaseId": "distal_embolization",
+        "probability": 0.03,
+        "lagDays": [0, 14],
+        "severityBoost": 0.3,
+        "clues": ["blue_toe", "acute_limb_ischemia", "livedo_reticularis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pulsatile_abdominal_mass", "age_over_65_male_smoker", "abdominal_or_back_pain_with_syncope"],
+    "exclusionClues": ["normal_aorta_on_us", "young_age_no_risk_factors"]
+  }
+}

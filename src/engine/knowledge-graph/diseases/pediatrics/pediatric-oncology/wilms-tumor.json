@@ -1,0 +1,161 @@
+{
+  "disease": {
+    "id": "wilms-tumor",
+    "name": "Wilms Tumor (Nephroblastoma)",
+    "system": "PAED",
+    "agePeak_months": [24, 60],
+    "note": "Most common renal tumor in children. Usually presents as asymptomatic abdominal mass. Associated with WAGR, Beckwith-Wiedemann, Denys-Drash syndromes.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["renal_malignancy", "abdominal_mass"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "tumor_rupture_hemorrhage", "weight": 10 },
+        { "sign": "inferior_vena_cava_thrombus", "weight": 9 },
+        { "sign": "pulmonary_embolism", "weight": 10 },
+        { "sign": "hypertensive_encephalopathy", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tumor_involving_inferior_vena_cava", "weight": 8 },
+          { "sign": "metastatic_disease_lung_liver", "weight": 8 },
+          { "sign": "stage_3_4_disease", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If metastatic, IVC thrombus, or tumor rupture -> SEVERE; else -> NON-SEVERE (localized stage 1-2)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_mass", "weight": 5 },
+      { "symptomId": "abdominal_pain", "weight": 3 },
+      { "symptomId": "hematuria", "weight": 3 },
+      { "symptomId": "hypertension", "weight": 3 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "constipation_or_vomiting", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_mass_palpable", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypertension", "baseWeight": 4 },
+      { "signId": "hematuria_microscopic", "baseWeight": 3 },
+      { "signId": "abdominal_tenderness", "baseWeight": 2 },
+      { "signId": "varicocele_left_sided", "baseWeight": 3, "note": "Suggests IVC thrombus" },
+      { "signId": "signs_of_metastases", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "wagram_syndrome", "multiplier": 30.0 },
+      { "id": "beckwith_wiedemann_syndrome", "multiplier": 10.0 },
+      { "id": "denys_drash_syndrome", "multiplier": 20.0 },
+      { "id": "family_history_wilms", "multiplier": 5.0 },
+      { "id": "sporadic_aniridia", "multiplier": 5.0 },
+      { "id": "hemihypertrophy", "multiplier": 5.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "favorable_histology",
+        "name": "Favorable Histology Wilms Tumor",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "no_anaplasia", "weight": 5 },
+          { "feature": "triphasic_morphology", "weight": 4 },
+          { "feature": "good_response_to_chemotherapy", "weight": 4 }
+        ],
+        "management": "Nephrectomy (upfront or after neoadjuvant chemo). Chemotherapy: vincristine + actinomycin D ± doxorubicin based on stage. Stage I-II: 18 weeks chemo. Stage III-IV: add radiotherapy."
+      },
+      {
+        "id": "unfavorable_histology",
+        "name": "Anaplastic (Unfavorable Histology) Wilms Tumor",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "anaplasia_diffuse", "weight": 5 },
+          { "feature": "p53_mutation", "weight": 4 },
+          { "feature": "poor_response_to_standard_chemo", "weight": 4 }
+        ],
+        "management": "Intensified chemotherapy (add doxorubicin, etoposide, cyclophosphamide). Irradiation of tumor bed and metastases. Consider autologous stem cell transplant for high risk."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "neuroblastoma",
+        "discriminators": ["elevated_urinary_catecholamines", "calcifications_on_ct", "crosses_midline", "encases_vessels"]
+      },
+      {
+        "diseaseId": "renal_cyst_or_hydronephrosis",
+        "discriminators": ["smooth_cystic_on_us", "no_solid_components", "benign_appearance"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Urinalysis", "priority": "high", "yield": 0.5, "indication": "hematuria" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.5, "indication": "renal function assessment" },
+        { "name": "Urinary catecholamines (VMA/HVA)", "priority": "medium", "yield": 0.6, "indication": "differentiate from neuroblastoma" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.85, "indication": "identify renal mass, IVC thrombus" },
+        { "name": "CT Abdomen with contrast", "priority": "high", "yield": 0.95, "indication": "staging, bilateral disease, vessel involvement" },
+        { "name": "Chest CT", "priority": "high", "yield": 0.9, "indication": "pulmonary metastases" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "COG / SIOP Renal Tumor Study Guidelines",
+      "pathways": [
+        {
+          "severity": "stage_i_ii_favorable",
+          "criteria": "Confined to kidney, completely resected, no anaplasia, no metastasis",
+          "treatment": "Nephrectomy (SIOP: neoadjuvant chemo x4 weeks first). Adjuvant chemotherapy: vincristine + actinomycin D for 18 weeks (COG) or 4 weeks (SIOP post-op). No radiation. 5-year OS >95%."
+        },
+        {
+          "severity": "stage_iii_iv_or_anaplastic",
+          "criteria": "Incomplete resection, lymph node involvement, metastasis, or anaplasia",
+          "treatment": "Neoadjuvant chemotherapy (vincristine + actinomycin + doxorubicin). Nephrectomy with lymph node sampling. Abdominal radiotherapy. Whole lung RT if pulmonary metastases. Intensified chemo for anaplasia."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "wt1_wt2_gene_mutation", "persistent_metanephric_blastema", "nephrogenic_rests", "triphasic_histology", "malignant_transformation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_rupture",
+        "probability": 0.1,
+        "lagDays": [0, 30],
+        "severityBoost": 0.5,
+        "clues": ["sudden_abdominal_pain", "acute_anemia", "shock"]
+      },
+      {
+        "diseaseId": "treatment_related_cardiotoxicity",
+        "probability": 0.05,
+        "lagDays": [365, 7300],
+        "severityBoost": 0.3,
+        "clues": ["doxorubicin_exposure", "reduced_ef"]
+      },
+      {
+        "diseaseId": "second_malignancy",
+        "probability": 0.02,
+        "lagDays": [1825, 10950],
+        "severityBoost": 0.5,
+        "clues": ["prior_radiation", "prior_doxorubicin"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["asymptomatic_abdominal_mass", "hematuria", "hypertension", "age_2_to_5_years"],
+    "exclusionClues": ["cystic_renal_lesion", "extrarenal_mass", "normal_imaging"]
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "disease": {
+    "id": "peritonitis",
+    "name": "Generalized Peritonitis",
+    "system": "surgical",
+    "agePeak_months": [240, 960],
+    "note": "Inflammation of the peritoneal cavity. Surgical emergency requiring source control and antibiotics.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["acute_abdomen", "sepsis", "peritonitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "anuria", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "qsofa_2_or_more", "weight": 8 },
+          { "sign": "lactate_elevated", "weight": 8 },
+          { "sign": "rigidity", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Septic shock/organ failure -> SEVERE; localized peritonitis without shock -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "severe_abdominal_pain", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "fever_rigors", "weight": 4 },
+      { "symptomId": "abdominal_distension", "weight": 3 },
+      { "symptomId": "recent_surgery_or_trauma", "weight": 4, "note": "Secondary peritonitis cause" },
+      { "symptomId": "perforation_history", "weight": 5, "note": "Peptic ulcer, diverticulitis, appendicitis" }
+    ],
+
+    "examFeatures": [
+      { "signId": "generalized_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "rigidity", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "rebound_tenderness", "baseWeight": 4 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "abdominal_distension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "perforated_viscus", "multiplier": 3.0 },
+      { "id": "recent_abdominal_surgery", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "malnutrition", "multiplier": 1.6 },
+      { "id": "cirrhosis", "multiplier": 2.0 },
+      { "id": "peritoneal_dialysis", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "primary_peritonitis",
+        "name": "Primary (Spontaneous) Peritonitis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "cirrhosis_or_ascites", "weight": 5 },
+          { "feature": "fever", "weight": 5 },
+          { "feature": "diffuse_abdominal_pain", "weight": 4 }
+        ],
+        "management": "IV antibiotics (third-generation cephalosporin). No surgical intervention. Treat underlying liver disease."
+      },
+      {
+        "id": "secondary_peritonitis",
+        "name": "Secondary Peritonitis",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "known_source_of_infection", "weight": 5 },
+          { "feature": "diffuse_pain", "weight": 5 },
+          { "feature": "rigidity_guarding", "weight": 5 },
+          { "feature": "sepsis", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy. Source control (repair perforation, resection of perforated viscus). Peritoneal lavage. Broad-spectrum IV antibiotics. ICU support."
+      },
+      {
+        "id": "tertiary_peritonitis",
+        "name": "Tertiary Peritonitis",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "persistent_peritonitis_after_treatment", "weight": 5 },
+          { "feature": "immunosuppression", "weight": 4 },
+          { "feature": "multi_drug_resistant_organisms", "weight": 5 }
+        ],
+        "management": "Re-laparotomy. Culture-directed antibiotics. Source control. Open abdomen management if needed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pancreatitis",
+        "discriminators": ["elevated_amylase_lipase", "pain_radiating_to_back", "retroperitoneal_signs"]
+      },
+      {
+        "diseaseId": "mesenteric_ischemia",
+        "discriminators": ["atrial_fibrillation", "pain_out_of_proportion", "lactate_elevated"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "qSOFA Score", "priority": "immediate", "yield": 0.7, "indication": "assess sepsis severity" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "leukocytosis or leukopenia" },
+        { "name": "CRP", "priority": "high", "yield": 0.85, "indication": "elevated in peritonitis" },
+        { "name": "Lactate", "priority": "high", "yield": 0.8, "indication": "tissue hypoperfusion marker" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.4, "indication": "identify causative organisms" },
+        { "name": "Renal function", "priority": "high", "yield": 0.5, "indication": "assess organ dysfunction" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV contrast", "priority": "immediate", "yield": 0.9, "indication": "identify source and extent" },
+        { "name": "Erect CXR", "priority": "high", "yield": 0.7, "indication": "detect free air" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Peritonitis",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "no septic shock, localized peritonitis, no organ failure",
+          "treatment": "IV antibiotics. Source control (laparoscopic or open). Peritoneal lavage. Early goal-directed therapy."
+        },
+        {
+          "severity": "severe",
+          "criteria": "septic shock, organ failure, generalized peritonitis",
+          "treatment": "Emergency laparotomy. Source control. Peritoneal lavage. Broad-spectrum IV antibiotics (e.g., Piperacillin-Tazobactam + Gentamicin). ICU admission. Vasopressors. Open abdomen if necessary."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "peritoneal_contamination",
+      "bacterial_inoculation",
+      "mast_cell_degranulation",
+      "neutrophil_recruitment",
+      "fibrin_exudation",
+      "abscess_formation",
+      "systemic_inflammatory_response",
+      "sepsis",
+      "multi_organ_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "probability": 0.2,
+        "lagDays": [5, 14],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "ileus", "palpable_mass"]
+      },
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.25,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "tachycardia", "oliguria", "altered_mental_state"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["generalized_abdominal_pain", "rigidity", "absent_bowel_sounds", "sepsis", "known_source"],
+    "exclusionClues": ["well_localized_tenderness", "normal_bowel_sounds", "no_fever"]
+  }
+}

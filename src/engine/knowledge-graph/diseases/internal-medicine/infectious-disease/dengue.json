@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "dengue",
+    "name": "Dengue Fever",
+    "system": "infectious-disease",
+    "alsoPresentIn": ["emergency-medicine", "pediatrics"],
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["febrile_illness", "hemorrhagic_fever", "arbovirus"],
+    "mustNotMiss": true,
+    "emergencyPriority": "urgent",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_abdominal_pain", "weight": 5, "description": "Warning sign for plasma leak / shock" },
+        { "sign": "persistent_vomiting", "weight": 4, "description": "Inability to maintain oral intake" },
+        { "sign": "mucosal_bleeding", "weight": 5, "description": "Thrombocytopenia with bleeding tendency" },
+        { "sign": "lethargy_restlessness", "weight": 5, "description": "Signs of shock or encephalopathy" },
+        { "sign": "hepatomegaly_>2cm", "weight": 4, "description": "Liver congestion from plasma leak" },
+        { "sign": "rapid_platelet_drop", "weight": 4, "description": "Precedes plasma leak phase" },
+        { "sign": "rising_hematocrit_with_hypotension", "weight": 5, "description": "Hemoconcentration indicates plasma leak" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hypotension_or_narrow_pulse_pressure", "weight": 5 },
+          { "sign": "clinical_fluid_accumulation_ascites_pleural", "weight": 4 },
+          { "sign": "organ_impairment_liver_heart_CNS", "weight": 4 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "dengue-who-classification"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5, "condition": "acute onset, high grade, 2-7 days" },
+      { "symptomId": "severe_headache", "weight": 4 },
+      { "symptomId": "myalgia_arthralgia", "weight": 4, "note": "breakbone fever" },
+      { "symptomId": "macular_rash", "weight": 3, "condition": "appears day 3-5" },
+      { "symptomId": "easy_bruising_bleeding", "weight": 4 },
+      { "symptomId": "abdominal_pain", "weight": 3, "condition": "warning sign" },
+      { "symptomId": "travel_to_endemic_area", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "tourniquet_test_positive", "baseWeight": 4 },
+      { "signId": "petechiae_ecchymosis", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 3, "severityIndicator": true },
+      { "signId": "hypotension_or_encephalopathy", "baseWeight": 5, "severityIndicator": true }
+    ],
+    "riskFactors": [
+      { "id": "endemic_region_travel_residence", "multiplier": 3.0 },
+      { "id": "previous_dengue_infection", "multiplier": 2.0, "note": "secondary infection increases risk of severe dengue via ADE" },
+      { "id": "age_extremes_young_or_old", "multiplier": 1.8 },
+      { "id": "pregnancy", "multiplier": 1.5 },
+      { "id": "comorbidities_diabetes_asthma_ckd", "multiplier": 1.5 }
+    ],
+    "diagnosticClues": [
+      "acute febrile illness with retro-orbital pain, myalgia, and rash in endemic area",
+      "tourniquet test positive and petechiae",
+      "hematocrit rising with platelet count dropping signals plasma leak",
+      "WHO classification guides severity assessment"
+    ],
+    "exclusionClues": [
+      "negative NS1 antigen and IgM/IgG after day 5",
+      "isolated fever without myalgia or headache in non-endemic area",
+      "alternative diagnosis confirmed (malaria, typhoid, leptospirosis, chikungunya)"
+    ],
+    "subtypes": [
+        {
+          "id": "dengue_without_warning",
+          "name": "Dengue without Warning Signs",
+          "prevalenceModifier": 0.5,
+          "keyFeatures": [
+            { "feature": "fever_2_7_days", "weight": 5 },
+            { "feature": "no_abdominal_pain_or_tenderness", "weight": 3 },
+            { "feature": "stable_hematocrit", "weight": 3 }
+          ],
+          "management": { "management": "Outpatient, oral hydration, paracetamol, platelet monitoring" }
+        },
+      {
+        "id": "dengue_with_warning",
+        "name": "Dengue with Warning Signs",
+        "prevalenceModifier": 0.3,
+        "agePeak": [1, 80],
+        "keyFeatures": [
+          { "feature": "abdominal_pain_tenderness", "weight": 5 },
+          { "feature": "persistent_vomiting", "weight": 4 },
+          { "feature": "clinical_fluid_accumulation", "weight": 4 },
+          { "feature": "mucosal_bleeding", "weight": 4 },
+          { "feature": "lethargy_restlessness", "weight": 4 },
+          { "feature": "hepatomegaly", "weight": 3 },
+          { "feature": "hematocrit_rising_with_platelet_drop", "weight": 5 }
+        ],
+        "management": {
+          "management": "Inpatient admission, IV fluids, strict input/output, platelet monitoring Q6H"
+        }
+      },
+      {
+        "id": "severe_dengue",
+        "name": "Severe Dengue / Dengue Shock Syndrome",
+        "prevalenceModifier": 0.2,
+        "agePeak": [1, 80],
+        "keyFeatures": [
+          { "feature": "severe_plasma_leak_shock", "weight": 5 },
+          { "feature": "severe_bleeding_GI_or_heavily_menstrual", "weight": 5 },
+          { "feature": "severe_organ_involvement_hepatitis_encephalitis_myocarditis", "weight": 5 }
+        ],
+        "management": {
+          "management": "ICU admission, IV crystalloid/colloid resuscitation, blood transfusion, vasopressors"
+        }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "chikungunya", "discriminators": ["severe joint pain", "rash more prominent", "no plasma leak", "no thrombocytopenia"] },
+      { "diseaseId": "malaria", "discriminators": ["cyclic fever", "positive blood smear", "splenomegaly", "no retro-orbital pain"] },
+      { "diseaseId": "leptospirosis", "discriminators": ["conjunctival suffusion", "calf tenderness", "jaundice", "renal impairment"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Tourniquet Test and Orthostatic BP", "priority": "first-line", "yield": 3, "indication": "capillary fragility and early shock" }
+      ],
+      "laboratory": [
+        { "name": "NS1 Antigen Test", "priority": "first-line", "yield": 5, "indication": "early diagnosis day 0-5" },
+        { "name": "Dengue IgM/IgG Serology", "priority": "essential", "yield": 4, "indication": "seroconversion day 5+" },
+        { "name": "Complete Blood Count (serial)", "priority": "essential", "yield": 5, "indication": "platelet trend, hematocrit, WBC" },
+        { "name": "Liver Function Tests and Coagulation", "priority": "routine", "yield": 3, "indication": "organ involvement" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray or Abdominal Ultrasound", "priority": "if indicated", "yield": 4, "indication": "pleural effusion, ascites" }
+      ]
+    },
+    "management": {
+      "protocolReference": "WHO Dengue Guidelines 2009/2019; National Clinical Management Guidelines",
+      "pathways": [
+        {
+          "severity": "group-a-outpatient",
+          "criteria": "dengue without warning signs, adequate oral intake, normal urine output",
+          "treatment": [
+            "Paracetamol 10-15 mg/kg Q6H (avoid aspirin, NSAIDs, ibuprofen)",
+            "Encourage oral fluids, monitor urine output target 1 mL/kg/h",
+            "Instruct to return if: abdominal pain, vomiting, bleeding, lethargy",
+            "Daily blood count (platelets, hematocrit) until afebrile"
+          ]
+        },
+        {
+          "severity": "group-b-inpatient",
+          "criteria": "dengue with warning signs, or comorbidities, or social concerns",
+          "treatment": [
+            "Admit to ward, strict fluid balance, IV crystalloid at maintenance rate",
+            "Repeat CBC and hematocrit Q4-6H in critical phase",
+            "No prophylactic platelet transfusions (no evidence of benefit)",
+            "Blood transfusion if severe bleeding or Hb drop with instability"
+          ]
+        },
+        {
+          "severity": "group-c-icu",
+          "criteria": "severe dengue with shock, severe bleeding, or organ impairment",
+          "treatment": [
+            "ICU admission, IV crystalloid 10-20 mL/kg bolus, reassess",
+            "Vasopressors if fluid-refractory shock",
+            "Packed RBC 10 mL/kg if severe bleeding; platelet concentrate if bleeding with platelets <20K",
+            "Correct electrolytes, monitor dextrose, mechanical ventilation if pulmonary edema"
+          ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Dengue virus (DENV 1-4) transmitted by Aedes aegypti mosquito",
+      "Antibody-dependent enhancement (ADE) in secondary infection increases viral load",
+      "Plasma leak via endothelial dysfunction: cytokines increase capillary permeability",
+      "Thrombocytopenia from bone marrow suppression and consumption",
+      "Hemoconcentration from plasma leak is hallmark of critical phase (day 3-7)"
+    ],
+    "complications": [
+      { "diseaseId": "dengue_shock_syndrome", "probability": 0.1, "severityBoost": 0.8, "lagDays": [3, 7] },
+      { "diseaseId": "disseminated_intravascular_coagulation", "probability": 0.05, "severityBoost": 0.7 },
+      { "diseaseId": "acute_kidney_injury", "probability": 0.05, "severityBoost": 0.4 }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "leprosy",
+    "name": "Leprosy (Hansen Disease)",
+    "system": "infectious_disease",
+    "agePeak_months": [120, 480],
+    "note": "Chronic granulomatous infection caused by Mycobacterium leprae. Affects skin and peripheral nerves. Classified by Ridley-Jopling scale: tuberculoid to lepromatous.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["chronic_infection", "mycobacterial_disease", "neurocutaneous"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "leprosy_reaction_type_2_erythema_nodosum", "weight": 9 },
+        { "sign": "severe_neuritis", "weight": 8 },
+        { "sign": "laryngeal_involvement", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Lepromatous / reactional -> MODERATE-SEVERE; tuberculoid -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hypopigmented_or_erythematous_skin_patches", "weight": 5 },
+      { "symptomId": "numbness_loss_of_sensation", "weight": 5 },
+      { "symptomId": "weakness_hand_foot_drop", "weight": 4 },
+      { "symptomId": "skin_thickening_nodules", "weight": 3 },
+      { "symptomId": "nasal_congestion_epistaxis", "weight": 2 },
+      { "symptomId": "painless_wounds_ulcers_on_feet", "weight": 3 },
+      { "symptomId": "prolonged_duration_years", "weight": 3 },
+      { "symptomId": "endemic_area_residence", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "anesthetic_hypopigmented_patch", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "thickened_peripheral_nerves", "baseWeight": 4 },
+      { "signId": "loss_of_sensation_in_distribution", "baseWeight": 4 },
+      { "signId": "motor_weakness_ulnar_median_common_peroneal", "baseWeight": 3 },
+      { "signId": "leonine_facies_facial_thickening", "baseWeight": 3 },
+      { "signId": "nasal_ulceration_perforation", "baseWeight": 2 },
+      { "signId": "claw_hand_foot_drop", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "close_prolonged_contact_with_untreated_case", "multiplier": 3.0 },
+      { "id": "endemic_area_south_asia_africa", "multiplier": 2.5 },
+      { "id": "genetic_susceptibility_nramp1", "multiplier": 2.0 },
+      { "id": "zoonotic_exposure_armadillos", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "tuberculoid_leprosy",
+        "name": "Tuberculoid Leprosy (TT)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "few_anesthetic_patches", "weight": 5 },
+          { "feature": "well_demarcated_borders", "weight": 4 },
+          { "feature": "positive_skin_smear", "weight": 2 }
+        ],
+        "management": "Rifampin 600mg monthly + Dapsone 100mg daily for 6 months. Single skin lesion: single dose ROM (Rifampin, Ofloxacin, Minocycline)."
+      },
+      {
+        "id": "lepromatous_leprosy",
+        "name": "Lepromatous Leprosy (LL)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "multiple_symmetric_nodules_plaques", "weight": 5 },
+          { "feature": "leonine_facies", "weight": 4 },
+          { "feature": "positive_skin_smear_high_bacterial_index", "weight": 5 }
+        ],
+        "management": "Rifampin 600mg monthly + Clofazimine 300mg monthly (50mg daily) + Dapsone 100mg daily for 12 months."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "vitiligo",
+        "discriminators": ["no_sensory_loss", "no_nerve_thickening", "margins_hyperpigmented"]
+      },
+      {
+        "diseaseId": "skin_lymphoma",
+        "discriminators": ["progressive", "not_anesthetic", "biopsy_positive"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Skin slit smear (bacterial index)", "priority": "high", "yield": 0.85, "indication": "diagnosis and classification" },
+        { "name": "Skin or nerve biopsy (Fite stain)", "priority": "gold_standard", "yield": 0.95, "indication": "histopathological confirmation" },
+        { "name": "PCR for M. leprae", "priority": "medium", "yield": 0.9, "indication": "confirmation in difficult cases" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Multidrug Therapy (MDT) Guidelines for Leprosy",
+      "pathways": [
+        {
+          "severity": "paucibacillary (tuberculoid)",
+          "criteria": "skin smears negative, <5 lesions",
+          "treatment": "Rifampin 600mg monthly + Dapsone 100mg daily for 6 months. Self-care for anesthesia. Monitor nerve function."
+        },
+        {
+          "severity": "multibacillary (lepromatous)",
+          "criteria": "skin smears positive, >=5 lesions",
+          "treatment": "Rifampin 600mg monthly + Clofazimine 300mg monthly + 50mg daily + Dapsone 100mg daily for 12 months. Manage reactions."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "inhalation_or_skin_inoculation",
+      "macrophage_infection",
+      "peripheral_nerve_schwann_cell_invasion",
+      "granuloma_formation",
+      "nerve_demyelination",
+      "loss_of_sensation_and_motor_function",
+      "autoimmune_reactions"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "type_1_reversal_reaction",
+        "probability": 0.25,
+        "severityBoost": 0.3,
+        "clues": ["acute_inflammation_of_lesions", "neuritis", "edema"]
+      },
+      {
+        "diseaseId": "type_2_reaction_erythema_nodosum_leprosum",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["fever_arthralgia", "tender_subcutaneous_nodules", "iritis"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["anesthetic_skin_patch", "thickened_nerve", "positive_biopsy", "endemic_area"],
+    "exclusionClues": ["negative_biopsy", "preserved_sensation", "alternative_diagnosis"]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "disease": {
+    "id": "svt",
+    "name": "Supraventricular Tachycardia",
+    "system": "CARD",
+    "agePeak_months": [144, 600],
+    "note": "Paroxysmal regular narrow-complex tachycardia originating above the ventricles. Includes AVNRT, AVRT, and AT.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["arrhythmia", "palpitations", "tachycardia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "syncope", "weight": 9 },
+        { "sign": "refractory_svt", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If unstable/syncope/refractory -> URGENT cardioversion; else -> STABLE for vagal maneuvers"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_onset_palpitations", "weight": 5 },
+      { "symptomId": "sudden_offset_palpitations", "weight": 4 },
+      { "symptomId": "lightheadedness", "weight": 3 },
+      { "symptomId": "syncope", "weight": 2 },
+      { "symptomId": "chest_discomfort", "weight": 2 },
+      { "symptomId": "dyspnea", "weight": 2 },
+      { "symptomId": "polyuria_after_episode", "weight": 2, "note": "Due to atrial natriuretic peptide release" }
+    ],
+    "examFeatures": [
+      { "signId": "regular_narrow_complex_tachycardia", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "heart_rate_150_to_250", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "pulsating_neck_veins", "baseWeight": 2, "note": "Frog sign in AVNRT" }
+    ],
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "young_age", "multiplier": 2.0 },
+      { "id": "stress_anxiety", "multiplier": 1.5 },
+      { "id": "caffeine_stimulants", "multiplier": 1.3 },
+      { "id": "accessory_pathway_wpw", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "avnrt",
+        "name": "AV Nodal Reentrant Tachycardia",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "p_waves_buried_or_terminal", "weight": 5 },
+          { "feature": "abrupt_onset_offset", "weight": 4 },
+          { "feature": "rate_160_200", "weight": 4 }
+        ],
+        "management": "Vagal maneuvers. Adenosine 6-12 mg IV. Catheter ablation (curative) if recurrent or symptomatic."
+      },
+      {
+        "id": "avrt_wpw",
+        "name": "AV Reentrant Tachycardia (WPW Syndrome)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "delta_wave_on_sinus_ecg", "weight": 5 },
+          { "feature": "preexcitation_pattern", "weight": 4 },
+          { "feature": "very_rapid_rate_200_280", "weight": 4 }
+        ],
+        "management": "Adenosine (caution: may precipitate AF with rapid conduction). Procainamide if pre-excited AF. Catheter ablation definitive."
+      },
+      {
+        "id": "atrial_tachycardia",
+        "name": "Focal Atrial Tachycardia",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "p_wave_morphology_different", "weight": 5 },
+          { "feature": "warm_up_cool_down_behavior", "weight": 4 },
+          { "feature": "rate_100_250", "weight": 3 }
+        ],
+        "management": "Beta-blocker or CCB. Flecainide if no structural disease. Catheter ablation for refractory cases."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "sinus_tachycardia", "discriminators": ["gradual_onset", "physiological_cause", "p_wave_matches_sinus"] },
+      { "diseaseId": "atrial_flutter", "discriminators": ["sawtooth_waves", "atrial_rate_300", "carotid_massage_response"] },
+      { "diseaseId": "ventricular_tachycardia", "discriminators": ["wide_qrs", "av_dissociation", "structural_heart_disease"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG during tachycardia", "priority": "immediate", "yield": 0.98, "indication": "diagnosis and differentiation" },
+        { "name": "Vagal maneuver response", "priority": "immediate", "yield": 0.5, "indication": "diagnostic and therapeutic" }
+      ],
+      "laboratory": [
+        { "name": "Electrolytes", "priority": "medium", "yield": 0.2, "indication": "rule out metabolic triggers" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "medium", "yield": 0.4, "indication": "structural heart disease assessment" }
+      ],
+      "advanced": [
+        { "name": "Electrophysiology study", "indication": "definitive diagnosis and ablation", "priority": "medium" },
+        { "name": "Holter monitor", "indication": "capture infrequent episodes", "priority": "medium" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Supraventricular Tachycardia",
+      "pathways": [
+        {
+          "severity": "unstable",
+          "criteria": "hypotension, syncope, chest pain, heart failure",
+          "treatment": "Synchronized cardioversion (100-200 J biphasic). IV adenosine if immediately available. Sedation if conscious."
+        },
+        {
+          "severity": "stable",
+          "criteria": "hemodynamically stable",
+          "treatment": "Vagal maneuvers (Valsalva, carotid sinus massage). IV adenosine 6 mg rapid bolus (may repeat 12 mg). If converts: sinus rhythm. ECG post-conversion."
+        },
+        {
+          "severity": "recurrent",
+          "criteria": "multiple episodes, symptomatic",
+          "treatment": "Chronic prophylaxis (beta-blocker, verapamil, flecainide). Catheter ablation (curative, first-line for AVNRT/AVRT)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "reentry_circuit_av_node",
+      "dual_av_node_pathways_avnrt",
+      "accessory_pathway_avrt",
+      "ectopic_focus_atrial_tachycardia",
+      "rapid_ventricular_response",
+      "decreased_diastolic_filling"
+    ],
+    "complications": [
+      { "diseaseId": "heart_failure", "probability": 0.02, "severityBoost": 0.2, "clues": ["tachycardia_induced_cardiomyopathy", "persistent_svt"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "high if unstable",
+    "diagnosticClues": ["sudden_onset_sudden_offset", "regular_narrow_complex_tachycardia", "young_patient"],
+    "exclusionClues": ["irregular_rhythm", "wide_qrs", "sawtooth_pattern"]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "disease": {
+    "id": "epididymitis",
+    "name": "Epididymitis",
+    "system": "URO",
+    "agePeak_months": [180, 480],
+    "note": "Inflammation of epididymis. Usually infectious (STI in young, urine pathogens in older). Acute scrotal pain but less emergent than torsion.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["acute_scrotum", "epididymal_inflammation", "scrotal_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "scrotal_abscess_necrosis", "weight": 8 },
+        { "sign": "sepsis_from_epididymo_orchitis", "weight": 9 },
+        { "sign": "testicular_infarction", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Acute (<6 weeks) vs Chronic (>6 weeks). Severity: mild (focal tenderness) to severe (abscess, systemic symptoms)"
+    },
+    "historyFeatures": [
+      { "symptomId": "gradual_onset_testicular_pain", "weight": 5 },
+      { "symptomId": "scrotal_swelling", "weight": 4 },
+      { "symptomId": "dysuria_uti_symptoms", "weight": 3 },
+      { "symptomId": "urethral_discharge", "weight": 3, "note": "STI-related" },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "recent_sexual_activity_sti_exposure", "weight": 3 },
+      { "symptomId": "catheter_or_instrumentation_history", "weight": 2 },
+      { "symptomId": "pain_improves_with_scrotal_elevation_prehn", "weight": 3 },
+      { "symptomId": "groin_lower_abdominal_pain", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "epididymal_tenderness_and_swelling_posterior", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "testis_relatively_normal_early", "baseWeight": 3 },
+      { "signId": "positive_prehn_sign_relief_with_elevation", "baseWeight": 3 },
+      { "signId": "scrotal_erythema_edema", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "urethral_discharge_on_milking", "baseWeight": 3 },
+      { "signId": "intact_cremasteric_reflex", "baseWeight": 3 },
+      { "signId": "hydrocele_reactive", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "unsafe_sexual_practice", "multiplier": 3.0 },
+      { "id": "age_under_35_high_sti_risk", "multiplier": 2.5 },
+      { "id": "uti_recent", "multiplier": 2.0 },
+      { "id": "urethral_catheter_instrumentation", "multiplier": 2.5 },
+      { "id": "bladder_outlet_obstruction", "multiplier": 2.0 },
+      { "id": "vigorous_physical_activity", "multiplier": 1.5 },
+      { "id": "amiodarone_medication", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_epididymitis_sti",
+        "name": "Acute Epididymitis from STI",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "age_under_35", "weight": 5 },
+          { "feature": "urethral_discharge", "weight": 4 },
+          { "feature": "sexual_risk_factors", "weight": 4 },
+          { "feature": "chlamydia_trachomatis_or_neisseria_gonorrhoeae", "weight": 5 }
+        ],
+        "management": "Empiric: ceftriaxone 500 mg IM single dose + doxycycline 100 mg BID x 14 days. Test for chlamydia, gonorrhea, HIV, syphilis. Sexual partner treatment. Abstinence until symptoms resolve and treatment completed. Scrotal support, NSAIDs, elevation."
+      },
+      {
+        "id": "acute_epididymitis_coliform",
+        "name": "Acute Epididymitis from Enteric Bacteria",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "age_over_35", "weight": 4 },
+          { "feature": "uti_symptoms", "weight": 4 },
+          { "feature": "bladder_outlet_obstruction", "weight": 3 },
+          { "feature": "positive_urine_culture_e_coli_proteus", "weight": 5 }
+        ],
+        "management": "Oral fluoroquinolone (ciprofloxacin 500 mg BID or levofloxacin 750 mg daily) x 10-14 days. Or TMP-SMX DS BID if susceptible. Treat underlying UTI/BOO. Scrotal support, NSAIDs, elevation. Evaluate for obstruction (PSA, ultrasound, PVR)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "testicular_torsion", "discriminators": ["sudden_pain", "absent_cremasteric", "high_riding_testis", "negative_prehn", "no_discharge"] },
+      { "diseaseId": "testicular_tumor", "discriminators": ["painless_mass", "firm_nodule_on_testis", "no_inflammatory_signs", "ultrasound_shows_mass"] },
+      { "diseaseId": "incarcerated_hernia", "discriminators": ["inguinoscrotal_mass_not_separable", "bowel_sounds", "vomiting", "obstruction"] },
+      { "diseaseId": "fournier_gangrene", "discriminators": ["crepitus", "systemic_toxicity", "rapid_progression", "necrosis"] },
+      { "diseaseId": "trauma", "discriminators": ["clear_history_of_trauma", "ecchymosis"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Urinalysis + culture", "priority": "high", "yield": 0.7, "indication": "pyuria, bacteriuria" },
+        { "name": "Nucleic acid amplification test (NAAT) for chlamydia/gonorrhea", "priority": "high", "yield": 0.8, "indication": "STI screening" },
+        { "name": "Urethral swab for Gram stain (if discharge)", "priority": "medium", "yield": 0.6, "indication": "intracellular diplococci" },
+        { "name": "FBC, CRP", "priority": "medium", "yield": 0.5, "indication": "inflammatory markers" }
+      ],
+      "imaging": [
+        { "name": "Scrotal Doppler Ultrasound", "priority": "first-line if diagnosis unclear", "yield": 0.9, "indication": "increased blood flow to epididymis, differentiate from torsion" }
+      ]
+    },
+    "management": {
+      "protocolReference": "CDC STI Treatment Guidelines / EAU Guidelines on Urological Infections",
+      "pathways": [
+        {
+          "severity": "acute STI-related",
+          "criteria": "age <35, urethral discharge, sexual risk",
+          "treatment": "Ceftriaxone 500 mg IM x1 + doxycycline 100 mg BID x 14 days. Partner treatment. STI screen. Scrotal rest, elevation, ice. NSAIDs. Avoid sex until symptom-free and treatment complete."
+        },
+        {
+          "severity": "acute non-STI (enteric)",
+          "criteria": "age >35, UTI, BOO symptoms",
+          "treatment": "Ciprofloxacin 500 mg BID x 10-14 days or levofloxacin 750 mg daily x 10-14 days. Culture-guided adjustment. Scrotal support. Treat underlying BOO. Evaluate prostate."
+        },
+        {
+          "severity": "severe/abscess",
+          "criteria": "high fever, abscess on ultrasound, failure of oral antibiotics",
+          "treatment": "IV antibiotics (ceftriaxone + gentamicin or piperacillin-tazobactam). Scrotal exploration with drainage of abscess. Epididymectomy if necrotic. Admission for IV therapy."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "retrograde_extension_of_infection_from_urethra",
+      "vas_deferens_involvement_to_epididymis",
+      "bacterial_colonization_of_epididymal_ducts",
+      "inflammatory_edema_and_congestion",
+      "lymphatic_and_venous_compression",
+      "secondary_hydrocele_formation",
+      "extension_to_testis_epididymo_orchitis"
+    ],
+    "complications": [
+      { "diseaseId": "epididymo_orchitis", "probability": 0.2, "severityBoost": 0.2, "clues": ["testicular_involvement_with_pain_and_swelling"] },
+      { "diseaseId": "scrotal_abscess", "probability": 0.05, "severityBoost": 0.4, "clues": ["fluctuant_mass", "persistent_fever", "ultrasound_confirms_abscess"] },
+      { "diseaseId": "chronic_epididymitis", "probability": 0.1, "severityBoost": 0.2, "clues": ["persistent_pain_6_weeks", "epididymal_induration", "negative_cultures"] },
+      { "diseaseId": "infertility_obstruction", "probability": 0.05, "severityBoost": 0.2, "clues": ["bilateral_episodes", "epididymal_obstruction"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "low (unless abscess/sepsis)",
+    "diagnosticClues": ["gradual_onset_pain_behind_testis", "positive_prehn_sign", "intact_cremasteric", "dysuria_discharge", "age_and_sti_or_uti_risk"],
+    "exclusionClues": ["sudden_onset", "absent_cremasteric", "high_riding_testis", "negative_doppler_flow"]
+  }
+}

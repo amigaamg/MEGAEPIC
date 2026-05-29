@@ -1,0 +1,184 @@
+{
+  "disease": {
+    "id": "transfusion_reaction",
+    "name": "Transfusion Reaction",
+    "system": "hematology",
+    "agePeak_months": [12, 480, 720, 960],
+    "note": "Adverse reaction to blood product transfusion. Ranges from mild allergic to life-threatening acute hemolytic reactions, bacterial contamination, and TRALI. Immediate recognition and management critical.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["transfusion", "reaction", "hemolysis", "allergic", "emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_hemolytic_reaction", "weight": 10 },
+        { "sign": "anaphylactic_shock", "weight": 10 },
+        { "sign": "hypotension", "weight": 9 },
+        { "sign": "respiratory_distress", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "disseminated_intravascular_coagulation", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "mild_symptoms_only": true
+      },
+      "severityLabel": "If any oxygen desaturation, hypotension, or hemoglobinuria -> EMERGENCY; mild fever or rash -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_during_transfusion", "weight": 5 },
+      { "symptomId": "chills_and_rigors", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "chest_pain", "weight": 3 },
+      { "symptomId": "back_pain", "weight": 3, "note": "Classic in acute hemolytic reaction" },
+      { "symptomId": "dark_urine", "weight": 3, "note": "Hemoglobinuria" },
+      { "symptomId": "nausea_and_vomiting", "weight": 2 },
+      { "symptomId": "urticaria", "weight": 3 },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "prior_transfusion_history", "weight": 3 },
+      { "symptomId": "prior_pregnancy", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "urticaria", "baseWeight": 3 },
+      { "signId": "hypoxia", "baseWeight": 5 },
+      { "signId": "bronchospasm", "baseWeight": 4 },
+      { "signId": "signs_of_dic", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_transfusion", "multiplier": 2.0 },
+      { "id": "parous_women", "multiplier": 2.0 },
+      { "id": "multiple_prior_transfusions", "multiplier": 2.5 },
+      { "id": "allergic_history", "multiplier": 1.5 },
+      { "id": "ig_a_deficiency", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_hemolytic_reaction",
+        "name": "Acute Hemolytic Transfusion Reaction",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "abocompatibility", "weight": 5 },
+          { "feature": "onset_within_minutes", "weight": 5 },
+          { "feature": "hemoglobinuria_and_back_pain", "weight": 5 }
+        ],
+        "management": "STOP transfusion immediately. IV fluids, furosemide. Support BP. Monitor for DIC and renal failure. Notify blood bank."
+      },
+      {
+        "id": "febrile_non_hemolytic",
+        "name": "Febrile Non-Hemolytic Reaction",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "fever_above_38", "weight": 5 },
+          { "feature": "chills_rigors", "weight": 4 },
+          { "feature": "no_hemolysis", "weight": 4 }
+        ],
+        "management": "Stop transfusion. Antipyretics. Leukocyte-reduced products for future transfusions."
+      },
+      {
+        "id": "allergic_reaction",
+        "name": "Allergic Transfusion Reaction",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "urticaria_pruritus", "weight": 5 },
+          { "feature": "mild_only", "weight": 4 },
+          { "feature": "no_fever", "weight": 3 }
+        ],
+        "management": "Stop or pause transfusion. Antihistamines (diphenhydramine). Can restart if mild and symptoms resolve."
+      },
+      {
+        "id": "trali",
+        "name": "Transfusion-Related Acute Lung Injury (TRALI)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "acute_hypoxia_within_6_hours", "weight": 5 },
+          { "feature": "bilateral_pulmonary_edema", "weight": 5 },
+          { "feature": "no_cardiac_cause", "weight": 4 }
+        ],
+        "management": "STOP transfusion. ICU admission. Oxygen and ventilatory support. Diuretics not indicated (non-cardiogenic edema)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sepsis",
+        "discriminators": ["no_temporal_relation_to_transfusion", "positive_blood_cultures", "source_of_infection"]
+      },
+      {
+        "diseaseId": "cardiogenic_pulmonary_edema",
+        "discriminators": ["history_of_heart_failure", "elevated_nt_probnp", "response_to_diuretics"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Vital signs monitoring", "priority": "immediate", "yield": 0.9, "indication": "Fever, BP, HR, SpO2" }
+      ],
+      "laboratory": [
+        { "name": "Repeat ABO check", "priority": "immediate", "yield": 0.9, "indication": "Confirm product-patient compatibility" },
+        { "name": "Direct Coombs test", "priority": "immediate", "yield": 0.85, "indication": "Positive in hemolytic reaction" },
+        { "name": "Plasma free hemoglobin", "priority": "immediate", "yield": 0.8, "indication": "Elevated in hemolysis" },
+        { "name": "Bilirubin, LDH, haptoglobin", "priority": "high", "yield": 0.8, "indication": "Hemolysis markers" },
+        { "name": "Coagulation screen", "priority": "high", "yield": 0.5, "indication": "DIC monitoring" },
+        { "name": "Blood and product cultures", "priority": "high", "yield": 0.3, "indication": "Rule out bacterial contamination" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.7, "indication": "Pulmonary edema in TRALI vs TACO" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "SHOT / AABB / BSH Guidelines for Transfusion Reactions",
+      "pathways": [
+        {
+          "severity": "immediate_severe_reaction",
+          "criteria": "Hypotension, dyspnea, back pain, hemoglobinuria",
+          "treatment": "STOP transfusion immediately. Maintain IV access. Fluids, vasopressors if needed. Check plasma free Hb, Coombs. Notify blood bank. Monitor for DIC and AKI."
+        },
+        {
+          "severity": "mild_reaction",
+          "criteria": "Urticaria, mild pruritus, low-grade fever",
+          "treatment": "Slow or pause transfusion. Diphenhydramine 25-50mg IM/IV. Acetaminophen for fever. Can often restart after symptom resolution."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "abo_incompatibility_antibody_mediated",
+      "complement_activation",
+      "intravascular_hemolysis",
+      "cytokine_release",
+      "leukocyte_antibodies",
+      "donor_antibodies_against_host",
+      "mast_cell_degranulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["hemoglobinuria", "oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["prolonged_coag", "low_fibrinogen", "bleeding"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["symptoms_during_transfusion", "fever_chills_back_pain", "hemoglobinuria"],
+    "exclusionClues": ["no_temporal_relation_to_transfusion", "negative_hemolysis_workup"]
+  }
+}

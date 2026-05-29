@@ -1,0 +1,130 @@
+{
+  "disease": {
+    "id": "muscular_dystrophy",
+    "name": "Muscular Dystrophy",
+    "system": "NEURO",
+    "agePeak_months": [0, 240],
+    "note": "Genetic disorders causing progressive muscle weakness and wasting. Duchenne most common and severe. X-linked recessive.",
+    "prevalenceWeight": 0.08,
+    "syndromeTags": ["neuromuscular", "genetic_myopathy"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "cardiomyopathy_acute", "weight": 9 },
+        { "sign": "severe_scoliosis_complicating", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If respiratory/cardiac -> URGENT; else -> PROGRESSIVE"
+    },
+    "historyFeatures": [
+      { "symptomId": "proximal_muscle_weakness", "weight": 5 },
+      { "symptomId": "delayed_motor_milestones", "weight": 4 },
+      { "symptomId": "frequent_falls", "weight": 4 },
+      { "symptomId": "gait_difficulty_waddling", "weight": 4 },
+      { "symptomId": "toe_walking", "weight": 3 },
+      { "symptomId": "calf_hypertrophy", "weight": 3 },
+      { "symptomId": "family_history", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "gower_sign", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "waddling_gait", "baseWeight": 4 },
+      { "signId": "proximal_muscle_wasting", "baseWeight": 4 },
+      { "signId": "calf_pseudohypertrophy", "baseWeight": 3 },
+      { "signId": "lumbar_lordosis", "baseWeight": 3 },
+      { "signId": "contractures_achilles_heel", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_x_linked", "multiplier": 5.0 },
+      { "id": "dystrophin_gene_deletion", "multiplier": 10.0 },
+      { "id": "male_sex_dmd_bmd", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "duchenne_md",
+        "name": "Duchenne Muscular Dystrophy",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "onset_before_age_5", "weight": 5 },
+          { "feature": "loss_ambulation_by_12", "weight": 5 },
+          { "feature": "very_elevated_ck_50_to_100_times", "weight": 5 }
+        ],
+        "management": "Corticosteroids (prednisolone or deflazacort) to prolong ambulation. Cardiac care (ACEi). Respiratory support (NIPPV). Spine surgery for scoliosis. Genetic counseling."
+      },
+      {
+        "id": "becker_md",
+        "name": "Becker Muscular Dystrophy",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "onset_after_age_5_or_teenage", "weight": 5 },
+          { "feature": "ambulation_beyond_16", "weight": 5 }
+        ],
+        "management": "Cardiomyopathy surveillance and treatment. Exercise within limits. Prednisolone may help. Genetic counseling."
+      },
+      {
+        "id": "myotonic_dystrophy",
+        "name": "Myotonic Dystrophy Type 1",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "myotonia_grip_and_percussion", "weight": 5 },
+          { "feature": "facial_weakness_temporal_wasting", "weight": 4 },
+          { "feature": "multisystem_cardiac_cataract_endocrine", "weight": 4 }
+        ],
+        "management": "Mexiletine for myotonia. Pacemaker if conduction defect. Cataract surgery. CPAP for sleep apnea. Avoid succinylcholine."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "spinal_muscular_atrophy", "discriminators": ["fasciculations", "low_ck", "sma_genetic_test"] },
+      { "diseaseId": "congenital_myopathy", "discriminators": ["non_progressive", "facial_involvement_different", "biopsy_specific"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Creatine kinase (CK)", "priority": "high", "yield": 0.95, "indication": "massively elevated in DMD, moderately in BMD" },
+        { "name": "Genetic testing (dystrophin gene)", "priority": "confirmatory", "yield": 1.0, "indication": "deletion/duplication/point mutation in DMD gene" }
+      ],
+      "imaging": [
+        { "name": "Muscle MRI", "priority": "medium", "yield": 0.7, "indication": "fatty infiltration pattern, helps differentiate subtypes" }
+      ],
+      "advanced": [
+        { "name": "EMG/NCS", "indication": "myopathic pattern", "priority": "medium" },
+        { "name": "Muscle biopsy", "indication": "if genetic test negative (dystrophin staining)", "priority": "medium" }
+      ]
+    },
+    "management": {
+      "protocolReference": "DMD Care Considerations Working Group Guidelines",
+      "pathways": [
+        {
+          "severity": "ambulatory phase",
+          "criteria": "walking independently, age 2-7 years (DMD)",
+          "treatment": "Prednisolone 0.75 mg/kg/day or deflazacort 0.9 mg/kg/day. Monitor side effects. PT/OT to maintain flexibility. Stretching to prevent contractures. Vitamin D and calcium."
+        },
+        {
+          "severity": "loss of ambulation",
+          "criteria": "wheelchair-dependent, scoliosis, contractures",
+          "treatment": "Spinal surgery for scoliosis. Respiratory surveillance (FVC, cough peak flow). NIPPV at night. Cardiac MRI/echo annually. ACEi for cardiomyopathy."
+        },
+        {
+          "severity": "advanced/respiratory",
+          "criteria": "FVC <30%, daytime hypercapnia, symptomatic respiratory failure",
+          "treatment": "NIPPV 24h if needed. Consider tracheostomy. Palliative care. Advance care planning. Cardiac care for end-stage cardiomyopathy."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "dystrophin_deficiency",
+      "sarcolemma_instability",
+      "muscle_fiber_necrosis",
+      "fibrosis_and_fatty_replacement",
+      "repeated_degeneration_regeneration",
+      "exhaustion_of_satellite_cells"
+    ],
+    "complications": [
+      { "diseaseId": "dilated_cardiomyopathy", "probability": 0.5, "severityBoost": 0.3, "clues": ["dyspnea", "reduced_lvef"] },
+      { "diseaseId": "respiratory_failure", "probability": 0.6, "severityBoost": 0.4, "clues": ["declining_fvc", "morning_headache", "orthopnea"] },
+      { "diseaseId": "scoliosis", "probability": 0.7, "severityBoost": 0.1, "clues": ["spinal_curvature"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["proximal_weakness_early_onset", "gower_sign", "high_ck", "calf_hypertrophy", "dystrophin_mutation"],
+    "exclusionClues": ["low_ck", "normal_muscle_biopsy", "sensory_or_central_signs"]
+  }
+}

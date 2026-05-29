@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "thalassemia",
+    "name": "Thalassemia (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [3, 120],
+    "note": "Inherited hemoglobinopathy with reduced globin chain synthesis. Alpha and beta thalassemia major require lifelong transfusions leading to iron overload.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["hemoglobinopathy", "microcytic_anemia", "transfusion_dependent"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_anemia_hb_<5", "weight": 10 },
+        { "sign": "cardiac_failure_iron_overload", "weight": 10 },
+        { "sign": "arrhythmia", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "transfusion_dependency", "weight": 8 },
+          { "sign": "growth_failure", "weight": 6 },
+          { "sign": "hepatosplenomegaly_massive", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If Hb <7, transfusion-dependent, or iron overload complications -> SEVERE (thalassemia major); else -> NON-SEVERE (thalassemia trait)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "pallor_progressive", "weight": 5 },
+      { "symptomId": "fatigue_weakness", "weight": 4 },
+      { "symptomId": "poor_growth", "weight": 4 },
+      { "symptomId": "abdominal_distension", "weight": 3, "note": "Hepatosplenomegaly" },
+      { "symptomId": "jaundice", "weight": 2 },
+      { "symptomId": "family_history_thalassemia", "weight": 4 },
+      { "symptomId": "bone_pain_facial_bony_prominence", "weight": 3, "note": "Chipmunk facies" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor_severe", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatosplenomegaly", "baseWeight": 5 },
+      { "signId": "frontal_bossing", "baseWeight": 3 },
+      { "signId": "maxillary_hypertrophy", "baseWeight": 3 },
+      { "signId": "growth_retardation", "baseWeight": 4 },
+      { "signId": "jaundice", "baseWeight": 2 },
+      { "signId": "tachycardia_flow_murmur", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_thalassemia", "multiplier": 4.0 },
+      { "id": "mediterranean_middle_east_southeast_asian_ethnicity", "multiplier": 3.0 },
+      { "id": "carrier_state_both_parents", "multiplier": 4.0 },
+      { "id": "consanguinity", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "thalassemia_minor_trait",
+        "name": "Thalassemia Minor (Trait)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "microcytic_hypochromic_anemia_mild", "weight": 5 },
+          { "feature": "hb_>10_g_dL", "weight": 4 },
+          { "feature": "frequent_asymptomatic", "weight": 4 }
+        ],
+        "management": "No treatment needed. Genetic counseling. Avoid iron supplementation unless proven iron deficiency. Differentiate from iron deficiency with Hb electrophoresis."
+      },
+      {
+        "id": "thalassemia_major",
+        "name": "Thalassemia Major (Cooley Anemia)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "severe_anemia_by_6_months", "weight": 5 },
+          { "feature": "transfusion_dependent", "weight": 5 },
+          { "feature": "skeletal_deformities", "weight": 4 }
+        ],
+        "management": "Regular PRBC transfusions q3-4 weeks to maintain Hb >9-10. Chelation therapy (deferasirox/deferoxamine) to prevent iron overload. Monitor ferritin, cardiac/liver iron. Splenectomy if hypersplenism. Curative: hematopoietic stem cell transplant."
+      },
+      {
+        "id": "thalassemia_intermedia",
+        "name": "Thalassemia Intermedia",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "moderate_anemia_hb_7_to_10", "weight": 5 },
+          { "feature": "intermittent_transfusion_needs", "weight": 4 },
+          { "feature": "splenomegaly", "weight": 3 }
+        ],
+        "management": "Monitor Hb and growth. Transfuse during illness/surgery/pregnancy. Hydroxyurea may reduce transfusion needs. Splenectomy if massive splenomegaly. Folate supplementation. Avoid iron overload."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "iron_deficiency_anemia",
+        "discriminators": ["low_ferritin", "normal_hb_electrophoresis", "mentzer_index_>13", "response_to_iron"]
+      },
+      {
+        "diseaseId": "sickle_cell_disease",
+        "discriminators": ["sickle_cells_on_film", "hb_electrophoresis_shows_hbs", "pain_crises"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC with RBC indices", "priority": "immediate", "yield": 0.9, "indication": "microcytic hypochromic anemia, low MCV" },
+        { "name": "Hb electrophoresis (HPLC)", "priority": "immediate", "yield": 1.0, "indication": "definitive diagnosis, HbA2, HbF levels" },
+        { "name": "Serum ferritin", "priority": "high", "yield": 0.6, "indication": "differentiate from iron deficiency" },
+        { "name": "Mentzer index (MCV/RBC)", "priority": "high", "yield": 0.7, "indication": "<13 suggests thalassemia trait" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "medium", "yield": 0.5, "indication": "hepatosplenomegaly, gallstones" },
+        { "name": "MRI T2* (cardiac and liver)", "priority": "medium", "yield": 0.9, "indication": "iron overload monitoring" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Thalassemia International Federation Guidelines",
+      "pathways": [
+        {
+          "severity": "trait_minor",
+          "criteria": "Mild microcytic anemia, Hb >10, asymptomatic",
+          "treatment": "Reassurance. Genetic counseling. No iron supplements. Differentiate from iron deficiency. Prenatal diagnosis options for at-risk couples."
+        },
+        {
+          "severity": "major",
+          "criteria": "Hb <7 by 6-12 months, transfusion-dependent, skeletal changes",
+          "treatment": "Regular PRBC transfusion (10-15 mL/kg) q3-4w. Target pre-transfusion Hb 9-10. Iron chelation: deferasirox 20-40 mg/kg/day oral or deferoxamine 40-50 mg/kg SC 5-7 days/week. Monitor ferritin. Consider HSCT."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "reduced_globin_chain_synthesis",
+      "ineffective_erythropoiesis",
+      "hemolysis_intramedullary",
+      "microcytic_hypochromic_anemia",
+      "extramedullary_hematopoiesis",
+      "iron_overload_from_transfusions"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "iron_overload",
+        "probability": 0.9,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.4,
+        "clues": ["multiple_transfusions", "elevated_ferritin", "cardiac_arrhythmia"]
+      },
+      {
+        "diseaseId": "endocrine_complications",
+        "probability": 0.4,
+        "lagDays": [1825, 7300],
+        "severityBoost": 0.3,
+        "clues": ["growth_failure", "delayed_puberty", "hypothyroidism", "diabetes"]
+      },
+      {
+        "diseaseId": "cardiac_hemosiderosis",
+        "probability": 0.3,
+        "lagDays": [1825, 7300],
+        "severityBoost": 0.6,
+        "clues": ["arrhythmia", "heart_failure", "elevated_cardiac_mri_t2*"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["microcytic_hypochromic_anemia", "positive_family_history", "hepatosplenomegaly", "elevated_hba2_on_electrophoresis"],
+    "exclusionClues": ["normal_mcv", "normal_hb_electrophoresis", "normal_ferritin"]
+  }
+}

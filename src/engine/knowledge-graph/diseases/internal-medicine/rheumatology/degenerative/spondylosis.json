@@ -1,0 +1,155 @@
+{
+  "disease": {
+    "id": "spondylosis",
+    "name": "Spondylosis (Spinal Osteoarthritis)",
+    "system": "rheumatology",
+    "agePeak_months": [600, 1080],
+    "note": "Degenerative disease of the spine involving intervertebral discs, facet joints, and spinal ligaments. Can cause neck or back pain, radiculopathy, and spinal stenosis. Most common cause of back pain in older adults.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["degenerative", "spine", "mechanical_back_pain", "radiculopathy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cauda_equina_syndrome", "weight": 10 },
+        { "sign": "cervical_myelopathy", "weight": 9 },
+        { "sign": "spinal_fracture_pathological", "weight": 8 },
+        { "sign": "spinal_infection_discitis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If cauda equina, myelopathy, or fracture -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "neck_or_low_back_pain", "weight": 5 },
+      { "symptomId": "mechanical_pattern_worse_activity", "weight": 5 },
+      { "symptomId": "radicular_pain_dermatomal", "weight": 4 },
+      { "symptomId": "numbness_tingling_extremities", "weight": 3 },
+      { "symptomId": "neurogenic_claudication", "weight": 4 },
+      { "symptomId": "morning_stiffness_brief", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "limited_spine_range_of_motion", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "paraspinal_muscle_spasm", "baseWeight": 3 },
+      { "signId": "positive_slr_test", "baseWeight": 3 },
+      { "signId": "neurological_deficit_dermatomal", "baseWeight": 4 },
+      { "signId": "spinal_tenderness_on_palpation", "baseWeight": 2 },
+      { "signId": "lhermitte_sign_cervical", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_age", "multiplier": 5.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "heavy_lifting_occupation", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "prior_spine_trauma", "multiplier": 2.0 },
+      { "id": "sedentary_lifestyle", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "cervical_spondylosis",
+        "name": "Cervical Spondylosis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "neck_pain_radiating_to_occiput_shoulder", "weight": 5 },
+          { "feature": "cervical_radiculopathy_c5_c7", "weight": 4 },
+          { "feature": "cervical_myelopathy_risk", "weight": 4 }
+        ],
+        "management": "Physiotherapy. NSAIDs. Collar for acute pain. Surgery for myelopathy."
+      },
+      {
+        "id": "lumbar_spondylosis",
+        "name": "Lumbar Spondylosis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "low_back_pain_exertion", "weight": 5 },
+          { "feature": "lumbar_radiculopathy_sciatica", "weight": 4 },
+          { "feature": "neurogenic_claudication_stenosis", "weight": 4 }
+        ],
+        "management": "Activity modification. Core strengthening. NSAIDs. Epidural steroids. Decompression surgery for stenosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "ankylosing_spondylitis",
+        "discriminators": ["inflammatory_back_pain_under_45", "improves_with_exercise", "sacrailiitis", "hla_b27"]
+      },
+      {
+        "diseaseId": "spinal_stenosis_other_causes",
+        "discriminators": ["congenital_stenosis", "tumor", "infection", "younger_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Neurological exam including reflexes", "priority": "immediate", "yield": 0.8, "indication": "detect radiculopathy, myelopathy" },
+        { "name": "Straight leg raise test", "priority": "high", "yield": 0.7, "indication": "lumbar nerve root irritation" }
+      ],
+      "laboratory": [
+        { "name": "CRP and ESR", "priority": "medium", "yield": 0.2, "indication": "normal in degenerative disease" }
+      ],
+      "imaging": [
+        { "name": "Spine X-ray (weight-bearing)", "priority": "high", "yield": 0.7, "indication": "disc space narrowing, osteophytes, alignment" },
+        { "name": "MRI spine", "priority": "high", "yield": 0.9, "indication": "disc herniation, canal stenosis, nerve root compression" },
+        { "name": "CT myelogram", "priority": "low", "yield": 0.8, "indication": "when MRI contraindicated" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Low Back Pain and Sciatica Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "mechanical back/neck pain, no radiculopathy",
+          "treatment": "Stay active. Physiotherapy. NSAIDs. Heat/ice. Manual therapy."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "radicular pain, neurogenic claudication, significant functional limit",
+          "treatment": "NSAIDs + PPI. Epidural steroid injection. Nerve root block. Physiotherapy."
+        },
+        {
+          "severity": "severe",
+          "criteria": "myelopathy, cauda equina, severe stenosis, progressive deficit",
+          "treatment": "Surgical decompression (laminectomy, discectomy, fusion). Immediate referral."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "intervertebral_disc_degeneration",
+      "loss_of_disc_height",
+      "facet_joint_hypertrophy",
+      "ligamentum_flavum_buckling",
+      "osteophyte_formation",
+      "spinal_canal_stenosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cervical_myelopathy",
+        "probability": 0.05,
+        "severityBoost": 0.7,
+        "clues": ["gait_disturbance", "hand_clumsiness", "hyperreflexia", "babinski_sign", "lhermitte"]
+      },
+      {
+        "diseaseId": "lumbar_spinal_stenosis",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["neurogenic_claudication", "relief_on_forward_bending", "bilateral_symptoms"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if cauda equina or myelopathy",
+    "diagnosticClues": ["mechanical_back_pain_older", "radiculopathy", "neurogenic_claudication", "degenerative_xray_changes"],
+    "exclusionClues": ["inflammatory_pattern_back_pain", "fever", "night_sweats", "weight_loss", "trauma"]
+  }
+}

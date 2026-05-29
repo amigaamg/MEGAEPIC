@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "hepatobiliary_pancreatitis",
+    "name": "Gallstone Pancreatitis",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Acute pancreatitis triggered by gallstone passage through the ampulla of Vater. Most common cause of acute pancreatitis.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["acute_abdomen", "epigastric_pain", "gallstone_complication"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "hemorrhagic_ascites", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "glasgow_score_3_or_more", "weight": 8 },
+          { "sign": "persistent_organ_failure_48h", "weight": 8 },
+          { "sign": "pancreatic_necrosis_on_ct", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Organ failure/necrosis -> SEVERE; mild pancreatitis without organ failure -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain", "weight": 5, "modifiers": [
+          { "condition": "radiation_to_back", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "known_gallstones", "weight": 5 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "previous_biliary_colic", "weight": 3 },
+      { "symptomId": "fatty_meal_preceding", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "guarding", "baseWeight": 3 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 3 },
+      { "signId": "grey_turner_cullen_sign", "baseWeight": 2 },
+      { "signId": "jaundice", "baseWeight": 3, "note": "If CBD stone persists" },
+      { "signId": "tachycardia_hypotension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "gallstones", "multiplier": 3.0 },
+      { "id": "female_gender", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "age_over_50", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_gallstone_pancreatitis",
+        "name": "Mild Gallstone Pancreatitis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "glasgow_0_2", "weight": 5 },
+          { "feature": "no_organ_failure", "weight": 5 },
+          { "feature": "rapid_improvement_in_48h", "weight": 4 }
+        ],
+        "management": "Conservative: NBM, IV fluids (Ringer's lactate), analgesia. MRCP if concern for persistent CBD stone. Laparoscopic cholecystectomy during same admission once pancreatitis resolves."
+      },
+      {
+        "id": "severe_gallstone_pancreatitis",
+        "name": "Severe Gallstone Pancreatitis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "glasgow_3_or_more", "weight": 5 },
+          { "feature": "organ_failure", "weight": 5 },
+          { "feature": "pancreatic_necrosis", "weight": 5 },
+          { "feature": "persistent_cbd_stone", "weight": 4 }
+        ],
+        "management": "ICU admission. Aggressive IV fluids. Urgent ERCP if cholangitis or persistent biliary obstruction. Enteral nutrition via NG tube. Step-up approach for necrosectomy. Cholecystectomy after recovery."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_cholecystitis",
+        "discriminators": ["murphy_sign", "no_back_radiation", "normal_amylase"]
+      },
+      {
+        "diseaseId": "perforated_ulcer",
+        "discriminators": ["board_like_rigidity", "pneumoperitoneum", "no_gallstones"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Glasgow score", "priority": "immediate", "yield": 0.85, "indication": "severity assessment" }
+      ],
+      "laboratory": [
+        { "name": "Serum Lipase", "priority": "immediate", "yield": 0.95, "indication": "gold standard" },
+        { "name": "Serum Amylase", "priority": "immediate", "yield": 0.85, "indication": "elevated >3x" },
+        { "name": "LFTs", "priority": "high", "yield": 0.7, "indication": "elevated ALT strongly suggests gallstone etiology" },
+        { "name": "CRP", "priority": "high", "yield": 0.75, "indication": "CRP >150 at 48h suggests severe" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.7, "indication": "detect gallstones, CBD dilation" },
+        { "name": "MRCP", "priority": "high", "yield": 0.9, "indication": "CBD stones if suspected" },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.85, "indication": "assess necrosis severity after 48-72h" },
+        { "name": "ERCP", "priority": "medium", "yield": 0.95, "indication": "therapeutic for CBD stones" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IAP/APA Guidelines for Acute Pancreatitis",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "Glasgow <3, no organ failure, resolving",
+          "treatment": "IV fluids, analgesia, NBM initially then oral. MRCP if LFTs persistently elevated. Laparoscopic cholecystectomy during same admission."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Glasgow >=3, organ failure, necrosis",
+          "treatment": "ICU. Aggressive IV fluids. ERCP <24h if cholangitis. Enteral nutrition. Step-up necrosectomy if needed. Delayed cholecystectomy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "gallstone_migration",
+      "impaction_at_ampulla",
+      "pancreatic_duct_obstruction",
+      "premature_enzyme_activation",
+      "pancreatic_inflammation",
+      "local_and_systemic_complications"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pancreatic_necrosis",
+        "probability": 0.15,
+        "lagDays": [2, 7],
+        "severityBoost": 0.4,
+        "clues": ["persistent_organ_failure", "crp_greater_150", "non_enhancing_pancreas_on_ct"]
+      },
+      {
+        "diseaseId": "choledocholithiasis",
+        "probability": 0.2,
+        "lagDays": [0, 5],
+        "severityBoost": 0.2,
+        "clues": ["persistent_jaundice", "elevated_alp", "dilated_cbd"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["epigastric_pain_radiating_to_back", "elevated_lipase", "gallstones_on_us", "elevated_alt"],
+    "exclusionClues": ["no_gallstones", "alcohol_as_primary_risk", "normal_lfts"]
+  }
+}

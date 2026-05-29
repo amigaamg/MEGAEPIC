@@ -1,0 +1,160 @@
+{
+  "disease": {
+    "id": "gestational_diabetes",
+    "name": "Gestational Diabetes Mellitus (GDM)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Carbohydrate intolerance of variable severity with onset or first recognition during pregnancy. Most commonly diagnosed at 24-28 weeks. Increases risk of macrosomia, shoulder dystocia, and neonatal hypoglycemia.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["metabolic_disorder_pregnancy", "high_risk_pregnancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "severeCriteria": {
+        "anyDangerSign": false,
+        "additionalCriteria": [
+          { "sign": "persistent_fasting_bgl_over_10", "weight": 8 },
+          { "sign": "ketonuria", "weight": 6 },
+          { "sign": "fetal_macrosomia_on_scan", "weight": 6 },
+          { "sign": "polyhydramnios", "weight": 5 },
+          { "sign": "poor_glycemic_control_on_maximal_oral_therapy", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Fasting glucose >6.9 mmol/L, macrosomia, or poor control -> SEVERE; Diet-controlled -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "polyuria", "weight": 3 },
+      { "symptomId": "polydipsia", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 2 },
+      { "symptomId": "excessive_fetal_growth_history", "weight": 3 },
+      { "symptomId": "previous_GDM", "weight": 4 },
+      { "symptomId": "family_history_of_diabetes", "weight": 3 },
+      { "symptomId": "asymptomatic_routine_screening", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "obesity", "baseWeight": 3 },
+      { "signId": "acanthosis_nigricans", "baseWeight": 2 },
+      { "signId": "fetal_growth_large_for_dates_on_symphysial_fundal_height", "baseWeight": 3 },
+      { "signId": "polyhydramnios_on_exam", "baseWeight": 2 },
+      { "signId": "elevated_blood_pressure", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "BMI_over_30", "multiplier": 3.0 },
+      { "id": "previous_GDM", "multiplier": 10.0 },
+      { "id": "family_history_of_diabetes_first_degree", "multiplier": 2.5 },
+      { "id": "previous_macrosomic_baby_over_4_5kg", "multiplier": 3.0 },
+      { "id": "maternal_age_over_35", "multiplier": 2.0 },
+      { "id": "polycystic_ovary_syndrome", "multiplier": 2.5 },
+      { "id": "ethnic_high_risk_asian_african_middle_eastern", "multiplier": 2.0 },
+      { "id": "history_of_unexplained_perinatal_loss", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "preexisting_type_1_diabetes",
+        "discriminators": ["diagnosis_before_pregnancy", "ketonuria", "positive_autoantibodies"]
+      },
+      {
+        "diseaseId": "prediabetes_undiagnosed",
+        "discriminators": ["elevated_hba1c_first_trimester", "abnormal_ogtt_early"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Capillary blood glucose monitoring", "priority": "immediate", "yield": 0.9, "indication": "fasting and postprandial" },
+        { "name": "Urine ketones dipstick", "priority": "medium", "yield": 0.5, "indication": "assess for ketosis" }
+      ],
+      "laboratory": [
+        { "name": "Oral glucose tolerance test 75g", "priority": "diagnostic", "yield": 0.95, "indication": "24-28 weeks; fasting >5.1, 1h >10.0, 2h >8.5 mmol/L" },
+        { "name": "HbA1c", "priority": "medium", "yield": 0.6, "indication": "assess overall control; less reliable in pregnancy" },
+        { "name": "Fasting glucose", "priority": "high", "yield": 0.7, "indication": "initial screening" }
+      ],
+      "imaging": [
+        { "name": "Fetal growth ultrasound", "priority": "routine", "yield": 0.7, "indication": "monitor for fetal macrosomia" },
+        { "name": "Amniotic fluid index", "priority": "routine", "yield": 0.6, "indication": "assess for polyhydramnios" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG3 - Diabetes in Pregnancy",
+      "pathways": [
+        {
+          "severity": "diet_controlled",
+          "criteria": "fasting <5.3, 1h postprandial <7.8, 2h <6.7 mmol/L on diet alone",
+          "treatment": "Medical nutrition therapy: low glycemic index diet, complex carbs, portion control. Exercise. Self-monitoring of BGL 4 times daily. Metformin if targets not met."
+        },
+        {
+          "severity": "pharmacotherapy_required",
+          "criteria": "fasting >5.3 or postprandial >7.8 despite diet",
+          "treatment": "Metformin 500mg PO daily, titrate up to 2.5g/day. If not tolerated or insufficient, add or switch to insulin (NPH or long-acting for fasting, rapid-acting for meals). Glyburide second-line."
+        },
+        {
+          "severity": "poorly_controlled",
+          "criteria": "consistently high BGL, macrosomia, or polyhydramnios",
+          "treatment": "Endocrinology referral. Intensive insulin therapy. Fetal surveillance (biophysical profile, Doppler). Increased antenatal monitoring. Plan delivery: induction at 38-39 weeks if on insulin. Avoid postterm pregnancy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "increased_placental_hormones",
+      "human_placental_lactogen",
+      "prolactin_cortisol",
+      "progressive_insulin_resistance",
+      "beta_cell_dysfunction_unmasked"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "fetal_macrosomia",
+        "probability": 0.25,
+        "lagDays": [30, 90],
+        "severityBoost": 0.3,
+        "clues": ["fundal_height_excess", "ultrasound_estimated_fetal_weight_over_4500g"]
+      },
+      {
+        "diseaseId": "shoulder_dystocia",
+        "probability": 0.05,
+        "lagDays": [0, 0],
+        "severityBoost": 0.5,
+        "clues": ["macrosomia", "prolonged_second_stage"]
+      },
+      {
+        "diseaseId": "neonatal_hypoglycemia",
+        "probability": 0.3,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["jitteriness", "poor_feeding", "low_blood_glucose_neonate"]
+      },
+      {
+        "diseaseId": "preeclampsia",
+        "probability": 0.15,
+        "lagDays": [0, 90],
+        "severityBoost": 0.4,
+        "clues": ["hypertension", "proteinuria"]
+      },
+      {
+        "diseaseId": "type_2_diabetes_postpartum",
+        "probability": 0.5,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.2,
+        "clues": ["persistent_impaired_glucose_postpartum"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["abnormal_ogtt", "excessive_fetal_growth", "polyhydramnios"],
+    "exclusionClues": ["normal_ogtt", "no_risk_factors"]
+  }
+}

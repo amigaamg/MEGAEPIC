@@ -1,0 +1,121 @@
+{
+  "disease": {
+    "id": "severe_croup",
+    "name": "Severe Croup",
+    "system": "emergency_medicine",
+    "agePeak_months": [12, 48],
+    "note": "Acute viral infection causing subglottic airway obstruction. Characterised by barking cough, stridor, and respiratory distress. Most cases mild, but severe croup can be life-threatening.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["pediatric_emergency", "respiratory_emergency", "airway_obstruction"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stridor_at_rest_severe", "weight": 10 },
+        { "sign": "severe_indrawing_sternal_intercostal", "weight": 9 },
+        { "sign": "hypoxia", "weight": 10 },
+        { "sign": "exhaustion_lethargy", "weight": 10 },
+        { "sign": "pallor_or_cyanosis", "weight": 10 },
+        { "sign": "unconsciousness", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Severe croup with stridor at rest and indrawing = EMERGENCY. Impending airway loss."
+    },
+    "historyFeatures": [
+      { "symptomId": "barking_croupy_cough", "weight": 5 },
+      { "symptomId": "stridor_noisy_breathing", "weight": 5 },
+      { "symptomId": "hoarse_voice", "weight": 4 },
+      { "symptomId": "fever_mild", "weight": 3 },
+      { "symptomId": "cold_symptoms_preceding", "weight": 3 },
+      { "symptomId": "worse_at_night", "weight": 3 },
+      { "symptomId": "difficulty_swallowing_or_drooling", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "barking_cough", "baseWeight": 5 },
+      { "signId": "stridor_inspiratory", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "indrawing_suprasternal_intercostal", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "hypoxia", "baseWeight": 4 },
+      { "signId": "lethargy_or_agitation", "baseWeight": 3 },
+      { "signId": "pallor_cyanosis", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "age_6_months_to_3_years", "multiplier": 3.0 },
+      { "id": "male_sex", "multiplier": 1.5 },
+      { "id": "prematurity", "multiplier": 1.5 },
+      { "id": "previous_croup", "multiplier": 2.0 },
+      { "id": "autumn_winter_season", "multiplier": 1.5 }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "epiglottitis",
+        "discriminators": ["drooling", "toxic_appearance", "high_fever", "no_cough", "tripod_positioning"]
+      },
+      {
+        "diseaseId": "bacterial_tracheitis",
+        "discriminators": ["high_fever", "toxic", "thick_secretions", "no_response_to_nebulized_adrenaline"]
+      },
+      {
+        "diseaseId": "foreign_body_airway",
+        "discriminators": ["sudden_onset", "choking_history", "no_fever", "unilateral_signs"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Westley Croup Score", "priority": "immediate", "yield": 0.9, "indication": "severity: stridor, retractions, air entry, cyanosis, consciousness" },
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.8, "indication": "oxygenation" },
+        { "name": "Respiratory rate and effort", "priority": "immediate", "yield": 0.9, "indication": "work of breathing" }
+      ],
+      "imaging": [
+        { "name": "Neck X-ray (AP)", "priority": "low", "yield": 0.5, "indication": "steeple sign (subglottic narrowing), only if uncertain diagnosis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Croup Guidelines / BTS Guidelines",
+      "pathways": [
+        {
+          "severity": "severe croup (Westley >=6)",
+          "criteria": "stridor at rest, severe indrawing, hypoxia, lethargy, agitation",
+          "treatment": "ABCDE. Keep child calm (parental presence). Oxygen to target SpO2 >92%. Nebulized adrenaline (epinephrine) 0.5mL/kg (max 5mL) of 1:1000. Dexamethasone 0.6mg/kg PO/IV (max 10mg) or prednisolone. Repeat nebulized adrenaline every 20 min if needed. Prepare for intubation (smallest ETT size) if impending respiratory failure. ICU admission."
+        },
+        {
+          "severity": "moderate croup (Westley 3-5)",
+          "criteria": "stridor on exertion, some indrawing, no hypoxia",
+          "treatment": "Dexamethasone 0.6mg/kg PO/IM (max 10mg). Observe 4 hours. If improves (stridor resolved at rest), discharge with steroid review. If no improvement, admit and consider adrenaline."
+        },
+        {
+          "severity": "mild croup (Westley <=2)",
+          "criteria": "occasional barking cough, no stridor at rest, no indrawing",
+          "treatment": "Single dose of dexamethasone 0.6mg/kg PO. Reassure parents. Discharge with safety net advice."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "viral_infection_parainfluenza_most_common",
+      "subglottic_inflammation",
+      "subglottic_swelling",
+      "dynamic_airway_collapse",
+      "increased_work_of_breathing",
+      "inspiratory_stridor",
+      "respiratory_fatigue",
+      "airway_obstruction"
+    ],
+    "complications": [
+      {
+        "diseaseId": "respiratory_failure",
+        "probability": 0.02,
+        "severityBoost": 0.7,
+        "clues": ["exhaustion", "hypoxia", "decreased_respiratory_effort"]
+      },
+      {
+        "diseaseId": "pneumonia",
+        "probability": 0.05,
+        "severityBoost": 0.2,
+        "clues": ["persistent_fever", "crackles", "infiltrates"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["barking_cough", "inspiratory_stridor", "hoarse_voice", "fever", "age_6m_to_3y", "steeple_sign"],
+    "exclusionClues": ["drooling_toxic_looking", "no_cough", "severe_dysphagia", "normal_voice"]
+  }
+}

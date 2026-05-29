@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "tension_pneumothorax",
+    "name": "Tension Pneumothorax",
+    "system": "RAD",
+    "agePeak_months": [12, 600],
+    "note": "Life-threatening condition where air accumulates in pleural space under positive pressure, causing mediastinal shift, impaired venous return, and hemodynamic collapse. Requires immediate decompression before imaging confirmation.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["critical_finding", "respiratory_emergency", "should_be_immediate_life_threat"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "pulseless_electrical_activity", "weight": 10 },
+        { "sign": "severe_hypotension_refractory", "weight": 10 },
+        { "sign": "obstructive_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "mediastinal_shift_away_from_pneumothorax", "weight": 8 },
+          { "sign": " tracheal_deviation_contralateral", "weight": 8 },
+          { "sign": "diaphragmatic_depression", "weight": 7 },
+          { "sign": "hemodynamic_instability_with_respiratory_distress", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "CRITICAL FINDING - immediate decompression required, do not wait for imaging"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_pleuritic_chest_pain", "weight": 5, "modifiers": [
+          { "condition": "with_dyspnea_and_distress", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "dyspnea_sudden_and_severe", "weight": 5 },
+      { "symptomId": "mechanical_ventilation_trauma", "weight": 4 },
+      { "symptomId": "chest_trauma_penetrating_or_blunt", "weight": 4 },
+      { "symptomId": "positive_pressure_ventilation", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "tracheal_deviation_away_from_side", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "absent_breath_sounds_unilateral", "baseWeight": 5 },
+      { "signId": "hyperresonance_to_percussion", "baseWeight": 4 },
+      { "signId": "distended_neck_veins_jvd", "baseWeight": 4 },
+      { "signId": "hypotension_tachycardia", "baseWeight": 4 },
+      { "signId": "cyanosis", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "mechanical_ventilation_with_peep", "multiplier": 4.0 },
+      { "id": "chest_trauma", "multiplier": 3.0 },
+      { "id": "copd_bullous_disease", "multiplier": 2.5 },
+      { "id": "cystic_fibrosis", "multiplier": 2.0 },
+      { "id": "marfan_syndrome", "multiplier": 2.0 },
+      { "id": "central_line_placement", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "spontaneous_tension_pneumothorax",
+        "name": "Spontaneous Tension Pneumothorax",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "primary_no_lung_disease", "weight": 3 },
+          { "feature": "tall_thin_male_habitus", "weight": 3 },
+          { "feature": "pneumothorax_with_mediastinal_shift", "weight": 5 }
+        ],
+        "management": "Emergent needle decompression (2nd ICS MCL or 5th ICS AAL). Followed by chest tube (24-28Fr). Thoracoscopic blebectomy + pleurodesis for recurrent."
+      },
+      {
+        "id": "ventilator_associated_tension",
+        "name": "Ventilator-Associated Tension Pneumothorax",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "sudden_deterioration_on_ventilator", "weight": 5 },
+          { "feature": "increasing_peak_airway_pressure", "weight": 5 },
+          { "feature": "hypotension_during_ventilation", "weight": 5 },
+          { "feature": "air_trapping_breath_stacking", "weight": 4 }
+        ],
+        "management": "Immediately disconnect ventilator. Needle decompression. Tube thoracostomy. Consider lung-protective ventilation settings. Reduce PEEP."
+      },
+      {
+        "id": "traumatic_tension_pneumothorax",
+        "name": "Traumatic Tension Pneumothorax",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "open_pneumothorax_sucking_chest_wound", "weight": 5 },
+          { "feature": "rib_fractures", "weight": 3 },
+          { "feature": "subcutaneous_emphysema_rapid", "weight": 4 }
+        ],
+        "management": "Needle decompression in 5th ICS AAL (longer needle for larger chest wall). Tube thoracostomy 28-32Fr. Examine for associated hemothorax. ATLS protocol."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "simple_pneumothorax",
+        "discriminators": ["no_hemodynamic_instability", "no_mediastinal_shift", "no_tracheal_deviation"]
+      },
+      {
+        "diseaseId": "massive_hemothorax",
+        "discriminators": ["opacification_not_lucency", "no_tracheal_deviation_away"]
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["normal_breath_sounds", "no_hyperresonance", "no_tracheal_deviation"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Physical exam (trachea, breath sounds, JVD)", "priority": "immediate", "yield": 0.85, "indication": "should precede imaging in unstable patient" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Chest X-ray AP (portable)", "priority": "immediate", "yield": 0.95, "indication": "confirms diagnosis if time permits; deep sulcus sign, mediastinal shift" },
+        { "name": "CT Chest", "priority": "low", "yield": 1.0, "indication": "do NOT delay treatment; only for stable patients or after decompression" },
+        { "name": "Lung Ultrasound", "priority": "immediate", "yield": 0.9, "indication": "POCUS: absent lung sliding, lung point, stratosphere sign" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACR Critical Findings and ATLS Guidelines",
+      "pathways": [
+        {
+          "severity": "suspected_tension_unstable",
+          "criteria": "clinical diagnosis: hypotensive, distended neck veins, absent breath sounds, tracheal deviation",
+          "treatment": "Immediate needle decompression (14G, 2nd ICS MCL or 5th ICS AAL). Do NOT wait for XR. Decompression can be performed by any trained clinician. Immediate improvement confirms diagnosis."
+        },
+        {
+          "severity": "confirmed_on_imaging_stable",
+          "criteria": "imaging shows tension physiology but patient compensated",
+          "treatment": "Urgent chest tube insertion (24-28Fr). Needle decompression if any deterioration. One-way valve (Heimlich) or underwater seal drainage."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "positive_intrapleural_pressure",
+      "venous_return_impaired",
+      "decreased_cardiac_output",
+      "mediastinal_shift_to_contralateral_side",
+      "contralateral_lung_compression",
+      "hypoxia_and_obstructive_shock"
+    ],
+    "complications": [
+      {
+        "diseaseId": "obstructive_shock_cardiac_arrest",
+        "probability": 0.2,
+        "lagDays": [0, 0],
+        "severityBoost": 0.8,
+        "clues": ["hypotension", "jvd", "pea"]
+      },
+      {
+        "diseaseId": "re_expansion_pulmonary_edema",
+        "probability": 0.05,
+        "lagDays": [0, 1],
+        "severityBoost": 0.3,
+        "clues": ["rapid_reexpansion", "cough", "hypoxia_after_chest_tube"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["tracheal_deviation", "absent_breath_sounds", "hyperresonance", "hypotension_jvd"],
+    "exclusionClues": ["normal_chest_xr", "no_tension_physiology", "hemodynamically_stable"]
+  }
+}

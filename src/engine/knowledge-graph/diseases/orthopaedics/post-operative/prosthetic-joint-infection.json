@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "prosthetic-joint-infection",
+    "name": "Prosthetic Joint Infection",
+    "system": "ORTHO",
+    "agePeak_months": [480, 960],
+    "note": "Devastating complication of arthroplasty. Acute (<4 weeks) or chronic (>4 weeks). Biofilm formation on implant. Staph species most common. Often requires two-stage revision.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["post_operative_complication", "joint_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "sinus_tract_communicating_with_prosthesis", "weight": 9 },
+        { "sign": "femoral_head_avulsion", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "early_post_op_infection_<4_weeks", "weight": 7 },
+          { "sign": "high_crp_>100", "weight": 6 },
+          { "sign": "loosening_on_xray", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If sinus tract, septic, or delayed diagnosis -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "persistent_joint_pain_since_arthroplasty", "weight": 5 },
+      { "symptomId": "wound_discharge_sinus", "weight": 5 },
+      { "symptomId": "fever_rigors", "weight": 3 },
+      { "symptomId": "joint_swelling_warmth", "weight": 4 },
+      { "symptomId": "history_of_arthroplasty", "weight": 5 },
+      { "symptomId": "timing_early_vs_late", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "joint_effusion_swelling", "baseWeight": 4 },
+      { "signId": "warmth_erythema_over_joint", "baseWeight": 4 },
+      { "signId": "sinus_tract_exam", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pain_on_range_of_motion", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "obesity", "multiplier": 2.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.5 },
+      { "id": "immunosuppression_steroids", "multiplier": 2.5 },
+      { "id": "previous_joint_surgery", "multiplier": 2.0 },
+      { "id": "prolonged_operative_time", "multiplier": 2.0 },
+      { "id": "rheumatoid_arthritis", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "early_post_op_infection",
+        "name": "Early Post-Operative Infection (<4 weeks)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "wound_drainage_erythema", "weight": 5 },
+          { "feature": "fever", "weight": 4 },
+          { "feature": "elevated_crp", "weight": 4 }
+        ],
+        "management": "DAIR: Debridement, antibiotics, implant retention. Open joint debridement with liner exchange. IV antibiotics for 6 weeks then oral suppression."
+      },
+      {
+        "id": "chronic_late_infection",
+        "name": "Chronic Late Infection (>4 weeks)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "persistent_pain_loosening", "weight": 5 },
+          { "feature": "sinus_tract", "weight": 5 },
+          { "feature": "elevated_crp_esr", "weight": 4 }
+        ],
+        "management": "Two-stage exchange: remove prosthesis and cement, implant antibiotic-impregnated cement spacer (PMMA with vancomycin + gentamicin). IV antibiotics for 6 weeks guided by culture. Reimplantation after normalization of CRP."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "aseptic_loosening",
+        "discriminators": ["normal_crp_esr", "negative_joint_aspiration", "progressive_radiographic_lucent_lines"]
+      },
+      {
+        "diseaseId": "periprosthetic_fracture",
+        "discriminators": ["acute_trauma", "fracture_on_xray", "no_signs_of_infection"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CRP and ESR", "priority": "immediate", "yield": 0.8, "indication": "screening for infection" },
+        { "name": "Joint aspiration for culture, cell count, differential", "priority": "high", "yield": 0.85, "indication": "confirm infection" },
+        { "name": "Blood culture", "priority": "high", "yield": 0.3, "indication": "if fever/systemic" },
+        { "name": "Intraoperative tissue cultures (≥3 samples)", "priority": "high", "yield": 0.95, "indication": "definitive diagnosis" }
+      ],
+      "imaging": [
+        { "name": "Joint X-ray (AP, lateral)", "priority": "high", "yield": 0.3, "indication": "loosening, periosteal reaction, osteolysis" },
+        { "name": "Nuclear imaging (WBC scan + bone scan)", "priority": "medium", "yield": 0.8, "indication": "when diagnosis unclear" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAOS / IDSA Periprosthetic Joint Infection Guidelines",
+      "pathways": [
+        {
+          "severity": "early_acute",
+          "criteria": "Symptoms <4 weeks from index arthroplasty, well-fixed implant",
+          "treatment": "DAIR: Debridement, polyethylene liner exchange, copious irrigation. IV antibiotics for 6 weeks (gram-positive coverage initially, then culture-directed). Monitor CRP."
+        },
+        {
+          "severity": "chronic_late",
+          "criteria": "Symptoms >4 weeks, loose implant, sinus tract, or failed DAIR",
+          "treatment": "Stage 1: removal of all components, cement, and membranes. Antibiotic cement spacer insertion. IV antibiotics 6 weeks. Stage 2: reimplantation after clinical and lab resolution. 4-12 week interval."
+        }
+      ]
+    },
+
+    "pathophysiology": ["bacterial_adhesion_to_implant", "biofilm_formation", "resistance_to_antibiotics_and_immune_response", "osteolysis", "implant_loosening"]
+  }
+}

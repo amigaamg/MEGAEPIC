@@ -1,0 +1,122 @@
+{
+  "disease": {
+    "id": "post_cardiac_surgery_icu",
+    "name": "Post-Cardiac Surgery ICU Management",
+    "system": "critical_care",
+    "agePeak_months": [480, 840],
+    "note": "Comprehensive ICU management after CABG, valve surgery, aortic surgery, or heart transplant. Focus on hemodynamics, bleeding, arrhythmias, and respiratory weaning.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["post_surgical_care", "cardiothoracic_icu", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "low_cardiac_output_syndrome", "weight": 10 },
+        { "sign": "massive_bleeding_re_exploration", "weight": 10 },
+        { "sign": "tamponade_physiology", "weight": 10 },
+        { "sign": "refractory_arrhythmia", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "LCOS/tamponade/bleeding -> CRITICAL; stable weaning -> MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "recent_cardiac_surgery_cabg_valve_aorta", "weight": 5 },
+      { "symptomId": "hemodynamic_instability_post_op", "weight": 4 },
+      { "symptomId": "chest_tube_output_increasing", "weight": 4 },
+      { "symptomId": "hypotension_not_responding", "weight": 4 },
+      { "symptomId": "oliguria_anuria", "weight": 3 },
+      { "symptomId": "difficulty_weaning_from_ventilator", "weight": 3 },
+      { "symptomId": "preoperative_lv_dysfunction_or_comorbidities", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "elevated_cvp_jvp", "baseWeight": 4 },
+      { "signId": "low_cardiac_output_cold_peripheries", "baseWeight": 4 },
+      { "signId": "chest_tube_output_brisk", "baseWeight": 4 },
+      { "signId": "muffled_heart_sounds_pulsus_paradoxus", "baseWeight": 4 },
+      { "signId": "arrhythmia_atrial_fibrillation_or_ventricular", "baseWeight": 3 },
+      { "signId": "hypoxia_pulmonary_oedema", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "preoperative_low_ejection_fraction", "multiplier": 2.5 },
+      { "id": "emergency_surgery", "multiplier": 2.5 },
+      { "id": "redo_sternotomy", "multiplier": 2.0 },
+      { "id": "age_over_75", "multiplier": 2.0 },
+      { "id": "copd_chronic_lung_disease", "multiplier": 1.5 },
+      { "id": "renal_dysfunction_preop", "multiplier": 2.0 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "CVP, arterial line, PAC or PiCCO if available", "priority": "immediate", "yield": 0.9, "indication": "hemodynamic monitoring" },
+        { "name": "ECG 12-lead", "priority": "immediate", "yield": 0.7, "indication": "ischemia, arrhythmia" },
+        { "name": "Echocardiography (TTE/TEE)", "priority": "immediate", "yield": 0.95, "indication": "tamponade, LV/RV function, valve, hypovolemia" }
+      ],
+      "laboratory": [
+        { "name": "ABG, lactate", "priority": "immediate", "yield": 0.8, "indication": "perfusion and ventilation" },
+        { "name": "FBC, Hb, platelets", "priority": "high", "yield": 0.7, "indication": "bleeding assessment" },
+        { "name": "Troponin (serial)", "priority": "high", "yield": 0.7, "indication": "perioperative MI" },
+        { "name": "U&E, Cr, Mg, Ca", "priority": "high", "yield": 0.6, "indication": "electrolytes for arrhythmia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "STS/SCA Guidelines for Post-Cardiac Surgery ICU Management",
+      "pathways": [
+        {
+          "severity": "low cardiac output syndrome",
+          "criteria": "CI <2.0, hypotension, elevated lactate, cool peripheries",
+          "treatment": "Optimize preload. Inotropes: dobutamine or milrinone. Vasopressors: norepinephrine if vasoplegia. IABP if refractory. TEE to exclude tamponade. Atrial pacing for bradycardia."
+        },
+        {
+          "severity": "post-op bleeding / tamponade",
+          "criteria": "chest tube output >200 mL/h, hypotension, rising CVP, echo shows tamponade",
+          "treatment": "Reverse heparin (protamine). Check ACT. Transfuse per protocol. Re-exploration if massive or tamponade. TEG-guided component therapy. Evans blue if chyle leak."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cardiopulmonary_bypass_induced_inflammation",
+      "myocardial_stunning_and_edema",
+      "coagulation_abnormalities_from_cpb",
+      "vasoplegia",
+      "arrhythmia_from_electrolyte_imbalance_and_ischemia",
+      "pulmonary_dysfunction_atelectasis_effusion"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "postoperative_bleeding_tamponade",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["high_chest_tube_output", "hypotension", "elevated_cvp"]
+      },
+      {
+        "diseaseId": "atrial_fibrillation_post_op",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["irregular_irregular_pulse", "palpitations", "hemodynamic_instability"]
+      },
+      {
+        "diseaseId": "stroke_post_op",
+        "probability": 0.03,
+        "severityBoost": 0.5,
+        "clues": ["focal_neuro_deficit", "not_waking_from_anesthesia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["recent_cardiac_surgery", "hemodynamic_instability", "chest_tube_output", "echo_findings"],
+    "exclusionClues": ["uneventful_post_op_course", "rapid_weaning", "stable_output"]
+  }
+}

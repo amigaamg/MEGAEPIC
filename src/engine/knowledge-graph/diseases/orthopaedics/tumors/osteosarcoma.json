@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "osteosarcoma",
+    "name": "Osteosarcoma",
+    "system": "ORTHO",
+    "agePeak_months": [120, 240],
+    "note": "Most common primary malignant bone tumor in children and adolescents. Arises from osteoid-producing cells. Metaphysis of long bones (distal femur, proximal tibia, proximal humerus).",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["bone_malignancy", "pediatric_oncology_ortho"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pathologic_fracture", "weight": 9 },
+        { "sign": "pulmonary_metastasis", "weight": 10 },
+        { "sign": "spinal_cord_compression", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tumor_>8cm", "weight": 7 },
+          { "sign": "metastatic_at_diagnosis", "weight": 8 },
+          { "sign": "poor_response_to_neoadjuvant_chemo", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If metastatic or poor chemo response -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "bone_pain_persistent_worse_at_night", "weight": 5 },
+      { "symptomId": "swelling_mass_over_bone", "weight": 5 },
+      { "symptomId": "limp_or_pathologic_fracture", "weight": 3 },
+      { "symptomId": "pain_that_wakes_from_sleep", "weight": 4 },
+      { "symptomId": "limitation_of_joint_range_of_motion", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_mass_firm_tender_over_bone", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "swelling_and_warmth", "baseWeight": 4 },
+      { "signId": "limited_range_of_motion_nearby_joint", "baseWeight": 3 },
+      { "signId": "signs_of_pathologic_fracture", "baseWeight": 4 },
+      { "signId": "systemic_signs_weight_loss_fever", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_10_to_20_years", "multiplier": 4.0 },
+      { "id": "pagets_disease_elderly", "multiplier": 5.0 },
+      { "id": "previous_radiation_therapy", "multiplier": 5.0 },
+      { "id": "certain_genetic_syndromes_li_fraumeni_rb", "multiplier": 10.0 },
+      { "id": "male_gender", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "conventional_osteosarcoma",
+        "name": "Conventional (Osteoblastic) Osteosarcoma",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "osteoid_production_on_histology", "weight": 5 },
+          { "feature": "metaphyseal_location", "weight": 4 },
+          { "feature": "sunburst_periosteal_reaction_on_xray", "weight": 5 }
+        ],
+        "management": "Neoadjuvant chemotherapy (MAP: methotrexate, doxorubicin, cisplatin). Wide local excision and limb salvage/reconstruction. Adjuvant chemotherapy. Lung mets: metastasectomy."
+      },
+      {
+        "id": "telangiectatic_osteosarcoma",
+        "name": "Telangiectatic Osteosarcoma",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "aneurysmal_bone_cyst_like_appearance", "weight": 4 },
+          { "feature": "blood_filled_cavities", "weight": 4 },
+          { "feature": "pathologic_fracture_common", "weight": 4 }
+        ],
+        "management": "Same chemotherapy protocol as conventional. Wide surgical excision."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "ewing_sarcoma",
+        "discriminators": ["diaphyseal_location", "onion_skin_periosteal_reaction", "cd99_positive"]
+      },
+      {
+        "diseaseId": "osteomyelitis",
+        "discriminators": ["fever_elevated_crp", "response_to_antibiotics", "no_tumor_on_biopsy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "ALP and LDH", "priority": "high", "yield": 0.6, "indication": "tumor markers, prognosis" },
+        { "name": "Biopsy (core needle or open)", "priority": "immediate", "yield": 1.0, "indication": "histologic diagnosis" }
+      ],
+      "imaging": [
+        { "name": "X-ray (AP, lateral of affected bone)", "priority": "high", "yield": 0.85, "indication": "sunburst, Codman triangle, osteoid matrix" },
+        { "name": "MRI with contrast (whole bone + joint)", "priority": "high", "yield": 0.95, "indication": "local extent, intramedullary skip, joint involvement" },
+        { "name": "CT chest (staging)", "priority": "high", "yield": 0.9, "indication": "pulmonary metastases" },
+        { "name": "Bone scan (Tc-99m)", "priority": "medium", "yield": 0.8, "indication": "skip lesions, bone mets" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "COG / EURAMOS Osteosarcoma Protocol",
+      "pathways": [
+        {
+          "severity": "localized",
+          "criteria": "No metastases, <8cm (favorable), good chemo response expected",
+          "treatment": "Neoadjuvant chemotherapy MAP x 10 weeks. Wide surgical excision (limb salvage preferred). Adjuvant chemotherapy (total 29 weeks). Monitor with CT chest and X-ray q3 months."
+        },
+        {
+          "severity": "metastatic_or_poor_response",
+          "criteria": "Metastases at diagnosis, or <90% necrosis after neoadjuvant chemo",
+          "treatment": "Neoadjuvant MAP. Surgical resection of primary and metastases. Adjuvant chemo with ifosfamide/etoposide added. Consider clinical trials. 5-year OS: 20-30% for metastatic."
+        }
+      ]
+    },
+
+    "pathophysiology": ["genetic_mutations_p53_rb", "malignant_osteoblast_proliferation", "osteoid_matrix_production", "hematogenous_spread_lungs"]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "disease": {
+    "id": "renal_cyst",
+    "name": "Renal Cyst",
+    "system": "URO",
+    "agePeak_months": [360, 960],
+    "note": "Fluid-filled sac in kidney. Bosniak classification I-IV determines malignant risk. Simple cysts (I) benign. Complex cysts (III-IV) require surgery.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["renal_lesion", "cystic_kidney_disease", "incidental_finding"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cyst_rupture_retroperitoneal_hemorrhage", "weight": 8 },
+        { "sign": "infected_cyst_sepsis", "weight": 9 },
+        { "sign": "ureteric_obstruction_from_large_cyst", "weight": 7 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Bosniak I (benign simple) → II (minimally complex) → IIF (follow) → III (indeterminate) → IV (malignant)"
+    },
+    "historyFeatures": [
+      { "symptomId": "asymptomatic_incidental_finding", "weight": 5 },
+      { "symptomId": "flank_pain_dull_ache", "weight": 2 },
+      { "symptomId": "palpable_mass_if_very_large", "weight": 2 },
+      { "symptomId": "hematuria", "weight": 1 },
+      { "symptomId": "hypertension", "weight": 1 },
+      { "symptomId": "fever_flank_pain_if_infected", "weight": 3 },
+      { "symptomId": "child_or_adult_polycystic_kidney_history", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "palpable_kidney_mass_if_large", "baseWeight": 2 },
+      { "signId": "costovertebral_angle_tenderness_if_complicated", "baseWeight": 2 },
+      { "signId": "hypertension", "baseWeight": 2 },
+      { "signId": "abdominal_mass_bilateral_in_polycystic", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 3.0 },
+      { "id": "male_sex", "multiplier": 1.5 },
+      { "id": "hypertension", "multiplier": 1.3 },
+      { "id": "dialysis_acquired_cystic_disease", "multiplier": 5.0 },
+      { "id": "autosomal_dominant_polycystic_kidney_disease_pkd1_pkd2", "multiplier": 10.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "bosniak_i_simple_cyst",
+        "name": "Bosniak I Simple Cyst",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "anechoic_well_circumscribed_round", "weight": 5 },
+          { "feature": "hairline_thin_wall", "weight": 5 },
+          { "feature": "no_septa_calcifications_or_solid", "weight": 5 },
+          { "feature": "no_enhancement_on_ct", "weight": 5 }
+        ],
+        "management": "No follow-up needed. Benign with 100% specificity. Reassure patient. No intervention."
+      },
+      {
+        "id": "bosniak_iif_iii_complex",
+        "name": "Bosniak IIF/III Complex Cyst",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "thin_septa_or_minimal_calcification_iif", "weight": 4 },
+          { "feature": "thick_irregular_wall_or_septa_iii", "weight": 5 },
+          { "feature": "measurable_enhancement_iii", "weight": 5 },
+          { "feature": "malignancy_risk_ii_f_5_10_percent_iii_40_60_percent", "weight": 4 }
+        ],
+        "management": "IIF: surveillance CT/MRI at 6 months, 12 months, then annually x 2-5 years. III: surgical referral. Options: partial nephrectomy, radical nephrectomy, or active surveillance (if surgical risk high). CT-guided biopsy may be considered. If cyst grows or becomes more complex: intervention."
+      },
+      {
+        "id": "bosniak_iv_malignant_cyst",
+        "name": "Bosniak IV Cystic RCC",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "solid_enhancing_nodule_or_mass", "weight": 5 },
+          { "feature": "thick_irregular_wall", "weight": 4 },
+          { "feature": "malignancy_risk_80_90_percent", "weight": 5 }
+        ],
+        "management": "Partial or radical nephrectomy. Consider biopsy if ablation planned. Management same as solid RCC per stage."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "renal_cell_carcinoma_cystic_necrosis", "discriminators": ["irregular_thick_wall", "solid_component_on_imaging", "high_bosniak_class"] },
+      { "diseaseId": "hemorrhagic_cyst", "discriminators": ["high_attenuation_on_non_contrast_ct", "no_enhancement", "hyperdense_cyst"] },
+      { "diseaseId": "renal_abscess", "discriminators": ["fever", "perinephric_stranding", "thick_wall_enhancing", "pyuria"] },
+      { "diseaseId": "angiomyolipoma_with_minimal_fat", "discriminators": ["chemical_shift_mri_opposes_ip", "no_enhancement_on_ct_with_indeterminate_density"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, eGFR", "priority": "high", "yield": 0.4, "indication": "baseline renal function" },
+        { "name": "Urinalysis", "priority": "medium", "yield": 0.3, "indication": "hematuria" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with and without contrast (renal mass protocol)", "priority": "gold_standard", "yield": 0.98, "indication": "Bosniak classification, enhancement assessment" },
+        { "name": "MRI with contrast (if contraindication to CT or problem-solving)", "priority": "high", "yield": 0.95, "indication": "better septa/wall characterization, Bosniak IIF-III" },
+        { "name": "Renal Ultrasound", "priority": "screening", "yield": 0.7, "indication": "simple vs complex initial differentiation" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Bosniak Classification 2024 / AUA Guidelines for Renal Cyst Management",
+      "pathways": [
+        {
+          "severity": "Bosniak I",
+          "criteria": "simple cyst, no septa/calcification/solid, no enhancement",
+          "treatment": "No follow-up required. Benign. Patient reassurance."
+        },
+        {
+          "severity": "Bosniak IIF",
+          "criteria": "thin septa (≤3), fine calcification, homogenous hyperdense, no enhancement",
+          "treatment": "Surveillance CT/MRI at 6 and 12 months, then annually x 5 years. If stable, stop. If progression (to III/IV): intervene."
+        },
+        {
+          "severity": "Bosniak III/IV",
+          "criteria": "thick irregular septa/wall, measurable enhancement (III); solid enhancing nodule (IV)",
+          "treatment": "Nephrology/urology referral. Partial nephrectomy (preferred for small/compatible). Radical nephrectomy (if large/central). Ablation for small (<3cm) in elderly/frail. Active surveillance if poor surgical candidate."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "simple_cyst_from_renal_tubular_obstruction",
+      "distal_tubule_or_collecting_duct_dilatation",
+      "fluid_accumulation_ultrafiltrate_like",
+      "bosniak_evolution_from_simple_to_complex",
+      "cystic_degeneration_of_rcc",
+      "malignant_transformation_in_complex_cysts"
+    ],
+    "complications": [
+      { "diseaseId": "cyst_infection", "probability": 0.02, "severityBoost": 0.3, "clues": ["fever", "flank_pain", "leukocytosis", "fluid_aspiration_positive_culture"] },
+      { "diseaseId": "cyst_hemorrhage_rupture", "probability": 0.01, "severityBoost": 0.4, "clues": ["acute_flank_pain", "hematuria", "ct_shows_hyperdense_fluid_or_retroperitoneal_hematoma"] },
+      { "diseaseId": "ureteric_pelvic_obstruction_from_large_cyst", "probability": 0.02, "severityBoost": 0.2, "clues": ["hydronephrosis", "flank_pain", "if_cyst_at_renal_hilum"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["incidental_finding_on_imaging", "bosniak_classification_on_ct_mri", "asymptomatic_or_mild_symptoms"],
+    "exclusionClues": ["solid_mass_with_enhancement_indicates_rcc", "fat_containing_lesion_indicates_aml"]
+  }
+}

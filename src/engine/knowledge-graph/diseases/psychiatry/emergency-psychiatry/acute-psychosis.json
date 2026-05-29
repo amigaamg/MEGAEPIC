@@ -1,0 +1,130 @@
+{
+  "disease": {
+    "id": "acute_psychosis",
+    "name": "Acute Psychosis (Emergency)",
+    "system": "PSYCH",
+    "agePeak_months": [180, 480],
+    "note": "Acute onset of psychotic symptoms requiring emergency assessment. May be due to primary psychiatric disorder, substance use, or medical condition.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["emergency_psychiatry", "psychosis", "acute_crisis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "violent_or_aggressive_behavior", "weight": 10 },
+        { "sign": "command_hallucinations_to_harm", "weight": 10 },
+        { "sign": "suicidal_intent", "weight": 10 },
+        { "sign": "catatonia_malignant", "weight": 10 },
+        { "sign": "severe_agitation_uncontrollable", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If danger signs -> EMERGENCY INPATIENT; else -> ASSESS AND TREAT"
+    },
+    "historyFeatures": [
+      { "symptomId": "delusions", "weight": 5 },
+      { "symptomId": "hallucinations_auditory_visual", "weight": 5 },
+      { "symptomId": "disorganized_speech_incoherence", "weight": 4 },
+      { "symptomId": "disorganized_or_catatonic_behavior", "weight": 4 },
+      { "symptomId": "negative_symptoms_blunted_affect", "weight": 2 },
+      { "symptomId": "acute_onset_hours_to_days", "weight": 3 },
+      { "symptomId": "substance_use_recent", "weight": 3 },
+      { "symptomId": "medical_symptoms_fever_headache", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "agitation_or_psychomotor_disturbance", "baseWeight": 4 },
+      { "signId": "suspicious_or_fearful_affect", "baseWeight": 3 },
+      { "signId": "responding_to_internal_stimuli", "baseWeight": 4 },
+      { "signId": "disorganized_incoherent_speech", "baseWeight": 4 },
+      { "signId": "catatonic_features_stupor_posturing", "baseWeight": 3 },
+      { "signId": "neurological_signs", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "previous_psychosis_history", "multiplier": 4.0 },
+      { "id": "substance_use_cannabis_stimulants", "multiplier": 3.0 },
+      { "id": "family_history_psychosis", "multiplier": 3.0 },
+      { "id": "medication_nonadherence", "multiplier": 4.0 },
+      { "id": "sleep_deprivation_extreme", "multiplier": 2.0 },
+      { "id": "organic_cause_uti_delirium", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "psychosis_primary",
+        "name": "Acute Psychosis from Primary Psychiatric Disorder",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "known_schizophrenia_schizoaffective_history", "weight": 4 },
+          { "feature": "medication_nonadherence_common", "weight": 3 }
+        ],
+        "management": "Antipsychotic IM/PO: olanzapine 10 mg, haloperidol 5 mg, or aripiprazole 9.75 mg IM. Short-term benzodiazepine (lorazepam 2 mg IM) for agitation. Titrate/maintain oral antipsychotic. Address adherence."
+      },
+      {
+        "id": "psychosis_substance_induced",
+        "name": "Substance-Induced Psychotic Disorder",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "temporal_relation_to_substance", "weight": 5 },
+          { "feature": "positive_urine_tox", "weight": 4 },
+          { "feature": "resolution_with_abstinence", "weight": 3 }
+        ],
+        "management": "Benzodiazepines for agitation (lorazepam 1-2 mg IM). Antipsychotics if needed (haloperidol 5 mg IM). Supportive care. Monitor for withdrawal. Substance abuse treatment referral."
+      },
+      {
+        "id": "psychosis_organic",
+        "name": "Psychosis Due to Medical Condition",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "medical_illness_identified", "weight": 5 },
+          { "feature": "atypical_presentation", "weight": 3 },
+          { "feature": "altered_level_of_consciousness", "weight": 4 }
+        ],
+        "management": "Treat underlying medical condition. Antipsychotics cautiously (low-dose haloperidol 1-2 mg). Avoid anticholinergic burden. Workup: CBC, CMP, TSH, B12, infection screen, CT/MRI brain, LP if indicated."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "delirium", "discriminators": ["altered_consciousness", "fluctuating_course", "acute_medical_cause", "attention_impairment"] },
+      { "diseaseId": "acute_mania", "discriminators": ["elevated_mood", "decreased_sleep_need", "grandiosity", "pressured_speech"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "BPRS (Brief Psychiatric Rating Scale)", "priority": "high", "yield": 0.85, "indication": "symptom severity assessment" },
+        { "name": "Agitation severity scale", "priority": "immediate", "yield": 0.8, "indication": "need for urgent sedation" }
+      ],
+      "laboratory": [
+        { "name": "Urine toxicology", "priority": "immediate", "yield": 0.5, "indication": "substance-induced psychosis" },
+        { "name": "FBC, U&E, glucose, LFT, TSH, B12", "priority": "high", "yield": 0.3, "indication": "rule out organic causes" },
+        { "name": "Head CT or MRI", "priority": "medium", "yield": 0.15, "indication": "if neurological signs, first episode, atypical" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Psychosis / APA Guidelines",
+      "pathways": [
+        {
+          "severity": "agitation/violence risk",
+          "criteria": "aggressive, threatening, severely agitated, command hallucinations",
+          "treatment": "Rapid tranquilization: olanzapine 10 mg IM or haloperidol 5 mg IM + lorazepam 2 mg IM. Monitor vitals (respiratory depression risk with benzodiazepines). Seclusion if needed. 1:1 observation."
+        },
+        {
+          "severity": "acute psychosis without immediate danger",
+          "criteria": "psychotic but not violent, able to cooperate",
+          "treatment": "Oral antipsychotic (olanzapine 10-20 mg, risperidone 2-6 mg, or aripiprazole 15-30 mg). Baseline labs. Admission usually indicated. Start treatment. Therapeutic alliance."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "dopamine_hyperactivity_mesolimbic",
+      "glutamate_hypofunction_nmda",
+      "stress_cortisol_activation",
+      "genetic_predisposition",
+      "substance_triggered",
+      "brain_structural_changes"
+    ],
+    "complications": [
+      { "diseaseId": "suicide_attempt", "probability": 0.05, "severityBoost": 0.5, "clues": ["command_hallucinations", "depressive_features", "previous_attempts"] },
+      { "diseaseId": "neuroleptic_malignant_syndrome", "probability": 0.01, "severityBoost": 0.5, "clues": ["high_potency_antipsychotic", "rigidity", "fever", "elevated_ck"] },
+      { "diseaseId": "assaultive_behavior", "probability": 0.1, "severityBoost": 0.3, "clues": ["paranoid_delusions", "command_hallucinations", "previous_violence"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "immediate",
+    "diagnosticClues": ["acute_onset_psychotic_symptoms", "delusions_hallucinations_disorganization"],
+    "exclusionClues": ["chronic_stable_psychosis", "mood_congruent_psychosis_only"]
+  }
+}

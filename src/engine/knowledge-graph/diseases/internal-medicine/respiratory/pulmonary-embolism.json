@@ -1,0 +1,355 @@
+{
+  "disease": {
+    "id": "pulmonary_embolism",
+    "name": "Pulmonary Embolism",
+    "system": "respiratory",
+    "note": "PE is a life-threatening cardiovascular emergency caused by thrombotic occlusion of pulmonary arteries. Clinical probability assessment (Wells score/PERC rule) guides D-dimer testing. CTPA is the gold standard diagnostic. Anticoagulation is mainstay; thrombolysis or embolectomy for massive PE.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["thromboembolic_disease", "acute_cardiorespiratory_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "obstructive_shock", "weight": 10, "description": "SBP <90 mmHg requiring inotropes" },
+        { "sign": "persistent_hypotension", "weight": 10, "description": "SBP <90 mmHg for >15 min" },
+        { "sign": "RV_strain_on_echo", "weight": 9, "description": "McConnell sign, D-shaped LV, RV/ LV ratio >1, elevated PAP" },
+        { "sign": "spo2_less_than_88", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "sPESI_score_greater_than_or_equal_1", "description": "Simplified PESI: age >80, cancer, chronic cardiopulmonary disease, HR ≥110, SBP <100, SpO2 <90%", "weight": 7 },
+          { "sign": "troponin_elevated", "weight": 6 },
+          { "sign": "BNP_or_NT_proBNP_elevated", "weight": 5 },
+          { "sign": "clot_burden_high_on_CTPA", "description": "Saddle embolus or multiple lobar emboli", "weight": 6 }
+        ]
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "Wells_score_moderate_to_high", "description": ">6 points", "weight": 5 },
+          { "sign": "RV_dysfunction_on_echo_but_normotensive", "weight": 5 },
+          { "sign": "D_dimer_elevated_3x_ULN", "weight": 4 },
+          { "sign": "sPESI_0_with_RV_injury", "weight": 4 }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "low_Wells_score": true,
+        "sPESI_0": true,
+        "no_RV_strain": true,
+        "normotensive": true
+      }
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_dyspnea", "weight": 5, "note": "Sudden onset; most common symptom" },
+      { "symptomId": "chest_pain", "weight": 4, "qualitativeModifiers": [
+          { "qualityKey": "pleuritic", "weightBoost": 2, "description": "Sharp, worse on inspiration" },
+          { "qualityKey": "substernal_pressure", "weightBoost": 2, "description": "Central chest pain may indicate RV ischaemia" }
+        ]
+      },
+      { "symptomId": "hemoptysis", "weight": 3, "note": "Blood-streaked sputum due to pulmonary infarction" },
+      { "symptomId": "syncope", "weight": 4, "note": "Suggests massive PE with haemodynamic compromise" },
+      { "symptomId": "presyncope", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "unilateral_leg_swelling", "weight": 3, "note": "DVT symptoms; present in ~50% of PE patients" },
+      { "symptomId": "deep_vein_thrombosis_history", "weight": 3 },
+      { "symptomId": "immobilisation_history", "weight": 3, "note": "Prolonged travel, hospitalisation, post-surgery" }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachypnea", "baseWeight": 5, "doubleWeight": true, "note": ">20/min; most common sign" },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypoxia", "baseWeight": 5, "severityBoost": true },
+      { "signId": "signs_of_DVT", "baseWeight": 3, "note": "Unilateral leg swelling, erythema, Homan's sign" },
+      { "signId": "pleural_rub", "baseWeight": 3, "note": "Pleuritic pain suggests pulmonary infarction" },
+      { "signId": "crackles", "baseWeight": 2 },
+      { "signId": "raised_JVP", "baseWeight": 4, "severityMarker": true, "note": "Indicates RV dysfunction" },
+      { "signId": "hypotension", "baseWeight": 5, "severityMarker": true },
+      { "signId": "loud_P2", "baseWeight": 3, "note": "Pulmonary hypertension" },
+      { "signId": "RV_heave", "baseWeight": 3, "severityMarker": true },
+      { "signId": "diaphoresis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "surgery_major_especially_orthopaedic", "multiplier": 2.0, "note": "Highest risk: hip/knee arthroplasty, pelvic surgery, neurosurgery" },
+      { "id": "immobilisation", "multiplier": 1.8, "note": "Prolonged bed rest, long-haul air travel >6 hours" },
+      { "id": "malignancy_active", "multiplier": 1.8, "note": "Especially adenocarcinoma, pancreatic, lung, brain, haematological" },
+      { "id": "previous_VTE", "multiplier": 2.0 },
+      { "id": "thrombophilia", "multiplier": 1.6, "note": "Factor V Leiden, prothrombin mutation, antiphospholipid, protein C/S/AT deficiency" },
+      { "id": "pregnancy_puerperium", "multiplier": 1.5 },
+      { "id": "Oestrogen_therapy", "multiplier": 1.5, "note": "OCP, HRT, tamoxifen" },
+      { "id": "obesity_BMI_over_30", "multiplier": 1.3 },
+      { "id": "age_over_65", "multiplier": 1.5 },
+      { "id": "central_venous_catheter", "multiplier": 1.4 },
+      { "id": "heart_failure_or_COPD", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "massive_high_risk_PE",
+        "name": "Massive (High-Risk) PE",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "obstructive_shock", "weight": 5 },
+          { "feature": "persistent_hypotension", "weight": 5 },
+          { "feature": "cardiac_arrest", "weight": 5 },
+          { "feature": "syncope", "weight": 4 },
+          { "feature": "severe_RV_dysfunction", "weight": 5 },
+          { "feature": "troponin_highly_elevated", "weight": 4 }
+        ],
+        "management": "Immediate reperfusion: systemic thrombolysis (alteplase 100 mg over 2 h) unless contraindicated; catheter-directed thrombolysis or surgical embolectomy if contraindicated; IV unfractionated heparin"
+      },
+      {
+        "id": "submassive_intermediate_risk_PE",
+        "name": "Submassive (Intermediate-Risk) PE",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "normotensive", "weight": 4 },
+          { "feature": "RV_dysfunction_on_echo_or_CT", "weight": 5 },
+          { "feature": "elevated_troponin_or_BNP", "weight": 5 },
+          { "feature": "sPESI_greater_than_0", "weight": 4 }
+        ],
+        "management": "Anticoagulation with LMWH or DOAC; monitor for haemodynamic decompensation; consider rescue thrombolysis if deterioration"
+      },
+      {
+        "id": "low_risk_PE",
+        "name": "Low-Risk PE",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "no_RV_dysfunction", "weight": 5 },
+          { "feature": "sPESI_0", "weight": 5 },
+          { "feature": "normotensive", "weight": 4 },
+          { "feature": "minimal_symptoms", "weight": 3 }
+        ],
+        "management": "DOAC (apixaban, rivaroxaban, edoxaban, dabigatran); early discharge possible if stable"
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_myocardial_infarction",
+        "discriminators": ["ECG_changes_ST_elevation", "troponin_pattern", "chest_pressure_exertional"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "pneumonia",
+        "discriminators": ["fever", "productive_cough", "focal_crackles", "infiltrate_on_CXR"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "pericarditis",
+        "discriminators": ["positional_pleuritic_pain", "pericardial_rub", "diffuse_ST_elevation_PRD"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "aortic_dissection",
+        "discriminators": ["tearing_back_chest_pain", "pulse_deficit", "wide_mediastinum", "aortic_intimal_flap"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "panic_attack",
+        "discriminators": ["history_of_anxiety", "normal_investigations", "hyperventilation", "paraesthesiae"],
+        "negativeImpactOnPneumonia": 2
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "ECG",
+          "priority": "immediate",
+          "yield": 0.4,
+          "indication": "all suspected PE",
+          "note": "Sinustachycardia most common; S1Q3T3 (classic but insensitive); RV strain (RBBB, TWI V1-V4)"
+        },
+        {
+          "name": "Pulse oximetry",
+          "priority": "immediate",
+          "yield": 0.8,
+          "indication": "assess oxygenation"
+        },
+        {
+          "name": "Wells criteria for PE",
+          "priority": "initial",
+          "yield": 0.8,
+          "indication": "pre-test probability assessment",
+          "note": "Score >6: high probability; 2–6: moderate; <2: low"
+        },
+        {
+          "name": "PERC rule",
+          "priority": "initial if low Wells",
+          "yield": 0.7,
+          "indication": "PERC-negative patients need no further testing (age >50, HR >100, SpO2 <95%, prior DVT/PE, surgery, hemoptysis, oestrogen, unilateral leg swelling)"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "D-dimer (high-sensitivity ELISA)",
+          "priority": "if low/moderate Wells score",
+          "yield": 0.95,
+          "indication": "Negative D-dimer (age-adjusted: age × 0.1 mg/L if >50) rules out PE in low/moderate probability",
+          "note": "Specificity decreases with age, malignancy, pregnancy, hospitalisation"
+        },
+        {
+          "name": "Troponin I or T",
+          "priority": "severity assessment",
+          "yield": 0.7,
+          "indication": "elevated in RV injury; prognostic marker for intermediate-risk PE"
+        },
+        {
+          "name": "NT-proBNP or BNP",
+          "priority": "severity assessment",
+          "yield": 0.7,
+          "indication": "elevated in RV strain; prognostic marker"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "CT pulmonary angiogram (CTPA)",
+          "priority": "diagnostic gold standard",
+          "yield": 0.98,
+          "indication": "moderate/high Wells or positive D-dimer; contraindications include severe contrast allergy, renal impairment",
+          "note": "Bilateral pulmonary artery filling defects confirm PE; also assess RV/LV ratio"
+        },
+        {
+          "name": "V/Q scan",
+          "priority": "if CTPA contraindicated or inconclusive",
+          "yield": 0.85,
+          "indication": "good lung function, normal CXR; report as low/intermediate/high probability",
+          "note": "Pregnancy: consider V/Q or low-dose CTPA"
+        },
+        {
+          "name": "Chest X-ray",
+          "priority": "initial screening",
+          "yield": 0.2,
+          "indication": "rule out pneumonia, pneumothorax; normal CXR with hypoxia raises PE suspicion",
+          "note": "Hampton hump, Westermark sign uncommon"
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Echocardiogram (transthoracic)",
+          "indication": "assess for RV strain (McConnell sign, D-shaped LV, RV/LV ratio, PAP); rule out other causes of shock",
+          "priority": "high if haemodynamic compromise",
+          "note": "Normal echo does NOT rule out PE"
+        },
+        {
+          "name": "Lower limb compression ultrasound (CUS)",
+          "indication": "if equivocal CT but high suspicion",
+          "priority": "selected",
+          "note": "Proximal DVT on CUS confirms VTE and justifies anticoagulation"
+        }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESC Guidelines on Acute Pulmonary Embolism (2019/2024 update); BTS Guidelines; ATS/ERS Consensus",
+      "pathways": [
+        {
+          "severity": "low risk (sPESI 0, no RV strain)",
+          "criteria": "normotensive, sPESI 0, no RV dysfunction, troponin negative",
+          "treatment": [
+            "DOAC first-line: apixaban 10 mg BID × 7 days then 5 mg BID; OR rivaroxaban 15 mg BID × 21 days then 20 mg daily",
+            "Alternative: LMWH bridge to warfarin (INR 2–3) or dabigatran/edoxaban after 5 days of parenteral therapy",
+            "Early discharge possible if home circumstances adequate",
+            "Risk factor modification: assess for reversible triggers, smoking cessation, weight loss"
+          ],
+          "followUp": "Review at 2 weeks; anticoagulation minimum 3 months; consider extended if unprovoked"
+        },
+        {
+          "severity": "intermediate risk (sPESI ≥1 or RV strain)",
+          "criteria": "normotensive BUT RV dysfunction (echo or CT) AND/OR elevated troponin/BNP",
+          "treatment": [
+            "Admit for close monitoring",
+            "DOAC (apixaban or rivaroxaban) OR LMWH (enoxaparin 1.5 mg/kg SC daily or 1 mg/kg BID) bridging to warfarin if preferred",
+            "Monitor for haemodynamic deterioration: BP, HR, SpO2, urine output q4h",
+            "Echocardiogram within 24–48 h to reassess RV function",
+            "If deterioration (hypotension, shock, worsening RV): consider rescue thrombolysis (alteplase 50 mg IV bolus or 100 mg over 2 h)",
+            "ICU/HDU admission if significant RV dysfunction"
+          ],
+          "escalation": "Rescue thrombolysis for haemodynamic decompensation. Surgical or catheter embolectomy if thrombolysis contraindicated or fails."
+        },
+        {
+          "severity": "high risk (massive PE with shock)",
+          "criteria": "obstructive shock, persistent hypotension, or cardiac arrest due to PE",
+          "treatment": [
+            "Immediate multidisciplinary team activation (respiratory, cardiology, ICU, radiology)",
+            "Systemic thrombolysis: alteplase 100 mg IV over 2 h (or 50 mg bolus if cardiac arrest)",
+            "If thrombolysis contraindicated: catheter-directed thrombolysis (ultrasound-assisted CDT) or surgical embolectomy (cardiopulmonary bypass)",
+            "Unfractionated heparin IV bolus (80 U/kg) then infusion (18 U/kg/h, target APTT 1.5–2.5x normal)",
+            "ICU management: invasive BP monitoring, inotropes if needed (noradrenaline), fluid cautious (RV preload dependent)",
+            "Mechanical ventilation if respiratory failure: low tidal volumes, avoid high PEEP",
+            "ECMO consideration in refractory shock"
+          ],
+          "escalation": "Thrombolysis within 2 hours of diagnosis if high-risk. Embolectomy if thrombolysis contraindicated or fails."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "deep_vein_thrombosis_embolisation",
+      "pulmonary_artery_occlusion",
+      "increased_pulmonary_vascular_resistance",
+      "right_ventricular_afterload_sudden_increase",
+      "right_ventricular_failure",
+      "ventilation_perfusion_mismatch",
+      "hypoxemia",
+      "decreased_cardiac_output",
+      "obstructive_shock_in_massive_PE",
+      "pulmonary_infarction_possible"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "obstructive_shock",
+        "probability": 0.15,
+        "severityBoost": 0.8,
+        "clues": ["hypotension_refractory", "cool_peripheries", "oliguria", "lactic_acidosis"]
+      },
+      {
+        "diseaseId": "cardiac_arrest",
+        "probability": 0.05,
+        "severityBoost": 1.0,
+        "clues": ["PEA_arrest", "sudden_collapse"]
+      },
+      {
+        "diseaseId": "chronic_thromboembolic_pulmonary_hypertension",
+        "probability": 0.04,
+        "lagDays": [90, 730],
+        "severityBoost": 0.5,
+        "clues": ["persistent_dyspnea_6_months_post_PE", "PH_on_echo", "CTEPH_on_V_Q_scan"]
+      },
+      {
+        "diseaseId": "bleeding_on_anticoagulation",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["major_bleed_GIT_IC_retroperitoneal"],
+        "management": "Reversal agents (andexanet for DOAC; PCC for warfarin); assess risk-benefit of resuming"
+      },
+      {
+        "diseaseId": "post_thrombotic_syndrome",
+        "probability": 0.15,
+        "clues": ["chronic_leg_pain_swelling", "skin_changes", "venous_ulcers"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "HIGH - massive PE with shock requires immediate thrombolysis; intermediate-risk with RV strain requires close monitoring",
+
+    "diagnosticClues": [
+      "acute dyspnoea + pleuritic chest pain + haemoptysis",
+      "syncope with RV strain pattern",
+      "tachycardia + hypoxia + unilateral leg swelling",
+      "Wells score >6 with positive D-dimer",
+      "filling defect on CTPA",
+      "McConnell sign on echo (RV free wall hypokinesis with apical sparing)"
+    ],
+    "exclusionClues": [
+      "PERC-negative with low Wells criteria",
+      "negative high-sensitivity D-dimer",
+      "normal CTPA or low-probability V/Q scan",
+      "alternative diagnosis confirmed (e.g., pneumonia, pneumothorax on CXR)"
+    ]
+  }
+}

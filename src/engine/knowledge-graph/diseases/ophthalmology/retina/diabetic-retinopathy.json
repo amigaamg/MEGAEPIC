@@ -1,0 +1,202 @@
+{
+  "disease": {
+    "id": "diabetic_retinopathy",
+    "name": "Diabetic Retinopathy (DR)",
+    "system": "OPHTH",
+    "agePeak_months": [360, 720],
+    "note": "Retinal microvascular complication of diabetes mellitus, leading to progressive damage to retinal blood vessels. Leading cause of blindness in working-age adults. Stages: NPDR (mild/moderate/severe) and PDR.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["retinal_disorder", "diabetic_complication", "sight_threatening"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "vitreous_hemorrhage", "weight": 9 },
+        { "sign": "tractional_retinal_detachment", "weight": 10 },
+        { "sign": "neovascular_glaucoma", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "proliferative_diabetic_retinopathy", "weight": 8 },
+          { "sign": "severe_NPDR", "weight": 6 },
+          { "sign": "clinically_significant_macular_edema (CSME)", "weight": 7 },
+          { "sign": "sudden_vision_loss", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "PDR, CSME, or vitreous hemorrhage -> SEVERE; Mild-moderate NPDR -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "asymptomatic_early_stages", "weight": 5 },
+      { "symptomId": "blurred_vision_slow_progressive", "weight": 4 },
+      { "symptomId": "floaters_sudden_flash", "weight": 4, "note": "Vitreous hemorrhage or PVD" },
+      { "symptomId": "visual_field_loss_scotoma", "weight": 3 },
+      { "symptomId": "difficulty_reading", "weight": 3 },
+      { "symptomId": "sudden_vision_loss_painless", "weight": 5, "note": "Vitreous hemorrhage" },
+      { "symptomId": "known_diabetes_duration_long", "weight": 4 },
+      { "symptomId": "poor_glycemic_control_history", "weight": 4 },
+      { "symptomId": "associated_hypertension", "weight": 3 },
+      { "symptomId": "previous_laser_treatment", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "microaneurysms_on_dilated_fundoscopy", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "dot_and_blot_hemorrhages", "baseWeight": 4 },
+      { "signId": "hard_exudates", "baseWeight": 3 },
+      { "signId": "cotton_wool_spots", "baseWeight": 3 },
+      { "signId": "venous_beading_or_looping", "baseWeight": 4 },
+      { "signId": "intraretinal_microvascular_abnormalities", "baseWeight": 4 },
+      { "signId": "neovascularization_disc_or_elsewhere", "baseWeight": 5 },
+      { "signId": "vitreous_hemorrhage", "baseWeight": 5 },
+      { "signId": "macular_edema_on_OCT", "baseWeight": 4 },
+      { "signId": "laser_scars", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "long_duration_diabetes", "multiplier": 5.0 },
+      { "id": "poor_glycemic_control_high_HbA1c", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 2.5 },
+      { "id": "hyperlipidemia", "multiplier": 1.5 },
+      { "id": "nephropathy", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 2.0 },
+      { "id": "puberty_in_type_1", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "non_proliferative_dr",
+        "name": "Non-Proliferative Diabetic Retinopathy (NPDR)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "microaneurysms", "weight": 5 },
+          { "feature": "retinal_hemorrhages", "weight": 4 },
+          { "feature": "hard_exudates", "weight": 3 },
+          { "feature": "cotton_wool_spots", "weight": 2 },
+          { "feature": "no_neovascularization", "weight": 5 }
+        ],
+        "management": "Optimize glycemic control (HbA1c target <7%). Blood pressure control. Lipid management. Annual dilated retinal exam. If severe NPDR: consider panretinal photocoagulation (PRP)."
+      },
+      {
+        "id": "proliferative_dr",
+        "name": "Proliferative Diabetic Retinopathy (PDR)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "neovascularization_disc_NVD", "weight": 5 },
+          { "feature": "neovascularization_elsewhere_NVE", "weight": 5 },
+          { "feature": "pre_retinal_or_vitreous_hemorrhage", "weight": 5 },
+          { "feature": "fibrovascular_proliferation", "weight": 4 },
+          { "feature": "tractional_retinal_detachment", "weight": 4 }
+        ],
+        "management": "Panretinal photocoagulation (PRP). Anti-VEGF intravitreal injections (Ranibizumab, Aflibercept, Bevacizumab). Vitrectomy for persistent hemorrhage or tractional detachment."
+      },
+      {
+        "id": "diabetic_macular_edema",
+        "name": "Diabetic Macular Edema (DME)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "retinal_thickening_involving_macula", "weight": 5 },
+          { "feature": "hard_exudates_near_fovea", "weight": 4 },
+          { "feature": "cystoid_macular_edema_on_OCT", "weight": 5 },
+          { "feature": "blurred_central_vision", "weight": 5 }
+        ],
+        "management": "Anti-VEGF injections (Ranibizumab, Aflibercept, Bevacizumab) monthly or treat-and-extend. Focal/grid laser for non-center involving DME. Steroid implants (Ozurdex, Iluvien) for chronic cases."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hypertensive_retinopathy",
+        "discriminators": ["AV_nicking", "silver_wiring", "bilateral", "no_diabetes"]
+      },
+      {
+        "diseaseId": "retinal_vein_occlusion",
+        "discriminators": ["unilateral", "sudden_onset", "dilated_tortuous_veins"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Dilated fundus examination", "priority": "immediate", "yield": 0.9, "indication": "cornerstone of diagnosis" }
+      ],
+      "laboratory": [
+        { "name": "HbA1c", "priority": "high", "yield": 0.7, "indication": "glycemic control assessment" },
+        { "name": "Lipid profile", "priority": "medium", "yield": 0.4, "indication": "associated risk" }
+      ],
+      "imaging": [
+        { "name": "Fundus photography (standard or widefield)", "priority": "high", "yield": 0.9, "indication": "documentation and screening" },
+        { "name": "OCT (macular cube)", "priority": "high", "yield": 0.9, "indication": "macular edema, vitreomacular interface" },
+        { "name": "Fluorescein angiography (FFA)", "priority": "medium", "yield": 0.85, "indication": "ischemia, leakage, neovascularization" },
+        { "name": "OCT angiography", "priority": "medium", "yield": 0.8, "indication": "non-invasive assessment of vasculature" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO Preferred Practice Pattern - Diabetic Retinopathy / ETDRS",
+      "pathways": [
+        {
+          "severity": "mild_moderate_npdr",
+          "criteria": "mild NPDR, no macular edema, good vision",
+          "treatment": "Annual dilated exam. Systemic control (HbA1c, BP, lipids). Patient education. Photocoagulation not indicated."
+        },
+        {
+          "severity": "severe_npdr",
+          "criteria": "severe NPDR (4-2-1 rule), high risk of progression",
+          "treatment": "Consider PRP (panretinal photocoagulation). Close follow-up every 3-4 months. Anti-VEGF may be preferred in some cases. Optimize systemic factors."
+        },
+        {
+          "severity": "pdr",
+          "criteria": "NVD, NVE, vitreous hemorrhage",
+          "treatment": "Anti-VEGF injection protocol (Ranibizumab 0.3mg/0.5mg monthly) or PRP. Vitrectomy if non-clearing vitreous hemorrhage, tractional detachment. Follow-up 1 month after PRP."
+        },
+        {
+          "severity": "dme",
+          "criteria": "macular edema on OCT involving center",
+          "treatment": "Anti-VEGF intravitreal injections monthly until dry. Treat-and-extend protocol. Focal laser for non-center DME. Steroid implant if anti-VEGF inadequate."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hyperglycemia_induced_microvascular_damage",
+      "pericyte_loss",
+      "capillary_basement_membrane_thickening",
+      "endothelial_dysfunction",
+      "VEGF_upregulation",
+      "blood_retinal_barrier_breakdown"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "vitreous_hemorrhage",
+        "probability": 0.3,
+        "lagDays": [0, 365],
+        "severityBoost": 0.6,
+        "clues": ["sudden_floaters", "vision_loss", "PDR"]
+      },
+      {
+        "diseaseId": "tractional_retinal_detachment",
+        "probability": 0.1,
+        "lagDays": [0, 365],
+        "severityBoost": 0.8,
+        "clues": ["progressive_vision_loss", "fibrovascular_membranes"]
+      },
+      {
+        "diseaseId": "neovascular_glaucoma",
+        "probability": 0.05,
+        "lagDays": [0, 365],
+        "severityBoost": 0.9,
+        "clues": ["elevated_IOP", "NVI"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["diabetes_history", "microaneurysms", "retinal_hemorrhages", "neovascularization"],
+    "exclusionClues": ["normal_fundus", "no_diabetes"]
+  }
+}

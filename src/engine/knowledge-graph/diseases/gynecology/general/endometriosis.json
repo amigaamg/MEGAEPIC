@@ -1,0 +1,183 @@
+{
+  "disease": {
+    "id": "endometriosis",
+    "name": "Endometriosis",
+    "system": "GYN",
+    "agePeak_months": [300, 480],
+    "note": "Presence of endometrial glands and stroma outside the uterine cavity, most commonly on pelvic peritoneum, ovaries, and rectovaginal septum. Chronic condition causing pain and infertility.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["pelvic_pain_chronic", "infertility", "dysmenorrhea"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "endometrioma_rupture", "weight": 8 },
+        { "sign": "acute_abdomen", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "deep_infiltrating_endometriosis", "weight": 7 },
+          { "sign": "ovarian_endometrioma_over_5cm", "weight": 6 },
+          { "sign": "severe_dysmenorrhea_unresponsive", "weight": 6 },
+          { "sign": "bowel_or_bladder_involvement", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Deep infiltrating disease, large endometriomas, or severe symptoms -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dysmenorrhea_severe_progressive", "weight": 5 },
+      { "symptomId": "deep_dyspareunia", "weight": 4 },
+      { "symptomId": "chronic_pelvic_pain", "weight": 4 },
+      { "symptomId": "infertility", "weight": 4 },
+      { "symptomId": "heavy_menstrual_bleeding", "weight": 3 },
+      { "symptomId": "cyclical_bowel_symptoms", "weight": 3, "note": "Painful defecation, diarrhea during menses" },
+      { "symptomId": "cyclical_bladder_symptoms", "weight": 2, "note": "Hematuria, pain on urination during menses" },
+      { "symptomId": "pain_cyclical_and_related_to_menstruation", "weight": 5 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "nausea_during_menstruation", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tender_uterosacral_nodules_on_pve", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fixed_retroverted_uterus", "baseWeight": 3 },
+      { "signId": "adnexal_mass_endometrioma", "baseWeight": 4 },
+      { "signId": "cervical_motion_tenderness", "baseWeight": 3 },
+      { "signId": "rectovaginal_nodularity", "baseWeight": 4 },
+      { "signId": "uterine_axial_fixed", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "early_menarche", "multiplier": 1.5 },
+      { "id": "short_menstrual_cycles", "multiplier": 1.5 },
+      { "id": "nulliparity", "multiplier": 2.0 },
+      { "id": "family_history_first_degree", "multiplier": 3.0 },
+      { "id": "mullerian_anomalies", "multiplier": 2.0 },
+      { "id": "low_BMI", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "superficial_peritoneal_endometriosis",
+        "name": "Superficial Peritoneal Endometriosis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "peritoneal_implants_only", "weight": 4 },
+          { "feature": "moderate_dysmenorrhea", "weight": 3 },
+          { "feature": "no_masses", "weight": 3 }
+        ],
+        "management": "Diagnostic laparoscopy with ablation/excision. Hormonal suppression (COCP, progestins, GnRH agonists). Analgesia."
+      },
+      {
+        "id": "endometrioma",
+        "name": "Ovarian Endometrioma (Chocolate Cyst)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "unilateral_or_bilateral_adnexal_cyst", "weight": 5 },
+          { "feature": "ground_glass_echogenicity_on_ultrasound", "weight": 5 },
+          { "feature": "pain_worse_during_menstruation", "weight": 4 },
+          { "feature": "cyst_over_5cm", "weight": 3 }
+        ],
+        "management": "Laparoscopic ovarian cystectomy. Pre-op GnRH agonist. PilIC or progestins for suppression. Ovarian reserve counseling."
+      },
+      {
+        "id": "deep_infiltrating_endometriosis",
+        "name": "Deep Infiltrating Endometriosis (DIE)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "infiltration_over_5mm_deep", "weight": 5 },
+          { "feature": "rectovaginal_or_bowel_involvement", "weight": 5 },
+          { "feature": "severe_pain_and_dyspareunia", "weight": 5 },
+          { "feature": "bladder_or_ureter_involvement", "weight": 4 }
+        ],
+        "management": "Excision surgery by specialist endometriosis team. Multidisciplinary (gynecology + colorectal + urology). Pre-op MRI and IVP. Hormonal suppression post-op."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pelvic_inflammatory_disease",
+        "discriminators": ["fever", "purulent_discharge", "acute_onset", "STI_history"]
+      },
+      {
+        "diseaseId": "adenomyosis",
+        "discriminators": ["diffuse_uterine_tenderness", "bulky_uterus", "MRI_findings"]
+      },
+      {
+        "diseaseId": "irritable_bowel_syndrome",
+        "discriminators": ["pain_relieved_by_defecation", "bloating_worse_with_certain_foods", "non_cyclical"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CA-125", "priority": "medium", "yield": 0.5, "indication": "may be elevated, not diagnostic" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound", "priority": "first_line", "yield": 0.8, "indication": "endometriomas, deep nodules" },
+        { "name": "MRI pelvis", "priority": "medium", "yield": 0.85, "indication": "pre-surgical mapping, DIE assessment" }
+      ],
+      "special": [
+        { "name": "Diagnostic laparoscopy", "priority": "gold_standard", "yield": 0.95, "indication": "visualization + histology confirmation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG73 - Endometriosis",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "dysmenorrhea, no DIE, endometriomas <5cm",
+          "treatment": "Analgesia (NSAIDs). Hormonal therapy: COCP continuous, progestins (norethisterone, dienogest), LNG-IUS. Laparoscopic ablation if medical fails."
+        },
+        {
+          "severity": "severe_infiltrating",
+          "criteria": "DIE, bowel/bladder involvement, endometriomas >5cm, infertility",
+          "treatment": "Refer to specialist endometriosis center. Laparoscopic excision of all lesions. Multidisciplinary surgery. Pre-op GnRH agonists for 3 months. Post-op hormonal suppression. Fertility referral."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "retrograde_menstruation",
+      "coelomic_metaplasia",
+      "immunological_dysfunction",
+      "estrogen_dependent_inflammation",
+      "nerve_fiber_infiltration"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "infertility",
+        "probability": 0.3,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.3,
+        "clues": ["tubal_adhesions", "ovarian_involvement", "decreased_ovarian_reserve"]
+      },
+      {
+        "diseaseId": "endometrioma_rupture",
+        "probability": 0.02,
+        "lagDays": [0, 365],
+        "severityBoost": 0.5,
+        "clues": ["acute_severe_pain", "peritonism", "cyst_collapse"]
+      },
+      {
+        "diseaseId": "chronic_pelvic_pain",
+        "probability": 0.4,
+        "lagDays": [0, 3650],
+        "severityBoost": 0.2,
+        "clues": ["persistent_pain", "quality_of_life_impairment"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["cyclical_pain", "dyspareunia", "infertility", "tender_uterosacral_nodules"],
+    "exclusionClues": ["non_cyclical_pain", "normal_pelvic_exam_and_imaging"]
+  }
+}

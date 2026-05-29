@@ -1,0 +1,176 @@
+{
+  "disease": {
+    "id": "thyroid_nodule",
+    "name": "Thyroid Nodule",
+    "system": "ent",
+    "agePeak_months": [360, 840],
+    "note": "Discrete lesion within the thyroid gland. Majority benign. Clinical challenge is to identify the minority that are malignant.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["neck_mass", "thyroid_lesion"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stridor", "weight": 10 },
+        { "sign": "airway_obstruction", "weight": 10 },
+        { "sign": "superior_vena_cava_syndrome", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "rapid_growth", "weight": 7 },
+          { "sign": "vocal_cord_paralysis", "weight": 8 },
+          { "sign": "hard_fixed_mass", "weight": 6 },
+          { "sign": "cervical_lymphadenopathy", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If malignant features/airway compromise -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "neck_mass", "weight": 5 },
+      { "symptomId": "anterior_neck_swelling", "weight": 4 },
+      { "symptomId": "dysphagia", "weight": 3, "note": "Suggests large nodule or malignant invasion" },
+      { "symptomId": "dysphonia_hoarseness", "weight": 3, "note": "Recurrent laryngeal nerve involvement" },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "pain_in_neck", "weight": 2, "note": "May suggest hemorrhage into nodule or malignancy" },
+      { "symptomId": "hyperthyroid_symptoms", "weight": 2, "note": "Tremor, palpitations, weight loss, heat intolerance" },
+      { "symptomId": "hypothyroid_symptoms", "weight": 1 },
+      { "symptomId": "family_history_thyroid_cancer", "weight": 3 },
+      { "symptomId": "radiation_exposure_history", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_thyroid_nodule", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hard_irregular_consistency", "baseWeight": 4 },
+      { "signId": "fixed_to_deep_tissue", "baseWeight": 4 },
+      { "signId": "cervical_lymphadenopathy", "baseWeight": 4 },
+      { "signId": "vocal_cord_mobility_deficit", "baseWeight": 4 },
+      { "signId": "tracheal_deviation", "baseWeight": 3 },
+      { "signId": "nodule_moves_with_swallowing", "baseWeight": 2 },
+      { "signId": "signs_hyperthyroidism", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender", "multiplier": 4.0 },
+      { "id": "iodine_deficiency", "multiplier": 2.0 },
+      { "id": "head_neck_irradiation", "multiplier": 5.0 },
+      { "id": "family_history_thyroid_cancer", "multiplier": 3.0 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "benign_thyroid_nodule",
+        "name": "Benign Thyroid Nodule",
+        "prevalenceModifier": 0.9,
+        "keyFeatures": [
+          { "feature": "smooth_soft_consistency", "weight": 3 },
+          { "feature": "well_circumscribed", "weight": 3 },
+          { "feature": "negative_FNA", "weight": 5 },
+          { "feature": "stable_size", "weight": 4 }
+        ],
+        "management": "Clinical and ultrasound surveillance. Repeat FNA if growth. Suppressive levothyroxine therapy not recommended. Surgery for compressive symptoms or cosmetic concerns."
+      },
+      {
+        "id": "malignant_thyroid_nodule",
+        "name": "Malignant Thyroid Nodule",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "hard_irregular", "weight": 4 },
+          { "feature": "rapid_growth", "weight": 4 },
+          { "feature": "fixed_to_surroundings", "weight": 4 },
+          { "feature": "cervical_lymph_nodes", "weight": 4 },
+          { "feature": "vocal_cord_paralysis", "weight": 4 }
+        ],
+        "management": "Total thyroidectomy + central neck dissection. Lateral neck dissection if nodal metastases. Post-op radioactive iodine for high-risk. TSH suppression therapy. Thyroglobulin monitoring."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "thyroglossal_duct_cyst",
+        "discriminators": ["midline", "moves_with_tongue_protrusion", "suprahyoid_location", "cystic_ultrasound"]
+      },
+      {
+        "diseaseId": "branchial_cleft_cyst",
+        "discriminators": ["lateral_neck", "anterior_border_SCM", "cystic", "young_adult"]
+      },
+      {
+        "diseaseId": "parathyroid_adenoma",
+        "discriminators": ["hypercalcemia", "elevated_PTH", "posterior_thyroid_location"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Neck Palpation", "priority": "immediate", "yield": 0.5, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "TSH", "priority": "high", "yield": 0.7, "indication": "all patients - if low, proceed to nuclear scan" },
+        { "name": "Free T4, T3", "priority": "medium", "yield": 0.5, "indication": "if TSH abnormal" },
+        { "name": "Calcitonin", "priority": "medium", "yield": 0.4, "indication": "suspected medullary thyroid carcinoma" }
+      ],
+      "imaging": [
+        { "name": "Thyroid Ultrasound", "priority": "high", "yield": 0.9, "indication": "first-line - assess size, composition, margins, vascularity, lymph nodes" },
+        { "name": "Thyroid Scan (I-123)", "priority": "medium", "yield": 0.6, "indication": "hyperfunctioning/hot vs cold nodule evaluation" },
+        { "name": "FNA Biopsy (US-guided)", "priority": "high", "yield": 0.95, "indication": "cytologic diagnosis, Bethesda classification" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATA Guidelines for Thyroid Nodule Management",
+      "pathways": [
+        {
+          "severity": "benign features",
+          "criteria": "low suspicion US, benign FNA (Bethesda II), stable size",
+          "treatment": "Clinical follow-up in 12-24 months. Repeat US at 1-2 years. No surgery unless growth or compressive symptoms."
+        },
+        {
+          "severity": "indeterminate features",
+          "criteria": "Bethesda III/IV, intermediate suspicion US",
+          "treatment": "Repeat FNA. Consider molecular testing (Afirma, ThyroSeq). Diagnostic lobectomy if suspicious features. Intraoperative frozen section."
+        },
+        {
+          "severity": "suspicious/malignant",
+          "criteria": "Bethesda V/VI, high suspicion US, compressive symptoms",
+          "treatment": "Total thyroidectomy + central neck dissection. RLN monitoring. Post-op RAI if indicated. TSH suppression with levothyroxine."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "follicular_cell_hyperplasia",
+      "colloid_accumulation",
+      "genetic_mutations",
+      "angiogenesis",
+      "malignant_transformation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "aerodigestive_obstruction",
+        "probability": 0.02,
+        "lagDays": [180, 1825],
+        "severityBoost": 0.5,
+        "clues": ["dysphagia_progressive", "stridor", "tracheal_deviation"]
+      },
+      {
+        "diseaseId": "recurrent_laryngeal_nerve_injury",
+        "probability": 0.01,
+        "lagDays": [1, 365],
+        "severityBoost": 0.3,
+        "clues": ["post_surgical_hoarseness", "aspiration"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["palpable_neck_mass", "moves_with_swallowing", "incidental_on_imaging"],
+    "exclusionClues": ["inflammatory_thyroiditis_painful", "diffuse_goiter", "thyroglossal_cyst"]
+  }
+}

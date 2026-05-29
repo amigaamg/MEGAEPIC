@@ -1,0 +1,196 @@
+{
+  "disease": {
+    "id": "hepatocellular_carcinoma",
+    "name": "Hepatocellular Carcinoma",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Primary liver cancer, usually arising in cirrhotic liver. Screening with US and AFP in high-risk patients. Surgical resection or transplant.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["liver_mass", "cirrhosis", "abdominal_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "tumor_rupture_hemorrhage", "weight": 10 },
+        { "sign": "variceal_bleeding", "weight": 10 },
+        { "sign": "hepatic_encephalopathy", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bclc_stage_c_or_d", "weight": 8 },
+          { "sign": "portal_vein_invasion", "weight": 8 },
+          { "sign": "child_pugh_c", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Advanced stage (BCLC C/D) -> SEVERE; early stage (BCLC 0/A) -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "known_cirrhosis_or_chronic_hepatitis", "weight": 5 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "abdominal_distension", "weight": 3, "note": "Ascites or hepatomegaly" },
+      { "symptomId": "anorexia", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 3 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "worsening_of_liver_function", "weight": 3 },
+      { "symptomId": "alcohol_abuse_or_hepatitis_b_c", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hepatomegaly", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "hepatic_bruit", "baseWeight": 3, "note": "Auscultatory sign suggestive of HCC" },
+      { "signId": "ascites", "baseWeight": 3 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "signs_of_chronic_liver_disease", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "asterixis", "baseWeight": 2 },
+      { "signId": "palpable_abdominal_mass", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "hepatitis_b_infection", "multiplier": 5.0 },
+      { "id": "hepatitis_c_infection", "multiplier": 4.0 },
+      { "id": "cirrhosis_any_cause", "multiplier": 5.0 },
+      { "id": "alcoholic_liver_disease", "multiplier": 3.0 },
+      { "id": "nonalcoholic_steatohepatitis", "multiplier": 2.5 },
+      { "id": "hemochromatosis", "multiplier": 4.0 },
+      { "id": "aflatoxin_exposure", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "family_history_of_hcc", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "early_hcc_bclc_0_a",
+        "name": "Early HCC (BCLC 0-A)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "single_tumor_or_up_to_3_lesions_less_3cm", "weight": 5 },
+          { "feature": "child_pugh_a_b", "weight": 5 },
+          { "feature": "no_extrahepatic_spread", "weight": 5 },
+          { "feature": "ps_0", "weight": 4 }
+        ],
+        "management": "Liver resection (if non-cirrhotic or Child A). Liver transplantation (Milan criteria). Radiofrequency ablation (RFA) or Microwave ablation (MWA) for small tumors. TACE for bridging."
+      },
+      {
+        "id": "intermediate_hcc_bclc_b",
+        "name": "Intermediate HCC (BCLC B)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "multinodular_disease", "weight": 5 },
+          { "feature": "child_pugh_a_b", "weight": 4 },
+          { "feature": "no_vascular_invasion", "weight": 4 },
+          { "feature": "ps_0", "weight": 3 }
+        ],
+        "management": "Transarterial Chemoembolization (TACE). Radioembolization (TARE/Y-90). Systemic therapy if TACE contraindicated."
+      },
+      {
+        "id": "advanced_hcc_bclc_c_d",
+        "name": "Advanced HCC (BCLC C-D)",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "portal_vein_invasion", "weight": 5 },
+          { "feature": "extrahepatic_metastases", "weight": 5 },
+          { "feature": "child_pugh_b_c", "weight": 5 },
+          { "feature": "ps_1_4", "weight": 4 }
+        ],
+        "management": "Systemic therapy: Atezolizumab + Bevacizumab (first line), Sorafenib, Lenvatinib. Palliative radiotherapy for bone metastases. Best supportive care."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatic_hemangioma",
+        "discriminators": ["afp_normal", "typical_enhancement_pattern_on_ct_mri", "no_cirrhosis"]
+      },
+      {
+        "diseaseId": "liver_abscess",
+        "discriminators": ["fever", "elevated_wbc", "cystic_lesion", "responds_to_antibiotics"]
+      },
+      {
+        "diseaseId": "metastatic_liver_disease",
+        "discriminators": ["known_primary_cancer", "multiple_lesions", "cea_elevated_not_afp"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECOG/Child-Pugh score", "priority": "high", "yield": 0.7, "indication": "assess liver function and performance" }
+      ],
+      "laboratory": [
+        { "name": "AFP (Alpha-fetoprotein)", "priority": "high", "yield": 0.7, "indication": "elevated >400 ng/mL strongly suggestive" },
+        { "name": "LFTs", "priority": "high", "yield": 0.6, "indication": "assess liver function" },
+        { "name": "Child-Pugh score", "priority": "high", "yield": 0.8, "indication": "severity of cirrhosis" },
+        { "name": "Hepatitis B/C serology", "priority": "high", "yield": 0.5, "indication": "identify underlying cause" },
+        { "name": "INR", "priority": "high", "yield": 0.5, "indication": "synthetic function" }
+      ],
+      "imaging": [
+        { "name": "Quadruple-phase CT Liver", "priority": "high", "yield": 0.95, "indication": "arterial enhancement + portal venous washout" },
+        { "name": "Contrast-enhanced MRI Liver", "priority": "high", "yield": 0.95, "indication": "best characterization if CT equivocal" },
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.7, "indication": "screening tool" },
+        { "name": "CT Chest/Abdomen/Pelvis", "priority": "high", "yield": 0.8, "indication": "staging for extrahepatic disease" },
+        { "name": "Liver biopsy", "priority": "medium", "yield": 0.95, "indication": "if imaging inconclusive" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BCLC/AASLD/EASL Guidelines for HCC",
+      "pathways": [
+        {
+          "severity": "very early/early (BCLC 0/A)",
+          "criteria": "single tumor or up to 3 <3cm, Child A/B, PS 0",
+          "treatment": "Resection (non-cirrhotic or Child A). Transplant (Milan criteria). RFA/MWA. TACE as bridge to transplant."
+        },
+        {
+          "severity": "intermediate (BCLC B)",
+          "criteria": "multinodular, Child A/B, PS 0",
+          "treatment": "TACE. TARE (Y-90 radioembolization). Consider systemic therapy if TACE refractory."
+        },
+        {
+          "severity": "advanced (BCLC C-D)",
+          "criteria": "vascular invasion, metastases, Child B/C, PS 1-2",
+          "treatment": "Systemic therapy: Atezolizumab + Bevacizumab. Sorafenib or Lenvatinib if contraindication to immunotherapy. Best supportive care for end-stage."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_liver_injury",
+      "cirrhosis",
+      "hepatocyte_regeneration",
+      "dysplastic_nodules",
+      "malignant_transformation",
+      "angiogenesis",
+      "vascular_invasion",
+      "metastasis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_rupture",
+        "probability": 0.05,
+        "lagDays": [0, 30],
+        "severityBoost": 0.5,
+        "clues": ["sudden_severe_ruq_pain", "hypotension", "hemoperitoneum"]
+      },
+      {
+        "diseaseId": "liver_failure",
+        "probability": 0.15,
+        "lagDays": [30, 360],
+        "severityBoost": 0.4,
+        "clues": ["worsening_jaundice", "ascites", "encephalopathy", "elevating_inr"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["cirrhosis_or_chronic_hepatitis", "elevated_afp", "arterial_enhancing_liver_mass", "weight_loss"],
+    "exclusionClues": ["normal_afp", "no_cirrhosis_risk_factors", "hemangioma_typical_imaging"]
+  }
+}

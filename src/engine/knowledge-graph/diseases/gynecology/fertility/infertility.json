@@ -1,0 +1,172 @@
+{
+  "disease": {
+    "id": "infertility",
+    "name": "Female Infertility",
+    "system": "GYN",
+    "agePeak_months": [300, 420],
+    "note": "Failure to achieve pregnancy after 12 months of regular unprotected intercourse. Etiology includes ovulatory dysfunction, tubal/peritoneal factors, uterine factors, and unexplained infertility.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["infertility", "reproductive_failure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "severeCriteria": {
+        "anyDangerSign": false,
+        "additionalCriteria": [
+          { "sign": "advanced_reproductive_age_over_40", "weight": 6 },
+          { "sign": "bilateral_tubal_blockage", "weight": 7 },
+          { "sign": "premature_ovarian_insufficiency", "weight": 8 },
+          { "sign": "azoospermia_male_factor", "weight": 6 },
+          { "sign": "recurrent_implantation_failure", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Advanced age, tubal block, or POI -> SEVERE; Mild male factor or anovulation -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "failure_to_conceive_12_months", "weight": 5 },
+      { "symptomId": "irregular_or_absent_menstrual_cycles", "weight": 4 },
+      { "symptomId": "previous_pelvic_infection", "weight": 3 },
+      { "symptomId": "previous_abdominal_or_pelvic_surgery", "weight": 3 },
+      { "symptomId": "dysmenorrhea_or_dyspareunia", "weight": 2 },
+      { "symptomId": "hirsutism_or_acne", "weight": 3, "note": "Suggests PCOS" },
+      { "symptomId": "galactorrhea", "weight": 2, "note": "Suggests hyperprolactinemia" },
+      { "symptomId": "weight_changes_significant", "weight": 2 },
+      { "symptomId": "hot_flashes_or_early_menopause", "weight": 3 },
+      { "symptomId": "male_factor_suspected", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "obesity_or_elevated_BMI", "baseWeight": 2 },
+      { "signId": "hirsutism_acanthosis_nigricans", "baseWeight": 3 },
+      { "signId": "galactorrhea", "baseWeight": 2 },
+      { "signId": "pelvic_mass_or_tenderness", "baseWeight": 2 },
+      { "signId": "virilization_signs", "baseWeight": 3 },
+      { "signId": "thyroid_enlargement", "baseWeight": 1 },
+      { "signId": "BMI_outside_normal_range", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_age_over_35", "multiplier": 3.0 },
+      { "id": "ovulatory_disorder_PCOS", "multiplier": 3.0 },
+      { "id": "tubal_disease_PID", "multiplier": 3.0 },
+      { "id": "endometriosis", "multiplier": 2.5 },
+      { "id": "uterine_abnormalities", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "underweight", "multiplier": 1.5 },
+      { "id": "previous_ovarian_surgery", "multiplier": 2.0 },
+      { "id": "chemotherapy_or_radiotherapy", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "ovulatory_infertility",
+        "name": "Ovulatory Infertility (WHO Group I, II, III)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "oligomenorrhea_or_amenorrhea", "weight": 5 },
+          { "feature": "anovulation_confirmed", "weight": 5 },
+          { "feature": "PCOS_features_or_hypogonadism", "weight": 3 }
+        ],
+        "management": "Ovulation induction: Clomiphene citrate, Letrozole, Gonadotropins. Metformin if PCOS. Lifestyle modification if obese."
+      },
+      {
+        "id": "tubal_infertility",
+        "name": "Tubal Factor Infertility",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "blocked_tubes_on_HSG_or_laparoscopy", "weight": 5 },
+          { "feature": "hydrosalpinx", "weight": 4 },
+          { "feature": "history_of_PID_or_ectopic", "weight": 4 }
+        ],
+        "management": "Laparoscopic tubal surgery (salpingostomy/neosalpingostomy) or salpingectomy if hydrosalpinx. IVF (most effective for tubal factor)."
+      },
+      {
+        "id": "unexplained_infertility",
+        "name": "Unexplained Infertility",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "normal_ovulation", "weight": 4 },
+          { "feature": "patent_tubes", "weight": 4 },
+          { "feature": "normal_semen_analysis", "weight": 4 },
+          { "feature": "no_uterine_abnormality", "weight": 4 }
+        ],
+        "management": "Expectant for 6 months if mild. Ovarian stimulation + IUI. IVF for more severe or prolonged."
+      }
+    ],
+
+    "mimics": [],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Day 2-4 FSH, LH, E2", "priority": "first_line", "yield": 0.8, "indication": "ovarian reserve assessment" },
+        { "name": "Anti-Mullerian hormone (AMH)", "priority": "first_line", "yield": 0.85, "indication": "ovarian reserve" },
+        { "name": "TSH and prolactin", "priority": "first_line", "yield": 0.5, "indication": "endocrine workup" },
+        { "name": "Progesterone (mid-luteal)", "priority": "first_line", "yield": 0.7, "indication": "confirm ovulation" },
+        { "name": "Free androgen index or testosterone", "priority": "medium", "yield": 0.4, "indication": "if PCOS suspected" },
+        { "name": "Chlamydia antibody test", "priority": "medium", "yield": 0.4, "indication": "tubal damage marker" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound (follicle count)", "priority": "first_line", "yield": 0.8, "indication": "AFC, ovarian morphology" },
+        { "name": "Hysterosalpingogram (HSG)", "priority": "first_line", "yield": 0.85, "indication": "tubal patency + uterine cavity" },
+        { "name": "Diagnostic laparoscopy", "priority": "medium", "yield": 0.9, "indication": "if HSG abnormal or endometriosis suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline CG156 - Fertility Problems",
+      "pathways": [
+        {
+          "severity": "ovulatory_age_under_35",
+          "criteria": "anovulatory, age <35, normal ovarian reserve",
+          "treatment": "Lifestyle advice (weight loss if BMI >30). Ovulation induction with clomiphene 50-150mg days 2-6. Timed intercourse. Thyroid and prolactin correction. Refer to fertility specialist if >6 cycles fail."
+        },
+        {
+          "severity": "tubal_or_uterine",
+          "criteria": "tubal block, hydrosalpinx, or uterine abnormality",
+          "treatment": "Surgical correction if feasible. Salpingectomy for hydrosalpinx then IVF. Uterine septum resection. IVF if bilateral tubal block."
+        },
+        {
+          "severity": "advanced_age_or_low_reserve",
+          "criteria": "age >40, low AMH, high FSH, or >3 years infertility",
+          "treatment": "Prompt IVF referral. Donor eggs if poor response. Preimplantation genetic testing if indicated. Counseling on adoption/fostering."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "anovulation",
+      "tubal_occlusion",
+      "peritoneal_adhesions",
+      "implantation_failure",
+      "sperm_egg_interaction_defects"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "psychological_distress",
+        "probability": 0.4,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.1,
+        "clues": ["anxiety", "depression", "relationship_strain"]
+      },
+      {
+        "diseaseId": "ovarian_hyperstimulation",
+        "probability": 0.03,
+        "lagDays": [0, 30],
+        "severityBoost": 0.5,
+        "clues": ["abdominal_distension", "ovarian_enlargement", "ascites"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["failure_to_conceive", "abnormal_cycles", "abnormal_HSG"],
+    "exclusionClues": ["proven_fertility_in_past_year"]
+  }
+}

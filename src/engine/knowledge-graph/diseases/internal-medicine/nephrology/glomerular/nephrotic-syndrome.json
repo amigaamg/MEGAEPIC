@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "nephrotic_syndrome",
+    "name": "Nephrotic Syndrome",
+    "system": "nephrology",
+    "agePeak_months": [18, 72],
+    "note": "Characterized by proteinuria, hypoalbuminemia, edema, and hyperlipidemia. Minimal change disease most common in children.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["proteinuria", "edema", "glomerular_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anuria_renal_failure", "weight": 9 },
+        { "sign": "severe_hypertension", "weight": 8 },
+        { "sign": "peritonitis_signs", "weight": 9 },
+        { "sign": "thromboembolism", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If complications (infection, thrombosis, renal failure) -> COMPLICATED; else -> UNCOMPLICATED"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "periorbital_edema", "weight": 5 },
+      { "symptomId": "generalized_edema", "weight": 5 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "foamy_urine", "weight": 4 },
+      { "symptomId": "lethargy_fatigue", "weight": 2 },
+      { "symptomId": "recent_infection", "weight": 2, "note": "Common trigger" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pitting_edema", "baseWeight": 5 },
+      { "signId": "periorbital_edema", "baseWeight": 4 },
+      { "signId": "ascites", "baseWeight": 3 },
+      { "signId": "pleural_effusion", "baseWeight": 2 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "hypertension", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "recent_respiratory_infection", "multiplier": 1.8 },
+      { "id": "atopy", "multiplier": 1.3 },
+      { "id": "age_2_to_6", "multiplier": 2.0 },
+      { "id": "family_history", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "minimal_change_disease",
+        "name": "Minimal Change Disease",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "selective_proteinuria", "weight": 4 },
+          { "feature": "steroid_sensitive", "weight": 5 },
+          { "feature": "normal_renal_function", "weight": 3 }
+        ],
+        "management": "Prednisolone 2 mg/kg/day (max 60 mg) for 4-6 weeks, then taper. Relapses retreated with steroids. Steroid-sparing agents if frequent relapses."
+      },
+      {
+        "id": "focal_segmental_glomerulosclerosis",
+        "name": "Focal Segmental Glomerulosclerosis (FSGS)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "non_selective_proteinuria", "weight": 4 },
+          { "feature": "steroid_resistant", "weight": 5 },
+          { "feature": "hematuria_hypertension", "weight": 3 }
+        ],
+        "management": "Longer steroid course. Calcineurin inhibitors (cyclosporine, tacrolimus). ACEi/ARB for proteinuria. Consider genetic testing."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_glomerulonephritis",
+        "discriminators": ["hematuria", "hypertension", "reduced_complement", "acute_onset"]
+      },
+      {
+        "diseaseId": "proteinuria_from_uti",
+        "discriminators": ["dysuria", "positive_culture", "low_level_proteinuria"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dipstick", "priority": "immediate", "yield": 0.9, "indication": "proteinuria screening" }
+      ],
+      "laboratory": [
+        { "name": "Urine protein-to-creatinine ratio (UPCR)", "priority": "high", "yield": 0.95, "indication": "quantify proteinuria, target >200 mg/mmol" },
+        { "name": "Serum albumin", "priority": "high", "yield": 0.9, "indication": "hypoalbuminemia <25 g/L" },
+        { "name": "Serum creatinine, eGFR", "priority": "high", "yield": 0.6, "indication": "renal function" },
+        { "name": "Lipid profile", "priority": "medium", "yield": 0.7, "indication": "hyperlipidemia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "KDIGO Guidelines for Glomerulonephritis",
+      "pathways": [
+        {
+          "severity": "first episode",
+          "criteria": "new onset nephrotic syndrome",
+          "treatment": "Prednisolone 2 mg/kg/day (max 60 mg) for 4-6 weeks. Salt restriction. Diuretics for edema. Penicillin V prophylaxis until remission."
+        },
+        {
+          "severity": "complications",
+          "criteria": "infection, thrombosis, renal impairment",
+          "treatment": "IV antibiotics for peritonitis. Anticoagulation for thrombosis. IV albumin + diuretics for severe edema. Dialysis if renal failure."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "podocyte_injury",
+      "glomerular_basement_membrane_damage",
+      "increased_glomerular_permeability",
+      "massive_proteinuria",
+      "hypoalbuminemia",
+      "edema_formation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "spontaneous_bacterial_peritonitis",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "clues": ["abdominal_pain", "fever", "ascites"]
+      },
+      {
+        "diseaseId": "thrombosis",
+        "probability": 0.03,
+        "severityBoost": 0.5,
+        "clues": ["unilateral_leg_swelling", "abdominal_pain", "dyspnea"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["generalized_edema", "foamy_urine", "proteinuria_heavy", "hypoalbuminemia"],
+    "exclusionClues": ["hematuria_dominant", "hypertension_severe", "normal_albumin"]
+  }
+}

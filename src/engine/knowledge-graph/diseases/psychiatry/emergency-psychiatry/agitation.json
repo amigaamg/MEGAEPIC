@@ -1,0 +1,116 @@
+{
+  "disease": {
+    "id": "agitation_emergency",
+    "name": "Agitation (Psychiatric Emergency)",
+    "system": "PSYCH",
+    "agePeak_months": [180, 480],
+    "note": "Excessive motor or verbal activity, often with anxiety, tension, and potential for aggression. May be due to psychiatric, medical, or substance causes.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["emergency_psychiatry", "agitation", "crisis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "imminent_violence_to_others", "weight": 10 },
+        { "sign": "self_harm_behavior_active", "weight": 10 },
+        { "sign": "agitation_not_responding_to_de_escalation", "weight": 9 },
+        { "sign": "medical_instability_fever_altered_consciousness", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If imminent violence/medical instability -> EMERGENCY INTERVENTION; else -> DE-ESCALATION"
+    },
+    "historyFeatures": [
+      { "symptomId": "restlessness_inability_to_sit_still", "weight": 5 },
+      { "symptomId": "irritable_or_angry_mood", "weight": 4 },
+      { "symptomId": "verbal_threats_or_escalation", "weight": 4 },
+      { "symptomId": "pacing_or_agitated_movements", "weight": 3 },
+      { "symptomId": "loud_rapid_speech", "weight": 3 },
+      { "symptomId": "uncooperative_hostile_behavior", "weight": 4 },
+      { "symptomId": "psychiatric_history_known", "weight": 3 },
+      { "symptomId": "substance_use_recent", "weight": 3 },
+      { "symptomId": "medication_nonadherence", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "psychomotor_agitation", "baseWeight": 5 },
+      { "signId": "loud_rapid_or_pressured_speech", "baseWeight": 4 },
+      { "signId": "clenched_fists_tight_posture", "baseWeight": 3 },
+      { "signId": "poor_eye_contact_threatening_glare", "baseWeight": 3 },
+      { "signId": "tachycardia_hypertension", "baseWeight": 3 },
+      { "signId": "diaphoresis", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "substance_intoxication_or_withdrawal", "multiplier": 4.0 },
+      { "id": "psychosis_acute", "multiplier": 4.0 },
+      { "id": "mania", "multiplier": 3.0 },
+      { "id": "dementia_delirium", "multiplier": 3.0 },
+      { "id": "personality_disorder_bpd_aspd", "multiplier": 2.0 },
+      { "id": "history_of_violence", "multiplier": 4.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "agitation_psychiatric",
+        "name": "Agitation from Primary Psychiatric Disorder",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "known_psychosis_mania_depression", "weight": 4 },
+          { "feature": "response_to_antipsychotic_or_benzodiazepine", "weight": 3 }
+        ],
+        "management": "De-escalation first. Oral medication: olanzapine 10 mg ODT or risperidone 2 mg. If refuses: IM olanzapine 10 mg or haloperidol 5 mg + lorazepam 2 mg. Address underlying cause."
+      },
+      {
+        "id": "agitation_organic",
+        "name": "Agitation from Medical/Substance Cause",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "altered_consciousness_or_confusion", "weight": 4 },
+          { "feature": "medical_signs_fever_hypoxia_hypoglycemia", "weight": 4 },
+          { "feature": "positive_toxicology", "weight": 3 }
+        ],
+        "management": "Treat underlying medical condition. Benzodiazepines for alcohol/sedative withdrawal. Antipsychotics for delirium (haloperidol 0.5-2 mg IM/IV). Avoid benzodiazepines in delirium. Restraints as last resort."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "akathisia", "discriminators": ["inner_restlessness", "pacing_rocking", "no_anger_or_threats", "antipsychotic_use_recent"] },
+      { "diseaseId": "anxiety_agitation", "discriminators": ["no_aggression", "reassurance_responds", "no_psychosis_or_mania"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Modified Overt Aggression Scale (MOAS)", "priority": "high", "yield": 0.85, "indication": "aggression severity" },
+        { "name": "Vital signs, pulse oximetry, glucose", "priority": "immediate", "yield": 0.6, "indication": "rule out medical causes" }
+      ],
+      "laboratory": [
+        { "name": "Urine toxicology + blood alcohol", "priority": "high", "yield": 0.5, "indication": "substance involvement" },
+        { "name": "FBC, U&E, glucose, TSH, LFT", "priority": "medium", "yield": 0.2, "indication": "rule out organic causes" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Project BETA Guidelines for Agitation / NICE Guidelines",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "verbal de-escalation possible, no immediate danger",
+          "treatment": "De-escalation techniques: calm voice, respect personal space, offer choices, active listening. Oral medication (preferred): olanzapine ODT 10 mg or risperidone 2 mg + lorazepam 1-2 mg. Quiet environment."
+        },
+        {
+          "severity": "severe/imminent violence",
+          "criteria": "failing de-escalation, imminent violence, dangerous to self/others",
+          "treatment": "IM medication: olanzapine 10 mg IM or haloperidol 5-10 mg IM + lorazepam 2 mg IM. Monitor for respiratory depression. Restraints (last resort). Obtain help (security/police). 1:1 observation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "dopamine_hyperactivity",
+      "noradrenergic_arousal",
+      "gaba_hypofunction",
+      "serotonin_dysregulation",
+      "prefrontal_cortex_dysfunction"
+    ],
+    "complications": [
+      { "diseaseId": "assault_injury_to_others", "probability": 0.2, "severityBoost": 0.3, "clues": ["previous_violence", "paranoid_ideation", "substance_intoxication"] },
+      { "diseaseId": "restraint_related_injury", "probability": 0.05, "severityBoost": 0.3, "clues": ["prolonged_restraint", "obesity", "combativeness"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "immediate",
+    "diagnosticClues": ["psychomotor_agitation", "verbal_threats_or_shouting", "anger_hostility"],
+    "exclusionClues": ["calm_cooperative", "no_physical_agitation", "responding_to_reassurance"]
+  }
+}

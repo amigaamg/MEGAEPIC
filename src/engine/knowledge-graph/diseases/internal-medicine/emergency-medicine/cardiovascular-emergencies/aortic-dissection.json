@@ -1,0 +1,158 @@
+{
+  "disease": {
+    "id": "aortic_dissection",
+    "name": "Aortic Dissection",
+    "system": "emergency_medicine",
+    "agePeak_months": [600, 960],
+    "note": "Life-threatening condition with a tear in the aortic intima causing blood flow between layers. Proximal (Stanford A, involving ascending) or distal (Stanford B, descending). Time-critical surgical emergency.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["cardiac_emergency", "vascular_emergency", "chest_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "syncope", "weight": 9 },
+        { "sign": "hypotension_shock", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "cardiac_tamponade", "weight": 10 },
+        { "sign": "neurological_deficit", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "AORTIC DISSECTION is a CATASTROPHIC EMERGENCY. Type A requires emergency surgery. Type B may be medical."
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_severe_tearing_chest_pain", "weight": 5, "doubleWeight": true },
+      { "symptomId": "pain_migrating_to_back_abdomen", "weight": 5 },
+      { "symptomId": "pain_worse_than_previous", "weight": 4 },
+      { "symptomId": "syncope", "weight": 4 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "neurological_symptoms_stroke_paraplegia", "weight": 4 },
+      { "symptomId": "hoarseness_or_dysphagia", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "blood_pressure_differential_arms", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pulse_deficit", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "aortic_regurgitation_murmur", "baseWeight": 4 },
+      { "signId": "hypotension_or_hypertension", "baseWeight": 4 },
+      { "signId": "signs_of_tamponade", "baseWeight": 4 },
+      { "signId": "focal_neurological_deficit", "baseWeight": 4 },
+      { "signId": "widened_mediastinum_signs", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "hypertension_chronic", "multiplier": 4.0 },
+      { "id": "connective_tissue_disease_marfan_ehlers_danlos", "multiplier": 6.0 },
+      { "id": "bicuspid_aortic_valve", "multiplier": 3.0 },
+      { "id": "aortic_coarctation", "multiplier": 2.5 },
+      { "id": "vasculitis_giant_cell_takayasu", "multiplier": 2.0 },
+      { "id": "cocaine_use", "multiplier": 2.0 },
+      { "id": "pregnancy_and_peripartum", "multiplier": 2.0 },
+      { "id": "previous_cardiac_surgery", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "type_a_dissection",
+        "name": "Stanford Type A (Ascending)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "ascending_aorta_involved", "weight": 5 },
+          { "feature": "anterior_chest_pain", "weight": 4 },
+          { "feature": "aortic_regurgitation", "weight": 4 }
+        ],
+        "management": "Emergency cardiothoracic surgery. Open repair with graft replacement. Medical stabilization (HR/BP control) while awaiting OR."
+      },
+      {
+        "id": "type_b_dissection",
+        "name": "Stanford Type B (Descending)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "descending_aorta_only", "weight": 5 },
+          { "feature": "back_or_abdominal_pain", "weight": 4 },
+          { "feature": "no_ascending_involvement", "weight": 5 }
+        ],
+        "management": "Medical: aggressive BP control (beta-blocker + vasodilator). Heart rate <60, SBP 100-120. Thoracic endovascular aortic repair (TEVAR) if complicated (rupture, malperfusion, refractory HTN)."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "myocardial_infarction",
+        "discriminators": ["ecg_changes", "troponin_elevation", "no_bp_differential"]
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["d_dimer_very_high", "ct_pa_confirmed", "no_aortic_involvement"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "BP in both arms", "priority": "immediate", "yield": 0.8, "indication": "differential pressures" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.3, "indication": "exclude MI (may coexist)" },
+        { "name": "POCUS/echocardiography", "priority": "immediate", "yield": 0.7, "indication": "flap, AR, tamponade" }
+      ],
+      "laboratory": [
+        { "name": "D-dimer", "priority": "high", "yield": 0.8, "indication": "rule-out if low probability (very high NPV)" },
+        { "name": "Troponin", "priority": "high", "yield": 0.4, "indication": "exclude MI, assess extension" },
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.4, "indication": "baseline, renal function" },
+        { "name": "Cross-match", "priority": "high", "yield": 1.0, "indication": "prepare for surgery" }
+      ],
+      "imaging": [
+        { "name": "CT aortogram (CT angiography)", "priority": "immediate", "yield": 0.99, "indication": "gold standard - extent, type, complications" },
+        { "name": "Transesophageal echo (TOE/TEE)", "priority": "high", "yield": 0.95, "indication": "if unstable or CT contraindicated" },
+        { "name": "Chest X-ray", "priority": "fast", "yield": 0.6, "indication": "widened mediastinum (>8cm)" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines on Aortic Diseases / AHA Guidelines",
+      "pathways": [
+        {
+          "severity": "suspected acute aortic dissection",
+          "criteria": "sudden severe tearing chest/back pain + risk factors + clinical signs",
+          "treatment": "Immediate CT aortogram. IV access x2. Pain control (morphine). Heart rate control: beta-blocker (esmolol/labetalol) target HR <60. Then vasodilator (sodium nitroprusside or nicardipine) if SBP >120. Target SBP 100-120. Type A: emergency surgery. Type B: medical management + TEVAR if complicated."
+        },
+        {
+          "severity": "complicated type A",
+          "criteria": "tamponade, severe AR, malperfusion, rupture, hypotension",
+          "treatment": "Emergency cardiothoracic surgery. Pericardiocentesis only if life-threatening tamponade (may precipitate hemodynamic collapse). Cross-clamp and graft repair."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "intimal_tear",
+      "blood_penetration_into_media",
+      "propagation_of_false_lumen",
+      "complications_from_false_lumen",
+      "malperfusion_syndromes",
+      "aortic_regurgitation",
+      "cardiac_tamponade",
+      "aortic_rupture"
+    ],
+    "complications": [
+      {
+        "diseaseId": "cardiac_tamponade",
+        "probability": 0.1,
+        "severityBoost": 0.8,
+        "clues": ["hypotension", "muffled_hearts", "distended_neck_veins", "pulsus_paradoxus"]
+      },
+      {
+        "diseaseId": "stroke",
+        "probability": 0.06,
+        "severityBoost": 0.6,
+        "clues": ["hemiplegia", "carotid_artery_involvement"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "renal_artery_involvement"]
+      },
+      {
+        "diseaseId": "mesenteric_ischemia",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["abdominal_pain", "lactic_acidosis"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_severe_tearing_chest_pain", "pulse_deficit", "bp_differential", "widened_mediastinum", "aortic_flap_on_imaging"],
+    "exclusionClues": ["normal_ct_aortogram", "non_aortic_cause_of_pain", "negative_d_dimer_low_probability"]
+  }
+}

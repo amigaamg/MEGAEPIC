@@ -1,0 +1,197 @@
+{
+  "disease": {
+    "id": "placenta_previa",
+    "name": "Placenta Previa",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Placenta partially or completely covering the internal cervical os. Classified by degree of coverage. Major cause of antepartum hemorrhage. Often requires cesarean delivery.",
+    "prevalenceWeight": 0.005,
+    "syndromeTags": ["antepartum_hemorrhage", "high_risk_pregnancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "heavy_antepartum_hemorrhage", "weight": 10 },
+        { "sign": "hemorrhagic_shock", "weight": 10 },
+        { "sign": "fetal_distress_severe", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "complete_placenta_previa", "weight": 7 },
+          { "sign": "recurrent_bleeding_episodes", "weight": 6 },
+          { "sign": "anemia_severe", "weight": 6 },
+          { "sign": "placenta_accreta_suspected", "weight": 8 },
+          { "sign": "preterm_labor_plus_bleeding", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Complete previa or major hemorrhage -> SEVERE; Marginal previa without bleeding -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_vaginal_bleeding", "weight": 5, "note": "Classic presentation: painless, bright red bleeding in third trimester" },
+      { "symptomId": "recurrent_bleeding_episodes", "weight": 4 },
+      { "symptomId": "bleeding_after_intercourse", "weight": 3 },
+      { "symptomId": "preterm_contractions", "weight": 2 },
+      { "symptomId": "history_of_placenta_previa", "weight": 4 },
+      { "symptomId": "previous_cesarean_section", "weight": 4 },
+      { "symptomId": "weakness_dizziness_lightheadedness", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "painless_vaginal_bleeding_on_speculum", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "uterus_soft_and_non_tender", "baseWeight": 4 },
+      { "signId": "high_presenting_part_or_malpresentation", "baseWeight": 3 },
+      { "signId": "tachycardia_if_hemorrhage", "baseWeight": 3 },
+      { "signId": "hypotension_if_significant_bleeding", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "abnormal_fetal_heart_rate", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_placenta_previa", "multiplier": 5.0 },
+      { "id": "previous_cesarean_section", "multiplier": 2.5 },
+      { "id": "multiple_gestation", "multiplier": 2.0 },
+      { "id": "advanced_maternal_age", "multiplier": 2.0 },
+      { "id": "multiparity", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "previous_uterine_surgery", "multiplier": 2.0 },
+      { "id": "IVF_pregnancy", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "complete_placenta_previa",
+        "name": "Complete (Total) Placenta Previa",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "placenta_fully_covers_cervical_os", "weight": 5 },
+          { "feature": "highest_risk_of_major_hemorrhage", "weight": 5 },
+          { "feature": "always_requires_cs", "weight": 4 }
+        ],
+        "management": "Elective C-section at 36-37 weeks. Cross-match blood. Consider interventional radiology (uterine artery balloon). NICU team."
+      },
+      {
+        "id": "partial_placenta_previa",
+        "name": "Partial Placenta Previa",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "placenta_partially_covers_os", "weight": 5 },
+          { "feature": "may_trial_of_labor_if_marginal", "weight": 3 }
+        ],
+        "management": "C-section typically. If marginal, may attempt vaginal delivery with caution."
+      },
+      {
+        "id": "marginal_placenta_previa",
+        "name": "Marginal Placenta Previa",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "placental_edge_within_2cm_of_os", "weight": 5 },
+          { "feature": "lower_risk_of_hemorrhage", "weight": 3 },
+          { "feature": "vaginal_delivery_possible", "weight": 3 }
+        ],
+        "management": "May attempt vaginal delivery if bleeding minimal and fetal head well applied. Admit if bleeding. Steroids if preterm."
+      },
+      {
+        "id": "low_lying_placenta",
+        "name": "Low-Lying Placenta",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "placenta_in_lower_segment_but_os_not_covered", "weight": 4 },
+          { "feature": "resolve_with_advancing_gestation", "weight": 3 },
+          { "feature": "often_managed_expectantly", "weight": 3 }
+        ],
+        "management": "Repeat ultrasound at 32-36 weeks to assess resolution. If >2cm from os, vaginal delivery possible."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "placental_abruption",
+        "discriminators": ["painful_bleeding", "uterine_hypertonus", "fetal_distress_common"]
+      },
+      {
+        "diseaseId": "vasa_previa",
+        "discriminators": ["bleeding_with_fetal_distress_out_of_proportion_to_maternal_condition", "velamentous_cord_insertion"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Speculum examination (NOT digital)", "priority": "immediate", "yield": 0.7, "indication": "assess bleeding source; avoid digital exam" },
+        { "name": "Fetal heart rate monitoring", "priority": "immediate", "yield": 0.8, "indication": "assess fetal well-being" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "high", "yield": 0.8, "indication": "anemia, baseline Hb" },
+        { "name": "Blood group and cross-match", "priority": "high", "yield": 0.99, "indication": "prepare for transfusion" },
+        { "name": "Coagulation profile", "priority": "medium", "yield": 0.5, "indication": "baseline" },
+        { "name": "Kleihauer-Betke test", "priority": "medium", "yield": 0.4, "indication": "feto-maternal hemorrhage in Rh-negative" }
+      ],
+      "imaging": [
+        { "name": "Transabdominal ultrasound", "priority": "immediate", "yield": 0.9, "indication": "placental localization" },
+        { "name": "Transvaginal ultrasound", "priority": "high", "yield": 0.95, "indication": "gold standard, safe when done carefully" },
+        { "name": "MRI pelvis", "priority": "medium", "yield": 0.8, "indication": "if accreta spectrum suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 27 - Placenta Praevia",
+      "pathways": [
+        {
+          "severity": "no_bleeding",
+          "criteria": "asymptomatic, no current bleeding",
+          "treatment": "Outpatient if compliant and reliable. Antenatal corticosteroids at 34-36 weeks (before planned CS). Avoid intercourse. Hospitalize if bleeding. Plan elective CS at 36-37 weeks for complete/partial, or 38-39 for marginal."
+        },
+        {
+          "severity": "bleeding_stable",
+          "criteria": "first bleed, stopped, mother and fetus stable",
+          "treatment": "Admit for 24-48h observation. IV access. Cross-match blood. Betamethasone if 24-34 weeks. Monitor Hb. If stable, may discharge after 48h with activity restriction."
+        },
+        {
+          "severity": "major_hemorrhage",
+          "criteria": "heavy bleeding, unstable vitals, fetal distress",
+          "treatment": "Emergency C-section regardless of gestation. IV fluids, blood transfusion. Multidisciplinary team (obstetric, anesthesiology, neonatalogy, blood bank). Consider uterine artery balloon occlusion. Hysterectomy if accreta."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "abnormal_placentation_in_lower_uterine_segment",
+      "decidual_deficiency_in_upper_uterus",
+      "impaired_migration_of_placenta",
+      "uterine_scarring"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "postpartum_hemorrhage",
+        "probability": 0.3,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["lower_segment_bleeding", "uterine_atony"]
+      },
+      {
+        "diseaseId": "placenta_accreta_spectrum",
+        "probability": 0.1,
+        "lagDays": [0, 0],
+        "severityBoost": 0.8,
+        "clues": ["previous_cs", "anterior_placenta_previa", "lacunae_on_ultrasound"]
+      },
+      {
+        "diseaseId": "preterm_delivery",
+        "probability": 0.4,
+        "lagDays": [0, 30],
+        "severityBoost": 0.4,
+        "clues": ["emergency_cs_for_bleeding"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painless_third_trimester_bleeding", "ultrasound_confirms"],
+    "exclusionClues": ["painful_bleeding", "normal_placental_site"]
+  }
+}

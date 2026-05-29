@@ -1,0 +1,178 @@
+{
+  "disease": {
+    "id": "peripheral_arterial_disease",
+    "name": "Peripheral Arterial Disease (PAD)",
+    "system": "surgical",
+    "agePeak_months": [600, 960],
+    "note": "Atherosclerotic occlusive disease of lower limb arteries. Claudication, rest pain, tissue loss. High risk of limb loss and cardiovascular events.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["leg_pain", "claudication", "vascular_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_limb_ischemia", "weight": 10 },
+        { "sign": "rest_pain_gangrene", "weight": 8 },
+        { "sign": "tissue_loss_ulceration", "weight": 7 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "abi_less_0_4", "weight": 8 },
+          { "sign": "rutherford_4_5_6", "weight": 8 },
+          { "sign": "diabetes_with_neuropathy", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "CLTI (rest pain/tissue loss) -> SEVERE; claudication -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "intermittent_claudication", "weight": 5, "note": "Calf/buttock pain on walking, relieved by rest" },
+      { "symptomId": "rest_pain", "weight": 4, "note": "Pain in forefoot at night, relieved by hanging leg down" },
+      { "symptomId": "non_healing_ulcer_wound", "weight": 4 },
+      { "symptomId": "skin_color_changes_pallor", "weight": 3 },
+      { "symptomId": "cold_foot_or_leg", "weight": 3 },
+      { "symptomId": "hair_loss_shiny_skin_nail_changes", "weight": 2 },
+      { "symptomId": "smoking_history", "weight": 5 },
+      { "symptomId": "diabetes_mellitus", "weight": 4 },
+      { "symptomId": "hypertension_dyslipidemia", "weight": 3 },
+      { "symptomId": "previous_cardiac_or_cerebrovascular_event", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "absent_or_reduced_pulses", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cool_cold_limb", "baseWeight": 4 },
+      { "signId": "pallor_on_elevation", "baseWeight": 4 },
+      { "signId": "dependent_rubor", "baseWeight": 3 },
+      { "signId": "trophic_skin_changes", "baseWeight": 3 },
+      { "signId": "non_healing_ulcer_or_gangrene", "baseWeight": 4 },
+      { "signId": "capillary_refill_prolonged", "baseWeight": 3 },
+      { "signId": "bruit_over_stenotic_artery", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 4.0 },
+      { "id": "diabetes_mellitus", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 2.0 },
+      { "id": "dyslipidemia", "multiplier": 2.5 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.0 },
+      { "id": "age_over_60", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "family_history_of_pad", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "claudication_rutherford_1_3",
+        "name": "Intermittent Claudication (Rutherford 1-3)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "exertional_leg_pain", "weight": 5 },
+          { "feature": "relieved_by_rest", "weight": 5 },
+          { "feature": "no_rest_pain_tissue_loss", "weight": 5 },
+          { "feature": "abi_0_5_0_9", "weight": 4 }
+        ],
+        "management": "Best medical therapy: Antiplatelet (Aspirin + Clopidogrel), Statin, BP control, smoking cessation, supervised exercise. Endovascular or surgical revascularization only if disabling claudication."
+      },
+      {
+        "id": "chronic_limb_threatening_ischemia",
+        "name": "Chronic Limb-Threatening Ischemia (Rutherford 4-6)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "rest_pain_more_than_2_weeks", "weight": 5 },
+          { "feature": "non_healing_ulcer_or_gangrene", "weight": 5 },
+          { "feature": "abi_less_0_4", "weight": 5 },
+          { "feature": "tcpO2_less_30_mmHg", "weight": 4 }
+        ],
+        "management": "Urgent vascular surgery referral. Duplex/CT angiography. Revascularization (endovascular first or bypass). Wound care. Amputation if unsalvageable. Cardiovascular risk reduction."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "spinal_stenosis_neurogenic_claudication",
+        "discriminators": ["relief_by_bending_forward_sitting", "bilateral_symptoms", "normal_pulses", "normal_abi"]
+      },
+      {
+        "diseaseId": "venous_claudication",
+        "discriminators": ["history_of_dvt", "tight_bursting_pain", "elevated_leg_relieves", "skin_pigmentation"]
+      },
+      {
+        "diseaseId": "peripheral_neuropathy",
+        "discriminators": ["burning_numbness", "no_worsening_on_walking", "normal_pulses", "normal_abi"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Ankle-Brachial Index (ABI)", "priority": "immediate", "yield": 0.9, "indication": "gold standard bedside test" },
+        { "name": "Segmental limb pressures", "priority": "medium", "yield": 0.8, "indication": "localize level of occlusion" }
+      ],
+      "laboratory": [
+        { "name": "Fasting lipid profile", "priority": "high", "yield": 0.5, "indication": "assess cardiovascular risk" },
+        { "name": "HbA1c", "priority": "high", "yield": 0.4, "indication": "diabetes assessment" },
+        { "name": "Creatinine, eGFR", "priority": "high", "yield": 0.4, "indication": "renal function" }
+      ],
+      "imaging": [
+        { "name": "Duplex Ultrasound Arterial", "priority": "high", "yield": 0.85, "indication": "locate stenosis/occlusion" },
+        { "name": "CT Angiography (Lower Limb Runoff)", "priority": "high", "yield": 0.95, "indication": "pre-intervention planning" },
+        { "name": "Digital Subtraction Angiography", "priority": "medium", "yield": 0.98, "indication": "gold standard, invasive" },
+        { "name": "MRI Angiography", "priority": "medium", "yield": 0.9, "indication": "alternative if contrast allergy" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESC/ESVS Guidelines for Peripheral Arterial Disease",
+      "pathways": [
+        {
+          "severity": "claudication",
+          "criteria": "Rutherford 1-3, ABI >0.5, no rest pain/tissue loss",
+          "treatment": "Smoking cessation. Antiplatelet (Aspirin 75mg + Clopidogrel). High-dose statin (Atorvastatin 80mg). Supervised exercise. BP control. Revascularization if disabling."
+        },
+        {
+          "severity": "CLTI",
+          "criteria": "Rutherford 4-6, ABI <0.4, rest pain/ulcer/gangrene",
+          "treatment": "Urgent vascular referral. Duplex/CTA imaging. Endovascular revascularization (PTA/stent). Surgical bypass (femoro-popliteal, distal). Wound care. Amputation if unsalvageable."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "atherosclerosis",
+      "plaque_formation",
+      "arterial_stenosis",
+      "collateral_formation",
+      "critical_stenosis",
+      "inadequate_blood_flow",
+      "tissue_ischemia",
+      "rest_pain",
+      "tissue_loss"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_limb_ischemia",
+        "probability": 0.05,
+        "lagDays": [0, 30],
+        "severityBoost": 0.5,
+        "clues": ["sudden_worsening", "pain_paralysis_paresthesia", "pulselessness"]
+      },
+      {
+        "diseaseId": "non_healing_ulcer_amputation",
+        "probability": 0.1,
+        "lagDays": [30, 360],
+        "severityBoost": 0.4,
+        "clues": ["progressive_ulceration", "gangrene", "failed_revascularization"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["exertional_leg_pain_relieved_by_rest", "absent_pulses", "low_abi", "smoking_diabetes_history"],
+    "exclusionClues": ["normal_pulses", "normal_abi", "neuropathic_pain_character"]
+  }
+}

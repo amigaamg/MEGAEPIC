@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "cellulitis",
+    "name": "Cellulitis",
+    "system": "surgical",
+    "agePeak_months": [240, 720],
+    "note": "Acute bacterial infection of the skin and subcutaneous tissues. Erythema, warmth, swelling, and pain. Usually caused by Strep and Staph.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["skin_infection", "erythema", "limb_swelling"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "necrotizing_fasciitis_suspicion", "weight": 10 },
+        { "sign": "compartment_syndrome", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "rapid_spread_over_24h", "weight": 6 },
+          { "sign": "systemic_toxicity_fever", "weight": 6 },
+          { "sign": "immunosuppression_diabetes", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Systemic toxicity/rapid spread -> SEVERE; localized mild -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "skin_redness_spreading", "weight": 5 },
+      { "symptomId": "limb_swelling_warmth", "weight": 4 },
+      { "symptomId": "pain_tenderness", "weight": 4 },
+      { "symptomId": "fever_chills", "weight": 3 },
+      { "symptomId": "skin_break_wound_ulcer", "weight": 4, "note": "Portal of entry" },
+      { "symptomId": "lower_limb_edema_venous_insuff", "weight": 3 },
+      { "symptomId": "diabetes_history", "weight": 3 },
+      { "symptomId": "recurrent_cellulitis", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "erythema_warmth_swelling", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tenderness_to_palpation", "baseWeight": 4 },
+      { "signId": "blistering_or_bullae", "baseWeight": 3 },
+      { "signId": "lymphangitic_streaks", "baseWeight": 3 },
+      { "signId": "regional_lymphadenopathy", "baseWeight": 3 },
+      { "signId": "fever_tachycardia", "baseWeight": 3 },
+      { "signId": "skin_break_tinea_interdigital", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 2.5 },
+      { "id": "peripheral_edema_venous_insufficiency", "multiplier": 2.0 },
+      { "id": "lymphoedema", "multiplier": 3.0 },
+      { "id": "skin_breaks_tinea_pedis", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "peripheral_arterial_disease", "multiplier": 1.5 },
+      { "id": "previous_cellulitis", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_cellulitis",
+        "name": "Mild Localized Cellulitis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "localized_erythema_small_area", "weight": 5 },
+          { "feature": "no_systemic_symptoms", "weight": 5 },
+          { "feature": "no_comorbidities", "weight": 4 }
+        ],
+        "management": "Oral antibiotics (Flucloxacillin 500mg QID or Cephalexin 500mg QID). Elevation of affected limb. Analgesia. Review in 48h."
+      },
+      {
+        "id": "severe_cellulitis",
+        "name": "Severe/Systemic Cellulitis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "extensive_rapid_spread", "weight": 5 },
+          { "feature": "systemic_symptoms_fever", "weight": 5 },
+          { "feature": "comorbidities", "weight": 4 },
+          { "feature": "failed_oral_antibiotics", "weight": 4 }
+        ],
+        "management": "Admit. IV antibiotics (Flucloxacillin 2g QDS +/- Benzylpenicillin + Clindamycin for Strep). Mark erythema border. Elevation. Monitor for abscess formation. Surgical debridement if suspected necrotizing fasciitis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "necrotizing_fasciitis",
+        "discriminators": ["rapid_progression", "severe_pain_out_of_proportion", "systemic_toxicity", "crepitus", "bullae_hemorrhagic"]
+      },
+      {
+        "diseaseId": "deep_vein_thrombosis",
+        "discriminators": ["no_erythema_warmth", "no_fever", "positive_doppler", "homans_sign"]
+      },
+      {
+        "diseaseId": "stasis_dermatitis",
+        "discriminators": ["bilateral", "chronic", "no_fever", "varicose_veins", "brownish_pigmentation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Mark erythema border", "priority": "immediate", "yield": 0.5, "indication": "monitor spread" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.5, "indication": "may be elevated" },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "elevated" },
+        { "name": "Blood cultures", "priority": "medium", "yield": 0.2, "indication": "if febrile or immunocompromised" },
+        { "name": "Lactate", "priority": "medium", "yield": 0.4, "indication": "if sepsis suspected" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound soft tissue", "priority": "medium", "yield": 0.5, "indication": "rule out abscess or DVT" },
+        { "name": "CT/MRI", "priority": "low", "yield": 0.6, "indication": "if necrotizing fasciitis suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Guidelines for Skin and Soft Tissue Infections",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "small area, afebrile, no comorbidities",
+          "treatment": "Oral antibiotics (Flucloxacillin or Cephalexin). Limb elevation. Review in 48h."
+        },
+        {
+          "severity": "moderate-severe",
+          "criteria": "extensive, febrile, comorbidities, failed oral therapy",
+          "treatment": "IV antibiotics (Flucloxacillin 2g QDS +/- Clindamycin). Mark spreading edge. Blood cultures. Daily review. Switch to oral when improving."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bacterial_entry_through_skin_break",
+      "streptococcal_staphylococcal_infection",
+      "dermal_and_subcutaneous_inflammation",
+      "lymphatic_spread",
+      "systemic_inflammatory_response"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "abscess_formation",
+        "probability": 0.1,
+        "lagDays": [2, 7],
+        "severityBoost": 0.2,
+        "clues": ["fluctuant_area", "no_improvement", "increasing_pain"]
+      },
+      {
+        "diseaseId": "lymphangitis_lymphadenitis",
+        "probability": 0.05,
+        "lagDays": [1, 3],
+        "severityBoost": 0.1,
+        "clues": ["red_streaks", "tender_nodes"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["spreading_erythema", "warmth_swelling", "pain", "fever", "skin_break_history"],
+    "exclusionClues": ["bilateral_chronic", "no_warmth", "no_fever", "normal_crp"]
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "disease": {
+    "id": "acute_diverticulitis",
+    "name": "Acute Diverticulitis",
+    "system": "surgical",
+    "agePeak_months": [480, 960],
+    "note": "Left lower quadrant pain, fever, and altered bowel habit. Most common in elderly. CT is imaging modality of choice.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["acute_abdomen", "left_lower_quadrant_pain", "colonic_inflammation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hinchey_iii_or_iv", "weight": 9 },
+          { "sign": "palpable_mass", "weight": 5 },
+          { "sign": "high_fever", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Generalized peritonitis/shock -> SEVERE (Hinchey III-IV); localized -> NON-SEVERE (Hinchey I-II)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "left_lower_quadrant_pain", "weight": 5 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "constipation_or_diarrhea", "weight": 3, "note": "Altered bowel habit" },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "known_diverticulosis", "weight": 4 },
+      { "symptomId": "dysuria", "weight": 2, "note": "Colovesical fistula or bladder irritation" }
+    ],
+
+    "examFeatures": [
+      { "signId": "left_lower_quadrant_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "guarding", "baseWeight": 3 },
+      { "signId": "palpable_mass", "baseWeight": 3, "note": "Inflammatory phlegmon or abscess" },
+      { "signId": "fever_tachycardia", "baseWeight": 3 },
+      { "signId": "rebound_tenderness", "baseWeight": 3 },
+      { "signId": "abdominal_distension", "baseWeight": 2, "note": "Associated ileus" }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 2.0 },
+      { "id": "low_fiber_diet", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.6 },
+      { "id": "smoking", "multiplier": 1.8 },
+      { "id": "nsaid_use", "multiplier": 1.5 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_diverticulitis",
+        "name": "Uncomplicated Diverticulitis (Hinchey I-II)",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "localized_llq_pain", "weight": 5 },
+          { "feature": "mild_fever", "weight": 3 },
+          { "feature": "no_peritonitis", "weight": 5 }
+        ],
+        "management": "Conservative: Oral antibiotics (e.g., Amoxicillin-Clavulanic acid). Bowel rest if needed. Outpatient management in select cases. Clear liquid diet."
+      },
+      {
+        "id": "complicated_diverticulitis",
+        "name": "Complicated Diverticulitis (Hinchey III-IV)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "generalized_abdominal_pain", "weight": 5 },
+          { "feature": "high_fever_sepsis", "weight": 5 },
+          { "feature": "peritonitis", "weight": 5 },
+          { "feature": "palpable_mass_or_abscess", "weight": 4 }
+        ],
+        "management": "IV antibiotics (e.g., Piperacillin-Tazobactam). CT-guided drainage of abscess if >4cm. Emergency laparotomy if generalized peritonitis. Hartmann procedure or primary resection with anastomosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "appendicitis",
+        "discriminators": ["pain_migration_to_rlq", "anorexia", "right_sided_pain"]
+      },
+      {
+        "diseaseId": "ovarian_torsion",
+        "discriminators": ["sudden_severe_unilateral_pain", "adnexal_mass", "nausea"]
+      },
+      {
+        "diseaseId": "colorectal_cancer",
+        "discriminators": ["chronic_symptoms", "weight_loss", "rectal_bleeding", "no_fever"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature", "priority": "immediate", "yield": 0.6, "indication": "fever assessment" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.75, "indication": "leukocytosis supports diagnosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.8, "indication": "elevated in inflammation" },
+        { "name": "Urinalysis", "priority": "medium", "yield": 0.3, "indication": "rule out UTI or colovesical fistula" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.97, "indication": "gold standard for diagnosis and staging" },
+        { "name": "Abdominal Ultrasound", "priority": "medium", "yield": 0.7, "indication": "alternative in young patients, pregnant women" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Acute Left-Sided Colonic Diverticulitis",
+      "pathways": [
+        {
+          "severity": "uncomplicated",
+          "criteria": "Hinchey I-II, localized pain, no peritonitis, no abscess >4cm",
+          "treatment": "Outpatient or short admission. Oral antibiotics. Liquid diet, advance as tolerated. Follow-up colonoscopy in 6-8 weeks."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "Hinchey III-IV, generalized peritonitis, abscess >4cm, sepsis",
+          "treatment": "IV antibiotics. CT-guided drainage of abscess. Emergency surgery for generalized peritonitis (Hartmann procedure or resection with anastomosis +/- defunctioning stoma). ICU if septic."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "diverticulum_inflammation",
+      "micro_perforation",
+      "localized_infection",
+      "phlegmon_formation",
+      "abscess_formation",
+      "free_perforation",
+      "generalized_peritonitis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "diverticular_abscess",
+        "probability": 0.15,
+        "lagDays": [3, 7],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "palpable_mass", "elevated_crp"]
+      },
+      {
+        "diseaseId": "colovesical_fistula",
+        "probability": 0.05,
+        "lagDays": [30, 180],
+        "severityBoost": 0.1,
+        "clues": ["pneumaturia", "fecaluria", "recurrent_uti"]
+      },
+      {
+        "diseaseId": "perforation_peritonitis",
+        "probability": 0.1,
+        "lagDays": [1, 4],
+        "severityBoost": 0.5,
+        "clues": ["worsening_pain", "rigidity", "septic_shock"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["left_lower_quadrant_pain", "fever", "age_over_50", "known_diverticulosis"],
+    "exclusionClues": ["right_upper_quadrant_pain", "bloody_diarrhea_as_primary", "pain_relieved_by_defecation"]
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "dialysis_disequilibrium_syndrome",
+    "name": "Dialysis Disequilibrium Syndrome",
+    "system": "RENAL",
+    "agePeak_months": [60, 480],
+    "note": "Neurological complication during or immediately after hemodialysis. Most common in new dialysis starts with high BUN. Caused by cerebral edema from rapid osmotic shift.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["hemodialysis_complication", "neurological_syndrome", "dialysis_related"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "seizures_generalized", "weight": 10 },
+        { "sign": "coma_unresponsiveness", "weight": 10 },
+        { "sign": "cerebral_edema_brain_herniation", "weight": 10 },
+        { "sign": "status_epilepticus", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Mild (headache, nausea, restlessness), Moderate (confusion, tremor, myoclonus), Severe (seizures, coma)"
+    },
+    "historyFeatures": [
+      { "symptomId": "headache_during_or_after_dialysis", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "restlessness_agitation", "weight": 3 },
+      { "symptomId": "confusion_disorientation", "weight": 4 },
+      { "symptomId": "muscle_cramps_twitching", "weight": 3 },
+      { "symptomId": "tremor", "weight": 2 },
+      { "symptomId": "seizures", "weight": 5 },
+      { "symptomId": "new_to_hemodialysis_first_few_sessions", "weight": 5 },
+      { "symptomId": "pre_dialysis_bun_very_high", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "altered_mental_status", "baseWeight": 5 },
+      { "signId": "seizure_activity", "baseWeight": 5 },
+      { "signId": "myoclonus_asterixis", "baseWeight": 3 },
+      { "signId": "papilledema_raised_icp_signs", "baseWeight": 3 },
+      { "signId": "hypertension_during_dialysis", "baseWeight": 2 },
+      { "signId": "focal_neurological_deficits_uncommon", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "new_dialysis_start_first_3_sessions", "multiplier": 5.0 },
+      { "id": "pre_dialysis_bun_greater_than_175_mg_dl", "multiplier": 4.0 },
+      { "id": "rapid_high_efficiency_hemodialysis", "multiplier": 2.5 },
+      { "id": "age_under_18_or_neurological_disorder", "multiplier": 2.0 },
+      { "id": "pre_existing_neurological_disease", "multiplier": 2.0 },
+      { "id": "severe_metabolic_acidosis", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "mild_dds",
+        "name": "Mild Dialysis Disequilibrium Syndrome",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "headache_during_dialysis", "weight": 5 },
+          { "feature": "nausea", "weight": 4 },
+          { "feature": "restlessness", "weight": 3 },
+          { "feature": "resolves_spontaneously_within_hours", "weight": 4 }
+        ],
+        "management": "Reassurance. Slow or temporarily stop dialysis. Administer hypertonic saline, mannitol, or dextrose. Consider reducing blood flow and dialysate flow. Extend treatment time. Increase dialysate sodium. For next session: shorter, slower, less efficient treatment."
+      },
+      {
+        "id": "severe_dds",
+        "name": "Severe Dialysis Disequilibrium Syndrome",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "seizures", "weight": 5 },
+          { "feature": "coma", "weight": 5 },
+          { "feature": "cerebral_edema_signs", "weight": 5 },
+          { "feature": "icu_required", "weight": 4 }
+        ],
+        "management": "Stop dialysis immediately. Secure airway. IV benzodiazepines for seizures. Mannitol 1 g/kg IV. Hypertonic saline (3% NaCl). ICU admission. CT head to rule out intracranial pathology. Dialysis: slow, low-efficiency, or peritoneal dialysis. Consider CRRT if further RRT needed."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "intracranial_hemorrhage_stroke", "discriminators": ["focal_neurological_deficit", "ct_head_shows_bleed", "hypertension_hemorrhage", "anticoagulation_related"] },
+      { "diseaseId": "hypoglycemia", "discriminators": ["low_blood_glucose", "responds_to_dextrose", "diabetic_patient"] },
+      { "diseaseId": "dialysate_composition_error_hyponatremia_hypermagnesemia", "discriminators": ["check_dialysate_composition", "electrolyte_abnormalities"] },
+      { "diseaseId": "uremic_encephalopathy", "discriminators": ["pre_dialysis_symptoms_improving", "not_related_to_dialysis_timing", "high_bun_but_no_worsening_with_dialysis"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Blood glucose (fingerstick)", "priority": "immediate", "yield": 0.8, "indication": "rule out hypoglycemia" }
+      ],
+      "laboratory": [
+        { "name": "Serum sodium, BUN, creatinine, osmolality", "priority": "high", "yield": 0.7, "indication": "rapid drop in BUN and osmolality confirm" },
+        { "name": "ABG", "priority": "medium", "yield": 0.5, "indication": "metabolic acidosis severity" }
+      ],
+      "imaging": [
+        { "name": "CT Head (non-contrast)", "priority": "if severe or focal findings", "yield": 0.5, "indication": "exclude intracranial hemorrhage/other pathology" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDOQI / Renal Association HD Guidelines",
+      "pathways": [
+        {
+          "severity": "mild (headache, nausea)",
+          "criteria": "symptoms during/after HD, no neurological signs",
+          "treatment": "Slow or pause dialysis. Administer hypertonic saline (10 mL NaCl 23.4%) or mannitol 100 mL of 20% IV. For next session: shorter time (2h), lower blood flow (200 mL/min), high dialysate Na (145-150), repeat daily x 3-4 then gradually increase."
+        },
+        {
+          "severity": "moderate-severe (confusion, seizures, coma)",
+          "criteria": "altered mental status, seizure, or coma during/after HD",
+          "treatment": "Stop HD immediately. ABCs. Seizure: IV lorazepam 2-4 mg or diazepam 5-10 mg. Mannitol 1 g/kg IV. Hypertonic saline. ICU. CT head. Anticonvulsants. Consider CRRT or peritoneal dialysis if further RRT needed. Prevention for future sessions."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "rapid_removal_of_urea_from_blood_vs_brain",
+      "osmotic_gradient_brain_to_plasma",
+      "water_movement_into_brain_cells",
+      "cerebral_edema",
+      "intracranial_hypertension",
+      "idiogenic_osmoles_formation_in_brain",
+      "paradoxical_csf_acidosis"
+    ],
+    "complications": [
+      { "diseaseId": "cerebral_edema_brain_herniation", "probability": 0.01, "severityBoost": 0.9, "clues": ["rapid_deterioration", "seizures", "papilledema", "pupillary_changes"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["new_hd_start_with_high_bun", "symptoms_during_or_soon_after_hd", "headache_confusion_seizure", "temporal_relation_to_dialysis"],
+    "exclusionClues": ["symptoms_pre_dialysis_resolving_with_hd", "focal_neurology", "intracranial_pathology_on_ct"]
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "disease": {
+    "id": "neonatal-jaundice",
+    "name": "Neonatal Jaundice",
+    "system": "PAED",
+    "agePeak_months": [0, 1],
+    "note": "Common physiological condition in newborns. Pathological jaundice requires urgent workup for hemolysis, infection, or biliary atresia.",
+    "prevalenceWeight": 0.85,
+    "syndromeTags": ["neonatal_hyperbilirubinemia", "jaundice"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "bilirubin_exchange_threshold", "weight": 10 },
+        { "sign": "acute_bilirubin_encephalopathy", "weight": 10 },
+        { "sign": "opisthotonos", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "jaundice_day_1", "weight": 9 },
+          { "sign": "bilirubin_20_mg_dL", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If exchange transfusion threshold crossed or encephalopathy signs -> SEVERE (kernicterus risk); else -> NON-SEVERE (physiological/needs phototherapy)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice_onset_first_24h", "weight": 5, "note": "Pathological until proven otherwise" },
+      { "symptomId": "jaundice_after_day_3", "weight": 2, "note": "Could be physiological or breast milk jaundice" },
+      { "symptomId": "poor_feeding", "weight": 4 },
+      { "symptomId": "lethargy", "weight": 4 },
+      { "symptomId": "dark_urine", "weight": 3, "note": "Suggests conjugated hyperbilirubinemia" },
+      { "symptomId": "pale_stools", "weight": 5, "note": "Suggests biliary atresia" }
+    ],
+
+    "examFeatures": [
+      { "signId": "icterus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pallor", "baseWeight": 3, "note": "Suggests hemolysis" },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "brudzinski_sign", "baseWeight": 3, "note": "Kernicterus" },
+      { "signId": "opisthotonos", "baseWeight": 5, "note": "Advanced bilirubin encephalopathy" },
+      { "signId": "high_pitched_cry", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "prematurity", "multiplier": 2.0 },
+      { "id": "breastfeeding", "multiplier": 1.5 },
+      { "id": "g6pd_deficiency", "multiplier": 2.5 },
+      { "id": "abo_incompatibility", "multiplier": 2.0 },
+      { "id": "rh_incompatibility", "multiplier": 3.0 },
+      { "id": "bruising_cephalohematoma", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "physiological_jaundice",
+        "name": "Physiological Jaundice",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "onset_day_2_to_5", "weight": 5 },
+          { "feature": "bilirubin_below_threshold", "weight": 5 },
+          { "feature": "well_feeding_baby", "weight": 4 }
+        ],
+        "management": "Reassurance, frequent feeding. Phototherapy if bilirubin crosses age-specific threshold per AAP nomogram."
+      },
+      {
+        "id": "pathological_jaundice",
+        "name": "Pathological Jaundice",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "onset_first_24h", "weight": 5 },
+          { "feature": "bilirubin_above_threshold", "weight": 5 },
+          { "feature": "conjugated_bilirubin", "weight": 5 }
+        ],
+        "management": "Double phototherapy. IVIG for isoimmunization. Exchange transfusion if threshold crossed. Investigate cause (G6PD, sepsis, biliary atresia)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "neonatal_sepsis",
+        "discriminators": ["fever", "irritability", "apnea", "positive_blood_culture"]
+      },
+      {
+        "diseaseId": "biliary_atresia",
+        "discriminators": ["conjugated_hyperbilirubinemia", "pale_stools", "dark_urine", "hepatomegaly"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Transcutaneous bilirubinometer", "priority": "immediate", "yield": 0.9, "indication": "initial screening all jaundiced neonates" },
+        { "name": "Apgar score review", "priority": "immediate", "yield": 0.3, "indication": "perinatal history" }
+      ],
+      "laboratory": [
+        { "name": "Serum bilirubin total and direct", "priority": "immediate", "yield": 1.0, "indication": "confirm and fractionate bilirubin" },
+        { "name": "CBC and blood film", "priority": "high", "yield": 0.6, "indication": "hemolysis workup" },
+        { "name": "G6PD assay", "priority": "medium", "yield": 0.4, "indication": "if family history or ethnic risk" },
+        { "name": "Direct Coombs test", "priority": "high", "yield": 0.5, "indication": "suspected isoimmunization" },
+        { "name": "Blood culture", "priority": "high", "yield": 0.3, "indication": "if sepsis suspected" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "medium", "yield": 0.8, "indication": "conjugated hyperbilirubinemia, suspected biliary atresia" },
+        { "name": "HIDA scan", "priority": "low", "yield": 0.85, "indication": "if biliary atresia suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAP Subcommittee on Hyperbilirubinemia Guidelines",
+      "pathways": [
+        {
+          "severity": "physiological",
+          "criteria": "Term infant, onset >24h, bilirubin below phototherapy threshold, well feeding",
+          "treatment": "Reassurance, frequent breastfeeding. Follow-up in 48 hours. Repeat bilirubin if clinically jaundiced."
+        },
+        {
+          "severity": "pathological",
+          "criteria": "Jaundice <24h, bilirubin above threshold, or any danger sign",
+          "treatment": "Admit to NICU. Double phototherapy. IV fluids. IVIG 0.5-1 g/kg for isoimmune hemolysis. Exchange transfusion if bilirubin continues rising despite phototherapy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "immature_hepatic_conjugation",
+      "increased_bilirubin_load",
+      "enterohepatic_circulation",
+      "hemolysis",
+      "decreased_clearance"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_bilirubin_encephalopathy",
+        "probability": 0.05,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["lethargy", "high_pitched_cry", "opisthotonos"]
+      },
+      {
+        "diseaseId": "kernicterus",
+        "probability": 0.01,
+        "lagDays": [3, 7],
+        "severityBoost": 0.6,
+        "clues": ["opisthotonos", "seizures", "developmental_delay"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["jaundice_day_1", "bilirubin_phototherapy_threshold", "pale_stools_conjugated"],
+    "exclusionClues": ["conjugated_bilirubin_absent", "stool_color_normal", "well_appearing_baby"]
+  }
+}

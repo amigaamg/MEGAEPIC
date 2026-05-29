@@ -1,0 +1,167 @@
+{
+  "disease": {
+    "id": "respiratory-distress-syndrome",
+    "name": "Respiratory Distress Syndrome (Hyaline Membrane Disease)",
+    "system": "PAED",
+    "agePeak_months": [0, 0],
+    "note": "Common in preterm infants due to surfactant deficiency. Presents at birth with progressive respiratory distress.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["neonatal_respiratory_failure", "prematurity"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "apnea_requiring_resuscitation", "weight": 10 },
+        { "sign": "pao2_less_than_50", "weight": 10 },
+        { "sign": "pco2_greater_than_70", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "grunting", "weight": 7 },
+          { "sign": "severe_chest_wall_retractions", "weight": 7 },
+          { "sign": "cyanosis_on_room_air", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": true,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If intubation required or severe gas exchange failure -> SEVERE; else -> NON-SEVERE (CPAP/oxygen)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "premature_birth", "weight": 5, "note": "Risk inversely proportional to gestational age" },
+      { "symptomId": "respiratory_distress_at_birth", "weight": 5 },
+      { "symptomId": "maternal_diabetes", "weight": 3 },
+      { "symptomId": "male_sex", "weight": 2 },
+      { "symptomId": "birth_asphyxia", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachypnea", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "grunting", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "nasal_flaring", "baseWeight": 4 },
+      { "signId": "chest_wall_retractions", "baseWeight": 5 },
+      { "signId": "cyanosis", "baseWeight": 4 },
+      { "signId": "decreased_breath_sounds", "baseWeight": 3 },
+      { "signId": "oxygen_desaturation", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "prematurity_less_than_34_weeks", "multiplier": 4.0 },
+      { "id": "maternal_diabetes", "multiplier": 2.0 },
+      { "id": "male_gender", "multiplier": 1.5 },
+      { "id": "multiple_gestation", "multiplier": 1.8 },
+      { "id": "cesarean_section_without_labor", "multiplier": 1.5 },
+      { "id": "perinatal_asphyxia", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_rds",
+        "name": "Mild Respiratory Distress Syndrome",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "gestational_age_32_36_weeks", "weight": 4 },
+          { "feature": "supplemental_o2_less_than_40_percent", "weight": 4 },
+          { "feature": "no_grunting", "weight": 3 }
+        ],
+        "management": "Nasal CPAP 5-6 cm H2O. Supplemental oxygen to target SpO2 90-95%. Enteral feeds if stable."
+      },
+      {
+        "id": "severe_rds",
+        "name": "Severe Respiratory Distress Syndrome",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "gestational_age_less_than_28_weeks", "weight": 5 },
+          { "feature": "fio2_greater_than_40_percent", "weight": 5 },
+          { "feature": "recurrent_apnea", "weight": 5 }
+        ],
+        "management": "Endotracheal intubation. Surfactant replacement therapy. Mechanical ventilation. Umbilical lines for access. Consider high-frequency ventilation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "transient_tachypnea_newborn",
+        "discriminators": ["term_infant", "cesarean_birth", "mild_tachypnea", "resolves_in_24_48h", "ground_glass_on_xray_absent"]
+      },
+      {
+        "diseaseId": "congenital_pneumonia",
+        "discriminators": ["fever", "maternal_infection", "elevated_crp", "positive_blood_culture"]
+      },
+      {
+        "diseaseId": "congenital_heart_disease",
+        "discriminators": ["cyanosis_unresponsive_to_o2", "cardiomegaly", "murmur"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.9, "indication": "all infants with respiratory distress" },
+        { "name": "Blood gas analysis", "priority": "immediate", "yield": 0.95, "indication": "assess ventilation and oxygenation" }
+      ],
+      "laboratory": [
+        { "name": "CBC with differential", "priority": "high", "yield": 0.3, "indication": "rule out sepsis" },
+        { "name": "Blood culture", "priority": "high", "yield": 0.2, "indication": "rule out congenital pneumonia" },
+        { "name": "CRP", "priority": "medium", "yield": 0.3, "indication": "infection marker" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.95, "indication": "ground-glass opacities, air bronchograms, low lung volumes" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICHD Neonatal RDS Management Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "GA >32 weeks, CPAP with FiO2 <0.4, stable blood gases",
+          "treatment": "Nasal CPAP 5-6 cm H2O, titrate FiO2 to SpO2 90-95%, monitor blood gases, minimal handling."
+        },
+        {
+          "severity": "moderate_to_severe",
+          "criteria": "GA <32 weeks, worsening distress, FiO2 >0.4, or blood gas deterioration",
+          "treatment": "Intubate. Surfactant therapy (200 mg/kg poractant alfa). Volume-targeted ventilation. Umbilical arterial catheter. Caffeine for apnea. Consider high-frequency oscillatory ventilation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "surfactant_deficiency",
+      "alveolar_collapse",
+      "ventilation_perfusion_mismatch",
+      "hyaline_membrane_formation",
+      "type_ii_pneumocyte_immaturity"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bronchopulmonary_dysplasia",
+        "probability": 0.3,
+        "lagDays": [28, 90],
+        "severityBoost": 0.4,
+        "clues": ["prolonged_oxygen_dependency", "chronic_lung_changes_on_xray"]
+      },
+      {
+        "diseaseId": "intraventricular_hemorrhage",
+        "probability": 0.15,
+        "lagDays": [1, 7],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "acidosis", "fluctuating_cbf"]
+      },
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.3,
+        "clues": ["sudden_deterioration", "decreased_breath_sounds", "transillumination_positive"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prematurity", "progressive_distress_at_birth", "ground_glass_on_chest_xray", "surfactant_response"],
+    "exclusionClues": ["term_birth", "spontaneous_resolution_24h", "clear_lungs_on_xray"]
+  }
+}

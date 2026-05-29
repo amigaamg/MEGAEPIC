@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "bph",
+    "name": "Benign Prostatic Hyperplasia",
+    "system": "urology",
+    "agePeak_months": [540, 1080],
+    "note": "Non-malignant enlargement of the prostate. Causes lower urinary tract symptoms (LUTS).",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["lower_urinary_tract_symptoms", "voiding_dysfunction"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_urinary_retention", "weight": 9 },
+        { "sign": "hematuria_clots", "weight": 7 },
+        { "sign": "hydronephrosis_renal_impairment", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If retention/renal impairment -> URGENT; else -> MILD/MODERATE/SEVERE per IPSS"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hesitancy", "weight": 4 },
+      { "symptomId": "weak_stream", "weight": 4 },
+      { "symptomId": "frequency_urinary", "weight": 3 },
+      { "symptomId": "urgency", "weight": 3 },
+      { "symptomId": "nocturia", "weight": 3 },
+      { "symptomId": "incomplete_emptying", "weight": 3 },
+      { "symptomId": "straining_to_void", "weight": 3 },
+      { "symptomId": "terminal_dribbling", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "enlarged_prostate_on_dre", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "palpable_bladder", "baseWeight": 3, "note": "Chronic retention" },
+      { "signId": "normal_neurological_exam_lower_limbs", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 3.0 },
+      { "id": "family_history_bph", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.4 },
+      { "id": "low_physical_activity", "multiplier": 1.3 },
+      { "id": "diabetes", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "prostate_cancer",
+        "discriminators": ["hard_irregular_prostate", "elevated_psa", "weight_loss"]
+      },
+      {
+        "diseaseId": "urethral_stricture",
+        "discriminators": ["history_of_sti_trauma", "normal_dre", "uroflowmetry_flat"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "IPSS questionnaire", "priority": "immediate", "yield": 0.9, "indication": "severity assessment" },
+        { "name": "Urine dipstick", "priority": "high", "yield": 0.5, "indication": "rule out UTI" }
+      ],
+      "laboratory": [
+        { "name": "PSA (total and free)", "priority": "high", "yield": 0.7, "indication": "rule out prostate cancer" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.5, "indication": "assess renal function" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "medium", "yield": 0.6, "indication": "hydronephrosis, post-void residual" },
+        { "name": "Uroflowmetry", "priority": "medium", "yield": 0.7, "indication": "assess flow rate and pattern" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EAU Guidelines on Non-Neurogenic Male LUTS",
+      "pathways": [
+        {
+          "severity": "mild (IPSS 0-7)",
+          "criteria": "mild symptoms, no bother",
+          "treatment": "Watchful waiting. Lifestyle modification (fluid timing, caffeine/alcohol reduction). Annual review."
+        },
+        {
+          "severity": "moderate (IPSS 8-19)",
+          "criteria": "moderate symptoms, bothersome",
+          "treatment": "Alpha-blocker (tamsulosin 0.4 mg OD) or 5-alpha-reductase inhibitor (finasteride 5 mg OD) if large prostate. Combination if both."
+        },
+        {
+          "severity": "severe (IPSS 20-35) or refractory",
+          "criteria": "severe symptoms, failed medical therapy, retention",
+          "treatment": "Surgery: TURP (gold standard), laser therapy, or open prostatectomy if very large. Continue medical therapy while waiting."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "androgen_driven_proliferation",
+      "stromal_and_glandular_hyperplasia",
+      "prostatic_urethral_compression",
+      "bladder_outlet_obstruction",
+      "detrusor_overactivity",
+      "voiding_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_urinary_retention",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["inability_to_void", "palpable_bladder"]
+      },
+      {
+        "diseaseId": "chronic_renal_impairment",
+        "probability": 0.02,
+        "severityBoost": 0.3,
+        "clues": ["hydronephrosis", "elevated_creatinine"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["hesitancy_weak_stream_frequency_nocturia", "enlarged_prostate_dre", "elevated_ipss"],
+    "exclusionClues": ["hard_irregular_prostate", "gross_hematuria", "severe_pain"]
+  }
+}

@@ -1,0 +1,491 @@
+{
+  "disease": {
+    "id": "pediatric_pneumonia",
+    "name": "Pediatric Pneumonia",
+    "system": "pediatric_respiratory",
+    "agePeak_months": [2, 59],
+    "excludedAgeGroups": [],
+    "note": "Adapted per WHO IMCI guidelines. For neonates <2 months, use neonatal sepsis/pneumonia protocol.",
+    "prevalenceWeight": 0.85,
+    "syndromeTags": ["alveolar_disease", "respiratory_distress", "imci_classification"],
+    "severityAssessment": {
+      "imciClassification": {
+        "description": "WHO IMCI: classify cough/difficult breathing into no pneumonia, pneumonia, or severe pneumonia based on chest indrawing and danger signs.",
+        "note": "Fast breathing thresholds: 2-11mo ≥50/min, 12-59mo ≥40/min"
+      },
+      "immediateDangerSigns": [
+        { "sign": "central_cyanosis", "weight": 10 },
+        { "sign": "unable_to_drink_or_breastfeed", "weight": 10 },
+        { "sign": "avpu_abnormal", "description": "AVPU = V, P or U", "weight": 10 },
+        { "sign": "grunting", "weight": 10 },
+        { "sign": "spo2_less_than_90", "weight": 9 },
+        { "sign": "head_nodding", "weight": 9, "description": "Head nodding in synchrony with respiration indicates severe distress in infants" },
+        { "sign": "lethargy_or_unconsciousness", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "lower_chest_wall_indrawing", "weight": 7, "description": "Chest indrawing is the KEY sign for severe classification per IMCI" },
+          { "sign": "stridor_in_calm_child", "weight": 9, "description": "Stridor in a calm child indicates severe upper airway obstruction" },
+          { "sign": "fast_breathing", "ageThresholds": [
+              { "ageMonths": [2, 11], "rr": 50 },
+              { "ageMonths": [12, 59], "rr": 40 }
+            ], "weight": 6
+          }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": true,
+        "noDangerSigns": true,
+        "description": "Pneumonia (no severe features): cough or difficulty breathing + chest indrawing OR fast breathing, NO danger signs"
+      },
+      "noPneumoniaCriteria": {
+        "description": "No pneumonia: cough or cold without chest indrawing and without fast breathing",
+        "management": "Cough/cold — no antibiotics. Symptomatic care only."
+      },
+      "severityLabel": "IMCI: danger sign → SEVERE PNEUMONIA; indrawing OR fast breathing without danger signs → PNEUMONIA; neither → NO PNEUMONIA (cough/cold)"
+    },
+    "historyFeatures": [
+      { "symptomId": "cough", "weight": 3, "modifiers": [
+          { "condition": "duration > 14 days", "suspectTB": true }
+        ]
+      },
+      { "symptomId": "fever", "weight": 3, "contextualWeights": [
+          { "condition": "temp >= 38.5 and toxic", "weightBoost": 2, "favorsSubtype": "bacterial_pneumonia" },
+          { "condition": "low_grade_temp_and_viral_prodrome", "weightBoost": -1 }
+        ]
+      },
+      { "symptomId": "fast_breathing", "weight": 4, "note": "Age-calculated tachypnoea threshold applied per IMCI" },
+      { "symptomId": "difficulty_breathing", "weight": 3 },
+      { "symptomId": "difficulty_feeding", "weight": 2, "condition": "ageMonths < 12", "severityMarker": true },
+      { "symptomId": "inability_to_feed", "weight": 4, "dangerSign": true, "description": "One of WHO IMCI general danger signs" },
+      { "symptomId": "chest_pain", "weight": 2, "condition": "age >= 5 years" },
+      { "symptomId": "wheeze", "weight": 1, "negativePredictor": {
+          "description": "Pure wheeze without fever reduces pneumonia probability strongly.",
+          "scoreReduction": 4,
+          "considerMimic": ["asthma", "bronchiolitis"]
+        }
+      },
+      { "symptomId": "viral_prodrome", "weight": 1, "favorsSubtype": "viral_pneumonia" },
+      { "symptomId": "vaccination_history", "weight": 2, "note": "Unimmunized or incomplete immunization increases risk of vaccine-preventable pneumonia" }
+    ],
+    "examFeatures": [
+      { "signId": "crackles", "baseWeight": 4, "doubleWeight": true, "subtypeModulation": {
+          "bacterial_pneumonia": 5,
+          "viral_pneumonia": 3,
+          "pcp_pneumonia": -2
+        }
+      },
+      { "signId": "bronchial_breathing", "baseWeight": 4, "doubleWeight": true, "note": "Strongly suggests consolidation (bacterial)." },
+      { "signId": "chest_indrawing", "baseWeight": 3, "doubleWeight": true, "note": "IMCI key sign for pneumonia classification" },
+      { "signId": "tachypnea", "baseWeight": 3, "ageDependentThresholds": true },
+      { "signId": "hypoxia", "baseWeight": 4, "severityBoost": true },
+      { "signId": "grunting", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "nasal_flaring", "baseWeight": 2 },
+      { "signId": "head_nodding", "baseWeight": 5, "severityIndicator": true, "note": "Specific sign of severe respiratory distress in young infants" },
+      { "signId": "toxic_appearance", "baseWeight": 3, "favorsSubtype": "bacterial_pneumonia" },
+      { "signId": "wheeze", "baseWeight": 2, "negativePredictorForPneumonia": true },
+      { "signId": "stridor", "baseWeight": 0, "excludePneumonia": true, "considerMimic": "croup" }
+    ],
+    "riskFactors": [
+      { "id": "hiv_exposure_or_infection", "multiplier": 1.5, "note": "Increases PCP and TB risk." },
+      { "id": "malnutrition", "multiplier": 1.3 },
+      { "id": "prematurity", "multiplier": 1.4 },
+      { "id": "congenital_heart_disease", "multiplier": 1.4 },
+      { "id": "lack_of_immunization", "multiplier": 1.3, "note": "PCV, Hib, measles vaccines are protective" },
+      { "id": "overcrowding", "multiplier": 1.2 },
+      { "id": "indoor_air_pollution", "multiplier": 1.2, "note": "Smoke from cooking fuels increases risk" },
+      { "id": "exclusive_breastfeeding_cessation", "multiplier": 1.2, "note": "Early weaning increases pneumonia risk" }
+    ],
+    "subtypes": [
+      {
+        "id": "bacterial_pneumonia",
+        "name": "Bacterial Pneumonia",
+        "typicalOrganisms": ["Streptococcus pneumoniae", "Haemophilus influenzae type b", "Staphylococcus aureus", "Klebsiella pneumoniae"],
+        "prevalenceModifier": 0.6,
+        "agePeak": [2, 59],
+        "keyFeatures": [
+          { "feature": "high_fever_toxic", "weight": 5 },
+          { "feature": "focal_crackles", "weight": 5 },
+          { "feature": "bronchial_breathing", "weight": 5 },
+          { "feature": "grunting", "weight": 5 },
+          { "feature": "chest_indrawing_severe", "weight": 4 },
+          { "feature": "acute_onset", "weight": 4 }
+        ],
+        "negativePredictors": [
+          { "feature": "wheeze_dominant", "weightReduction": 4 },
+          { "feature": "viral_prodrome_marked", "weightReduction": 3 }
+        ],
+        "imagingFeatures": ["lobar_consolidation", "air_bronchogram"],
+        "management": {
+          "nonSevere": "High-dose amoxicillin PO 40-45 mg/kg/dose 12-hourly for 5 days",
+          "severe": "IV Benzylpenicillin 50,000 IU/kg every 6h + Gentamicin 7.5 mg/kg once daily",
+          "treatmentFailure48h": "Switch to IV Ceftriaxone 50 mg/kg once daily if not improving",
+          "suspectedStaph": "IV Flucloxacillin + Gentamicin"
+        }
+      },
+      {
+        "id": "viral_pneumonia",
+        "name": "Viral Pneumonia",
+        "prevalenceModifier": 0.3,
+        "agePeak": [0, 24],
+        "keyFeatures": [
+          { "feature": "viral_prodrome", "weight": 5 },
+          { "feature": "wheeze", "weight": 4 },
+          { "feature": "diffuse_bilateral_crackles", "weight": 3 },
+          { "feature": "low_grade_fever", "weight": 3 },
+          { "feature": "coryza", "weight": 4 }
+        ],
+        "negativePredictors": [
+          { "feature": "bronchial_breathing", "weightReduction": 3 },
+          { "feature": "high_fever_toxic", "weightReduction": 3 }
+        ],
+        "imagingFeatures": ["bilateral_interstitial_infiltrates", "hyperinflation"],
+        "management": "Supportive care; oxygen if hypoxic. No routine antibiotics unless bacterial superinfection suspected."
+      },
+      {
+        "id": "atypical_pneumonia",
+        "name": "Atypical Pneumonia (Mycoplasma/Chlamydia)",
+        "typicalOrganisms": ["Mycoplasma pneumoniae", "Chlamydia pneumoniae", "Chlamydia trachomatis"],
+        "prevalenceModifier": 0.1,
+        "agePeak": [5, 15],
+        "keyFeatures": [
+          { "feature": "dry_hacking_cough", "weight": 5 },
+          { "feature": "headache", "weight": 3 },
+          { "feature": "malaise", "weight": 3 },
+          { "feature": "minimal_auscultatory_findings", "weight": 4 },
+          { "feature": "low_grade_fever", "weight": 2 },
+          { "feature": "age_school_going", "weight": 4 }
+        ],
+        "imagingFeatures": ["patchy_interstitial", "worse_than_physical_findings"],
+        "management": "Macrolide (e.g., Azithromycin 10 mg/kg once daily for 3 days) if indicated."
+      },
+      {
+        "id": "aspiration_pneumonia",
+        "name": "Aspiration Pneumonia",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "choking_event", "weight": 5 },
+          { "feature": "neurological_comorbidity", "weight": 4, "note": "Cerebral palsy, neuromuscular disorders" },
+          { "feature": "recurrent_pneumonia", "weight": 3 },
+          { "feature": "dependent_lung_segment_consolidation", "weight": 4 },
+          { "feature": "feeding_difficulties", "weight": 3 }
+        ],
+        "management": "Antibiotics covering anaerobes (e.g., Amoxicillin-clavulanate 45 mg/kg/dose 12-hourly). Address underlying cause. Consider thickened feeds, NG tube."
+      },
+      {
+        "id": "staphylococcal_pneumonia",
+        "name": "Staphylococcal Pneumonia",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "rapid_deterioration", "weight": 5 },
+          { "feature": "toxic_appearance", "weight": 5 },
+          { "feature": "pneumatoceles_on_cxr", "weight": 5 },
+          { "feature": "empyema_early", "weight": 5 },
+          { "feature": "cavitation", "weight": 5 },
+          { "feature": "high_fever_unresponsive", "weight": 4 }
+        ],
+        "imagingFeatures": ["cavitation", "pneumatocele", "empyema"],
+        "management": "IV Flucloxacillin + Gentamicin; consider drainage of empyema."
+      },
+      {
+        "id": "pcp_pneumonia",
+        "name": "Pneumocystis jirovecii Pneumonia (PCP)",
+        "prevalenceModifier": 0.02,
+        "agePeak": [2, 12],
+        "riskFactors": ["hiv_exposed", "hiv_infected", "severe_malnutrition"],
+        "keyFeatures": [
+          { "feature": "severe_hypoxia", "weight": 5 },
+          { "feature": "relatively_clear_chest", "weight": 5 },
+          { "feature": "severe_distress", "weight": 5 },
+          { "feature": "infant_under_12m", "weight": 5 },
+          { "feature": "poor_response_to_standard_antibiotics", "weight": 5 },
+          { "feature": "hiv_exposure", "weight": 5 }
+        ],
+        "imagingFeatures": ["bilateral_interstitial_opacities", "normal_cxr_early"],
+        "management": "High-dose co-trimoxazole IV (trimethoprim 20 mg/kg/day in 4 divided doses); oxygen; prednisolone if severe hypoxia (PaO2 <70 mmHg)."
+      },
+      {
+        "id": "neonatal_pneumonia",
+        "name": "Neonatal Pneumonia (<2 months)",
+        "prevalenceModifier": 0.05,
+        "agePeak": [0, 1],
+        "keyFeatures": [
+          { "feature": "maternal_fever", "weight": 5 },
+          { "feature": "prom", "weight": 5 },
+          { "feature": "grunting_soon_after_birth", "weight": 5 },
+          { "feature": "apnea", "weight": 5 },
+          { "feature": "temperature_instability", "weight": 4 },
+          { "feature": "respiratory_distress_at_birth", "weight": 5 },
+          { "feature": "poor_feeding_neonatal", "weight": 5 }
+        ],
+        "management": "Ampicillin 50 mg/kg IV every 8h + Gentamicin 5 mg/kg IV once daily for 7-10 days. Admit to NICU."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "asthma",
+        "discriminators": ["recurrent_wheeze", "family_atopy", "no_fever", "bronchodilator_response"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "bronchiolitis",
+        "discriminators": ["age_under_2", "viral_prodrome", "wheeze_and_crackles", "apnea", "first_wheeze_episode"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "tb",
+        "discriminators": ["chronic_cough", "weight_loss", "night_sweats", "tb_contact"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "foreign_body",
+        "discriminators": ["sudden_onset", "unilateral_wheeze", "choking_history"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "pertussis",
+        "discriminators": ["paroxysmal_cough", "post_tussive_vomiting", "whoop", "apnea_in_infants"],
+        "negativeImpactOnPneumonia": 1
+      },
+      {
+        "diseaseId": "croup",
+        "discriminators": ["barking_cough", "inspiratory_stridor", "no_crackles"],
+        "negativeImpactOnPneumonia": 2
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Pulse oximetry",
+          "priority": "immediate",
+          "yield": 1.0,
+          "indication": "all suspected pneumonia",
+          "relevance": "severity, hypoxia assessment, oxygen eligibility criteria"
+        },
+        {
+          "name": "Respiratory rate counting (full one minute)",
+          "priority": "immediate",
+          "yield": 0.9,
+          "indication": "all",
+          "ageThresholdsNote": "Use IMCI age-specific cut-offs: ≥50 for 2-11 months, ≥40 for 12-59 months"
+        },
+        {
+          "name": "AVPU assessment",
+          "priority": "immediate",
+          "yield": 0.8,
+          "indication": "if ill-looking"
+        },
+        {
+          "name": "Feeding assessment",
+          "priority": "immediate",
+          "indication": "assess ability to drink/breastfeed"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "FBC + CRP",
+          "priority": "high",
+          "yield": 0.6,
+          "indication": "all suspected pneumonia, to support bacterial aetiology",
+          "limitations": "low specificity, CRP trending helps"
+        },
+        {
+          "name": "Blood culture",
+          "priority": "high_if_severe",
+          "yield": 0.2,
+          "indication": "severe pneumonia, toxic child, immunocompromised, empyema",
+          "note": "Draw before antibiotics"
+        },
+        {
+          "name": "HIV test (PCR or rapid)",
+          "priority": "essential_if_risk",
+          "yield": 0.9,
+          "indication": "all children with pneumonia in high-prevalence settings, or as per protocol when suspect PCP"
+        },
+        {
+          "name": "GeneXpert (sputum/gastric aspirate)",
+          "priority": "indicated_if_tb_suspected",
+          "indication": "chronic cough >14 days, TB contact, poor response to antibiotics"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "Chest X-ray PA (and lateral if needed)",
+          "priority": "high",
+          "yield": 0.8,
+          "cost": "moderate",
+          "indication": "severe pneumonia, hypoxia, treatment failure, suspected effusion/empyema/cavitation, recurrent pneumonia",
+          "typicalFindingsBySubtype": {
+            "bacterial": "lobar consolidation, air bronchogram",
+            "viral": "bilateral interstitial infiltrates, hyperinflation",
+            "staphylococcal": "cavitation, pneumatoceles, empyema",
+            "pcp": "bilateral diffuse interstitial opacities, may be normal early",
+            "aspiration": "dependent segment consolidation"
+          }
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Pleural ultrasound",
+          "indication": "suspected effusion/empyema",
+          "priority": "when dullness or persistent fever"
+        },
+        {
+          "name": "CT chest",
+          "indication": "complications not resolving, suspected foreign body, bronchiectasis",
+          "priority": "low; reserved"
+        }
+      ]
+    },
+    "management": {
+      "protocolReference": "WHO IMCI Guidelines + Kenya Paediatric Management Guidelines, child 2-59 months",
+      "pathways": [
+        {
+          "severity": "imci_no_pneumonia",
+          "criteria": "Cough or cold without chest indrawing and without fast breathing",
+          "treatment": [
+            "Soothe throat and relieve cough with safe remedy",
+            "No antibiotics indicated",
+            "Counsel on when to return: if breathing becomes difficult, fast breathing develops, unable to feed, or condition worsens"
+          ]
+        },
+        {
+          "severity": "imci_pneumonia",
+          "criteria": "Cough or difficult breathing + chest indrawing OR fast breathing (age-specific threshold), NO danger signs",
+          "treatment": [
+            "High-dose amoxicillin PO 40-45 mg/kg/dose 12-hourly for 5 days",
+            "Soothe cough",
+            "Follow up in 48 hours",
+            "If wheeze present AND fast breathing → treat as pneumonia if first episode; if recurrent wheeze, consider asthma"
+          ],
+          "followUp": "Return immediately if: develops danger signs, not able to drink, becomes sicker. Review at 48 hours."
+        },
+        {
+          "severity": "imci_severe_pneumonia",
+          "criteria": "Any danger sign (SpO2 <90%, central cyanosis, unable to drink/breastfeed, AVPU abnormal, grunting, head nodding, lethargy) OR chest indrawing + any danger sign",
+          "treatment": [
+            "Admit urgently to hospital",
+            "Oxygen to maintain SpO2 ≥90%",
+            "IV Benzylpenicillin 50,000 IU/kg every 6h + Gentamicin 7.5 mg/kg once daily",
+            "Monitor SpO2, respiratory rate, indrawing, feeding, consciousness",
+            "Ensure adequate feeding (breastfeeding support or NG/IV if needed)",
+            "Keep child warm",
+            "Treat fever if indicated"
+          ],
+          "reassessment": "At 48 hours: if worsening or no improvement, switch to IV Ceftriaxone 50 mg/kg once daily. Suspect staphylococcal if cavitation present – add Flucloxacillin."
+        },
+        {
+          "severity": "imci_treatment_failure",
+          "criteria": "Progression to danger signs, no improvement in RR/indrawing/fever/feeding at 48h, worsening at day 5",
+          "definitions": {
+            "progression_to_severe": "Child initially classified as pneumonia develops danger signs → admit and treat as severe",
+            "48h_failure": "Severe pneumonia child worsening; switch to Ceftriaxone; if staph suspected use Flucloxacillin + Gentamicin",
+            "day5_failure": "≥3 of: fever >38°C, RR >60, cyanosis/SpO2 <90% unchanged, chest indrawing persistent, worsening CXR",
+            "chronic_cough_>14d": "Suspect TB. Perform Mantoux, CXR, TB contact history, and consider TB treatment per guidelines."
+          }
+        }
+      ],
+      "oxygenCriteria": [
+        "SpO2 <90% on room air → start oxygen via nasal prongs at 1-2 L/min",
+        "Maintain SpO2 ≥90% (≥92% for severe)",
+        "Wean oxygen once stable on room air for 4-6 hours"
+      ],
+      "specialConsiderations": {
+        "wheeze_branch": "If wheeze present → if first episode with fever → treat as pneumonia; if recurrent wheeze and afebrile → consider asthma protocol",
+        "HIV_exposed": "See separate HIV/PCP protocol. Early HIV testing, treat for PCP if hypoxic and failing standard antibiotics",
+        "SAM_child": "WHO IMCI: all children with severe acute malnutrition and cough/difficulty breathing should be admitted and treated with IV antibiotics",
+        "age_under_2_months": "Do not use this protocol; use integrated management of neonatal/young infant illness (IMNCI) protocol"
+      }
+    },
+    "treatmentResponseLogic": {
+      "triggers": [
+        {
+          "timePoint": "48 hours",
+          "ifNoImprovement": {
+            "actions": [
+              "Re-assess thoroughly including danger signs",
+              "Check treatment adherence (if oral antibiotics)",
+              "Get chest X-ray if not done",
+              "Increase probability of: empyema, resistant organism, staphylococcal pneumonia, TB, PCP (if HIV risk)",
+              "Change antibiotics as per protocol"
+            ]
+          }
+        },
+        {
+          "timePoint": "day 5",
+          "ifStillSick": {
+            "actions": [
+              "Admit if not already admitted",
+              "Switch to IV Ceftriaxone",
+              "Re-evaluate for empyema (ultrasound), TB, PCP",
+              "Consider HIV testing if not done"
+            ]
+          }
+        }
+      ]
+    },
+    "pathophysiology": [
+      "alveolar_inflammation_from_infection",
+      "alveolar_exudate_and_consolidation",
+      "ventilation_perfusion_mismatch",
+      "hypoxemia",
+      "increased_work_of_breathing",
+      "possible_progression_to_sepsis_or_respiratory_failure"
+    ],
+    "complications": [
+      {
+        "diseaseId": "pleural_effusion",
+        "probability": 0.2,
+        "lagDays": [2, 7],
+        "severityBoost": 0.3,
+        "clues": ["dullness_to_percussion", "persistent_fever", "worsening_respiratory_distress"]
+      },
+      {
+        "diseaseId": "empyema",
+        "probability": 0.1,
+        "lagDays": [5, 14],
+        "severityBoost": 0.3,
+        "clues": ["spiking_fever", "chest_pain", "persistent_effusion"]
+      },
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.25,
+        "severityBoost": 0.4,
+        "clues": ["shock", "poor_perfusion", "altered_consciousness"]
+      },
+      {
+        "diseaseId": "lung_abscess",
+        "probability": 0.05,
+        "associatedSubtype": "staphylococcal_pneumonia",
+        "clues": ["prolonged_fever", "cavitation_on_CXR"]
+      },
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.05,
+        "associatedSubtype": "staphylococcal_pneumonia",
+        "clues": ["sudden_deterioration", "chest_asymmetry", "hyperresonance"]
+      },
+      {
+        "diseaseId": "respiratory_failure",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["severe_hypoxia", "rising_pCO2", "exhaustion"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "if any danger sign present, immediate admission and oxygen",
+    "diagnosticClues": [
+      "cough + fever + tachypnoea for age",
+      "grunting + hypoxia + chest indrawing",
+      "bronchial breathing locally over consolidation",
+      "IMCI: chest indrawing OR fast breathing in child with cough/difficult breathing"
+    ],
+    "exclusionClues": [
+      "isolated stridor without crackles (think croup)",
+      "pure wheeze with no fever and recurrent episodes (asthma)",
+      "sudden onset with choking history (foreign body)",
+      "barking cough with inspiratory stridor (croup)"
+    ]
+  }
+}

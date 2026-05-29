@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "atrial_fibrillation",
+    "name": "Atrial Fibrillation",
+    "system": "cardiology",
+    "agePeak_months": [600, 1080],
+    "note": "Most common sustained arrhythmia. Associated with increased stroke risk and heart failure.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["arrhythmia", "palpitations"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "rapid_ventricular_rate", "weight": 8 },
+        { "sign": "acute_stroke", "weight": 9 },
+        { "sign": "pulmonary_oedema", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If unstable (hypotension, chest pain, oedema, rapid rate) -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "palpitations", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "chest_discomfort", "weight": 2 },
+      { "symptomId": "syncope", "weight": 2 },
+      { "symptomId": "stroke_tia", "weight": 3, "note": "May be the presenting feature" }
+    ],
+
+    "examFeatures": [
+      { "signId": "irregularly_irregular_pulse", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "signs_of_heart_failure", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "heart_failure", "multiplier": 2.0 },
+      { "id": "valvular_heart_disease", "multiplier": 1.8 },
+      { "id": "obesity", "multiplier": 1.3 },
+      { "id": "diabetes", "multiplier": 1.3 },
+      { "id": "hyperthyroidism", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "paroxysmal_af",
+        "name": "Paroxysmal Atrial Fibrillation",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "episodic_palpitations", "weight": 5 },
+          { "feature": "self_terminating_within_7_days", "weight": 4 }
+        ],
+        "management": "Rate or rhythm control. Anticoagulation per CHA2DS2-VASc score."
+      },
+      {
+        "id": "persistent_af",
+        "name": "Persistent Atrial Fibrillation",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "duration_over_7_days", "weight": 5 },
+          { "feature": "requires_cardioversion", "weight": 4 }
+        ],
+        "management": "Rate control (beta-blocker, CCB, digoxin) or rhythm control (cardioversion, antiarrhythmics). Anticoagulation."
+      },
+      {
+        "id": "permanent_af",
+        "name": "Permanent Atrial Fibrillation",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "accepted_irreversible", "weight": 5 },
+          { "feature": "rate_control_only", "weight": 4 }
+        ],
+        "management": "Rate control. Long-term anticoagulation. No attempt at rhythm control."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "atrial_flutter",
+        "discriminators": ["sawtooth_ecg", "regular_rate", "carotid_massage_response"]
+      },
+      {
+        "diseaseId": "supraventricular_tachycardia",
+        "discriminators": ["regular_narrow_complex", "sudden_onset_offset", "younger_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.98, "indication": "confirm diagnosis, assess rate" },
+        { "name": "Pulse examination", "priority": "immediate", "yield": 0.85, "indication": "irregularly irregular" }
+      ],
+      "laboratory": [
+        { "name": "Thyroid function tests", "priority": "high", "yield": 0.6, "indication": "hyperthyroidism as cause" },
+        { "name": "Serum electrolytes", "priority": "high", "yield": 0.5, "indication": "electrolyte imbalance" },
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.4, "indication": "baseline before anticoagulation" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "high", "yield": 0.8, "indication": "structural heart disease, LA size, LV function" },
+        { "name": "Holter monitor", "priority": "medium", "yield": 0.85, "indication": "paroxysmal AF detection" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESC Guidelines for Atrial Fibrillation",
+      "pathways": [
+        {
+          "severity": "unstable",
+          "criteria": "hypotension, chest pain, heart failure, rapid ventricular rate",
+          "treatment": "Emergency synchronized cardioversion. IV heparin. Treat underlying cause."
+        },
+        {
+          "severity": "stable",
+          "criteria": "hemodynamically stable, rate <150",
+          "treatment": "Rate control (beta-blocker or CCB). Assess CHA2DS2-VASc score. Anticoagulate if score >=2 (men) or >=3 (women). Consider rhythm control."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ectopic_foci",
+      "reentry_circuits",
+      "pulmonary_vein_triggers",
+      "atrial_remodeling",
+      "loss_of_atrial_contraction",
+      "thromboembolism"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "ischemic_stroke",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["sudden_neurological_deficit", "high_cha2ds2_vasc"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if unstable",
+    "diagnosticClues": ["irregularly_irregular_pulse", "ecg_confirmed_af"],
+    "exclusionClues": ["regular_rhythm", "normal_ecg"]
+  }
+}

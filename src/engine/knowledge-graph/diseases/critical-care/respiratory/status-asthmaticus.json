@@ -1,0 +1,134 @@
+{
+  "disease": {
+    "id": "status_asthmaticus",
+    "name": "Status Asthmaticus (Severe Acute Asthma)",
+    "system": "critical_care",
+    "agePeak_months": [0, 480],
+    "note": "Life-threatening asthma exacerbation unresponsive to standard bronchodilator therapy. Requires ICU management. Can lead to respiratory failure.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["acute_respiratory_failure", "airflow_obstruction", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "silent_chest", "weight": 10 },
+        { "sign": "cyanosis", "weight": 9 },
+        { "sign": "bradycardia_hypotension", "weight": 9 },
+        { "sign": "exhaustion_somnolence", "weight": 10 },
+        { "sign": "arrhythmia", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Life-threatening (silent chest, cyanosis, exhaustion) -> CRITICAL; severe -> ICU; moderate -> ward"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "severe_dyspnea_at_rest", "weight": 5 },
+      { "symptomId": "wheezing_increasing", "weight": 4 },
+      { "symptomId": "chest_tightness", "weight": 3 },
+      { "symptomId": "cough_non_productive", "weight": 3 },
+      { "symptomId": "inability_to_speak_sentences", "weight": 4 },
+      { "symptomId": "known_asthma_history", "weight": 4 },
+      { "symptomId": "recent_upper_respiratory_infection_or_allergen_exposure", "weight": 3 },
+      { "symptomId": "poor_adherence_to_inhaled_corticosteroids", "weight": 3 },
+      { "symptomId": "previous_icu_admission_or_intubation_for_asthma", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "respiratory_distress_accessory_muscle_use", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "wheezing_expiratory_and_inspiratory", "baseWeight": 4 },
+      { "signId": "silent_chest", "baseWeight": 5 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "pulsus_paradoxus", "baseWeight": 3 },
+      { "signId": "cyanosis", "baseWeight": 4 },
+      { "signId": "inability_to_complete_sentences", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "prior_icu_admission_or_intubation", "multiplier": 3.0 },
+      { "id": "frequent_a_and_e_visits", "multiplier": 2.5 },
+      { "id": "poor_asthma_control", "multiplier": 2.0 },
+      { "id": "non_adherence_to_ics", "multiplier": 2.0 },
+      { "id": "aspirin_sensitivity", "multiplier": 2.0 },
+      { "id": "psychosocial_issues", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "copd_exacerbation",
+        "discriminators": ["older_age", "smoking_history", "chronic_sputum_production"]
+      },
+      {
+        "diseaseId": "upper_airway_obstruction",
+        "discriminators": ["stridor", "no_response_to_bronchodilators", "flow_volume_loop"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "PEFR (Peak Expiratory Flow Rate)", "priority": "immediate", "yield": 0.85, "indication": "severity assessment, <33% predicted = severe" },
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.9, "indication": "continuous monitoring" }
+      ],
+      "laboratory": [
+        { "name": "ABG (PaO2, PaCO2, pH)", "priority": "immediate", "yield": 0.9, "indication": "life-threatening: normal/high PaCO2 = exhaustion" },
+        { "name": "FBC, CRP", "priority": "high", "yield": 0.4, "indication": "infection marker" },
+        { "name": "Serum potassium, magnesium", "priority": "high", "yield": 0.4, "indication": "metabolic assessment" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "pneumothorax, pneumonia, pneumomediastinum" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BTS/SIGN or GINA Guidelines for Acute Asthma",
+      "pathways": [
+        {
+          "severity": "severe (ICU criteria)",
+          "criteria": "PEFR 33-50%, unable to complete sentences, RR >25, HR >110",
+          "treatment": "High-flow O2. Back-to-back salbutamol nebulizers (5mg). IV hydrocortisone 200mg or prednisolone 40-50mg. Ipratropium 0.5mg. Consider IV magnesium sulfate 2g. IV salbutamol or aminophylline if life-threatening."
+        },
+        {
+          "severity": "life-threatening / near-fatal",
+          "criteria": "silent chest, cyanosis, exhaustion, PaCO2 normal/elevated, PEFR <33%",
+          "treatment": "Immediate ICU. Continuous salbutamol nebulization. IV magnesium. IV salbutamol. Consider ketamine. Intubation if deteriorating (low threshold). Lung-protective ventilation. Sedation + paralysis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bronchial_smooth_muscle_spasm",
+      "airway_mucosal_edema",
+      "mucus_plugging",
+      "airflow_obstruction",
+      "air_trapping_dynamic_hyperinflation",
+      "increased_work_of_breathing",
+      "alveolar_hypoventilation",
+      "respiratory_muscle_fatigue"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["sudden_deterioration", "chest_pain", "hyperresonance"]
+      },
+      {
+        "diseaseId": "post_intubation_hypotension",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["hypotension_after_intubation", "dynamic_hyperinflation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["severe_dyspnea_wheezing", "asthma_history", "poor_response_to_bronchodilators", "silent_chest"],
+    "exclusionClues": ["stridor", "copd_history", "cardiac_causes"]
+  }
+}

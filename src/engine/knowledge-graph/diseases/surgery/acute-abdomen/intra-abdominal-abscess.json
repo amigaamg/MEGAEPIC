@@ -1,0 +1,183 @@
+{
+  "disease": {
+    "id": "intra_abdominal_abscess",
+    "name": "Intra-Abdominal Abscess",
+    "system": "surgical",
+    "agePeak_months": [240, 840],
+    "note": "Localized collection of pus within the peritoneal cavity. Often complication of surgery, perforation, or inflammatory disease.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["acute_abdomen", "fever", "abdominal_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "abscess_rupture", "weight": 9 },
+          { "sign": "organ_dysfunction", "weight": 8 },
+          { "sign": "persistent_sepsis_despite_antibiotics", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Sepsis/organ failure -> SEVERE; controlled without sepsis -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "persistent_fever", "weight": 5 },
+      { "symptomId": "abdominal_pain", "weight": 4 },
+      { "symptomId": "recent_abdominal_surgery", "weight": 4, "note": "Most common cause" },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "generalized_malaise", "weight": 3 },
+      { "symptomId": "history_of_perforation_or_diverticulitis", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "localized_abdominal_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "palpable_mass", "baseWeight": 4, "note": "May be palpable if abscess is large and anterior" },
+      { "signId": "fever_tachycardia", "baseWeight": 4 },
+      { "signId": "abdominal_distension", "baseWeight": 2 },
+      { "signId": "guarding", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "recent_abdominal_surgery", "multiplier": 2.5 },
+      { "id": "perforated_viscus", "multiplier": 2.0 },
+      { "id": "diverticulitis", "multiplier": 2.0 },
+      { "id": "appendicitis", "multiplier": 1.8 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "malnutrition", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "subphrenic_abscess",
+        "name": "Subphrenic Abscess",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "upper_abdominal_pain", "weight": 4 },
+          { "feature": "referred_shoulder_pain", "weight": 3 },
+          { "feature": "fever", "weight": 5 },
+          { "feature": "elevated_diaphragm_on_cxr", "weight": 4 }
+        ],
+        "management": "CT-guided percutaneous drainage. IV antibiotics. Surgical drainage if percutaneous fails."
+      },
+      {
+        "id": "pelvic_abscess",
+        "name": "Pelvic Abscess",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "lower_abdominal_pain", "weight": 4 },
+          { "feature": "diarrhea_tenesmus", "weight": 3 },
+          { "feature": "urinary_frequency", "weight": 3 },
+          { "feature": "fever", "weight": 4 }
+        ],
+        "management": "Antibiotics. Transrectal or transvaginal drainage. Surgical drainage if needed."
+      },
+      {
+        "id": "psoas_abscess",
+        "name": "Psoas Abscess",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "hip_pain_limping", "weight": 5 },
+          { "feature": "fever", "weight": 5 },
+          { "feature": "psoas_sign_positive", "weight": 5 }
+        ],
+        "management": "CT-guided drainage. IV antibiotics. Treat underlying cause (TB, Crohn, etc.)."
+      },
+      {
+        "id": "interloop_abscess",
+        "name": "Interloop Abscess",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "vague_abdominal_pain", "weight": 4 },
+          { "feature": "intermittent_obstruction", "weight": 3 },
+          { "feature": "fever", "weight": 4 }
+        ],
+        "management": "Surgical drainage. Difficult to access percutaneously. Treat underlying disease."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hematoma",
+        "discriminators": ["no_fever", "falling_hemoglobin", "no_response_to_antibiotics"]
+      },
+      {
+        "diseaseId": "pancreatic_pseudocyst",
+        "discriminators": ["elevated_amylase", "history_of_pancreatitis", "cystic_appearance_on_ct"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature chart", "priority": "immediate", "yield": 0.5, "indication": "fever pattern assessment" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.85, "indication": "elevated and persistent" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.4, "indication": "identify organism" },
+        { "name": "Procalcitonin", "priority": "medium", "yield": 0.7, "indication": "bacterial infection marker" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV contrast", "priority": "immediate", "yield": 0.95, "indication": "gold standard for detection and localization" },
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.7, "indication": "useful for subphrenic and pelvic abscesses" },
+        { "name": "MRI", "priority": "medium", "yield": 0.85, "indication": "alternative in pregnancy or contrast allergy" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Intra-Abdominal Abscess",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "well-defined abscess, no sepsis, accessible percutaneously",
+          "treatment": "CT-guided percutaneous drainage. IV antibiotics. Culture-directed antibiotic therapy. Monitor resolution with imaging."
+        },
+        {
+          "severity": "severe",
+          "criteria": "multiple abscesses, failed percutaneous drainage, sepsis, inaccessible location",
+          "treatment": "Surgical drainage (laparoscopic or open). Source control. IV broad-spectrum antibiotics. ICU admission if septic."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "localized_infection",
+      "purulent_collection",
+      "fibrinous_wall_formation",
+      "bacterial_proliferation",
+      "systemic_inflammatory_response",
+      "potential_rupture"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "abscess_rupture",
+        "probability": 0.1,
+        "lagDays": [3, 14],
+        "severityBoost": 0.5,
+        "clues": ["sudden_worsening_pain", "generalized_peritonitis", "septic_shock"]
+      },
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.2,
+        "lagDays": [1, 7],
+        "severityBoost": 0.4,
+        "clues": ["persistent_fever", "tachycardia", "worsening_wbc"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["persistent_fever_post_surgery", "localized_tenderness", "palpable_mass", "elevated_crp"],
+    "exclusionClues": ["clear_source_controlled_infection", "normal_imaging", "afebrile_for_72h"]
+  }
+}

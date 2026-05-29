@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "lymphoma",
+    "name": "Lymphoma (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [60, 180],
+    "note": "Third most common childhood cancer. Hodgkin (HL) and Non-Hodgkin lymphoma (NHL). NHL is more common in younger children; HL in adolescents.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["lymphoid_malignancy", "lymphadenopathy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "superior_vena_cava_syndrome", "weight": 10 },
+        { "sign": "airway_compression_mediastinal_mass", "weight": 10 },
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "tumor_lysis_syndrome", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bulky_disease_>10_cm", "weight": 7 },
+          { "sign": "b_symptoms_present", "weight": 6 },
+          { "sign": "ldh_>2x_normal_burkitt", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If SVCO, airway compromise, cord compression, or TLS -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_lymphadenopathy", "weight": 5 },
+      { "symptomId": "fever_persistent", "weight": 3 },
+      { "symptomId": "night_sweats_drenching", "weight": 3 },
+      { "symptomId": "weight_loss_unexplained", "weight": 3 },
+      { "symptomId": "cough_dyspnea_chest_pain", "weight": 3, "note": "Mediastinal mass" },
+      { "symptomId": "abdominal_pain_distension", "weight": 3, "note": "Abdominal NHL" },
+      { "symptomId": "pruritus", "weight": 2, "note": "Classic for HL" }
+    ],
+
+    "examFeatures": [
+      { "signId": "lymphadenopathy_cervical_supraclavicular", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatosplenomegaly", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "mediastinal_mass_signs", "baseWeight": 4 },
+      { "signId": "abdominal_mass", "baseWeight": 3 },
+      { "signId": "svco_signs", "baseWeight": 5 },
+      { "signId": "pallor", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "immunodeficiency_hiv", "multiplier": 5.0 },
+      { "id": "post_transplant_immunosuppression", "multiplier": 10.0 },
+      { "id": "epstein_barr_virus_infection", "multiplier": 3.0 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "family_history_lymphoma", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hodgkin_lymphoma",
+        "name": "Hodgkin Lymphoma",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "constitutional_b_symptoms", "weight": 4 },
+          { "feature": "reed_sternberg_cells", "weight": 5 },
+          { "feature": "contiguous_lymph_node_spread", "weight": 3 }
+        ],
+        "management": "ABVD or OEPA/COPDAC chemotherapy regimen. Involved-field radiation for bulky disease. Staging: PET-CT, bone marrow biopsy. Overall cure rate >90%."
+      },
+      {
+        "id": "burkitt_lymphoma",
+        "name": "Burkitt Lymphoma",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "rapid_tumor_growth", "weight": 5 },
+          { "feature": "abdominal_mass_predominant", "weight": 4 },
+          { "feature": "c_myc_translocation", "weight": 5 }
+        ],
+        "management": "Intensive short-course chemo (Group C protocol). CNS prophylaxis. Tumor lysis syndrome prevention. Rituximab added. Cure rate >90% in localized disease."
+      },
+      {
+        "id": "lymphoblastic_lymphoma",
+        "name": "Lymphoblastic Lymphoma (T-cell)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "mediastinal_mass_often", "weight": 5 },
+          { "feature": "t_cell_immunophenotype", "weight": 5 },
+          { "feature": "rapid_progression", "weight": 4 }
+        ],
+        "management": "Intensive ALL-type chemotherapy protocol. Mediastinal radiation for residual mass. Risk of SVCO at presentation. High cure rate."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "infectious_lymphadenopathy_tb",
+        "discriminators": ["fever_night_sweats", "positive_quantiferon", "caseating_granuloma", "response_to_anti_tb_therapy"]
+      },
+      {
+        "diseaseId": "leukemia",
+        "discriminators": ["blasts_in_peripheral_blood", "pancytopenia_marked", "bone_marrow_>25%_blasts"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.4, "indication": "may be normal, cytopenias if marrow involved" },
+        { "name": "LDH", "priority": "high", "yield": 0.7, "indication": "tumor burden marker" },
+        { "name": "ESR", "priority": "medium", "yield": 0.5, "indication": "prognostic marker in HL" },
+        { "name": "Lymph node excision biopsy", "priority": "immediate", "yield": 1.0, "indication": "histology, IHC, flow cytometry" },
+        { "name": "Bone marrow biopsy", "priority": "high", "yield": 0.4, "indication": "staging, marrow involvement" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.6, "indication": "mediastinal mass" },
+        { "name": "CT Neck/Chest/Abdomen/Pelvis", "priority": "high", "yield": 0.9, "indication": "staging, assess bulk" },
+        { "name": "PET-CT scan", "priority": "high", "yield": 0.95, "indication": "staging and response assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "COG / EuroNet-PHL / Inter-B-NHL Guidelines",
+      "pathways": [
+        {
+          "severity": "limited_stage",
+          "criteria": "Stage I-II, no B symptoms, non-bulky, LDH normal",
+          "treatment": "Limited chemotherapy cycles (2-4), ± involved-field radiation for HL. Response assessment with PET-CT after 2 cycles. Excellent prognosis."
+        },
+        {
+          "severity": "advanced_stage",
+          "criteria": "Stage III-IV, B symptoms, bulky disease, high LDH, SVCO",
+          "treatment": "Intensive multi-agent chemotherapy. Tumor lysis prophylaxis (allopurinol, rasburicase, hydration). Airway management if mediastinal mass. CNS prophylaxis. PET-CT for response assessment."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "genetic_translocation", "oncogene_activation", "clonal_lymphoid_proliferation", "immune_evasion", "tumor_burden_effects"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_lysis_syndrome",
+        "probability": 0.3,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["burkitt", "high_ldh", "bulky_disease", "rapid_response_to_chemo"]
+      },
+      {
+        "diseaseId": "superior_vena_cava_syndrome",
+        "probability": 0.1,
+        "lagDays": [0, 7],
+        "severityBoost": 0.6,
+        "clues": ["facial_edema", "distended_neck_veins", "stridor"]
+      },
+      {
+        "diseaseId": "anthracycline_cardiotoxicity",
+        "probability": 0.05,
+        "lagDays": [365, 7300],
+        "severityBoost": 0.3,
+        "clues": ["cumulative_dose_>300_mg_m2", "reduced_ejection_fraction"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painless_lymphadenopathy", "b_symptoms", "mediastinal_mass", "night_sweats", "reed_sternberg_cells"],
+    "exclusionClues": ["self_limited_lymphadenopathy", "negative_biopsy", "resolves_with_antibiotics"]
+  }
+}

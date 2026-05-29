@@ -1,0 +1,182 @@
+{
+  "disease": {
+    "id": "chemical_burn",
+    "name": "Chemical Burn (Ocular Chemical Injury)",
+    "system": "OPHTH",
+    "agePeak_months": [120, 480],
+    "note": "Ocular emergency caused by alkali (more severe) or acid exposure. Alkali penetrates rapidly through cornea causing deep stromal damage and anterior segment necrosis. Requires immediate copious irrigation.",
+    "prevalenceWeight": 0.005,
+    "syndromeTags": ["eye_trauma", "ocular_emergency", "chemical_injury"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "corneal_opacification_white_eye", "weight": 10 },
+        { "sign": "limbal_ischemia_severe_more_than_180_degrees", "weight": 9 },
+        { "sign": "globe_perforation", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "corneal_epithelial_defect_total", "weight": 8 },
+          { "sign": "elevated_IOP_acute_glaucoma", "weight": 7 },
+          { "sign": "conjunctival_chemosis_and_ischemia", "weight": 7 },
+          { "sign": "anterior_chamber_inflammation_hypopyon", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Roper-Hall Grade III-IV (limbal ischemia >50%) -> SEVERE; Grade I-II -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "alkali_or_acid_chemical_exposure", "weight": 5 },
+      { "symptomId": "immediate_severe_pain", "weight": 5 },
+      { "symptomId": "blurred_vision_or_vision_loss", "weight": 5 },
+      { "symptomId": "redness_eye", "weight": 4 },
+      { "symptomId": "photophobia", "weight": 4 },
+      { "symptomId": "excess_lacrimation", "weight": 4 },
+      { "symptomId": "blepharospasm", "weight": 3 },
+      { "symptomId": "foreign_body_sensation", "weight": 3 },
+      { "symptomId": "occupational_or_home_exposure", "weight": 4 },
+      { "symptomId": "no_eye_washing_or_delayed", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "corneal_epithelial_defect_or_opacification", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "limbal_ischemia_whitening", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "conjunctival_chemosis_and_hemorrhage", "baseWeight": 4 },
+      { "signId": "anterior_chamber_inflammation", "baseWeight": 3 },
+      { "signId": "elevated_intraocular_pressure", "baseWeight": 4 },
+      { "signId": "corneal_edema_descemet_folds", "baseWeight": 3 },
+      { "signId": "pH_of_conjunctival_fornix_abnormal", "baseWeight": 5 },
+      { "signId": "periorbital_skin_burns", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "occupational_chemical_exposure", "multiplier": 5.0 },
+      { "id": "no_eye_protection", "multiplier": 10.0 },
+      { "id": "home_cleaning_products", "multiplier": 3.0 },
+      { "id": "assault_with_chemicals", "multiplier": 5.0 },
+      { "id": "laboratory_work", "multiplier": 3.0 },
+      { "id": "agricultural_lime_fertilizers", "multiplier": 4.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "alkali_burn",
+        "name": "Alkali Burn (Lime, Lye, Ammonia, Cement)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "rapid_penetration_through_cornea", "weight": 5 },
+          { "feature": "severe_limbal_ischemia", "weight": 5 },
+          { "feature": "corneal_opacification", "weight": 5 },
+          { "feature": "high_IOP_early", "weight": 4 },
+          { "feature": "worse_prognosis_than_acid", "weight": 4 }
+        ],
+        "management": "Immediate copious irrigation 30+ min. Check pH. Ascorbate and citrate topically. Cycloplegia. IOP control. Steroids (caution with epithelial healing). AMG/tissue glue for persistent defect. Limbal stem cell transplant."
+      },
+      {
+        "id": "acid_burn",
+        "name": "Acid Burn (Sulfuric, Hydrochloric, Hydrofluoric)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "less_penetration", "weight": 4 },
+          { "feature": "protein_precipitation_coagulation", "weight": 4 },
+          { "feature": "corneal_opacity_may_limit_penetration", "weight": 3 },
+          { "feature": "usually_superficial_unless_high_conc", "weight": 3 },
+          { "feature": "HF_penetrates_deeply", "weight": 3 }
+        ],
+        "management": "Copious irrigation. Topical antibiotics. Cycloplegic. IOP control. Surgery rarely needed unless severe."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "thermal_burn",
+        "discriminators": ["heat_source", "eyelid_signs", "corneal_less_involved"]
+      },
+      {
+        "diseaseId": "ultraviolet_keratitis",
+        "discriminators": ["UV_light_exposure", "bilateral", "latent_6_to_12_hours"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Conjunctival fornix pH testing (litmus paper)", "priority": "immediate", "yield": 0.9, "indication": "assess adequacy of irrigation" },
+        { "name": "Slit lamp (after irrigation)", "priority": "immediate", "yield": 0.85, "indication": "grading" },
+        { "name": "Visual acuity", "priority": "immediate", "yield": 0.6, "indication": "baseline" }
+      ],
+      "laboratory": [],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "American Academy of Ophthalmology - Chemical Ocular Burns",
+      "pathways": [
+        {
+          "severity": "emergency_irrigation",
+          "criteria": "all chemical exposures, immediate",
+          "treatment": "STOP: remove contact lens. IRRIGATE immediately: Normal saline or Ringer's lactate 2L+ for 30 min minimum. Continue until fornix pH 7.0-7.4. Evert lids and sweep fornices for particles. Then assess severity."
+        },
+        {
+          "severity": "mild_grade_I_II",
+          "criteria": "clear cornea, no or minimal limbal ischemia, epithelial intact or focal loss",
+          "treatment": "Topical antibiotics (Chloramphenicol/Ofloxacin qds). Cycloplegia (Cyclopentolate or Atropine). Artificial tears. Topical steroid (Prednisolone acetate 1% qds) for limited duration. Ascorbate 10% and Citrate topically. Pressure patch if epithelial defect. Oral analgesia."
+        },
+        {
+          "severity": "severe_grade_III_IV",
+          "criteria": "corneal opacification, >50% limbal ischemia, elevated IOP",
+          "treatment": "Admit. Topical antibiotics. Cycloplegia (Atropine 1% tds). Topical steroid (Prednisolone q1-2h) - use with caution after first week due to corneal melting risk. Ascorbate 10% q1-2h. Citrate 10% q1-2h. IOP-lowering (Acetazolamide, Timolol). Oral Doxycycline (100mg BD) to reduce collagenase. AMG (amniotic membrane graft) for persistent defect. Surgical: limbal stem cell transplant, keratoprosthesis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "alkali_saponification_of_fatty_acids",
+      "collagen_denaturation",
+      "glycosaminoglycan_hydrolysis",
+      "proteoglycan_loss",
+      "limbal_stem_cell_destruction",
+      "corneal_ulceration_and_melting"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "corneal_ulcer_and_melting",
+        "probability": 0.3,
+        "lagDays": [2, 14],
+        "severityBoost": 0.7,
+        "clues": ["stromal_thinning", "descemetocele"]
+      },
+      {
+        "diseaseId": "limbal_stem_cell_deficiency",
+        "probability": 0.4,
+        "lagDays": [30, 180],
+        "severityBoost": 0.6,
+        "clues": ["conjunctivalization_of_cornea", "chronic_epithelial_defects"]
+      },
+      {
+        "diseaseId": "glaucoma_secondary",
+        "probability": 0.2,
+        "lagDays": [7, 180],
+        "severityBoost": 0.5,
+        "clues": ["elevated_IOP", "angle_closure"]
+      },
+      {
+        "diseaseId": "symblepharon_and_trichiasis",
+        "probability": 0.3,
+        "lagDays": [14, 90],
+        "severityBoost": 0.2,
+        "clues": ["conjunctival_adhesions", "eyelash_turning_in"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["chemical_exposure", "immediate_pain_vision_loss", "limbal_ischemia", "abnormal_pH"],
+    "exclusionClues": ["no_chemical_exposure", "normal_cornea"]
+  }
+}

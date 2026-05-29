@@ -1,0 +1,222 @@
+{
+  "disease": {
+    "id": "airway_obstruction",
+    "name": "Acute Upper Airway Obstruction",
+    "system": "ent",
+    "agePeak_months": [0, 1200],
+    "note": "Life-threatening emergency requiring immediate recognition and intervention. Causes include foreign body, infection, edema, trauma, and neoplasm.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["stridor", "respiratory_distress", "airway_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "apnea", "weight": 10 },
+        { "sign": "cyanosis", "weight": 10 },
+        { "sign": "bradycardia_desaturation", "weight": 10 },
+        { "sign": "silent_chest", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "stridor_at_rest", "weight": 9 },
+          { "sign": "severe_indrawing", "weight": 8 },
+          { "sign": "tripod_positioning", "weight": 7 },
+          { "sign": "drooling_severe_trismus", "weight": 7 },
+          { "sign": "agitation_confusion", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "All cases with stridor/ respiratory distress are SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_onset_respiratory_distress", "weight": 5, "modifiers": [
+          { "condition": "choking_while_eating", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "stridor", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 5 },
+      { "symptomId": "cough_sudden", "weight": 3 },
+      { "symptomId": "dysphagia", "weight": 3, "note": "Suggests supraglottic cause" },
+      { "symptomId": "voice_change", "weight": 3 },
+      { "symptomId": "fever", "weight": 3, "note": "Suggests infectious cause (croup, epiglottitis)" },
+      { "symptomId": "recent_upper_respiratory_infection", "weight": 2 },
+      { "symptomId": "trauma_history", "weight": 3 },
+      { "symptomId": "foreign_body_suspicion", "weight": 4 },
+      { "symptomId": "anaphylaxis_symptoms", "weight": 4, "note": "Urticaria, angioedema, allergen exposure" }
+    ],
+
+    "examFeatures": [
+      { "signId": "stridor_inspiratory_or_biphasic", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "intercostal_supraclavicular_indrawing", "baseWeight": 4 },
+      { "signId": "accessory_muscle_use", "baseWeight": 4 },
+      { "signId": "cyanosis", "baseWeight": 5 },
+      { "signId": "tripod_posture", "baseWeight": 4 },
+      { "signId": "drooling", "baseWeight": 4 },
+      { "signId": "agitation_confusion_lethargy", "baseWeight": 5 },
+      { "signId": "bradycardia_ominous", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "young_age", "multiplier": 3.0 },
+      { "id": "recent_anaphylaxis_allergy", "multiplier": 3.0 },
+      { "id": "laryngeal_cancer", "multiplier": 4.0 },
+      { "id": "neck_trauma", "multiplier": 3.0 },
+      { "id": "intubation_history", "multiplier": 1.5 },
+      { "id": "obesity_osa", "multiplier": 1.5 },
+      { "id": "neuromuscular_disorder", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "airway_foreign_body",
+        "name": "Foreign Body Airway Obstruction",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "sudden_choking", "weight": 5 },
+          { "feature": "while_eating_playing", "weight": 4 },
+          { "feature": "unilateral_breath_sounds", "weight": 3 }
+        ],
+        "management": "Heimlich maneuver (conscious >1yr). Back blows + chest thrusts (<1yr). Laryngoscopy and removal with Magill forceps. Bronchoscopy if below cords."
+      },
+      {
+        "id": "acute_epiglottitis",
+        "name": "Acute Epiglottitis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "rapid_onset_sore_throat", "weight": 4 },
+          { "feature": "dysphagia_severe", "weight": 4 },
+          { "feature": "drooling", "weight": 4 },
+          { "feature": "muffled_voice", "weight": 3 },
+          { "feature": "tripod_position", "weight": 4 }
+        ],
+        "management": "Do NOT examine throat. Keep child calm. Immediate ENT/anes. Inhalation (racemic epinephrine, Heliox). IV antibiotics (Ceftriaxone). Secure airway in OR (awake FOI). Dexamethasone."
+      },
+      {
+        "id": "laryngotracheobronchitis_croup",
+        "name": "Croup (Laryngotracheobronchitis)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "barking_cough", "weight": 5 },
+          { "feature": "hoarse_voice", "weight": 3 },
+          { "feature": "inspiratory_stridor", "weight": 4 },
+          { "feature": "preceding_URI", "weight": 3 },
+          { "feature": "age_6mo_3yr", "weight": 4 }
+        ],
+        "management": "Mild: single dose Dexamethasone 0.15-0.6 mg/kg PO. Moderate: Dexamethasone + racemic epinephrine neb. Severe/impending: Heliox, CPAP, intubation."
+      },
+      {
+        "id": "angioedema_anaphylaxis",
+        "name": "Angioedema / Anaphylaxis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "lip_tongue_uvula_swelling", "weight": 5 },
+          { "feature": "urticaria", "weight": 4 },
+          { "feature": "allergen_exposure", "weight": 4 },
+          { "feature": "hypotension", "weight": 4 }
+        ],
+        "management": "IM Epinephrine (1:1000) 0.01 mg/kg (max 0.5 mg). IV fluids. Antihistamines (Diphenhydramine + Ranitidine). Corticosteroids. Secure airway early. ICU."
+      },
+      {
+        "id": "laryngeal_tumor_obstruction",
+        "name": "Laryngeal Tumor / Bilateral VC Palsy",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "progressive_symptoms", "weight": 4 },
+          { "feature": "stridor_exertional_initially", "weight": 3 },
+          { "feature": "hoarseness_long_standing", "weight": 3 }
+        ],
+        "management": "Tumor: tracheostomy under local anesthesia + biopsy. VC palsy: Tracheostomy or cordotomy/arytenoidectomy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "lower_airway_obstruction",
+        "discriminators": ["expiratory_wheeze", "prolonged_expiration", "responds_to_bronchodilators"]
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["sudden_dyspnea", "pleuritic_pain", "risk_factors"]
+      },
+      {
+        "diseaseId": "panic_attack",
+        "discriminators": ["normal_oxygenation", "normal_exam", "no_stridor", "history_anxiety"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Airway Assessment (ABCDE)", "priority": "immediate", "yield": 1.0, "indication": "all patients - first priority" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "X-ray Neck Lateral", "priority": "high", "yield": 0.6, "indication": "suspected epiglottitis (thumb sign), croup (steeple sign), retropharyngeal abscess" },
+        { "name": "CT Neck", "priority": "medium", "yield": 0.7, "indication": "stable patient, suspected tumor/abscess" },
+        { "name": "Flexible Nasolaryngoscopy", "priority": "high", "yield": 0.95, "indication": "assess supraglottic/glottic level in stable patient" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASA Difficult Airway Algorithm / PALS Airway Guidelines",
+      "pathways": [
+        {
+          "severity": "mild/moderate",
+          "criteria": "stridor only with activity, mild indrawing, saturations normal",
+          "treatment": "Keep calm. Position upright. Oxygen. Dexamethasone. Treat underlying cause. Monitor closely."
+        },
+        {
+          "severity": "severe",
+          "criteria": "stridor at rest, indrawing, desaturation, drooling, tripod",
+          "treatment": "Call anesthesia + ENT immediately. Awake fiberoptic intubation (first choice). Prepare for tracheostomy. Inhalation racemic epinephrine + Heliox. IV access. Dexamethasone."
+        },
+        {
+          "severity": "critical (CICO)",
+          "criteria": "cannot intubate, cannot oxygenate",
+          "treatment": "Emergency front of neck access (cricothyroidotomy or tracheostomy). Needle cricothyroidotomy in <6yr. Surgical cricothyroidotomy in older children/adults."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mechanical_obstruction",
+      "mucosal_edema",
+      "inflammatory_swelling",
+      "laryngospasm",
+      "airway_narrowing"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypoxic_brain_injury",
+        "probability": 0.05,
+        "lagDays": [0, 0],
+        "severityBoost": 0.9,
+        "clues": ["prolonged_desaturation", "cardiac_arrest"]
+      },
+      {
+        "diseaseId": "aspiration_pneumonia",
+        "probability": 0.1,
+        "lagDays": [1, 7],
+        "severityBoost": 0.2,
+        "clues": ["fever", "cough", "infiltrate_on_CXR"]
+      },
+      {
+        "diseaseId": "post_obstructive_pulmonary_edema",
+        "probability": 0.05,
+        "lagDays": [0, 1],
+        "severityBoost": 0.3,
+        "clues": ["sudden_oxygen_drop_after_relief", "pink_frothy_sputum"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "critical",
+    "diagnosticClues": ["stridor", "respiratory_distress", "drooling", "tripod", "choking_history"],
+    "exclusionClues": ["wheeze_only", "no_stridor", "normal_airway_exam"]
+  }
+}

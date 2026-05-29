@@ -1,0 +1,203 @@
+{
+  "disease": {
+    "id": "breast_cancer",
+    "name": "Breast Cancer",
+    "system": "surgical",
+    "agePeak_months": [480, 720],
+    "note": "Most common cancer in women. Presents as breast lump, skin changes, or axillary node. Multidisciplinary management.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["breast_mass", "breast_change", "axillary_lymphadenopathy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "inflammatory_carcinoma", "weight": 8 },
+        { "sign": "fungating_mass", "weight": 7 },
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "distant_metastases", "weight": 9 },
+          { "sign": "fixed_axillary_nodes", "weight": 7 },
+          { "sign": "chest_wall_invasion", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Metastatic/fungating/inflammatory -> SEVERE; early localized -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "breast_lump", "weight": 5 },
+      { "symptomId": "nipple_discharge", "weight": 3, "note": "Bloody discharge suggests ductal carcinoma" },
+      { "symptomId": "skin_dimpling_peau_dorange", "weight": 4 },
+      { "symptomId": "nipple_retraction", "weight": 3 },
+      { "symptomId": "axillary_lump", "weight": 4, "note": "Metastatic axillary node" },
+      { "symptomId": "breast_pain", "weight": 2, "note": "Rarely painful" },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "family_history_of_breast_cancer", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_breast_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "axillary_lymphadenopathy", "baseWeight": 4 },
+      { "signId": "skin_changes", "baseWeight": 4 },
+      { "signId": "nipple_retraction_discharge", "baseWeight": 3 },
+      { "signId": "peau_dorange", "baseWeight": 4 },
+      { "signId": "fixed_mass_to_chest_wall", "baseWeight": 3 },
+      { "signId": "contralateral_breast_exam", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 3.0 },
+      { "id": "family_history_first_degree", "multiplier": 2.5 },
+      { "id": "brca1_brca2_mutation", "multiplier": 5.0 },
+      { "id": "nulliparity_late_first_pregnancy", "multiplier": 1.5 },
+      { "id": "early_menarche_late_menopause", "multiplier": 1.5 },
+      { "id": "hormone_replacement_therapy", "multiplier": 1.5 },
+      { "id": "obesity_postmenopausal", "multiplier": 1.5 },
+      { "id": "alcohol_consumption", "multiplier": 1.3 },
+      { "id": "previous_breast_cancer", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "invasive_ductal_carcinoma",
+        "name": "Invasive Ductal Carcinoma (IDC)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "most_common_type", "weight": 5 },
+          { "feature": "hard_irregular_mass", "weight": 5 },
+          { "feature": "skin_involvement_common", "weight": 3 }
+        ],
+        "management": "Breast-conserving surgery (lumpectomy) + sentinel node biopsy + radiotherapy. Total mastectomy for large/multicentric. Adjuvant chemotherapy, endocrine therapy, targeted therapy per subtype."
+      },
+      {
+        "id": "invasive_lobular_carcinoma",
+        "name": "Invasive Lobular Carcinoma (ILC)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "subtle_mass_or_thickening", "weight": 4 },
+          { "feature": "bilateral_and_multicentric", "weight": 4 },
+          { "feature": "e_cadherin_negative", "weight": 4 },
+          { "feature": "difficult_to_detect_on_imaging", "weight": 4 }
+        ],
+        "management": "Surgery (wider margins often needed). Sentinel node biopsy. Endocrine therapy (ER positive in most). Adjuvant chemotherapy based on genomic profile."
+      },
+      {
+        "id": "triple_negative_breast_cancer",
+        "name": "Triple-Negative Breast Cancer",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "er_pr_her2_negative", "weight": 5 },
+          { "feature": "higher_grade", "weight": 4 },
+          { "feature": "brca1_associated", "weight": 4 },
+          { "feature": "younger_patients", "weight": 3 }
+        ],
+        "management": "Neoadjuvant chemotherapy (anthracycline + taxane). Surgery. Radiotherapy. PARP inhibitors for BRCA carriers. Immunotherapy (Pembrolizumab) for PD-L1 positive."
+      },
+      {
+        "id": "inflammatory_breast_cancer",
+        "name": "Inflammatory Breast Cancer (IBC)",
+        "prevalenceModifier": 0.02,
+        "keyFeatures": [
+          { "feature": "diffuse_erythema_edema", "weight": 5 },
+          { "feature": "peau_dorange", "weight": 5 },
+          { "feature": "no_discrete_mass", "weight": 4 },
+          { "feature": "rapid_progression", "weight": 5 }
+        ],
+        "management": "Neoadjuvant chemotherapy. Modified radical mastectomy. Post-mastectomy radiotherapy. Endocrine therapy and targeted therapy per receptor status."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "fibroadenoma",
+        "discriminators": ["younger_age", "smooth_mobile", "well_defined", "no_lymphadenopathy"]
+      },
+      {
+        "diseaseId": "breast_abscess_mastitis",
+        "discriminators": ["painful", "red_warm", "fever", "responds_to_antibiotics"]
+      },
+      {
+        "diseaseId": "phyllodes_tumor",
+        "discriminators": ["rapid_growth", "large_size", "no_lymph_nodes", "cystic_spaces"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical breast exam", "priority": "immediate", "yield": 0.6, "indication": "TNM clinical staging" }
+      ],
+      "laboratory": [
+        { "name": "CBC, LFTs, ALP", "priority": "high", "yield": 0.3, "indication": "baseline, metastatic screen" },
+        { "name": "Tumor markers (CA 15-3, CEA)", "priority": "low", "yield": 0.3, "indication": "monitoring, not diagnostic" }
+      ],
+      "imaging": [
+        { "name": "Mammogram + US Breast", "priority": "immediate", "yield": 0.85, "indication": "detection and characterization" },
+        { "name": "Core needle biopsy with histology + IHC", "priority": "immediate", "yield": 0.98, "indication": "definitive diagnosis" },
+        { "name": "Breast MRI", "priority": "medium", "yield": 0.9, "indication": "high-risk screening, extent of disease" },
+        { "name": "CT Chest/Abdomen/Pelvis", "priority": "high", "yield": 0.6, "indication": "staging if node positive or symptoms" },
+        { "name": "Bone scan / PET-CT", "priority": "medium", "yield": 0.7, "indication": "if bone pain or advanced disease" },
+        { "name": "Sentinel lymph node biopsy", "priority": "medium", "yield": 0.95, "indication": "axillary staging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN/St. Gallen Guidelines for Breast Cancer",
+      "pathways": [
+        {
+          "severity": "early (T1-T2, N0)",
+          "criteria": "tumor <5cm, node negative, no metastases",
+          "treatment": "Breast-conserving surgery + sentinel node biopsy + whole breast RT. Mastectomy if multifocal or contraindication to RT. Adjuvant therapy per molecular subtype."
+        },
+        {
+          "severity": "locally advanced (T3-T4, N+)",
+          "criteria": "tumor >5cm, node positive, or chest wall/skin involvement",
+          "treatment": "Neoadjuvant chemotherapy (anthracycline + taxane). Modified radical mastectomy. Post-mastectomy RT. Adjuvant endocrine therapy + targeted therapy."
+        },
+        {
+          "severity": "metastatic (M1)",
+          "criteria": "distant metastases (bone, lung, liver, brain)",
+          "treatment": "Palliative systemic therapy. Endocrine therapy for ER+. Chemotherapy for triple negative. HER2-targeted therapy. Palliative RT. Surgical resection of primary only for symptom control."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "genetic_mutations",
+      "hormonal_influence",
+      "ductal_lobular_cell_transformation",
+      "in_situ_carcinoma",
+      "invasive_carcinoma",
+      "lymphovascular_invasion",
+      "lymphatic_spread_to_axillary_nodes",
+      "hematogenous_spread_to_bone_lung_liver_brain"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "lymphedema",
+        "probability": 0.2,
+        "lagDays": [30, 360],
+        "severityBoost": 0.1,
+        "clues": ["arm_swelling_post_axillary_surgery", "heavy_feeling"]
+      },
+      {
+        "diseaseId": "bone_metastases",
+        "probability": 0.2,
+        "lagDays": [180, 720],
+        "severityBoost": 0.3,
+        "clues": ["bone_pain", "pathologic_fracture", "hypercalcemia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["painless_breast_lump", "axillary_node", "skin_changes", "family_history", "age_over_40"],
+    "exclusionClues": ["young_age_with_cyclic_pain", "smooth_mobile_lump_in_young_woman", "normal_imaging_and_biopsy"]
+  }
+}

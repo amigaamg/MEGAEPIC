@@ -1,0 +1,137 @@
+{
+  "disease": {
+    "id": "pancreatic_cancer",
+    "name": "Pancreatic Ductal Adenocarcinoma",
+    "system": "ONCO",
+    "agePeak_months": [600, 960],
+    "note": "Highly lethal cancer. Late presentation, early metastasis. KRAS mutation near-universal. CA19-9 useful marker.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["hepatobiliary_malignancy", "pancreatic_mass"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_obstructive_jaundice_cholangitis", "weight": 8 },
+        { "sign": "upper_gi_bleeding_variceal", "weight": 9 },
+        { "sign": "splenic_vein_thrombosis", "weight": 7 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Resectable, borderline resectable, locally advanced unresectable, or metastatic"
+    },
+    "historyFeatures": [
+      { "symptomId": "painless_obstructive_jaundice", "weight": 5 },
+      { "symptomId": "epigastric_pain_radiating_to_back", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 5 },
+      { "symptomId": "anorexia", "weight": 3 },
+      { "symptomId": "new_onset_diabetes", "weight": 3 },
+      { "symptomId": "steatorrhea", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "migratory_thrombophlebitis_trousseau", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "scleral_icterus_jaundice", "baseWeight": 5 },
+      { "signId": "palpable_gallbladder_courvoisier", "baseWeight": 4 },
+      { "signId": "epigastric_mass", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "ascites", "baseWeight": 2 },
+      { "signId": "left_supraclavicular_node", "baseWeight": 2 },
+      { "signId": "skin_excoriations_pruritus", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "chronic_pancreatitis", "multiplier": 3.0 },
+      { "id": "family_history_pancreatic_cancer", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "new_onset_diabetes_over_50", "multiplier": 2.0 },
+      { "id": "brca1_brca2_mutation", "multiplier": 3.0 },
+      { "id": "p16_cdkn2a_mutation_famm", "multiplier": 10.0 },
+      { "id": "ab_blood_group", "multiplier": 1.3 }
+    ],
+    "subtypes": [
+      {
+        "id": "pancreatic_ductal_adenocarcinoma",
+        "name": "Pancreatic Ductal Adenocarcinoma (PDAC)",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "kras_mutation", "weight": 5 },
+          { "feature": "smad4_loss", "weight": 4 },
+          { "feature": "desmoplastic_stroma", "weight": 3 }
+        ],
+        "management": "Surgical resection if resectable (Whipple/distal pancreatectomy). Adjuvant mFOLFIRINOX or gemcitabine/capecitabine. Locally advanced: FOLFIRINOX chemoradiation."
+      },
+      {
+        "id": "pancreatic_neuroendocrine",
+        "name": "Pancreatic Neuroendocrine Tumor (PNET)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "indolent_growth", "weight": 4 },
+          { "feature": "hormonal_syndromes_insulinoma_glucagonoma", "weight": 4 },
+          { "feature": "chromogranin_a_positive", "weight": 4 }
+        ],
+        "management": "Surgical resection. Somatostatin analogs (octreotide/lanreotide) for functioning/metastatic. PRRT (Lu-177 dotatate) for somatostatin receptor positive. Everolimus/sunitinib."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "cholangiocarcinoma", "discriminators": ["intrahepatic_or_extrahepatic_bile_duct_origin", "different_cytokeratin_profile", "no_kras_mutation"] },
+      { "diseaseId": "autoimmune_pancreatitis", "discriminators": ["diffuse_enlargement_sausage_shaped", "elevated_igg4", "response_to_steroids", "no_ca19_9_elevation"] },
+      { "diseaseId": "acute_pancreatitis", "discriminators": ["acute_onset", "elevated_lipase_amylase", "no_mass_on_ct", "self_limiting"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "CA19-9", "priority": "high", "yield": 0.75, "indication": "tumor marker; prognostic and monitoring" },
+        { "name": "LFT (bilirubin, ALP, GGT)", "priority": "high", "yield": 0.7, "indication": "obstructive jaundice pattern" },
+        { "name": "CEA", "priority": "medium", "yield": 0.4, "indication": "adjunctive marker" }
+      ],
+      "imaging": [
+        { "name": "CT Pancreas protocol (triple-phase)", "priority": "first-line", "yield": 0.9, "indication": "tumor detection, vascular involvement (SMA, SMV, celiac)" },
+        { "name": "MRCP/MRI", "priority": "high", "yield": 0.85, "indication": "better characterization of cystic lesions, biliary anatomy" },
+        { "name": "EUS with FNA biopsy", "priority": "gold_standard", "yield": 0.95, "indication": "tissue diagnosis, cytology, celiac plexus block" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "equivocal metastases, staging" },
+        { "name": "Diagnostic laparoscopy", "priority": "high", "yield": 0.85, "indication": "rule out peritoneal metastases before resection" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/ESMO Guidelines for Pancreatic Cancer",
+      "pathways": [
+        {
+          "severity": "resectable",
+          "criteria": "no arterial involvement, SMV/PV patent, no metastases",
+          "treatment": "Pancreaticoduodenectomy (Whipple) for head, distal pancreatectomy + splenectomy for tail. Adjuvant mFOLFIRINOX or gemcitabine + capecitabine for 6 months."
+        },
+        {
+          "severity": "borderline resectable",
+          "criteria": "abutment of SMA/SMV, <180 deg arterial involvement",
+          "treatment": "Neoadjuvant FOLFIRINOX or gemcitabine-based chemo ± RT. Re-staging and surgical exploration if downstaged."
+        },
+        {
+          "severity": "locally advanced unresectable",
+          "criteria": ">180 deg SMA/celiac involvement, occluded SMV/PV",
+          "treatment": "FOLFIRINOX or gemcitabine + nab-paclitaxel. Chemoradiation if no progression after induction. Palliative biliary stenting if jaundice."
+        },
+        {
+          "severity": "metastatic",
+          "criteria": "distant metastases (liver, peritoneum, lung)",
+          "treatment": "FOLFIRINOX (if fit) or gemcitabine + nab-paclitaxel. Gemcitabine alone if poor performance. Palliative RT for pain. Biliary drainage if obstructed. Hospice referral."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "pancreatic_intraepithelial_neoplasia_panin",
+      "kras_mutation_initiating",
+      "cdkn2a_tp53_smad4_progression",
+      "desmoplastic_reaction",
+      "perineural_invasion",
+      "early_lymphatic_spread",
+      "liver_and_peritoneal_metastases"
+    ],
+    "complications": [
+      { "diseaseId": "obstructive_jaundice_cholangitis", "probability": 0.3, "severityBoost": 0.4, "clues": ["fever", "right_upper_quadrant_pain", "elevated_bilirubin_alk_phos"] },
+      { "diseaseId": "gastric_outlet_obstruction", "probability": 0.1, "severityBoost": 0.3, "clues": ["vomiting", "no_oral_intake", "dilated_stomach"] },
+      { "diseaseId": "splenic_vein_thrombosis", "probability": 0.05, "severityBoost": 0.2, "clues": ["splenomegaly", "gastric_varices_bleeding"] },
+      { "diseaseId": "venous_thromboembolism", "probability": 0.2, "severityBoost": 0.3, "clues": ["leg_swelling", "dyspnea", "trousseau_sign"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painless_obstructive_jaundice", "weight_loss", "epigastric_mass", "new_diabetes_over_50"],
+    "exclusionClues": ["benign_cystic_lesion_imaging", "igg4_elevated", "normal_ct_pancreas"]
+  }
+}

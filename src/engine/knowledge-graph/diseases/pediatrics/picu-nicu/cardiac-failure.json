@@ -1,0 +1,159 @@
+{
+  "disease": {
+    "id": "cardiac-failure",
+    "name": "Cardiac Failure (Pediatric ICU)",
+    "system": "PAED",
+    "agePeak_months": [0, 12],
+    "note": "Inability of the heart to pump sufficient blood to meet metabolic demands. In PICU context, often post-cardiac surgery or decompensated cardiomyopathy/myocarditis.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["circulatory_failure", "low_cardiac_output"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "pulmonary_edema", "weight": 10 },
+        { "sign": "refractory_hypotension", "weight": 10 },
+        { "sign": "cardiac_arrhythmia_malignant", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "lactate_>4", "weight": 8 },
+          { "sign": "ejection_fraction_<25_percent", "weight": 8 },
+          { "sign": "oliguria_<0_5_ml_kg_h", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If shock, pulmonary edema, or lactate >4 -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "tachypnea", "weight": 5 },
+      { "symptomId": "poor_feeding_fatigue", "weight": 5 },
+      { "symptomId": "sweating_during_feeds", "weight": 4 },
+      { "symptomId": "oliguria", "weight": 4 },
+      { "symptomId": "lethargy", "weight": 4 },
+      { "symptomId": "known_cardiac_disease", "weight": 4 },
+      { "symptomId": "post_cardiac_surgery", "weight": 4 },
+      { "symptomId": "palpitations_chest_pain", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachycardia", "baseWeight": 5 },
+      { "signId": "tachypnea", "baseWeight": 5 },
+      { "signId": "hepatomegaly", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "gallop_rhythm", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "cool_extremities_poor_pulses", "baseWeight": 4 },
+      { "signId": "pulmonary_crackles", "baseWeight": 3 },
+      { "signId": "peripheral_edema", "baseWeight": 3 },
+      { "signId": "murmur_new_or_changed", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "congenital_heart_disease", "multiplier": 4.0 },
+      { "id": "cardiomyopathy", "multiplier": 4.0 },
+      { "id": "myocarditis", "multiplier": 3.5 },
+      { "id": "post_cardiac_surgery", "multiplier": 3.0 },
+      { "id": "arrhythmia", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "low_cardiac_output_syndrome",
+        "name": "Low Cardiac Output Syndrome (Post-op)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "post_cardiac_surgery_24_48h", "weight": 5 },
+          { "feature": "cold_extremities", "weight": 4 },
+          { "feature": "hypotension_high_lactate", "weight": 5 }
+        ],
+        "management": "Optimize preload (fluids). Inotropes (milrinone, dobutamine, epinephrine). Reduce afterload (milrinone, nitroprusside). Mechanical ventilation. Consider ECMO if refractory."
+      },
+      {
+        "id": "cardiogenic_pulmonary_edema",
+        "name": "Cardiogenic Pulmonary Edema",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "severe_respiratory_distress", "weight": 5 },
+          { "feature": "pink_frothy_sputum", "weight": 4 },
+          { "feature": "crackles_on_auscultation", "weight": 5 }
+        ],
+        "management": "Furosemide 1-2 mg/kg IV. Non-invasive or invasive ventilation (PEEP). Afterload reduction. Inotropic support. Morphine for anxiety. Dialysis if diuretic resistant."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sepsis",
+        "discriminators": ["fever", "positive_culture", "warm_shock_maybe", "normal_contractility_on_echo"]
+      },
+      {
+        "diseaseId": "respiratory_failure",
+        "discriminators": ["primary_lung_pathology", "normal_echo", "no_hepatomegaly"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.5, "indication": "ischemia, arrhythmia, hypertrophy" }
+      ],
+      "laboratory": [
+        { "name": "BNP/NT-proBNP", "priority": "immediate", "yield": 0.9, "indication": "heart failure marker" },
+        { "name": "Lactate", "priority": "immediate", "yield": 0.8, "indication": "tissue perfusion" },
+        { "name": "Troponin", "priority": "high", "yield": 0.5, "indication": "myocardial injury" },
+        { "name": "Blood gas", "priority": "high", "yield": 0.6, "indication": "acidosis, oxygenation" },
+        { "name": "Liver and renal function", "priority": "high", "yield": 0.5, "indication": "end-organ function" }
+      ],
+      "imaging": [
+        { "name": "Echocardiogram", "priority": "immediate", "yield": 0.95, "indication": "systolic/diastolic function, anatomy, effusion" },
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.7, "indication": "cardiomegaly, pulmonary edema" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ISHLT Guidelines for Pediatric Heart Failure",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "No shock, lactate <2, adequate urine output, normal consciousness",
+          "treatment": "Diuretics (furosemide). ACE inhibitor (enalapril). Inotropic support if needed (milrinone 0.5-0.75 mcg/kg/min). Monitor I/O, daily weight, echo."
+        },
+        {
+          "severity": "severe_decompensated",
+          "criteria": "Shock, pulmonary edema, lactate >4, oliguria, altered consciousness",
+          "treatment": "ICU. IV furosemide. Inotropes (milrinone + epinephrine/dobutamine). Mechanical ventilation. ECMO/VAD if refractory. Consider renal replacement therapy. Heart transplant evaluation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "reduced_myocardial_contractility", "increased_afterload", "volume_overload", "neurohormonal_activation", "pulmonary_congestion", "systemic_hypoperfusion"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cardiogenic_shock",
+        "probability": 0.3,
+        "lagDays": [0, 3],
+        "severityBoost": 0.6,
+        "clues": ["hypotension", "lactate_>4", "oliguria"]
+      },
+      {
+        "diseaseId": "arrhythmia",
+        "probability": 0.2,
+        "lagDays": [0, 7],
+        "severityBoost": 0.4,
+        "clues": ["ectopy", "vt_vf", "electrolyte_imbalance"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["tachypnea_hepatomegaly", "poor_feeding_sweating", "cardiomegaly", "elevated_bnp"],
+    "exclusionClues": ["normal_bnp", "normal_echo", "no_hepatomegaly"]
+  }
+}

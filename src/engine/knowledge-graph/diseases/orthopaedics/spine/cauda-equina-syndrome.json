@@ -1,0 +1,123 @@
+{
+  "disease": {
+    "id": "cauda-equina-syndrome",
+    "name": "Cauda Equina Syndrome",
+    "system": "ORTHO",
+    "agePeak_months": [360, 720],
+    "note": "Surgical emergency caused by compression of the cauda equina nerve roots. Most commonly from large central disc herniation at L4-S1. Rapid diagnosis and treatment essential.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["spine_emergency", "neural_compression"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "urinary_retention_with_overflow_incontinence", "weight": 10 },
+        { "sign": "fecal_incontinence", "weight": 10 },
+        { "sign": "saddle_anesthesia", "weight": 10 },
+        { "sign": "bilateral_leg_weakness_progressive", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "loss_of_anal_sphincter_tone", "weight": 9 },
+          { "sign": "reduced_perineal_sensation", "weight": 9 },
+          { "sign": "bilateral_sciatica", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Any sign of cauda equina -> SEVERE (surgical emergency)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "low_back_pain_severe", "weight": 4 },
+      { "symptomId": "bilateral_leg_pain_sciatica", "weight": 4 },
+      { "symptomId": "numbness_in_saddle_area_perineum", "weight": 5 },
+      { "symptomId": "difficulty_urinating_retention", "weight": 5 },
+      { "symptomId": "loss_of_bowel_control", "weight": 5 },
+      { "symptomId": "leg_weakness_progressive", "weight": 4 },
+      { "symptomId": "sudden_onset_after_lifting_strain", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "saddle_anesthesia_perineum", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "reduced_anal_sphincter_tone", "baseWeight": 5 },
+      { "signId": "urinary_retention_post_void_residual", "baseWeight": 5 },
+      { "signId": "bilateral_lower_extremity_weakness", "baseWeight": 4 },
+      { "signId": "reduced_or_absent_ankle_knee_reflexes", "baseWeight": 3 },
+      { "signId": "decreased_perineal_sensation_pinprick", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "large_central_lumbar_disc_herniation", "multiplier": 4.0 },
+      { "id": "spinal_stenosis_severe", "multiplier": 3.0 },
+      { "id": "spinal_tumor", "multiplier": 3.0 },
+      { "id": "spinal_hematoma_anticoagulation", "multiplier": 4.0 },
+      { "id": "spinal_infection_abscess", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_cauda_equina",
+        "name": "Acute Cauda Equina Syndrome",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "rapid_onset_<24h", "weight": 5 },
+          { "feature": "retention_anesthesia_weakness", "weight": 5 }
+        ],
+        "management": "Emergency MRI. Urgent surgical decompression (within 24-48h ideally, emergent if <48h of symptoms). Laminectomy + discectomy. Post-op monitoring."
+      },
+      {
+        "id": "chronic_cauda_equina",
+        "name": "Chronic Cauda Equina Syndrome",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "gradual_onset_days_weeks", "weight": 4 },
+          { "feature": "progressive_correlating_with_stenosis", "weight": 4 }
+        ],
+        "management": "Urgent MRI and surgical decompression. Timing may be less critical but still urgent. May have incomplete recovery."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "conus_medullaris_syndrome",
+        "discriminators": ["early_bowel_bladder_involvement", "sacral_saddle_sensory_loss", "upper_motor_neuron_signs_maybe"]
+      },
+      {
+        "diseaseId": "bilateral_leg_vascular_claudication",
+        "discriminators": ["absent_pulses", "relief_with_standing", "normal_neurologic_exam"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Post-void residual bladder scan", "priority": "immediate", "yield": 0.85, "indication": "urinary retention >100 mL" },
+        { "name": "Neurologic exam (perianal sensation, sphincter tone)", "priority": "immediate", "yield": 0.9, "indication": "suspected CES" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "MRI lumbosacral spine (urgent/emergency)", "priority": "immediate", "yield": 0.98, "indication": "confirm compression, guide surgery" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NASS Cauda Equina Syndrome Guidelines",
+      "pathways": [
+        {
+          "severity": "suspected_with_red_flags",
+          "criteria": "Any one of: saddle anesthesia, urinary retention, loss of anal tone, bilateral leg weakness",
+          "treatment": "Immediate spinal precautions. Emergent MRI. Urgent spine surgery consultation. Strict bed rest. Catheter if urinary retention. Do not delay surgery for imaging >24h."
+        },
+        {
+          "severity": "confirmed_ces",
+          "criteria": "MRI shows compression + clinical signs",
+          "treatment": "Emergency decompressive laminectomy + discectomy. Surgery ideally within 24-48h of symptom onset. Better outcomes with earlier decompression. Post-op: rehabilitation, bladder training."
+        }
+      ]
+    },
+
+    "pathophysiology": ["compression_of_cauda_equina_nerve_roots", "ischemia_and_demyelination", "loss_of_motor_sensory_and_autonomic_function"]
+  }
+}

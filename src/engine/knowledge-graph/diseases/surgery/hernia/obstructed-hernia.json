@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "obstructed_hernia",
+    "name": "Obstructed Hernia",
+    "system": "surgical",
+    "agePeak_months": [360, 840],
+    "note": "Hernia containing bowel causing mechanical obstruction. Different from strangulation where blood supply is compromised. Urgent surgical condition.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["bowel_obstruction", "hernia", "acute_abdomen"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "strangulation_signs", "weight": 9 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "signs_of_progression_to_strangulation", "weight": 7 },
+          { "sign": "complete_bowel_obstruction", "weight": 7 },
+          { "sign": "peritoneal_signs_localized", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Progression to strangulation/peritonitis -> SEVERE; simple obstruction with viable contents -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "known_hernia_suddenly_irreducible", "weight": 5 },
+      { "symptomId": "colicky_abdominal_pain", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "constipation_obstipation", "weight": 4 },
+      { "symptomId": "abdominal_distension", "weight": 3 },
+      { "symptomId": "hernia_mass_is_tender", "weight": 3 },
+      { "symptomId": "previous_reducible_hernia", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "irreducible_hernia_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tender_on_palpation", "baseWeight": 4 },
+      { "signId": "cough_impulse_present_or_weak", "baseWeight": 3 },
+      { "signId": "signs_of_bowel_obstruction", "baseWeight": 4 },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "high_pitched_bowel_sounds", "baseWeight": 3 },
+      { "signId": "fever_tachycardia_if_strangulating", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "inguinal_hernia", "multiplier": 2.0 },
+      { "id": "femoral_hernia", "multiplier": 2.5 },
+      { "id": "recurrent_hernia", "multiplier": 1.5 },
+      { "id": "larger_hernia_sac", "multiplier": 1.5 },
+      { "id": "increased_intra_abdominal_pressure", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "early_obstructed_hernia",
+        "name": "Early Obstructed (Viable Contents)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "irreducible_hernia", "weight": 5 },
+          { "feature": "obstruction_symptoms", "weight": 5 },
+          { "feature": "no_peritonitis", "weight": 5 },
+          { "feature": "contents_still_viable", "weight": 4 }
+        ],
+        "management": "Urgent surgery (within hours). Reduction of contents. Assess viability. Repair with mesh if clean. Bowel resection only if viability doubtful."
+      },
+      {
+        "id": "obstructed_position_hernia",
+        "name": "Obstructed with Viability At Risk",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "irreducible_mass", "weight": 5 },
+          { "feature": "complete_obstruction", "weight": 5 },
+          { "feature": "localized_peritoneal_signs", "weight": 4 },
+          { "feature": "systemic_features_fever_tachycardia", "weight": 4 }
+        ],
+        "management": "Emergency surgery. Open exploration. Likely bowel resection. No mesh due to contamination. Primary tissue repair. Consider stoma if significant contamination."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "strangulated_hernia",
+        "discriminators": ["severe_pain_out_of_proportion", "skin_gangrene", "septic_shock", "lactic_acidosis", "absent_cough_impulse"]
+      },
+      {
+        "diseaseId": "hydrocele_of_hernia_sac",
+        "discriminators": ["fluid_filled", "transilluminates", "no_obstruction", "reducible"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Assessment of hernia", "priority": "immediate", "yield": 0.7, "indication": "irreducibility, tenderness" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.6, "indication": "baseline for monitoring" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "rule out early strangulation" },
+        { "name": "Electrolytes", "priority": "high", "yield": 0.5, "indication": "dehydration assessment" }
+      ],
+      "imaging": [
+        { "name": "Groin/Abdominal Ultrasound", "priority": "high", "yield": 0.8, "indication": "contents, vascularity with Doppler" },
+        { "name": "Abdominal X-Ray", "priority": "medium", "yield": 0.6, "indication": "air-fluid levels suggesting obstruction" },
+        { "name": "CT Abdomen", "priority": "medium", "yield": 0.9, "indication": "if diagnosis unclear or to assess obstruction level" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BJS Guidelines for Obstructed Hernia",
+      "pathways": [
+        {
+          "severity": "early obstruction",
+          "criteria": "irreducible hernia with obstruction but contents likely viable",
+          "treatment": "Urgent surgical repair. Attempt manual reduction only if gentle and early. Open exploration. Reduce contents, assess viability. Mesh repair if no contamination."
+        },
+        {
+          "severity": "obstruction with risk of strangulation",
+          "criteria": "complete obstruction, localized tenderness, systemic signs",
+          "treatment": "Emergency laparotomy. Reduction. Bowel resection if non-viable. Primary repair without mesh. Consider stoma."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hernia_incarceration",
+      "luminal_obstruction_of_contained_bowel",
+      "proximal_distension",
+      "fluid_and_electrolyte_loss",
+      "increased_intra_sac_pressure",
+      "venous_compression",
+      "progression_to_strangulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "strangulation",
+        "probability": 0.2,
+        "lagDays": [0, 2],
+        "severityBoost": 0.4,
+        "clues": ["pain_intensifying", "skin_erythema", "fever", "lactic_acidosis"]
+      },
+      {
+        "diseaseId": "bowel_necrosis",
+        "probability": 0.1,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["peritonitis", "sepsis", "non_viable_bowel_on_operation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["irreducible_hernia_with_obstruction", "colicky_pain", "vomiting", "constipation", "known_hernia_history"],
+    "exclusionClues": ["reducible_hernia", "no_obstruction_symptoms", "strangulation_signs_absent"]
+  }
+}

@@ -1,0 +1,347 @@
+[
+  {
+    "id": "inguinal_hernia",
+    "name": "Inguinal Hernia",
+    "system": "surgical",
+    "agePeak": [0, 216],
+    "prevalenceWeight": 0.6,
+    "historyFeatures": [
+      { "symptomId": "bulge_groin", "weight": 5 },
+      { "symptomId": "dragging_sensation", "weight": 3 },
+      { "symptomId": "cough", "weight": 1, "condition": "worse with coughing" },
+      { "symptomId": "abdominal_pain", "weight": 3, "condition": "if obstructed" },
+      { "symptomId": "vomiting", "weight": 4, "condition": "if strangulated" }
+    ],
+    "examFeatures": [
+      { "signId": "hernia_reducible", "baseWeight": 3 },
+      { "signId": "hernia_obstructed", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hernia_strangulated", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cough_impulse", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "riskFactors": [
+      { "id": "prematurity", "multiplier": 1.5 },
+      { "id": "male_sex", "multiplier": 1.8 },
+      { "id": "chronic_constipation", "multiplier": 1.3 },
+      { "id": "chronic_cough", "multiplier": 1.3 },
+      { "id": "family_history_hernia", "multiplier": 1.2 },
+      { "id": "cystic_fibrosis", "multiplier": 1.4 },
+      { "id": "connective_tissue_disorder", "multiplier": 1.5 },
+      { "id": "ascites", "multiplier": 1.3 }
+    ],
+    "complications": [
+      { "diseaseId": "intestinal_obstruction", "probability": 0.15, "severityBoost": 0.4 },
+      { "diseaseId": "strangulated_hernia", "probability": 0.1, "severityBoost": 0.5 },
+      { "diseaseId": "testicular_atrophy", "probability": 0.05, "severityBoost": 0.2 }
+    ],
+    "syndromeTags": ["abdominal_wall_defect", "surgical_condition"],
+    "mustNotMiss": true,
+    "emergencyPriority": "If strangulated or obstructed: emergency",
+    "diagnosticClues": ["reducible groin swelling with cough impulse"],
+    "exclusionClues": ["normal examination without bulge", "non-reducible with signs of inflammation (may be strangulated)"],
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical examination", "priority": "immediate", "yield": 0.9, "indication": "all suspected — cough impulse, reducibility" },
+        { "name": "Transillumination", "priority": "bedside", "yield": 0.7, "indication": "differentiate from hydrocele" }
+      ],
+      "laboratory": [
+        { "name": "Full blood count", "priority": "preoperative", "yield": 0.4, "indication": "if strangulation suspected — leukocytosis" },
+        { "name": "Serum electrolytes", "priority": "preoperative", "yield": 0.3, "indication": "if obstruction with vomiting" }
+      ],
+      "imaging": [
+        { "name": "Inguinal ultrasound", "priority": "confirmatory", "yield": 0.85, "indication": "uncertain diagnosis, obese patients, recurrent hernia" },
+        { "name": "Scrotal ultrasound", "priority": "if_testes_involved", "yield": 0.8, "indication": "assess testicular blood flow if strangulated" }
+      ],
+      "advanced": [
+        { "name": "CT abdomen", "indication": "complicated or occult hernia", "priority": "low" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Paediatric Surgical Guidelines — Hernia Repair",
+      "pathways": [
+        {
+          "severity": "reducible",
+          "criteria": "Soft, reducible swelling with positive cough impulse, no pain",
+          "treatment": [
+            "Elective referral to paediatric surgeon",
+            "Open herniotomy (high ligation of hernial sac) — usually within 2-4 weeks",
+            "In preterm infants: consider delayed repair until 36-40 weeks corrected gestational age",
+            "For incarcerated hernia: attempt gentle manual reduction with sedation",
+            "After reduction: schedule elective repair within 48-72 hours"
+          ],
+          "counselling": "Explain signs of obstruction: pain, vomiting, irreducible swelling — return immediately."
+        },
+        {
+          "severity": "obstructed",
+          "criteria": "Irreducible swelling with colicky pain, vomiting, abdominal distension",
+          "treatment": [
+            "IV fluids — NBM",
+            "Attempt gentle manual reduction after adequate sedation/analgesia",
+            "If reduction successful: admit for observation and schedule repair within 24-48 hours",
+            "If reduction unsuccessful: emergency herniotomy",
+            "Broad-spectrum antibiotics if strangulation suspected"
+          ]
+        },
+        {
+          "severity": "strangulated",
+          "criteria": "Irreducible, tender, overlying erythema, fever, tachycardia, signs of intestinal obstruction",
+          "treatment": [
+            "Emergency surgery — immediate herniotomy",
+            "IV fluids resuscitation",
+            "Broad-spectrum IV antibiotics (e.g. Ceftriaxone + Metronidazole)",
+            "Resection and anastomosis if non-viable bowel segment",
+            "Postoperative: ICU monitoring if required"
+          ]
+        }
+      ]
+    },
+    "subtypes": [
+      {
+        "id": "indirect_inguinal_hernia",
+        "name": "Indirect Inguinal Hernia",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "lateral_to_inferior_epigastric", "weight": 5 },
+          { "feature": "descends_into_scrotum", "weight": 5 },
+          { "feature": "congenital_onset", "weight": 4 },
+          { "feature": "common_in_children", "weight": 5 }
+        ],
+        "management": "Open herniotomy — high sac ligation"
+      },
+      {
+        "id": "direct_inguinal_hernia",
+        "name": "Direct Inguinal Hernia",
+        "prevalenceModifier": 0.2,
+        "agePeak": [180, 216],
+        "keyFeatures": [
+          { "feature": "medial_to_inferior_epigastric", "weight": 5 },
+          { "feature": "rarely_descends_into_scrotum", "weight": 4 },
+          { "feature": "acquired", "weight": 4 },
+          { "feature": "uncommon_in_children", "weight": 4 }
+        ],
+        "management": "Herniorrhaphy with posterior wall repair (e.g., Bassini, Shouldice)"
+      }
+    ],
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["groin_swelling?", "reducible?", "worse_with_coughing?", "pain?", "vomiting?"],
+      "branching": [
+        { "if": "groin_swelling_present", "ask": ["duration?", "left_vs_right_vs_bilateral?", "descends_to_scrotum?"] },
+        { "if": "pain_present", "ask": ["colicky_vs_constant?", "associated_vomiting?", "abdominal_distension?"] },
+        { "if": "vomiting_present", "ask": ["billous?", "constipation?", "last_bowel_movement?"] }
+      ]
+    },
+    "pathophysiology": [
+      "patent_processus_vaginalis",
+      "abdominal_wall_weakness",
+      "increased_intra_abdominal_pressure",
+      "bowel_omentum_herniation",
+      "risk_of_incarceration_and_strangulation"
+    ]
+  },
+  {
+    "id": "umbilical_hernia",
+    "name": "Umbilical Hernia",
+    "system": "surgical",
+    "agePeak": [0, 60],
+    "prevalenceWeight": 0.5,
+    "historyFeatures": [
+      { "symptomId": "bulge_umbilicus", "weight": 5 },
+      { "symptomId": "abdominal_pain", "weight": 2, "condition": "if strangulated" },
+      { "symptomId": "vomiting", "weight": 4, "condition": "if strangulated" }
+    ],
+    "examFeatures": [
+      { "signId": "hernia_reducible", "baseWeight": 3 },
+      { "signId": "cough_impulse", "baseWeight": 4 },
+      { "signId": "hernia_strangulated", "baseWeight": 5, "doubleWeight": true }
+    ],
+    "riskFactors": [
+      { "id": "prematurity", "multiplier": 1.4 },
+      { "id": "low_birth_weight", "multiplier": 1.3 },
+      { "id": "increased_intra_abdominal_pressure", "multiplier": 1.5 },
+      { "id": "african_descent", "multiplier": 1.3 },
+      { "id": "connective_tissue_disorder", "multiplier": 1.4 }
+    ],
+    "complications": [
+      { "diseaseId": "strangulated_hernia", "probability": 0.02, "severityBoost": 0.5 },
+      { "diseaseId": "incarceration", "probability": 0.05, "severityBoost": 0.3 }
+    ],
+    "syndromeTags": ["abdominal_wall_defect", "surgical_condition"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["protrusion at umbilicus that increases with crying/coughing"],
+    "exclusionClues": ["normal umbilicus without defect", "umbilical granuloma"],
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical examination", "priority": "immediate", "yield": 0.95, "indication": "all suspected" },
+        { "name": "Measurement of defect size", "priority": "immediate", "yield": 0.9, "indication": "all — determines need for surgery" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "if_suspected_complication", "yield": 0.8, "indication": "if strangulation suspected" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Paediatric Surgical Guidelines — Umbilical Hernia",
+      "pathways": [
+        {
+          "severity": "small_asymptomatic",
+          "criteria": "Defect <1.5 cm, reducible, no symptoms in child <3 years",
+          "treatment": [
+            "Observe — most close spontaneously by age 3-4 years",
+            "No intervention unless defect persists beyond age 4-5 years",
+            "No role for strapping or binding (may cause skin complications)"
+          ],
+          "counselling": "Reassure parents — 90% close spontaneously. Return if becomes painful, irreducible, or discoloured."
+        },
+        {
+          "severity": "large_or_persistent",
+          "criteria": "Defect >1.5 cm or persisting beyond age 4-5 years",
+          "treatment": [
+            "Elective surgical repair — primary closure (vest-over-pants or simple fascial closure)",
+            "Preoperative evaluation for underlying increased intra-abdominal pressure"
+          ]
+        },
+        {
+          "severity": "strangulated",
+          "criteria": "Irreducible, tender, erythematous, vomiting",
+          "treatment": [
+            "Emergency surgical repair",
+            "IV fluids, NBM",
+            "Broad-spectrum antibiotics",
+            "Resection of non-viable tissue if needed"
+          ]
+        }
+      ]
+    },
+    "syndromeTags": ["abdominal_wall_defect"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["protrusion at umbilicus increasing with crying"],
+    "exclusionClues": ["umbilical granuloma", "normal umbilicus"]
+  },
+  {
+    "id": "hiatal_hernia",
+    "name": "Hiatal Hernia",
+    "system": "surgical",
+    "agePeak": [120, 216],
+    "prevalenceWeight": 0.3,
+    "historyFeatures": [
+      { "symptomId": "heartburn", "weight": 4 },
+      { "symptomId": "regurgitation", "weight": 4 },
+      { "symptomId": "dysphagia", "weight": 3 },
+      { "symptomId": "chest_pain", "weight": 3 },
+      { "symptomId": "cough", "weight": 2, "condition": "nocturnal" },
+      { "symptomId": "vomiting", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "epigastric_tenderness", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "increased_intra_abdominal_pressure", "multiplier": 1.3 },
+      { "id": "pregnancy", "multiplier": 1.2 },
+      { "id": "advanced_age", "multiplier": 1.3 },
+      { "id": "connective_tissue_disorder", "multiplier": 1.2 }
+    ],
+    "complications": [
+      { "diseaseId": "gastroesophageal_reflux", "probability": 0.7, "severityBoost": 0.3 },
+      { "diseaseId": "barrett_esophagus", "probability": 0.1, "severityBoost": 0.3 },
+      { "diseaseId": "esophageal_stricture", "probability": 0.05, "severityBoost": 0.2 },
+      { "diseaseId": "strangulated_hiatal_hernia", "probability": 0.02, "severityBoost": 0.6 }
+    ],
+    "syndromeTags": ["gastroesophageal_pathology", "surgical_condition"],
+    "mustNotMiss": false,
+    "diagnosticClues": ["reflux symptoms + post-prandial chest discomfort"],
+    "exclusionClues": ["normal endoscopy", "no reflux symptoms"],
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical assessment with GERD questionnaire", "priority": "routine", "yield": 0.6, "indication": "all suspected" }
+      ],
+      "imaging": [
+        { "name": "Barium swallow", "priority": "first_line", "yield": 0.85, "indication": "anatomical diagnosis — stomach herniation above diaphragm" },
+        { "name": "Upper GI endoscopy", "priority": "confirmatory", "yield": 0.9, "indication": "assess for esophagitis, Barrett's, stricture" }
+      ],
+      "laboratory": [
+        { "name": "Full blood count", "priority": "routine", "yield": 0.2, "indication": "screen for anaemia (iron deficiency from chronic blood loss)" }
+      ],
+      "advanced": [
+        { "name": "Oesophageal manometry", "indication": "preoperative assessment", "priority": "if_surgery_planned" },
+        { "name": "24-hour pH monitoring", "indication": "confirm pathological reflux", "priority": "if_diagnosis_uncertain" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Guidelines for Management of Hiatal Hernia and GERD",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "Intermittent heartburn, no dysphagia, small hernia on imaging",
+          "treatment": [
+            "Lifestyle modifications: weight loss, avoid large meals, elevate head of bed, avoid lying flat after meals",
+            "PPI therapy: Omeprazole 0.7-1 mg/kg PO OD (max 20 mg) for 8-12 weeks",
+            "Antacids PRN",
+            "Avoid: caffeine, chocolate, fatty foods, tomatoes, citrus"
+          ],
+          "reassessment": "If symptoms persist after 12 weeks of PPI, refer for endoscopy and surgical evaluation"
+        },
+        {
+          "severity": "moderate_to_severe",
+          "criteria": "Persistent reflux despite PPI, dysphagia, regurgitation, large hernia, oesophagitis on endoscopy",
+          "treatment": [
+            "Continue high-dose PPI",
+            "Refer for surgical evaluation — Nissen fundoplication",
+            "Preoperative: endoscopy, manometry, pH study",
+            "Nissen fundoplication (laparoscopic or open): wrap gastric fundus around lower oesophagus"
+          ]
+        },
+        {
+          "severity": "emergency",
+          "criteria": "Strangulation, acute obstruction, perforation, significant bleeding",
+          "treatment": [
+            "Emergency laparotomy",
+            "Reduction of hernia",
+            "Repair of hiatal defect ± fundoplication",
+            "Resection if strangulated non-viable tissue",
+            "ICU admission postoperatively"
+          ]
+        }
+      ]
+    },
+    "subtypes": [
+      {
+        "id": "sliding_hiatal_hernia",
+        "name": "Sliding Hiatal Hernia (Type I)",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "GE_junction_above_diaphragm", "weight": 5 },
+          { "feature": "reflux_dominant", "weight": 5 },
+          { "feature": "stomach_stays_longitudinally_aligned", "weight": 4 }
+        ],
+        "management": "PPI + lifestyle; fundoplication if refractory"
+      },
+      {
+        "id": "paraoesophageal_hernia",
+        "name": "Paraoesophageal Hernia (Type II/III)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "GE_junction_in_normal_position", "weight": 4 },
+          { "feature": "stomach_herniates_adjacent_to_oesophagus", "weight": 5 },
+          { "feature": "risk_of_strangulation", "weight": 5 },
+          { "feature": "fullness_and_pressure_symptoms", "weight": 4 }
+        ],
+        "management": "Surgical repair due to risk of strangulation — elective fundoplication + crural repair"
+      }
+    ],
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["heartburn?", "regurgitation?", "dysphagia?", "worse_when_lying_flat?", "weight_loss?"],
+      "branching": [
+        { "if": "heartburn_present", "ask": ["frequency?", "post_prandial?", "nocturnal?", "relieved_by_antacids?"] },
+        { "if": "dysphagia", "ask": ["solids_vs_liquids?", "progressive?", "pain_on_swallowing?"] },
+        { "if": "weight_loss", "ask": ["amount_lost?", "over_what_period?", "appetite?"] }
+      ]
+    },
+    "pathophysiology": [
+      "weakening_of_phrenicoesophageal_ligament",
+      "widening_of_hiatal_opening",
+      "herniation_of_stomach_through_diaphragm",
+      "loss_of_lower_oesophageal_sphincter_competence",
+      "gastroesophageal_reflux",
+      "risk_of_volvulus_in_paraoesophageal_type"
+    ]
+  }
+]

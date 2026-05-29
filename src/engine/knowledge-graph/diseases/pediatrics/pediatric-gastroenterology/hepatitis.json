@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "hepatitis",
+    "name": "Pediatric Hepatitis",
+    "system": "PAED",
+    "agePeak_months": [12, 180],
+    "note": "Inflammation of the liver. Viral hepatitis (A, B, C, E) most common. Autoimmune hepatitis and drug-induced also seen. Acute liver failure is life-threatening.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["liver_inflammation", "jaundice"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hepatic_encephalopathy", "weight": 10 },
+        { "sign": "coagulopathy_inr_>2", "weight": 10 },
+        { "sign": "hypoglycemia", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ascites", "weight": 7 },
+          { "sign": "jaundice_severe", "weight": 6 },
+          { "sign": "bilirubin_>10", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If encephalopathy or coagulopathy -> SEVERE (acute liver failure); else -> NON-SEVERE (acute hepatitis)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 5 },
+      { "symptomId": "dark_urine", "weight": 4 },
+      { "symptomId": "pale_stools", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "abdominal_pain_ruq", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "loss_of_appetite", "weight": 3 },
+      { "symptomId": "exposure_to_hepatitis_contact", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly", "baseWeight": 5 },
+      { "signId": "ruq_tenderness", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "ascites", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "palmar_erythema", "baseWeight": 2 },
+      { "signId": "flapping_tremor_asterixis", "baseWeight": 4, "note": "Hepatic encephalopathy" }
+    ],
+
+    "riskFactors": [
+      { "id": "unvaccinated_against_hepatitis_b", "multiplier": 3.0 },
+      { "id": "exposure_to_hepatitis_patient", "multiplier": 2.5 },
+      { "id": "blood_transfusion", "multiplier": 2.0 },
+      { "id": "vertical_transmission_hbv", "multiplier": 3.0 },
+      { "id": "travel_to_endemic_area", "multiplier": 2.0 },
+      { "id": "contaminated_food_water", "multiplier": 2.5 },
+      { "id": "chronic_liver_disease_family", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hepatitis_a",
+        "name": "Hepatitis A (Infectious Hepatitis)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "acute_onset_fever_jaundice", "weight": 5 },
+          { "feature": "history_of_contaminated_food_water", "weight": 4 },
+          { "feature": "igm_anti_hav_positive", "weight": 5 }
+        ],
+        "management": "Supportive care. No specific antiviral. Hospitalization if severe. Hygiene measures. Contact vaccination. Self-limiting usually 2-4 weeks. No chronic carrier state."
+      },
+      {
+        "id": "hepatitis_b",
+        "name": "Hepatitis B (Serum Hepatitis)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "insidious_onset", "weight": 3 },
+          { "feature": "hbsag_positive", "weight": 5 },
+          { "feature": "vertical_maternal_transmission", "weight": 4 }
+        ],
+        "management": "Supportive in acute phase. Chronic HBV: monitor LFTs, HBV DNA, HBeAg. Antiviral therapy (entecavir/tenofovir) if indicated. Screen for HCC. Vaccination of contacts."
+      },
+      {
+        "id": "autoimmune_hepatitis",
+        "name": "Autoimmune Hepatitis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "chronic_or_relapsing_course", "weight": 4 },
+          { "feature": "autoantibodies_ana_asma", "weight": 5 },
+          { "feature": "elevated_igg", "weight": 4 }
+        ],
+        "management": "Immunosuppression: prednisolone + azathioprine. Monitor LFTs, IgG, autoantibodies. Long-term therapy. Liver transplant if cirrhosis/decompensation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "biliary_atresia",
+        "discriminators": ["conjugated_hyperbilirubinemia_in_infant", "pale_stools", "no_viral_markers"]
+      },
+      {
+        "diseaseId": "wilson_disease",
+        "discriminators": ["kayser_flischer_rings", "neurologic_symptoms", "low_ceruloplasmin"]
+      },
+      {
+        "diseaseId": "hemolytic_anemia",
+        "discriminators": ["pallor", "unconjugated_hyperbilirubinemia", "reticulocytosis", "no_liver_dysfunction"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dipstick for bilirubin", "priority": "immediate", "yield": 0.7, "indication": "initial screening" }
+      ],
+      "laboratory": [
+        { "name": "LFT (ALT, AST, ALP, GGT, bilirubin)", "priority": "immediate", "yield": 0.95, "indication": "assess liver injury" },
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.8, "indication": "synthetic function, severity" },
+        { "name": "Hepatitis serology (HAV IgM, HBsAg, HBcAb IgM, HCV Ab)", "priority": "immediate", "yield": 0.9, "indication": "viral etiology" },
+        { "name": "Autoantibody panel (ANA, ASMA, LKM1)", "priority": "medium", "yield": 0.7, "indication": "autoimmune hepatitis" },
+        { "name": "Ceruloplasmin", "priority": "medium", "yield": 0.4, "indication": "Wilson disease" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.6, "indication": "liver size, echotexture, biliary dilation, ascites" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESPGHAN/NASPGHAN Guidelines for Pediatric Hepatitis",
+      "pathways": [
+        {
+          "severity": "mild_acute",
+          "criteria": "No jaundice or mild jaundice, no coagulopathy, no encephalopathy, able to eat",
+          "treatment": "Outpatient supportive care. Rest, adequate hydration, avoid hepatotoxic drugs. Monitor LFTs twice weekly. Report if vomiting worsens or jaundice deepens."
+        },
+        {
+          "severity": "severe_acute_liver_failure",
+          "criteria": "Encephalopathy, coagulopathy (INR >2), hypoglycemia, or multi-organ failure",
+          "treatment": "ICU admission. N-acetylcysteine if acetaminophen overdose. Lactulose for encephalopathy. Vitamin K. Blood products if bleeding. Monitor for sepsis. Liver transplant evaluation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "viral_infection_hepatocyte",
+      "immune_mediated_hepatocyte_damage",
+      "cholestasis",
+      "hepatocellular_necrosis",
+      "liver_regeneration_or_fibrosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_liver_failure",
+        "probability": 0.05,
+        "lagDays": [3, 21],
+        "severityBoost": 0.6,
+        "clues": ["encephalopathy", "coagulopathy", "rising_inr"]
+      },
+      {
+        "diseaseId": "chronic_hepatitis_b",
+        "probability": 0.3,
+        "lagDays": [180, 365],
+        "severityBoost": 0.2,
+        "clues": ["persistent_hbsag", "elevated_lfts>6months", "hbv_dna_detectable"]
+      },
+      {
+        "diseaseId": "liver_cirrhosis",
+        "probability": 0.1,
+        "lagDays": [1825, 7300],
+        "severityBoost": 0.4,
+        "clues": ["chronic_infection", "splenomegaly", "varices", "thrombocytopenia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["jaundice", "dark_urine", "pale_stools", "elevated_transaminases", "hepatomegaly"],
+    "exclusionClues": ["normal_lfts", "no_jaundice", "negative_serology"]
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "disease": {
+    "id": "ectopic_pregnancy",
+    "name": "Ectopic Pregnancy",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Implantation of a fertilized ovum outside the uterine cavity. Most commonly in the fallopian tube (ampulla). Life-threatening emergency due to risk of rupture and hemorrhage.",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["first_trimester_bleeding", "acute_abdomen", "adnexal_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ruptured_ectopic", "weight": 10 },
+          { "sign": "significant_hemoperitoneum", "weight": 9 },
+          { "sign": "fall_in_hemoglobin", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Ruptured ectopic with shock -> SEVERE; Unruptured with stable vitals -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "amenorrhea", "weight": 5 },
+      { "symptomId": "vaginal_bleeding", "weight": 4 },
+      { "symptomId": "lower_abdominal_pain", "weight": 5, "modifiers": [
+          { "condition": "unilateral", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "shoulder_tip_pain", "weight": 4, "note": "Suggests diaphragmatic irritation from hemoperitoneum" },
+      { "symptomId": "syncope_or_presyncope", "weight": 4 },
+      { "symptomId": "rectal_pressure_or_tenesmus", "weight": 2 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "dizziness", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "adnexal_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "adnexal_mass", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "cervical_motion_tenderness", "baseWeight": 4 },
+      { "signId": "abdominal_tenderness", "baseWeight": 3 },
+      { "signId": "rebound_tenderness", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_ectopic_pregnancy", "multiplier": 3.0 },
+      { "id": "previous_tubal_surgery", "multiplier": 2.5 },
+      { "id": "pelvic_inflammatory_disease", "multiplier": 2.0 },
+      { "id": "IVF_assisted_conception", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "IUD_in_situ", "multiplier": 1.3 },
+      { "id": "tubal_ligation", "multiplier": 1.5 },
+      { "id": "endometriosis", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "tubal_ectopic",
+        "name": "Tubal Ectopic Pregnancy",
+        "prevalenceModifier": 0.95,
+        "keyFeatures": [
+          { "feature": "adnexal_mass", "weight": 5 },
+          { "feature": "unilateral_pain", "weight": 5 },
+          { "feature": "empty_uterus_on_ultrasound", "weight": 5 }
+        ],
+        "management": "Salpingectomy or salpingostomy. Medical management with methotrexate if unruptured."
+      },
+      {
+        "id": "ruptured_ectopic",
+        "name": "Ruptured Ectopic Pregnancy",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "severe_sudden_pain", "weight": 5 },
+          { "feature": "hypovolemic_shock", "weight": 5 },
+          { "feature": "peritoneal_signs", "weight": 5 },
+          { "feature": "hemoperitoneum_on_ultrasound", "weight": 5 },
+          { "feature": "shoulder_tip_pain", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy or laparoscopy. Salpingectomy. IV fluid resuscitation. Blood transfusion. ICU admission."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "miscarriage",
+        "discriminators": ["open_cervical_os", "central_bleeding", "intrauterine_sac"]
+      },
+      {
+        "diseaseId": "ovarian_torsion",
+        "discriminators": ["sudden_severe_pain", "no_vaginal_bleeding", "negative_pregnancy_test"]
+      },
+      {
+        "diseaseId": "acute_appendicitis",
+        "discriminators": ["pain_migration_to_rlq", "positive_pregnancy_test", "anorexia"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine pregnancy test", "priority": "immediate", "yield": 0.99, "indication": "all reproductive-age women with abdominal pain" }
+      ],
+      "laboratory": [
+        { "name": "Serum beta-hCG", "priority": "immediate", "yield": 0.95, "indication": "quantitative; discriminatory zone >1500 IU/L" },
+        { "name": "Serum progesterone", "priority": "medium", "yield": 0.7, "indication": "low levels suggest abnormal pregnancy" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.7, "indication": "assess blood loss" },
+        { "name": "Blood group and Rh type", "priority": "high", "yield": 0.99, "indication": "Rhogam for Rh-negative" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal Ultrasound", "priority": "immediate", "yield": 0.95, "indication": "first-line; look for adnexal mass, empty uterus, free fluid" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG126 - Ectopic Pregnancy and Miscarriage",
+      "pathways": [
+        {
+          "severity": "unruptured_stable",
+          "criteria": "beta-hCG <5000 IU/L, no cardiac activity, mass <35mm, no fetal cardiac activity",
+          "treatment": "Medical management: Methotrexate 50mg/m2 IM (single-dose protocol). Monitor beta-hCG on days 4 and 7. Surgical if fails."
+        },
+        {
+          "severity": "unruptured_surgical",
+          "criteria": "beta-hCG >5000, fetal cardiac activity, mass >35mm, contraindications to methotrexate",
+          "treatment": "Laparoscopic salpingectomy or salpingostomy. Preserve tube if possible. Rhogam if Rh-negative."
+        },
+        {
+          "severity": "ruptured",
+          "criteria": "hemodynamic instability, hemoperitoneum, peritonitis",
+          "treatment": "Emergency laparotomy. Salpingectomy. Aggressive IV fluid resuscitation. Blood transfusion. ICU admission. If unstable, no methotrexate."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "tubal_structural_damage",
+      "impaired_tubal_motility",
+      "altered_tubal_environment",
+      "ectopic_implantation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hemorrhagic_shock",
+        "probability": 0.3,
+        "lagDays": [0, 1],
+        "severityBoost": 0.8,
+        "clues": ["tachycardia", "hypotension", "abdominal_distension"]
+      },
+      {
+        "diseaseId": "infertility",
+        "probability": 0.3,
+        "lagDays": [365, 730],
+        "severityBoost": 0.1,
+        "clues": ["reduced_fertility", "tubal_damage"]
+      },
+      {
+        "diseaseId": "recurrent_ectopic",
+        "probability": 0.1,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.2,
+        "clues": ["previous_ectopic_history"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["amenorrhea_plus_bleeding", "unilateral_pain", "adnexal_mass", "empty_uterus"],
+    "exclusionClues": ["intrauterine_pregnancy_confirmed", "negative_pregnancy_test"]
+  }
+}

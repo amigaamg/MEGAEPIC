@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "lung_cancer_screening",
+    "name": "Lung Cancer Screening and Nodule Characterization",
+    "system": "RAD",
+    "agePeak_months": [600, 960],
+    "note": "Low-dose CT (LDCT) screening for high-risk individuals (age 50-80, 20 pack-year history). Lung-RADS categorization of pulmonary nodules guides management. Solid, subsolid, and ground-glass nodules have different malignancy risks.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["lung_cancer", "pulmonary_nodule", "screening"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hemoptysis", "weight": 9 },
+        { "sign": "superior_vena_cava_syndrome", "weight": 8 },
+        { "sign": "malignant_pleural_effusion", "weight": 8 },
+        { "sign": "atelectasis_whole_lung", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "lung_rads_4x", "weight": 8 },
+          { "sign": "nodule_growth_on_follow_up", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If Lung-RADS 4 or danger signs -> SUSPICIOUS; else -> NEGATIVE/BENIGN (surveillance)"
+    },
+    "historyFeatures": [
+      { "symptomId": "smoking_history_pack_years", "weight": 5, "modifiers": [
+          { "condition": "gt_30_pack_years", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "cough_persistent", "weight": 3 },
+      { "symptomId": "hemoptysis", "weight": 5 },
+      { "symptomId": "unexplained_weight_loss", "weight": 4 },
+      { "symptomId": "dyspnea_progressive", "weight": 3 },
+      { "symptomId": "chest_pain", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "clubbing", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "lymphadenopathy_supraclavicular", "baseWeight": 4 },
+      { "signId": "decreased_breath_sounds", "baseWeight": 3 },
+      { "signId": "wheezing_focal", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_50_to_80", "multiplier": 2.5 },
+      { "id": "smoking_gt_20_pack_years", "multiplier": 4.0 },
+      { "id": "family_history_lung_cancer", "multiplier": 1.8 },
+      { "id": "copd_or_pulmonary_fibrosis", "multiplier": 2.0 },
+      { "id": "asbestos_exposure", "multiplier": 2.5 },
+      { "id": "radon_exposure", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "solid_pulmonary_nodule",
+        "name": "Solid Pulmonary Nodule",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "solid_density_obscures_bronchi_vessels", "weight": 5 },
+          { "feature": "spiculated_margins", "weight": 5 },
+          { "feature": "size_gt_8mm", "weight": 4 },
+          { "feature": "upper_lobe_predominance", "weight": 3 },
+          { "feature": "growth_on_follow_up", "weight": 5 }
+        ],
+        "management": "Lung-RADS based: <6mm (2) follow-up 12mo; 6-8mm (3) follow-up 6-12mo; >8mm (4A) PET/CT or biopsy; >15mm (4B/4X) staging workup."
+      },
+      {
+        "id": "subsolid_gg_nodule",
+        "name": "Subsolid/Ground-Glass Nodule",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "ground_glass_density_no_solid_component", "weight": 4 },
+          { "feature": "part_solid_with_solid_component", "weight": 5 },
+          { "feature": "persistent_on_follow_up_ct", "weight": 4 },
+          { "feature": "solid_component_growth", "weight": 5 },
+          { "feature": "bubbly_lucencies_pseudocavitation", "weight": 3 }
+        ],
+        "management": "Pure GGO <20mm: CT at 12mo; stable for 5yrs. Part-solid with solid component >6mm: PET/CT, biopsy, or resection. Lepidic vs invasive adenocarcinoma."
+      },
+      {
+        "id": "central_endobronchial_tumor",
+        "name": "Central/Endobronchial Tumor",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "endobronchial_lesion", "weight": 5 },
+          { "feature": "post_obstructive_pneumonitis", "weight": 4 },
+          { "feature": "atelectasis_or_collapse", "weight": 4 },
+          { "feature": "hilar_mass", "weight": 4 }
+        ],
+        "management": "Bronchoscopy with biopsy. Staging CT and PET-CT. SCLC vs NSCLC histology determination. Mediastinal staging by EBUS or mediastinoscopy."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "granuloma",
+        "discriminators": ["stable_over_2_years", "calcified", "satellite_nodules", "upper_lobe_predominance"]
+      },
+      {
+        "diseaseId": "hamartoma",
+        "discriminators": ["popcorn_calcification", "fat_density", "smooth_margins", "slow_growth"]
+      },
+      {
+        "diseaseId": "round_pneumonia",
+        "discriminators": ["acute_symptoms", "complete_resolution", "air_bronchogram"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Low-Dose CT Chest (LDCT)", "priority": "immediate", "yield": 0.92, "indication": "screening: age 50-80, 20+ pack-years, current/quit <15yrs" },
+        { "name": "Diagnostic CT Chest with contrast", "priority": "high", "yield": 0.95, "indication": "characterization of detected nodule, mediastinal involvement" },
+        { "name": "PET-CT", "priority": "high", "yield": 0.85, "indication": "nodules >8mm, staging, evaluate for metastases" },
+        { "name": "CT-guided biopsy", "priority": "medium", "yield": 0.9, "indication": "peripheral nodules, tissue diagnosis" },
+        { "name": "Brain MRI with contrast", "priority": "medium", "yield": 0.3, "indication": "staging of NSCLC stage II+, SCLC" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Lung-RADS and NCCN Guidelines for Lung Cancer Screening",
+      "pathways": [
+        {
+          "severity": "negative_lung_rads_1_2",
+          "criteria": "no nodule or nodule <6mm solid, <20mm GGN",
+          "treatment": "Continue annual LDCT screening. No additional workup needed."
+        },
+        {
+          "severity": "probably_benign_lung_rads_3",
+          "criteria": "solid nodule 6-8mm, part-solid with solid <6mm, GGN >20mm",
+          "treatment": "Short interval follow-up CT at 6 months. If stable at 6 and 12 months, return to annual screening."
+        },
+        {
+          "severity": "suspicious_lung_rads_4",
+          "criteria": "solid nodule >8mm, part-solid with solid >6mm, or new/growing nodule",
+          "treatment": "PET/CT. Multidisciplinary evaluation. Pulmonology and thoracic surgery consultation. Biopsy (bronchoscopic, CT-guided, or surgical). Staging and treatment per histology."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "field_carcinogenesis",
+      "tobacco_carcinogen_dna_damage",
+      "adenocarcinoma_precursor_lesions",
+      "angiogenesis",
+      "lymphatic_and_hematogenous_spread"
+    ],
+    "complications": [
+      {
+        "diseaseId": "bronchial_obstruction",
+        "probability": 0.2,
+        "lagDays": [90, 365],
+        "severityBoost": 0.3,
+        "clues": ["persistent_cough", "atelectasis", "post_obstructive_pneumonia"]
+      },
+      {
+        "diseaseId": "malignant_effusion",
+        "probability": 0.2,
+        "lagDays": [180, 730],
+        "severityBoost": 0.4,
+        "clues": ["pleural_nodularity", "large_effusion", "dyspnea"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["smoking_history", "pulmonary_nodule_on_ct", "nodule_growth", "spiculated_margins"],
+    "exclusionClues": ["calcified_nodule", "stability_over_2_years", "low_pre_test_probability"]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "disease": {
+    "id": "acl-tear",
+    "name": "Anterior Cruciate Ligament Tear",
+    "system": "ORTHO",
+    "agePeak_months": [180, 480],
+    "note": "Common sports injury from non-contact pivoting. ACL rupture leads to knee instability and high risk of meniscal tears and osteoarthritis if untreated.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["knee_ligament_injury", "sports_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_hemarthrosis_severe", "weight": 7 },
+        { "sign": "locked_knee_meniscal_tear", "weight": 8 },
+        { "sign": "knee_dislocation_multiligament", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "complete_tear_on_mri", "weight": 7 },
+          { "sign": "multiligament_injury", "weight": 8 },
+          { "sign": "recurrent_giving_way", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If multiligament or locked knee -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "non_contact_pivoting_twisting", "weight": 5 },
+      { "symptomId": "pop_sound_at_time_of_injury", "weight": 5 },
+      { "symptomId": "immediate_swelling_hemarthrosis", "weight": 5 },
+      { "symptomId": "knee_giving_way_instability", "weight": 5 },
+      { "symptomId": "pain_and_inability_to_continue_activity", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hemarthrosis_effusion", "baseWeight": 4 },
+      { "signId": "lachman_test_positive", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "anterior_drawer_sign_positive", "baseWeight": 4 },
+      { "signId": "pivot_shift_test_positive", "baseWeight": 5 },
+      { "signId": "range_of_motion_limited", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender", "multiplier": 2.5 },
+      { "id": "contact_sports_soccer_basketball", "multiplier": 3.0 },
+      { "id": "previous_acl_injury", "multiplier": 3.0 },
+      { "id": "poor_neuromuscular_control", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "complete_acl_tear",
+        "name": "Complete ACL Tear",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "positive_lachman_pivot_shift", "weight": 5 },
+          { "feature": "mri_confirms_complete_disruption", "weight": 5 }
+        ],
+        "management": "Reconstruction with hamstring or patellar tendon autograft. Prehabilitation to regain ROM. Post-op brace and physiotherapy. Return to sports 9-12 months."
+      },
+      {
+        "id": "partial_acl_tear",
+        "name": "Partial ACL Tear",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "minimal_lachman_pivot_shift_negative", "weight": 3 },
+          { "feature": "mri_high_signal_with_some_intact_fibers", "weight": 4 }
+        ],
+        "management": "Bracing and physiotherapy. Activity modification. Consider surgery if fails conservative treatment."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "meniscal_tear",
+        "discriminators": ["locked_knee", "positive_mcmurray_test", "joint_line_tenderness"]
+      },
+      {
+        "diseaseId": "patellar_dislocation",
+        "discriminators": ["medial_patellar_tenderness", "positive_apprehension_test"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Lachman test", "priority": "immediate", "yield": 0.85, "indication": "all acute knee injuries" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Knee X-ray (AP, lateral, skyline, tunnel)", "priority": "high", "yield": 0.3, "indication": "rule out fracture, Segond fracture" },
+        { "name": "MRI knee", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis, associated injuries" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAOS ACL Injury Guidelines",
+      "pathways": [
+        {
+          "severity": "conservative",
+          "criteria": "Partial tear, low demand, older age, no instability",
+          "treatment": "Physiotherapy (quadriceps/hamstring strengthening), functional brace, activity modification. Consider delayed reconstruction."
+        },
+        {
+          "severity": "surgical",
+          "criteria": "Complete tear, young, active, instability/giving way",
+          "treatment": "ACL reconstruction (hamstring/patellar BTB/quadriceps autograft). Prehab 4-6 weeks. Post-op: brace locked in extension for 2 weeks, progressive rehab, return to sports 9-12 months."
+        }
+      ]
+    },
+
+    "pathophysiology": ["non_contact_deceleration_pivot", "valgus_and_external_rotation", "anterior_tibial_translation"]
+  }
+}

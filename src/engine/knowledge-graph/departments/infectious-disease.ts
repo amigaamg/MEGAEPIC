@@ -1,0 +1,77 @@
+import type { DepartmentDefinition } from './index';
+
+export const infectiousDisease: DepartmentDefinition = {
+  id: 'ID',
+  name: 'Infectious Disease',
+  shortName: 'ID',
+  description: 'Diagnosis and management of complex infectious diseases including bacterial, viral, fungal and parasitic infections, antimicrobial stewardship, and infection control.',
+  icon: '🦠',
+  color: '#84cc16',
+  sections: [
+    {
+      id: 'systemic-infections',
+      name: 'Systemic Infections',
+      description: 'Widespread infections affecting multiple organ systems',
+      diseaseCategories: ['Sepsis and bacteraemia', 'Fever of unknown origin', 'Septic shock', 'Toxic shock syndrome', 'Endocarditis', 'Osteomyelitis', 'Septic arthritis'],
+    },
+    {
+      id: 'respiratory-infections-id',
+      name: 'Respiratory Infections',
+      description: 'Infectious diseases of the respiratory tract',
+      diseaseCategories: ['Tuberculosis', 'Pneumonia (community/hospital)', 'COVID-19', 'Influenza', 'Fungal pneumonia', 'Pulmonary aspergillosis', 'Pneumocystis pneumonia'],
+    },
+    {
+      id: 'hiv',
+      name: 'HIV Medicine',
+      description: 'HIV prevention, treatment and complication management',
+      diseaseCategories: ['HIV acute seroconversion', 'AIDS-defining conditions', 'Antiretroviral therapy management', 'ART resistance', 'PrEP/PEP', 'HIV in pregnancy', 'HIV-associated opportunistic infections'],
+    },
+    {
+      id: 'tropical',
+      name: 'Tropical & Travel Medicine',
+      description: 'Infections prevalent in tropical regions and travel-related illness',
+      diseaseCategories: ['Malaria', 'Dengue fever', 'Typhoid fever', 'Cholera', 'Schistosomiasis', 'Leishmaniasis', 'Filariasis', 'Leprosy', 'Yellow fever', 'Rabies'],
+    },
+    {
+      id: 'healthcare-associated',
+      name: 'Healthcare-Associated Infections',
+      description: 'Infections acquired in healthcare settings',
+      diseaseCategories: ['MRSA infection', 'C. difficile infection', 'Multi-drug resistant organisms', 'Catheter-associated UTI', 'Central line-associated BSI', 'Surgical site infection', 'Ventilator-associated pneumonia'],
+    },
+    {
+      id: 'antimicrobial-stewardship',
+      name: 'Antimicrobial Stewardship',
+      description: 'Rational use of antimicrobials to optimise outcomes and reduce resistance',
+      diseaseCategories: ['Antibiotic stewardship programme', 'Therapeutic drug monitoring', 'Antibiotic allergy assessment', 'Desensitisation', 'Outpatient parenteral antibiotic therapy'],
+    },
+    {
+      id: 'viral',
+      name: 'Viral Hepatitis & Bloodborne Viruses',
+      description: 'Bloodborne viral infections and their sequelae',
+      diseaseCategories: ['Hepatitis B', 'Hepatitis C', 'Hepatitis D', 'Needlestick injury management', 'Post-exposure prophylaxis', 'Occupational bloodborne virus exposure'],
+    },
+  ],
+  commonSymptoms: [
+    'fever', 'rigors', 'night_sweats', 'fatigue', 'malaise',
+    'weight_loss', 'lymphadenopathy', 'hepatomegaly',
+    'splenomegaly', 'rash', 'arthralgia', 'myalgia',
+    'headache', 'confusion', 'neck_stiffness', 'photophobia',
+    'cough', 'dyspnoea', 'sputum_production', 'diarrhoea',
+    'dysentery', 'vomiting', 'abdominal_pain', 'jaundice',
+    'dark_urine', 'pale_stools', 'dysuria', 'pyuria',
+    'skin_ulcer', 'lymphangitis', 'septic_shock_signs',
+    'localised_warmth_swelling', 'discharge_from_wound',
+  ],
+  commonInvestigations: [
+    'FBC', 'CRP', 'PCT', 'ESR', 'Blood culture × 2', 'Urinalysis',
+    'Urine culture', 'Sputum culture', 'Mycobacterial culture',
+    'GeneXpert', 'TB PCR', 'Malarial smear', 'RDT for malaria',
+    'Dengue serology', 'HIV Ag/Ab test', 'HIV viral load', 'CD4 count',
+    'Hepatitis B serology', 'Hepatitis C serology', 'Hepatitis C PCR',
+    'Lumbar puncture', 'CSF analysis (culture, PCR, India ink)',
+    'CT chest/abdomen', 'Echocardiogram', 'Biopsy with culture',
+    'Antimicrobial sensitivity testing', 'Procalcitonin',
+    'Beta-D-glucan', 'Galactomannan', 'Toxoplasma serology',
+    'Strongyloides serology', 'Schistosomiasis serology',
+  ],
+};

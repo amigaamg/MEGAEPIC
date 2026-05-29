@@ -1,0 +1,160 @@
+{
+  "disease": {
+    "id": "disseminated_intravascular_coagulation",
+    "name": "Disseminated Intravascular Coagulation",
+    "system": "hematology",
+    "agePeak_months": [12, 360, 720, 960],
+    "note": "Life-threatening acquired coagulopathy with systemic activation of coagulation leading to widespread microvascular thrombosis and consumption of clotting factors. Usually secondary to sepsis, trauma, malignancy, or obstetrical complications.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["coagulopathy", "consumption", "thrombosis", "hemorrhage", "critical"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_bleeding", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "multiple_organ_failure", "weight": 10 },
+        { "sign": "purpura_fulminans", "weight": 9 },
+        { "sign": "intracranial_hemorrhage", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "isth_score_above_5": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": false,
+        "score_less_than_5": true
+      },
+      "severityLabel": "ALWAYS EMERGENCY. Requires immediate ICU-level care."
+    },
+
+    "historyFeatures": [
+      { "symptomId": "bleeding_from_multiple_sites", "weight": 5 },
+      { "symptomId": "petechiae_and_purpura", "weight": 4 },
+      { "symptomId": "hematuria", "weight": 3 },
+      { "symptomId": "gi_bleeding", "weight": 3 },
+      { "symptomId": "acral_cyanosis", "weight": 3, "note": "Digital ischemia from microthrombi" },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "altered_mental_status", "weight": 3 },
+      { "symptomId": "oliguria", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "widespread_petechiae_and_ecchymoses", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bleeding_from_iv_sites", "baseWeight": 4 },
+      { "signId": "purpura_fulminans", "baseWeight": 5 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "digital_ischemia_or_gangrene", "baseWeight": 3 },
+      { "signId": "altered_mental_status", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "sepsis", "multiplier": 4.0 },
+      { "id": "major_trauma", "multiplier": 3.0 },
+      { "id": "malignancy", "multiplier": 2.5 },
+      { "id": "obstetric_complications", "multiplier": 3.0 },
+      { "id": "acute_promyelocytic_leukemia", "multiplier": 4.0 },
+      { "id": "severe_liver_disease", "multiplier": 2.0 },
+      { "id": "snake_envenomation", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "overt_dic",
+        "name": "Overt DIC",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "isth_score_above_5", "weight": 5 },
+          { "feature": "active_bleeding_or_thrombosis", "weight": 5 }
+        ],
+        "management": "Treat underlying cause. Platelet transfusion if <50k with bleeding. Cryoprecipitate if fibrinogen <1.0. FFP for prolonged PT/PTT."
+      },
+      {
+        "id": "non_overt_dic",
+        "name": "Non-Overt DIC",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "isth_score_less_than_5", "weight": 4 },
+          { "feature": "laboratory_abnormalities_only", "weight": 3 }
+        ],
+        "management": "Monitor and treat underlying condition. No routine factor replacement unless bleeding."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatic_coagulopathy",
+        "discriminators": ["history_of_liver_disease", "normal_d_dimer", "normal_platelets", "elevated_factor_viii"]
+      },
+      {
+        "diseaseId": "thrombotic_thrombocytopenic_purpura",
+        "discriminators": ["severe_thrombocytopenia", "normal_pt_aPTT_fibrinogen", "elevated_lactate_dehydrogenase_and_schistocytes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Platelet count", "priority": "immediate", "yield": 0.9, "indication": "Thrombocytopenia in DIC" },
+        { "name": "PT / aPTT", "priority": "immediate", "yield": 0.85, "indication": "Prolonged due to consumption" },
+        { "name": "Fibrinogen", "priority": "immediate", "yield": 0.8, "indication": "Low or falling" },
+        { "name": "D-dimer", "priority": "immediate", "yield": 0.95, "indication": "Markedly elevated" },
+        { "name": "ISTH DIC score", "priority": "immediate", "yield": 0.9, "indication": "Standardized diagnostic tool" },
+        { "name": "Blood culture", "priority": "immediate", "yield": 0.3, "indication": "Rule out sepsis" },
+        { "name": "Peripheral blood film", "priority": "high", "yield": 0.7, "indication": "Schistocytes may be present" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "ISTH / BSH Guidelines for DIC",
+      "pathways": [
+        {
+          "severity": "overt_dic_with_bleeding",
+          "criteria": "Active bleeding, ISTH score >5",
+          "treatment": "Treat underlying cause. Platelets if <50k + bleeding. Cryoprecipitate if fibrinogen <1.0. FFP 15ml/kg if PT/aPTT prolonged. Consider tranexamic acid."
+        },
+        {
+          "severity": "overt_dic_with_thrombosis",
+          "criteria": "Thrombotic manifestations (purpura fulminans, digital ischemia)",
+          "treatment": "Therapeutic LMWH or UFH. Treat underlying cause. Factor replacement only if bleeding develops."
+        },
+        {
+          "severity": "non_overt_dic",
+          "criteria": "Laboratory DIC but no clinical bleeding/thrombosis",
+          "treatment": "No specific hemostatic therapy. Treat underlying condition. Monitor coagulation parameters closely."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "systemic_coagulation_activation",
+      "tissue_factor_expression",
+      "thrombin_generation",
+      "fibrin_deposition_in_microvasculature",
+      "consumption_of_platelets_and_coagulation_factors",
+      "secondary_hyperfibrinolysis",
+      "organ_dysfunction_from_microthrombi"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "multiple_organ_dysfunction_syndrome",
+        "probability": 0.4,
+        "severityBoost": 0.7,
+        "clues": ["rising_creatinine", "liver_enzymes_elevated", "altered_mental_status", "hypoxia"]
+      },
+      {
+        "diseaseId": "purpura_fulminans",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["rapidly_spreading_purpuric_lesions", "skin_necrosis", "septic_shock"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["severe_coagulopathy", "low_fibrinogen", "high_d_dimer", "thrombocytopenia"],
+    "exclusionClues": ["normal_d_dimer", "normal_platelets", "no_underlying_cause"]
+  }
+}

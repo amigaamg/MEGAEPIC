@@ -1,0 +1,167 @@
+{
+  "disease": {
+    "id": "growth-disorders",
+    "name": "Growth Disorders (Short Stature / Growth Failure)",
+    "system": "PAED",
+    "agePeak_months": [12, 180],
+    "note": "Height significantly below population norms. Causes: constitutional delay, GH deficiency, hypothyroidism, malnutrition, chronic illness, genetic syndromes.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["short_stature", "growth_retardation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypoglycemia_with_growth_hormone_deficiency", "weight": 8 },
+        { "sign": "severe_midline_defect_craniopharyngioma", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "height_z_score_less_than_minus_3", "weight": 8 },
+          { "sign": "growth_velocity_<2_cm_year", "weight": 8 },
+          { "sign": "associated_intracranial_mass", "weight": 9 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If severe short stature (<-3 SD) or intracranial pathology -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "height_below_3rd_percentile", "weight": 5 },
+      { "symptomId": "slow_growth_rate_over_time", "weight": 5 },
+      { "symptomId": "delayed_puberty", "weight": 3 },
+      { "symptomId": "family_history_short_stature", "weight": 3 },
+      { "symptomId": "chronic_illness_history", "weight": 3 },
+      { "symptomId": "birth_weight_length_neonatal_history", "weight": 2 },
+      { "symptomId": "headache_visual_disturbance", "weight": 3, "note": "Suggests intracranial mass" },
+      { "symptomId": "feeding_history_malabsorption", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "height_<3rd_percentile_for_age_sex", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "delayed_bone_age_on_hand_xray", "baseWeight": 4 },
+      { "signId": "upper_to_lower_segment_ratio_abnormal", "baseWeight": 3 },
+      { "signId": "dysmorphic_features", "baseWeight": 3 },
+      { "signId": "delayed_pubertal_staging", "baseWeight": 3 },
+      { "signId": "signs_of_chronic_disease", "baseWeight": 3 },
+      { "signId": "proportionate_vs_disproportionate", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_short_stature", "multiplier": 2.5 },
+      { "id": "constitutional_delay", "multiplier": 2.0 },
+      { "id": "intrauterine_growth_restriction", "multiplier": 2.5 },
+      { "id": "chronic_illness_renal_gi_cardiac", "multiplier": 2.5 },
+      { "id": "malnutrition", "multiplier": 3.0 },
+      { "id": "endocrinopathy", "multiplier": 2.0 },
+      { "id": "radiation_therapy_cns", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "constitutional_delay",
+        "name": "Constitutional Delay of Growth and Puberty",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "delayed_bone_age_corresponding_to_height_age", "weight": 5 },
+          { "feature": "family_history_constitutional_delay", "weight": 4 },
+          { "feature": "normal_growth_velocity", "weight": 4 },
+          { "feature": "normal_igf1_gh_stimulation", "weight": 4 }
+        ],
+        "management": "Reassurance. Monitor growth q6-12 months. X-ray bone age. No treatment needed unless psychosocial burden. Short course of low-dose testosterone for boys >14y if significant psychosocial distress."
+      },
+      {
+        "id": "growth_hormone_deficiency",
+        "name": "Growth Hormone Deficiency",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "severe_short_stature_z_<minus_2_5", "weight": 5 },
+          { "feature": "low_growth_velocity_<25th_percentile", "weight": 5 },
+          { "feature": "very_low_igf1_igfbp3", "weight": 5 },
+          { "feature": "failed_gh_stimulation_test", "weight": 5 }
+        ],
+        "management": "Recombinant human GH therapy: 25-50 mcg/kg/day SC. Monitor growth response q3-6 months. IGF-1 monitoring for dose adjustment. Continue until near final height."
+      },
+      {
+        "id": "familial_short_stature",
+        "name": "Familial Short Stature",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "parents_also_short", "weight": 5 },
+          { "feature": "normal_bone_age_consistent_with_chronological", "weight": 4 },
+          { "feature": "normal_growth_velocity", "weight": 4 }
+        ],
+        "management": "Reassurance. No medical treatment. Monitor growth. Calculate target height from mid-parental height."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hypothyroidism",
+        "discriminators": ["delayed_bone_age_much_more_than_height_age", "elevated_tsh", "low_t4"]
+      },
+      {
+        "diseaseId": "celiac_disease",
+        "discriminators": ["positive_celiac_serology", "gi_symptoms", "malabsorption"]
+      },
+      {
+        "diseaseId": "turner_syndrome",
+        "discriminators": ["female", "webbed_neck", "low_hairline", "cubitus_valgus", "karyotype_45_xo"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Accurate height and weight measurement on growth chart", "priority": "immediate", "yield": 0.9, "indication": "all growth assessment" }
+      ],
+      "laboratory": [
+        { "name": "IGF-1 and IGFBP-3", "priority": "high", "yield": 0.7, "indication": "GH axis screening" },
+        { "name": "GH stimulation test (clonidine/glucagon/arginine)", "priority": "high", "yield": 0.85, "indication": "confirm GHD" },
+        { "name": "TSH, free T4", "priority": "high", "yield": 0.3, "indication": "rule out hypothyroidism" },
+        { "name": "Celiac serology (tTG IgA)", "priority": "high", "yield": 0.2, "indication": "rule out celiac" },
+        { "name": "Karyotype (females)", "priority": "medium", "yield": 0.3, "indication": "Turner syndrome" }
+      ],
+      "imaging": [
+        { "name": "Bone age X-ray (left hand and wrist)", "priority": "high", "yield": 0.8, "indication": "skeletal maturity assessment" },
+        { "name": "MRI Brain with pituitary focus", "priority": "high", "yield": 0.5, "indication": "pituitary stalk, mass, structural abnormality" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESPE / PES Guidelines for Growth Hormone Therapy",
+      "pathways": [
+        {
+          "severity": "non_endocrine",
+          "criteria": "Normal GH axis, normal thyroid, normal IGF-1, constitutional or familial",
+          "treatment": "Reassurance. Monitor growth q6-12 months. Address any underlying psychosocial concerns. Nutrition optimization. Address any chronic illness."
+        },
+        {
+          "severity": "gh_deficiency_confirmed",
+          "criteria": "Failed GH stimulation, low IGF-1, severe short stature, slow growth velocity",
+          "treatment": "Recombinant GH 25-50 mcg/kg/day SC. Monitor height, weight, IGF-1 q3-6 months. Dose adjustment. Continue until final height (growth <2 cm/year, bone age >15y boys, >13y girls)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "gh_deficiency_or_resistance", "igf1_deficiency", "constitutional_delayed_maturation", "genetic_familial", "chronic_disease_effect", "skeletal_dysplasia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "psychosocial_impact",
+        "probability": 0.4,
+        "lagDays": [180, 3650],
+        "severityBoost": 0.2,
+        "clues": ["severe_short_stature", "bullying", "social_withdrawal"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["height_<3rd_percentile", "slow_growth_velocity", "delayed_bone_age", "normal_thyroid_and_celiac_screen"],
+    "exclusionClues": ["normal_growth_velocity", "parental_short_stature", "normal_bone_age"]
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "disease": {
+    "id": "neonatal_sepsis",
+    "name": "Neonatal Sepsis",
+    "system": "pediatrics",
+    "agePeak_months": [0, 1],
+    "note": "Systemic infection in the first 28 days of life. Early-onset (<72h) and late-onset (>72h). High mortality without prompt treatment.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["neonatal_infection", "neonatal_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "apnea", "weight": 10 },
+        { "sign": "convulsions", "weight": 9 },
+        { "sign": "severely_ill_looks_unwell", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If shock/apnea/convulsions -> SEVERE; else -> SUSPECTED (prompt workup)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "poor_feeding", "weight": 4 },
+      { "symptomId": "fever_or_hypothermia", "weight": 4 },
+      { "symptomId": "lethargy", "weight": 4 },
+      { "symptomId": "irritability", "weight": 3 },
+      { "symptomId": "vomiting", "weight": 2 },
+      { "symptomId": "jaundice", "weight": 2 },
+      { "symptomId": "maternal_risk_factors", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_or_hypothermia", "baseWeight": 4 },
+      { "signId": "respiratory_distress_grunting", "baseWeight": 4 },
+      { "signId": "tachycardia_or_bradycardia", "baseWeight": 3 },
+      { "signId": "poor_perfusion_cr_greater_3", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "lethargy_irritability", "baseWeight": 3 },
+      { "signId": "abdominal_distension", "baseWeight": 2 },
+      { "signId": "petechiae_purpura", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "prematurity", "multiplier": 3.0 },
+      { "id": "prolonged_rupture_of_membranes", "multiplier": 2.5 },
+      { "id": "maternal_fever_in_labor", "multiplier": 2.5 },
+      { "id": "maternal_gbs_colonization", "multiplier": 2.0 },
+      { "id": "low_birth_weight", "multiplier": 2.5 },
+      { "id": "chorioamnionitis", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "early_onset_neonatal_sepsis",
+        "name": "Early-Onset Sepsis (<72 hours)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "vertical_transmission", "weight": 5 },
+          { "feature": "maternal_risk_factors", "weight": 4 },
+          { "feature": "gbs_e_coli_most_common", "weight": 3 }
+        ],
+        "management": "IV Ampicillin + Gentamicin (first-line). Cefotaxime + Ampicillin if meningitis suspected. Supportive care (respiratory, cardiovascular)."
+      },
+      {
+        "id": "late_onset_neonatal_sepsis",
+        "name": "Late-Onset Sepsis (>72 hours)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "horizontal_or_hospital_acquired", "weight": 4 },
+          { "feature": "coagulase_negative_staph", "weight": 3 },
+          { "feature": "nicu_admission", "weight": 4 }
+        ],
+        "management": "IV Vancomycin + Gentamicin (or Cefotaxime). Consider antifungals if prolonged NICU stay. Central line removal if line-associated."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature and vital signs", "priority": "immediate", "yield": 0.7, "indication": "all neonates" }
+      ],
+      "laboratory": [
+        { "name": "Full blood count and differential", "priority": "immediate", "yield": 0.6, "indication": "WBC, ANC, platelet count" },
+        { "name": "CRP (serial)", "priority": "high", "yield": 0.7, "indication": "trending for response" },
+        { "name": "Blood culture (aerobic)", "priority": "immediate", "yield": 0.3, "indication": "before starting antibiotics" },
+        { "name": "CSF analysis and culture", "priority": "high", "yield": 0.8, "indication": "if meningitis suspected, after stabilization" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.7, "indication": "hypoglycemia common" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / Kenya IP Paediatric Protocol - Neonatal Sepsis",
+      "pathways": [
+        {
+          "severity": "suspected sepsis",
+          "criteria": "any sign of infection in neonate",
+          "treatment": "Blood culture. Start empiric antibiotics (Ampicillin + Gentamicin). Supportive care (warmth, feeding support, oxygen). Monitor for complications."
+        },
+        {
+          "severity": "severe sepsis/shock",
+          "criteria": "hypotension, poor perfusion, apnea, seizures",
+          "treatment": "IV fluids cautiously (10 mL/kg N/S bolus). Inotropes if needed. IV antibiotics. respiratory support. Correct hypoglycemia/hypocalcemia. ICU admission."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "immature_immune_system",
+      "maternal_pathogen_transmission",
+      "systemic_inflammatory_response",
+      "multi_organ_dysfunction",
+      "metabolic_derangements"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "neonatal_meningitis",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["seizures", "bulging_fontanelle", "high_index_suspicion"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["petechiae", "bleeding", "low_platelets"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["neonate_with_poor_feeding", "fever_hypothermia", "lethargy_irritability", "maternal_risk_factors"],
+    "exclusionClues": ["well_thriving_neonate", "no_risk_factors", "normal_crp_trending"]
+  }
+}

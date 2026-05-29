@@ -1,0 +1,135 @@
+{
+  "disease": {
+    "id": "stemi",
+    "name": "STEMI",
+    "system": "emergency_medicine",
+    "agePeak_months": [480, 960],
+    "note": "ST-Elevation Myocardial Infarction. Acute coronary occlusion causing transmural myocardial ischemia. Time-to-reperfusion is the strongest predictor of outcome. 'Time is muscle.'",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["cardiac_emergency", "acute_coronary_syndrome", "chest_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "ventricular_arrhythmia", "weight": 9 },
+        { "sign": "pulmonary_oedema", "weight": 9 },
+        { "sign": "complete_heart_block", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "STEMI is a TIME-CRITICAL emergency requiring immediate reperfusion (PCI first <120min, else thrombolysis)."
+    },
+    "historyFeatures": [
+      { "symptomId": "chest_pain_central_crushing", "weight": 5 },
+      { "symptomId": "chest_pain_radiating_to_arm_jaw", "weight": 4 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "diaphoresis", "weight": 4 },
+      { "symptomId": "fatigue_or_malaise", "weight": 2 },
+      { "symptomId": "palpitations_or_syncope", "weight": 2 },
+      { "symptomId": "chest_pain_unrelieved_by_rest_gtn", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "chest_pain_on_palpation", "baseWeight": 2 },
+      { "signId": "diaphoresis", "baseWeight": 4 },
+      { "signId": "tachycardia_or_bradycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "signs_of_heart_failure", "baseWeight": 3 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "anxiety_restlessness", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "hyperlipidaemia", "multiplier": 1.5 },
+      { "id": "family_history_premature_cad", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.3 },
+      { "id": "previous_mi_or_pci", "multiplier": 3.0 },
+      { "id": "cocaine_use", "multiplier": 3.0 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.98, "indication": "all chest pain, door-to-ECG <10min" },
+        { "name": "Right-sided ECG if inferior STEMI", "priority": "high", "yield": 0.7, "indication": "detect RV infarction" },
+        { "name": "ECG monitoring (defibrillator pads)", "priority": "immediate", "yield": 0.5, "indication": "arrhythmia monitoring" }
+      ],
+      "laboratory": [
+        { "name": "Troponin (hs-cTnI/T)", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis, peak prognostic" },
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.4, "indication": "baseline before PCI" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.3, "indication": "before anticoagulation" },
+        { "name": "Lipid profile", "priority": "medium", "yield": 0.3, "indication": "risk factor assessment" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.4, "indication": "pulmonary oedema, widened mediastinum" },
+        { "name": "Echocardiography (POCUS)", "priority": "high", "yield": 0.8, "indication": "wall motion abnormality, LVE, mechanical complications" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for STEMI / AHA/ACC STEMI Guidelines",
+      "pathways": [
+        {
+          "severity": "STEMI within 12h of symptom onset",
+          "criteria": "ST-elevation >=1mm in 2 contiguous leads (or new LBBB) + ischemic symptoms",
+          "treatment": "MONA: Morphine 2.5-5mg IV (pain), Oxygen (if SpO2 <90%), Nitrates GTN 0.3-0.6mg SL (caution in inferior/RV STEMI), Aspirin 300mg chewed. Second antiplatelet (ticagrelor 180mg or prasugrel 60mg). Anticoagulation (heparin/enoxaparin). Primary PCI <120min from diagnosis. If PCI not available within 120min: thrombolysis (tenecteplase/alteplase) within 30min. Transfer to PCI centre post-thrombolysis."
+        },
+        {
+          "severity": "STEMI with cardiogenic shock",
+          "criteria": "SBP <90 + signs of hypoperfusion, in setting of STEMI",
+          "treatment": "Urgent PCI (emergent revascularization). Norepinephrine for MAP >65. Do not bolus fluids excessively (risk of pulmonary oedema). Inotropic support. IABP or temporary mechanical circulatory support (Impella, ECMO). ICU."
+        },
+        {
+          "severity": "cardiac arrest (VF/VT)",
+          "criteria": "VF or pulseless VT in STEMI context",
+          "treatment": "Defibrillation per ALS protocol. CPR. Post-ROSC: targeted temperature management. Emergency coronary angiography. PCI if appropriate."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "acute_plaque_rupture_or_erosion",
+      "coronary_thrombosis",
+      "total_or_subtotal_occlusion",
+      "transmural_myocardial_ischaemia",
+      "myocardial_necrosis",
+      "electrical_instability",
+      "mechanical_dysfunction",
+      "reperfusion_injury"
+    ],
+    "complications": [
+      {
+        "diseaseId": "cardiogenic_shock",
+        "probability": 0.07,
+        "severityBoost": 0.7,
+        "clues": ["hypotension", "oliguria", "altered_mental_status", "cold_peripheries"]
+      },
+      {
+        "diseaseId": "ventricular_fibrillation",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["cardiac_arrest_in_first_hours"]
+      },
+      {
+        "diseaseId": "free_wall_rupture",
+        "probability": 0.03,
+        "severityBoost": 0.9,
+        "clues": ["recurrent_chest_pain", "electromechanical_dissociation", "hypotension_sudden"]
+      },
+      {
+        "diseaseId": "ventricular_septal_rupture",
+        "probability": 0.02,
+        "severityBoost": 0.8,
+        "clues": ["new_harsh_holosystolic_murmur", "biventricular_failure"]
+      },
+      {
+        "diseaseId": "pericarditis_dressler",
+        "probability": 0.04,
+        "severityBoost": 0.2,
+        "clues": ["chest_pain_positional", "pericardial_rub", "weeks_post_mi"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["central_chest_pain", "ste_on_ecg", "troponin_elevation", "radiating_to_arm_jaw", "diaphoresis"],
+    "exclusionClues": ["normal_ecg", "normal_troponin", "non_cardiac_chest_pain", "ecg_not_diagnostic"]
+  }
+}

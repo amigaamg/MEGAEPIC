@@ -1,0 +1,151 @@
+{
+  "disease": {
+    "id": "chronic_myeloid_leukemia",
+    "name": "Chronic Myeloid Leukemia",
+    "system": "hematology",
+    "agePeak_months": [600, 720, 960],
+    "note": "Myeloproliferative neoplasm characterized by t(9;22) BCR-ABL1 fusion gene (Philadelphia chromosome). Triphasic course: chronic, accelerated, blast phase.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["leukemia", "myeloproliferative", "chronic", "philadelphia_chromosome"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "blast_crisis", "weight": 10 },
+        { "sign": "leukostasis", "weight": 9, "note": "WBC >300,000" },
+        { "sign": "splenic_rupture", "weight": 9 },
+        { "sign": "sepsis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "chronic_phase": true
+      },
+      "severityLabel": "If blast crisis or leukostasis -> EMERGENCY; chronic phase -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "abdominal_fullness", "weight": 3, "note": "Splenomegaly" },
+      { "symptomId": "night_sweats", "weight": 2 },
+      { "symptomId": "gout", "weight": 1 },
+      { "symptomId": "easy_bruising", "weight": 1 },
+      { "symptomId": "asymptomatic_incidental", "weight": 5, "note": "Many discovered on routine blood test" }
+    ],
+
+    "examFeatures": [
+      { "signId": "splenomegaly", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "sternal_tenderness", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "radiation_exposure", "multiplier": 3.0 },
+      { "id": "older_age", "multiplier": 2.0 },
+      { "id": "male_gender", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "chronic_phase_cml",
+        "name": "Chronic Phase CML",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "blasts_less_than_10_percent", "weight": 5 },
+          { "feature": "leukocytosis_with_full_maturation", "weight": 5 },
+          { "feature": "bcr_abl1_positive", "weight": 5 }
+        ],
+        "management": "Tyrosine kinase inhibitor (imatinib, dasatinib, nilotinib). Monitor BCR-ABL transcript levels q3 months."
+      },
+      {
+        "id": "accelerated_phase_cml",
+        "name": "Accelerated Phase CML",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "blasts_10_to_19_percent", "weight": 5 },
+          { "feature": "basophils_above_20_percent", "weight": 4 },
+          { "feature": "clonal_evolution", "weight": 4 }
+        ],
+        "management": "Switch TKI. Consider HSCT. Clinical trial options."
+      },
+      {
+        "id": "blast_phase_cml",
+        "name": "Blast Phase CML",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "blasts_above_20_percent", "weight": 5 },
+          { "feature": "extramedullary_blasts", "weight": 4 }
+        ],
+        "management": "Treat as acute leukemia (ALL or AML type induction). TKI + chemo. HSCT if response."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "polycythemia_vera",
+        "discriminators": ["high_hb_hematocrit", "jak2_mutation", "no_bcr_abl"]
+      },
+      {
+        "diseaseId": "essential_thrombocythemia",
+        "discriminators": ["isolated_thrombocytosis", "jak2_calr_mpl_mutation", "no_bcr_abl"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "Leukocytosis, low LAP score" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.95, "indication": "Myeloid precursors, basophilia, eosinophilia" }
+      ],
+      "laboratory": [
+        { "name": "BCR-ABL1 FISH or PCR", "priority": "immediate", "yield": 0.99, "indication": "Diagnostic - t(9;22) in 95%" },
+        { "name": "Bone marrow aspirate", "priority": "high", "yield": 0.9, "indication": "Hypercellular, assess phase" },
+        { "name": "Leukocyte alkaline phosphatase (LAP)", "priority": "medium", "yield": 0.7, "indication": "Low in CML" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "medium", "yield": 0.6, "indication": "Assess spleen size" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / ELN Guidelines for CML",
+      "pathways": [
+        {
+          "severity": "chronic_phase_first_line",
+          "criteria": "Newly diagnosed chronic phase",
+          "treatment": "Imatinib 400mg daily. Or 2nd-gen TKI (dasatinib, nilotinib) if high risk. Monitor BCR-ABL by PCR at 3, 6, 12 months."
+        },
+        {
+          "severity": "blast_crisis",
+          "criteria": "Blasts >20% or extramedullary disease",
+          "treatment": "TKI + acute leukemia-type induction. HSCT evaluation. Clinical trials."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bcr_abl1_fusion_gene",
+      "constitutive_tyrosine_kinase_activity",
+      "uncontrolled_myeloid_proliferation",
+      "genomic_instability",
+      "clonal_evolution",
+      "blast_transformation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "blast_crisis",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["rising_blast_count", "new_cytogenetic_abnormalities", "extramedullary_disease"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low unless blast crisis",
+    "diagnosticClues": ["leukocytosis", "basophilia", "splenomegaly", "bcr_abl_positive"],
+    "exclusionClues": ["jak2_mutation", "reactive_leukocytosis", "negative_bcr_abl"]
+  }
+}

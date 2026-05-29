@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "anal_fissure",
+    "name": "Anal Fissure",
+    "system": "surgical",
+    "agePeak_months": [180, 480],
+    "note": "Longitudinal tear in the anal canal distal to dentate line. Severe pain on defecation and bright red bleeding.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["anal_pain", "rectal_bleeding", "constipation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_anal_pain_incapacitating", "weight": 6 },
+        { "sign": "infection_abscess", "weight": 7 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "chronic_fissure_more_than_6_weeks", "weight": 5 },
+          { "sign": "sentinel_tag_hypertrophied_papilla", "weight": 4 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Chronic fissure with complicating features -> SEVERE; acute fissure -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sharp_anal_pain_on_defecation", "weight": 5 },
+      { "symptomId": "bright_red_bleeding_per_rectum", "weight": 4, "note": "Blood on toilet paper only" },
+      { "symptomId": "constipation", "weight": 4, "note": "Usually preceded by hard stool" },
+      { "symptomId": "pain_lasts_hours_after_defecation", "weight": 4 },
+      { "symptomId": "fear_of_defecation", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "posterior_midline_fissure", "baseWeight": 5, "doubleWeight": true, "note": "90% posterior midline" },
+      { "signId": "sentinel_skin_tag", "baseWeight": 3, "note": "Chronic fissure indicator" },
+      { "signId": "hypertrophied_anal_papilla", "baseWeight": 2 },
+      { "signId": "sphincter_spasm_anal", "baseWeight": 3 },
+      { "signId": "digital_rectal_exam_painful", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_constipation", "multiplier": 2.5 },
+      { "id": "passage_of_hard_stool", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 1.5 },
+      { "id": "childbirth_trauma", "multiplier": 1.5 },
+      { "id": "low_fiber_diet", "multiplier": 1.8 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_anal_fissure",
+        "name": "Acute Anal Fissure",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "recent_onset_less_6_weeks", "weight": 5 },
+          { "feature": "severe_pain_with_defecation", "weight": 5 },
+          { "feature": "no_sentinel_tag", "weight": 4 }
+        ],
+        "management": "Conservative: High fiber diet, increased fluids, stool softeners. Warm sitz baths. Topical lidocaine. Topical GTN (0.2% Nitroglycerin) or Nifedipine/Diltiazem cream. Heals spontaneously in many."
+      },
+      {
+        "id": "chronic_anal_fissure",
+        "name": "Chronic Anal Fissure",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "duration_more_than_6_weeks", "weight": 5 },
+          { "feature": "sentinel_tag", "weight": 4 },
+          { "feature": "hypertrophied_papilla", "weight": 3 },
+          { "feature": "visible_internal_sphincter_fibers", "weight": 4 }
+        ],
+        "management": "Medical: Topical GTN/Nifedipine for 8 weeks. Botulinum toxin injection (Botox). Surgical: Lateral internal sphincterotomy (LIS) if medical therapy fails. Fissurectomy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hemorrhoids",
+        "discriminators": ["painless_bleeding", "prolapse", "no_sphincter_spasm", "visible_on_proctoscopy"]
+      },
+      {
+        "diseaseId": "anal_cancer",
+        "discriminators": ["non_healing_ulcer", "irregular_borders", "no_midline_location", "biopsy_positive"]
+      },
+      {
+        "diseaseId": "crohns_fissure",
+        "discriminators": ["atypical_location", "multiple_fissures", "other_perianal_disease", "ibd_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Gentle perianal examination", "priority": "immediate", "yield": 0.9, "indication": "visual inspection often diagnostic" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "low", "yield": 0.1, "indication": "rarely indicated" }
+      ],
+      "imaging": [
+        { "name": "Anoscopy", "priority": "medium", "yield": 0.6, "indication": "if tolerated, to confirm" },
+        { "name": "Colonoscopy", "priority": "low", "yield": 0.2, "indication": "if atypical features, IBD suspected, or screening" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASCRS Clinical Practice Guidelines for Anal Fissure",
+      "pathways": [
+        {
+          "severity": "acute",
+          "criteria": "symptoms <6 weeks, no sentinel tag",
+          "treatment": "Dietary modification (fiber 25-35g/day, 2-3L fluid). Warm sitz baths. Topical lidocaine for pain. Stool softeners. Topical GTN or Nifedipine. Heals in 2-4 weeks."
+        },
+        {
+          "severity": "chronic",
+          "criteria": "symptoms >6 weeks, sentinel tag, hypertrophied papilla",
+          "treatment": "Topical GTN 0.2% or Nifedipine 0.3% cream for 8 weeks. Botox injection (20-30 units). Lateral internal sphincterotomy (LIS) if medical therapy fails. Fissurectomy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "trauma_from_hard_stool",
+      "anal_canal_tear",
+      "internal_sphincter_spasm",
+      "ischemia_of_fissure_base",
+      "failure_to_heal",
+      "chronic_ulceration"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "perianal_abscess",
+        "probability": 0.02,
+        "lagDays": [3, 14],
+        "severityBoost": 0.3,
+        "clues": ["increasing_pain", "swelling", "fever"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["sharp_anal_pain_on_defecation", "bright_red_blood_on_tissue", "posterior_midline_tear", "sphincter_spasm"],
+    "exclusionClues": ["painless_bleeding", "lateral_or_anterior_location", "chronic_non_healing_ulcer"]
+  }
+}

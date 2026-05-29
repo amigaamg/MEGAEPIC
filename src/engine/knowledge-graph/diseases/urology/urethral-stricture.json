@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "urethral_stricture",
+    "name": "Urethral Stricture",
+    "system": "urology",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["voiding_dysfunction", "obstructive_uropathy"],
+    "mustNotMiss": false,
+    "emergencyPriority": "non-urgent",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_urinary_retention", "weight": 5, "description": "Complete obstruction" },
+        { "sign": "extravasation_of_urine", "weight": 5, "description": "Rupture of urethra" },
+        { "sign": "fever_with_retention", "weight": 4, "description": "Obstruction with infection" }
+      ],
+      "severeCriteria": { "anyDangerSign": true, "additionalCriteria": [ { "sign": "recurrent_utis", "weight": 3 } ] },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "obstructive-voiding"
+    },
+    "historyFeatures": [
+      { "symptomId": "poor_urinary_stream", "weight": 5 },
+      { "symptomId": "hesitancy", "weight": 4 },
+      { "symptomId": "straining_to_void", "weight": 4 },
+      { "symptomId": "dribbling_post_void", "weight": 3 },
+      { "symptomId": "spraying_or_bifid_stream", "weight": 4 },
+      { "symptomId": "recurrent_urinary_tract_infections", "weight": 3 },
+      { "symptomId": "acute_urinary_retention", "weight": 4 },
+      { "symptomId": "previous_urethral_instrumentation", "weight": 5 },
+      { "symptomId": "history_of_pelvic_trauma", "weight": 4 },
+      { "symptomId": "previous_urethritis_gonorrhea", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "palpable_urethral_induration", "baseWeight": 4 },
+      { "signId": "difficulty_passing_catheter_or_scope", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "distended_bladder", "baseWeight": 4 },
+      { "signId": "urethral_meatal_stenosis", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "previous_urethral_instrumentation", "multiplier": 3.0 },
+      { "id": "pelvic_fracture_urethral_injury", "multiplier": 4.0 },
+      { "id": "straddle_injury", "multiplier": 3.5 },
+      { "id": "gonococcal_or_chlamydial_urethritis", "multiplier": 2.5 },
+      { "id": "lichen_sclerosus", "multiplier": 3.0 }
+    ],
+    "diagnosticClues": [
+      "progressive poor urinary stream with straining",
+      "history of urethral instrumentation or pelvic trauma",
+      "difficulty passing urethral catheter"
+    ],
+    "exclusionClues": [ "normal Qmax >20 mL/s on uroflowmetry", "cystoscopy shows normal urethra" ],
+    "subtypes": [
+      {
+        "id": "anterior_urethral_stricture", "name": "Anterior Urethral Stricture (bulbar/pendulous)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [ { "feature": "stricture_in_bulbar_or_penile_urethra", "weight": 5 }, { "feature": "spongiofibrosis_on_US", "weight": 4 } ],
+        "management": { "management": "DVIU if short <2 cm, urethroplasty (anastomotic or graft) for longer/recurrent" }
+      },
+      {
+        "id": "posterior_urethral_stricture", "name": "Posterior Urethral Stricture (membranous)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [ { "feature": "stricture_in_membranous_urethra", "weight": 5 }, { "feature": "pelvic_fracture_history", "weight": 5 } ],
+        "management": { "management": "Urethroplasty (progressive perineal or abdominoperineal), specialist referral" }
+      },
+      {
+        "id": "meatal_stenosis", "name": "Meatal Stenosis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [ { "feature": "pinpoint_meatus", "weight": 5 }, { "feature": "deflected_bifid_stream", "weight": 4 } ],
+        "management": { "management": "Meatal dilation, meatotomy, or meatoplasty" }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "benign_prostatic_hyperplasia", "discriminators": ["men >50", "no trauma history", "normal RUG"] },
+      { "diseaseId": "bladder_neck_contracture", "discriminators": ["post-TURP", "normal distal urethra on cystoscopy"] },
+      { "diseaseId": "neurogenic_bladder_dsd", "discriminators": ["neurologic diagnosis", "urodynamics shows DSD", "normal urethrogram"] }
+    ],
+    "investigations": {
+      "bedside": [ { "name": "Uroflowmetry", "priority": "first-line", "yield": 4, "indication": "reduced Qmax <10 mL/s plateau pattern" }, { "name": "Post-Void Residual", "priority": "first-line", "yield": 4, "indication": "elevated PVR >100 mL" } ],
+      "laboratory": [ { "name": "Urinalysis and Culture", "priority": "essential", "yield": 3, "indication": "exclude UTI" }, { "name": "Serum Creatinine", "priority": "routine", "yield": 2, "indication": "renal function in chronic obstruction" } ],
+      "imaging": [ { "name": "Retrograde Urethrogram (RUG)", "priority": "gold-standard", "yield": 5, "indication": "defines stricture location, length, severity" }, { "name": "VCUG", "priority": "essential", "yield": 5, "indication": "visualizes proximal urethra" }, { "name": "Ultrasound or MRI Urethra", "priority": "supportive", "yield": 4, "indication": "spongiofibrosis assessment" } ]
+    },
+    "management": {
+      "protocolReference": "AUA/SUFU Urethral Stricture Guidelines; EAU Guidelines",
+      "pathways": [
+        {
+          "severity": "minimal",
+          "criteria": "Qmax >10, PVR <100, mild symptoms",
+          "treatment": [ "Observation or urethral dilation", "CIC self-dilation program; alpha-blockers" ]
+        },
+        {
+          "severity": "moderate",
+          "criteria": "Qmax 5-10, stricture <2 cm, anterior",
+          "treatment": [ "Direct Vision Internal Urethrotomy (DVIU) cold knife/laser", "If recurrence after 2 DVIU → urethroplasty" ]
+        },
+        {
+          "severity": "severe-complex",
+          "criteria": "stricture >2 cm, posterior, recurrent, or obliterative",
+          "treatment": [ "Reconstructive urology referral", "Anastomotic or substitution urethroplasty (buccal mucosa graft)", "Perineal urethrostomy or suprapubic catheter as salvage" ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Fibrotic narrowing of urethral lumen from corpus spongiosum fibrosis (spongiofibrosis)",
+      "Ischemic injury from instrumentation or trauma; inflammatory scarring from gonococcal urethritis",
+      "Lichen sclerosus (BXO): chronic dermatologic condition causing progressive meatal/anterior scarring",
+      "Spongiofibrosis depth and length correlate with recurrence risk and treatment complexity"
+    ],
+    "complications": [
+      { "diseaseId": "acute_urinary_retention", "probability": 0.2, "severityBoost": 0.4 },
+      { "diseaseId": "recurrent_utis", "probability": 0.3, "severityBoost": 0.2 },
+      { "diseaseId": "urethral_abscess_or_fistula", "probability": 0.05, "severityBoost": 0.5 },
+      { "diseaseId": "hydronephrosis_renal_impairment", "probability": 0.08, "severityBoost": 0.5, "lagDays": [365, 3650] },
+      { "diseaseId": "stricture_recurrence_after_treatment", "probability": 0.3, "severityBoost": 0.3, "lagDays": [90, 730] }
+    ]
+  }
+}

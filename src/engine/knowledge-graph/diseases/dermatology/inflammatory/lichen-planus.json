@@ -1,0 +1,135 @@
+{
+  "disease": {
+    "id": "lichen_planus",
+    "name": "Lichen Planus",
+    "system": "dermatology",
+    "agePeak_months": [360, 720],
+    "note": "Chronic inflammatory mucocutaneous disease. Typical violaceous polygonal flat-topped papules. Affects skin, oral mucosa, nails, scalp. Unknown etiology, T-cell mediated.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["inflammatory_skin", "papulosquamous", "mucocutaneous"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "oral_ulceration_severe", "weight": 8 },
+        { "sign": "esophageal_lichen_planus_dysphagia", "weight": 8 },
+        { "sign": "squamous_cell_carcinoma_transformation", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Disseminated/ulcerative/oral -> MODERATE-SEVERE; localized -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "purple_flat_topped_papules", "weight": 5 },
+      { "symptomId": "intense_itching", "weight": 4 },
+      { "symptomId": "oral_white_lacy_patches", "weight": 4 },
+      { "symptomId": "skin_lesions_on_flexor_wrists_ankles_lower_back", "weight": 4 },
+      { "symptomId": "nail_thinning_ridging", "weight": 3 },
+      { "symptomId": "scalp_scarring_alopecia", "weight": 2 },
+      { "symptomId": "stress_or_hepatitis_c_virus_association", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "violaceous_polygonal_flat_topped_papules", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "wickham_striae_lacy_white_lines", "baseWeight": 4 },
+      { "signId": "koebner_phenomenon_isomorphic", "baseWeight": 3 },
+      { "signId": "oral_reticular_white_patches", "baseWeight": 4 },
+      { "signId": "nail_ptrygium_ridging_thinning", "baseWeight": 3 },
+      { "signId": "flexor_surface_distribution", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "hepatitis_c_infection", "multiplier": 2.5 },
+      { "id": "stress", "multiplier": 1.5 },
+      { "id": "certain_drugs_beta_blockers_nsaids", "multiplier": 2.0 },
+      { "id": "genetic_predisposition_hla_dr1", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "cutaneous_lichen_planus",
+        "name": "Cutaneous Lichen Planus",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "violaceous_papules", "weight": 5 },
+          { "feature": "intense_pruritus", "weight": 4 },
+          { "feature": "flexor_wrist_ankle_distribution", "weight": 4 }
+        ],
+        "management": "Topical corticosteroids (potent/very potent). Oral antihistamines for itch. Phototherapy (UVB or PUVA) if widespread. Systemic steroids for severe cases (prednisolone 30-60mg/day taper)."
+      },
+      {
+        "id": "oral_lichen_planus",
+        "name": "Oral Lichen Planus",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "bilateral_buccal_white_reticular_striae", "weight": 5 },
+          { "feature": "painful_erosions_ulcers", "weight": 4 },
+          { "feature": "burning_sensation", "weight": 3 }
+        ],
+        "management": "Topical corticosteroids (betamethasone mouthwash or triamcinolone paste). Topical calcineurin inhibitors (tacrolimus). Systemic steroids for erosive disease. Avoid triggers. Monitor for SCC."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "psoriasis",
+        "discriminators": ["silvery_scale", "extensor_surfaces", "nail_pitting", "auspitz_sign"]
+      },
+      {
+        "diseaseId": "eczema",
+        "discriminators": ["flexural", "less_sharp_margins", "no_wickham_striae"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Skin biopsy (punch biopsy)", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis" }
+      ],
+      "laboratory": [
+        { "name": "HCV serology", "priority": "medium", "yield": 0.3, "indication": "association screening" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "British Association of Dermatologists / European Dermatology Forum Guidelines",
+      "pathways": [
+        {
+          "severity": "mild localized",
+          "criteria": "few lesions, mild itch",
+          "treatment": "Potent topical corticosteroid (clobetasol 0.05% cream BD). Antihistamines. Emollients. Usually self-limiting within 1-2 years."
+        },
+        {
+          "severity": "severe/disseminated/oral erosive",
+          "criteria": "extensive skin or painful oral lesions",
+          "treatment": "Systemic corticosteroids (prednisolone 30-60mg/day taper). UVB/PUVA for extensive skin. Acitretin or mycophenolate for chronic cases. Oral: topical steroids + tacrolimus. Screen for HCV."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "t_cell_mediated_autoimmune_response",
+      "cd8_cytotoxic_t_cell_attack_on_basal_keratinocytes",
+      "apoptosis_of_basal_cells",
+      "saw_tooth_lymphocytic_infiltrate",
+      "cytokine_dysregulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "squamous_cell_carcinoma",
+        "probability": 0.01,
+        "severityBoost": 0.5,
+        "clues": ["oral_erosive_lp", "non_healing_ulcer", "duration_over_10_years"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["violaceous_polygonal_flat_topped_papules", "wickham_striae", "oral_lacy_white_patches"],
+    "exclusionClues": ["silvery_scale", "negative_biopsy", "unilateral_oral_lesion"]
+  }
+}

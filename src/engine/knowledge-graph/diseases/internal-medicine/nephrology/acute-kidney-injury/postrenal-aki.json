@@ -1,0 +1,131 @@
+{
+  "disease": {
+    "id": "postrenal_aki",
+    "name": "Postrenal Acute Kidney Injury",
+    "system": "RENAL",
+    "agePeak_months": [480, 1080],
+    "note": "AKI caused by obstruction of urinary outflow tract. Reversible if relieved promptly. Bilateral obstruction or unilateral in solitary kidney needed to cause AKI.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["acute_kidney_injury", "obstructive_uropathy", "hydronephrosis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anuria_complete_obstruction", "weight": 9 },
+        { "sign": "obstructive_pyelonephritis_sepsis", "weight": 10 },
+        { "sign": "severe_hyperkalemia_uremic_symptoms", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Complete vs partial obstruction. Duration determines reversibility."
+    },
+    "historyFeatures": [
+      { "symptomId": "oliguria_anuria_intermittent", "weight": 5, "note": "Complete anuria suggests complete obstruction" },
+      { "symptomId": "flank_pain_colicky_or_dull", "weight": 4 },
+      { "symptomId": "hesitancy_weak_stream_incomplete_emptying", "weight": 4 },
+      { "symptomId": "hematuria", "weight": 3 },
+      { "symptomId": "history_of_stones_enlarged_prostate_malignancy", "weight": 4 },
+      { "symptomId": "suprapubic_pain_fullness", "weight": 3 },
+      { "symptomId": "alternating_anuria_and_polyuria", "weight": 3 },
+      { "symptomId": "dysuria_uti_symptoms", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "palpable_bladder_after_voiding", "baseWeight": 5 },
+      { "signId": "costovertebral_angle_tenderness", "baseWeight": 4 },
+      { "signId": "palpable_kidney_hydronephrosis", "baseWeight": 3 },
+      { "signId": "enlarged_prostate_on_dre", "baseWeight": 4 },
+      { "signId": "suprapubic_tenderness", "baseWeight": 3 },
+      { "signId": "signs_of_chronic_retention_hypertension", "baseWeight": 2 },
+      { "signId": "fever_if_complicated_by_infection", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "bph_enlarged_prostate", "multiplier": 4.0 },
+      { "id": "prostate_cancer", "multiplier": 3.0 },
+      { "id": "ureteric_stones_bilateral", "multiplier": 3.0 },
+      { "id": "retroperitoneal_fibrosis_malignancy", "multiplier": 2.5 },
+      { "id": "cervical_or_colorectal_cancer", "multiplier": 2.5 },
+      { "id": "neurogenic_bladder", "multiplier": 2.0 },
+      { "id": "previous_pelvic_surgery_radiation", "multiplier": 2.0 },
+      { "id": "solitary_kidney_with_obstruction", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "bladder_outlet_obstruction",
+        "name": "Bladder Outlet Obstruction",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "bph_or_prostate_enlargement", "weight": 5 },
+          { "feature": "palpable_bladder_post_void", "weight": 5 },
+          { "feature": "low_flow_rate_hesitancy", "weight": 4 },
+          { "feature": "ultrasound_shows_bladder_distension", "weight": 4 }
+        ],
+        "management": "Urgent bladder catheterization (Foley or suprapubic). Prostate management: alpha-blocker (tamsulosin), 5-ARI (finasteride). TURP if medical therapy fails. Monitor post-obstructive diuresis."
+      },
+      {
+        "id": "ureteric_obstruction_bilateral",
+        "name": "Bilateral Ureteric Obstruction",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "bilateral_hydronephrosis_on_imaging", "weight": 5 },
+          { "feature": "stones_retroperitoneal_mass", "weight": 4 },
+          { "feature": "flank_pain_radiating", "weight": 4 }
+        ],
+        "management": "Urgent decompression: retrograde ureteric stenting (double-J) or percutaneous nephrostomy. Treat underlying cause (lithotripsy/stenting for stones, biopsy for mass). Monitor post-obstructive diuresis with careful fluid and electrolyte replacement."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "prerenal_aki", "discriminators": ["fe_na_under_1", "no_hydronephrosis", "response_to_fluids", "bun_creat_ratio_greater_than_20"] },
+      { "diseaseId": "intrinsic_aki", "discriminators": ["muddy_brown_casts_or_acellular", "no_hydronephrosis", "bladders_can_empty"] },
+      { "diseaseId": "chronic_kidney_disease_with_acute_on_chronic", "discriminators": ["small_kidneys_on_uss", "no_hydronephrosis", "known_ckd_history"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, BUN, eGFR", "priority": "immediate", "yield": 0.95, "indication": "AKI staging" },
+        { "name": "U&E, bicarbonate", "priority": "immediate", "yield": 0.8, "indication": "hyperkalemia, acidosis" },
+        { "name": "Urinalysis + microscopy", "priority": "high", "yield": 0.6, "indication": "hematuria if stones; pyuria if infection" },
+        { "name": "PSA (if male >50)", "priority": "medium", "yield": 0.5, "indication": "prostate cancer screening" }
+      ],
+      "imaging": [
+        { "name": "Bladder scan (post-void residual)", "priority": "immediate", "yield": 0.9, "indication": "assess for bladder outlet obstruction" },
+        { "name": "Renal Ultrasound (KUB)", "priority": "first-line", "yield": 0.95, "indication": "hydronephrosis, stone detection, bladder distension" },
+        { "name": "NCCT KUB (non-contrast CT)", "priority": "high", "yield": 0.98, "indication": "stone localization, level of obstruction" },
+        { "name": "CT urogram (contrast)", "priority": "medium", "yield": 0.85, "indication": "anatomic detail, suspected malignancy" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO AKI Guidelines / EAU Guidelines on Urological Emergencies",
+      "pathways": [
+        {
+          "severity": "bladder outlet obstruction",
+          "criteria": "palpable bladder, PVR >300 mL, difficulty voiding",
+          "treatment": "Foley catheterization (16-18 Fr). Monitor urine output hourly. Post-obstructive diuresis (may produce >200 mL/h): replace 50-75% of urine output with 0.45% NS. Monitor electrolytes q6h. Alpha-blocker (tamsulosin 0.4 mg)."
+        },
+        {
+          "severity": "ureteric obstruction",
+          "criteria": "bilateral hydronephrosis, elevated creatinine",
+          "treatment": "Nephrology + urology consult. Decompression: retrograde double-J stent (preferred) or percutaneous nephrostomy (if stent fails). Prophylactic antibiotics if obstruction + fever. Manage cause."
+        },
+        {
+          "severity": "obstructive pyelonephritis/sepsis",
+          "criteria": "obstruction with fever, leukocytosis, positive cultures",
+          "treatment": "Empiric IV antibiotics (piperacillin-tazobactam or carbapenem) after cultures. Emergency decompression (stent or nephrostomy). Vasopressors if septic shock. Blood cultures. ICU admission."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "urinary_tract_obstruction",
+      "increased_intratubular_pressure",
+      "decreased_gfr_hydrostatic_pressure_gradient",
+      "hydronephrosis_and_hydroureter",
+      "renal_parenchymal_atrophy_if_prolonged",
+      "post_obstructive_diuresis"
+    ],
+    "complications": [
+      { "diseaseId": "obstructive_pyelonephritis", "probability": 0.15, "severityBoost": 0.5, "clues": ["fever", "chills", "flank_pain", "pyuria", "positive_urine_culture"] },
+      { "diseaseId": "post_obstructive_diuresis", "probability": 0.5, "severityBoost": 0.2, "clues": ["high_urine_output_after_decompression", "electrolyte_imbalance", "hypotension"] },
+      { "diseaseId": "chronic_kidney_disease", "probability": 0.2, "severityBoost": 0.3, "clues": ["prolonged_obstruction_over_weeks", "failure_of_creatinine_to_normalize", "small_kidneys_on_follow_up_uss"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["anuria_or_oliguria_with_hydronephrosis", "palpable_bladder", "bph_or_stone_history", "flank_pain_with_azotemia"],
+    "exclusionClues": ["no_hydronephrosis_on_uss", "normal_post_void_residual", "prerenal_or_intrinsic_indices_on_urine_studies"]
+  }
+}

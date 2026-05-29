@@ -1,0 +1,166 @@
+{
+  "disease": {
+    "id": "surgical_abscess",
+    "name": "Surgical Abscess",
+    "system": "surgical",
+    "agePeak_months": [120, 600],
+    "note": "Localized pus collection from infection. Painful, erythematous, fluctuant mass. Requires incision and drainage.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["skin_infection", "pus_collection", "painful_swelling"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "deep_abscess_compromising_airway", "weight": 10 },
+        { "sign": "systemic_sepsis", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "deep_space_infection", "weight": 7 },
+          { "sign": "large_size_more_than_5cm", "weight": 5 },
+          { "sign": "immunosuppressed_host", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Deep/sepsis/immunosuppressed -> SEVERE; superficial small -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painful_swelling", "weight": 5 },
+      { "symptomId": "redness_warmth", "weight": 4 },
+      { "symptomId": "fever_chills", "weight": 3 },
+      { "symptomId": "history_of_skin_break_infection", "weight": 3 },
+      { "symptomId": "previous_surgery_or_trauma", "weight": 3 },
+      { "symptomId": "fluctuant_lump", "weight": 5 },
+      { "symptomId": "pus_discharge", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fluctuant_swelling", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "erythema_warmth", "baseWeight": 4 },
+      { "signId": "tenderness", "baseWeight": 4 },
+      { "signId": "surrounding_cellulitis", "baseWeight": 3 },
+      { "signId": "regional_lymphadenopathy", "baseWeight": 2 },
+      { "signId": "pointing_sign_pustule", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 2.5 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "intravenous_drug_use", "multiplier": 3.0 },
+      { "id": "poor_hygiene", "multiplier": 1.5 },
+      { "id": "skin_disease_folliculitis", "multiplier": 2.0 },
+      { "id": "post_surgical_wound", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "superficial_abscess",
+        "name": "Superficial Abscess (Subcutaneous)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "skin_level_fluctuant_mass", "weight": 5 },
+          { "feature": "localized_pain_erythema", "weight": 4 },
+          { "feature": "no_systemic_symptoms", "weight": 4 }
+        ],
+        "management": "Incision and drainage under LA. Pus culture. Packing or drain. Antibiotics only if cellulitis or immunocompromised. Remove packing in 24-48h."
+      },
+      {
+        "id": "deep_abscess",
+        "name": "Deep Abscess (Psoas, Retropharyngeal, Paracolic)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "deep_seated_pain", "weight": 5 },
+          { "feature": "fever_systemic_symptoms", "weight": 5 },
+          { "feature": "no_fluctuance_on_surface", "weight": 4 },
+          { "feature": "may_have_limited_range_of_motion", "weight": 3 }
+        ],
+        "management": "CT-guided percutaneous drainage or surgical drainage under GA. IV antibiotics. Pus culture. Source control. Treat underlying cause."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sebaceous_cyst_infection",
+        "discriminators": ["central_punctum", "chronic_present", "cheesy_material"]
+      },
+      {
+        "diseaseId": "hematoma",
+        "discriminators": ["no_erythema_warmth", "history_of_trauma_anticoagulation", "aspiration_shows_blood"]
+      },
+      {
+        "diseaseId": "lipoma",
+        "discriminators": ["non_tender", "no_erythema", "no_fluctuance", "soft_rubbery"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Needle aspiration", "priority": "high", "yield": 0.9, "indication": "confirm pus" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "medium", "yield": 0.5, "indication": "may be elevated" },
+        { "name": "CRP", "priority": "medium", "yield": 0.6, "indication": "inflammation marker" },
+        { "name": "Pus culture + sensitivity", "priority": "high", "yield": 0.8, "indication": "guide antibiotics" },
+        { "name": "Blood cultures", "priority": "medium", "yield": 0.3, "indication": "if septic" }
+      ],
+      "imaging": [
+        { "name": "Soft Tissue Ultrasound", "priority": "high", "yield": 0.85, "indication": "confirm abscess, size, depth" },
+        { "name": "CT/MRI", "priority": "medium", "yield": 0.9, "indication": "for deep abscesses" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Guidelines for Skin Abscess",
+      "pathways": [
+        {
+          "severity": "superficial small (<2cm)",
+          "criteria": "superficial, no cellulitis, afebrile",
+          "treatment": "Incision and drainage alone. No antibiotics unless immunocompromised or severe surrounding cellulitis."
+        },
+        {
+          "severity": "large or deep",
+          "criteria": ">2cm, deep, fever, immunocompromised",
+          "treatment": "I&D or US/CT-guided drainage. IV antibiotics. Pus culture. Wound packing. Repeat imaging if no improvement."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bacterial_inoculation",
+      "local_inflammation",
+      "abscess_wall_formation",
+      "purulent_collection",
+      "increased_local_pressure",
+      "spontaneous_drainage_or_extension"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bacteremia_sepsis",
+        "probability": 0.05,
+        "lagDays": [1, 5],
+        "severityBoost": 0.4,
+        "clues": ["fever_rigors", "hypotension", "worsening_toxicity"]
+      },
+      {
+        "diseaseId": "recurrence",
+        "probability": 0.1,
+        "lagDays": [7, 60],
+        "severityBoost": 0.1,
+        "clues": ["reaccumulation", "pain_returning", "inadequate_drainage"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["painful_fluctuant_swelling", "erythema", "pus_on_aspiration", "fever"],
+    "exclusionClues": ["non_fluctuant", "no_pus", "solid_mass_on_us"]
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "disease": {
+    "id": "mitral_regurgitation",
+    "name": "Mitral Regurgitation",
+    "system": "CARD",
+    "agePeak_months": [540, 960],
+    "note": "Leakage of blood from LV into LA during systole. Causes: primary (valve structural) or secondary (LV dilation).",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["valvular_heart_disease", "left_heart_volume_overload"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_pulmonary_oedema", "weight": 10 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "new_severe_mr", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If acute/pulmonary oedema/shock -> ACUTE MR (emergency); else -> CHRONIC MR"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "reduced_exercise_tolerance", "weight": 3 },
+      { "symptomId": "lower_limb_swelling", "weight": 2 },
+      { "symptomId": "acute_severe_dyspnea", "weight": 4, "note": "Acute MR (e.g., chordal rupture, papillary muscle rupture)" }
+    ],
+    "examFeatures": [
+      { "signId": "pansystolic_murmur_apex", "baseWeight": 5, "doubleWeight": true, "note": "Radiates to axilla" },
+      { "signId": "displaced_hyperdynamic_apex", "baseWeight": 3 },
+      { "signId": "s3_gallop", "baseWeight": 3 },
+      { "signId": "crackles_lung_bases", "baseWeight": 3 },
+      { "signId": "signs_of_left_ventricular_enlargement", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "mitral_valve_prolapse", "multiplier": 2.0 },
+      { "id": "rheumatic_heart_disease", "multiplier": 2.0 },
+      { "id": "ischemic_heart_disease", "multiplier": 2.0 },
+      { "id": "dilated_cardiomyopathy", "multiplier": 2.5 },
+      { "id": "endocarditis", "multiplier": 2.0 },
+      { "id": "myxomatous_degeneration", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "primary_mr",
+        "name": "Primary (Degenerative) MR",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "valve_prolapse_or_flail", "weight": 5 },
+          { "feature": "normal_lv_function", "weight": 4 }
+        ],
+        "management": "Mitral valve repair (preferred) or replacement. If severe and symptomatic: surgery. If severe and LVEF >30%: surveillance."
+      },
+      {
+        "id": "secondary_mr",
+        "name": "Secondary (Functional) MR",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "lv_dilation", "weight": 5 },
+          { "feature": "tethering_of_leaflets", "weight": 4 }
+        ],
+        "management": "Treat underlying LV dysfunction (GDMT for HF). Revascularization if ischemic. Transcatheter edge-to-edge repair (MitraClip) if appropriate."
+      },
+      {
+        "id": "acute_mr",
+        "name": "Acute MR (e.g., chordal/papillary rupture)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "sudden_dyspnea", "weight": 5 },
+          { "feature": "acute_pulmonary_oedema", "weight": 5 },
+          { "feature": "new_loud_murmur", "weight": 5 }
+        ],
+        "management": "Emergency surgery. IV vasodilators (nitroprusside). IABP as bridge. Treat cause (revascularization if papillary rupture post-MI)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "ventricular_septal_defect", "discriminators": ["holosystolic_left_lower_sternal_border", "thrill", "lr_shunt"] },
+      { "diseaseId": "tricuspid_regurgitation", "discriminators": ["left_lower_sternal", "increases_with_inspiration", "cannon_v_waves"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "high", "yield": 0.3, "indication": "LA enlargement, LVH, AF" }
+      ],
+      "laboratory": [
+        { "name": "BNP/NT-proBNP", "priority": "medium", "yield": 0.6, "indication": "HF severity assessment" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "severity (EROA, regurgitant volume, vena contracta), mechanism, LV function" },
+        { "name": "Transesophageal echo", "priority": "medium", "yield": 0.95, "indication": "pre-surgical assessment, anatomical detail" },
+        { "name": "Cardiac MRI", "priority": "low", "yield": 0.85, "indication": "regurgitant volume quantification" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC/EACTS Guidelines for Valvular Heart Disease",
+      "pathways": [
+        {
+          "severity": "mild-moderate MR",
+          "criteria": "EROA <40 mm2, NYHA I-II, LVEF >60%, LVESD <40 mm",
+          "treatment": "Medical surveillance. Vasodilators not recommended for normotensives with primary MR. Treat HF if secondary MR. Monitor echo annually."
+        },
+        {
+          "severity": "severe primary MR (indication for surgery)",
+          "criteria": "EROA ≥40 mm2, symptomatic, or LVEF ≤60%, or LVESD ≥40 mm",
+          "treatment": "Mitral valve repair (preferred over replacement, better outcomes). Surgery: repair vs prosthetic valve. Transcatheter edge-to-edge repair if high surgical risk."
+        },
+        {
+          "severity": "acute severe MR",
+          "criteria": "papillary muscle rupture, chordal rupture, acute severe dyspnea",
+          "treatment": "Emergency surgery. IV nitroprusside for afterload reduction. IABP to reduce regurgitant volume. Inotropes if shock."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "systolic_flow_reversal_into_la",
+      "left_atrial_volume_overload",
+      "left_ventricular_volume_overload",
+      "eccentric_hypertrophy",
+      "myocardial_fibrosis",
+      "reduced_forward_cardiac_output"
+    ],
+    "complications": [
+      { "diseaseId": "atrial_fibrillation", "probability": 0.3, "severityBoost": 0.2, "clues": ["la_enlargement", "palpitations"] },
+      { "diseaseId": "pulmonary_hypertension", "probability": 0.15, "severityBoost": 0.3, "clues": ["raised_jvp", "right_heart_strain"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["pansystolic_murmur_apex_to_axilla", "hyperdynamic_apex", "volume_overload_signs"],
+    "exclusionClues": ["normal_valve_appearance", "no_regurgitation_on_echo"]
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "disease": {
+    "id": "postpartum_hemorrhage",
+    "name": "Postpartum Hemorrhage",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Blood loss >500mL after vaginal delivery or >1000mL after cesarean section. Leading cause of maternal mortality worldwide. Most commonly due to uterine atony.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["postpartum_emergency", "maternal_hemorrhage"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "unconsciousness", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "blood_loss_over_1500ml", "weight": 9 },
+          { "sign": "tachycardia_over_120", "weight": 7 },
+          { "sign": "hypotension_systolic_below_90", "weight": 8 },
+          { "sign": "oliguria", "weight": 7 },
+          { "sign": "signs_of_shock", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Primary PPH: within 24h. Secondary PPH: 24h-12 weeks. Blood loss >1000mL or hemodynamic instability -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "heavy_vaginal_bleeding_postpartum", "weight": 5 },
+      { "symptomId": "dizziness_lightheadedness", "weight": 4 },
+      { "symptomId": "blurred_vision", "weight": 3 },
+      { "symptomId": "fainting_or_near_fainting", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "thirst", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "prolonged_bleeding_days_to_weeks", "weight": 2, "note": "Secondary PPH" }
+    ],
+
+    "examFeatures": [
+      { "signId": "uterine_atony_boggy_uterus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "vaginal_bleeding_heavy", "baseWeight": 5 },
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "pallor_conjunctival_palmar", "baseWeight": 4 },
+      { "signId": "poor_capillary_refill", "baseWeight": 3 },
+      { "signId": "oliguria", "baseWeight": 3 },
+      { "signId": "signs_of_trauma_perineal_vaginal_cervical", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "uterine_atony", "multiplier": 5.0 },
+      { "id": "prolonged_labor", "multiplier": 2.0 },
+      { "id": "large_for_gestational_age_fetus", "multiplier": 2.5 },
+      { "id": "multiple_gestation", "multiplier": 3.0 },
+      { "id": "polyhydramnios", "multiplier": 2.0 },
+      { "id": "previous_postpartum_hemorrhage", "multiplier": 3.0 },
+      { "id": "placental_abnormalities", "multiplier": 3.0 },
+      { "id": "assisted_vaginal_delivery_or_cesarean", "multiplier": 2.0 },
+      { "id": "antepartum_hemorrhage", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "primary_pph_atonic",
+        "name": "Primary PPH (Uterine Atony)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "boggy_uterus", "weight": 5 },
+          { "feature": "continuous_bleeding", "weight": 5 },
+          { "feature": "uterus_fundus_above_umbilicus", "weight": 4 }
+        ],
+        "management": "Uterine massage. Oxytocin IV/IM. Ergometrine. Misoprostol. Tranexamic acid. Balloon tamponade (Bakri balloon). Surgical: compression sutures (B-Lynch), hysterectomy."
+      },
+      {
+        "id": "primary_pph_traumatic",
+        "name": "Primary PPH (Traumatic)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "firm_uterus_but_bleeding", "weight": 5 },
+          { "feature": "laceration_identified", "weight": 5 },
+          { "feature": "bright_red_blood", "weight": 3 }
+        ],
+        "management": "Repair of lacerations (perineal, vaginal, cervical). Exploration under anesthesia. Uterine artery ligation if needed."
+      },
+      {
+        "id": "secondary_pph",
+        "name": "Secondary PPH",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "bleeding_24h_to_12w_postpartum", "weight": 5 },
+          { "feature": "foul_lochia", "weight": 4 },
+          { "feature": "subinvolution_of_uterus", "weight": 4 }
+        ],
+        "management": "Ultrasound for retained products. Broad-spectrum antibiotics. Uterotonics. D&C if retained products. Endometrial biopsy if persistent."
+      }
+    ],
+
+    "mimics": [],
+    "investigations": {
+      "bedside": [
+        { "name": "Quantify blood loss", "priority": "immediate", "yield": 0.9, "indication": "visual estimation, weighing of swabs" },
+        { "name": "Examine for lacerations", "priority": "immediate", "yield": 0.8, "indication": "rule out traumatic cause" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "immediate", "yield": 0.9, "indication": "Hgb drop" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.8, "indication": "DIC screen" },
+        { "name": "Blood cross-match", "priority": "high", "yield": 0.95, "indication": "preparation for transfusion" },
+        { "name": "Fibrinogen level", "priority": "high", "yield": 0.8, "indication": "predictor of severe PPH" }
+      ],
+      "imaging": [
+        { "name": "Pelvic ultrasound", "priority": "high", "yield": 0.8, "indication": "retained products, hematometra" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 52 - Postpartum Hemorrhage",
+      "pathways": [
+        {
+          "severity": "minor_500_1000ml",
+          "criteria": "stable vitals, blood loss 500-1000mL, uterus atonic",
+          "treatment": "Uterine massage. Oxytocin 5 units IV slow push. IV fluids. Bladder emptying. Examine for lacerations. Second uterotonic (ergometrine 0.25mg IM if no hypertension)."
+        },
+        {
+          "severity": "moderate_1000_2000ml",
+          "criteria": "blood loss 1000-2000mL, tachycardia, no hypotension",
+          "treatment": "Call for help. IV oxytocin infusion. Tranexamic acid 1g IV. Misoprostol 800mcg PR/SL. Bakri balloon insertion. Prepare for theater. Cross-match blood. Activate massive transfusion protocol."
+        },
+        {
+          "severity": "severe_over_2000ml",
+          "criteria": "blood loss >2000mL, hypotension, shock",
+          "treatment": "Massive transfusion protocol (1:1:1 RBC:FFP:platelets). IV TXA. Uterine compression sutures (B-Lynch). Uterine or internal iliac artery ligation. Emergency hysterectomy. ICU admission. Avoid hypothermia, acidosis, hypocalcemia."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uterine_atony",
+      "genital_tract_trauma",
+      "retained_products_of_conception",
+      "coagulopathy"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["bleeding_from_multiple_sites", "abnormal_coagulation_tests"]
+      },
+      {
+        "diseaseId": "sheehans_syndrome",
+        "probability": 0.02,
+        "lagDays": [1, 30],
+        "severityBoost": 0.5,
+        "clues": ["failure_of_lactation", "amenorrhea", "hypopituitarism"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.6,
+        "clues": ["oliguria", "rising_creatinine"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["postpartum_bleeding", "boggy_uterus", "hemodynamic_instability"],
+    "exclusionClues": ["normal_lochia", "firm_uterus_without_excessive_bleeding"]
+  }
+}

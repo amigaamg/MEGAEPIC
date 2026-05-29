@@ -1,0 +1,156 @@
+{
+  "disease": {
+    "id": "empiric_antibiotic_selection",
+    "name": "Empiric Antibiotic Selection Guide",
+    "system": "PHARM",
+    "agePeak_months": [12, 960],
+    "note": "Empiric antibiotic therapy is based on suspected infection site, local epidemiology, patient factors (allergies, renal function, recent antibiotics), and severity of illness. De-escalation based on culture results is a core antimicrobial stewardship principle. Start smart, then focus.",
+    "prevalenceWeight": 0.85,
+    "syndromeTags": ["antimicrobial_stewardship", "empiric_therapy", "infection_management"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock_needing_vasopressors", "weight": 10 },
+        { "sign": "meningitis_meningococcal_or_pneumococcal", "weight": 10 },
+        { "sign": "necrotizing_soft_tissue_infection", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "recent_mdro_colonization_or_infection", "weight": 8 },
+          { "sign": "sepsis_with_organ_dysfunction_qSOFA_gt_2", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If septic shock -> broadest spectrum immediately; if stable -> narrow spectrum based on risk factors"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_and_infection_site_specific_symptoms", "weight": 5, "modifiers": [
+          { "condition": "healthcare_associated_or_hospital_acquired", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "prior_antibiotic_exposure_last_90_days", "weight": 4 },
+      { "symptomId": "recent_hospitalization_or_surgery", "weight": 4 },
+      { "symptomId": "known_multidrug_resistance_history", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "infection_site_identified", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "severity_assessment_sepsis_score", "baseWeight": 5 },
+      { "signId": "mdro_risk_factors_present", "baseWeight": 4 },
+      { "signId": "allergy_history_confirmed", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "prior_antibiotics_90_days", "multiplier": 2.5 },
+      { "id": "hospitalization_gt_5_days", "multiplier": 2.0 },
+      { "id": "hemodialysis", "multiplier": 2.5 },
+      { "id": "immunosuppression_neutropenia", "multiplier": 3.0 },
+      { "id": "nursing_home_residence", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "community_acquired_pneumonia",
+        "name": "Community-Acquired Pneumonia (CAP)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "outpatient_or_admitted_non_icu", "weight": 4 },
+          { "feature": "typical_pathogens_strep_pneumo_hflu_mcat", "weight": 4 },
+          { "feature": "atypical_legionella_mycoplasma_chlamydia", "weight": 3 },
+          { "feature": "pscore_for_severity", "weight": 3 }
+        ],
+        "management": "Non-ICU: amoxicillin or doxycycline or macrolide (if resistance <25%). ICU: beta-lactam (ceftriaxone, cefotaxime) + macrolide. If MRSA risk: add vancomycin. If Pseudomonas risk: anti-pseudomonal beta-lactam + cipro/levofloxacin."
+      },
+      {
+        "id": "complicated_uti",
+        "name": "Complicated UTI / Pyelonephritis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "fever_gt_38_flank_pain", "weight": 5 },
+          { "feature": "catheter_associated_or_structural_abnormality", "weight": 4 },
+          { "feature": "male_or_pregnant_or_immunocompromised", "weight": 3 }
+        ],
+        "management": "Non-severe: ceftriaxone 1g IV q24h or cefepime. Severe: piperacillin-tazobactam or meropenem if ESBL risk. Adjust based on local uropathogen resistance. Step-down to oral when stable (cipro or TMP-SMX if sensitive)."
+      },
+      {
+        "id": "intra_abdominal_infection",
+        "name": "Intra-Abdominal Infection",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "enteric_gram_negatives_plus_anaerobes", "weight": 5 },
+          { "feature": "empiric_coverage_of_both_aerobic_and_anaerobic", "weight": 5 }
+        ],
+        "management": "Mild-moderate: cefoxitin, ertapenem, or ceftriaxone + metronidazole. Severe/healthcare-associated: piperacillin-tazobactam, meropenem, or cefepime + metronidazole. Source control paramount (drainage, surgery)."
+      },
+      {
+        "id": "sepsis_of_unknown_origin",
+        "name": "Sepsis / Septic Shock (Unknown Source)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "life_threatening_organ_dysfunction", "weight": 5 },
+          { "feature": "unknown_source_broadest_coverage", "weight": 5 },
+          { "feature": "surgical_icu_or_neutropenic_patients", "weight": 4 }
+        ],
+        "management": "Within 1 hour of recognition: draw blood cultures, start broad-spectrum. Community: piperacillin-tazobactam + vancomycin. Hospital/ICU: meropenem + vancomycin. Neutropenic: cefepime + vancomycin. De-escalate when cultures return (48-72h)."
+      }
+    ],
+    "mimics": [],
+    "investigations": {
+      "bedside": [
+        { "name": "Blood cultures x2 sets before antibiotics", "priority": "immediate", "yield": 0.8, "indication": "sepsis, pneumonia, endocarditis" },
+        { "name": "Urine culture", "priority": "immediate", "yield": 0.7, "indication": "UTI suspected" },
+        { "name": "Pneumococcal and Legionella urine antigen", "priority": "medium", "yield": 0.4, "indication": "severe CAP" }
+      ],
+      "laboratory": [
+        { "name": "WBC, CRP, Procalcitonin", "priority": "high", "yield": 0.6, "indication": "infection markers; PCT guides duration" },
+        { "name": "Creatinine/eGFR", "priority": "immediate", "yield": 0.8, "indication": "renal dose adjustment" },
+        { "name": "Liver function tests", "priority": "medium", "yield": 0.4, "indication": "hepatic function, abscess" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "pneumonia" },
+        { "name": "CT as indicated by source", "priority": "medium", "yield": 0.7, "indication": "source localization" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IDSA Guidelines, Surviving Sepsis Campaign, Local Antibiogram",
+      "pathways": [
+        {
+          "severity": "mild_moderate_non_icu",
+          "criteria": "no shock, no organ dysfunction, community-acquired",
+          "treatment": "Targeted empiric therapy per site. Narrow spectrum preferred. Reassess at 48-72h when cultures available. Consider oral switch."
+        },
+        {
+          "severity": "severe_sepsis_shock",
+          "criteria": "hypotension, organ dysfunction, ICU admission",
+          "treatment": "Broad-spectrum IV within 1 hour. Source control. De-escalate when cultures return (48-72h). 7-day course (shorter if rapid response). Procalcitonin-guided discontinuation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "bacterial_inoculation_and_proliferation",
+      "systemic_inflammatory_response",
+      "multi_organ_dysfunction",
+      "antimicrobial_resistance_when_inappropriate"
+    ],
+    "complications": [
+      {
+        "diseaseId": "C_difficile_infection",
+        "probability": 0.05,
+        "lagDays": [3, 30],
+        "severityBoost": 0.3,
+        "clues": ["broad_spectrum_antibiotics", "diarrhea", "abdominal_pain"]
+      },
+      {
+        "diseaseId": "antibiotic_resistance",
+        "probability": 0.1,
+        "lagDays": [7, 90],
+        "severityBoost": 0.3,
+        "clues": ["prolonged_broad_spectrum", "subsequent_infection_mdro"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["suspected_infection_site", "severity_assessment", "risk_factors_for_mdro", "local_epidemiology"],
+    "exclusionClues": ["non_infectious_cause_identified", "negative_cultures"]
+  }
+}

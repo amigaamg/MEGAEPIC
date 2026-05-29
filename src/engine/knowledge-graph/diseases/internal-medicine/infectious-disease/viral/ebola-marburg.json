@@ -1,0 +1,113 @@
+{
+  "disease": {
+    "id": "ebola_marburg",
+    "name": "Ebola and Marburg Virus Disease",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 960],
+    "note": "Severe, often fatal viral hemorrhagic fevers. Family Filoviridae. Outbreaks in sub-Saharan Africa. High case fatality rate (25-90%).",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["viral_hemorrhagic_fever", "high_consequence_infectious_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemorrhagic_shock", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 },
+        { "sign": "severe_dehydration", "weight": 9 },
+        { "sign": "altered_consciousness_seizures", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Any hemorrhagic manifestation or organ failure -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_sudden_onset", "weight": 5 },
+      { "symptomId": "severe_fatigue_prostration", "weight": 4 },
+      { "symptomId": "myalgia_arthralgia", "weight": 3 },
+      { "symptomId": "headache_severe", "weight": 3 },
+      { "symptomId": "vomiting_diarrhea", "weight": 4 },
+      { "symptomId": "abdominal_pain", "weight": 3 },
+      { "symptomId": "unexplained_bleeding", "weight": 5 },
+      { "symptomId": "contact_with_case_or_bat", "weight": 5 },
+      { "symptomId": "travel_to_outbreak_area_last_21_days", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_high", "baseWeight": 5 },
+      { "signId": "conjunctival_injection", "baseWeight": 3 },
+      { "signId": "pharyngeal_erythema", "baseWeight": 2 },
+      { "signId": "petechiae_ecchymoses", "baseWeight": 4 },
+      { "signId": "bleeding_from_orifices", "baseWeight": 5 },
+      { "signId": "dehydration_signs", "baseWeight": 4 },
+      { "signId": "maculopapular_rash", "baseWeight": 3 },
+      { "signId": "hypotension_tachycardia", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "direct_contact_with_body_fluids_case", "multiplier": 5.0 },
+      { "id": "funeral_burial_practices", "multiplier": 3.0 },
+      { "id": "healthcare_worker_ppe_breach", "multiplier": 4.0 },
+      { "id": "hunting_consumption_of_bushmeat", "multiplier": 2.0 },
+      { "id": "bat_cave_exposure", "multiplier": 3.0 }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Ebola/Marburg RT-PCR (whole blood)", "priority": "immediate", "yield": 0.95, "indication": "confirmation within 48h of symptoms" },
+        { "name": "RDT for Ebola (if available)", "priority": "high", "yield": 0.8, "indication": "field screening" },
+        { "name": "FBC, U&E, Cr, LFT, Coagulation", "priority": "high", "yield": 0.6, "indication": "organ function, thrombocytopenia" },
+        { "name": "Malaria RDT (rule out)", "priority": "high", "yield": 0.5, "indication": "differential diagnosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Clinical Management of VHF / MSF Guidelines",
+      "pathways": [
+        {
+          "severity": "all confirmed cases",
+          "criteria": "confirmed filovirus infection",
+          "treatment": "Isolation in high-containment unit. Aggressive IV/PO rehydration. Symptom management (analgesia, antiemetics). Monoclonal antibodies (Ansuvimab/REGN-EB3 for Ebola). ICU support."
+        },
+        {
+          "severity": "severe / complicated",
+          "criteria": "shock, bleeding, organ failure",
+          "treatment": "ICU. Vasopressors. Blood product transfusion. RRT for AKI. Ventilatory support. Manage DIC with component therapy. Palliative care if futile."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "viral_entry_via_mucous_membranes",
+      "macrophage_dendritic_cell_infection",
+      "lymphocyte_apoptosis",
+      "cytokine_storm",
+      "coagulopathy_dic",
+      "multi_organ_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.5,
+        "severityBoost": 0.5,
+        "clues": ["bleeding", "thrombocytopenia", "prolonged_inr"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.4,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine", "hypotension"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever_hemorrhage_outbreak_contact", "travel_outbreak_area", "rapid_deterioration"],
+    "exclusionClues": ["negative_pcr_after_symptoms_onset", "alternative_diagnosis_confirmed"]
+  }
+}

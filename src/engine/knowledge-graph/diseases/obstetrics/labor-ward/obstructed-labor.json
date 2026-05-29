@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "obstructed_labor",
+    "name": "Obstructed Labor",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Failure of descent of the presenting part despite adequate uterine contractions, due to mechanical obstruction. Leading cause of maternal mortality and morbidity in low-resource settings.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["labor_abnormality", "maternal_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "uterine_rupture_suspected", "weight": 10 },
+        { "sign": "maternal_shock", "weight": 10 },
+        { "sign": "fetal_bradycardia", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bandls_ring", "weight": 9 },
+          { "sign": "molding_and_caput_severe", "weight": 7 },
+          { "sign": "lack_of_progress_4_hours", "weight": 7 },
+          { "sign": "maternal_fever", "weight": 6 },
+          { "sign": "ketonuria", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Prolonged second stage with Bandl ring, fetal distress, or signs of rupture -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prolonged_labor", "weight": 5 },
+      { "symptomId": "ineffective_contractions", "weight": 4 },
+      { "symptomId": "severe_pain", "weight": 4 },
+      { "symptomId": "ruptured_membranes_long_duration", "weight": 3 },
+      { "symptomId": "inability_to_pass_urine", "weight": 3 },
+      { "symptomId": "feeling_of_fullness_in_lower_abdomen", "weight": 2 },
+      { "symptomId": "fever", "weight": 3, "note": "Suggests chorioamnionitis" },
+      { "symptomId": "previous_obstructed_labor", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bandls_ring", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "severe_molding_and_caput", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "non_descent_of_presenting_part", "baseWeight": 5 },
+      { "signId": "full_bladder", "baseWeight": 3 },
+      { "signId": "maternal_tachycardia", "baseWeight": 3 },
+      { "signId": "fetal_tachycardia_or_bradycardia", "baseWeight": 4 },
+      { "signId": "dehydration_signs", "baseWeight": 3 },
+      { "signId": "ketotic_breath", "baseWeight": 2 },
+      { "signId": "uterine_tetanic_contractions", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "cephalopelvic_disproportion", "multiplier": 3.0 },
+      { "id": "occipitoposterior_position", "multiplier": 2.0 },
+      { "id": "fetal_macrosomia", "multiplier": 2.5 },
+      { "id": "pelvic_contraction", "multiplier": 3.0 },
+      { "id": "face_or_brow_presentation", "multiplier": 3.0 },
+      { "id": "uterine_fibroids_lower_segment", "multiplier": 2.0 },
+      { "id": "previous_obstructed_labor", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "uterine_inertia",
+        "discriminators": ["poor_contractions", "no_bandl_ring", "no_molding"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Partograph review", "priority": "immediate", "yield": 0.95, "indication": "assess labor progress" },
+        { "name": "Fetal heart rate monitoring", "priority": "immediate", "yield": 0.9, "indication": "assess fetal well-being" }
+      ],
+      "laboratory": [
+        { "name": "Ketonuria dipstick", "priority": "high", "yield": 0.7, "indication": "dehydration assessment" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.6, "indication": "infection assessment" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Safe Motherhood: Obstructed Labor",
+      "pathways": [
+        {
+          "severity": "obstructed_no_fetal_distress",
+          "criteria": "arrest of descent, Bandl ring, no fetal distress",
+          "treatment": "IV fluids. Catheterize bladder. Antibiotics. Emergency C-section if fetus alive. If fetal demise, consider destructive operation (craniotomy) in skilled hands."
+        },
+        {
+          "severity": "obstructed_with_fetal_distress",
+          "criteria": "fetal bradycardia, maternal distress, signs of rupture",
+          "treatment": "Emergency C-section. IV antibiotics. Blood transfusion standby. ICU monitoring. Repair of uterine rupture if present. Hysterectomy if rupture irreparable."
+        },
+        {
+          "severity": "with_uterine_rupture",
+          "criteria": "abdominal pain, loss of station, fetal parts palpable, shock",
+          "treatment": "Emergency laparotomy. Repair of uterine rupture or hysterectomy. Aggressive fluid resuscitation. Blood transfusion. ICU. Broad-spectrum antibiotics."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mechanical_obstruction",
+      "cephalopelvic_disproportion",
+      "uterine_exhaustion",
+      "fetal_distress",
+      "uterine_rupture"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "uterine_rupture",
+        "probability": 0.05,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["abrupt_pain", "loss_of_station", "fetal_bradycardia"]
+      },
+      {
+        "diseaseId": "postpartum_hemorrhage",
+        "probability": 0.2,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["uterine_atony", "vaginal_bleeding"]
+      },
+      {
+        "diseaseId": "vesicovaginal_fistula",
+        "probability": 0.05,
+        "lagDays": [3, 14],
+        "severityBoost": 0.3,
+        "clues": ["urinary_leakage", "pressure_necrosis"]
+      },
+      {
+        "diseaseId": "maternal_sepsis",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.6,
+        "clues": ["fever", "foul_lochia", "tachycardia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prolonged_labor", "bandls_ring", "lack_of_descent", "severe_molding"],
+    "exclusionClues": ["normal_progress_on_partograph", "adequate_descent"]
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "disease": {
+    "id": "heart_failure",
+    "name": "Heart Failure with Reduced and Preserved Ejection Fraction",
+    "system": "IMED",
+    "agePeak_months": [600, 1080],
+    "note": "Heart failure affects over 6M Americans. HFrEF (LVEF <=40%) and HFpEF (LVEF >=50%) have distinct pathophysiologies. NYHA classification guides symptom assessment. Guideline-directed medical therapy (GDMT) for HFrEF includes quadruple therapy: ACEi/ARB/ARNI + beta-blocker (bisoprolol/carvedilol/metoprolol succinate) + MRA (spironolactone/eplerenone) + SGLT2i (dapagliflozin/empagliflozin). ICD for ischemic cardiomyopathy with LVEF <=35%, CRT for QRS >=150ms with LBBB.",
+    "prevalenceWeight": 3.5,
+    "syndromeTags": ["heart_failure", "hfref", "hfpef", "cardiomyopathy", "g_dmt"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiogenic_shock_hypotension_organ_hypoperfusion", "weight": 10 },
+        { "sign": "acute_pulmonary_edema_respiratory_failure_requiring_ventilation", "weight": 10 },
+        { "sign": "ventricular_arrhythmia_sustained_vt_or_vf", "weight": 10 },
+        { "sign": "anuria_refractory_to_diuretics_renal_failure", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "nyha_class_iv_symptoms_at_rest", "weight": 8 },
+          { "sign": "lvef_below_25_percent", "weight": 7 },
+          { "sign": "recurrent_hospitalization_for_decompensation", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If cardiogenic shock or acute pulmonary edema -> EMERGENCY; if NYHA III-IV -> SEVERE; if NYHA I-II compensated -> MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "progressive_dyspnea_on_exertion_decreasing_tolerance", "weight": 5, "modifiers": [
+          { "condition": "orthopnea_or_paroxysmal_nocturnal_dyspnea", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "lower_extremity_edema_bilateral_pitting", "weight": 4 },
+      { "symptomId": "fatigue_weakness_reduced_exercise_capacity", "weight": 4 },
+      { "symptomId": "nocturnal_cough_wheezing_cardiac_asthma", "weight": 3 },
+      { "symptomId": "history_of_ischemic_heart_disease_prior_mi", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "lvef_by_echocardiography_biplane_simpson", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "jugular_venous_pressure_elevated_or_hepatomegaly", "baseWeight": 5 },
+      { "signId": "lung_auscultation_crackles_pleural_effusion", "baseWeight": 4 },
+      { "signId": "s3_gallop_on_cardiac_auscultation", "baseWeight": 4 },
+      { "signId": "hepatomegaly_and_hepatojugular_reflux", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "coronary_artery_disease_prior_mi", "multiplier": 4.0 },
+      { "id": "hypertension_chronic_uncontrolled", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus_type_2", "multiplier": 2.5 },
+      { "id": "atrial_fibrillation", "multiplier": 2.5 },
+      { "id": "obesity_bmi_above_35", "multiplier": 2.0 },
+      { "id": "valvular_heart_disease", "multiplier": 3.0 },
+      { "id": "alcohol_or_cocaine_use", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "hfref_lvef_below_40",
+        "name": "Heart Failure with Reduced Ejection Fraction (LVEF <=40%)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "lvef_40_percent_or_less_by_echo", "weight": 5 },
+          { "feature": "ischemic_or_non_ischemic_cause", "weight": 4 },
+          { "feature": "quadruple_gdmt_indicated", "weight": 5 },
+          { "feature": "icd_for_primary_prevention_if_lvef_35", "weight": 4 }
+        ],
+        "management": "Initiate quadruple GDMT: ARNI (sacubitril/valsartan 24/26mg BID, titrate to 97/103mg) + beta-blocker (carvedilol 3.125mg BID titrate to 25mg BID, or bisoprolol 1.25mg daily to 10mg) + MRA (spironolactone 12.5-25mg daily or eplerenone 25mg BID) + SGLT2i (dapagliflozin 10mg or empagliflozin 10mg). Loop diuretic for congestion. ICD if LVEF <=35% after 3mo GDMT. CRT if QRS >=150ms LBBB."
+      },
+      {
+        "id": "hfpef_lvef_above_50",
+        "name": "Heart Failure with Preserved Ejection Fraction (LVEF >=50%)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "lvef_50_percent_or_more_preserved", "weight": 5 },
+          { "feature": "diastolic_dysfunction_on_echo_grade_ii_iii", "weight": 4 },
+          { "feature": "elevated_filling_pressures_e_e_ratio", "weight": 4 },
+          { "feature": "comorbidities_obesity_htn_dm_afib_elderly", "weight": 4 }
+        ],
+        "management": "Treat comorbidities (HTN, DM, obesity, AFib). SGLT2i (dapagliflozin/empagliflozin 10mg) reduces HF hospitalization. Diuretics for congestion. Consider ARNI in select patients (LVEF <60% or recent HF hospitalization). Avoid beta-blocker as first line unless specific indication. Exercise training and weight loss highly effective."
+      },
+      {
+        "id": "acute_decompensated_hf",
+        "name": "Acute Decompensated Heart Failure (ADHF)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "rapid_onset_of_congestion_dyspnea_edema", "weight": 5 },
+          { "feature": "elevated_jvp_hepatojugular_reflux_positive", "weight": 5 },
+          { "feature": "pulmonary_edema_on_chest_xray", "weight": 5 },
+          { "feature": "elevated_bnp_or_nt_pro_bnp", "weight": 5 }
+        ],
+        "management": "Intravenous loop diuretic (furosemide IV 2x oral dose, or bumetanide/torsemide). Monitor I/O, daily weight, electrolytes. If refractory, add thiazide diuretic for sequential nephron blockade. Vasodilators (nitroglycerin IV or nitroprusside) if SBP >110. Inotropes (dobutamine or milrinone) if cardiogenic shock. Treat precipitating cause (ischemia, arrhythmia, infection)."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "copd_with_cor_pulmonale",
+        "discriminators": ["pfts_showing_obstruction", "smoking_history", "hyperinflation_on_cxr", "no_pulmonary_congestion"]
+      },
+      {
+        "diseaseId": "cirrhosis_with_anasarca",
+        "discriminators": ["no_cardiomegaly", "normal_bnp", "liver_stigmata", "ascites_dominant"]
+      },
+      {
+        "diseaseId": "renal_failure_with_fluid_overload",
+        "discriminators": ["creatinine_elevated_out_of_proportion", "no_cardiomegaly", "normal_bnp_or_less_elevated"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Daily weight measurement (same scale, same time)", "priority": "high", "yield": 0.8, "indication": "all HF patients" },
+        { "name": "Strict intake and output monitoring", "priority": "high", "yield": 0.7, "indication": "ADHF management" },
+        { "name": "Orthostatic vitals assessment", "priority": "medium", "yield": 0.4, "indication": "volume status, medication tolerance" }
+      ],
+      "laboratory": [
+        { "name": "BNP or NT-proBNP", "priority": "immediate", "yield": 0.9, "indication": "diagnosis and severity assessment" },
+        { "name": "CMP (Na, K, BUN, Cr, glucose, Ca, Mg)", "priority": "high", "yield": 0.8, "indication": "electrolytes, renal function, GDMT monitoring" },
+        { "name": "CBC with differential", "priority": "medium", "yield": 0.4, "indication": "anemia exacerbating HF" },
+        { "name": "Troponin (high sensitivity)", "priority": "high", "yield": 0.5, "indication": "ACS rule out, myocardial injury" },
+        { "name": "TSH", "priority": "medium", "yield": 0.2, "indication": "thyroid dysfunction" },
+        { "name": "Ferritin and iron studies", "priority": "medium", "yield": 0.3, "indication": "iron deficiency in HF" }
+      ],
+      "imaging": [
+        { "name": "Echocardiogram with strain imaging", "priority": "immediate", "yield": 0.95, "indication": "LVEF, diastolic function, valvular, wall motion" },
+        { "name": "Chest X-ray (PA and lateral)", "priority": "high", "yield": 0.7, "indication": "cardiomegaly, pulmonary congestion, pleural effusion" },
+        { "name": "Cardiac MRI", "priority": "medium", "yield": 0.4, "indication": "myocarditis, amyloid, iron overload, scar" },
+        { "name": "Coronary angiography or CT coronary", "priority": "medium", "yield": 0.3, "indication": "ischemic etiology assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACC-AHA 2022 HF Guideline, ESC 2021 HF Guidelines, Meta-analysis of GDMT (BMJ 2023)",
+      "pathways": [
+        {
+          "severity": "new_diagnosis_hfref",
+          "criteria": "LVEF <=40%, no contraindications, euvolemic",
+          "treatment": "Start beta-blocker (carvedilol 3.125mg BID or bisoprolol 1.25mg daily) AND SGLT2i (dapagliflozin 10mg). Then add ARNI (sacubitril/valsartan 24/26mg BID) within 1-2 weeks. Add MRA (spironolactone 12.5-25mg) after K and Cr check. Titrate to target doses over 2-4 months. Follow up in 2 weeks."
+        },
+        {
+          "severity": "hypervolemia_congestion",
+          "criteria": "dyspnea, edema, JVP elevated, pulmonary congestion on CXR",
+          "treatment": "IV furosemide (40-80mg bolus, then infusion 5-10mg/h). If loop resistant: add metolazone 2.5-5mg 30min before loop. Daily weight goal -0.5 to -1kg/day. Monitor K, Mg, Cr. Transition to oral diuretics when euvolemic. Continue GDMT. Hold beta-blocker only if hypotension or shock."
+        },
+        {
+          "severity": "refractory_advanced_hf",
+          "criteria": "NYHA III-IV despite optimal GDMT, LVEF <=35%, frequent admissions",
+          "treatment": "Evaluate for ICD/CRT if QRS >=150ms LBBB. Assess for transplant or LVAD candidacy. Consider inotrope dependency evaluation. Palliative care consultation. Adjust diuretics to maintain euvolemia. Monitor for cardiorenal syndrome."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "reduced_contractility_in_left_ventricular_systolic_dysfunction",
+      "increased_left_ventricular_filling_pressures_diastolic_dysfunction",
+      "neurohormonal_activation_raas_and_sympathetic",
+      "sodium_and_water_retention_via_raas",
+      "ventricular_remodeling_and_dilatation",
+      "impaired_peripheral_oxygen_extraction"
+    ],
+    "complications": [
+      {
+        "diseaseId": "cardiogenic_shock",
+        "probability": 0.03,
+        "lagDays": [0, 30],
+        "severityBoost": 0.9,
+        "clues": ["systolic_bp_below_90", "cool_extremities", "oliguria", "lactic_acidosis"]
+      },
+      {
+        "diseaseId": "ventricular_arrhythmia_sudden_cardiac_death",
+        "probability": 0.05,
+        "lagDays": [30, 3650],
+        "severityBoost": 0.9,
+        "clues": ["lvef_below_30", "syncope", "non_sustained_vt_on_holter"]
+      },
+      {
+        "diseaseId": "cardiorenal_syndrome",
+        "probability": 0.15,
+        "lagDays": [7, 365],
+        "severityBoost": 0.5,
+        "clues": ["worsening_creatinine_during_diuresis", "refractory_congestion", "hyponatremia"]
+      },
+      {
+        "diseaseId": "hepatic_congestion_cardiac_cirrhosis",
+        "probability": 0.05,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.2,
+        "clues": ["elevated_lfts_cholestatic_pattern", "hepatomegaly", "ascites"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["lvef_below_50", "elevated_bnp", "dyspnea_orthopnea_pnd", "s3_gallop", "jvp_elevated"],
+    "exclusionClues": ["normal_lvef_and_bnp", "pft_obstruction_not_cardiac", "primary_renal_failure", "no_congestion"]
+  }
+}

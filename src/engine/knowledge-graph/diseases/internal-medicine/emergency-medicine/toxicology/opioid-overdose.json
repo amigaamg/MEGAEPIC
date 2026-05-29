@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "opioid_overdose",
+    "name": "Opioid Overdose",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 600],
+    "note": "Life-threatening respiratory depression caused by opioid excess. Reversible with naloxone. Part of the opioid epidemic with rising mortality.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["toxicity", "overdose", "respiratory_depression"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_depression_less_8", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "unconsciousness", "weight": 9 },
+        { "sign": "severe_hypoxia", "weight": 10 },
+        { "sign": "pupils_pinpoint", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Opioid overdose with respiratory depression = EMERGENCY. Immediate naloxone."
+    },
+    "historyFeatures": [
+      { "symptomId": "known_opioid_use", "weight": 5 },
+      { "symptomId": "injection_pills_patches", "weight": 4 },
+      { "symptomId": "found_unresponsive", "weight": 5 },
+      { "symptomId": "slow_shallow_breathing", "weight": 5 },
+      { "symptomId": "snoring_respirations", "weight": 3 },
+      { "symptomId": "prior_overdose", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "respiratory_depression", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pinpoint_pupils", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "unconsciousness", "baseWeight": 5 },
+      { "signId": "cyanosis", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "bradycardia", "baseWeight": 2 },
+      { "signId": "hypothermia", "baseWeight": 2 },
+      { "signId": "needle_track_marks", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "iv_opioid_use", "multiplier": 3.0 },
+      { "id": "post_detoxification_relapse", "multiplier": 4.0 },
+      { "id": "concurrent_sedatives", "multiplier": 3.0 },
+      { "id": "alcohol_use", "multiplier": 2.0 },
+      { "id": "renal_or_liver_impairment", "multiplier": 2.0 },
+      { "id": "methadone_or_buprenorphine", "multiplier": 2.0 }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "hypoglycaemia",
+        "discriminators": ["normal_pupils", "low_blood_glucose", "response_to_dextrose"]
+      },
+      {
+        "diseaseId": "stroke_brainstem",
+        "discriminators": ["focal_neurological_signs", "asymmetric_pupils", "nystagmus"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE assessment", "priority": "immediate", "yield": 1.0, "indication": "all patients" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.6, "indication": "hypoglycemia mimics" },
+        { "name": "ECG", "priority": "high", "yield": 0.5, "indication": "QT prolongation (methadone)" },
+        { "name": "Pupil examination", "priority": "immediate", "yield": 0.8, "indication": "pinpoint pupils" }
+      ],
+      "laboratory": [
+        { "name": "ABG/VBG", "priority": "high", "yield": 0.7, "indication": "respiratory acidosis, hypoxia" },
+        { "name": "Paracetamol/salicylate levels", "priority": "medium", "yield": 0.3, "indication": "co-ingestion screen" },
+        { "name": "U&E, Cr, LFTs", "priority": "medium", "yield": 0.3, "indication": "baseline, end-organ function" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ERC Guidelines / UK National Guidelines on Opioid Overdose",
+      "pathways": [
+        {
+          "severity": "respiratory depression",
+          "criteria": "RR <12, SpO2 <94%, unresponsive",
+          "treatment": "Airway support: jaw thrust, OPA/NPA. Ventilate with BVM. Naloxone 0.4-2mg IV/IM (or 0.1mg increments if opioid-dependent to avoid withdrawal). Repeat PRN. Consider naloxone infusion (2/3 of effective dose per hour). Observe minimum 4-6 hours (longer for long-acting opioids like methadone)."
+        },
+        {
+          "severity": "cardiac arrest (opioid-related)",
+          "criteria": "pulseless, apnea, suspected opioid",
+          "treatment": "Standard ACLS. Naloxone 2mg IV/IO. Consider high-dose naloxone. Prolonged resuscitation may be needed."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "mu_opioid_receptor_agonism",
+      "respiratory_center_depression",
+      "decreased_respiratory_rate_and_tidal_volume",
+      "hypercapnia",
+      "hypoxia",
+      "cerebral_oedema",
+      "aspiration_pneumonitis",
+      "anoxic_brain_injury"
+    ],
+    "complications": [
+      {
+        "diseaseId": "aspiration_pneumonia",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["vomiting", "fever", "infiltrates_on_cxr"]
+      },
+      {
+        "diseaseId": "anoxic_brain_injury",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["prolonged_hypoxia", "prolonged_unconsciousness", "myoclonus"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["unconsciousness", "respiratory_depression", "pinpoint_pupils", "known_or_suspected_opioid_use"],
+    "exclusionClues": ["normal_respiratory_rate", "normal_pupils", "response_to_sternal_rub", "no_history_of_opioid_use"]
+  }
+}

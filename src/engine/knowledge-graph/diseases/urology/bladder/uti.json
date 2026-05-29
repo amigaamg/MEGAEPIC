@@ -1,0 +1,159 @@
+{
+  "disease": {
+    "id": "urinary_tract_infection",
+    "name": "Urinary Tract Infection",
+    "system": "URO",
+    "agePeak_months": [18, 960],
+    "note": "Bacterial infection of urinary tract. E. coli most common. Cystitis (lower) vs pyelonephritis (upper). Recurrent UTIs common in women.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["uti", "urinary_infection", "dysuria"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "urosepsis_septic_shock", "weight": 10 },
+        { "sign": "obstructive_pyelonephritis_abscess", "weight": 9 },
+        { "sign": "emphysematous_pyelonephritis", "weight": 9 },
+        { "sign": "renal_abscess", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Uncomplicated (cystitis) vs Complicated (pyelonephritis, obstruction, catheter, male, diabetes)"
+    },
+    "historyFeatures": [
+      { "symptomId": "dysuria_burning_on_urination", "weight": 5 },
+      { "symptomId": "frequency_urinary", "weight": 4 },
+      { "symptomId": "urgency", "weight": 4 },
+      { "symptomId": "suprapubic_pain_fullness", "weight": 3 },
+      { "symptomId": "hematuria", "weight": 2 },
+      { "symptomId": "fever_chills", "weight": 4, "note": "Suggests pyelonephritis" },
+      { "symptomId": "flank_pain", "weight": 4, "note": "Suggests pyelonephritis" },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "recent_sexual_activity", "weight": 2 },
+      { "symptomId": "previous_uti_history", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "suprapubic_tenderness", "baseWeight": 3 },
+      { "signId": "costovertebral_angle_tenderness", "baseWeight": 4, "note": "Pyelonephritis" },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "signs_of_dehydration", "baseWeight": 2 },
+      { "signId": "foul_smelling_cloudy_urine", "baseWeight": 2 },
+      { "signId": "signs_of_sepsis_hypotension_tachycardia", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 4.0 },
+      { "id": "recent_sexual_intercourse", "multiplier": 2.0 },
+      { "id": "history_of_uti", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 2.5 },
+      { "id": "indwelling_catheter", "multiplier": 5.0 },
+      { "id": "bladder_outlet_obstruction", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "uncomplicated_cystitis",
+        "name": "Uncomplicated Cystitis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "dysuria_frequency_urgency", "weight": 5 },
+          { "feature": "no_fever_flank_pain", "weight": 4 },
+          { "feature": "non_pregnant_healthy_woman", "weight": 3 }
+        ],
+        "management": "Nitrofurantoin 100 mg BID x 5 days OR TMP-SMX DS BID x 3 days (if local resistance <20%) OR fosfomycin trometamol 3g single dose. Avoid amoxicillin and fluoroquinolones as first-line. Phenazopyridine for symptom relief. Advise increased fluid intake."
+      },
+      {
+        "id": "acute_pyelonephritis",
+        "name": "Acute Pyelonephritis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "fever_greater_38", "weight": 5 },
+          { "feature": "flank_pain_cva_tenderness", "weight": 5 },
+          { "feature": "nausea_vomiting", "weight": 3 },
+          { "feature": "systemic_symptoms", "weight": 3 }
+        ],
+        "management": "Mild-moderate: oral ciprofloxacin 500 mg BID x 7 days or levofloxacin 750 mg x 5 days (if resistance <10%). Alternative: oral cephalexin + TMP-SMX. Severe (admit): IV ceftriaxone 1g daily or gentamicin + ampicillin. Switch to oral when afebrile. Total 10-14 days. Urine culture to guide. Imaging if no improvement after 48-72h."
+      },
+      {
+        "id": "catheter_associated_uti",
+        "name": "Catheter-Associated UTI (CA-UTI)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "indwelling_urinary_catheter_in_situ", "weight": 5 },
+          { "feature": "fever_chills", "weight": 4 },
+          { "feature": "new_onset_confusion_elderly", "weight": 3 },
+          { "feature": "suprapubic_or_flank_pain", "weight": 3 }
+        ],
+        "management": "Replace catheter (or remove if no longer needed). Urine culture before antibiotics. Empiric: piperacillin-tazobactam, carbapenem, or ceftolozane-tazobactam (if ESBL risk). Adjust based on sensitivity. Treat for 7-14 days. 5 days if prompt resolution after catheter change."
+      },
+      {
+        "id": "recurrent_uti",
+        "name": "Recurrent UTI (≥2 in 6 months or ≥3 in year)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "frequent_episodes_of_uti", "weight": 5 },
+          { "feature": "symptom_free_between_episodes", "weight": 3 },
+          { "feature": "post_menopausal_women", "weight": 4 }
+        ],
+        "management": "Prophylaxis options: continuous low-dose antibiotics (nitrofurantoin 50 mg or TMP-SMX half-strength daily) for 6-12 months. Post-coital prophylaxis. Cranberry products (limited evidence). Vaginal estrogen if post-menopausal. D-mannose (some evidence). Behavioral modifications (hydration, void after intercourse, wipe front to back)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "acute_urethritis_gonococcal_chlamydial", "discriminators": ["urethral_discharge", "stis_history", "no_pyuria_on_dipstick", "positive_nucleic_acid_amplification"] },
+      { "diseaseId": "vaginitis_candidiasis_bacterial_vaginosis", "discriminators": ["vaginal_discharge", "pruritus", "no_dysuria_but_external_burning", "normal_urinalysis"] },
+      { "diseaseId": "interstitial_cystitis", "discriminators": ["chronic_pain", "negative_cultures", "symptoms_over_months", "glomerulations_on_cystoscopy"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dipstick", "priority": "immediate", "yield": 0.8, "indication": "nitrites, leukocyte esterase, blood" }
+      ],
+      "laboratory": [
+        { "name": "Urinalysis + microscopy", "priority": "high", "yield": 0.85, "indication": "pyuria >10 WBC/hpf, bacteriuria" },
+        { "name": "Urine culture + sensitivity", "priority": "high", "yield": 0.9, "indication": "confirm organism, resistance pattern" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.3, "indication": "if pyelonephritis/sepsis suspected" },
+        { "name": "Serum creatinine, U&E", "priority": "medium", "yield": 0.3, "indication": "if pyelonephritis or complicated" }
+      ],
+      "imaging": [
+        { "name": "CT abdomen/pelvis (with contrast)", "priority": "if no improvement 48-72h", "yield": 0.7, "indication": "abscess, emphysematous, obstruction" },
+        { "name": "Renal Ultrasound", "priority": "medium", "yield": 0.5, "indication": "hydronephrosis, abscess, pyonephrosis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IDSA Guidelines for UTI / EAU Guidelines on Urological Infections",
+      "pathways": [
+        {
+          "severity": "uncomplicated cystitis",
+          "criteria": "mild LUTS, no fever, non-pregnant, healthy",
+          "treatment": "Nitrofurantoin 100 mg BID x 5 days OR TMP-SMX DS BID x 3 days OR fosfomycin 3g single dose. Avoid fluoroquinolones if alternatives available. Analgesia. Increase fluids."
+        },
+        {
+          "severity": "mild-moderate pyelonephritis",
+          "criteria": "fever, CVA tenderness, able to take oral, no nausea",
+          "treatment": "Ciprofloxacin 500 mg BID x 7 days (if resistance <10%) OR levofloxacin 750 mg x 5 days. If resistant risk: initial IV ceftriaxone, then oral TMP-SMX. Total 10-14 days."
+        },
+        {
+          "severity": "severe pyelonephritis/sepsis",
+          "criteria": "septic, unable to tolerate oral, vomiting, abscess risk",
+          "treatment": "Admit. IV ceftriaxone 1g q24h or piperacillin-tazobactam 4.5g q6h or gentamicin + ampicillin. IV fluids. Imaging. Drain abscess if present (nephrostomy if obstructed). Switch to oral when afebrile 24-48h. Total 14 days."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "ascending_infection_from_perineal_flora",
+      "e_coli_colonization_of_vaginal_introitus",
+      "adherence_to_uroepithelium_via_fimbriae",
+      "biofilm_formation",
+      "mucosal_inflammation_and_desquamation",
+      "bacterial_translocation_to_kidney_pyelonephritis",
+      "bacteremia_and_systemic_inflammation"
+    ],
+    "complications": [
+      { "diseaseId": "pyelonephritis", "probability": 0.2, "severityBoost": 0.3, "clues": ["fever_flank_pain", "cva_tenderness", "elevated_wbc_crp"] },
+      { "diseaseId": "renal_abscess", "probability": 0.02, "severityBoost": 0.5, "clues": ["persistent_fever_despite_antibiotics", "flank_mass", "abscess_on_ct"] },
+      { "diseaseId": "urosepsis", "probability": 0.03, "severityBoost": 0.6, "clues": ["systemic_sirs_criteria", "organ_dysfunction", "hypotension", "obstruction"] },
+      { "diseaseId": "acute_kidney_injury", "probability": 0.05, "severityBoost": 0.3, "clues": ["rising_creatinine", "decreased_urine_output"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["dysuria_frequency_urgency", "positive_dipstick_nitrites_le", "suprapubic_or_flank_pain", "previous_uti_history"],
+    "exclusionClues": ["negative_dipstick_and_culture", "vaginal_discharge_only", "normal_microscopy"]
+  }
+}

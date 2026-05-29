@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "amebiasis",
+    "name": "Amebiasis (Amebic Dysentery)",
+    "system": "infectious_disease",
+    "agePeak_months": [60, 480],
+    "note": "Intestinal infection caused by Entamoeba histolytica. Can cause dysentery, liver abscess, and extraintestinal disease. Fecal-oral transmission.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["intestinal_infection", "dysentery", "hepatic_abscess"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "fulminant_colitis_perforation", "weight": 10 },
+        { "sign": "amebic_liver_abscess_rupture", "weight": 10 },
+        { "sign": "peritonitis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Liver abscess / perforation -> SEVERE; colitis -> MODERATE; asymptomatic -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "diarrhea_bloody_mucoid", "weight": 5 },
+      { "symptomId": "abdominal_pain_cramping", "weight": 4 },
+      { "symptomId": "tenesmus", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3, "note": "Liver abscess" },
+      { "symptomId": "weight_loss_fatigue", "weight": 2 },
+      { "symptomId": "travel_to_endemic_area", "weight": 4 },
+      { "symptomId": "exposure_to_contaminated_food_water", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_tenderness", "baseWeight": 3 },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 4, "note": "Liver abscess" },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "dehydration_signs", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "travel_to_tropical_developing_countries", "multiplier": 3.0 },
+      { "id": "poor_sanitation_hygiene", "multiplier": 2.5 },
+      { "id": "oral_anal_sexual_contact", "multiplier": 2.0 },
+      { "id": "institutionalization", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "amebic_colitis",
+        "name": "Amebic Colitis (Dysentery)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "bloody_mucoid_diarrhea", "weight": 5 },
+          { "feature": "abdominal_cramping", "weight": 4 },
+          { "feature": "positive_stool_parasitology", "weight": 5 }
+        ],
+        "management": "Metronidazole 500-750mg PO TID x 10 days. Followed by Paromomycin 500mg PO TID x 7 days (luminal agent). Hydration."
+      },
+      {
+        "id": "amebic_liver_abscess",
+        "name": "Amebic Liver Abscess",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "right_upper_quadrant_pain", "weight": 5 },
+          { "feature": "fever_night_sweats", "weight": 4 },
+          { "feature": "hepatomegaly_tenderness", "weight": 4 },
+          { "feature": "anchovy_sauce_aspirate", "weight": 5 }
+        ],
+        "management": "Metronidazole 750mg IV TID x 10 days. Tinidazole alternative. Therapeutic aspiration if large (>5cm) or impending rupture. Follow with luminal agent."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "shigellosis",
+        "discriminators": ["higher_fever", "systemic_toxicity", "stool_culture_positive"]
+      },
+      {
+        "diseaseId": "inflammatory_bowel_disease",
+        "discriminators": ["chronic_relapsing", "extraintestinal_manifestations", "negative_studies"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Stool microscopy (trophozoites/cysts)", "priority": "high", "yield": 0.7, "indication": "intestinal disease" },
+        { "name": "Stool antigen (E. histolytica ELISA)", "priority": "high", "yield": 0.85, "indication": "confirms pathogenic species" },
+        { "name": "Stool PCR", "priority": "high", "yield": 0.9, "indication": "definitive identification" },
+        { "name": "Amebic serology (IgG ELISA)", "priority": "high", "yield": 0.95, "indication": "liver abscess, extraintestinal" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound / CT", "priority": "high", "yield": 0.9, "indication": "suspected liver abscess" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / Infectious Disease Society Guidelines",
+      "pathways": [
+        {
+          "severity": "mild-moderate colitis",
+          "criteria": "bloody diarrhea, positive stool, no severe dehydration",
+          "treatment": "Metronidazole 500-750mg PO TID x 10 days. Tinidazole 2g PO OD x 3 days (alternative). Luminal agent: Paromomycin 500mg PO TID x 7 days."
+        },
+        {
+          "severity": "liver abscess / severe colitis",
+          "criteria": "RUQ pain, fever, abscess on imaging, or peritoneal signs",
+          "treatment": "Metronidazole 750mg IV TID x 10 days. Aspiration if >5cm or pyogenic. Supportive care. Follow with luminal agent."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "fecal_oral_ingestion_of_cysts",
+      "excystation_in_small_intestine",
+      "trophozoite_colonization_of_colon",
+      "tissue_invasion_via_lectin_adhesion",
+      "cytolytic_necrosis",
+      "portal_vein_spread_to_liver",
+      "liver_abscess_formation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "amebic_liver_abscess",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["ruq_pain_fever", "elevated_alkaline_phosphatase", "abscess_on_imaging"]
+      },
+      {
+        "diseaseId": "fulminant_amebic_colitis",
+        "probability": 0.01,
+        "severityBoost": 0.6,
+        "clues": ["severe_pain", "distension", "peritonitis"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["bloody_mucoid_diarrhea", "ruq_liver_abscess", "travel_endemic", "positive_stool_serology"],
+    "exclusionClues": ["negative_studies", "different_organism_on_stool"]
+  }
+}

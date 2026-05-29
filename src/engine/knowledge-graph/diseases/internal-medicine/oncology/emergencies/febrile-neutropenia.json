@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "febrile_neutropenia",
+    "name": "Febrile Neutropenia",
+    "system": "ONCO",
+    "agePeak_months": [18, 960],
+    "note": "Oncologic emergency. Fever in a neutropenic patient after chemotherapy. Requires immediate broad-spectrum antibiotics. Risk stratification guides management.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["oncologic_emergency", "fever_in_immunocompromised", "chemotherapy_complication"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "altered_mental_status", "weight": 9 },
+        { "sign": "multi_organ_dysfunction", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "MASCC risk index: Low risk (≥21) vs High risk (<21). High risk requires inpatient IV antibiotics."
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_temperature", "weight": 5, "modifiers": [{ "condition": "single_temp_38_3_or_sustained_38", "suspectTB": false }] },
+      { "symptomId": "recent_chemotherapy_within_2_3_weeks", "weight": 5 },
+      { "symptomId": "chills_rigors", "weight": 3 },
+      { "symptomId": "cough_sputum_shortness_of_breath", "weight": 3 },
+      { "symptomId": "abdominal_pain_diarrhea", "weight": 3 },
+      { "symptomId": "dysuria_urinary_symptoms", "weight": 2 },
+      { "symptomId": "sore_throat_mucositis", "weight": 2 },
+      { "symptomId": "iv_line_skin_breakdown", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "signs_of_sepsis_hypotension", "baseWeight": 5 },
+      { "signId": "oral_mucositis_ulcers", "baseWeight": 3 },
+      { "signId": "perirectal_area_tenderness", "baseWeight": 3 },
+      { "signId": "pulmonary_auscultation_abnormal", "baseWeight": 3 },
+      { "signId": "skin_port_site_infection", "baseWeight": 3 },
+      { "signId": "abdominal_tenderness", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "neutrophil_count_under_100", "multiplier": 3.0 },
+      { "id": "prolonged_neutropenia_over_7_days", "multiplier": 2.5 },
+      { "id": "high_dose_chemotherapy", "multiplier": 2.0 },
+      { "id": "age_over_65", "multiplier": 1.5 },
+      { "id": "hematologic_malignancy", "multiplier": 2.0 },
+      { "id": "mucositis_severe", "multiplier": 1.8 },
+      { "id": "prior_febrile_neutropenia", "multiplier": 1.5 },
+      { "id": "indwelling_central_line", "multiplier": 1.3 }
+    ],
+    "subtypes": [
+      {
+        "id": "febrile_neutropenia_low_risk",
+        "name": "Febrile Neutropenia - Low Risk",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "mascc_score_21_or_higher", "weight": 5 },
+          { "feature": "outpatient_management_possible", "weight": 4 },
+          { "feature": "no_comorbidities", "weight": 4 },
+          { "feature": "expected_neutropenia_under_7_days", "weight": 3 }
+        ],
+        "management": "Oral antibiotics: ciprofloxacin + amoxicillin/clavulanate. Close outpatient monitoring. Daily follow-up. Hospitalize if deterioration."
+      },
+      {
+        "id": "febrile_neutropenia_high_risk",
+        "name": "Febrile Neutropenia - High Risk",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "mascc_score_under_21", "weight": 5 },
+          { "feature": "inpatient_required", "weight": 5 },
+          { "feature": "hemodynamic_instability", "weight": 4 },
+          { "feature": "profound_neutropenia_anc_under_100", "weight": 4 }
+        ],
+        "management": "IV broad-spectrum antibiotics within 1 hour: anti-pseudomonal beta-lactam (cefepime, piperacillin-tazobactam, meropenem) monotherapy. Add vancomycin if unstable, suspected line infection, or MRSA risk. Add antifungals if persistent fever >4-7 days. G-CSF if high risk. Blood cultures x 2 sets."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "non_neutropenic_infection", "discriminators": ["normal_anc", "different_etiology"] },
+      { "diseaseId": "neutropenic_fever_non_infectious", "discriminators": ["drug_fever", "transfusion_reaction", "tumor_fever", "engraftment_syndrome"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature measurement", "priority": "immediate", "yield": 1.0, "indication": "confirm fever ≥38.3°C or ≥38°C sustained" }
+      ],
+      "laboratory": [
+        { "name": "FBC with differential (urgent)", "priority": "immediate", "yield": 0.95, "indication": "ANC <500 or <1000 with predicted nadir <500" },
+        { "name": "Blood cultures (peripheral and from line)", "priority": "immediate", "yield": 0.3, "indication": "identify pathogen, source" },
+        { "name": "C-reactive protein, procalcitonin", "priority": "high", "yield": 0.6, "indication": "inflammation and response monitoring" },
+        { "name": "U&E, creatinine, LFT, LDH", "priority": "high", "yield": 0.4, "indication": "organ function, baseline, MASCC scoring" },
+        { "name": "Urinalysis + culture", "priority": "high", "yield": 0.2, "indication": "urinary source" },
+        { "name": "Galactomannan (serum)", "priority": "medium", "yield": 0.5, "indication": "suspected invasive aspergillosis" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray (or CT chest)", "priority": "high", "yield": 0.4, "indication": "pulmonary infiltrates, pneumonia" },
+        { "name": "CT sinuses", "priority": "medium", "yield": 0.3, "indication": "suspected fungal sinusitis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IDSA/NCCN Guidelines for Fever and Neutropenia",
+      "pathways": [
+        {
+          "severity": "high risk - initial empiric therapy",
+          "criteria": "MASCC <21, ANC <500, expected prolonged",
+          "treatment": "IV anti-pseudomonal beta-lactam monotherapy (cefepime 2g q8h OR piperacillin-tazobactam 4.5g q6h OR meropenem 1g q8h). Add vancomycin if hypotension, MRSA colonization, severe mucositis, or line infection. Initiate within 60 min of presentation."
+        },
+        {
+          "severity": "persistent fever (4-7 days)",
+          "criteria": "fever despite empiric antibiotics, ANC still low",
+          "treatment": "Re-evaluate. Repeat cultures. Add empiric antifungal (caspofungin, voriconazole, or liposomal amphotericin) for suspected fungal infection. Consider CT chest/sinuses. Add G-CSF if ANC <100."
+        },
+        {
+          "severity": "low risk - outpatient",
+          "criteria": "MASCC ≥21, no hypotension, no organ failure, supportive home environment",
+          "treatment": "Oral ciprofloxacin 750 mg BID + amoxicillin/clavulanate 875 mg BID for 5-7 days. Daily clinic follow-up. G-CSF from day 1. Immediate hospitalization if deterioration."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "chemotherapy_induced_myelosuppression",
+      "neutrophil_nadir_7_to_14_days_post_chemo",
+      "mucosal_barrier_breakdown",
+      "bacterial_translocation_from_gut",
+      "impaired_innate_immunity",
+      "catheter_related_bloodstream_infection",
+      "opportunistic_infections_bacterial_fungal_viral"
+    ],
+    "complications": [
+      { "diseaseId": "septic_shock", "probability": 0.15, "severityBoost": 0.5, "clues": ["hypotension", "lactic_acidosis", "end_organ_dysfunction"] },
+      { "diseaseId": "invasive_fungal_infection", "probability": 0.05, "severityBoost": 0.5, "clues": ["persistent_fever", "pulmonary_nodules_cavitation", "positive_galactomannan", "sinus_involvement"] },
+      { "diseaseId": "acute_respiratory_distress_syndrome", "probability": 0.05, "severityBoost": 0.5, "clues": ["dyspnea", "bilateral_infiltrates", "hypoxia", "non_cardiogenic_pulmonary_edema"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["anc_under_500", "fever_38_3", "recent_chemotherapy", "need_for_urgent_antibiotics"],
+    "exclusionClues": ["no_neutropenia", "anc_over_1000", "non_infectious_fever"]
+  }
+}

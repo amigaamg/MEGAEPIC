@@ -1,0 +1,150 @@
+{
+  "disease": {
+    "id": "renal_cell_carcinoma",
+    "name": "Renal Cell Carcinoma (RCC)",
+    "system": "URO",
+    "agePeak_months": [540, 840],
+    "note": "Most common kidney cancer. Clear cell RCC most common subtype. Classic triad: hematuria, flank pain, palpable mass. Paraneoplastic syndromes common.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["renal_malignancy", "genitourinary_cancer", "kidney_tumor"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "renal_vein_inferior_vena_cava_thrombus", "weight": 9 },
+        { "sign": "massive_hematuria_clot_retention", "weight": 8 },
+        { "sign": "tumor_rupture_retroperitoneal_hemorrhage", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "TNM Stage I-IV. Risk groups: favorable, intermediate, poor (MSKCC/IMDC criteria)"
+    },
+    "historyFeatures": [
+      { "symptomId": "hematuria_gross_or_microscopic", "weight": 5 },
+      { "symptomId": "flank_pain_dull_aching", "weight": 4 },
+      { "symptomId": "palpable_flank_mass", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "fever_of_unknown_origin", "weight": 2 },
+      { "symptomId": "paraneoplastic_symptoms_hypercalcemia_erythrocytosis", "weight": 2 },
+      { "symptomId": "varicocele_new_onset_left_sided", "weight": 2, "note": "Suggests renal vein/IVC thrombus" },
+      { "symptomId": "smoking_history", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "palpable_flank_mass", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "costovertebral_angle_tenderness", "baseWeight": 2 },
+      { "signId": "left_sided_varicocele", "baseWeight": 3 },
+      { "signId": "lower_limb_edema_bilateral", "baseWeight": 2, "note": "IVC thrombus" },
+      { "signId": "signs_of_metastatic_disease_lymphadenopathy", "baseWeight": 3 },
+      { "signId": "hypertension", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "von_hippel_lindau_disease", "multiplier": 10.0 },
+      { "id": "tuberous_sclerosis", "multiplier": 3.0 },
+      { "id": "birt_hogg_dube_syndrome", "multiplier": 5.0 },
+      { "id": "acquired_cystic_kidney_disease_dialysis", "multiplier": 5.0 },
+      { "id": "family_history_rcc", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "clear_cell_rcc",
+        "name": "Clear Cell RCC (conventional)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "clear_cytoplasm_morphology", "weight": 5 },
+          { "feature": "chromosome_3p_loss_vhl_mutation", "weight": 5 },
+          { "feature": "hypervascular_on_imaging", "weight": 4 },
+          { "feature": "hi_f1_alpha_pathway_dysregulation", "weight": 3 }
+        ],
+        "management": "Nephrectomy (radical or partial). Active surveillance for small (<2cm) in elderly/comorbid. Thermal ablation (cryo/RFA) for T1a. Systemic therapy for metastatic: VEGF TKIs (sunitinib, pazopanib, cabozantinib), immune checkpoint inhibitors (nivolumab + ipilimumab), mTOR inhibitors (everolimus)."
+      },
+      {
+        "id": "papillary_rcc",
+        "name": "Papillary RCC (type 1 and 2)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "papillary_architecture", "weight": 5 },
+          { "feature": "type1_basophilic_type2_eosinophilic", "weight": 3 },
+          { "feature": "hypovascular_on_imaging", "weight": 3 },
+          { "feature": "met_on_chromosome_7_in_hereditary_papillary", "weight": 3 }
+        ],
+        "management": "Surgical resection for localized disease. Metastatic: TKIs (sunitinib, pazopanib), MET inhibitors (foretinib in MET-driven). Immunotherapy. Type 2 more aggressive."
+      },
+      {
+        "id": "chromophobe_rcc",
+        "name": "Chromophobe RCC",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "pale_eosinophilic_cells_perinuclear_halo", "weight": 4 },
+          { "feature": "multiple_chromosomal_losses", "weight": 3 },
+          { "feature": "better_prognosis_than_clear_cell", "weight": 3 }
+        ],
+        "management": "Surgery. Excellent prognosis. Metastatic disease rare. If metastatic, treat similarly to clear cell."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "renal_cyst_complex", "discriminators": ["bosniak_cyst_classification", "no_enhancement_or_septal_only", "benign_on_imaging"] },
+      { "diseaseId": "renal_oncocytoma", "discriminators": ["central_stellate_scar", "benign_course", "eosinophilic_cells_no_mitoses"] },
+      { "diseaseId": "angiomyolipoma", "discriminators": ["fat_density_on_ct_macroscopic", "benign", "aneurysm_risk_of_bleeding"] },
+      { "diseaseId": "renal_abscess", "discriminators": ["fever", "flank_pain", "thick_wall_enhancing", "pyuria"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Urinalysis", "priority": "high", "yield": 0.5, "indication": "hematuria" },
+        { "name": "Serum creatinine, eGFR", "priority": "high", "yield": 0.6, "indication": "renal function for surgical planning" },
+        { "name": "Calcium, LDH, hemoglobin, ALP, platelets", "priority": "high", "yield": 0.5, "indication": "IMDC prognostic criteria" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen/Pelvis with contrast (renal mass protocol)", "priority": "first-line", "yield": 0.95, "indication": "characterization, enhancement, staging, IVC thrombus" },
+        { "name": "MRI Abdomen", "priority": "high", "yield": 0.9, "indication": "CKD/contrast allergy, problem-solving, cystic lesions" },
+        { "name": "CT Chest", "priority": "high", "yield": 0.6, "indication": "lung metastases" },
+        { "name": "Renal mass biopsy", "priority": "if imaging indeterminate", "yield": 0.9, "indication": "tissue diagnosis before ablative therapy or systemic" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EAU / NCCN Guidelines for Renal Cell Carcinoma",
+      "pathways": [
+        {
+          "severity": "T1 (≤7cm, confined to kidney)",
+          "criteria": "small renal mass, localized",
+          "treatment": "Partial nephrectomy (gold standard, nephron-sparing). Radical nephrectomy if not feasible. Active surveillance for T1a <2cm in elderly/frail. Thermal ablation (cryoablation, RFA) for T1a."
+        },
+        {
+          "severity": "T2-T4 N0 M0 (localized, ≥7cm or invasive)",
+          "criteria": "larger or locally invasive, no metastases",
+          "treatment": "Radical nephrectomy (open or laparoscopic). IVC thrombectomy if tumor thrombus present. Regional lymphadenectomy if palpable nodes."
+        },
+        {
+          "severity": "metastatic (M1) - first-line",
+          "criteria": "distant metastases, good/intermediate risk",
+          "treatment": "Nivolumab + ipilimumab (IMDC intermediate/poor risk) OR pembrolizumab + axitinib OR sunitinib/pazopanib (favorable risk). Cytoreductive nephrectomy in select (good performance status, majority of tumor burden in primary)."
+        },
+        {
+          "severity": "metastatic - second-line",
+          "criteria": "progression on first-line TKI or IO",
+          "treatment": "Cabozantinib. Nivolumab (if no prior IO). Lenvatinib + everolimus. Clinical trials."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "vhl_gene_mutation_in_clear_cell",
+      "hi_f1_alpha_stabilization_and_vegf_upregulation",
+      "angiogenesis_driven_tumor_growth",
+      "chromosome_3p_loss",
+      "met_pathway_in_papillary_type",
+      "hematogenous_metastasis_to_lung_bone_liver_brain",
+      "tumor_extension_into_renal_vein_ivc",
+      "paraneoplastic_secretion_of_epo_il_6_pthrp"
+    ],
+    "complications": [
+      { "diseaseId": "ivc_tumor_thrombus", "probability": 0.1, "severityBoost": 0.5, "clues": ["left_varicocele", "lower_limb_edema", "pulmonary_embolism", "ct_or_mri_shows_thrombus_extending_to_ivc"] },
+      { "diseaseId": "paraneoplastic_hypercalcemia", "probability": 0.15, "severityBoost": 0.3, "clues": ["elevated_calcium", "confusion", "pthrp_elevated", "bone_metastases_may_not_be_present"] },
+      { "diseaseId": "metastatic_disease_to_lung_bone_liver", "probability": 0.25, "severityBoost": 0.5, "clues": ["cough_dyspnea", "bone_pain", "abnormal_lfts", "lesions_on_imaging"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["hematuria_flank_pain_mass", "enhancing_renal_mass_on_ct", "smoking_history", "paraneoplastic_syndromes"],
+    "exclusionClues": ["simple_cyst_bosniak_1_2", "fat_containing_aml", "no_enhancement"]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "disease": {
+    "id": "hypertrophic_cardiomyopathy",
+    "name": "Hypertrophic Cardiomyopathy",
+    "system": "CARD",
+    "agePeak_months": [144, 480],
+    "note": "Genetic myocardial disorder with LV hypertrophy, diastolic dysfunction, and risk of sudden cardiac death. Most common genetic cardiac disease.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["cardiomyopathy", "genetic_cardiac"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sustained_vt_vf", "weight": 10 },
+        { "sign": "syncope", "weight": 9 },
+        { "sign": "outflow_tract_obstruction_rest", "weight": 8 },
+        { "sign": "heart_failure", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If VT/syncope/obstruction/HF -> HIGH RISK; else -> LOW RISK"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea_on_exertion", "weight": 4 },
+      { "symptomId": "syncope_exertional", "weight": 4 },
+      { "symptomId": "chest_discomfort", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "family_history_hcm_sudden_death", "weight": 5 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "pre_syncope", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "systolic_ejection_murmur_llsb", "baseWeight": 4, "note": "Increases with Valsalva, decreases with squatting" },
+      { "signId": "s4_gallop", "baseWeight": 3 },
+      { "signId": "sustained_apex_beat", "baseWeight": 3 },
+      { "signId": "carotid_bisferiens_pulse", "baseWeight": 3 },
+      { "signId": "dynamic_outflow_murmur", "baseWeight": 4, "doubleWeight": true }
+    ],
+    "riskFactors": [
+      { "id": "family_history_hcm", "multiplier": 5.0 },
+      { "id": "family_history_sudden_death", "multiplier": 4.0 },
+      { "id": "male_sex", "multiplier": 1.3 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "sarcomere_gene_mutation", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "hypertrophic_obstructive_cardiomyopathy",
+        "name": "Hypertrophic Obstructive Cardiomyopathy (HOCM)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "lv_outflow_gradient_greater_30", "weight": 5 },
+          { "feature": "systolic_anterior_motion_sam", "weight": 5 },
+          { "feature": "dynamic_murmur", "weight": 4 }
+        ],
+        "management": "Beta-blocker first-line. Verapamil if no obstruction. Disopyramide if refractory. Septal reduction therapy (myectomy or alcohol ablation)."
+      },
+      {
+        "id": "nonobstructive_hcm",
+        "name": "Non-Obstructive Hypertrophic Cardiomyopathy",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "lv_hypertrophy", "weight": 5 },
+          { "feature": "no_outflow_gradient", "weight": 5 },
+          { "feature": "diastolic_dysfunction", "weight": 4 }
+        ],
+        "management": "Beta-blocker or verapamil for symptoms. Diuretics cautiously. ICD for high-risk. Manage AF."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "hypertensive_heart_disease", "discriminators": ["long_standing_htn", "concentric_lvh", "no_family_history"] },
+      { "diseaseId": "aortic_stenosis", "discriminators": ["valvular_calcification", "murmur_decreases_valsalva", "ava_less_1"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.85, "indication": "LVH, deep septal Q waves, giant T inversion" }
+      ],
+      "laboratory": [
+        { "name": "Genetic testing", "priority": "medium", "yield": 0.6, "indication": "sarcomere gene mutations (MYH7, MYBPC3)" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "LV wall thickness ≥15 mm, SAM, outflow gradient, diastolic function" },
+        { "name": "Cardiac MRI", "priority": "high", "yield": 0.95, "indication": "late gadolinium enhancement, LV mass, apical HCM detection" },
+        { "name": "Exercise stress echo", "priority": "medium", "yield": 0.7, "indication": "provoke outflow gradient" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ACC Guidelines for Hypertrophic Cardiomyopathy",
+      "pathways": [
+        {
+          "severity": "low risk",
+          "criteria": "no symptoms, no obstruction, no risk factors for SCD",
+          "treatment": "Clinical surveillance. Echo Q1-2y. Avoid dehydration and heavy isometric exercise. Genetic counseling. Family screening."
+        },
+        {
+          "severity": "symptomatic obstructive",
+          "criteria": "dyspnea, angina, pre-syncope, gradient >30 at rest or >50 with provocation",
+          "treatment": "Beta-blocker (atenolol 25-100 mg), titrate. Add verapamil if needed (avoid in obstruction). Septal myectomy or alcohol ablation if refractory."
+        },
+        {
+          "severity": "high SCD risk",
+          "criteria": "prior VT/VF, syncope, family history SCD, massive LVH >30mm, abnormal BP response",
+          "treatment": "ICD for primary prevention. Avoid competitive sports. Manage AF, anticoagulate. Evaluate for heart transplant if end-stage."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "sarcomere_protein_mutation",
+      "myocyte_disarray",
+      "ventricular_hypertrophy",
+      "diastolic_dysfunction",
+      "lv_outflow_obstruction",
+      "mitral_regurgitation",
+      "myocardial_ischemia",
+      "autonomic_dysfunction"
+    ],
+    "complications": [
+      { "diseaseId": "sudden_cardiac_death", "probability": 0.01, "severityBoost": 0.8, "clues": ["young", "family_history_scd", "massive_lvh"] },
+      { "diseaseId": "atrial_fibrillation", "probability": 0.2, "severityBoost": 0.3, "clues": ["palpitations", "la_enlargement"] },
+      { "diseaseId": "heart_failure", "probability": 0.1, "severityBoost": 0.3, "clues": ["dyspnea", "diastolic_dysfunction"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if high-risk features",
+    "diagnosticClues": ["young_athlete_syncope", "dynamic_systolic_murmur", "massive_lvh_echo", "family_history"],
+    "exclusionClues": ["concentric_lvh_from_htn", "normal_echo", "valvular_as_only"]
+  }
+}

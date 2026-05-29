@@ -7,6 +7,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { INVESTIGATION_WORKSPACES, isPanelTest, expandPanel, expandTestList, PANEL_NAMES, PANEL_COMPONENTS, getPanelDefinition, computeFlag } from '@/src/data/investigationGroups';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { FACILITIES, getFacilitiesByType } from '@/src/data/facilityDirectory';
 
 /* ─── Helpers ─── */
@@ -115,6 +116,11 @@ export default function DiagnosticCommandCenter({
   const [intSaving, setIntSaving] = useState(false);
   const [panelValues, setPanelValues] = useState<Record<string, string>>({});
   const [expandedInvId, setExpandedInvId] = useState<string | null>(null);
+  const [showSidebar, setShowSidebar] = useState(true);
+
+  /* ── Responsive breakpoints ── */
+  const isMobile = useMediaQuery('(max-width: 640px)');
+  const isTablet = useMediaQuery('(max-width: 1024px)');
 
   /* Sync panelValues ←→ intFindings when interpreting order changes */
   const syncPanelFromFindings = useCallback((findings: string) => {
@@ -654,56 +660,63 @@ export default function DiagnosticCommandCenter({
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {/* ═══ 1. COMPACT WORKSPACE HEADER ═══ */}
+        {/* ═══ 1. COMPACT WORKSPACE HEADER (responsive) ═══ */}
         <div style={{
-          background: 'var(--white)', borderRadius: 12, border: '1px solid var(--border)', padding: 12,
+          background: 'var(--white)', borderRadius: 12, border: '1px solid var(--border)',
+          padding: isMobile ? 10 : 12,
           borderLeft: `4px solid ${activeWorkspace.urgency === 'stat' ? '#dc2626' : activeWorkspace.urgency === 'urgent' ? '#f97316' : '#0F766E'}`,
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 6 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 16, fontWeight: 800 }}>{activeWorkspace.name}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', minWidth: 0, flex: 1 }}>
+              <span style={{ fontSize: isMobile ? 14 : 16, fontWeight: 800, overflow: 'hidden', textOverflow: 'ellipsis' }}>{activeWorkspace.name}</span>
               <span style={{
-                fontSize: 9, fontWeight: 700, padding: '1px 8px', borderRadius: 99,
+                fontSize: 8, fontWeight: 700, padding: '1px 6px', borderRadius: 99,
                 background: activeWorkspace.status === 'active' ? '#f0fdf4' : '#fefce8',
                 color: activeWorkspace.status === 'active' ? '#16a34a' : '#ca8a04',
               }}>{activeWorkspace.status}</span>
               {activeWorkspace.urgency !== 'routine' && (
                 <span style={{
-                  fontSize: 9, fontWeight: 800, padding: '1px 8px', borderRadius: 4,
+                  fontSize: 8, fontWeight: 800, padding: '1px 6px', borderRadius: 3,
                   background: activeWorkspace.urgency === 'stat' ? '#dc2626' : '#f97316', color: '#fff',
                 }}>{activeWorkspace.urgency.toUpperCase()}</span>
               )}
             </div>
-            <div style={{ display: 'flex', gap: 4 }}>
+            <div style={{ display: 'flex', gap: 3, flexShrink: 0, flexWrap: 'wrap' }}>
               <button onClick={() => { setOrderWorkspaceId(activeWorkspace.id); setOrderType('lab'); setShowOrderModal(true); setOrderStep(1); }} style={{
-                background: '#0F766E', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
+                background: '#0F766E', color: '#fff', border: 'none', borderRadius: 6, padding: isMobile ? '6px 10px' : '4px 10px', fontSize: isMobile ? 11 : 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
               }}>🧪 Lab</button>
               <button onClick={() => { setOrderWorkspaceId(activeWorkspace.id); setOrderType('imaging'); setShowOrderModal(true); setOrderStep(1); }} style={{
-                background: '#7c3aed', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
+                background: '#7c3aed', color: '#fff', border: 'none', borderRadius: 6, padding: isMobile ? '6px 10px' : '4px 10px', fontSize: isMobile ? 11 : 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
               }}>🩻 Imaging</button>
               <button onClick={() => {
                 const noUpload = pendingOrders.filter((o: any) => !(o.uploadUrl || o.fileUrl));
                 if (noUpload.length > 0) openUploadcareForDoctor(noUpload[0]);
                 else alert('No pending orders to upload for.');
               }} disabled={doctorUploading} style={{
-                background: '#059669', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
+                background: '#059669', color: '#fff', border: 'none', borderRadius: 6, padding: isMobile ? '6px 10px' : '4px 10px', fontSize: isMobile ? 11 : 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
                 opacity: doctorUploading ? 0.6 : 1,
               }}>{doctorUploading ? '⌛' : '📤'}</button>
               <button onClick={() => printForm(allOrders.find((o:any) => o.workspaceId === activeWorkspace.id))} style={{
-                background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 10px', fontSize: 10, cursor: 'pointer', fontFamily: 'var(--font)',
+                background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 6, padding: isMobile ? '6px 10px' : '4px 10px', fontSize: isMobile ? 11 : 10, cursor: 'pointer', fontFamily: 'var(--font)',
               }}>🖨</button>
             </div>
           </div>
-          {activeWorkspace.clinicalProblem && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>🧠 {activeWorkspace.clinicalProblem}</div>}
+          {activeWorkspace.clinicalProblem && <div style={{ fontSize: isMobile ? 10 : 11, color: 'var(--muted)', marginTop: 2 }}>🧠 {activeWorkspace.clinicalProblem}</div>}
           {activeWorkspace.suspectedDiagnoses?.length > 0 && (
             <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
               {activeWorkspace.suspectedDiagnoses.map((d: string, i: number) => (
-                <span key={i} style={{ fontSize: 9, fontWeight: 600, background: '#fefce8', color: '#ca8a04', borderRadius: 99, padding: '1px 6px' }}>🏷 {d}</span>
+                <span key={i} style={{ fontSize: 8, fontWeight: 600, background: '#fefce8', color: '#ca8a04', borderRadius: 99, padding: '1px 5px' }}>🏷 {d}</span>
               ))}
             </div>
           )}
-          {/* Counts strip */}
-          <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', marginTop: 6 }}>
+          {/* Counts strip - scrollable on mobile */}
+          <div style={{
+            display: 'flex', gap: 3, marginTop: 6,
+            overflowX: isMobile ? 'auto' : 'visible',
+            flexWrap: isMobile ? 'nowrap' : 'wrap',
+            paddingBottom: isMobile ? 4 : 0,
+            WebkitOverflowScrolling: 'touch',
+          }}>
             {[
               { label: 'Investigations', count: wsCounts.total, icon: '📊', color: '#475569' },
               { label: 'Pending', count: wsCounts.pending, icon: '⏳', color: '#ca8a04' },
@@ -712,10 +725,10 @@ export default function DiagnosticCommandCenter({
               { label: 'Unread Messages', count: wsCounts.unreadMessages, icon: '💬', color: '#2563eb' },
               { label: 'Abnormal', count: wsCounts.abnormal, icon: '🚨', color: '#dc2626' },
             ].map(s => (
-              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 2, background: '#f8fafc', borderRadius: 6, padding: '2px 7px', border: '1px solid #e2e8f0' }}>
-                <span style={{ fontSize: 9 }}>{s.icon}</span>
-                <span style={{ fontSize: 11, fontWeight: 800, color: s.color }}>{s.count}</span>
-                <span style={{ fontSize: 8, color: 'var(--muted)' }}>{s.label}</span>
+              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 2, background: '#f8fafc', borderRadius: 6, padding: isMobile ? '3px 8px' : '2px 7px', border: '1px solid #e2e8f0', flexShrink: 0 }}>
+                <span style={{ fontSize: isMobile ? 10 : 9 }}>{s.icon}</span>
+                <span style={{ fontSize: isMobile ? 12 : 11, fontWeight: 800, color: s.color }}>{s.count}</span>
+                <span style={{ fontSize: isMobile ? 9 : 8, color: 'var(--muted)', whiteSpace: 'nowrap' }}>{s.label}</span>
               </div>
             ))}
           </div>
@@ -726,38 +739,38 @@ export default function DiagnosticCommandCenter({
           )}
         </div>
 
-        {/* ═══ 2. AWAITING REVIEW ═══ */}
+        {/* ═══ 2. AWAITING REVIEW (responsive) ═══ */}
         {awaitingReview.length > 0 && (
-          <div style={{ background: '#fef2f2', border: '1.5px solid #dc262630', borderRadius: 10, padding: 10 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: '#dc2626', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ background: '#fef2f2', border: '1.5px solid #dc262630', borderRadius: 10, padding: isMobile ? 8 : 10 }}>
+            <div style={{ fontSize: isMobile ? 11 : 10, fontWeight: 700, color: '#dc2626', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
               📎 {awaitingReview.length} Result{awaitingReview.length > 1 ? 's' : ''} Awaiting Review
             </div>
             {awaitingReview.map((o: any) => (
-              <div key={o.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0', borderBottom: '1px solid #dc262610', gap: 6 }}>
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontWeight: 600, fontSize: 11 }}>{o._type === 'imaging' ? '🩻' : '🧪'} {(o.tests || []).join(', ')}</span>
+              <div key={o.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #dc262610', gap: 6 }}>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, minWidth: 0, flexWrap: 'wrap' }}>
+                  <span style={{ fontWeight: 600, fontSize: isMobile ? 12 : 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o._type === 'imaging' ? '🩻' : '🧪'} {(o.tests || []).join(', ')}</span>
                   <span style={{ fontSize: 9, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</span>
                 </div>
-                <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                  {o.uploadUrl && <a href={o.uploadUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, color: '#2563eb' }}>View</a>}
+                <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexShrink: 0 }}>
+                  {o.uploadUrl && <a href={o.uploadUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, color: '#2563eb', padding: '2px 6px' }}>View</a>}
                   <button onClick={() => {
                     const f = o.structuredResults?.map((sr: any) => `${sr.test}, ${sr.value}, ${sr.unit}, ${sr.flag}`).join('\n') || '';
                     setInterpretingOrderId(o.id); setIntPanelOrder(o); setIntFindings(f); syncPanelFromFindings(f);
                     setIntImpression(o.interpretationImpression || ''); setIntRecommendation(o.interpretationRecommendation || '');
                     setShowIntPanel(true);
-                  }} style={{ background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: '3px 8px', fontSize: 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)' }}>Interpret</button>
+                  }} style={{ background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: isMobile ? '5px 10px' : '3px 8px', fontSize: isMobile ? 11 : 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)' }}>Interpret</button>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* ═══ 3. INVESTIGATIONS (Collapsible Tree) ═══ */}
+        {/* ═══ 3. INVESTIGATIONS (responsive collapsible cards) ═══ */}
         {pendingOrders.filter((o: any) => !(o.uploadUrl || o.fileUrl)).length > 0 && (
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <div style={{ fontSize: isMobile ? 12 : 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
               <span>⏳ Investigations ({pendingOrders.filter((o: any) => !(o.uploadUrl || o.fileUrl)).length})</span>
-              <span style={{ fontSize: 9, fontWeight: 400, color: 'var(--muted)', textTransform: 'none' }}>
+              <span style={{ fontSize: isMobile ? 10 : 9, fontWeight: 400, color: 'var(--muted)', textTransform: 'none' }}>
                 — awaiting results
               </span>
             </div>
@@ -766,11 +779,13 @@ export default function DiagnosticCommandCenter({
                 background: 'var(--white)', borderRadius: 8, marginBottom: 4, cursor: 'pointer',
                 border: o.urgency === 'stat' ? '1.5px solid #dc262640' : o.urgency === 'urgent' ? '1.5px solid #f9731640' : '1px solid var(--border)',
                 overflow: 'hidden',
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation',
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: isMobile ? '10px 10px' : '8px 10px', minHeight: isMobile ? 44 : 36 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: 10, color: 'var(--muted)', transform: expandedInvId === o.id ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }}>▶</span>
-                    <span style={{ fontWeight: 700, fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <span style={{ fontWeight: 700, fontSize: isMobile ? 13 : 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {o._type === 'imaging' ? '🩻' : '🧪'} {(o.tests || []).join(', ')}
                     </span>
                     {o.urgency === 'stat' && <span style={{ fontSize: 7, fontWeight: 800, color: '#fff', background: '#dc2626', borderRadius: 3, padding: '0 4px' }}>STAT</span>}
@@ -778,30 +793,30 @@ export default function DiagnosticCommandCenter({
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
                     <span style={{
-                      fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 99,
+                      fontSize: isMobile ? 10 : 9, fontWeight: 700, padding: '1px 6px', borderRadius: 99,
                       background: o.status === 'processing' ? '#fefce8' : o.status === 'collected' ? '#eff6ff' : '#f0fdf4',
                       color: o.status === 'processing' ? '#ca8a04' : o.status === 'collected' ? '#2563eb' : '#16a34a',
                     }}>{o.status}</span>
-                    <span style={{ fontSize: 9, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</span>
+                    <span style={{ fontSize: isMobile ? 10 : 9, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</span>
                   </div>
                 </div>
                 {expandedInvId === o.id && (
-                  <div style={{ padding: '8px 10px 10px', borderTop: '1px solid var(--border)', background: '#fafafa' }}>
-                    {o.clinicalIndication && <div style={{ fontSize: 10, color: 'var(--text)', marginBottom: 4 }}>💡 {o.clinicalIndication}</div>}
-                    {o.doctorName && <div style={{ fontSize: 9, color: 'var(--muted)', marginBottom: 4 }}>Ordered by {o.doctorName} · {o.facilityName || 'AMEXAN'}</div>}
+                  <div style={{ padding: isMobile ? '10px 10px 12px' : '8px 10px 10px', borderTop: '1px solid var(--border)', background: '#fafafa' }}>
+                    {o.clinicalIndication && <div style={{ fontSize: isMobile ? 11 : 10, color: 'var(--text)', marginBottom: 4 }}>💡 {o.clinicalIndication}</div>}
+                    {o.doctorName && <div style={{ fontSize: isMobile ? 10 : 9, color: 'var(--muted)', marginBottom: 4 }}>Ordered by {o.doctorName} · {o.facilityName || 'AMEXAN'}</div>}
                     <div style={{ display: 'flex', gap: 3, alignItems: 'center', marginBottom: 6 }}>
                       {(o._type === 'imaging' ? IMG_PIPELINE : LAB_PIPELINE).map((step: string) => {
                         const statuses = ['ordered', 'collected', 'processing', 'resulted', 'reviewed'];
                         const done = statuses.indexOf(step) <= statuses.indexOf(o.status);
-                        return <div key={step} style={{ width: 7, height: 7, borderRadius: '50%', background: done ? '#059669' : '#d1d5db' }} title={step} />;
+                        return <div key={step} style={{ width: 8, height: 8, borderRadius: '50%', background: done ? '#059669' : '#d1d5db' }} title={step} />;
                       })}
-                      <span style={{ fontSize: 8, color: 'var(--muted)', marginLeft: 2 }}>{o.status} · {o.facilityName || 'AMEXAN'}</span>
+                      <span style={{ fontSize: isMobile ? 10 : 8, color: 'var(--muted)', marginLeft: 2 }}>{o.status} · {o.facilityName || 'AMEXAN'}</span>
                     </div>
-                    {o.patientExplanation && <div style={{ fontSize: 9, color: '#166534', fontStyle: 'italic', marginBottom: 4 }}>📋 {o.patientExplanation}</div>}
+                    {o.patientExplanation && <div style={{ fontSize: isMobile ? 10 : 9, color: '#166534', fontStyle: 'italic', marginBottom: 4 }}>📋 {o.patientExplanation}</div>}
                     <button onClick={e => { e.stopPropagation(); openUploadcareForDoctor(o); }} disabled={doctorUploading} style={{
-                      background: '#0F766E', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px',
-                      fontSize: 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)',
-                      opacity: doctorUploading ? 0.6 : 1,
+                      background: '#0F766E', color: '#fff', border: 'none', borderRadius: 6, padding: isMobile ? '8px 14px' : '4px 10px',
+                      fontSize: isMobile ? 12 : 10, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)', minHeight: isMobile ? 40 : 'auto',
+                      opacity: doctorUploading ? 0.6 : 1, touchAction: 'manipulation',
                     }}>{doctorUploading ? '⌛' : '📤 Upload Result'}</button>
                   </div>
                 )}
@@ -810,10 +825,10 @@ export default function DiagnosticCommandCenter({
           </div>
         )}
 
-        {/* ═══ 4. RESULTS ═══ */}
+        {/* ═══ 4. RESULTS (responsive collapsible cards) ═══ */}
         {resultedOrders.length > 0 && (
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <div style={{ fontSize: isMobile ? 12 : 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
               <span>✅ Results ({resultedOrders.length})</span>
             </div>
             {resultedOrders.map((o: any) => (
@@ -821,28 +836,30 @@ export default function DiagnosticCommandCenter({
                 background: 'var(--white)', borderRadius: 8, marginBottom: 4, cursor: 'pointer',
                 border: o.interpreted ? '1px solid #38a16940' : '1px solid var(--border)',
                 overflow: 'hidden',
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation',
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: isMobile ? '10px 10px' : '8px 10px', minHeight: isMobile ? 44 : 36 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: 10, color: 'var(--muted)', transform: expandedInvId === o.id ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }}>▶</span>
-                    <span style={{ fontWeight: 700, fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <span style={{ fontWeight: 700, fontSize: isMobile ? 13 : 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {o._type === 'imaging' ? '🩻' : '🧪'} {(o.tests || []).join(', ')}
                     </span>
                     {o.interpreted ? (
-                      <span style={{ fontSize: 9, fontWeight: 700, color: '#16a34a', background: '#f0fdf4', borderRadius: 99, padding: '0 5px' }}>✓ Reviewed</span>
+                      <span style={{ fontSize: isMobile ? 10 : 9, fontWeight: 700, color: '#16a34a', background: '#f0fdf4', borderRadius: 99, padding: '0 5px' }}>✓ Reviewed</span>
                     ) : (
-                      <span style={{ fontSize: 9, fontWeight: 700, color: '#f97316', background: '#fff7ed', borderRadius: 99, padding: '0 5px' }}>⏳ Pending Review</span>
+                      <span style={{ fontSize: isMobile ? 10 : 9, fontWeight: 700, color: '#f97316', background: '#fff7ed', borderRadius: 99, padding: '0 5px' }}>⏳ Pending Review</span>
                     )}
                     {o.interpretationSeverity && (
                       <span style={{
-                        fontSize: 8, fontWeight: 700, borderRadius: 99, padding: '0 5px',
+                        fontSize: isMobile ? 9 : 8, fontWeight: 700, borderRadius: 99, padding: '0 5px',
                         background: o.interpretationSeverity === 'critical' ? '#fef2f2' : o.interpretationSeverity === 'severe' ? '#fff7ed' : '#f0fdf4',
                         color: o.interpretationSeverity === 'critical' ? '#dc2626' : o.interpretationSeverity === 'severe' ? '#f97316' : '#16a34a',
                       }}>{o.interpretationSeverity}</span>
                     )}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-                    <span style={{ fontSize: 9, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</span>
+                    <span style={{ fontSize: isMobile ? 10 : 9, color: 'var(--muted)' }}>{fmtDate(o.createdAt)}</span>
                     {!o.interpreted && (
                       <button onClick={e => { e.stopPropagation();
                         const findings = o.structuredResults?.map((sr: any) => `${sr.test}, ${sr.value}, ${sr.unit}, ${sr.flag}`).join('\n') || '';
@@ -850,26 +867,26 @@ export default function DiagnosticCommandCenter({
                         setIntImpression(o.interpretationImpression || ''); setIntSeverity(o.interpretationSeverity || '');
                         setIntDifferential(o.interpretationDifferentialSupport || ''); setIntComparison(o.interpretationPriorComparison || '');
                         setIntRecommendation(o.interpretationRecommendation || ''); setShowIntPanel(true);
-                      }} style={{ background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: '3px 8px', fontSize: 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)' }}>✍️ Interpret</button>
+                      }} style={{ background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: isMobile ? '6px 10px' : '3px 8px', fontSize: isMobile ? 11 : 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)', minHeight: isMobile ? 36 : 'auto', touchAction: 'manipulation' }}>✍️ Interpret</button>
                     )}
-                    <button onClick={e => { e.stopPropagation(); printForm(o); }} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 4, padding: '3px 8px', fontSize: 9, cursor: 'pointer', fontFamily: 'var(--font)' }}>🖨</button>
+                    <button onClick={e => { e.stopPropagation(); printForm(o); }} style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 4, padding: isMobile ? '6px 10px' : '3px 8px', fontSize: isMobile ? 12 : 9, cursor: 'pointer', fontFamily: 'var(--font)', minHeight: isMobile ? 36 : 'auto', touchAction: 'manipulation' }}>🖨</button>
                   </div>
                 </div>
                 {expandedInvId === o.id && (
-                  <div style={{ padding: '8px 10px 10px', borderTop: '1px solid var(--border)', background: '#fafafa' }}>
-                    {o.uploadUrl && <a href={o.uploadUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, color: '#2563eb', display: 'inline-block', marginBottom: 6 }}>📎 View File</a>}
+                  <div style={{ padding: isMobile ? '10px 10px 12px' : '8px 10px 10px', borderTop: '1px solid var(--border)', background: '#fafafa' }}>
+                    {o.uploadUrl && <a href={o.uploadUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: isMobile ? 11 : 10, color: '#2563eb', display: 'inline-block', marginBottom: 6, padding: '2px 0' }}>📎 View File</a>}
                     {o.structuredResults?.length > 0 && (
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 4 }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(110px, 1fr))' : 'repeat(auto-fill, minmax(140px, 1fr))', gap: isMobile ? 3 : 4 }}>
                         {o.structuredResults.map((sr: any, i: number) => (
                           <div key={i} style={{
                             background: sr.flag === 'critical' ? '#fef2f2' : sr.flag === 'high' || sr.flag === 'low' ? '#fff7ed' : '#f0fdf4',
-                            borderRadius: 6, padding: '5px 7px',
+                            borderRadius: 6, padding: isMobile ? '6px 7px' : '5px 7px',
                             border: sr.flag === 'critical' ? '1px solid #dc262630' : 'none',
                           }}>
-                            <div style={{ fontWeight: 600, fontSize: 9, color: 'var(--muted)' }}>{sr.test}</div>
-                            <div style={{ fontWeight: 700, color: sr.flag === 'critical' || sr.flag === 'high' || sr.flag === 'low' ? '#dc2626' : 'var(--text)', fontSize: 12 }}>
-                              {sr.value} <span style={{ fontWeight: 400, fontSize: 9 }}>{sr.unit}</span>
-                              {sr.flag && <span style={{ fontWeight: 700, fontSize: 9, color: '#dc2626', marginLeft: 2 }}>{sr.flag}</span>}
+                            <div style={{ fontWeight: 600, fontSize: isMobile ? 10 : 9, color: 'var(--muted)' }}>{sr.test}</div>
+                            <div style={{ fontWeight: 700, color: sr.flag === 'critical' || sr.flag === 'high' || sr.flag === 'low' ? '#dc2626' : 'var(--text)', fontSize: isMobile ? 13 : 12 }}>
+                              {sr.value} <span style={{ fontWeight: 400, fontSize: isMobile ? 10 : 9 }}>{sr.unit}</span>
+                              {sr.flag && <span style={{ fontWeight: 700, fontSize: isMobile ? 10 : 9, color: '#dc2626', marginLeft: 2 }}>{sr.flag}</span>}
                             </div>
                           </div>
                         ))}
@@ -877,8 +894,8 @@ export default function DiagnosticCommandCenter({
                     )}
                     {o.interpretationImpression && (
                       <div style={{ marginTop: 6, padding: '6px 8px', background: '#f0fdf4', borderRadius: 6, borderLeft: '3px solid #16a34a' }}>
-                        <div style={{ fontSize: 9, fontWeight: 700, color: '#166534' }}>💬 Impression</div>
-                        <div style={{ fontSize: 11, color: '#166534' }}>{o.interpretationImpression}</div>
+                        <div style={{ fontSize: isMobile ? 10 : 9, fontWeight: 700, color: '#166534' }}>💬 Impression</div>
+                        <div style={{ fontSize: isMobile ? 12 : 11, color: '#166534' }}>{o.interpretationImpression}</div>
                       </div>
                     )}
                     {o.interpreted && (
@@ -888,7 +905,7 @@ export default function DiagnosticCommandCenter({
                         setIntImpression(o.interpretationImpression || ''); setIntSeverity(o.interpretationSeverity || '');
                         setIntDifferential(o.interpretationDifferentialSupport || ''); setIntComparison(o.interpretationPriorComparison || '');
                         setIntRecommendation(o.interpretationRecommendation || ''); setShowIntPanel(true);
-                      }} style={{ marginTop: 6, background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: '3px 8px', fontSize: 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)' }}>✍️ Re-interpret</button>
+                      }} style={{ marginTop: 6, background: '#059669', color: '#fff', border: 'none', borderRadius: 4, padding: isMobile ? '8px 14px' : '3px 8px', fontSize: isMobile ? 12 : 9, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font)', minHeight: isMobile ? 40 : 'auto', touchAction: 'manipulation' }}>✍️ Re-interpret</button>
                     )}
                   </div>
                 )}
@@ -1159,16 +1176,21 @@ export default function DiagnosticCommandCenter({
     return (
       <div style={{
         position: 'fixed', inset: 0, background: 'rgba(0,0,0,.4)', display: 'flex',
-        alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16,
+        alignItems: isMobile ? 'flex-end' : 'center', justifyContent: 'center', zIndex: 1000, padding: isMobile ? 0 : 16,
       }} onClick={() => setShowOrderModal(false)}>
         <div style={{
-          background: 'var(--white)', borderRadius: 16, maxWidth: 680, width: '100%',
-          maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 25px 80px rgba(0,0,0,.3)',
-          padding: 24, display: 'flex', flexDirection: 'column', gap: 14,
+          background: 'var(--white)',
+          borderRadius: isMobile ? '16px 16px 0 0' : 16,
+          maxWidth: 680, width: '100%',
+          maxHeight: isMobile ? '92dvh' : '92vh',
+          overflowY: 'auto', boxShadow: '0 25px 80px rgba(0,0,0,.3)',
+          padding: isMobile ? 16 : 24,
+          paddingTop: isMobile ? 20 : 24,
+          display: 'flex', flexDirection: 'column', gap: isMobile ? 10 : 14,
         }} onClick={e => e.stopPropagation()}>
           {/* ── Header with step indicator ── */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ fontWeight: 800, fontSize: 16 }}>
+            <div style={{ fontWeight: 800, fontSize: isMobile ? 14 : 16 }}>
               {orderType === 'lab' ? '🧪' : '🩻'} {orderType === 'lab' ? 'Order Lab Tests' : 'Order Imaging'}
             </div>
             <div style={{ display: 'flex', gap: 4, fontSize: 10 }}>
@@ -1556,47 +1578,82 @@ Does the patient need admission?" rows={3} style={{
 
   /* ── MAIN RENDER ── */
   return (
-    <div style={{ display: 'flex', gap: 0, maxWidth: '100%', minHeight: 400 }}>
-      {/* ── SIDEBAR ── */}
-      <div style={{
-        width: 240, flexShrink: 0, borderRight: '1px solid var(--border)',
-        display: 'flex', flexDirection: 'column', background: '#f8fafc', borderRadius: '12px 0 0 12px',
-        overflow: 'hidden',
-      }}>
-        {/* Sidebar nav */}
-        {SIDEBAR_NAV.map(item => (
-          <button key={item.id} onClick={() => setSidebarView(item.id)} style={{
-            display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', border: 'none', width: '100%',
-            background: sidebarView === item.id ? '#fff' : 'transparent',
-            borderLeft: sidebarView === item.id ? '3px solid #0F766E' : '3px solid transparent',
-            cursor: 'pointer', fontFamily: 'var(--font)', fontSize: 12, fontWeight: sidebarView === item.id ? 700 : 500,
-            color: sidebarView === item.id ? '#0F766E' : 'var(--text)',
-            textAlign: 'left', transition: 'all 0.1s',
-          }}>
-            <span style={{ fontSize: 16 }}>{item.icon}</span>
-            <span>{item.label}</span>
-            {item.id === 'inbox' && inboxItems.total > 0 && (
-              <span style={{
-                marginLeft: 'auto', fontSize: 10, fontWeight: 700, background: inboxItems.critical > 0 ? '#dc2626' : '#0F766E',
-                color: '#fff', borderRadius: 99, padding: '1px 7px', minWidth: 18, textAlign: 'center',
-              }}>{inboxItems.total}</span>
-            )}
-          </button>
-        ))}
+    <div style={{ display: 'flex', gap: 0, maxWidth: '100%', minHeight: isMobile ? '100dvh' : 400, position: 'relative' }}>
+      {/* ── Mobile menu toggle ── */}
+      {isMobile && (
+        <button onClick={() => setShowSidebar(s => !s)} style={{
+          position: 'fixed', top: 8, left: 8, zIndex: 1100,
+          width: 36, height: 36, borderRadius: 8, border: '1px solid var(--border)',
+          background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 18, boxShadow: '0 2px 8px rgba(0,0,0,.1)',
+        }}>{showSidebar ? '✕' : '☰'}</button>
+      )}
 
-        <div style={{ borderTop: '1px solid var(--border)', padding: '8px 10px', fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+      {/* ── SIDEBAR (responsive) ── */}
+      <div style={{
+        width: isMobile ? '100%' : 240,
+        maxWidth: isMobile ? '100%' : 240,
+        flexShrink: 0,
+        borderRight: '1px solid var(--border)',
+        display: isMobile && !showSidebar ? 'none' : 'flex',
+        flexDirection: 'column',
+        background: '#f8fafc',
+        borderRadius: isMobile ? 0 : '12px 0 0 12px',
+        overflow: 'hidden',
+        position: isMobile ? 'fixed' : 'static',
+        top: isMobile ? 0 : 'auto',
+        left: isMobile ? 0 : 'auto',
+        zIndex: isMobile ? 1090 : 'auto',
+        height: isMobile ? '100dvh' : 'auto',
+        boxShadow: isMobile ? '0 0 40px rgba(0,0,0,.2)' : 'none',
+      }}>
+        {/* Sidebar header with close on mobile */}
+        <div style={{ padding: isMobile ? '14px 14px 10px' : '10px 14px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: '#0F766E', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 18 }}>🩺</span> Diagnostic Hub
+            </div>
+            <div style={{ fontSize: 9, color: 'var(--muted)', marginTop: 1 }}>AMEXAN Clinical Intelligence</div>
+          </div>
+          {isMobile && (
+            <button onClick={() => setShowSidebar(false)} style={{
+              width: 32, height: 32, borderRadius: 6, border: 'none', background: '#f1f5f9',
+              cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>✕</button>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', gap: 2, padding: '6px 10px', borderBottom: '1px solid var(--border)' }}>
+          {SIDEBAR_NAV.map(nav => (
+            <button key={nav.id} onClick={() => { setSidebarView(nav.id); if (isMobile) setShowSidebar(false); }} style={{
+              flex: 1, padding: '5px 4px', border: 'none', borderRadius: 6,
+              background: sidebarView === nav.id ? '#0F766E' : 'transparent',
+              color: sidebarView === nav.id ? '#fff' : 'var(--muted)', fontWeight: sidebarView === nav.id ? 700 : 500,
+              fontSize: 9, cursor: 'pointer', fontFamily: 'var(--font)', textAlign: 'center',
+            }}>
+              <div style={{ fontSize: 14, marginBottom: 1 }}>{nav.icon}</div>
+              {nav.label}
+            </button>
+          ))}
+          <button onClick={() => setShowNewWorkspace(true)} style={{
+            padding: '5px 8px', border: 'none', borderRadius: 6,
+            background: 'transparent', color: 'var(--muted)', cursor: 'pointer',
+            fontSize: 14, fontFamily: 'var(--font)',
+          }} title="New Workspace">➕</button>
+        </div>
+
+        <div style={{ borderTop: '1px solid var(--border)', padding: '8px 10px', fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
           Active Workspaces
         </div>
 
-        {/* Workspace list in sidebar */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '4px 0' }}>
           {wsSummary.length === 0 && (
             <div style={{ padding: '12px 14px', fontSize: 11, color: 'var(--muted)' }}>
-              No workspaces yet. Create one to start organizing investigations.
+              No workspaces yet.
             </div>
           )}
           {wsSummary.filter(ws => ws.status === 'active').map(ws => (
-            <button key={ws.id} onClick={() => { setActiveWorkspaceId(ws.id); setSidebarView('workspaces'); }} style={{
+            <button key={ws.id} onClick={() => { setActiveWorkspaceId(ws.id); setSidebarView('workspaces'); if (isMobile) setShowSidebar(false); }} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', border: 'none', width: '100%',
               background: activeWorkspaceId === ws.id ? '#fff' : 'transparent',
               cursor: 'pointer', fontFamily: 'var(--font)', fontSize: 11, textAlign: 'left',
@@ -1625,16 +1682,15 @@ Does the patient need admission?" rows={3} style={{
           </button>
         </div>
 
-        {/* Quick actions at bottom */}
         <div style={{ borderTop: '1px solid var(--border)', padding: 10 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', marginBottom: 6 }}>Quick Actions</div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>Quick Actions</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <button onClick={() => { setShowNewWorkspace(true); }} style={{
+            <button onClick={() => { setShowNewWorkspace(true); if (isMobile) setShowSidebar(false); }} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', border: 'none', width: '100%',
               background: 'transparent', cursor: 'pointer', fontFamily: 'var(--font)', fontSize: 10, color: 'var(--text)', textAlign: 'left',
               borderRadius: 6,
             }}><span style={{ fontSize: 12 }}>➕</span> New Workspace</button>
-            <button onClick={() => { setSidebarView('inbox'); }} style={{
+            <button onClick={() => { setSidebarView('inbox'); if (isMobile) setShowSidebar(false); }} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', border: 'none', width: '100%',
               background: 'transparent', cursor: 'pointer', fontFamily: 'var(--font)', fontSize: 10, color: 'var(--text)', textAlign: 'left',
               borderRadius: 6,
@@ -1642,9 +1698,16 @@ Does the patient need admission?" rows={3} style={{
           </div>
         </div>
       </div>
+      {isMobile && showSidebar && <div onClick={() => setShowSidebar(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.3)', zIndex: 1085 }} />}
 
       {/* ── MAIN CONTENT ── */}
-      <div style={{ flex: 1, padding: 16, overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}>
+      <div style={{
+        flex: 1,
+        padding: isMobile ? 8 : 16,
+        paddingTop: isMobile ? 52 : 16,
+        overflowY: 'auto',
+        maxHeight: isMobile ? 'calc(100dvh - 16px)' : 'calc(100vh - 200px)',
+      }}>
         {sidebarView === 'workspaces' && renderWorkspaceDetail()}
         {sidebarView === 'inbox' && renderInbox()}
         {sidebarView === 'history' && renderHistory()}
@@ -1655,7 +1718,7 @@ Does the patient need admission?" rows={3} style={{
       {renderOrderModal()}
       {renderNewWorkspace()}
 
-      {/* ── Right-side Interpretation Panel ── */}
+      {/* ── Right-side Interpretation Panel (responsive) ── */}
       {showIntPanel && intPanelOrder && (() => {
         const o = intPanelOrder;
         const panelName = (o.tests || [])[0];
@@ -1663,24 +1726,36 @@ Does the patient need admission?" rows={3} style={{
         const isImage = (o.uploadUrl || o.fileUrl)?.match(/\.(png|jpg|jpeg|gif|webp)$/i);
         return (
           <div style={{
-            position: 'fixed', top: 0, right: 0, width: '52%', height: '100%', background: '#fff', zIndex: 1001,
+            position: 'fixed', top: 0, right: 0,
+            width: isMobile ? '100%' : isTablet ? '75%' : '52%',
+            height: '100dvh', background: '#fff', zIndex: 1001,
             boxShadow: '-6px 0 32px rgba(0,0,0,.12)', overflow: 'hidden', display: 'flex', flexDirection: 'column',
             borderLeft: '1px solid var(--border)',
           }}>
             {/* Header */}
-            <div style={{ padding: '10px 16px', borderBottom: '2px solid #059669', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 800, color: '#059669' }}>✍️ Interpreting: {panelName}</div>
-                <div style={{ fontSize: 10, color: 'var(--muted)' }}>{panelDef?.purpose || ''}</div>
+            <div style={{
+              padding: isMobile ? '12px 12px 8px' : '10px 16px',
+              borderBottom: '2px solid #059669',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0,
+              flexWrap: 'wrap', gap: 4,
+            }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ fontSize: isMobile ? 12 : 13, fontWeight: 800, color: '#059669', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>✍️ {panelName}</div>
+                {panelDef?.purpose && <div style={{ fontSize: isMobile ? 8 : 10, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{panelDef.purpose}</div>}
               </div>
               <button onClick={() => { setShowIntPanel(false); setIntPanelOrder(null); }} style={{
-                background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, padding: '4px 10px',
+                background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, padding: isMobile ? '6px 12px' : '4px 10px',
                 fontSize: 11, fontWeight: 700, cursor: 'pointer', color: '#dc2626', fontFamily: 'var(--font)',
               }}>✕ Close</button>
             </div>
-            {/* Scrollable content */}
-            <div style={{ flex: 1, overflow: 'auto', padding: 12 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, minHeight: '100%' }}>
+            {/* Scrollable content - stacks on mobile */}
+            <div style={{ flex: 1, overflow: 'auto', padding: isMobile ? 8 : 12 }}>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                gap: isMobile ? 8 : 12,
+                minHeight: '100%',
+              }}>
                 {/* LEFT: Results entry */}
                 <div>
                   {isImage && (

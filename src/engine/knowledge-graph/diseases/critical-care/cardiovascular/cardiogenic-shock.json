@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "cardiogenic_shock",
+    "name": "Cardiogenic Shock",
+    "system": "critical_care",
+    "agePeak_months": [480, 960],
+    "note": "Low cardiac output state due to pump failure. Most commonly post-MI. End-organ hypoperfusion despite adequate intravascular volume.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["shock", "cardiac_failure", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "refractory_hypotension", "weight": 10 },
+        { "sign": "pulmonary_edema_severe", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "ventricular_arrhythmia", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "SCAI stages: A (at risk), B (beginning), C (classic), D (deteriorating), E (extremis)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "chest_pain_acute_mi_symptoms", "weight": 5 },
+      { "symptomId": "shortness_of_breath_severe", "weight": 4 },
+      { "symptomId": "dizziness_syncope", "weight": 3 },
+      { "symptomId": "diaphoresis", "weight": 3 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "palpitations_arrhythmia", "weight": 3 },
+      { "symptomId": "known_heart_failure_or_mi_history", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension_sbp_less_90", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "elevated_jvp", "baseWeight": 4 },
+      { "signId": "pulmonary_oedema_crackles", "baseWeight": 4 },
+      { "signId": "cold_clammy_peripheries", "baseWeight": 4 },
+      { "signId": "muffled_heart_sounds", "baseWeight": 2, "note": "Cardiac tamponade" },
+      { "signId": "gallop_rhythm_s3", "baseWeight": 3 },
+      { "signId": "signs_of_low_cardiac_output", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "acute_coronary_syndrome_stemi", "multiplier": 3.0 },
+      { "id": "prior_mi_or_heart_failure", "multiplier": 2.5 },
+      { "id": "advanced_age_over_75", "multiplier": 2.0 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "cardiomyopathy_dilated_or_hypertrophic", "multiplier": 2.0 },
+      { "id": "myocarditis", "multiplier": 2.0 },
+      { "id": "valvular_heart_disease_severe", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mi_cardiogenic_shock",
+        "name": "Post-MI Cardiogenic Shock",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "stemi_on_ecg", "weight": 5 },
+          { "feature": "elevated_troponin", "weight": 5 },
+          { "feature": "hypotension_and_hypoperfusion", "weight": 5 }
+        ],
+        "management": "Emergency revascularization (PCI). Inotropes (dobutamine) + vasopressors (norepinephrine). IABP or VA-ECMO if refractory. Ventilatory support if needed."
+      },
+      {
+        "id": "myocarditis_shock",
+        "name": "Myocarditis/Non-Ischemic Cardiogenic Shock",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "viral_prodrome", "weight": 3 },
+          { "feature": "diffuse_ecg_changes", "weight": 4 },
+          { "feature": "elevated_troponin_without_obstruction", "weight": 4 }
+        ],
+        "management": "Supportive. Inotropes/vasopressors. Mechanical circulatory support if refractory. Immunosuppression in selected cases. Treat arrhythmias."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "septic_shock",
+        "discriminators": ["fever", "warm_peripheries_early", "elevated_cardiac_output_early", "source_of_infection"]
+      },
+      {
+        "diseaseId": "hypovolemic_shock",
+        "discriminators": ["low_jvp", "responds_to_fluids", "obvious_fluid_loss"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECG 12-lead", "priority": "immediate", "yield": 0.9, "indication": "STEMI, arrhythmia, ischemia" },
+        { "name": "Echocardiography (POCUS)", "priority": "immediate", "yield": 0.95, "indication": "LV function, RV function, tamponade, valvular" }
+      ],
+      "laboratory": [
+        { "name": "Troponin (high sensitivity)", "priority": "immediate", "yield": 0.95, "indication": "MI diagnosis" },
+        { "name": "BNP/NT-proBNP", "priority": "high", "yield": 0.8, "indication": "heart failure" },
+        { "name": "Lactate, ABG", "priority": "immediate", "yield": 0.8, "indication": "tissue hypoperfusion" },
+        { "name": "U&E, Cr, LFT", "priority": "high", "yield": 0.5, "indication": "end-organ function" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.7, "indication": "pulmonary edema, cardiac size" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "SCAI / ESC Guidelines for Cardiogenic Shock",
+      "pathways": [
+        {
+          "severity": "classic shock (SCAI C)",
+          "criteria": "SBP <90, CI <2.2, PCWP >15, signs of hypoperfusion",
+          "treatment": "Norepinephrine first-line vasopressor. Dobutamine for inotropy. Emergent revascularization if ACS. Ventilatory support if pulmonary edema. ICU."
+        },
+        {
+          "severity": "deteriorating/extremis (SCAI D-E)",
+          "criteria": "refractory shock on multiple vasopressors, worsening lactate",
+          "treatment": "Mechanical circulatory support (IABP, Impella, VA-ECMO). Invasive hemodynamic monitoring. Multi-organ support. Transplant evaluation in select cases."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "myocardial_contractile_dysfunction",
+      "reduced_cardiac_output",
+      "neurohormonal_activation",
+      "systemic_vasoconstriction",
+      "pulmonary_congestion",
+      "end_organ_hypoperfusion",
+      "ischemia_perpetuates_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.4,
+        "severityBoost": 0.4,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "respiratory_failure_pulmonary_oedema",
+        "probability": 0.5,
+        "severityBoost": 0.3,
+        "clues": ["crackles", "hypoxia", "white_out_on_cxr"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["hypotension_with_pulmonary_oedema", "elevated_jvp", "cold_peripheries", "low_cardiac_output"],
+    "exclusionClues": ["normal_cardiac_function_on_echo", "hypovolemia", "septic_shock_criteria"]
+  }
+}

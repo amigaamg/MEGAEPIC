@@ -1,0 +1,181 @@
+{
+  "disease": {
+    "id": "cervical_cancer",
+    "name": "Cervical Cancer",
+    "system": "GYN",
+    "agePeak_months": [360, 540],
+    "note": "Malignancy of the cervix, most commonly squamous cell carcinoma. Strongly associated with high-risk HPV infection (types 16, 18, 31, 33, 45). Preventable through vaccination and screening.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["gynecologic_malignancy", "vaginal_bleeding"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "heavy_hemorrhage", "weight": 9 },
+        { "sign": "ureteric_obstruction_renal_failure", "weight": 8 },
+        { "sign": "metastatic_disease", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "FIGO_stage_IIB_or_above", "weight": 8 },
+          { "sign": "parametrial_invasion", "weight": 7 },
+          { "sign": "hydronephrosis", "weight": 7 },
+          { "sign": "rectal_or_bladder_invasion", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Advanced FIGO stage or metastasis -> SEVERE; Early stage (IA-IB1) -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "postcoital_bleeding", "weight": 5 },
+      { "symptomId": "intermenstrual_bleeding", "weight": 4 },
+      { "symptomId": "postmenopausal_bleeding", "weight": 4 },
+      { "symptomId": "foul_smelling_vaginal_discharge", "weight": 4 },
+      { "symptomId": "pelvic_or_back_pain", "weight": 3 },
+      { "symptomId": "dyspareunia", "weight": 2 },
+      { "symptomId": "heavy_menstrual_bleeding", "weight": 2 },
+      { "symptomId": "urinary_symptoms_hematuria_dysuria", "weight": 2 },
+      { "symptomId": "leg_swelling_unilateral", "weight": 2, "note": "Lymphatic obstruction" },
+      { "symptomId": "weight_loss_and_fatigue", "weight": 2 },
+      { "symptomId": "abnormal_screening_test", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "visible_cervical_lesion_on_speculum", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cervical_friability_on_touch", "baseWeight": 4 },
+      { "signId": "irregular_cervix_or_mass", "baseWeight": 5 },
+      { "signId": "parametrial_tenderness_or_nodularity", "baseWeight": 3 },
+      { "signId": "vaginal_invasion_on_exam", "baseWeight": 4 },
+      { "signId": "inguinal_lymphadenopathy", "baseWeight": 3 },
+      { "signId": "urinary_retention_if_advanced", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "HPV_infection_high_risk", "multiplier": 10.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "multiple_sexual_partners", "multiplier": 2.5 },
+      { "id": "early_sexual_debut_under_16", "multiplier": 2.0 },
+      { "id": "immunosuppression_HIV", "multiplier": 3.0 },
+      { "id": "oral_contraceptive_long_term", "multiplier": 1.5 },
+      { "id": "high_parity", "multiplier": 1.5 },
+      { "id": "lack_of_screening", "multiplier": 5.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "squamous_cell_carcinoma",
+        "name": "Squamous Cell Carcinoma (most common)",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "exophytic_or_ulcerating_lesion", "weight": 5 },
+          { "feature": "HPV_16_most_common", "weight": 4 },
+          { "feature": "squamous_differentiation_on_histology", "weight": 5 },
+          { "feature": "preceded_by_CIN", "weight": 4 }
+        ],
+        "management": "Stage IA1: Cone biopsy. Stage IA2-IB1: Radical hysterectomy + pelvic lymphadenectomy. Stage IB2-IVA: Chemoradiotherapy (Cisplatin + EBRT + brachytherapy). Stage IVB: Palliative chemotherapy."
+      },
+      {
+        "id": "adenocarcinoma_cervix",
+        "name": "Adenocarcinoma of the Cervix",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "endocervical_location", "weight": 4 },
+          { "feature": "HPV_18_associated", "weight": 4 },
+          { "feature": "may_be_harder_to_detect_on_cytology", "weight": 3 },
+          { "feature": "barrel_shaped_cervix", "weight": 3 }
+        ],
+        "management": "Similar staging and treatment as squamous. Increased risk of ovarian metastases; consider oophorectomy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cervical_polyp",
+        "discriminators": ["benign_appearing", "pedunculated", "no_invasion"]
+      },
+      {
+        "diseaseId": "cervical_fibroid",
+        "discriminators": ["smooth_surface", "firm_mobile", "no_friability"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Speculum examination", "priority": "immediate", "yield": 0.7, "indication": "visualization of lesion" }
+      ],
+      "laboratory": [
+        { "name": "Cervical cytology (Pap smear)", "priority": "screening", "yield": 0.7, "indication": "screening" },
+        { "name": "HPV DNA testing", "priority": "screening", "yield": 0.9, "indication": "high-risk HPV detection" },
+        { "name": "Squamous cell carcinoma antigen (SCC)", "priority": "monitoring", "yield": 0.5, "indication": "tumor marker for squamous" },
+        { "name": "HIV testing", "priority": "high", "yield": 0.3, "indication": "associated risk" }
+      ],
+      "imaging": [
+        { "name": "Colposcopy with biopsy", "priority": "diagnostic", "yield": 0.95, "indication": "see lesion, directed biopsy" },
+        { "name": "MRI pelvis", "priority": "staging", "yield": 0.85, "indication": "parametrial invasion, tumor size" },
+        { "name": "PET-CT or CT chest/abdomen/pelvis", "priority": "staging", "yield": 0.8, "indication": "nodal and distant metastases" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / FIGO Guidelines for Cervical Cancer",
+      "pathways": [
+        {
+          "severity": "early_stage_IA_IB1",
+          "criteria": "confined to cervix, <4cm, no nodal involvement",
+          "treatment": "Stage IA1: Cone biopsy (fertility preserving). IA2-IB1: Radical hysterectomy (type II/III) + pelvic lymphadenectomy. Or radical trachelectomy if fertility desired. 5-year survival >90%."
+        },
+        {
+          "severity": "locally_advanced_IB2_IVA",
+          "criteria": "tumor >4cm, parametrial invasion, nodal involvement",
+          "treatment": "Concurrent chemoradiotherapy: Cisplatin 40mg/m2 weekly + EBRT 45-50.4Gy + brachytherapy 30-35Gy. 5-year survival 60-80%."
+        },
+        {
+          "severity": "metastatic_IVB",
+          "criteria": "distant metastases",
+          "treatment": "Palliative chemotherapy (Cisplatin/Paclitaxel/Bevacizumab). Palliative radiotherapy for bleeding/pain. Consider immunotherapy (Pembrolizumab if PD-L1+). 5-year survival <20%."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "high_risk_HPV_integration",
+      "E6_E7_oncoprotein_expression",
+      "p53_and_Rb_degradation",
+      "cervical_intraepithelial_neoplasia",
+      "invasive_carcinoma"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "ureteric_obstruction",
+        "probability": 0.1,
+        "lagDays": [180, 730],
+        "severityBoost": 0.6,
+        "clues": ["hydronephrosis", "flank_pain", "renal_failure"]
+      },
+      {
+        "diseaseId": "hemorrhage_from_tumor",
+        "probability": 0.05,
+        "lagDays": [0, 365],
+        "severityBoost": 0.6,
+        "clues": ["heavy_bleeding", "drop_in_Hb"]
+      },
+      {
+        "diseaseId": "vesicovaginal_or_rectovaginal_fistula",
+        "probability": 0.03,
+        "lagDays": [0, 730],
+        "severityBoost": 0.5,
+        "clues": ["urinary_or_fecal_leakage"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["postcoital_bleeding", "visible_cervical_lesion", "positive_HPV_high_risk"],
+    "exclusionClues": ["normal_cervix", "negative_HPV_and_cytology"]
+  }
+}

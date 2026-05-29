@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "hf_pef",
+    "name": "Heart Failure with Preserved Ejection Fraction",
+    "system": "CARD",
+    "agePeak_months": [600, 1080],
+    "note": "LVEF ≥50%. Diastolic dysfunction with impaired relaxation and increased filling pressures.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["heart_failure", "diastolic_dysfunction"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pulmonary_oedema", "weight": 9 },
+        { "sign": "refractory_hypertension", "weight": 8 },
+        { "sign": "atrial_fibrillation_rapid_rate", "weight": 7 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If pulmonary oedema/uncontrolled HTN/rapid AF -> ACUTE HFpEF; else -> COMPENSATED HFpEF"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea_on_exertion", "weight": 5 },
+      { "symptomId": "exercise_intolerance", "weight": 4 },
+      { "symptomId": "orthopnea", "weight": 3 },
+      { "symptomId": "paroxysmal_nocturnal_dyspnea", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "lower_limb_swelling", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "elevated_bp", "baseWeight": 4 },
+      { "signId": "jugular_venous_distension", "baseWeight": 3 },
+      { "signId": "peripheral_oedema", "baseWeight": 3 },
+      { "signId": "crackles_bibasilar", "baseWeight": 3 },
+      { "signId": "s4_gallop", "baseWeight": 3, "note": "Atrial gallop common in diastolic dysfunction" },
+      { "signId": "hepatomegaly", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "hypertension", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "female_sex", "multiplier": 1.5 },
+      { "id": "advanced_age", "multiplier": 2.0 },
+      { "id": "atrial_fibrillation", "multiplier": 1.8 }
+    ],
+    "subtypes": [
+      {
+        "id": "mild_hfpef",
+        "name": "Mild HFpEF (E/e' 8-12)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [{ "feature": "e_e_prime_8_to_12", "weight": 4 }],
+        "management": "BP control. Diuretics PRN. SGLT2i. Manage comorbidities. Exercise training."
+      },
+      {
+        "id": "moderate_hfpef",
+        "name": "Moderate HFpEF (E/e' 13-15)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [{ "feature": "e_e_prime_13_to_15", "weight": 5 }],
+        "management": "Intensive BP control. Loop diuretics. SGLT2i. Rate control for AF. Manage comorbidities."
+      },
+      {
+        "id": "severe_hfpef",
+        "name": "Severe HFpEF (E/e' >15, PAH)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [{ "feature": "e_e_prime_greater_15", "weight": 5 }],
+        "management": "MRA considered. SGLT2i. Diuretics. Treat pulmonary hypertension. Consider HF specialist referral."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "hfref", "discriminators": ["low_lvef", "s3_gallop", "dilated_lv"] },
+      { "diseaseId": "copd", "discriminators": ["chronic_cough", "smoking", "normal_echo_diastolic_function"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.6, "indication": "hypoxia assessment" }
+      ],
+      "laboratory": [
+        { "name": "BNP/NT-proBNP", "priority": "high", "yield": 0.8, "indication": "elevated but typically lower than HFrEF" },
+        { "name": "Serum creatinine and eGFR", "priority": "high", "yield": 0.5, "indication": "baseline renal function" },
+        { "name": "HbA1c", "priority": "medium", "yield": 0.3, "indication": "screen for diabetes" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.95, "indication": "EF ≥50%, diastolic parameters (E/e', LA size)" },
+        { "name": "Stress echo", "priority": "medium", "yield": 0.7, "indication": "exercise-induced diastolic dysfunction" },
+        { "name": "Cardiac MRI", "priority": "low", "yield": 0.8, "indication": "fibrosis, infiltrative disease" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Heart Failure with Preserved Ejection Fraction",
+      "pathways": [
+        {
+          "severity": "compensated HFpEF",
+          "criteria": "no congestion, well-controlled BP",
+          "treatment": "SGLT2i (dapagliflozin 10 mg). BP control (target <130/80). Diuretics PRN for congestion. Exercise training. Weight loss if obese."
+        },
+        {
+          "severity": "decompensated HFpEF",
+          "criteria": "pulmonary congestion, oedema, hypertensive crisis",
+          "treatment": "IV furosemide. BP control (IV vasodilators if hypertensive urgency). Rate control for AF. Oxygen. Non-invasive ventilation if pulmonary oedema."
+        },
+        {
+          "severity": "refractory HFpEF",
+          "criteria": "recurrent admissions, persistent NYHA III-IV",
+          "treatment": "Optimize diuretics. Consider MRA. Manage AF (rate or rhythm). Pulmonary hypertension management. Palliative care."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "impaired_lv_relaxation",
+      "increased_lv_filling_pressures",
+      "lv_hypertrophy",
+      "myocardial_fibrosis",
+      "vascular_stiffness",
+      "pulmonary_hypertension"
+    ],
+    "complications": [
+      { "diseaseId": "atrial_fibrillation", "probability": 0.3, "severityBoost": 0.3, "clues": ["palpitations", "irregular_pulse"] },
+      { "diseaseId": "pulmonary_hypertension", "probability": 0.2, "severityBoost": 0.3, "clues": ["right_heart_strain", "raised_bnp", "tricuspid_regurgitation"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "moderate",
+    "diagnosticClues": ["dyspnea_with_normal_lvef", "diastolic_dysfunction_echo", "htn_obesity_female"],
+    "exclusionClues": ["lvef_less_50", "systolic_dysfunction", "alternative_cause_dyspnea"]
+  }
+}

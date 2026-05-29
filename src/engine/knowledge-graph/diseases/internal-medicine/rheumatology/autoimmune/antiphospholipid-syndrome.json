@@ -1,0 +1,162 @@
+{
+  "disease": {
+    "id": "antiphospholipid_syndrome",
+    "name": "Antiphospholipid Syndrome",
+    "system": "rheumatology",
+    "agePeak_months": [240, 480],
+    "note": "Systemic autoimmune disorder characterized by arterial and venous thrombosis, pregnancy morbidity, and persistent antiphospholipid antibodies (lupus anticoagulant, anticardiolipin, anti-beta2 glycoprotein I).",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["autoimmune", "thrombophilia", "hypercoagulable", "pregnancy_loss"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "catastrophic_aps", "weight": 10 },
+        { "sign": "pulmonary_embolism_massive", "weight": 9 },
+        { "sign": "stroke_arterial_thrombosis", "weight": 9 },
+        { "sign": "myocardial_infarction", "weight": 9 },
+        { "sign": "severe_pregnancy_complications", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If acute thrombosis or catastrophic APS -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "deep_vein_thrombosis", "weight": 5 },
+      { "symptomId": "pulmonary_embolism", "weight": 5 },
+      { "symptomId": "recurrent_miscarriage", "weight": 5 },
+      { "symptomId": "livedo_reticularis", "weight": 3 },
+      { "symptomId": "stroke_or_tia_young", "weight": 4 },
+      { "symptomId": "migraine_headaches", "weight": 2 },
+      { "symptomId": "superficial_thrombophlebitis", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "livedo_reticularis", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "leg_swelling_dvt_signs", "baseWeight": 4 },
+      { "signId": "skin_ulcers_lower_legs", "baseWeight": 3 },
+      { "signId": "digital_gangrene", "baseWeight": 4 },
+      { "signId": "splinter_hemorrhages", "baseWeight": 2 },
+      { "signId": "neurological_deficits", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "systemic_lupus_erythematosus", "multiplier": 5.0 },
+      { "id": "female_sex", "multiplier": 3.0 },
+      { "id": "pregnancy_postpartum", "multiplier": 3.0 },
+      { "id": "oral_contraceptive_hrt", "multiplier": 2.0 },
+      { "id": "family_history_aps", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "primary_aps",
+        "name": "Primary Antiphospholipid Syndrome",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "thrombosis_or_pregnancy_loss_no_sle", "weight": 5 },
+          { "feature": "no_other_autoimmune", "weight": 4 },
+          { "feature": "persistent_positive_apl_antibodies", "weight": 5 }
+        ],
+        "management": "Long-term anticoagulation. Warfarin (INR 2-3) or DOAC (caution in arterial)."
+      },
+      {
+        "id": "secondary_aps_sle",
+        "name": "Secondary APS (with SLE)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "sle_features_plus_thrombosis", "weight": 5 },
+          { "feature": "higher_risk_of_thrombosis", "weight": 4 },
+          { "feature": "treat_both_conditions", "weight": 4 }
+        ],
+        "management": "Anticoagulation plus hydroxychloroquine. Immunosuppression for SLE."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hereditary_thrombophilia",
+        "discriminators": ["negative_apl_antibodies", "factor_v_leiden", "prothrombin_mutation", "protein_c_s_deficiency"]
+      },
+      {
+        "diseaseId": "heparin_induced_thrombocytopenia",
+        "discriminators": ["heparin_exposure", "thrombocytopenia", "hit_antibodies", "no_apl_antibodies"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Lupus anticoagulant (dRVVT, PTT-LA)", "priority": "high", "yield": 0.8, "indication": "functional coagulation assay" },
+        { "name": "Anticardiolipin antibodies (IgG, IgM)", "priority": "high", "yield": 0.8, "indication": "solid-phase antibody detection" },
+        { "name": "Anti-beta2 glycoprotein I antibodies", "priority": "high", "yield": 0.7, "indication": "confirmatory test" },
+        { "name": "FBC and coagulation screen", "priority": "high", "yield": 0.4, "indication": "thrombocytopenia possible" },
+        { "name": "Repeat testing 12 weeks apart", "priority": "high", "yield": 0.9, "indication": "persistence requirement for diagnosis" }
+      ],
+      "imaging": [
+        { "name": "Doppler ultrasound of affected limb", "priority": "high", "yield": 0.9, "indication": "DVT confirmation" },
+        { "name": "CT pulmonary angiogram", "priority": "high", "yield": 0.9, "indication": "PE confirmation" },
+        { "name": "MRI brain", "priority": "medium", "yield": 0.6, "indication": "cerebral ischemia, white matter lesions" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR Recommendations for APS Management",
+      "pathways": [
+        {
+          "severity": "venous_thrombosis",
+          "criteria": "first DVT/PE, no arterial thrombosis",
+          "treatment": "Anticoagulation: warfarin INR 2-3 or DOAC (rivaroxaban, apixaban). Lifelong anticoagulation."
+        },
+        {
+          "severity": "arterial_thrombosis",
+          "criteria": "stroke, MI, arterial events",
+          "treatment": "Warfarin INR 3-4 or warfarin + aspirin. Avoid DOACs."
+        },
+        {
+          "severity": "pregnancy",
+          "criteria": "pregnancy in APS, prior pregnancy loss",
+          "treatment": "Low-dose aspirin + low molecular weight heparin throughout pregnancy. Postpartum anticoagulation."
+        },
+        {
+          "severity": "catastrophic_aps",
+          "criteria": "rapid multi-organ thrombosis, microangiopathy",
+          "treatment": "High-dose steroids. Anticoagulation. Plasma exchange. IVIG. Rituximab."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "apl_antibodies_activate_endothelium",
+      "beta2_glycoprotein_i_interaction",
+      "tissue_factor_pathway_activation",
+      "complement_activation",
+      "platelet_activation",
+      "thrombin_generation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "catastrophic_aps",
+        "probability": 0.01,
+        "severityBoost": 0.9,
+        "clues": ["rapid_thrombosis_multiple_organs", "microangiopathy", "thrombocytopenia", "microangiopathic_hemolytic_anemia"]
+      },
+      {
+        "diseaseId": "recurrent_thrombosis",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["inadequate_anticoagulation", "triple_positive_antibodies", "arterial_thrombosis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if acute thrombosis or CAPS",
+    "diagnosticClues": ["unprovoked_thrombosis_young", "recurrent_pregnancy_loss", "livedo_reticularis", "positive_apl_antibodies"],
+    "exclusionClues": ["negative_apl_antibodies_twice", "alternative_thrombophilia", "single_negative_test"]
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "tia",
+    "name": "Transient Ischemic Attack",
+    "system": "NEURO",
+    "agePeak_months": [540, 960],
+    "note": "Temporary focal neurological deficit due to ischemia, typically lasting <1 hour. High risk of subsequent stroke, especially within 48 hours.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["focal_neurological_deficit", "cerebrovascular_event"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "deficit_still_present", "weight": 9 },
+        { "sign": "crescendo_tia", "weight": 9 },
+        { "sign": "atrial_fibrillation", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If crescendo TIA/ongoing symptoms/AF -> HIGH RISK; else -> LOW RISK"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_focal_weakness", "weight": 5 },
+      { "symptomId": "speech_disturbance", "weight": 4 },
+      { "symptomId": "transient_visual_loss_amaurosis_fugax", "weight": 4 },
+      { "symptomId": "hemisensory_symptoms", "weight": 3 },
+      { "symptomId": "dizziness_vertigo", "weight": 2 },
+      { "symptomId": "complete_resolution_within_24h", "weight": 4 },
+      { "symptomId": "resolution_within_1_hour", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "neurological_exam_normal", "baseWeight": 4, "note": "Resolved deficit - exam typically normal" },
+      { "signId": "focal_signs_if_still_symptomatic", "baseWeight": 3 },
+      { "signId": "vascular_bruits", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "hypertension", "multiplier": 2.0 },
+      { "id": "atrial_fibrillation", "multiplier": 3.0 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "prior_stroke_tia", "multiplier": 2.5 },
+      { "id": "carotid_stenosis", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "high_risk_tia",
+        "name": "High-Risk TIA (ABCD2 6-7)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "age_greater_60", "weight": 2 },
+          { "feature": "bp_greater_140_90", "weight": 1 },
+          { "feature": "speech_deficit", "weight": 2 },
+          { "feature": "duration_greater_60_min", "weight": 2 },
+          { "feature": "diabetes", "weight": 1 }
+        ],
+        "management": "Urgent admission. Stroke unit. Dual antiplatelet if non-cardioembolic. Urgent workup (MRI, carotids, echo, telemetry)."
+      },
+      {
+        "id": "low_risk_tia",
+        "name": "Low-Risk TIA (ABCD2 0-5)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "age_less_60", "weight": 0 },
+          { "feature": "no_high_risk_features", "weight": 3 }
+        ],
+        "management": "Urgent outpatient TIA clinic within 48h. Urgent imaging. Antiplatelet therapy. Risk factor optimization."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "migraine_with_aura", "discriminators": ["visual_aura", "headache", "sequential_spread", "young_age"] },
+      { "diseaseId": "focal_seizure_todd_paralysis", "discriminators": ["jerking", "post_ictal", "tongue_bite", "eeg_abnormal"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCD2 score", "priority": "immediate", "yield": 0.85, "indication": "risk stratification" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr, Glucose, Lipids", "priority": "high", "yield": 0.4, "indication": "baseline and risk assessment" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain (DWI)", "priority": "high", "yield": 0.7, "indication": "positive in 30-50% - confirms ischemia" },
+        { "name": "Carotid Doppler/CT Angiography", "priority": "high", "yield": 0.8, "indication": "carotid stenosis assessment" },
+        { "name": "CT Head", "priority": "immediate", "yield": 0.3, "indication": "rule out hemorrhage, other pathology" },
+        { "name": "Echocardiography", "priority": "medium", "yield": 0.4, "indication": "cardioembolic source" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ASA Guidelines for TIA",
+      "pathways": [
+        {
+          "severity": "high risk",
+          "criteria": "ABCD2 6-7, crescendo TIA, AF, or carotid stenosis >50%",
+          "treatment": "Admit to stroke unit. Dual antiplatelet (aspirin + clopidogrel) for 21 days if non-cardioembolic. If AF: anticoagulation. Urgent endarterectomy if carotid stenosis >70%. Statin. BP management."
+        },
+        {
+          "severity": "low risk",
+          "criteria": "ABCD2 0-5, no high-risk features",
+          "treatment": "Urgent TIA clinic within 48h. Aspirin 300 mg stat then 75 mg OD. Urgent carotid imaging. MRI brain. Start statin. Anticoagulate if AF. Lifestyle modification."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "temporary_cerebral_ischemia",
+      "embolic_occlusion_with_lysis",
+      "hemodynamic_deficit",
+      "thrombosis_with_recanalization",
+      "critical_stenosis"
+    ],
+    "complications": [
+      { "diseaseId": "ischemic_stroke", "probability": 0.1, "severityBoost": 0.5, "clues": ["symptoms_progressing_beyond_24h", "new_dwi_lesion"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high (within 48h window)",
+    "diagnosticClues": ["transient_focal_neurological_deficit", "complete_resolution", "high_stroke_risk_short_term"],
+    "exclusionClues": ["migraine_aura_temporal", "seizure_activity", "glucose_abnormal"]
+  }
+}

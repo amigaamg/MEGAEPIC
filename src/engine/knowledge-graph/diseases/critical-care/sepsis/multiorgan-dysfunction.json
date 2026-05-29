@@ -1,0 +1,121 @@
+{
+  "disease": {
+    "id": "multiorgan_dysfunction_syndrome",
+    "name": "Multiple Organ Dysfunction Syndrome (MODS)",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Progressive dysfunction of two or more organ systems in critically ill patients. Primarily driven by uncontrolled inflammation. High mortality (30-80%).",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["critical_care", "organ_failure", "sepsis_complication"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiovascular_failure_refractory_shock", "weight": 10 },
+        { "sign": "respiratory_failure_ards_refractory", "weight": 10 },
+        { "sign": "renal_failure_anuric", "weight": 9 },
+        { "sign": "hepatic_failure_encephalopathy", "weight": 9 },
+        { "sign": "coagulopathy_dic_bleeding", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "SOFA score >=2 per system. Score 2-3 organ systems = MODERATE; 4+ = SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sepsis_or_severe_inflammatory_trigger", "weight": 5 },
+      { "symptomId": "progressive_multisystem_failure", "weight": 5 },
+      { "symptomId": "oliguria_anuria", "weight": 4 },
+      { "symptomId": "hypoxia_requiring_ventilation", "weight": 4 },
+      { "symptomId": "hypotension_vasopressors", "weight": 5 },
+      { "symptomId": "bleeding_coagulopathy", "weight": 3 },
+      { "symptomId": "jaundice_liver_failure", "weight": 3 },
+      { "symptomId": "altered_consciousness", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension_tachycardia", "baseWeight": 4 },
+      { "signId": "hypoxia_cyanosis", "baseWeight": 4 },
+      { "signId": "altered_mental_status", "baseWeight": 4 },
+      { "signId": "oliguria_anuria", "baseWeight": 4 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "petechiae_bleeding", "baseWeight": 3 },
+      { "signId": "edema_anasarca", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "sepsis_septic_shock", "multiplier": 3.0 },
+      { "id": "massive_trauma_surgery", "multiplier": 2.5 },
+      { "id": "systemic_inflammatory_response", "multiplier": 2.5 },
+      { "id": "delayed_resuscitation", "multiplier": 2.0 },
+      { "id": "advanced_age", "multiplier": 2.0 },
+      { "id": "pre_existing_organ_dysfunction", "multiplier": 2.5 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "SOFA score calculation (daily)", "priority": "immediate", "yield": 0.9, "indication": "quantify organ dysfunction" }
+      ],
+      "laboratory": [
+        { "name": "ABG (PaO2/FiO2 ratio)", "priority": "immediate", "yield": 0.8, "indication": "respiratory function" },
+        { "name": "FBC, Coagulation (PT, aPTT, platelets)", "priority": "high", "yield": 0.7, "indication": "hematologic/DIC assessment" },
+        { "name": "LFT (ALT, AST, Bilirubin, ALP)", "priority": "high", "yield": 0.6, "indication": "hepatic function" },
+        { "name": "U&E, Cr, urine output", "priority": "high", "yield": 0.7, "indication": "renal function" },
+        { "name": "Lactate", "priority": "high", "yield": 0.8, "indication": "tissue perfusion" },
+        { "name": "Troponin, BNP", "priority": "medium", "yield": 0.5, "indication": "cardiac involvement" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Surviving Sepsis Campaign / Critical Care MODS Management",
+      "pathways": [
+        {
+          "severity": "2-3 organ failure (MODERATE)",
+          "criteria": "SOFA 2-3 points in 2-3 systems",
+          "treatment": "ICU. Treat underlying cause (source control, antibiotics). Organ-specific support: lung-protective ventilation, fluid resuscitation, vasopressors, RRT if AKI. Nutrition. Glucose control."
+        },
+        {
+          "severity": "4+ organ failure (SEVERE)",
+          "criteria": "SOFA >=3 in 4+ systems, high mortality",
+          "treatment": "Full ICU organ support: mechanical ventilation, CRRT, multiple vasopressors/inotropes. Consider steroids. DIC management. Discuss goals of care. Palliative care if escalating support is futile."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "initial_insult_sepsis_trauma_pancreatitis",
+      "systemic_inflammatory_response_syndrome",
+      "cytokine_storm",
+      "endothelial_dysfunction",
+      "microvascular_thrombosis",
+      "tissue_hypoxia_and_reperfusion",
+      "mitochondrial_dysfunction",
+      "apoptosis_and_necrosis",
+      "progressive_organ_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["thrombocytopenia", "prolonged_pt_aptt", "elevated_d_dimer"]
+      },
+      {
+        "diseaseId": "critical_illness_polyneuropathy",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["failure_to_wean", "muscle_wasting", "decreased_reflexes"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["progressive_organ_failure_in_icu", "sepsis_trauma_trigger", "high_sofa_scores"],
+    "exclusionClues": ["single_organ_failure", "rapid_improvement", "reversible_metabolic_cause"]
+  }
+}

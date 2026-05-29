@@ -1,0 +1,153 @@
+{
+  "disease": {
+    "id": "aplastic_anemia",
+    "name": "Aplastic Anemia",
+    "system": "hematology",
+    "agePeak_months": [120, 480, 720],
+    "note": "Bone marrow failure syndrome with pancytopenia. Can be acquired (idiopathic, drug-induced, post-viral) or congenital.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["pancytopenia", "bone_marrow_failure", "anemia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sepsis", "weight": 10 },
+        { "sign": "severe_bleeding", "weight": 10 },
+        { "sign": "severe_anemia_hb_below_5", "weight": 9 },
+        { "sign": "neutropenic_fever", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "stable_counts": true
+      },
+      "severityLabel": "If fever, bleeding, or severe cytopenia -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "pallor", "weight": 4 },
+      { "symptomId": "bruising", "weight": 4 },
+      { "symptomId": "epistaxis", "weight": 3 },
+      { "symptomId": "gingival_bleeding", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 4 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "drug_exposure", "weight": 3 },
+      { "symptomId": "viral_illness", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "petechiae", "baseWeight": 4 },
+      { "signId": "ecchymoses", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "no_organomegaly", "baseWeight": 2, "note": "Absence of hepatosplenomegaly is notable" },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "chemotherapy_exposure", "multiplier": 3.0 },
+      { "id": "radiation_exposure", "multiplier": 2.0 },
+      { "id": "benzene_exposure", "multiplier": 2.5 },
+      { "id": "viral_hepatitis", "multiplier": 2.0 },
+      { "id": "drugs_chloramphenicol", "multiplier": 2.0 },
+      { "id": "genetic_fanconi", "multiplier": 3.0 },
+      { "id": "pregnancy", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "severe_aplastic_anemia",
+        "name": "Severe Aplastic Anemia",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "bm_cellularity_below_25_percent", "weight": 5 },
+          { "feature": "anc_below_500", "weight": 4 },
+          { "feature": "platelet_below_20000", "weight": 4 }
+        ],
+        "management": "Hematopoietic stem cell transplant if young and fit. ATG + cyclosporine if not transplant candidate."
+      },
+      {
+        "id": "moderate_aplastic_anemia",
+        "name": "Moderate Aplastic Anemia",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "bm_cellularity_25_to_50_percent", "weight": 4 },
+          { "feature": "milder_cytopenias", "weight": 3 }
+        ],
+        "management": "Supportive care, growth factors, immunosuppressive therapy if progressing."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "myelodysplastic_syndrome",
+        "discriminators": ["dysplastic_features", "cytogenetic_abnormalities", "hypercellular_marrow"]
+      },
+      {
+        "diseaseId": "acute_leukemia",
+        "discriminators": ["blasts_on_film", "blasts_in_marrow", "splenomegaly"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.98, "indication": "Pancytopenia" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.9, "indication": "No blasts, reduced all lineages" }
+      ],
+      "laboratory": [
+        { "name": "Reticulocyte count", "priority": "high", "yield": 0.8, "indication": "Low (<1%)" },
+        { "name": "Serum B12 and folate", "priority": "high", "yield": 0.5, "indication": "Rule out deficiency" },
+        { "name": "Viral serology (EBV, CMV, parvovirus)", "priority": "high", "yield": 0.3, "indication": "Identify triggering infection" },
+        { "name": "Bone marrow aspirate and trephine", "priority": "immediate", "yield": 0.98, "indication": "Hypocellular marrow, confirm diagnosis" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "EBMT / BSH Guidelines for Aplastic Anemia",
+      "pathways": [
+        {
+          "severity": "severe",
+          "criteria": "ANC <500, platelets <20000, reticulocytes <1%",
+          "treatment": "HLA-matched sibling HSCT if <40 years. ATG + cyclosporine + eltrombopag for older. Supportive transfusions, G-CSF, antibiotics."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "Stable counts, no transfusion dependence",
+          "treatment": "Close monitoring. Immunosuppression if count dropping. Avoid myelosuppressive drugs."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "immune_mediated_marrow_suppression",
+      "cytotoxic_t_cell_activation",
+      "hematopoietic_stem_cell_destruction",
+      "marrow_hypocellularity",
+      "pancytopenia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "myelodysplastic_syndrome",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["clonal_evolution", "cytogenetic_abnormality"]
+      },
+      {
+        "diseaseId": "paroxysmal_nocturnal_hemoglobinuria",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["hemoglobinuria", "thrombosis", "pnl_clone_positive"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pancytopenia", "hypocellular_marrow", "no_blasts", "no_splenomegaly"],
+    "exclusionClues": ["splenomegaly", "blasts_on_film", "hypercellular_marrow"]
+  }
+}

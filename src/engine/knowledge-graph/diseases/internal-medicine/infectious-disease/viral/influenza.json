@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "influenza",
+    "name": "Influenza (Seasonal Flu)",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 960],
+    "note": "Seasonal respiratory viral illness caused by Influenza A/B. High fever, myalgia, cough. Can cause severe pneumonia, especially in extremes of age.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["viral_respiratory_infection", "febrile_illness", "seasonal_outbreak"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_distress", "weight": 9 },
+        { "sign": "severe_hypoxia", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "encephalitis_altered_consciousness", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Uncomplicated -> MILD-MODERATE; Pneumonia/ICU -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_sudden_onset_high", "weight": 5 },
+      { "symptomId": "myalgia_severe", "weight": 4 },
+      { "symptomId": "cough_non_productive", "weight": 4 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "sore_throat", "weight": 3 },
+      { "symptomId": "fatigue_profound", "weight": 4 },
+      { "symptomId": "nasal_congestion_rhinorrhea", "weight": 2 },
+      { "symptomId": "seasonal_community_outbreak", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_high", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "pharyngeal_erythema", "baseWeight": 2 },
+      { "signId": "crackles_wheezing", "baseWeight": 2 },
+      { "signId": "conjunctival_injection", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_under_2_or_over_65", "multiplier": 2.5 },
+      { "id": "pregnancy", "multiplier": 2.0 },
+      { "id": "chronic_lung_disease", "multiplier": 2.0 },
+      { "id": "cardiac_disease", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "healthcare_worker", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_influenza",
+        "name": "Uncomplicated Influenza",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "symptoms_less_5_days", "weight": 4 },
+          { "feature": "no_hypoxia", "weight": 5 },
+          { "feature": "self_limiting", "weight": 3 }
+        ],
+        "management": "Symptomatic care: antipyretics, hydration, rest. Antivirals (oseltamivir) if high risk or within 48h. Isolation."
+      },
+      {
+        "id": "complicated_influenza",
+        "name": "Complicated Influenza (Pneumonia)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "persistent_high_fever", "weight": 4 },
+          { "feature": "dyspnea_hypoxia", "weight": 5 },
+          { "feature": "infiltrates_on_imaging", "weight": 4 }
+        ],
+        "management": "Oseltamivir 75mg BD (or IV peramivir). Antibiotics if bacterial superinfection. O2 therapy. ICU if respiratory failure."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "covid_19",
+        "discriminators": ["loss_of_smell_taste_more_common", "longer_incubation", "pcr_distinction"]
+      },
+      {
+        "diseaseId": "bacterial_pneumonia",
+        "discriminators": ["productive_cough_focal_signs", "high_procalcitonin", "lobar_consolidation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Rapid influenza antigen test", "priority": "high", "yield": 0.7, "indication": "quick diagnosis during season" }
+      ],
+      "laboratory": [
+        { "name": "Influenza A/B PCR (NP swab)", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "FBC, CRP", "priority": "medium", "yield": 0.4, "indication": "leukopenia common" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "if hypoxia or suspicion of pneumonia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CDC/WHO Guidelines for Influenza",
+      "pathways": [
+        {
+          "severity": "mild uncomplicated",
+          "criteria": "no hypoxia, no comorbidities",
+          "treatment": "Rest, hydration, paracetamol/ibuprofen. Antivirals not routinely needed. Monitor for worsening."
+        },
+        {
+          "severity": "high risk or complicated",
+          "criteria": "age <2/>65, pregnancy, chronic disease, or pneumonia",
+          "treatment": "Oseltamivir 75mg PO BD for 5 days (start within 48h). Antibiotics if bacterial superinfection. O2 if hypoxic. ICU if severe."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "respiratory_epithelium_infection",
+      "cytokine_release",
+      "systemic_symptoms",
+      "immune_evasion_antigenic_drift",
+      "secondary_bacterial_infection"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bacterial_pneumonia_superinfection",
+        "probability": 0.15,
+        "lagDays": [5, 14],
+        "severityBoost": 0.4,
+        "clues": ["biphasic_illness", "purulent_sputum", "lobar_consolidation"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["sudden_onset_high_fever_myalgia_cough", "winter_season", "community_outbreak"],
+    "exclusionClues": ["negative_pcr", "alternative_respiratory_pathogen"]
+  }
+}

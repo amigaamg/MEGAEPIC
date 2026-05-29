@@ -1,0 +1,162 @@
+{
+  "disease": {
+    "id": "osteoarthritis",
+    "name": "Osteoarthritis",
+    "system": "rheumatology",
+    "agePeak_months": [600, 1080],
+    "note": "Most common joint disorder characterized by progressive degeneration of articular cartilage, subchondral bone remodeling, and osteophyte formation. Primarily affects weight-bearing joints.",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["degenerative", "joint_disease", "non_inflammatory", "mechanical_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_joint_superimposed", "weight": 10 },
+        { "sign": "avascular_necrosis", "weight": 8 },
+        { "sign": "pathological_fracture", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If suspected septic joint or fracture -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "joint_pain_worsens_with_activity", "weight": 5 },
+      { "symptomId": "morning_stiffness_under_30_min", "weight": 4 },
+      { "symptomId": "knee_hip_hand_pain_weight_bearing", "weight": 5 },
+      { "symptomId": "crepitus_grating_sensation", "weight": 3 },
+      { "symptomId": "activity_related_worsening", "weight": 5 },
+      { "symptomId": "night_pain_advanced_disease", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bony_enlargement_osteophytes", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "crepitus_on_movement", "baseWeight": 4 },
+      { "signId": "limited_range_of_motion", "baseWeight": 4 },
+      { "signId": "joint_line_tenderness", "baseWeight": 3 },
+      { "signId": "heberden_nodes_dip", "baseWeight": 3 },
+      { "signId": "bouchard_nodes_pip", "baseWeight": 3 },
+      { "signId": "varus_valgus_deformity_knee", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_age", "multiplier": 5.0 },
+      { "id": "obesity", "multiplier": 3.0 },
+      { "id": "previous_joint_injury", "multiplier": 3.0 },
+      { "id": "repetitive_joint_use_occupation", "multiplier": 2.0 },
+      { "id": "family_history_oa", "multiplier": 2.0 },
+      { "id": "female_sex_post_menopause", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "knee_osteoarthritis",
+        "name": "Knee Osteoarthritis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "medial_compartment_pain_gait", "weight": 5 },
+          { "feature": "crepitus_knee_flexion", "weight": 4 },
+          { "feature": "varus_deformity_common", "weight": 3 }
+        ],
+        "management": "Weight loss. Quadriceps strengthening. Analgesics. TKR when advanced."
+      },
+      {
+        "id": "hand_osteoarthritis",
+        "name": "Hand Osteoarthritis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "heberden_nodes_dip", "weight": 5 },
+          { "feature": "bouchard_nodes_pip", "weight": 4 },
+          { "feature": "thumb_cmc_joint_pain", "weight": 4 }
+        ],
+        "management": "Splints. Topical NSAIDs. Analgesics. Joint preservation exercises."
+      },
+      {
+        "id": "hip_osteoarthritis",
+        "name": "Hip Osteoarthritis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "groin_pain_referred_knee", "weight": 5 },
+          { "feature": "limited_internal_rotation_abduction", "weight": 5 },
+          { "feature": "antalgic_gait", "weight": 4 }
+        ],
+        "management": "Weight loss. Physiotherapy. Analgesics. THR when advanced."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "rheumatoid_arthritis",
+        "discriminators": ["morning_stiffness_over_30_min", "synovitis_swelling", "elevated_crp_esr", "positive_rf_anti_ccp"]
+      },
+      {
+        "diseaseId": "gout_pseudogout",
+        "discriminators": ["acute_onset", "crystal_positive", "erythema_warmth", "self_limiting"]
+      },
+      {
+        "diseaseId": "hip_avascular_necrosis",
+        "discriminators": ["steroid_alcohol_use", "mri_bone_marrow_edema", "femoral_head_collapse", "night_pain"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ROM assessment and gait analysis", "priority": "immediate", "yield": 0.8, "indication": "joint function" }
+      ],
+      "laboratory": [
+        { "name": "CRP", "priority": "medium", "yield": 0.2, "indication": "typically normal; if elevated, consider inflammatory arthropathy" }
+      ],
+      "imaging": [
+        { "name": "Weight-bearing joint X-ray", "priority": "high", "yield": 0.9, "indication": "joint space narrowing, osteophytes, sclerosis, cysts" },
+        { "name": "MRI", "priority": "low", "yield": 0.8, "indication": "cartilage loss, meniscal tears, bone marrow lesions" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "OARSI/ACR Guidelines for OA Management",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "intermittent pain, no functional limitation",
+          "treatment": "Weight loss. Exercise. Patient education. Paracetamol PRN. Topical NSAIDs."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "persistent pain, some functional limitation",
+          "treatment": "Oral NSAIDs (with PPI). Physiotherapy. Intra-articular steroids. Supports/braces."
+        },
+        {
+          "severity": "severe",
+          "criteria": "severe pain, significant functional limitation, night pain",
+          "treatment": "Intra-articular hyaluronic acid. Joint replacement surgery (TKR, THR). Analgesics including weak opioids."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cartilage_degradation",
+      "proteoglycan_loss",
+      "collagen_network_disruption",
+      "subchondral_bone_sclerosis",
+      "osteophyte_formation",
+      "synovial_inflammation_secondary"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "functional_limitation_disability",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["advanced_joint_space_narrowing", "deformity", "muscle_atrophy"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["activity_related_joint_pain", "short_morning_stiffness", "bony_enlargement", "joint_space_narrowing_xray"],
+    "exclusionClues": ["prolonged_morning_stiffness", "synovitis_on_exam", "increased_crp_esr", "erosions_on_xray"]
+  }
+}

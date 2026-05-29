@@ -1,6 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import TherapeuticLifeTimeline from '@/components/visual-intelligence/TherapeuticLifeTimeline';
+import DrugResponseGraph from '@/components/visual-intelligence/DrugResponseGraph';
+import TSHEETS from '@/components/visual-intelligence/TSHEETS';
+import ClinicalResponseBoard from '@/components/visual-intelligence/ClinicalResponseBoard';
+import MedicationEvolutionMap, { buildTherapyTree } from '@/components/visual-intelligence/MedicationEvolutionMap';
+import PharmacyWallet from '@/components/visual-intelligence/PharmacyWallet';
+import LifetimeTherapeuticMemory from '@/components/visual-intelligence/LifetimeTherapeuticMemory';
 import {
   collection, query, where, onSnapshot, doc, setDoc, addDoc,
   updateDoc, deleteDoc, getDoc, serverTimestamp, orderBy, limit,
@@ -86,6 +93,9 @@ export default function FullPagePatientDossier({
   const [sentTopics, setSentTopics] = useState<string[]>([]);
   const [allPrescriptions, setAllPrescriptions] = useState<any[]>([]);
   const [referrals, setReferrals] = useState<any[]>([]);
+  const [allSideEffects, setAllSideEffects] = useState<any[]>([]);
+  const [activeVizTab, setActiveVizTab] = useState<'timeline' | 'tsheets' | 'response' | 'evolution' | 'inventory' | 'memory'>('timeline');
+  const [showVizPanel, setShowVizPanel] = useState(true);
   const [showReferralForm, setShowReferralForm] = useState(false);
   const [referralData, setReferralData] = useState({ specialty: '', facility: '', reason: '', notes: '' });
   const [invWorkspace, setInvWorkspace] = useState('respiratory');
@@ -162,6 +172,10 @@ export default function FullPagePatientDossier({
     subs.push(onSnapshot(
       query(collection(db, 'medicationAdherence'), where('patientId', '==', pid), orderBy('recordedAt', 'desc'), limit(20)),
       snap => setAdherence(snap.docs.map(d => ({ id: d.id, ...d.data() } as Adherence)))
+    ));
+    subs.push(onSnapshot(
+      query(collection(db, 'sideEffects'), where('patientId', '==', pid), orderBy('onset', 'desc'), limit(50)),
+      snap => setAllSideEffects(snap.docs.map(d => ({ id: d.id, ...d.data() })))
     ));
     subs.push(onSnapshot(
       query(collection(db, 'clinicalNotes'), where('patientId', '==', pid), orderBy('createdAt', 'desc'), limit(30)),
@@ -1161,68 +1175,10 @@ ${!item.interpreted ? '<p class="disclaimer no-print">⚠ PRELIMINARY REPORT: Re
 
         {/* ═══ PRESCRIPTIONS ═══ */}
         {activeTab === 'prescriptions' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)' }}>💊 Prescriptions</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{allPrescriptions.length} total prescription{allPrescriptions.length !== 1 ? 's' : ''}</div>
-              </div>
-              <div style={{ display: 'flex', gap: 16 }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 22, fontWeight: 900, fontFamily: 'var(--mono)', color: 'var(--green)' }}>{allPrescriptions.length}</div>
-                  <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>Total</div>
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 22, fontWeight: 900, fontFamily: 'var(--mono)', color: 'var(--accent)' }}>{new Set(allPrescriptions.map((r: any) => r.medication || r.medicationName)).size}</div>
-                  <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>Unique</div>
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 22, fontWeight: 900, fontFamily: 'var(--mono)', color: 'var(--amber)' }}>{new Set(allPrescriptions.map((r: any) => r.doctorId || r.prescriberId)).size}</div>
-                  <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>Prescribers</div>
-                </div>
-              </div>
-            </div>
-
-            {allPrescriptions.length === 0 ? (
-              <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 14, padding: '40px 20px', textAlign: 'center' }}>
-                <div style={{ fontSize: 40, marginBottom: 12 }}>💊</div>
-                <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>No prescriptions yet</div>
-                <div style={{ fontSize: 13, color: 'var(--muted)' }}>Prescriptions will appear once ordered.</div>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 10 }}>
-                {allPrescriptions.map((rx: any, i: number) => {
-                  const rxDate = rx.createdAt?.toDate
-                    ? rx.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-                    : rx.date || '';
-                  return (
-                    <div key={rx.id || i} style={{
-                      background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 12,
-                      padding: 14, display: 'flex', flexDirection: 'column', gap: 8, transition: 'all 0.15s',
-                    }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', minWidth: 0 }}>
-                          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{rx.medication || rx.medicationName}</span>
-                          <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 8px', borderRadius: 99, background: 'rgba(0,214,143,.12)', color: 'var(--green)', textTransform: 'uppercase' }}>Active</span>
-                        </div>
-                        <span style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--mono)', whiteSpace: 'nowrap', flexShrink: 0 }}>{rxDate}</span>
-                      </div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                        {rx.dosage && <span style={{ fontSize: 10.5, color: 'var(--text2)', background: 'var(--surface2)', padding: '3px 9px', borderRadius: 6, fontWeight: 500 }}>💉 {rx.dosage}</span>}
-                        {rx.frequency && <span style={{ fontSize: 10.5, color: 'var(--text2)', background: 'var(--surface2)', padding: '3px 9px', borderRadius: 6, fontWeight: 500 }}>🕐 {rx.frequency}</span>}
-                        {rx.duration && <span style={{ fontSize: 10.5, color: 'var(--text2)', background: 'var(--surface2)', padding: '3px 9px', borderRadius: 6, fontWeight: 500 }}>📆 {rx.duration}</span>}
-                        {rx.route && <span style={{ fontSize: 10.5, color: 'var(--text2)', background: 'var(--surface2)', padding: '3px 9px', borderRadius: 6, fontWeight: 500 }}>🩸 {rx.route}</span>}
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 4, marginTop: 'auto' }}>
-                        <span style={{ fontSize: 11, color: 'var(--accent3)', fontWeight: 600 }}>Dr. {rx.doctorName || rx.prescriberName || 'Unknown'}</span>
-                        {rx.condition && <span style={{ fontSize: 10, color: 'var(--muted)' }}>For: {rx.condition}</span>}
-                      </div>
-                      {rx.notes && <div style={{ fontSize: 11, color: 'var(--text2)', fontStyle: 'italic', borderTop: '1px solid var(--border)', paddingTop: 6, marginTop: 2 }}>📝 {rx.notes}</div>}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', justifyContent: 'center', padding: 40, textAlign: 'center' }}>
+            <div style={{ fontSize: 48, marginBottom: 12 }}>💊</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Prescriptions</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)' }}>No prescription data available.</div>
           </div>
         )}
 

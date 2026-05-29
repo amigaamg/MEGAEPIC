@@ -1,0 +1,76 @@
+import type { DepartmentDefinition } from './index';
+
+export const emergencyMedicine: DepartmentDefinition = {
+  id: 'EM',
+  name: 'Emergency Medicine',
+  shortName: 'EM',
+  description: 'Acute care of undifferentiated patients presenting with life-threatening or urgent conditions requiring immediate assessment, resuscitation and treatment.',
+  icon: '🚨',
+  color: '#ef4444',
+  sections: [
+    {
+      id: 'resuscitation',
+      name: 'Resuscitation & Critical Care',
+      description: 'Acute life support, cardiac arrest, shock management',
+      diseaseCategories: ['Cardiac arrest', 'Shock (hypovolaemic/cardiogenic/distributive)', 'Anaphylaxis', 'Sepsis resuscitation', 'Massive haemorrhage', 'Airway emergency'],
+    },
+    {
+      id: 'cardiac-emergency',
+      name: 'Cardiac Emergencies',
+      description: 'Acute coronary syndromes, arrhythmias, hypertensive emergencies',
+      diseaseCategories: ['STEMI', 'NSTEMI', 'Acute heart failure', 'Cardiac tamponade', 'Tachyarrhythmia', 'Bradyarrhythmia', 'Hypertensive emergency', 'Aortic dissection'],
+    },
+    {
+      id: 'respiratory-emergency',
+      name: 'Respiratory Emergencies',
+      description: 'Acute respiratory failure, severe asthma, pulmonary embolism',
+      diseaseCategories: ['Acute respiratory failure', 'Severe asthma exacerbation', 'COPD exacerbation', 'Pulmonary embolism', 'Tension pneumothorax', 'Massive haemoptysis', 'Upper airway obstruction'],
+    },
+    {
+      id: 'trauma',
+      name: 'Trauma & Injury',
+      description: 'Acute traumatic injuries from blunt and penetrating mechanisms',
+      diseaseCategories: ['Major trauma', 'Head injury', 'Chest trauma', 'Abdominal trauma', 'Spinal injury', 'Pelvic fracture', 'Burns', 'Polytrauma'],
+    },
+    {
+      id: 'neurological-emergency',
+      name: 'Neurological Emergencies',
+      description: 'Acute neurological presentations requiring urgent intervention',
+      diseaseCategories: ['Acute stroke', 'Intracranial haemorrhage', 'Status epilepticus', 'Meningitis', 'Encephalitis', 'Spinal cord compression', 'Rising ICP'],
+    },
+    {
+      id: 'toxicology',
+      name: 'Toxicology & Poisoning',
+      description: 'Acute poisoning, overdose, envenomation',
+      diseaseCategories: ['Drug overdose', 'Paracetamol poisoning', 'Opioid overdose', 'Alcohol intoxication', 'Organophosphate poisoning', 'Snake bite', 'Carbon monoxide poisoning'],
+    },
+    {
+      id: 'environmental',
+      name: 'Environmental Emergencies',
+      description: 'Exposure-related emergencies and envenomation',
+      diseaseCategories: ['Hypothermia', 'Hyperthermia/heat stroke', 'Drowning', 'Electrical injury', 'Lightning strike', 'Decompression sickness', 'High altitude illness'],
+    },
+  ],
+  commonSymptoms: [
+    'chest_pain', 'dyspnoea', 'difficulty_breathing', 'cardiac_arrest',
+    'loss_of_consciousness', 'syncope', 'collapse', 'seizures',
+    'severe_headache', 'acute_confusion', 'altered_mental_status',
+    'stroke_symptoms', 'major_haemorrhage', 'haematemesis',
+    'melena_massive', 'haemoptysis_massive', 'severe_abdominal_pain',
+    'acute_abdomen', 'peritonism', 'trauma', 'head_injury',
+    'open_fracture', 'amputation', 'crush_injury', 'burns',
+    'poisoning', 'overdose', 'anaphylaxis', 'acute_allergic_reaction',
+    'stridor', 'wheeze_severe', 'cyanosis', 'hypotension',
+    'tachycardia', 'fever_high', 'hypothermia', 'sepsis',
+  ],
+  commonInvestigations: [
+    'ECG', 'Chest X-ray', 'FBC', 'U&E', 'LFT', 'CRP', 'Blood gas',
+    'Lactate', 'Troponin', 'D-dimer', 'Coagulation screen',
+    'Blood culture', 'Urinalysis', 'Urine toxicology screen',
+    'Paracetamol/salicylate levels', 'Alcohol level',
+    'CT head', 'CT chest/abdomen/pelvis (trauma)',
+    'FAST ultrasound', 'E-FAST', 'Bedside echocardiogram',
+    'Focused history and physical examination',
+    'Group and crossmatch', 'Pregnancy test',
+  ],
+};

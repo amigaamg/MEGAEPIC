@@ -1,0 +1,125 @@
+{
+  "disease": {
+    "id": "osteomyelitis",
+    "name": "Osteomyelitis",
+    "system": "ORTHO",
+    "agePeak_months": [0, 120],
+    "note": "Bone infection, commonly hematogenous in children (metaphysis of long bones). Can be acute or chronic. S. aureus most common pathogen.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["bone_infection", "orthopedic_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "pathologic_fracture", "weight": 9 },
+        { "sign": "intraosseous_abscess", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "fever_high_grade", "weight": 7 },
+          { "sign": "subperiosteal_abscess", "weight": 7 },
+          { "sign": "brodie_abscess_chronic", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If abscess, septic, or pathologic fracture -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "bone_pain_localized", "weight": 5 },
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "refusal_to_move_limb_pseudoparalysis", "weight": 4 },
+      { "symptomId": "swelling_erythema_over_bone", "weight": 4 },
+      { "symptomId": "recent_trauma_to_bone", "weight": 2 },
+      { "symptomId": "recent_skin_infection", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bony_tenderness_over_metaphysis", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "swelling_warmth_erythema", "baseWeight": 4 },
+      { "signId": "refusal_to_move_limb", "baseWeight": 4 },
+      { "signId": "limp_or_non_weight_bearing", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_<5_years", "multiplier": 3.0 },
+      { "id": "sickle_cell_disease", "multiplier": 4.0 },
+      { "id": "immunosuppression", "multiplier": 3.0 },
+      { "id": "open_fracture", "multiplier": 3.5 },
+      { "id": "diabetes_mellitus_foot", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_hematogenous_osteomyelitis",
+        "name": "Acute Hematogenous Osteomyelitis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "acute_onset_<2_weeks", "weight": 5 },
+          { "feature": "metaphysis_of_long_bone", "weight": 5 },
+          { "feature": "positive_blood_culture_or_mri", "weight": 5 }
+        ],
+        "management": "IV antibiotics (antistaphylococcal penicillin + 3rd gen cephalosporin) for 4-6 weeks. Surgical drainage if abscess or no improvement in 48h."
+      },
+      {
+        "id": "chronic_osteomyelitis",
+        "name": "Chronic Osteomyelitis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "duration_>6_weeks", "weight": 5 },
+          { "feature": "sequestrum_involucrum_on_xray", "weight": 5 },
+          { "feature": "draining_sinus_tract", "weight": 4 }
+        ],
+        "management": "Surgical debridement (sequestrectomy). Culture-directed antibiotics for 6-12 weeks. Bone graft or antibiotic cement spacer."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "septic_arthritis",
+        "discriminators": ["joint_symptoms_predominate", "positive_joint_aspiration"]
+      },
+      {
+        "diseaseId": "eosinophilic_granuloma",
+        "discriminators": ["lytic_lesion_on_xray", "no_fever", "normal_crp"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC, CRP, ESR", "priority": "immediate", "yield": 0.8, "indication": "infection markers" },
+        { "name": "Blood culture", "priority": "immediate", "yield": 0.5, "indication": "identify pathogen" },
+        { "name": "Bone biopsy for culture and histology", "priority": "high", "yield": 0.85, "indication": "definitive diagnosis" }
+      ],
+      "imaging": [
+        { "name": "Bone X-ray", "priority": "high", "yield": 0.3, "indication": "periosteal reaction at 10-14 days" },
+        { "name": "MRI with contrast", "priority": "high", "yield": 0.95, "indication": "earliest changes, abscess, extent" },
+        { "name": "Bone scan (Tc-99m)", "priority": "medium", "yield": 0.8, "indication": "suspected multifocal" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Osteomyelitis Guidelines",
+      "pathways": [
+        {
+          "severity": "acute_uncomplicated",
+          "criteria": "Duration <2 weeks, no abscess, no septic, CRP responsive",
+          "treatment": "IV antibiotics for 3-5 days (cloxacillin/cefazolin + gentamicin if <3 months), then oral switch for total 4-6 weeks. Clinical and CRP monitoring."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "Abscess, chronic, no response to antibiotics, pathologic fracture",
+          "treatment": "Surgical debridement. Culture-directed IV antibiotics 6-12 weeks. Bone grafting/stabilization. Regular CRP follow-up for recurrence."
+        }
+      ]
+    },
+
+    "pathophysiology": ["hematogenous_seeding", "metaphyseal_capillary_loops", "bacterial_proliferation", "inflammation_edema", "bone_necrosis", "sequestrum_formation"]
+  }
+}

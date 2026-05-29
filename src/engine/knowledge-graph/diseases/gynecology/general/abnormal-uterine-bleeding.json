@@ -1,0 +1,170 @@
+{
+  "disease": {
+    "id": "abnormal_uterine_bleeding",
+    "name": "Abnormal Uterine Bleeding (AUB)",
+    "system": "GYN",
+    "agePeak_months": [240, 600],
+    "note": "Bleeding from the uterine corpus that is abnormal in duration, volume, frequency, or regularity. PALM-COEIN classification: Structural (Polyp, Adenomyosis, Leiomyoma, Malignancy) and Non-structural (Coagulopathy, Ovulatory, Endometrial, Iatrogenic, Not classified).",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["vaginal_bleeding", "menstrual_disorder"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "heavy_bleeding_with_hypovolemia", "weight": 10 },
+        { "sign": "hemorrhagic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hemoglobin_below_7", "weight": 8 },
+          { "sign": "postmenopausal_bleeding", "weight": 7 },
+          { "sign": "prolonged_bleeding_over_14_days", "weight": 4 },
+          { "sign": "tachycardia_and_hypotension", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Heavy bleeding with hemodynamic instability or PMB -> SEVERE; Irregular spotting without anemia -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "heavy_menstrual_bleeding_soaking_pads", "weight": 5 },
+      { "symptomId": "prolonged_bleeding_over_7_days", "weight": 4 },
+      { "symptomId": "intermenstrual_bleeding", "weight": 4 },
+      { "symptomId": "postcoital_bleeding", "weight": 3 },
+      { "symptomId": "postmenopausal_bleeding", "weight": 5 },
+      { "symptomId": "irregular_cycles", "weight": 3 },
+      { "symptomId": "frequent_cycles_under_21_days", "weight": 3 },
+      { "symptomId": "clots_passing_large", "weight": 4 },
+      { "symptomId": "fatigue_weakness_dizziness", "weight": 3 },
+      { "symptomId": "pelvic_pain_cramping", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor_conjunctival", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "pelvic_mass_if_fibroid", "baseWeight": 3 },
+      { "signId": "cervical_lesions_on_speculum", "baseWeight": 4 },
+      { "signId": "enlarged_uterus", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "anovulation_PCOS", "multiplier": 2.0 },
+      { "id": "perimenopause", "multiplier": 2.5 },
+      { "id": "thyroid_dysfunction", "multiplier": 2.0 },
+      { "id": "endometrial_hyperplasia_cancer_risk", "multiplier": 1.5 },
+      { "id": "liver_or_kidney_disease", "multiplier": 1.5 },
+      { "id": "bleeding_disorders_vWD", "multiplier": 3.0 },
+      { "id": "anticoagulant_therapy", "multiplier": 3.0 },
+      { "id": "IUD", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "anovulatory_bleeding",
+        "name": "Anovulatory (Dysfunctional) Uterine Bleeding",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "irregular_unpredictable_bleeding", "weight": 5 },
+          { "feature": "adolescent_or_perimenopausal", "weight": 4 },
+          { "feature": "no_dysmenorrhea", "weight": 3 },
+          { "feature": "unopposed_estrogen", "weight": 3 }
+        ],
+        "management": "Progestins (norethisterone 5mg TID for 21 days). COCP. LNG-IUS. Endometrial biopsy if persistent."
+      },
+      {
+        "id": "postmenopausal_bleeding",
+        "name": "Postmenopausal Bleeding (PMB)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "bleeding_12_months_after_menopause", "weight": 5 },
+          { "feature": "endometrial_thickness_over_4mm", "weight": 5 },
+          { "feature": "must_exclude_endometrial_cancer", "weight": 5 }
+        ],
+        "management": "Transvaginal ultrasound. Endometrial biopsy (pipelle) or hysteroscopy + curettage. If endometrial cancer, refer to gynecologic oncology."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cervical_bleeding",
+        "discriminators": ["postcoital", "visible_cervical_lesion", "normal_uterine_bleeding"]
+      },
+      {
+        "diseaseId": "pregnancy_related_bleeding",
+        "discriminators": ["positive_pregnancy_test", "ultrasound_evidence"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "immediate", "yield": 0.8, "indication": "anemia assessment" },
+        { "name": "Coagulation screen (vWD screen)", "priority": "medium", "yield": 0.4, "indication": "if menarcheal or heavy since onset" },
+        { "name": "Thyroid function tests", "priority": "medium", "yield": 0.3, "indication": "thyroid dysfunction" },
+        { "name": "Ferritin", "priority": "medium", "yield": 0.5, "indication": "iron stores" },
+        { "name": "HCG", "priority": "immediate", "yield": 0.9, "indication": "exclude pregnancy" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound", "priority": "first_line", "yield": 0.8, "indication": "endometrial thickness, fibroids, polyps" },
+        { "name": "Saline infusion sonography", "priority": "medium", "yield": 0.85, "indication": "evaluate uterine cavity" },
+        { "name": "Hysteroscopy + endometrial biopsy", "priority": "diagnostic", "yield": 0.95, "indication": "gold standard for diagnosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG88 - Heavy Menstrual Bleeding / FIGO AUB System",
+      "pathways": [
+        {
+          "severity": "acute_hemorrhage",
+          "criteria": "heavy bleeding, Hb low, unstable",
+          "treatment": "IV fluids. High-dose estrogen (IV Premarin 25mg q4h x 24h) or high-dose progestins (Norethisterone 5mg TID). Tranexamic acid 1g IV. D&C if needed. Consider transfusion."
+        },
+        {
+          "severity": "chronic_no_fertility",
+          "criteria": "persistent AUB, no desire for pregnancy",
+          "treatment": "LNG-IUS (Mirena) first-line. Tranexamic acid during bleeding. NSAIDs. COCP. Oral progestins. Endometrial ablation if no structural cause. Hysterectomy if other treatments fail."
+        },
+        {
+          "severity": "chronic_with_fertility",
+          "criteria": "AUB with desire for future pregnancy",
+          "treatment": "Medical therapy: progestins luteal phase, COCP, ovulation induction. Surgical: hysteroscopic polypectomy or myomectomy. Avoid ablation or hysterectomy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hormonal_imbalance",
+      "anovulation",
+      "endometrial_structural_abnormalities",
+      "coagulation_defects",
+      "iatrogenic_causes"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "anemia",
+        "probability": 0.3,
+        "lagDays": [30, 365],
+        "severityBoost": 0.3,
+        "clues": ["fatigue", "pallor", "low_Hb"]
+      },
+      {
+        "diseaseId": "endometrial_cancer",
+        "probability": 0.01,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.8,
+        "clues": ["PMB", "thick_endometrium", "atypical_hyperplasia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["abnormal_bleeding_pattern", "PMB_in_postmenopausal", "hemodynamic_instability"],
+    "exclusionClues": ["normal_menstrual_pattern", "physiological_menopausal_transition"]
+  }
+}

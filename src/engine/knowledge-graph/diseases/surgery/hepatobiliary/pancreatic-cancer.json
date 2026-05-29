@@ -1,0 +1,193 @@
+{
+  "disease": {
+    "id": "pancreatic_cancer",
+    "name": "Pancreatic Adenocarcinoma",
+    "system": "surgical",
+    "agePeak_months": [600, 840],
+    "note": "Most common pancreatic malignancy. Presents with painless jaundice, weight loss, and epigastric pain. Poor prognosis.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["jaundice", "weight_loss", "epigastric_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "obstructive_jaundice_severe", "weight": 7 },
+        { "sign": "gi_bleeding", "weight": 8 },
+        { "sign": "splenic_vein_thrombosis", "weight": 7 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "metastatic_disease_m1", "weight": 9 },
+          { "sign": "vascular_invasion_unresectable", "weight": 8 },
+          { "sign": "malignant_ascites", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Metastatic/unresectable -> SEVERE; resectable -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_jaundice", "weight": 5, "note": "Classic presentation of head of pancreas tumors" },
+      { "symptomId": "epigastric_pain", "weight": 4, "note": "Dull epigastric pain radiating to back" },
+      { "symptomId": "weight_loss", "weight": 5 },
+      { "symptomId": "anorexia", "weight": 4 },
+      { "symptomId": "new_onset_diabetes", "weight": 3, "note": "Paraneoplastic or obstructive" },
+      { "symptomId": "steatorrhea", "weight": 2, "note": "Exocrine insufficiency" },
+      { "symptomId": "dark_urine_pale_stool", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "back_pain", "weight": 3, "note": "Suggests retroperitoneal invasion" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "courvoisier_gallbladder", "baseWeight": 4, "note": "Palpable, non-tender gallbladder in jaundiced patient" },
+      { "signId": "epigastric_mass", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "ascites", "baseWeight": 2 },
+      { "signId": "signs_of_malnutrition_cachexia", "baseWeight": 3 },
+      { "signId": "supraclavicular_lymph_node", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "family_history_of_pancreatic_cancer", "multiplier": 3.0 },
+      { "id": "chronic_pancreatitis", "multiplier": 3.0 },
+      { "id": "new_onset_diabetes", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "hereditary_syndromes", "multiplier": 4.0 },
+      { "id": "heavy_alcohol_use", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "pancreatic_head_cancer",
+        "name": "Pancreatic Head Adenocarcinoma",
+        "prevalenceModifier": 0.65,
+        "keyFeatures": [
+          { "feature": "painless_jaundice", "weight": 5 },
+          { "feature": "courvoisier_sign", "weight": 4 },
+          { "feature": "weight_loss", "weight": 4 },
+          { "feature": "dilated_pancreatic_and_bile_ducts_double_duct_sign", "weight": 5 }
+        ],
+        "management": "Pancreaticoduodenectomy (Whipple procedure) for resectable. Neoadjuvant FOLFIRINOX for borderline resectable. Biliary stenting for palliation."
+      },
+      {
+        "id": "pancreatic_body_tail_cancer",
+        "name": "Pancreatic Body/Tail Adenocarcinoma",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "epigastric_pain_radiating_to_back", "weight": 5 },
+          { "feature": "weight_loss_prominent", "weight": 5 },
+          { "feature": "late_jaundice_absent", "weight": 4 },
+          { "feature": "splenic_vein_thrombosis", "weight": 3 }
+        ],
+        "management": "Distal pancreatectomy with splenectomy for resectable. Neoadjuvant chemotherapy for borderline. Palliative chemotherapy for metastatic."
+      },
+      {
+        "id": "unresectable_metastatic",
+        "name": "Unresectable/Metastatic Pancreatic Cancer",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "liver_metastases", "weight": 5 },
+          { "feature": "vascular_invasion", "weight": 5 },
+          { "feature": "malignant_ascites", "weight": 4 },
+          { "feature": "distant_lymph_node_metastases", "weight": 4 }
+        ],
+        "management": "Palliative chemotherapy (FOLFIRINOX or Gemcitabine + Nab-paclitaxel). Biliary stenting for jaundice. Celiac plexus block for pain. Palliative gastrojejunostomy for gastric outlet obstruction."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cholangiocarcinoma",
+        "discriminators": ["ca_19_9_elevated", "stricture_on_mrcp", "mass_in_bile_duct", "klatskin_tumor"]
+      },
+      {
+        "diseaseId": "autoimmune_pancreatitis",
+        "discriminators": ["elevated_igg4", "no_weight_loss", "responds_to_steroids", "sausage_shaped_pancreas"]
+      },
+      {
+        "diseaseId": "chronic_pancreatitis",
+        "discriminators": ["long_history_of_abdominal_pain", "calcifications_on_ct", "normal_ca_19_9"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECOG Performance Status", "priority": "high", "yield": 0.5, "indication": "assess fitness for surgery/chemotherapy" }
+      ],
+      "laboratory": [
+        { "name": "CA 19-9", "priority": "high", "yield": 0.8, "indication": "tumor marker, monitor treatment response" },
+        { "name": "Bilirubin, ALP, GGT", "priority": "high", "yield": 0.7, "indication": "obstructive jaundice pattern" },
+        { "name": "LFTs", "priority": "high", "yield": 0.5, "indication": "liver function assessment" },
+        { "name": "CEA", "priority": "medium", "yield": 0.3, "indication": "non-specific marker" }
+      ],
+      "imaging": [
+        { "name": "CT Pancreas Protocol (triple phase)", "priority": "immediate", "yield": 0.9, "indication": "best for staging and resectability" },
+        { "name": "MRCP/MRI Abdomen", "priority": "high", "yield": 0.9, "indication": "better for ductal anatomy, liver lesions" },
+        { "name": "Endoscopic Ultrasound (EUS) + FNA", "priority": "high", "yield": 0.95, "indication": "tissue diagnosis and local staging" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "detect occult metastases" },
+        { "name": "Diagnostic Laparoscopy", "priority": "medium", "yield": 0.85, "indication": "detect peritoneal metastases" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Pancreatic Adenocarcinoma",
+      "pathways": [
+        {
+          "severity": "resectable",
+          "criteria": "no arterial involvement, <=180 degree SMV/PV involvement, no metastases",
+          "treatment": "Pancreaticoduodenectomy (Whipple) for head tumors. Distal pancreatectomy for body/tail. Adjuvant chemotherapy (FOLFIRINOX or Gemcitabine + Capecitabine)."
+        },
+        {
+          "severity": "borderline resectable",
+          "criteria": ">180 degree SMV/PV involvement, limited arterial abutment",
+          "treatment": "Neoadjuvant FOLFIRINOX for 2-6 months. Restaging CT. Pancreaticoduodenectomy with vascular resection if downstaged."
+        },
+        {
+          "severity": "unresectable / metastatic",
+          "criteria": "distant metastases, arterial invasion, extensive SMV involvement",
+          "treatment": "Palliative chemotherapy (FOLFIRINOX or Gemcitabine + Nab-paclitaxel). Biliary stenting. Celiac plexus block. Palliative gastrojejunostomy. Hospice care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "pancreatic_intraepithelial_neoplasia",
+      "kras_mutation",
+      "cdkn2a_tp53_smad4_mutations",
+      "invasive_adenocarcinoma",
+      "lymphatic_spread",
+      "perineural_invasion",
+      "vascular_invasion",
+      "distant_metastasis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "obstructive_jaundice",
+        "probability": 0.7,
+        "lagDays": [0, 60],
+        "severityBoost": 0.2,
+        "clues": ["jaundice", "dark_urine", "elevated_bilirubin", "dilated_bile_ducts"]
+      },
+      {
+        "diseaseId": "gastric_outlet_obstruction",
+        "probability": 0.1,
+        "lagDays": [30, 180],
+        "severityBoost": 0.3,
+        "clues": ["vomiting", "early_satiety", "duodenal_invasion_on_ct"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["painless_jaundice", "weight_loss", "courvoisier_gallbladder", "elevated_ca19_9", "double_duct_sign"],
+    "exclusionClues": ["normal_ca19_9", "no_mass_on_ct_pancreas_protocol", "young_age_with_diabetes_only"]
+  }
+}

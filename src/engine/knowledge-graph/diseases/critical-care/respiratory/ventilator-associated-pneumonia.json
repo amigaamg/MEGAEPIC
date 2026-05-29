@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "ventilator_associated_pneumonia",
+    "name": "Ventilator-Associated Pneumonia (VAP)",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Pneumonia occurring >48h after intubation. Common ICU complication. Polymicrobial. Prevention through VAP bundles.",
+    "prevalenceWeight": 0.45,
+    "syndromeTags": ["nosocomial_pneumonia", "healthcare_associated_infection", "icu_complication"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hypoxia_refractory", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "ards", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "MDR VAP / VAP with ARDS -> SEVERE; early VAP -> MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "new_or_progressive_infiltrates_on_cxr", "weight": 5 },
+      { "symptomId": "purulent_tracheal_secretions", "weight": 5 },
+      { "symptomId": "fever_new_onset", "weight": 4 },
+      { "symptomId": "worsening_oxygenation", "weight": 4 },
+      { "symptomId": "increased_ventilator_requirements", "weight": 4 },
+      { "symptomId": "icu_stay_prolonged_over_48h", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "purulent_endotracheal_suction", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "crackles_bronchial_breathing", "baseWeight": 3 },
+      { "signId": "hypoxia_requiring_fio2_increase", "baseWeight": 4 },
+      { "signId": "leukocytosis_or_leukopenia", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "prolonged_mechanical_ventilation_over_5_days", "multiplier": 2.5 },
+      { "id": "reintubation", "multiplier": 2.0 },
+      { "id": "supine_position", "multiplier": 1.5 },
+      { "id": "enteral_feeding_and_aspiration", "multiplier": 2.0 },
+      { "id": "prior_antibiotic_exposure", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "copd_or_ards", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "early_onset_vap",
+        "name": "Early-Onset VAP (<5 days)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "onset_less_than_5_days_after_intubation", "weight": 5 },
+          { "feature": "usually_sensitive_organisms", "weight": 4 }
+        ],
+        "management": "Empiric: Ceftriaxone 2g IV OD or Piperacillin-tazobactam 4.5g Q6H. De-escalate based on cultures. Duration 7 days."
+      },
+      {
+        "id": "late_onset_vap",
+        "name": "Late-Onset VAP (>=5 days)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "onset_more_than_or_equal_5_days", "weight": 5 },
+          { "feature": "high_risk_for_mdr_pathogens", "weight": 5 }
+        ],
+        "management": "Empiric: anti-pseudomonal beta-lactam (cefepime/meropenem/piperacillin-tazobactam) + anti-MRSA (vancomycin/linezolid) +/- aminoglycoside. Cultures: BAL or mini-BAL. Duration 7-8 days."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "atelectasis",
+        "discriminators": ["no_fever", "non_purulent_secretions", "improves_with_suctioning"]
+      },
+      {
+        "diseaseId": "pulmonary_edema",
+        "discriminators": ["copious_frothy_secretions", "cardiac_history", "bilateral_hilar_distribution"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "CPIS (Clinical Pulmonary Infection Score)", "priority": "high", "yield": 0.75, "indication": "VAP diagnosis probability" }
+      ],
+      "laboratory": [
+        { "name": "Endotracheal aspirate Gram stain and culture", "priority": "high", "yield": 0.7, "indication": "all suspected VAP" },
+        { "name": "BAL or mini-BAL (quantitative cultures)", "priority": "high", "yield": 0.85, "indication": "more specific, threshold >10^4 CFU/mL" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.3, "indication": "may identify pathogen" },
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.6, "indication": "infection markers, PCT to guide duration" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.7, "indication": "new/progressive infiltrates" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATS/IDSA Guidelines for HAP/VAP",
+      "pathways": [
+        {
+          "severity": "early VAP (low MDR risk)",
+          "criteria": "onset <5d, no prior antibiotics, no MDR risk",
+          "treatment": "Piperacillin-tazobactam 4.5g IV Q6H or Ceftriaxone 2g OD. Consider MRSA coverage only if risk. Duration 7 days. De-escalate per cultures."
+        },
+        {
+          "severity": "late VAP (high MDR risk)",
+          "criteria": "onset ≥5d, prior antibiotics, or MDR risk",
+          "treatment": "Anti-pseudomonal beta-lactam (meropenem 1g IV Q8H or cefepime 2g Q8H) + anti-MRSA (vancomycin trough 15-20 or linezolid 600mg Q12H). Respiratory cultures. Shortest effective duration. PreVAP bundle."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "endotracheal_tube_biofilm",
+      "microaspiration",
+      "colonization_of_lower_respiratory_tract",
+      "bacterial_proliferation",
+      "parenchymal_infection",
+      "systemic_inflammatory_response",
+      "gas_exchange_worsening"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "empyema",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "pleural_effusion"]
+      },
+      {
+        "diseaseId": "lung_abscess",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["cavitary_lesion_on_ct"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["new_infiltrate_on_ventilator", "purulent_secretions", "fever", "worsening_oxygenation"],
+    "exclusionClues": ["non_purulent_secretions", "negative_cultures", "alternative_non_infectious_cause"]
+  }
+}

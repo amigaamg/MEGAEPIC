@@ -1,0 +1,123 @@
+{
+  "disease": {
+    "id": "stevens_johnson_syndrome",
+    "name": "Stevens-Johnson Syndrome (SJS)",
+    "system": "dermatology",
+    "agePeak_months": [0, 960],
+    "note": "Severe, life-threatening cutaneous adverse drug reaction. Widespread target lesions, epidermal detachment <10% BSA. Typically drug-induced (anticonvulsants, allopurinol, antibiotics, NSAIDs).",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["severe_drug_reaction", "medical_emergency", "vesiculobullous"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_failure_airway", "weight": 10 },
+        { "sign": "sepsis_from_skin_loss", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 },
+        { "sign": "positive_nikolsky_sign_widespread", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "SJS (<10% detachment) vs SJS/TEN overlap (10-30%) vs TEN (>30%). SCORTEN score predicts mortality."
+    },
+
+    "historyFeatures": [
+      { "symptomId": "rapid_onset_of_painful_skin_rash", "weight": 5 },
+      { "symptomId": "new_drug_in_last_1_to_4_weeks", "weight": 5 },
+      { "symptomId": "fever_malaise_headache_prodrome", "weight": 4 },
+      { "symptomId": "oral_genital_eye_pain_ulcers", "weight": 5 },
+      { "symptomId": "blisters_and_skin_separation", "weight": 5 },
+      { "symptomId": "history_of_previous_sjs_or_allergy", "weight": 3 },
+      { "symptomId": "asian_descent_hla_b1502_hla_b5801", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "atypical_target_lesions_with_dusky_center", "baseWeight": 5 },
+      { "signId": "positive_nikolsky_sign", "baseWeight": 5 },
+      { "signId": "mucosal_involvement_oral_ocular_genital", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "epidermal_detachment_less_10_percent_bsa", "baseWeight": 5 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "hla_b1502_carbamazepine_association", "multiplier": 5.0 },
+      { "id": "hla_b5801_allopurinol_association", "multiplier": 5.0 },
+      { "id": "certain_drugs_anticonvulsants_allopurinol_sulfa_nsaids", "multiplier": 4.0 },
+      { "id": "hiv_infection", "multiplier": 3.0 },
+      { "id": "asian_ethnicity", "multiplier": 2.5 },
+      { "id": "prior_sjs_history", "multiplier": 3.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "erythema_multiforme_major",
+        "discriminators": ["typical_target_lesions", "less_severe_mucosal", "usually_hsv_triggered"]
+      },
+      {
+        "diseaseId": "toxic_epidermal_necrolysis",
+        "discriminators": ["same_spectrum", "detachment_more_than_30_percent"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "SCORTEN severity score", "priority": "immediate", "yield": 0.85, "indication": "predicts mortality within 5 days" },
+        { "name": "Assessment of BSA detachment", "priority": "immediate", "yield": 0.9, "indication": "classify SJS vs TEN" }
+      ],
+      "laboratory": [
+        { "name": "FBC (lymphopenia, neutrophil count)", "priority": "high", "yield": 0.6, "indication": "leukopenia common" },
+        { "name": "U&E, Cr, LFT, glucose", "priority": "high", "yield": 0.6, "indication": "organ involvement, SCORTEN" },
+        { "name": "Skin biopsy for frozen section (full-thickness necrosis)", "priority": "gold_standard", "yield": 0.95, "indication": "confirm diagnosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "British Association of Dermatologists / RegiSCAR SJS/TEN Guidelines",
+      "pathways": [
+        {
+          "severity": "all confirmed SJS/TEN",
+          "criteria": "any epidermal detachment with mucosal involvement",
+          "treatment": "Immediate withdrawal of culprit drug. ICU/burn unit admission. Multidisciplinary: dermatology, ophthalmology, respiratory. Supportive care: fluids, nutrition, temperature, wound care. Avoid prophylactic antibiotics. No corticosteroids proven beneficial in trials."
+        },
+        {
+          "severity": "advanced supportive care",
+          "criteria": "ICU management, wound care, complications",
+          "treatment": "Skin care: sterile handling, non-adherent dressings (silicone/biosynthetic). Ophthalmology daily (amniotic membrane). Airway assessment if respiratory. Pain management. IVIG or cyclosporine may be considered. SCORTEN-based prognosis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "drug_immune_hypersensitivity",
+      "cd8_cytotoxic_t_cell_activation",
+      "granulysin_perforin_granzyme_mediated_keratinocyte_apoptosis",
+      "massive_epidermal_necrosis",
+      "mucosal_involvement",
+      "cytokine_storm"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "sepsis_from_skin_barrier_loss",
+        "probability": 0.4,
+        "severityBoost": 0.5,
+        "clues": ["fever", "hypotension", "positive_cultures"]
+      },
+      {
+        "diseaseId": "ocular_complications_symblepharon_trichiasis",
+        "probability": 0.5,
+        "severityBoost": 0.4,
+        "clues": ["eye_pain_redness", "vision_loss"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["drug_exposure_1_4_weeks", "fever_prodrome", "target_lesions_nikolsky_positive", "mucosal_involvement", "skin_detachment"],
+    "exclusionClues": ["no_drug_history", "typical_target_lesions_only", "no_mucosal_lesions"]
+  }
+}

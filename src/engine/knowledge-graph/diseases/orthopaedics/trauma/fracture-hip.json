@@ -1,0 +1,139 @@
+{
+  "disease": {
+    "id": "fracture_hip",
+    "name": "Fractured Neck of Femur (Hip Fracture)",
+    "system": "orthopaedics",
+    "agePeak_months": [720, 1080],
+    "note": "Common in elderly osteoporotic patients. Intracapsular vs extracapsular determines management.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["hip_pain", "fragility_fracture"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture", "weight": 10 },
+        { "sign": "neurovascular_compromise", "weight": 10 },
+        { "sign": "shock_hypovolemic", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If open/neurovascular compromise -> EMERGENCY; else -> URGENT (surgical within 48h)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hip_pain_after_fall", "weight": 5 },
+      { "symptomId": "inability_to_weight_bear", "weight": 5 },
+      { "symptomId": "shortened_externally_rotated_leg", "weight": 4 },
+      { "symptomId": "groin_pain", "weight": 3 },
+      { "symptomId": "mechanism_of_injury", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "shortened_leg", "baseWeight": 4 },
+      { "signId": "external_rotation", "baseWeight": 4 },
+      { "signId": "pain_on_hip_movement", "baseWeight": 5 },
+      { "signId": "bruising_swelling_hip", "baseWeight": 3 },
+      { "signId": "tenderness_over_greater_trochanter", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 3.0 },
+      { "id": "osteoporosis", "multiplier": 2.5 },
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "previous_fragility_fracture", "multiplier": 2.0 },
+      { "id": "impaired_mobility", "multiplier": 1.5 },
+      { "id": "visual_impairment", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "intracapsular_hip_fracture",
+        "name": "Intracapsular Neck of Femur Fracture",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "garden_classification", "weight": 5 },
+          { "feature": "displaced_vs_undisplaced", "weight": 4 }
+        ],
+        "management": "Undisplaced: internal fixation (cannulated screws). Displaced: hemiarthroplasty or total hip replacement depending on age."
+      },
+      {
+        "id": "extracapsular_hip_fracture",
+        "name": "Extracapsular (Intertrochanteric) Fracture",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "intertrochanteric_pattern", "weight": 5 },
+          { "feature": "stable_vs_unstable", "weight": 4 }
+        ],
+        "management": "Dynamic hip screw or intramedullary nail. Stable patterns treated with DHS, unstable with IM nail."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pain assessment", "priority": "immediate", "yield": 0.8, "indication": "all patients" },
+        { "name": "Neurovascular assessment", "priority": "immediate", "yield": 0.9, "indication": "all limb injuries" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr, Glucose, INR", "priority": "high", "yield": 0.6, "indication": "pre-operative assessment" },
+        { "name": "Group and save / cross-match", "priority": "high", "yield": 0.7, "indication": "anticipate blood loss" },
+        { "name": "Vitamin D, Calcium, ALP", "priority": "medium", "yield": 0.5, "indication": "assess bone health" }
+      ],
+      "imaging": [
+        { "name": "Hip X-ray (AP + Lateral)", "priority": "immediate", "yield": 0.95, "indication": "all suspected hip fractures" },
+        { "name": "Pelvis X-ray", "priority": "high", "yield": 0.8, "indication": "rule out associated pelvic injury" },
+        { "name": "MRI Hip or CT", "priority": "medium", "yield": 0.98, "indication": "occult fracture, X-ray negative but clinical suspicion" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Hip Fracture Management",
+      "pathways": [
+        {
+          "severity": "standard",
+          "criteria": "no open fracture, no neurovascular compromise",
+          "treatment": "Analgesia (nerve block preferred). Surgical fixation within 48 hours. DVT prophylaxis. Orthogeriatric review. Osteoporosis assessment."
+        },
+        {
+          "severity": "complex",
+          "criteria": "open fracture, polytrauma, significant medical comorbidities",
+          "treatment": "Resuscitate. IV antibiotics for open fracture. Urgent surgical debridement and fixation. ICU if needed. Multidisciplinary care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "low_energy_trauma",
+      "osteoporotic_bone",
+      "cancellous_bone_failure",
+      "loss_of_weight_bearing_ability",
+      "immobility_complications"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "avascular_necrosis_hip",
+        "probability": 0.2,
+        "lagDays": [180, 720],
+        "severityBoost": 0.3,
+        "associatedSubtype": "intracapsular_hip_fracture",
+        "clues": ["persistent_pain", "collapse_on_xray"]
+      },
+      {
+        "diseaseId": "non_union",
+        "probability": 0.1,
+        "lagDays": [90, 365],
+        "severityBoost": 0.3,
+        "clues": ["pain_at_6_months", "gap_on_xray"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fall_in_elderly", "inability_to_weight_bear", "shortened_externally_rotated_leg"],
+    "exclusionClues": ["normal_hip_xray", "full_weight_bearing", "hip_replacement_in_situ_ok"]
+  }
+}

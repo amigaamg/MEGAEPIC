@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "hodgkin_lymphoma",
+    "name": "Hodgkin Lymphoma",
+    "system": "hematology",
+    "agePeak_months": [240, 360, 720, 960],
+    "note": "B-cell lymphoma characterized by Reed-Sternberg cells. Bimodal age distribution. Highly curable with modern chemo-radiotherapy. Staging based on Ann Arbor classification.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["lymphoma", "lymphadenopathy", "b_symptoms"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "superior_vena_cava_syndrome", "weight": 10 },
+        { "sign": "airway_compression", "weight": 10 },
+        { "sign": "spinal_cord_compression", "weight": 9 },
+        { "sign": "pericardial_tamponade", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "early_stage": true
+      },
+      "severityLabel": "If bulky mediastinal mass with compression -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_lymphadenopathy", "weight": 5, "note": "Often cervical or supraclavicular" },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "night_sweats", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "pruritus", "weight": 3 },
+      { "symptomId": "alcohol_induced_pain_in_nodes", "weight": 2 },
+      { "symptomId": "cough_dyspnea_chest_pain", "weight": 2, "note": "Mediastinal involvement" }
+    ],
+
+    "examFeatures": [
+      { "signId": "lymphadenopathy", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "mediastinal_dullness", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "ebv_infection", "multiplier": 2.5 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "family_history", "multiplier": 2.0 },
+      { "id": "hiv_infection", "multiplier": 3.0 },
+      { "id": "autoimmune_disease", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "nodular_sclerosing_hl",
+        "name": "Nodular Sclerosing HL",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "most_common_subtype", "weight": 5 },
+          { "feature": "mediastinal_involvement", "weight": 4 },
+          { "feature": "lacunar_cells", "weight": 3 }
+        ],
+        "management": "ABVD chemotherapy. Involved-field radiotherapy for early-stage favorable."
+      },
+      {
+        "id": "mixed_cellularity_hl",
+        "name": "Mixed Cellularity HL",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "ebv_associated", "weight": 4 },
+          { "feature": "older_age_at_presentation", "weight": 3 },
+          { "feature": "more_often_extranodal", "weight": 3 }
+        ],
+        "management": "ABVD chemotherapy. Prognosis slightly less favorable than nodular sclerosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "non_hodgkin_lymphoma",
+        "discriminators": ["no_reed_sternberg", "different_immunophenotype", "more_extranodal", "cd20_positive_in_b_cell"]
+      },
+      {
+        "diseaseId": "infectious_mononucleosis",
+        "discriminators": ["positive_ebv_igm", "self_limited", "atypical_lymphocytes", "negative_biopsy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "high", "yield": 0.4, "indication": "May be normal or show eosinophilia" }
+      ],
+      "laboratory": [
+        { "name": "Lymph node excision biopsy", "priority": "immediate", "yield": 0.99, "indication": "Gold standard - Reed-Sternberg cells" },
+        { "name": "Immunohistochemistry", "priority": "high", "yield": 0.98, "indication": "CD30+, CD15+, PAX5+, CD45-" },
+        { "name": "ESR / CRP", "priority": "high", "yield": 0.6, "indication": "Prognostic marker" },
+        { "name": "LDH", "priority": "high", "yield": 0.5, "indication": "Prognostic marker" },
+        { "name": "Bone marrow biopsy", "priority": "medium", "yield": 0.3, "indication": "If B symptoms or advanced stage" }
+      ],
+      "imaging": [
+        { "name": "PET-CT scan", "priority": "immediate", "yield": 0.95, "indication": "Staging and response assessment (Deauville score)" },
+        { "name": "CT neck/chest/abdomen/pelvis", "priority": "high", "yield": 0.85, "indication": "Anatomical staging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / ESMO Guidelines for Hodgkin Lymphoma",
+      "pathways": [
+        {
+          "severity": "early_stage_favorable",
+          "criteria": "Stage I-II, no B symptoms, no bulky disease",
+          "treatment": "ABVD x2 cycles + involved-field radiotherapy (20Gy). Excellent prognosis (>90% cure)."
+        },
+        {
+          "severity": "advanced_stage",
+          "criteria": "Stage III-IV or B symptoms or bulky",
+          "treatment": "ABVD x6 cycles. PET-2 adapted therapy. Brentuximab vedotin + AVD for high risk. Escalated BEACOPP for very high risk."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "reed_sternberg_cell_clonal_expansion",
+      "b_cell_origin_disrupted",
+      "aberrant_signaling_nfkb",
+      "immune_evasion",
+      "cytokine_microenvironment",
+      "contiguous_lymph_node_spread"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "treatment_related_mds_aml",
+        "probability": 0.02,
+        "severityBoost": 0.6,
+        "clues": ["alkylating_therapy", "radiation_exposure", "falling_counts_after_treatment"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["reed_sternberg_cells", "cd30_cd15_positive", "contiguous_lymphadenopathy", "young_adult"],
+    "exclusionClues": ["cd20_positive_b_cell", "no_reed_sternberg", "t_cell_phenotype"]
+  }
+}

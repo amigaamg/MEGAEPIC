@@ -1,0 +1,143 @@
+{
+  "disease": {
+    "id": "tuberculosis_extrapulmonary",
+    "name": "Extrapulmonary Tuberculosis",
+    "system": "infectious_disease",
+    "agePeak_months": [120, 600],
+    "note": "Mycobacterium tuberculosis infection outside the lung parenchyma. Common sites: lymph nodes, pleura, CNS, bones, genitourinary, abdomen. Higher prevalence in HIV.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["mycobacterial_disease", "chronic_infection", "extrapulmonary"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "tb_meningitis_consciousness", "weight": 10 },
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "pericardial_tamponade", "weight": 10 },
+        { "sign": "disseminated_miliary_tb", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "CNS/miliary/pericardial -> SEVERE; lymphatic/pleural -> MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_night_sweats", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "lymph_node_swelling_painless", "weight": 4 },
+      { "symptomId": "chest_pain_pleuritic_dyspnea", "weight": 3, "note": "Pleural TB" },
+      { "symptomId": "headache_vomiting_stiff_neck", "weight": 4, "note": "TB meningitis" },
+      { "symptomId": "back_pain_kyphosis_paraplegia", "weight": 4, "note": "Pott disease" },
+      { "symptomId": "abdominal_pain_ascites", "weight": 3, "note": "Abdominal TB" },
+      { "symptomId": "hiv_positive", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "lymphadenopathy_cervical_scrofula", "baseWeight": 4 },
+      { "signId": "pleural_effusion_signs", "baseWeight": 4 },
+      { "signId": "ascites_abdominal_mass", "baseWeight": 3 },
+      { "signId": "meningismus", "baseWeight": 4 },
+      { "signId": "spinal_deformity_tenderness", "baseWeight": 3 },
+      { "signId": "pericardial_rub_tamponade", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "hiv_coinfection", "multiplier": 4.0 },
+      { "id": "age_under_5", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "disseminated_primary_infection", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "tb_lymphadenitis",
+        "name": "TB Lymphadenitis (Scrofula)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "cervical_lymph_node_enlargement", "weight": 5 },
+          { "feature": "cold_abscess_draining_sinus", "weight": 4 },
+          { "feature": "positive_fna_or_biopsy", "weight": 5 }
+        ],
+        "management": "Standard 4-drug TB regimen (RIPE). Surgical drainage if abscess. Response may be slow (weeks)."
+      },
+      {
+        "id": "tb_meningitis",
+        "name": "TB Meningitis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "subacute_meningitis", "weight": 5 },
+          { "feature": "csf_lymphocytosis_low_glucose", "weight": 5 },
+          { "feature": "basal_meningeal_enhancement", "weight": 4 }
+        ],
+        "management": "Standard 4-drug regimen + corticosteroids (dexamethasone for 6-8 weeks). Monitor ICP. Treat for 12 months."
+      },
+      {
+        "id": "tb_spondylitis_pott_disease",
+        "name": "Pott Disease (Spinal TB)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "kyphosis_gibbus_deformity", "weight": 4 },
+          { "feature": "back_pain_stiffness", "weight": 4 },
+          { "feature": "paraplegia_nerve_root_signs", "weight": 4 }
+        ],
+        "management": "Standard anti-TB therapy 12 months. Spinal bracing. Surgical decompression if cord compression or instability."
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "FNAC/biopsy with AFB stain + culture", "priority": "high", "yield": 0.8, "indication": "lymph node, tissue diagnosis" },
+        { "name": "GeneXpert on tissue/fluid", "priority": "high", "yield": 0.85, "indication": "rapid diagnosis + resistance" },
+        { "name": "CSF analysis (lymphocytes, protein, glucose)", "priority": "immediate", "yield": 0.8, "indication": "suspected meningitis" },
+        { "name": "Adenosine deaminase (ADA) - fluid", "priority": "high", "yield": 0.85, "indication": "pleural/peritoneal TB" }
+      ],
+      "imaging": [
+        { "name": "CT/MRI brain with contrast", "priority": "high", "yield": 0.8, "indication": "TB meningitis, tuberculoma" },
+        { "name": "Spinal MRI", "priority": "high", "yield": 0.9, "indication": "Pott disease, cord compression" },
+        { "name": "CT chest/abdomen", "priority": "medium", "yield": 0.7, "indication": "pleural, abdominal, nodal disease" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / NICE Guidelines for Extrapulmonary TB",
+      "pathways": [
+        {
+          "severity": "most EPTB (nodes, pleura, abdominal)",
+          "criteria": "tissue or fluid confirmed",
+          "treatment": "Standard 4-drug regimen (RIPE) for 2 months + RH for 4-7 months (total 6-9 months). Longer therapy for bone (12 months)."
+        },
+        {
+          "severity": "CNS TB / military",
+          "criteria": "meningitis, tuberculoma, spinal TB",
+          "treatment": "RIPE + corticosteroids (dexamethasone 0.4 mg/kg/day taper). Total duration 9-12 months. Neurosurgery if hydrocephalus or tuberculoma."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "lymphohematogenous_spread_from_primary_lung",
+      "granuloma_formation_in_extrapulmonary_sites",
+      "caseous_necrosis",
+      "fibrosis_and_scarring",
+      "immune_reaction_in_serosal_cavities"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tb_paradoxical_reaction_iris",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["worsening_lesions_during_treatment", "lymph_node_enlargement_on_anti_tb"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if CNS/spinal",
+    "diagnosticClues": ["systemic_tb_symptoms", "target_organ_syndrome", "positive_tissue_fluid_study"],
+    "exclusionClues": ["negative_mtb_testing", "alternative_malignancy_diagnosis"]
+  }
+}

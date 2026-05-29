@@ -1,0 +1,172 @@
+{
+  "disease": {
+    "id": "multiple_myeloma",
+    "name": "Multiple Myeloma",
+    "system": "hematology",
+    "agePeak_months": [720, 960, 1080],
+    "note": "Clonal plasma cell malignancy with monoclonal immunoglobulin production, lytic bone lesions, hypercalcemia, renal impairment, anemia. Incurable but treatable. CRAB criteria define end-organ damage.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["plasma_cell", "myeloma", "monoclonal_gammopathy", "bone_lesions"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pathologic_fracture", "weight": 8 },
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "hypercalcemia_crisis", "weight": 9 },
+        { "sign": "acute_renal_failure", "weight": 9 },
+        { "sign": "hyperviscosity_syndrome", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "stable_renal_function": true
+      },
+      "severityLabel": "If spinal cord compression, hypercalcemia, or renal failure -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "bone_pain", "weight": 5, "note": "Often back pain due to lytic lesions" },
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "thirst_and_polyuria", "weight": 2, "note": "Hypercalcemia" },
+      { "symptomId": "paresthesias_or_weakness", "weight": 2, "note": "Cord compression" },
+      { "symptomId": "nausea_and_constipation", "weight": 2 },
+      { "symptomId": "headache_blurred_vision", "weight": 1, "note": "Hyperviscosity" },
+      { "symptomId": "easy_bruising", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bone_tenderness", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "signs_of_renal_failure", "baseWeight": 2 },
+      { "signId": "neurologice_deficit", "baseWeight": 4 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 1 },
+      { "signId": "purpura", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "mgus_precursor", "multiplier": 5.0 },
+      { "id": "age_above_65", "multiplier": 3.0 },
+      { "id": "african_ancestry", "multiplier": 2.0 },
+      { "id": "family_history", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "igg_myeloma",
+        "name": "IgG Myeloma",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "igg_paraprotein", "weight": 5 },
+          { "feature": "most_common_subtype", "weight": 4 }
+        ],
+        "management": "Triplet therapy based on transplant eligibility."
+      },
+      {
+        "id": "iga_myeloma",
+        "name": "IgA Myeloma",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "iga_paraprotein", "weight": 5 },
+          { "feature": "more_likely_hypercalcemia", "weight": 3 }
+        ],
+        "management": "Same backbone as IgG. Monitor for hyperviscosity."
+      },
+      {
+        "id": "light_chain_myeloma",
+        "name": "Light Chain Myeloma",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "no_heavy_chain", "weight": 5 },
+          { "feature": "higher_renal_involvement", "weight": 5 }
+        ],
+        "management": "High burden of renal disease. Bortezomib-based regimens preferred. Aggressive hydration and supportive care."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "mgus",
+        "discriminators": ["no_end_organ_damage", "m_spike_less_than_3", "low_bone_marrow_plasmacytosis"]
+      },
+      {
+        "diseaseId": "primary_amyloidosis",
+        "discriminators": ["amyloid_deposits_in_tissue", "low_voltage_ecg", "nephrotic_syndrome"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.6, "indication": "Anemia, leukopenia, thrombocytopenia" },
+        { "name": "Serum calcium", "priority": "immediate", "yield": 0.5, "indication": "Hypercalcemia" }
+      ],
+      "laboratory": [
+        { "name": "Serum protein electrophoresis (SPEP)", "priority": "immediate", "yield": 0.95, "indication": "M-spike in gamma region" },
+        { "name": "Serum free light chains", "priority": "immediate", "yield": 0.9, "indication": "Abnormal kappa/lambda ratio" },
+        { "name": "Immunofixation", "priority": "high", "yield": 0.98, "indication": "Confirm heavy and light chain type" },
+        { "name": "Bone marrow aspirate and trephine", "priority": "immediate", "yield": 0.98, "indication": "Plasmacytosis >10%, CD138+" },
+        { "name": "Beta-2 microglobulin", "priority": "high", "yield": 0.7, "indication": "Prognostic (ISS staging)" },
+        { "name": "Creatinine and eGFR", "priority": "immediate", "yield": 0.5, "indication": "Renal function assessment" }
+      ],
+      "imaging": [
+        { "name": "Whole body low-dose CT or PET-CT", "priority": "high", "yield": 0.85, "indication": "Lytic bone lesions" },
+        { "name": "MRI spine/pelvis", "priority": "medium", "yield": 0.8, "indication": "If suspected cord compression" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / IMWG Guidelines for Multiple Myeloma",
+      "pathways": [
+        {
+          "severity": "transplant_eligible",
+          "criteria": "Age <70, fit, no major comorbidities",
+          "treatment": "Induction: VRd (bortezomib, lenalidomide, dexamethasone). Autologous HSCT. Maintenance lenalidomide."
+        },
+        {
+          "severity": "transplant_ineligible",
+          "criteria": "Age >70 or unfit",
+          "treatment": "DRd (daratumumab, lenalidomide, dexamethasone) or VMP (bortezomib, melphalan, prednisone). Continuous therapy."
+        },
+        {
+          "severity": "emergency_hypercalcemia_cord_compression",
+          "criteria": "Calcium >3.5, cord compression, acute renal failure",
+          "treatment": "IV hydration, bisphosphonates (zoledronic acid), dexamethasone. Urgent radiotherapy if cord compression. Hemodialysis if renal failure."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "plasma_cell_clonal_expansion",
+      "monoclonal_immunoglobulin_production",
+      "osteoclast_activation",
+      "bone_destruction",
+      "renal_tubular_damage",
+      "immune_paresis",
+      "hematopoietic_suppression"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["light_chain_proteinuria", "dehydration", "hypercalcemia", "nephrotoxic_drugs"]
+      },
+      {
+        "diseaseId": "pathologic_fracture",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["lytic_lesions_on_imaging", "bone_pain", "osteoporosis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if complications present",
+    "diagnosticClues": ["m_spike", "lytic_lesions", "plasmacytosis", "crab_criteria"],
+    "exclusionClues": ["no_end_organ_damage", "polyclonal_hypergammaglobulinemia"]
+  }
+}

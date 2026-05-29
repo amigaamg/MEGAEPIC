@@ -1,0 +1,130 @@
+{
+  "disease": {
+    "id": "status_epilepticus",
+    "name": "Status Epilepticus",
+    "system": "NEURO",
+    "agePeak_months": [0, 960],
+    "note": "Prolonged seizure >5 min or recurrent seizures without return to baseline. Neurological emergency with high morbidity.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["seizure_emergency", "neurological_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiorespiratory_compromise", "weight": 10 },
+        { "sign": "refractory_status", "weight": 10 },
+        { "sign": "prolonged_greater_30_min", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "ALL status epilepticus is an EMERGENCY - treat as per protocol"
+    },
+    "historyFeatures": [
+      { "symptomId": "prolonged_seizure_activity", "weight": 5 },
+      { "symptomId": "recurrent_seizures_no_intervening_consciousness", "weight": 5 },
+      { "symptomId": "known_epilepsy_history", "weight": 3 },
+      { "symptomId": "aed_noncompliance", "weight": 3 },
+      { "symptomId": "acute_illness_fever", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "generalized_convulsive_movements", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "decreased_gcs_post_ictal", "baseWeight": 4 },
+      { "signId": "airway_compromise", "baseWeight": 4 },
+      { "signId": "cyanosis_hypoxia", "baseWeight": 4 },
+      { "signId": "aspiration_signs", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "known_epilepsy", "multiplier": 2.0 },
+      { "id": "aed_nonadherence", "multiplier": 3.0 },
+      { "id": "acute_stroke", "multiplier": 2.5 },
+      { "id": "cns_infection", "multiplier": 3.0 },
+      { "id": "hypoglycemia", "multiplier": 2.0 },
+      { "id": "alcohol_withdrawal", "multiplier": 2.5 },
+      { "id": "brain_tumor", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "generalized_convulsive_status",
+        "name": "Generalized Convulsive Status Epilepticus",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "bilateral_convulsions", "weight": 5 },
+          { "feature": "impaired_consciousness", "weight": 5 }
+        ],
+        "management": "Immediate ABCDE. IV lorazepam 0.1 mg/kg. If continues: IV fosphenytoin 20 mg/kg. If refractory: IV anesthesia (propofol, midazolam). ICU."
+      },
+      {
+        "id": "nonconvulsive_status",
+        "name": "Nonconvulsive Status Epilepticus",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "altered_mental_status", "weight": 5 },
+          { "feature": "subtle_twitching_or_automatisms", "weight": 3 },
+          { "feature": "eeg_ictal_discharges", "weight": 5 }
+        ],
+        "management": "IV lorazepam. IV levetiracetam or valproate. Continuous EEG monitoring. Treat aggressively same as convulsive status."
+      },
+      {
+        "id": "focal_motor_status",
+        "name": "Focal Motor Status Epilepticus",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "continuous_focal_jerking", "weight": 5 },
+          { "feature": "consciousness_preserved", "weight": 4 }
+        ],
+        "management": "IV benzodiazepine. IV levetiracetam or fosphenytoin. Treat underlying lesion."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG, Pulse oximetry, BP monitoring", "priority": "immediate", "yield": 0.9, "indication": "vital sign monitoring" },
+        { "name": "EEG (urgent)", "priority": "immediate", "yield": 0.95, "indication": "confirm status, guide treatment" }
+      ],
+      "laboratory": [
+        { "name": "Blood glucose (fingerstick)", "priority": "immediate", "yield": 0.9, "indication": "hypoglycemia treatment" },
+        { "name": "U&E, Cr, Ca, Mg, PO4", "priority": "high", "yield": 0.5, "indication": "metabolic causes" },
+        { "name": "AED levels", "priority": "high", "yield": 0.6, "indication": "noncompliance or subtherapeutic" },
+        { "name": "Blood cultures, LP", "priority": "medium", "yield": 0.3, "indication": "if CNS infection suspected" }
+      ],
+      "imaging": [
+        { "name": "CT Head", "priority": "once_stable", "yield": 0.3, "indication": "structural cause, hemorrhage" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AES Guidelines for Status Epilepticus",
+      "pathways": [
+        {
+          "severity": "0-5 min: stabilization",
+          "criteria": "seizure ongoing at 5 min",
+          "treatment": "ABC. Oxygen. IV access. Check glucose (thiamine 100 mg if alcoholic). Lorazepam 0.1 mg/kg IV (max 4 mg) or midazolam 10 mg IM (no IV). Repeat once after 5 min."
+        },
+        {
+          "severity": "5-20 min: first-line AED",
+          "criteria": "seizure persists after 2nd benzodiazepine",
+          "treatment": "IV fosphenytoin 20 mg/kg (max 150 mg/min). Alternatives: IV valproate 30-40 mg/kg, IV levetiracetam 60 mg/kg. Monitor for hypotension, arrhythmia."
+        },
+        {
+          "severity": "20-40 min: refractory status",
+          "criteria": "seizure persists despite above",
+          "treatment": "ICU admission. IV anesthetic: propofol 2 mg/kg bolus then 5-10 mg/kg/h infusion, or midazolam 0.2 mg/kg bolus then 0.05-2 mg/kg/h. Continuous EEG monitoring."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "excessive_excitation",
+      "gaba_receptor_internalization",
+      "nmda_receptor_upregulation",
+      "metabolic_exhaustion",
+      "excitotoxicity",
+      "neuronal_death"
+    ],
+    "complications": [
+      { "diseaseId": "aspiration_pneumonia", "probability": 0.2, "severityBoost": 0.3, "clues": ["fever", "infiltrate_cxr"] },
+      { "diseaseId": "rhabdomyolysis", "probability": 0.1, "severityBoost": 0.2, "clues": ["elevated_ck", "dark_urine", "acute_kidney_injury"] },
+      { "diseaseId": "post_status_encephalopathy", "probability": 0.3, "severityBoost": 0.2, "clues": ["prolonged_confusion"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prolonged_or_recurrent_seizures", "no_return_to_baseline", "low_gcs_between_seizures"],
+    "exclusionClues": ["single_seizure_with_full_recovery", "post_ictal_self_limited"]
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "disease": {
+    "id": "fracture-radius-ulna",
+    "name": "Radius and Ulna Fracture (Forearm Fracture)",
+    "system": "ORTHO",
+    "agePeak_months": [60, 360],
+    "note": "Common fracture in children (bowing or greenstick) and adults. Both bones often fractured. Distal radius fractures most common. Requires anatomic reduction for forearm rotation.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["upper_limb_fracture", "forearm_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture", "weight": 10 },
+        { "sign": "compartment_syndrome", "weight": 10 },
+        { "sign": "vascular_injury", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "displaced_both_bones", "weight": 7 },
+          { "sign": "galeazzi_or_monteggia_fracture", "weight": 7 },
+          { "sign": "failed_closed_reduction", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If open, compartment syndrome, or displaced both bones -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fall_on_outstretched_hand", "weight": 5 },
+      { "symptomId": "forearm_pain_deformity", "weight": 5 },
+      { "symptomId": "direct_blow_forearm", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "forearm_deformity_angulation", "baseWeight": 5 },
+      { "signId": "swelling_tenderness", "baseWeight": 4 },
+      { "signId": "compartment_syndrome_check", "baseWeight": 5 },
+      { "signId": "radial_and_ulnar_pulse", "baseWeight": 4 },
+      { "signId": "finger_sensation_motor_check", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "osteoporosis", "multiplier": 2.5 },
+      { "id": "pediatric_age", "multiplier": 2.5 },
+      { "id": "contact_sports", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "both_bone_forearm",
+        "name": "Both Bone Forearm Fracture",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "fractures_of_radius_and_ulna", "weight": 5 },
+          { "feature": "displaced_or_angulated", "weight": 4 }
+        ],
+        "management": "Closed reduction and cast (children). ORIF with plate and screws (adults). Anatomic reduction critical for pronation/supination."
+      },
+      {
+        "id": "distal_radius_fracture",
+        "name": "Distal Radius Fracture (Colles/Smith)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "dinner_fork_deformity_colles", "weight": 5 },
+          { "feature": "distal_radius_tenderness", "weight": 4 }
+        ],
+        "management": "Closed reduction and cast (volar or dorsal tilt based on type). Volar locking plate fixation if intra-articular or unstable."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "wrist_sprain",
+        "discriminators": ["no_fracture_on_xray", "less_swelling"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Forearm AP and lateral X-ray (include wrist and elbow)", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "CT forearm", "priority": "medium", "yield": 0.8, "indication": "intra-articular extension" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "OTA Fracture Guidelines",
+      "pathways": [
+        {
+          "severity": "pediatric_remodeling",
+          "criteria": "Child <10 years, <20 degrees angulation, <1 cm shortening",
+          "treatment": "Closed reduction under sedation. Long arm cast for 6 weeks. Accept some angulation (remodeling potential). X-ray at 1, 4, 6 weeks."
+        },
+        {
+          "severity": "adult_operative",
+          "criteria": "Adult, displaced, angulated, intra-articular",
+          "treatment": "ORIF with volar/dorsal plate for radius ± ulnar plate. Post-op splint. Early range of motion. Hardware removal after 12-18 months if symptomatic."
+        }
+      ]
+    },
+
+    "pathophysiology": ["fall_on_outstretched_hand", "direct_trauma", "axial_loading"]
+  }
+}

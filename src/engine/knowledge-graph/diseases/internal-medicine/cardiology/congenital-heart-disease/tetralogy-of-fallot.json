@@ -1,0 +1,118 @@
+{
+  "disease": {
+    "id": "tetralogy_of_fallot",
+    "name": "Tetralogy of Fallot",
+    "system": "CARD",
+    "agePeak_months": [0, 60],
+    "note": "Classic cyanotic congenital heart disease. Four features: VSD, pulmonary stenosis, overriding aorta, RV hypertrophy.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["congenital_heart_disease", "cyanotic_heart_disease", "right_to_left_shunt"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypercyanotic_spell", "weight": 10 },
+        { "sign": "severe_hypoxia", "weight": 9 },
+        { "sign": "decreased_consciousness", "weight": 10 },
+        { "sign": "seizure_from_hypoxia", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If hypercyanotic spell -> EMERGENCY; else -> STABLE/CHRONIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "cyanosis", "weight": 5 },
+      { "symptomId": "hypercyanotic_episodes_tet_spells", "weight": 4 },
+      { "symptomId": "feeding_difficulty", "weight": 3 },
+      { "symptomId": "failure_to_thrive", "weight": 3 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "squatting_during_play", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "cyanosis_and_clubbing", "baseWeight": 4 },
+      { "signId": "ejection_systolic_murmur_left_upper_sternal", "baseWeight": 4 },
+      { "signId": "right_ventricular_heave", "baseWeight": 3 },
+      { "signId": "single_loud_s2", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "22q11_deletion_digeorge", "multiplier": 5.0 },
+      { "id": "maternal_phenylketonuria", "multiplier": 2.0 },
+      { "id": "maternal_diabetes", "multiplier": 1.5 },
+      { "id": "family_history_tof", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "classic_tof",
+        "name": "Classic Tetralogy of Fallot",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "all_four_components", "weight": 5 },
+          { "feature": "moderate_ps", "weight": 4 }
+        ],
+        "management": "Complete surgical repair at 3-6 months (VSD patch + RVOT reconstruction). Palliative shunt (BT shunt) if symptomatic neonate."
+      },
+      {
+        "id": "severe_tof_pulmonary_atresia",
+        "name": "TOF with Pulmonary Atresia (MAPCAs)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "duct_dependent_pulmonary_flow", "weight": 5 },
+          { "feature": "profound_cyanosis", "weight": 5 },
+          { "feature": "collateral_arteries_mapcas", "weight": 4 }
+        ],
+        "management": "Neonatal PGE1 infusion. Cardiac catheterization. Unifocalization + VSD closure. Staged surgical approach."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "truncus_arteriosus", "discriminators": ["early_hf", "bounding_pulses", "truncal_valve_abnormalities"] },
+      { "diseaseId": "tricuspid_atresia", "discriminators": ["absent_rv", "small_or_absent_tricuspid_valve", "lv_dominance"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.9, "indication": "baseline SpO2, cyanosis severity" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "confirm diagnosis, PS severity, VSD, aortic override, RVH" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "boot-shaped heart, decreased pulmonary vascularity" },
+        { "name": "ECG", "priority": "high", "yield": 0.5, "indication": "RVH, right axis deviation" },
+        { "name": "CT/MRI angiography", "priority": "medium", "yield": 0.9, "indication": "coronary anatomy, pulmonary artery size, collaterals" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Congenital Heart Disease - Tetralogy of Fallot",
+      "pathways": [
+        {
+          "severity": "neonatal - duct dependent",
+          "criteria": "severe cyanosis, duct-dependent pulmonary flow",
+          "treatment": "PGE1 infusion to maintain ductal patency. Balloon dilation or stent of RVOT. Modified BT shunt if anatomy unfavorable."
+        },
+        {
+          "severity": "hypercyanotic spell",
+          "criteria": "sudden increase in cyanosis, agitation, gasping",
+          "treatment": "Knee-chest position. Oxygen 100%. Morphine 0.05-0.2 mg/kg IV. IV fluids (NS 10-20 mL/kg). Propranolol 0.1-0.2 mg/kg IV. Phenylephrine if hypotensive. Emergency surgery if refractory."
+        },
+        {
+          "severity": "elective repair",
+          "criteria": "stable, elective surgical repair",
+          "treatment": "Complete repair at 3-6 months: VSD patch closure, RVOT muscle bundle resection, transannular patch if needed. Post-op: monitor for pulmonary regurgitation, RV dilation, arrhythmias. Long-term follow-up."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "anterior_malalignment_vsd",
+      "right_ventricular_outflow_obstruction",
+      "right_to_left_shunt",
+      "desaturated_systemic_blood",
+      "cyanosis",
+      "right_ventricular_hypertrophy"
+    ],
+    "complications": [
+      { "diseaseId": "hypercyanotic_spell", "probability": 0.3, "severityBoost": 0.5, "clues": ["agitation", "increasing_cyanosis", "gasping"] },
+      { "diseaseId": "post_op_pulmonary_regurgitation", "probability": 0.4, "severityBoost": 0.1, "clues": ["diastolic_murmur", "rv_dilation"] },
+      { "diseaseId": "ventricular_arrhythmia", "probability": 0.1, "severityBoost": 0.3, "clues": ["palpitations", "syncope", "rv_dilation"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["cyanotic_neonate", "squatting_toddler", "boot_shaped_heart", "ejection_systolic_murmur"],
+    "exclusionClues": ["acyanotic", "normal_cardiac_silhouette", "no_vsd_on_echo"]
+  }
+}

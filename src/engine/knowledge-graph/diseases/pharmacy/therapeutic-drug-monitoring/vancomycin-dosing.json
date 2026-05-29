@@ -1,0 +1,71 @@
+{
+  "disease": {
+    "id": "vancomycin_dosing",
+    "name": "Vancomycin - Dosing and Monitoring",
+    "system": "pharmacy",
+    "note": "Glycopeptide antibiotic with time-dependent killing. AUC/MIC ratio best predictor of efficacy. Trough monitoring traditional.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["antibiotic_dosing", "therapeutic_drug_monitoring"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_nephrotoxicity", "weight": 9 },
+        { "sign": "red_man_syndrome_severe", "weight": 7 },
+        { "sign": "therapeutic_failure", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Trough 10-15 mcg/mL (standard) or 15-20 mcg/mL (complicated infections)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "persistent_fever_despite_antibiotics", "weight": 3 },
+      { "symptomId": "known_mrsa_infection", "weight": 5 },
+      { "symptomId": "renal_impairment_chronic", "weight": 4 },
+      { "symptomId": "previous_vancomycin_exposure", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "signs_of_infection", "baseWeight": 3 },
+      { "signId": "oliguria", "baseWeight": 3 }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Vancomycin trough level", "priority": "routine monitoring", "yield": 0.9, "indication": "draw just before 4th dose (steady state)" },
+        { "name": "Serum creatinine (baseline and daily)", "priority": "high", "yield": 0.8, "indication": "renal function monitoring" },
+        { "name": "AUC/MIC estimation (if available)", "priority": "preferred", "yield": 0.9, "indication": "two-level pharmacokinetics for accuracy" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.5, "indication": "clearance monitoring" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA/ASHP/SIDP Guidelines for Vancomycin Therapeutic Monitoring",
+      "pathways": [
+        {
+          "severity": "standard dosing",
+          "criteria": "normal renal function, uncomplicated infection",
+          "treatment": "15-20 mg/kg IV every 8-12 hours (max 2 g/dose). Target trough 10-15 mcg/mL. Adjust dose by 25-50% if needed."
+        },
+        {
+          "severity": "serious infection (MRSA)",
+          "criteria": "bacteremia, endocarditis, osteomyelitis, meningitis, pneumonia",
+          "treatment": "15-20 mg/kg IV every 8-12 hours. Loading dose 25-30 mg/kg (max 3 g) for severe infection. Target trough 15-20 mcg/mL. Consider AUC-guided dosing."
+        },
+        {
+          "severity": "renal impairment",
+          "criteria": "CrCl <50 mL/min or rising creatinine",
+          "treatment": "Extend interval (every 12-24-48h) rather than reduce dose. Monitor trough closely. Consider alternative (daptomycin) if nephrotoxicity develops."
+        }
+      ]
+    },
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["mrsa_infection", "vancomycin_therapy", "renal_monitoring_required"]
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "disease": {
+    "id": "prostate_cancer_onco",
+    "name": "Prostate Cancer",
+    "system": "ONCO",
+    "agePeak_months": [600, 960],
+    "note": "Most common non-skin cancer in men. Spectrum from indolent to aggressive. Gleason scoring guides prognosis.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["genitourinary_malignancy", "male_cancer_androgen_driven"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "bilateral_hydronephrosis_renal_failure", "weight": 9 },
+        { "sign": "disseminated_intravascular_coagulation", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Risk stratification: low (Gleason ≤6, PSA <10, T1-T2a), intermediate, high, metastatic"
+    },
+    "historyFeatures": [
+      { "symptomId": "lower_urinary_tract_symptoms", "weight": 3 },
+      { "symptomId": "hematuria", "weight": 2 },
+      { "symptomId": "hematospermia", "weight": 2 },
+      { "symptomId": "bone_pain", "weight": 4 },
+      { "symptomId": "weight_loss_fatigue", "weight": 2 },
+      { "symptomId": "erectile_dysfunction", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "hard_irregular_prostate_on_dre", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "loss_of_median_sulcus", "baseWeight": 4 },
+      { "signId": "spinal_tenderness", "baseWeight": 3 },
+      { "signId": "lower_limb_edema", "baseWeight": 2 },
+      { "signId": "supraclavicular_lymphadenopathy", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 3.0 },
+      { "id": "family_history_prostate_cancer", "multiplier": 2.5 },
+      { "id": "african_descent", "multiplier": 2.0 },
+      { "id": "brca2_mutation", "multiplier": 3.5 },
+      { "id": "obesity", "multiplier": 1.3 },
+      { "id": "high_dairy_diet", "multiplier": 1.2 }
+    ],
+    "subtypes": [
+      {
+        "id": "localized_low_risk",
+        "name": "Localized Low-Risk Prostate Cancer",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "gleason_6_or_less", "weight": 5 },
+          { "feature": "psa_under_10", "weight": 4 },
+          { "feature": "t1_t2a", "weight": 4 }
+        ],
+        "management": "Active surveillance with serial PSA, DRE, MRI and repeat biopsy. Definitive treatment if progression."
+      },
+      {
+        "id": "localized_intermediate_high_risk",
+        "name": "Localized Intermediate/High-Risk Prostate Cancer",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "gleason_7_or_above", "weight": 5 },
+          { "feature": "psa_over_10", "weight": 4 },
+          { "feature": "t2b_or_higher", "weight": 4 }
+        ],
+        "management": "Radical prostatectomy or radiotherapy (EBRT or brachytherapy) + ADT. Multimodal therapy for high-risk."
+      },
+      {
+        "id": "metastatic_hormone_sensitive",
+        "name": "Metastatic Hormone-Sensitive Prostate Cancer (mHSPC)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "bone_or_visceral_metastases", "weight": 5 },
+          { "feature": "still_responds_to_adt", "weight": 4 }
+        ],
+        "management": "ADT (LHRH agonist/antagonist) + docetaxel or abiraterone/prednisolone or enzalutamide. Radiotherapy to primary. Bone protection with denosumab/zoledronic acid."
+      },
+      {
+        "id": "castration_resistant",
+        "name": "Castration-Resistant Prostate Cancer (CRPC)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "progression_despite_castrate_testosterone", "weight": 5 },
+          { "feature": "rising_psa_on_adt", "weight": 5 }
+        ],
+        "management": "Enzalutamide, abiraterone, cabazitaxel, radium-223 (bone metastases). PARP inhibitors if HRR mutation. Immunotherapy if MSI-H. Palliative RT for bone pain."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "bph", "discriminators": ["smooth_enlarged_prostate", "normal_psa", "no_metastases_on_imaging"] },
+      { "diseaseId": "prostatitis", "discriminators": ["fever", "perineal_pain", "tender_prostate", "uti_symptoms"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "PSA (total, free/total ratio)", "priority": "high", "yield": 0.7, "indication": "screening, risk stratification, monitoring" },
+        { "name": "Serum creatinine, eGFR", "priority": "high", "yield": 0.5, "indication": "renal function, hydronephrosis assessment" },
+        { "name": "ALP, Calcium, LDH", "priority": "medium", "yield": 0.5, "indication": "bone metastases screen" },
+        { "name": "Testosterone level", "priority": "medium", "yield": 0.6, "indication": "baseline before ADT, confirm castrate level" }
+      ],
+      "imaging": [
+        { "name": "mpMRI Prostate (PI-RADS)", "priority": "high", "yield": 0.85, "indication": "lesion detection, staging, biopsy targeting" },
+        { "name": "TRUS-guided systematic + targeted biopsy", "priority": "gold_standard", "yield": 0.95, "indication": "histological diagnosis, Gleason grading" },
+        { "name": "Bone scan (Tc-99m MDP)", "priority": "high", "yield": 0.8, "indication": "bone metastases in high-risk/metastatic disease" },
+        { "name": "PSMA PET-CT", "priority": "high", "yield": 0.9, "indication": "restaging biochemical recurrence, metastatic workup" },
+        { "name": "CT Abdomen/Pelvis", "priority": "medium", "yield": 0.6, "indication": "lymph node and visceral metastases" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/EAU/ESMO Guidelines for Prostate Cancer",
+      "pathways": [
+        {
+          "severity": "low risk",
+          "criteria": "Gleason ≤6, PSA <10, T1-T2a",
+          "treatment": "Active surveillance. Definitive treatment (RP or RT) if patient preference or progression."
+        },
+        {
+          "severity": "intermediate risk",
+          "criteria": "Gleason 7, PSA 10-20, T2b",
+          "treatment": "Radical prostatectomy or EBRT + short-course ADT (4-6 months). Consider brachytherapy boost."
+        },
+        {
+          "severity": "high risk / locally advanced",
+          "criteria": "Gleason 8-10, PSA >20, T3-T4",
+          "treatment": "EBRT + long-course ADT (2-3 years). Radical prostatectomy + extended PLND in select cases. Multimodal therapy."
+        },
+        {
+          "severity": "metastatic (M1)",
+          "criteria": "distant metastases on imaging",
+          "treatment": "ADT indefinitely. Add docetaxel or abiraterone or enzalutamide (mHSPC). For CRPC: second-gen hormonal agents, cabazitaxel, radium-223, PARPi. Bone protection. Palliative RT."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "androgen_receptor_signaling",
+      "tmprss2_erg_fusion",
+      "pten_loss",
+      "tp53_rb1_alterations",
+      "prostatic_intraepithelial_neoplasia",
+      "local_invasion_seminal_vesicles",
+      "lymphatic_and_hematogenous_spread",
+      "osteoblastic_bone_metastases"
+    ],
+    "complications": [
+      { "diseaseId": "spinal_cord_compression", "probability": 0.05, "severityBoost": 0.6, "clues": ["back_pain", "leg_weakness", "sensory_level", "urinary_retention"] },
+      { "diseaseId": "hydronephrosis_renal_failure", "probability": 0.08, "severityBoost": 0.4, "clues": ["elevated_creatinine", "bilateral_hydronephrosis_on_uss"] },
+      { "diseaseId": "pathologic_fracture", "probability": 0.04, "severityBoost": 0.3, "clues": ["bone_pain", "lytic_blastic_lesion", "minimal_trauma_fracture"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["elevated_psa", "abnormal_dre_hard_prostate", "bone_pain_in_older_man", "family_history"],
+    "exclusionClues": ["normal_psa_below_age_threshold", "smooth_prostate_dre", "benign_mri_pi_rads_1_2"]
+  }
+}

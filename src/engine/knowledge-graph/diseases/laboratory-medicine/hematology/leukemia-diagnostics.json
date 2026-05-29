@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "leukemia_diagnostics",
+    "name": "Leukemia Laboratory Diagnostics",
+    "system": "LAB",
+    "agePeak_months": [36, 720],
+    "note": "Diagnosis of leukemia requires CBC with differential, peripheral blood smear, bone marrow aspirate and biopsy, flow cytometry, cytogenetics, and molecular testing. WHO classification integrates morphology, immunophenotype, genetics, and clinical features.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["hematologic_malignancy", "leukocytosis", "pancytopenia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hyperleukocytosis_gt_100k", "weight": 9 },
+        { "sign": "dIC_with_bleeding", "weight": 10 },
+        { "sign": "tumor_lysis_syndrome", "weight": 9 },
+        { "sign": "sepsis_neutropenic", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "blast_crisis_gt_20_percent", "weight": 8 },
+          { "sign": "profound_anemia_hb_lt_7", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If hyperleukocytosis/DIC -> ONCOLOGIC EMERGENCY; else -> NON-EMERGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "fatigue_weakness", "weight": 4, "modifiers": [
+          { "condition": "progressive_over_weeks", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "fever_infections_recurrent", "weight": 5 },
+      { "symptomId": "easy_bruising_bleeding", "weight": 4 },
+      { "symptomId": "bone_pain", "weight": 3 },
+      { "symptomId": "lymphadenopathy_or_splenomegaly", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "wbc_count_elevated_or_decreased", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "blasts_on_peripheral_smear", "baseWeight": 5 },
+      { "signId": "anemia_thrombocytopenia", "baseWeight": 4 },
+      { "signId": "ldh_elevated", "baseWeight": 3 },
+      { "signId": "uric_acid_elevated", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "down_syndrome_trisomy_21", "multiplier": 20.0 },
+      { "id": "prior_chemotherapy_alkylating", "multiplier": 5.0 },
+      { "id": "radiation_exposure", "multiplier": 3.0 },
+      { "id": "familial_leukemia_syndromes", "multiplier": 5.0 },
+      { "id": "clonal_hematopoiesis_chip", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_myeloid_leukemia",
+        "name": "Acute Myeloid Leukemia (AML)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "blasts_gt_20_percent_in_marrow_or_blood", "weight": 5 },
+          { "feature": "myeloperoxidase_positive_cytochemistry", "weight": 5 },
+          { "feature": "cd13_cd33_cd117_flow", "weight": 5 },
+          { "feature": "auer_rods_on_smear", "weight": 4 },
+          { "feature": "nPM1_flt3_itd_cebpa_mutations", "weight": 4 }
+        ],
+        "management": "Induction chemotherapy (7+3: cytarabine + anthracycline). Risk stratification per ELN guidelines. AlloSCT for intermediate/adverse risk. Targeted therapy (midostaurin for FLT3, gemtuzumab for CD33)."
+      },
+      {
+        "id": "acute_lymphoblastic_leukemia",
+        "name": "Acute Lymphoblastic Leukemia (ALL)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "lymphoblasts_in_marrow_gt_25_percent", "weight": 5 },
+          { "feature": "tD_positive_b_cell_or_cytoplasmic_cd3_t_cell", "weight": 5 },
+          { "feature": "cd10_cd19_cd20_b_lineage", "weight": 4 },
+          { "feature": "pHLadelphia_chromosome_t_9_22", "weight": 4 },
+          { "feature": "mLL_rearrangements_kmt2a", "weight": 3 }
+        ],
+        "management": "Multi-agent chemotherapy (vincristine, steroids, anthracycline, L-asparaginase). CNS prophylaxis. Ph-positive ALL: add TKI (dasatinib/imatinib). CAR-T (tisagenlecleucel) for refractory."
+      },
+      {
+        "id": "chronic_lymphocytic_leukemia",
+        "name": "Chronic Lymphocytic Leukemia (CLL)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "lymphocytosis_gt_5k_persistent", "weight": 5 },
+          { "feature": "smudge_cells_on_smear", "weight": 4 },
+          { "feature": "cd5_cd19_cd23_positive", "weight": 5 },
+          { "feature": "monoclonal_b_cell_population", "weight": 4 },
+          { "feature": "del_17p_or_tp53_mutation_poor_prognosis", "weight": 4 }
+        ],
+        "management": "Watchful waiting for early stage. Chemoimmunotherapy (FCR for IGHV mutated, venetoclax + obinutuzumab for unmutated/17p). BTK inhibitors (ibrutinib, acalabrutinib). AlloSCT for refractory."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "leukemoid_reaction",
+        "discriminators": ["left_shift_no_blasts", "infection_or_inflammation_present", "normal_cytogenetics"]
+      },
+      {
+        "diseaseId": "myelodysplastic_syndrome",
+        "discriminators": ["blasts_lt_20_percent", "dysplasia_multilineage", "cytopenias"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC with automated differential", "priority": "immediate", "yield": 0.9, "indication": "all suspected leukemia" },
+        { "name": "Peripheral blood smear review", "priority": "immediate", "yield": 0.95, "indication": "blast quantification, morphology" },
+        { "name": "Bone marrow aspirate and biopsy", "priority": "high", "yield": 0.98, "indication": "definitive diagnosis, cellularity, blast count" },
+        { "name": "Flow cytometry (peripheral blood or marrow)", "priority": "high", "yield": 0.95, "indication": "immunophenotyping, lineage assignment" },
+        { "name": "Cytogenetics (karyotype)", "priority": "high", "yield": 0.7, "indication": "clonal abnormalities, risk stratification" },
+        { "name": "FISH for common rearrangements", "priority": "high", "yield": 0.8, "indication": "rapid detection of PML-RARA, BCR-ABL, MLL" },
+        { "name": "Molecular panel (NGS for mutations)", "priority": "medium", "yield": 0.8, "indication": "FLT3, NPM1, CEBPA, IDH1/2, RUNX1, TP53" },
+        { "name": "LDH, Uric acid", "priority": "high", "yield": 0.6, "indication": "tumor lysis risk assessment" },
+        { "name": "Coagulation panel (PT, PTT, fibrinogen, D-dimer)", "priority": "high", "yield": 0.5, "indication": "DIC screen, especially APL suspicion" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "WHO Classification of Haematolymphoid Tumours, ELN/ESMO Guidelines",
+      "pathways": [
+        {
+          "severity": "suspected_leukemia",
+          "criteria": "abnormal CBC with blasts, cytopenias, clinical suspicion",
+          "treatment": "Urgent hematology consultation. Peripheral blood flow cytometry. Bone marrow biopsy within 24-48 hours. Tumor lysis prophylaxis (allopurinol, hydration)."
+        },
+        {
+          "severity": "emergent_oncologic",
+          "criteria": "hyperleukocytosis >100k, DIC (APL), TLS, neutropenic sepsis",
+          "treatment": "Leukapheresis for hyperleukocytosis. ATRA for suspected APL. Platelet transfusion if <10k. Exchange FFP/cryo for DIC. Broad-spectrum antibiotics for febrile neutropenia ICU."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "clonal_hematopoietic_stem_cell_mutation",
+      "differentiation_arrest",
+      "uncontrolled_proliferation",
+      "bone_marrow_failure",
+      "extramedullary_infiltration",
+      "immune_dysfunction"
+    ],
+    "complications": [
+      {
+        "diseaseId": "tumor_lysis_syndrome",
+        "probability": 0.2,
+        "lagDays": [1, 5],
+        "severityBoost": 0.5,
+        "clues": ["hyperuricemia", "hyperkalemia", "hyperphosphatemia", "hypocalcemia"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.1,
+        "lagDays": [1, 5],
+        "severityBoost": 0.5,
+        "clues": ["low_fibrinogen", "elevated_d_dimer", "prolonged_pt_ptt", "bleeding"]
+      },
+      {
+        "diseaseId": "febrile_neutropenia",
+        "probability": 0.5,
+        "lagDays": [7, 21],
+        "severityBoost": 0.4,
+        "clues": ["anc_lt_500", "temperature_gt_38_3", "mucositis"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["blasts_on_smear", "pancytopenia_or_leukocytosis", "flow_cytometry_abnormal", "cytogenetic_marker"],
+    "exclusionClues": ["reactive_left_shift", "normal_flow_cytometry", "resolving_with_treatment_of_infection"]
+  }
+}

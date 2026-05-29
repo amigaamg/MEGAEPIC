@@ -1,0 +1,176 @@
+﻿{
+  "disease": {
+    "id": "pancreatic_cancer",
+    "name": "Pancreatic Cancer",
+    "system": "gastroenterology",
+    "agePeak_months": [600, 960],
+    "note": "Adenocarcinoma of the pancreas; often presents at advanced stage with poor prognosis. 5-year survival <10%.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["malignancy", "pancreatic", "jaundice"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_obstructive_jaundice_with_cholangitis", "weight": 9 },
+        { "sign": "duodenal_obstruction", "weight": 8 },
+        { "sign": "severe_cancer_pain", "weight": 6 },
+        { "sign": "portal_vein_thrombosis", "weight": 7 },
+        { "sign": "gastrointestinal_bleeding", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "new_onset_symptoms": true
+      },
+      "severityLabel": "If cholangitis or obstruction -> EMERGENCY; new diagnosis -> URGENT staging and treatment"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_obstructive_jaundice", "weight": 5 },
+      { "symptomId": "epigastric_pain_dull_aching", "weight": 4 },
+      { "symptomId": "pain_radiating_to_back", "weight": 4 },
+      { "symptomId": "unintentional_weight_loss", "weight": 5 },
+      { "symptomId": "anorexia", "weight": 4 },
+      { "symptomId": "new_onset_diabetes", "weight": 3, "note": "May be earliest sign" },
+      { "symptomId": "steatorrhea", "weight": 2, "note": "Exocrine insufficiency from duct obstruction" },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "dark_urine_pale_stools", "weight": 4 },
+      { "symptomId": "pruritus", "weight": 3 },
+      { "symptomId": "migratory_thrombophlebitis_trousseau", "weight": 2 },
+      { "symptomId": "depression_new_onset", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "palpable_gallbladder_courvoisier", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "epigastric_mass", "baseWeight": 4 },
+      { "signId": "hepatomegaly_nodular", "baseWeight": 3, "note": "Liver metastases" },
+      { "signId": "ascites", "baseWeight": 3, "note": "Peritoneal carcinomatosis" },
+      { "signId": "cachexia", "baseWeight": 3 },
+      { "signId": "left_supraclavicular_lymph_node_virchow", "baseWeight": 3 },
+      { "signId": "trousseau_sign_migratory_thrombophlebitis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "chronic_pancreatitis", "multiplier": 3.0 },
+      { "id": "family_history_pancreatic_cancer", "multiplier": 3.0 },
+      { "id": "hereditary_syndromes_brca2_p16_stk11", "multiplier": 5.0 },
+      { "id": "new_onset_diabetes", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "non_0_blood_group", "multiplier": 1.3 },
+      { "id": "chronic_hepatitis_b", "multiplier": 1.5 },
+      { "id": "heavy_alcohol_use", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "chronic_pancreatitis",
+        "discriminators": ["long_history_of_pain", "recurrent_attacks", "pancreatic_calcifications", "normal_ca19_9", "stable_over_time"]
+      },
+      {
+        "diseaseId": "cholangiocarcinoma",
+        "discriminators": ["proximal_bile_duct_tumor", "better_resectability_rate", "different_imaging_characteristics"]
+      },
+      {
+        "diseaseId": "autoimmune_pancreatitis",
+        "discriminators": ["elevated_igg4", "diffuse_swelling_on_ct", "response_to_steroids", "no_mass_progression"]
+      },
+      {
+        "diseaseId": "acute_cholangitis",
+        "discriminators": ["fever", "right_upper_quadrant_pain", "responds_to_antibiotics"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Scleral exam for jaundice", "priority": "immediate", "yield": 0.9, "indication": "visible jaundice indicates bilirubin >3" }
+      ],
+      "laboratory": [
+        { "name": "CA 19-9", "priority": "high", "yield": 0.8, "indication": "tumor marker; elevated in 70-80%, used for monitoring not screening" },
+        { "name": "LFTs with bilirubin (direct predominance)", "priority": "immediate", "yield": 0.8, "indication": "obstructive pattern" },
+        { "name": "FBC", "priority": "high", "yield": 0.3, "indication": "anemia" },
+        { "name": "Fasting glucose / HbA1c", "priority": "high", "yield": 0.4, "indication": "new onset diabetes as early sign" }
+      ],
+      "imaging": [
+        { "name": "CT abdomen (pancreatic protocol triple phase)", "priority": "immediate", "yield": 0.92, "indication": "gold standard for diagnosis and staging; assess resectability" },
+        { "name": "EUS with fine needle aspiration (FNA)", "priority": "high", "yield": 0.95, "indication": "tissue diagnosis for unresectable or equivocal cases" },
+        { "name": "MRCP", "priority": "high", "yield": 0.9, "indication": "ductal anatomy, differentiate from cholangiocarcinoma" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.85, "indication": "detect distant metastases if considering curative surgery" },
+        { "name": "Diagnostic laparoscopy", "priority": "if_indicated", "yield": 0.9, "indication": "exclude peritoneal metastases before laparotomy" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines: Pancreatic Adenocarcinoma",
+      "pathways": [
+        {
+          "severity": "resectable",
+          "criteria": "No arterial involvement (celiac, SMA, hepatic), <180° SMV/PV involvement, no metastases",
+          "treatment": "Pancreaticoduodenectomy (Whipple) for head tumors; distal pancreatectomy for body/tail. Adjuvant chemotherapy (FOLFIRINOX or gemcitabine + capecitabine) for 6 months."
+        },
+        {
+          "severity": "borderline_resectable",
+          "criteria": "Arterial involvement <180°, venous >180° but reconstructable",
+          "treatment": "Neoadjuvant chemotherapy (FOLFIRINOX or gemcitabine + nab-paclitaxel) for 4-6 months. Re-staging. Surgery if downstaged to resectable."
+        },
+        {
+          "severity": "locally_advanced_unresectable",
+          "criteria": "Arterial encasement >180°, no metastases",
+          "treatment": "Chemotherapy (FOLFIRINOX or gemcitabine + nab-paclitaxel). Consider chemoradiation for selected patients. Palliative biliary stenting if jaundice. Pain management."
+        },
+        {
+          "severity": "metastatic",
+          "criteria": "Distant metastases (liver, peritoneum, lung)",
+          "treatment": "Palliative chemotherapy (FOLFIRINOX if fit, gemcitabine + nab-paclitaxel if not). Palliative biliary/duodenal stenting. Pain management (celiac plexus block). Hospice referral."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "pancreatic_intraepithelial_neoplasia_panin",
+      "kras_mutation_early",
+      "cdkn2a_tp53_smad4_mutations",
+      "desmoplastic_stromal_reaction",
+      "early_lymphatic_invasion",
+      "perineural_invasion",
+      "vascular_encasement_sma_celiac_smv_pv",
+      "liver_metastasis_portal_vein_drainage",
+      "peritoneal_carcinomatosis",
+      "immune_evasion_tumor_microenvironment"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "obstructive_jaundice",
+        "probability": 0.7,
+        "severityBoost": 0.4,
+        "clues": ["head_of_pancreas_tumor", "dilated_bile_duct", "jaundice", "pruritus"]
+      },
+      {
+        "diseaseId": "duodenal_obstruction",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["vomiting", "gastric_dilation", "inability_to_tolerate_oral"]
+      },
+      {
+        "diseaseId": "portal_vein_thrombosis",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["ascites", "splenomegaly", "variceal_bleeding"]
+      },
+      {
+        "diseaseId": "venous_thromboembolism",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["deep_vein_thrombosis", "pulmonary_embolism", "trousseau_syndrome"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if cholangitis or obstruction; high suspicion needed",
+    "diagnosticClues": ["painless_obstructive_jaundice", "courvoisier_gallbladder", "new_onset_diabetes_in_elderly", "weight_loss", "ca19_9_elevated"],
+    "exclusionClues": ["stone_in_common_bile_duct", "normal_pancreatic_ct", "elevated_igg4_suggesting_autoimmune"]
+  }
+}

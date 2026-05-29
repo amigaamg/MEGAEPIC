@@ -1,0 +1,142 @@
+{
+  "disease": {
+    "id": "psoriasis",
+    "name": "Psoriasis",
+    "system": "dermatology",
+    "agePeak_months": [120, 480],
+    "note": "Chronic immune-mediated inflammatory skin disease. Associated with psoriatic arthritis and metabolic syndrome.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["inflammatory_skin", "chronic_plaque"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "erythroderma", "weight": 10 },
+        { "sign": "generalized_pustular_psoriasis", "weight": 10 },
+        { "sign": "severe_arthritis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Erythroderma/pustular -> URGENT; plaque -> MILD/MODERATE/SEVERE based on BSA"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "well_demarcated_red_plaques", "weight": 5 },
+      { "symptomId": "silvery_scale", "weight": 5 },
+      { "symptomId": "itch", "weight": 3 },
+      { "symptomId": "joint_pain_swelling", "weight": 3 },
+      { "symptomId": "family_history", "weight": 3 },
+      { "symptomId": "nail_changes", "weight": 2 },
+      { "symptomId": "koebner_phenomenon", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "well_demarcated_erythematous_plaques", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "silvery_scales", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "auspitz_sign", "baseWeight": 4 },
+      { "signId": "nail_pitting_onycholysis", "baseWeight": 3 },
+      { "signId": "scalp_involvement", "baseWeight": 3 },
+      { "signId": "extensor_distribution", "baseWeight": 4 },
+      { "signId": "dactylitis_sausage_digit", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "stress", "multiplier": 1.4 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "streptococcal_infection", "multiplier": 1.3 },
+      { "id": "certain_drugs_beta_blockers_lithium", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "plaque_psoriasis",
+        "name": "Plaque Psoriasis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "chronic_stable_plaques", "weight": 5 },
+          { "feature": "extensor_surfaces", "weight": 4 }
+        ],
+        "management": "Topical corticosteroids and vitamin D analogs. Phototherapy if widespread. Systemic therapy if severe."
+      },
+      {
+        "id": "guttate_psoriasis",
+        "name": "Guttate Psoriasis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "sudden_onset_droplet_lesions", "weight": 5 },
+          { "feature": "post_strep_infection", "weight": 5 }
+        ],
+        "management": "Often self-limiting. Topical therapy. Phototherapy if persistent. Treat strep infection."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "eczema",
+        "discriminators": ["flexural", "less_sharp_margins", "more_pruritic", "no_nail_signs"]
+      },
+      {
+        "diseaseId": "seborrheic_dermatitis",
+        "discriminators": ["greasy_scale", "central_face", "scalp_only"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "PASI score", "priority": "high", "yield": 0.9, "indication": "severity assessment" },
+        { "name": "BSA assessment", "priority": "high", "yield": 0.8, "indication": "extent of disease" }
+      ],
+      "laboratory": [
+        { "name": "CRP, ESR", "priority": "medium", "yield": 0.5, "indication": "inflammatory markers if arthritis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Psoriasis",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "BSA <5%, well-controlled with topicals",
+          "treatment": "Topical corticosteroids. Vitamin D analogs (calcipotriol). Tar preparations. Emollients."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "BSA 5-10%, inadequate response to topicals",
+          "treatment": "Phototherapy (UVB, PUVA). Second-line topical therapy. Consider systemic if fails."
+        },
+        {
+          "severity": "severe",
+          "criteria": "BSA >10% or significant impact on QoL",
+          "treatment": "Systemic therapy (methotrexate, cyclosporine, acitretin). Biologics (TNF-alpha inhibitors, IL-17/IL-23 inhibitors)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "keratinocyte_hyperproliferation",
+      "t_cell_activation",
+      "th1_th17_pathway",
+      "inflammatory_cytokines",
+      "abnormal_epidermal_differentiation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "psoriatic_arthritis",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["joint_pain_swelling_stiffness", "dactylitis"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["well_demarcated_plaques_silvery_scale", "extensor_distribution", "nail_changes"],
+    "exclusionClues": ["flexural_only", "no_scale", "negative_auspitz"]
+  }
+}

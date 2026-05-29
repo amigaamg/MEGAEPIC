@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "hyperparathyroidism",
+    "name": "Hyperparathyroidism",
+    "system": "surgical",
+    "agePeak_months": [480, 720],
+    "note": "Excess PTH secretion. Primary from parathyroid adenoma/hyperplasia. Stones, bones, groans, psychiatric overtones.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["hypercalcemia", "parathyroid_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypercalcemic_crisis_greater_14", "weight": 10 },
+        { "sign": "cardiac_arrhythmia", "weight": 10 },
+        { "sign": "acute_pancreatitis", "weight": 8 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "calcium_greater_than_12", "weight": 8 },
+          { "sign": "renal_failure", "weight": 7 },
+          { "sign": "severe_osteoporosis_fracture", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Hypercalcemic crisis/renal failure -> SEVERE; mild asymptomatic -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "renal_colic_kidney_stones", "weight": 4 },
+      { "symptomId": "bone_pain_fractures", "weight": 3 },
+      { "symptomId": "abdominal_pain_constipation", "weight": 3 },
+      { "symptomId": "depression_fatigue", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "polyuria_polydipsia", "weight": 3 },
+      { "symptomId": "muscle_weakness", "weight": 2 },
+      { "symptomId": "neck_lump_rare", "weight": 2 },
+      { "symptomId": "family_history_of_hyperparathyroidism", "weight": 2 },
+      { "symptomId": "incidental_finding_on_lab", "weight": 4, "note": "Most common presentation now" }
+    ],
+
+    "examFeatures": [
+      { "signId": "neck_palpation_rarely_palpable", "baseWeight": 2 },
+      { "signId": "signs_of_dehydration", "baseWeight": 2 },
+      { "signId": "hypertension", "baseWeight": 2 },
+      { "signId": "band_keratopathy_corneal", "baseWeight": 1 },
+      { "signId": "bone_tenderness", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender_postmenopausal", "multiplier": 3.0 },
+      { "id": "age_over_50", "multiplier": 2.0 },
+      { "id": "neck_radiation_history", "multiplier": 2.5 },
+      { "id": "family_history_familial_hpt", "multiplier": 3.0 },
+      { "id": "men_syndrome", "multiplier": 4.0 },
+      { "id": "lithium_therapy", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "parathyroid_adenoma",
+        "name": "Parathyroid Adenoma (Single)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "single_gland_disease", "weight": 5 },
+          { "feature": "localized_on_sestamibi", "weight": 5 },
+          { "feature": "elevated_ptp_calcium", "weight": 5 },
+          { "feature": "cure_with_single_gland_excision", "weight": 5 }
+        ],
+        "management": "Minimally invasive parathyroidectomy (MIP) guided by sestamibi + intraoperative PTH monitoring. Four-gland exploration if localization fails."
+      },
+      {
+        "id": "parathyroid_hyperplasia",
+        "name": "Multigland Hyperplasia",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "multiple_glands_enlarged", "weight": 5 },
+          { "feature": "familial_or_men_related", "weight": 4 },
+          { "feature": "no_single_hot_spot_on_sestamibi", "weight": 4 }
+        ],
+        "management": "Bilateral neck exploration. Subtotal parathyroidectomy (3.5 glands) or total parathyroidectomy with autotransplantation. Intraoperative PTH monitoring."
+      },
+      {
+        "id": "parathyroid_carcinoma",
+        "name": "Parathyroid Carcinoma",
+        "prevalenceModifier": 0.01,
+        "keyFeatures": [
+          { "feature": "very_high_calcium_greater_than_14", "weight": 5 },
+          { "feature": "palpable_neck_mass", "weight": 4 },
+          { "feature": "severe_hyperparathyroid_symptoms", "weight": 5 }
+        ],
+        "management": "En bloc resection including ipsilateral thyroid lobe and central nodes. No neck dissection unless nodes involved. Close follow-up for recurrence."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "familial_hypocalciuric_hypercalcemia",
+        "discriminators": ["low_urine_calcium_excretion", "family_history", "normal_ptp_in_young"]
+      },
+      {
+        "diseaseId": "hypercalcemia_of_malignancy",
+        "discriminators": ["known_malignancy", "low_ptp_level", "pthrp_elevated", "acute_onset"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Corrected calcium calculation", "priority": "immediate", "yield": 0.8, "indication": "confirm hypercalcemia" }
+      ],
+      "laboratory": [
+        { "name": "Serum Calcium (corrected)", "priority": "immediate", "yield": 0.95, "indication": "elevated" },
+        { "name": "Intact PTH", "priority": "immediate", "yield": 0.95, "indication": "elevated or inappropriately normal" },
+        { "name": "25-OH Vitamin D", "priority": "high", "yield": 0.3, "indication": "rule out secondary HPT" },
+        { "name": "24h Urine Calcium", "priority": "high", "yield": 0.5, "indication": "rule out FHH" },
+        { "name": "Creatinine, eGFR", "priority": "high", "yield": 0.4, "indication": "renal function" },
+        { "name": "Alkaline Phosphatase", "priority": "medium", "yield": 0.3, "indication": "bone turnover marker" },
+        { "name": "Serum Phosphate", "priority": "medium", "yield": 0.5, "indication": "low in primary HPT" }
+      ],
+      "imaging": [
+        { "name": "Sestamibi (MIBI) Scan with SPECT/CT", "priority": "high", "yield": 0.85, "indication": "localize adenoma" },
+        { "name": "Neck Ultrasound", "priority": "high", "yield": 0.7, "indication": "complementary to sestamibi" },
+        { "name": "CT Neck / 4D-CT", "priority": "medium", "yield": 0.85, "indication": "if non-concordant imaging" },
+        { "name": "DEXA scan (bone density)", "priority": "medium", "yield": 0.5, "indication": "assess bone disease" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAES Guidelines for Primary Hyperparathyroidism",
+      "pathways": [
+        {
+          "severity": "asymptomatic mild",
+          "criteria": "calcium <1mg/dL above ULN, no renal stones, no osteoporosis, age >50",
+          "treatment": "Observation. Monitor calcium, renal function, bone density every 1-2 years. Adequate hydration. Avoid thiazides and lithium."
+        },
+        {
+          "severity": "symptomatic or meeting surgical criteria",
+          "criteria": "calcium >1mg/dL above ULN, renal stones, osteoporosis, age <50, CrCl <60mL/min",
+          "treatment": "Parathyroidectomy (MIP if localized, bilateral exploration if not). Intraoperative PTH monitoring (drop >50% at 10min)."
+        },
+        {
+          "severity": "hypercalcemic crisis",
+          "criteria": "calcium >14 mg/dL, confusion, dehydration, arrhythmia",
+          "treatment": "Admit to ICU. Aggressive IV fluids (normal saline). Calcitonin. Bisphosphonates (Pamidronate or Zoledronic acid). Urgent parathyroidectomy once stabilized."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "parathyroid_adenoma_or_hyperplasia",
+      "excess_ptp_secretion",
+      "increased_bone_resorption",
+      "increased_renal_calcium_reabsorption",
+      "increased_vitamin_d_synthesis",
+      "hypercalcemia",
+      "hypophosphatemia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypercalcemic_crisis",
+        "probability": 0.02,
+        "lagDays": [0, 30],
+        "severityBoost": 0.5,
+        "clues": ["calcium_greater_14", "confusion", "dehydration", "ecg_changes"]
+      },
+      {
+        "diseaseId": "renal_calculi",
+        "probability": 0.2,
+        "lagDays": [30, 360],
+        "severityBoost": 0.1,
+        "clues": ["flank_pain", "hematuria", "stones_on_imaging"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["elevated_calcium_with_elevated_ptp", "renal_stones", "osteoporosis", "incidental_hypercalcemia"],
+    "exclusionClues": ["low_ptp_with_hypercalcemia", "low_urine_calcium", "normal_calcium"]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "disease": {
+    "id": "dilated_cardiomyopathy",
+    "name": "Dilated Cardiomyopathy",
+    "system": "CARD",
+    "agePeak_months": [240, 720],
+    "note": "LV or biventricular dilation with systolic dysfunction. Many causes including genetic, ischemic, alcoholic, post-viral.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["cardiomyopathy", "heart_failure"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "pulmonary_oedema", "weight": 9 },
+        { "sign": "ventricular_arrhythmia", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If shock/oedema/arrhythmia -> ACUTE DECOMPENSATION; else -> CHRONIC COMPENSATED"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 5 },
+      { "symptomId": "fatigue_weakness", "weight": 4 },
+      { "symptomId": "orthopnea", "weight": 4 },
+      { "symptomId": "lower_limb_swelling", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "family_history", "weight": 2 },
+      { "symptomId": "alcohol_history", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "displaced_apex_beat", "baseWeight": 4 },
+      { "signId": "s3_gallop", "baseWeight": 4 },
+      { "signId": "jugular_venous_distension", "baseWeight": 3 },
+      { "signId": "peripheral_oedema", "baseWeight": 3 },
+      { "signId": "murmur_mitral_tricuspid_regurgitation", "baseWeight": 3 },
+      { "signId": "crackles_bibasilar", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_dcm", "multiplier": 3.0 },
+      { "id": "alcohol_excess", "multiplier": 2.5 },
+      { "id": "viral_myocarditis", "multiplier": 2.0 },
+      { "id": "chemotherapy_doxorubicin", "multiplier": 3.0 },
+      { "id": "peripartum_period", "multiplier": 2.0 },
+      { "id": "thyroid_disease", "multiplier": 1.5 }
+    ],
+    "mimics": [
+      { "diseaseId": "ischemic_cardiomyopathy", "discriminators": ["known_cad", "prior_mi", "regional_wall_motion"] },
+      { "diseaseId": "myocarditis", "discriminators": ["acute_onset", "fever", "viral_prodrome", "inflammatory_markers"] },
+      { "diseaseId": "alcoholic_cardiomyopathy", "discriminators": ["heavy_alcohol_use", "improvement_with_abstinence"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "high", "yield": 0.5, "indication": "non-specific, LBBB, AF, LVH" }
+      ],
+      "laboratory": [
+        { "name": "BNP/NT-proBNP", "priority": "high", "yield": 0.8, "indication": "HF severity" },
+        { "name": "Troponin", "priority": "medium", "yield": 0.4, "indication": "myocardial injury" },
+        { "name": "Ferritin and iron studies", "priority": "medium", "yield": 0.2, "indication": "hemochromatosis screening" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "LV dilation, LVEF <40%, diastolic parameters" },
+        { "name": "Cardiac MRI", "priority": "high", "yield": 0.9, "indication": "myocardial fibrosis, etiology (ischemic vs non-ischemic)" },
+        { "name": "Coronary angiography", "priority": "medium", "yield": 0.5, "indication": "exclude ischemic cause" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Heart Failure and Cardiomyopathies",
+      "pathways": [
+        {
+          "severity": "compensated",
+          "criteria": "no congestion, stable NYHA II-III",
+          "treatment": "GDMT: ACEi/ARB + beta-blocker + MRA + SGLT2i. Loop diuretics PRN. ICD if LVEF <35%. CRT if LBBB and LVEF <35%."
+        },
+        {
+          "severity": "decompensated",
+          "criteria": "congestion, dyspnea, oedema",
+          "treatment": "IV diuretics. Inotropes if shock. Treat precipitant. Optimize oral therapy. Consider ICD/CRT."
+        },
+        {
+          "severity": "advanced/refractory",
+          "criteria": "NYHA III-IV despite maximal therapy",
+          "treatment": "Heart transplant evaluation. LVAD as bridge or destination. Palliative care. Inotropic support if palliation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "lv_dilation",
+      "reduced_contractility",
+      "neurohormonal_activation",
+      "myocardial_fibrosis",
+      "excitation_contraction_coupling_defect",
+      "cytoskeletal_protein_mutations",
+      "abnormal_intracellular_calcium_handling"
+    ],
+    "complications": [
+      { "diseaseId": "heart_failure", "probability": 0.5, "severityBoost": 0.3, "clues": ["dyspnea", "oedema", "reduced_lvef"] },
+      { "diseaseId": "ventricular_tachycardia", "probability": 0.2, "severityBoost": 0.4, "clues": ["syncope", "palpitations", "low_lvef"] },
+      { "diseaseId": "atrial_fibrillation", "probability": 0.25, "severityBoost": 0.2, "clues": ["palpitations", "la_enlargement"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if decompensated",
+    "diagnosticClues": ["lv_dilation", "systolic_dysfunction", "exclude_ischemic_cause", "hx_alcohol_family"],
+    "exclusionClues": ["normal_lvef", "normal_lv_size", "ischemic_pattern"]
+  }
+}

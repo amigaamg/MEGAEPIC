@@ -1,0 +1,170 @@
+{
+  "disease": {
+    "id": "diabetic-ketoacidosis",
+    "name": "Diabetic Ketoacidosis (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [48, 180],
+    "note": "Life-threatening acute metabolic complication of T1DM. Triad: hyperglycemia, ketonemia, metabolic acidosis. Cerebral edema is the leading cause of mortality.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["diabetic_emergency", "metabolic_acidosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cerebral_edema", "weight": 10 },
+        { "sign": "shock_decompensated", "weight": 10 },
+        { "sign": "ph_<7_0", "weight": 10 },
+        { "sign": "coma", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ph_7_0_to_7_1", "weight": 8 },
+          { "sign": "bicarbonate_<5", "weight": 8 },
+          { "sign": "kussmaul_breathing_severe", "weight": 7 },
+          { "sign": "altered_consciousness", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If pH <7.1, altered consciousness, or signs of cerebral edema -> SEVERE; else -> NON-SEVERE (mild-moderate DKA)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "polyuria_polydipsia_preceding", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 5 },
+      { "symptomId": "abdominal_pain", "weight": 4 },
+      { "symptomId": "weight_loss_recent", "weight": 3 },
+      { "symptomId": "lethargy_confusion", "weight": 4 },
+      { "symptomId": "precipitating_event_infection", "weight": 3 },
+      { "symptomId": "missed_insulin_doses", "weight": 4 },
+      { "symptomId": "known_diabetes", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "kussmaul_breathing", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "acetone_breath", "baseWeight": 4 },
+      { "signId": "dehydration_signs", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "altered_consciousness_gcs", "baseWeight": 5 },
+      { "signId": "abdominal_tenderness", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "signs_of_cerebral_edema", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "established_t1dm", "multiplier": 3.0 },
+      { "id": "insulin_omission", "multiplier": 4.0 },
+      { "id": "intercurrent_illness_infection", "multiplier": 3.0 },
+      { "id": "age_<5_years", "multiplier": 2.0 },
+      { "id": "gastroparesis", "multiplier": 1.5 },
+      { "id": "socioeconomic_barriers", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_moderate_dka",
+        "name": "Mild-Moderate DKA (pH 7.1-7.3)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "ph_7_1_to_7_3", "weight": 5 },
+          { "feature": "bicarbonate_5_to_15", "weight": 5 },
+          { "feature": "alert_or_mildly_lethargic", "weight": 3 }
+        ],
+        "management": "IV NS 10-20 mL/kg over 1h. Deficit replacement over 48h. IV insulin 0.05-0.1 U/kg/h. Replace potassium. Monitor glucose and electrolytes q2h."
+      },
+      {
+        "id": "severe_dka",
+        "name": "Severe DKA (pH <7.1)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "ph_<7_1", "weight": 5 },
+          { "feature": "bicarbonate_<5", "weight": 5 },
+          { "feature": "altered_consciousness", "weight": 4 }
+        ],
+        "management": "ICU admission. IV NS 20 mL/kg bolus. Deficit replacement over 48h. IV insulin 0.1 U/kg/h. Frequent neuro checks. If cerebral edema: mannitol 0.5-1 g/kg, hypertonic saline, hyperventilation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "gastroenteritis",
+        "discriminators": ["blood_glucose_normal", "no_ketones", "diarrhea_prominent", "no_acidosis"]
+      },
+      {
+        "diseaseId": "salicylate_poisoning",
+        "discriminators": ["respiratory_alkalosis_mixed", "history_of_ingestion", "normal_glucose"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Capillary blood glucose", "priority": "immediate", "yield": 0.95, "indication": "confirm hyperglycemia" },
+        { "name": "Urine/blood ketones", "priority": "immediate", "yield": 0.95, "indication": "ketosis" }
+      ],
+      "laboratory": [
+        { "name": "Blood gas (pH, HCO3, pCO2)", "priority": "immediate", "yield": 1.0, "indication": "acidosis severity" },
+        { "name": "Serum electrolytes (Na, K, Cl, PO4, Ca, Mg)", "priority": "immediate", "yield": 0.9, "indication": "electrolyte monitoring" },
+        { "name": "Serum osmolality", "priority": "high", "yield": 0.6, "indication": "cerebral edema risk" },
+        { "name": "BUN and creatinine", "priority": "high", "yield": 0.5, "indication": "renal function" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "ISPAD Clinical Practice Consensus Guidelines - DKA Management",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "pH 7.1-7.3, alert, no signs of cerebral edema",
+          "treatment": "IV NS 10-20 mL/kg over 1h. Calculate deficit (5-10% dehydration) replace over 48h. Add K+ 40 mEq/L once K <5.5 and urine output established. IV insulin 0.05-0.1 U/kg/h 1h after fluids start. Monitor: glucose q1h, electrolytes q2-4h."
+        },
+        {
+          "severity": "severe",
+          "criteria": "pH <7.1, altered consciousness, or signs of cerebral edema",
+          "treatment": "ICU. ABC assessment. IV NS 20 mL/kg bolus (max 2L). Replace deficit over 48h. Insulin 0.1 U/kg/h IV. No bolus insulin. K+ replacement. Hourly neuro checks. Cerebral edema: mannitol 0.5-1 g/kg IV over 20 min, hypertonic saline 3% 5-10 mL/kg. Reduce insulin rate when glucose <250."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "insulin_deficiency_absolute_or_relative",
+      "counter_regulatory_hormone_excess",
+      "hyperglycemia",
+      "lipolysis_and_ketogenesis",
+      "metabolic_acidosis",
+      "osmotic_diuresis",
+      "electrolyte_depletion"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cerebral_edema",
+        "probability": 0.01,
+        "lagDays": [0, 1],
+        "severityBoost": 0.8,
+        "clues": ["headache", "vomiting", "hypertension", "bradycardia", "falling_gcs"]
+      },
+      {
+        "diseaseId": "hypokalemia",
+        "probability": 0.3,
+        "lagDays": [0, 2],
+        "severityBoost": 0.3,
+        "clues": ["inadequate_replacement", "ecg_u_waves", "arrhythmia"]
+      },
+      {
+        "diseaseId": "hypoglycemia_during_treatment",
+        "probability": 0.2,
+        "lagDays": [0, 2],
+        "severityBoost": 0.2,
+        "clues": ["glucose_falling_too_quickly", "excess_insulin"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["hyperglycemia", "ketonemia", "metabolic_acidosis", "kussmaul_breathing"],
+    "exclusionClues": ["normoglycemia", "no_ketones", "normal_ph"]
+  }
+}

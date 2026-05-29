@@ -1,0 +1,107 @@
+{
+  "disease": {
+    "id": "damage_control_resuscitation",
+    "name": "Damage Control Resuscitation (DCR)",
+    "system": "critical_care",
+    "agePeak_months": [120, 600],
+    "note": "Systematic approach to managing severely injured/bleeding patients. Components: permissive hypotension, hemostatic resuscitation (1:1:1 ratio), damage control surgery, prevention of lethal triad.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["trauma", "hemorrhagic_shock", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "exsanguination_cardiac_arrest", "weight": 10 },
+        { "sign": "coagulopathy_with_bleeding", "weight": 9 },
+        { "sign": "hypothermia_deep_less_32", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Based on hemodynamic instability and metabolic compromise"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "major_trauma_penetrating_or_blunt", "weight": 5 },
+      { "symptomId": "active_hemorrhage_visible_or_suspected", "weight": 5 },
+      { "symptomId": "hypotension_on_scene", "weight": 4 },
+      { "symptomId": "prolonged_extrication_time", "weight": 3 },
+      { "symptomId": "anticoagulant_or_antiplatelet_use", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 3 },
+      { "signId": "cold_skin_prolonged_cr", "baseWeight": 3 },
+      { "signId": "obvious_bleeding_sites", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "penetrating_trauma", "multiplier": 3.0 },
+      { "id": "high_velocity_blunt_trauma", "multiplier": 2.5 },
+      { "id": "anticoagulation_therapy", "multiplier": 3.0 },
+      { "id": "pre_existing_coagulopathy", "multiplier": 2.5 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "TEG/ROTEM (viscoelastic testing)", "priority": "high", "yield": 0.85, "indication": "guide goal-directed resuscitation" },
+        { "name": "FAST scan", "priority": "immediate", "yield": 0.8, "indication": "identify intra-abdominal bleeding" }
+      ],
+      "laboratory": [
+        { "name": "ABG and lactate", "priority": "immediate", "yield": 0.85, "indication": "shock severity and clearance" },
+        { "name": "FBC, PT/aPTT, fibrinogen", "priority": "high", "yield": 0.7, "indication": "coagulopathy assessment" },
+        { "name": "Ionized calcium", "priority": "high", "yield": 0.5, "indication": "hypocalcemia from citrate" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "TCCC / ACS Trauma Quality Improvement Program / Massive Transfusion Guidelines",
+      "pathways": [
+        {
+          "severity": "DCR activation criteria",
+          "criteria": "hemorrhagic shock: SBP <90, HR >120, lactate >5, or ongoing bleeding requiring massive transfusion",
+          "treatment": "Permissive hypotension (SBP 80-90, no TBI). Massive transfusion protocol 1:1:1 (PRBC:FFP:Platelets). TXA 1g IV over 10 min then 1g over 8h. Limit crystalloid. Avoid hypothermia (warm fluids, blankets). Correct acidosis. Calcium replacement."
+        },
+        {
+          "severity": "ongoing resuscitation phase",
+          "criteria": "after initial hemorrhage control, still in ICU",
+          "treatment": "TEG/ROTEM-guided balanced resuscitation. Goal Hb 7-9, platelets >50, fibrinogen >150, ionized Ca >1.0. Rewarming. Re-assess for second-look surgery. Minimize crystalloid."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hemorrhage_induced_hypovolemia",
+      "trauma_induced_coagulopathy",
+      "dilutional_coagulopathy_from_crystalloid",
+      "hypothermia_acidosis_coagulopathy_lethal_triad",
+      "systemic_inflammatory_activation",
+      "endothelial_glycocalyx_damage"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "abdominal_compartment_syndrome",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["distended_abdomen", "elevated_IAP_over_20", "oliguria"]
+      },
+      {
+        "diseaseId": "transfusion_associated_circulatory_overload",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["pulmonary_oedema", "cva_elevation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["major_trauma_with_hemorrhage", "hypotension_not_responding", "coagulopathy_hypothermia_acidosis"],
+    "exclusionClues": ["controlled_hemorrhage", "stable_hemodynamics", "no_coagulopathy"]
+  }
+}

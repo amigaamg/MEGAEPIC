@@ -1,0 +1,141 @@
+{
+  "disease": {
+    "id": "antibiotic_resistant_organisms",
+    "name": "Antibiotic-Resistant Organisms (MDROs)",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 960],
+    "note": "Infections caused by multi-drug resistant organisms including MRSA, VRE, ESBL-producing Enterobacteriaceae, CRE, MDR-Acinetobacter, and MDR-Pseudomonas.",
+    "prevalenceWeight": 0.55,
+    "syndromeTags": ["healthcare_associated_infection", "antimicrobial_resistance", "nosocomial"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "cre_pneumonia", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Pan-resistant/MDR sepsis -> SEVERE; colonization or susceptible strain -> MILD-MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "recent_hospitalization_long_term_care", "weight": 5 },
+      { "symptomId": "prior_broad_spectrum_antibiotics", "weight": 4 },
+      { "symptomId": "indwelling_devices_catheters", "weight": 4 },
+      { "symptomId": "prior_history_of_mdro", "weight": 4 },
+      { "symptomId": "hemodialysis", "weight": 3 },
+      { "symptomId": "recent_surgery_wound_infection", "weight": 3 },
+      { "symptomId": "icu_stay_prolonged", "weight": 4 },
+      { "symptomId": "immunosuppression_or_neutropenia", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "signs_of_infection_site", "baseWeight": 4 },
+      { "signId": "hypotension_tachycardia", "baseWeight": 3 },
+      { "signId": "purulent_discharge", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "prior_hospitalization_90_days", "multiplier": 2.5 },
+      { "id": "prior_antibiotics_30_days", "multiplier": 3.0 },
+      { "id": "icu_admission", "multiplier": 2.5 },
+      { "id": "central_line_or_urinary_catheter", "multiplier": 2.0 },
+      { "id": "mechanical_ventilation", "multiplier": 2.5 },
+      { "id": "known_colonization", "multiplier": 3.0 },
+      { "id": "long_term_care_facility", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mrsa_infection",
+        "name": "MRSA Infection",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "skin_abscess_cellulitis", "weight": 4 },
+          { "feature": "pneumonia_with_cavitation", "weight": 4 },
+          { "feature": "positive_mrsa_culture", "weight": 5 }
+        ],
+        "management": "Vancomycin (trough 15-20) or Daptomycin (for bacteremia). Linezolid for pneumonia. Trimethoprim-sulfamethoxazole for skin infections. Drain abscesses."
+      },
+      {
+        "id": "esbl_cre_infection",
+        "name": "ESBL/CRE Infection",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "uti_pyelonephritis", "weight": 4 },
+          { "feature": "intra_abdominal_infection", "weight": 4 },
+          { "feature": "positive_esbl_or_cre_culture", "weight": 5 }
+        ],
+        "management": "Carbapenems for ESBL (meropenem 1g Q8H). Ceftazidime-avibactam or meropenem-vaborbactam for CRE. Infectious disease consultation."
+      },
+      {
+        "id": "mdr_pseudomonas_acinetobacter",
+        "name": "MDR Pseudomonas / Acinetobacter",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "ventilator_associated_pneumonia", "weight": 5 },
+          { "feature": "bloodstream_infection", "weight": 4 },
+          { "feature": "prior_antibiotic_exposure", "weight": 4 }
+        ],
+        "management": "Combination therapy: anti-pseudomonal beta-lactam + aminoglycoside or colistin. Ceftolozane-tazobactam for MDR Pseudomonas. Colistin-based regimens for Acinetobacter."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "MRSA nasal swab screening", "priority": "high", "yield": 0.9, "indication": "decolonization and empiric therapy decisions" }
+      ],
+      "laboratory": [
+        { "name": "Culture and sensitivity from infection site", "priority": "immediate", "yield": 0.95, "indication": "all suspected infections" },
+        { "name": "Blood cultures x 2 sets", "priority": "immediate", "yield": 0.5, "indication": "if systemic signs" },
+        { "name": "RECTAL/VRE screening swab", "priority": "medium", "yield": 0.8, "indication": "surveillance in high-risk units" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Guidelines for MDRO / WHO AWaRe Classification",
+      "pathways": [
+        {
+          "severity": "empiric high-risk",
+          "criteria": "sepsis + risk factors for MDRO (prior antibiotics, hospitalization, devices)",
+          "treatment": "Empiric broad-spectrum: anti-MRSA (vancomycin/linezolid) + anti-pseudomonal (cefepime/piperacillin-tazobactam/meropenem). Narrow based on cultures. De-escalate."
+        },
+        {
+          "severity": "targeted MDRO therapy",
+          "criteria": "confirmed resistant organism with sensitivities",
+          "treatment": "ESBL: carbapenem. CRE: ceftazidime-avibactam. MDR-Pseudomonas: ceftolozane-tazobactam. MRSA: vancomycin/daptomycin. Duration: shortest effective course."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "selection_pressure_from_antibiotics",
+      "plasmid_mediated_resistance",
+      "biofilm_formation",
+      "horizontal_gene_transfer",
+      "clonal_outbreak_spread",
+      "healthcare_transmission"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["failure_of_first_line_antibiotics", "positive_mdro_culture"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["healthcare_exposure", "prior_antibiotics", "positive_mdro_culture", "failure_of_first_line_tx"],
+    "exclusionClues": ["negative_cultures", "no_risk_factors", "susceptible_organism"]
+  }
+}

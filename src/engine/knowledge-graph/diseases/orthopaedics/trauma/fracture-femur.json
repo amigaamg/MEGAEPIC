@@ -1,0 +1,117 @@
+{
+  "disease": {
+    "id": "fracture-femur",
+    "name": "Femur Fracture",
+    "system": "ORTHO",
+    "agePeak_months": [24, 480],
+    "note": "High-energy fracture in young adults and children. Low-energy in elderly with osteoporosis. Significant blood loss. Diaphyseal fractures most common.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["lower_limb_fracture", "high_energy_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture", "weight": 10 },
+        { "sign": "vascular_injury_femoral_artery", "weight": 10 },
+        { "sign": "hemorrhagic_shock_pelvis", "weight": 10 },
+        { "sign": "fat_embolism_syndrome", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_energy_mechanism", "weight": 7 },
+          { "sign": "comminuted_fracture", "weight": 7 },
+          { "sign": "ipsilateral_hip_or_knee_injury", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If open, comminuted, high-energy, or vascular injury -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "high_energy_trauma_mva_fall", "weight": 5 },
+      { "symptomId": "severe_thigh_pain", "weight": 5 },
+      { "symptomId": "inability_to_weight_bear", "weight": 5 },
+      { "symptomId": "deformity_shortening", "weight": 4 },
+      { "symptomId": "open_wound_at_thigh", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "thigh_deformity_angulation", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "leg_length_discrepancy", "baseWeight": 4 },
+      { "signId": "swelling_and_tenderness", "baseWeight": 4 },
+      { "signId": "distal_neurovascular_status", "baseWeight": 5 },
+      { "signId": "signs_of_blood_loss_tachycardia", "baseWeight": 4 },
+      { "signId": "open_wound_assessment", "baseWeight": 5 },
+      { "signId": "compartment_syndrome_check", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "osteoporosis", "multiplier": 3.0 },
+      { "id": "high_energy_trauma", "multiplier": 3.0 },
+      { "id": "pathologic_bone_tumor", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "femoral_shaft",
+        "name": "Femoral Shaft Fracture",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "mid_diaphyseal_fracture", "weight": 5 },
+          { "feature": "high_energy_mechanism", "weight": 4 }
+        ],
+        "management": "Intramedullary nail (adults). Flexible intramedullary nails or spica cast (children). Skeletal traction temporarily if OR delayed."
+      },
+      {
+        "id": "pediatric_femur",
+        "name": "Pediatric Femur Fracture",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "child_<6_years", "weight": 4 },
+          { "feature": "spica_cast_or_elastic_nails", "weight": 4 }
+        ],
+        "management": "<6 years: early hip spica cast. 6-16 years: flexible intramedullary nails. Open or unstable: plate fixation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hip_dislocation",
+        "discriminators": ["hip_deformity", "xray_shows_dislocation", "femur_contour_normal"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.5, "indication": "blood loss assessment" },
+        { "name": "Cross match", "priority": "high", "yield": 0.6, "indication": "preparation for OR" }
+      ],
+      "imaging": [
+        { "name": "Femur AP and lateral X-ray (include hip and knee)", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "CT scan", "priority": "medium", "yield": 0.7, "indication": "intra-articular, complex, associated injuries" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "OTA Femur Fracture Guidelines",
+      "pathways": [
+        {
+          "severity": "pediatric_stable",
+          "criteria": "Age <6 years, non-displaced, closed",
+          "treatment": "Early hip spica cast for 6-8 weeks. X-ray at 1, 4, 8 weeks. Accept up to 30 degrees sagittal angulation."
+        },
+        {
+          "severity": "adult_operative",
+          "criteria": "Adult femur fracture (displaced, high energy, comminuted)",
+          "treatment": "Intramedullary nail (antegrade/retrograde). Reamed vs non-reamed. Early stabilization (<24h). Post-op: early mobilization, toe-touch weight bearing for 6-8 weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": ["high_energy_trauma", "axial_loading", "bending_moment"]
+  }
+}

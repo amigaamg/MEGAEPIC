@@ -1,0 +1,81 @@
+{
+  "disease": {
+    "id": "hypertensive_urgency",
+    "name": "Hypertensive Urgency",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Severely elevated BP (≥180/120) without acute target organ damage. Requires gradual BP reduction over hours to days.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["hypertensive_crisis", "hypertension"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "new_neurological_deficit", "weight": 10 },
+        { "sign": "papilloedema", "weight": 9 },
+        { "sign": "acute_renal_injury", "weight": 8 },
+        { "sign": "acute_chest_pain", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If any end-organ damage -> HYPERTENSIVE EMERGENCY; else -> HYPERTENSIVE URGENCY"
+    },
+    "historyFeatures": [
+      { "symptomId": "severe_headache", "weight": 4 },
+      { "symptomId": "epistaxis", "weight": 2 },
+      { "symptomId": "anxiety", "weight": 2 },
+      { "symptomId": "visual_blurring", "weight": 2 },
+      { "symptomId": "chest_discomfort", "weight": 2 },
+      { "symptomId": "dyspnea", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "bp_greater_180_120", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "no_acute_end_organ_damage", "baseWeight": 4 },
+      { "signId": "anxious_patient", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "medication_nonadherence", "multiplier": 3.0 },
+      { "id": "chronic_hypertension", "multiplier": 2.0 },
+      { "id": "drug_discontinuation", "multiplier": 2.5 },
+      { "id": "stress", "multiplier": 1.5 },
+      { "id": "alcohol_or_stimulant", "multiplier": 2.0 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "BP monitoring Q15-30min", "priority": "immediate", "yield": 0.9, "indication": "track response to treatment" },
+        { "name": "Fundoscopy", "priority": "high", "yield": 0.7, "indication": "rule out papilloedema, haemorrhages" }
+      ],
+      "laboratory": [
+        { "name": "U&E, creatinine, eGFR", "priority": "high", "yield": 0.6, "indication": "acute kidney injury assessment" },
+        { "name": "Urinalysis", "priority": "high", "yield": 0.5, "indication": "proteinuria, haematuria" },
+        { "name": "Troponin", "priority": "high", "yield": 0.4, "indication": "myocardial injury" }
+      ],
+      "imaging": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.5, "indication": "LVH strain, ischemia" },
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.3, "indication": "pulmonary oedema, widened mediastinum" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ACC Guidelines for Hypertensive Crisis",
+      "pathways": [
+        {
+          "severity": "hypertensive urgency",
+          "criteria": "BP ≥180/120, no end-organ damage",
+          "treatment": "Restart home medications. Oral agents: captopril 25 mg, labetalol 200 mg, or nifedipine ER 30 mg. Reduce BP by 25% over 24h. Do NOT lower too rapidly."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "severe_vasoconstriction",
+      "raas_activation",
+      "volume_overload",
+      "sodium_sensitivity",
+      "baroreceptor_resetting"
+    ],
+    "complications": [
+      { "diseaseId": "hypertensive_emergency", "probability": 0.1, "severityBoost": 0.3, "clues": ["new_end_organ_damage", "worsening_bp"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "moderate",
+    "diagnosticClues": ["bp_180_120", "no_end_organ_damage", "asymptomatic_or_mild_symptoms"],
+    "exclusionClues": ["bp_less_180_120", "end_organ_damage_present"]
+  }
+}

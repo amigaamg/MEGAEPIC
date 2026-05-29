@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "postpartum_haemorrhage",
+    "name": "Postpartum Hemorrhage",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 360],
+    "note": "Blood loss >500mL vaginal delivery or >1000mL Caesarean section within 24h of birth. Leading cause of maternal mortality worldwide. Most common cause: uterine atony.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["obstetric_emergency", "haemorrhage", "shock", "maternal_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_haemorrhage_uncontrolled", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "hypotension_unresponsive", "weight": 10 },
+        { "sign": "loss_of_consciousness", "weight": 9 },
+        { "sign": "coagulopathy_bleeding", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "PPH is a MATERNAL EMERGENCY. Activate massive transfusion protocol and treat cause (atony, trauma, retained tissue, coagulopathy)."
+    },
+    "historyFeatures": [
+      { "symptomId": "vaginal_bleeding_postpartum", "weight": 5 },
+      { "symptomId": "heavy_bleeding_soaking_pads", "weight": 5 },
+      { "symptomId": "dizziness_lightheadedness", "weight": 4 },
+      { "symptomId": "palpitations_weakness", "weight": 3 },
+      { "symptomId": "abdominal_pain_cramping", "weight": 2 },
+      { "symptomId": "retained_placenta_history", "weight": 3 },
+      { "symptomId": "prolonged_labour_or_operative_delivery", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "boggy_uterus_on_palpation", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "continuous_vaginal_bleeding", "baseWeight": 5 },
+      { "signId": "perineal_or_vaginal_laceration", "baseWeight": 4 },
+      { "signId": "retained_placental_fragments", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "hypothermia", "baseWeight": 2 },
+      { "signId": "oliguria", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "previous_pph", "multiplier": 4.0 },
+      { "id": "uterine_atony_risk_overdistended", "multiplier": 3.0 },
+      { "id": "multiple_gestation", "multiplier": 2.5 },
+      { "id": "polyhydramnios", "multiplier": 2.0 },
+      { "id": "prolonged_labour", "multiplier": 2.0 },
+      { "id": "operative_vaginal_delivery", "multiplier": 2.0 },
+      { "id": "caesarean_section", "multiplier": 2.5 },
+      { "id": "placenta_praevia_or_accreta", "multiplier": 4.0 },
+      { "id": "retained_placenta", "multiplier": 3.0 },
+      { "id": "anticoagulation", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "uterine_atony",
+        "name": "Uterine Atony (most common, 80%)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "boggy_uterus_above_umbilicus", "weight": 5 },
+          { "feature": "uterus_not_contracting", "weight": 5 },
+          { "feature": "bleeding_continuous_or_gush", "weight": 4 }
+        ],
+        "management": "Uterine massage. Uterotonics: oxytocin 5 IU slow IV then 40 IU infusion, ergometrine 0.5mg IM (contraindicated in HTN), carboprost 0.25mg IM Q15min, misoprostol 800-1000mcg PR/SL. Intrauterine balloon (Bakri). Surgical: compression sutures (B-Lynch), ligation of uterine arteries, hysterectomy if refractory."
+      },
+      {
+        "id": "traumatic_pph",
+        "name": "Traumatic PPH (lacerations, uterine rupture)",
+        "prevalenceModifier": 0.12,
+        "keyFeatures": [
+          { "feature": "laceration_of_cervix_vagina_perineum", "weight": 5 },
+          { "feature": "uterine_rupture_signs", "weight": 5 },
+          { "feature": "bleeding_with_firm_uterus", "weight": 5 }
+        ],
+        "management": "Surgical repair of lacerations. Laparotomy for uterine rupture. Hysterectomy if uterine rupture not repairable."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE assessment", "priority": "immediate", "yield": 1.0, "indication": "all PPH" },
+        { "name": "Uterine tone assessment", "priority": "immediate", "yield": 0.9, "indication": "atony vs trauma" },
+        { "name": "Blood loss quantification", "priority": "high", "yield": 0.7, "indication": "objective assessment" }
+      ],
+      "laboratory": [
+        { "name": "FBC, Hb", "priority": "high", "yield": 0.6, "indication": "Hb may lag in acute" },
+        { "name": "Coagulation profile, fibrinogen", "priority": "high", "yield": 0.8, "indication": "DIC, consumptive coagulopathy" },
+        { "name": "Cross-match / group and hold", "priority": "high", "yield": 1.0, "indication": "prepare for transfusion" },
+        { "name": "ABG/VBG with lactate", "priority": "high", "yield": 0.7, "indication": "shock severity, base deficit" },
+        { "name": "U&E, Cr, Ca", "priority": "medium", "yield": 0.4, "indication": "baseline, hypocalcemia from transfusion" }
+      ]
+    },
+    "management": {
+      "protocolReference": "WHO PPH Guidelines / RCOG Green-top Guideline / NICE Guidelines",
+      "pathways": [
+        {
+          "severity": "primary PPH (active bleeding)",
+          "criteria": "blood loss >500mL with ongoing bleeding or hemodynamic instability",
+          "treatment": "ABC. Oxygen. 2 large-bore IVs. IV fluids/blood. Uterine massage. Oxytocin 5 IU slow IV + 40 IU in 500mL NS over 4h. Examine for cause: atony, genital tract trauma, retained tissue, coagulopathy. Empty bladder (catheter). Tranexamic acid 1g IV (WOMAN trial). Escalate to senior. Activate massive transfusion protocol if >1500mL or ongoing."
+        },
+        {
+          "severity": "refractory PPH",
+          "criteria": "ongoing bleeding despite uterotonics",
+          "treatment": "Second-line uterotonics: ergometrine 0.5mg IM, carboprost 0.25mg IM Q15min (max 8 doses), misoprostol 800mcg PR. Intrauterine balloon tamponade (Bakri balloon 500mL saline). Uterine compression sutures (B-Lynch). Uterine artery embolization (IR). Hysterectomy as last resort."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "uterine_atony",
+      "genital_tract_trauma",
+      "retained_placental_tissue",
+      "coagulopathy_of_pregnancy",
+      "acute_blood_loss",
+      "hypovolaemic_shock",
+      "consumptive_coagulopathy",
+      "sheehans_syndrome",
+      "maternal_death"
+    ],
+    "complications": [
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["ongoing_bleeding", "thrombocytopenia", "prolonged_pt_ptt", "low_fibrinogen"]
+      },
+      {
+        "diseaseId": "sheehans_syndrome",
+        "probability": 0.02,
+        "severityBoost": 0.3,
+        "clues": ["postpartum_hypopituitarism", "lactation_failure", "hypotension"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["postpartum_vaginal_bleeding", "boggy_uterus", "tachycardia", "hypotension", "risk_factors"],
+    "exclusionClues": ["normal_postpartum_lochia", "firm_contracted_uterus", "no_hemodynamic_compromise"]
+  }
+}

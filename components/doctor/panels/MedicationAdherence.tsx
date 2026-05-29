@@ -47,6 +47,7 @@ const fmtDate = (ts: any) => {
 };
 
 export default function MedicationAdherence({ patientId, doctorId, doctorName, compact }: Props) {
+  return null;
   const [adherenceRecords, setAdherenceRecords] = useState<AdherenceRecord[]>([]);
   const [patientReports, setPatientReports] = useState<PatientReport[]>([]);
   const [prescriptions, setPrescriptions] = useState<any[]>([]);

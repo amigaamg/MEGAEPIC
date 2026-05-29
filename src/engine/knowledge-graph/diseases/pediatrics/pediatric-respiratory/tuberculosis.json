@@ -1,0 +1,437 @@
+{
+  "disease": {
+    "id": "pediatric_tuberculosis",
+    "name": "Pediatric Tuberculosis",
+    "system": "pediatric_respiratory",
+    "syndromeType": "chronic_granulomatous_infection",
+    "corePathophysiology": [
+      "mycobacterium_tuberculosis_inhalation",
+      "alveolar_macrophage_infection",
+      "granuloma_formation",
+      "caseation_necrosis",
+      "hilar_lymph_node_involvement",
+      "lymphohematogenous_spread",
+      "primary_complex_formation",
+      "immunopathology_in_children"
+    ],
+    "agePhenotype": {
+      "infant_0_12m": "disseminated_high_risk_meningitis",
+      "toddler_1_5y": "primary_complex_hilar_lymphadenopathy",
+      "school_age_5y_plus": "adult_type_apical_cavitary_disease"
+    },
+    "ageWeighting": {
+      "0-11": 0.6,
+      "12-59": 1.0,
+      "60-143": 0.9,
+      "144+": 0.7
+    },
+    "note": "In children, hilar/mediastinal lymphadenopathy is more common than parenchymal disease. Primary TB is the dominant form. Young children (<2 years) are at highest risk of disseminated (miliary) and meningeal TB.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["chronic_respiratory_disease", "granulomatous_disease", "systemic_infection", "pediatric_infectious_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "meningeal_signs", "weight": 10, "description": "Neck stiffness, bulging fontanelle, altered consciousness, seizures" },
+        { "sign": "severe_respiratory_distress", "weight": 9 },
+        { "sign": "central_cyanosis", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "severe_wasting", "weight": 8, "description": "Severe acute malnutrition or marasmus" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tb_meningitis", "weight": 10 },
+          { "sign": "miliary_disseminated_tb", "weight": 9 },
+          { "sign": "spinal_tb_abscess_or_kyphosis", "weight": 8 }
+        ],
+        "action": "Admit, treat with prolonged regimen (9-12 months), add corticosteroids for TB meningitis"
+      },
+      "nonSevereCriteria": {
+        "description": "Chronic cough >2 weeks, weight loss/failure to thrive, typical CXR findings (hilar LAD, primary complex), no danger signs"
+      }
+    },
+    "historyFeatures": [
+      { "symptomId": "chronic_cough", "weight": 6, "durationGate": ">=14_days", "note": "Persistent cough >14 days is a WHO screening criterion" },
+      { "symptomId": "weight_loss_or_failure_to_thrive", "weight": 5, "note": "Weight loss is often more prominent than cough in children" },
+      { "symptomId": "fever", "weight": 3, "pattern": "prolonged_low_grade" },
+      { "symptomId": "night_sweats", "weight": 4 },
+      { "symptomId": "tb_contact", "weight": 6, "mustBoost": true, "note": "Household contact with smear-positive TB is the single strongest risk factor" },
+      { "symptomId": "poor_appetite", "weight": 4 },
+      { "symptomId": "chronic_fatigue_or_lethargy", "weight": 3 },
+      { "symptomId": "recurrent_pneumonia", "weight": 3, "note": "Especially if poor response to standard antibiotics" },
+      { "symptomId": "bcg_vaccination_status", "weight": 1, "note": "BCG provides partial protection against severe TB (miliary, meningitis) in children" },
+      { "symptomId": "hiv_exposure_or_infection", "weight": 4, "multiplier": 2.5 },
+      { "symptomId": "cervical_lymph_node_swelling", "weight": 4, "note": "Matted non-tender nodes, often in cervical chain" }
+    ],
+    "negativePredictors": [
+      { "feature": "rapid_symptom_resolution_within_7_days", "scoreReduction": 6 },
+      { "feature": "acute_onset_under_7_days", "scoreReduction": 5 },
+      { "feature": "strong_bronchodilator_response", "scoreReduction": 4, "favorsAlternative": ["asthma"] },
+      { "feature": "episodic_wheeze_pattern", "scoreReduction": 5, "favorsAlternative": ["asthma"] },
+      { "feature": "localised_crackles_with_high_fever_responding_to_antibiotics", "scoreReduction": 3, "favorsAlternative": ["bacterial_pneumonia"] },
+      { "feature": "no_tb_contact", "scoreReduction": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "crackles", "baseWeight": 3, "note": "May be absent or minimal in pediatric TB; often overshadowed by lymphadenopathy" },
+      { "signId": "clubbing", "baseWeight": 3, "note": "Late finding" },
+      { "signId": "lymphadenopathy", "baseWeight": 5, "note": "Cervical, supraclavicular, or axillary. Matted, non-tender, firm." },
+      { "signId": "failure_to_thrive", "baseWeight": 6, "note": "Weight <3rd centile or crossing centiles downward" },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2, "note": "May indicate disseminated/miliary disease" },
+      { "signId": "pleural_effusion_signs", "baseWeight": 5, "note": "Dullness, reduced breath sounds, mediastinal shift" },
+      { "signId": "respiratory_distress", "baseWeight": 2, "note": "Only if advanced or significant airway compression from nodes" },
+      { "signId": "meningeal_signs", "baseWeight": 6, "note": "Neck stiffness, Kernig/Brudzinski signs, altered consciousness — suspect TBM" },
+      { "signId": "wasting_or_marasmus", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "hiv_exposure_or_infection", "multiplier": 2.5, "note": "HIV increases TB risk and complicates treatment" },
+      { "id": "malnutrition", "multiplier": 2.0, "note": "Severe acute malnutrition is a major risk factor" },
+      { "id": "overcrowding", "multiplier": 1.5 },
+      { "id": "tb_household_contact", "multiplier": 3.0, "note": "Strongest risk factor for pediatric TB" },
+      { "id": "lack_of_bcg_vaccination", "multiplier": 1.2 },
+      { "id": "age_under_2_years", "multiplier": 1.5, "note": "Young children are more susceptible to progression from latent to active TB" },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "primary_pulmonary_tb",
+        "name": "Primary Pulmonary TB",
+        "prevalenceModifier": 0.7,
+        "agePeak": [12, 59],
+        "keyFeatures": [
+          { "feature": "hilar_or_mediastinal_lymphadenopathy", "weight": 5, "description": "Most common radiologic finding in children" },
+          { "feature": "ghon_complex", "weight": 4, "description": "Parenchymal focus + draining lymph node" },
+          { "feature": "chronic_cough", "weight": 4 },
+          { "feature": "weight_loss", "weight": 4 },
+          { "feature": "tb_contact", "weight": 5 }
+        ],
+        "imagingFeatures": ["hilar_lymphadenopathy", "ghon_complex", "segmental_consolidation"],
+        "management": "Standard 2RHZE/4RH regimen with weight-band-based dosing"
+      },
+      {
+        "id": "miliary_tb",
+        "name": "Miliary (Disseminated) TB",
+        "prevalenceModifier": 0.1,
+        "agePeak": [0, 24],
+        "keyFeatures": [
+          { "feature": "miliary_pattern_on_cxr", "weight": 5, "description": "Diffuse 1-2 mm nodules throughout both lung fields" },
+          { "feature": "systemic_illness", "weight": 5 },
+          { "feature": "hepatosplenomegaly", "weight": 4 },
+          { "feature": "fever_of_unknown_origin", "weight": 4 },
+          { "feature": "lymphadenopathy", "weight": 4 },
+          { "feature": "hiv_co_infection", "weight": 4 },
+          { "feature": "age_under_2", "weight": 5 }
+        ],
+        "imagingFeatures": ["miliary_micronodules", "diffuse_interstitial"],
+        "management": "Prolonged regimen (9-12 months). Corticosteroids if CNS or pericardial involvement."
+      },
+      {
+        "id": "tb_meningitis",
+        "name": "Tuberculous Meningitis (TBM)",
+        "prevalenceModifier": 0.05,
+        "agePeak": [0, 24],
+        "keyFeatures": [
+          { "feature": "neck_stiffness", "weight": 5 },
+          { "feature": "altered_consciousness", "weight": 5 },
+          { "feature": "seizures", "weight": 5 },
+          { "feature": "vomiting", "weight": 4 },
+          { "feature": "fever_prolonged", "weight": 4 },
+          { "feature": "cranial_nerve_palsy", "weight": 4, "note": "CN VI most commonly affected" },
+          { "feature": "age_under_2", "weight": 5 }
+        ],
+        "management": "Prolonged anti-TB therapy (9-12 months) + corticosteroids (prednisolone 2 mg/kg/day, taper over 4-6 weeks). ICU care."
+      },
+      {
+        "id": "tb_lymphadenitis",
+        "name": "TB Lymphadenitis (Scrofula)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "matted_cervical_nodes", "weight": 5 },
+          { "feature": "cold_abscess", "weight": 4 },
+          { "feature": "sinus_tract_formation", "weight": 4 },
+          { "feature": "non_tender_nodes", "weight": 3 },
+          { "feature": "aspiration_showing_AFB", "weight": 5 }
+        ],
+        "management": "Standard 2RHZE/4RH regimen. Surgical excision only for diagnosis or large cold abscess."
+      },
+      {
+        "id": "pleural_tb",
+        "name": "Tuberculous Pleural Effusion",
+        "prevalenceModifier": 0.1,
+        "agePeak": [60, 180],
+        "keyFeatures": [
+          { "feature": "pleuritic_chest_pain", "weight": 4 },
+          { "feature": "dullness_on_percussion", "weight": 4 },
+          { "feature": "respiratory_distress_if_large", "weight": 3 },
+          { "feature": "fever_and_night_sweats", "weight": 3 },
+          { "feature": "lymphocytic_exudate", "weight": 4 }
+        ],
+        "management": "Standard 2RHZE/4RH regimen. Therapeutic thoracentesis if respiratory compromise."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "bacterial_pneumonia",
+        "discriminators": ["acute_onset", "high_fever", "focal_crackles", "rapid_response_to_antibiotics", "no_tb_contact"],
+        "negativeImpactOnTB": 4
+      },
+      {
+        "diseaseId": "asthma",
+        "discriminators": ["episodic_wheeze", "recurrent_episodes", "bronchodilator_response", "no_weight_loss", "atopy_history"],
+        "negativeImpactOnTB": 3
+      },
+      {
+        "diseaseId": "bronchiolitis",
+        "discriminators": ["age_under_2", "acute_viral_prodrome", "fine_crackles_and_wheeze", "seasonal_pattern"],
+        "negativeImpactOnTB": 3
+      },
+      {
+        "diseaseId": "hiv_pcp_pneumonia",
+        "discriminators": ["severe_hypoxia", "relatively_clear_chest", "hiv_exposed", "poor_response_to_standard_antibiotics"],
+        "negativeImpactOnTB": 2,
+        "note": "TB and PCP can coexist in HIV-infected children"
+      },
+      {
+        "diseaseId": "malignancy_lymphoma",
+        "discriminators": ["progressive_lymphadenopathy", "hepatosplenomegaly", "B_symptoms_night_sweats_fever", "no_response_to_ATT"],
+        "negativeImpactOnTB": 2
+      },
+      {
+        "diseaseId": "bronchiectasis",
+        "discriminators": ["chronic_productive_cough_since_early_childhood", "clubbing", "recurrent_lower_respiratory_infections"],
+        "negativeImpactOnTB": 1
+      },
+      {
+        "diseaseId": "foreign_body_aspiration",
+        "discriminators": ["sudden_onset", "unilateral_wheeze", "choking_history"],
+        "negativeImpactOnTB": 1
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Weight chart review (growth trajectory)", "priority": "immediate", "yield": 0.9, "indication": "all suspected TB" },
+        { "name": "Pulse oximetry", "priority": "if respiratory distress" },
+        { "name": "WHO symptom screening (4-question)", "priority": "immediate", "yield": 0.7, "indication": "cough >2 weeks, fever, weight loss, night sweats" }
+      ],
+      "laboratory": [
+        {
+          "name": "GeneXpert MTB/RIF on sputum or gastric aspirate",
+          "priority": "highest",
+          "yield": 0.85,
+          "indication": "all suspected pediatric TB",
+          "note": "Gastric aspirate preferred in young children who cannot expectorate. Collect 3 early morning specimens. Detects rifampicin resistance."
+        },
+        {
+          "name": "AFB smear microscopy x 3 (sputum or gastric aspirate)",
+          "priority": "high",
+          "yield": 0.3,
+          "note": "Low sensitivity in children (paucibacillary disease)"
+        },
+        {
+          "name": "TST (Mantoux tuberculin skin test)",
+          "priority": "high",
+          "yield": 0.7,
+          "interpretation": "≥10 mm = positive in non-HIV, ≥5 mm = positive in HIV-infected or severely malnourished children",
+          "note": "False negative possible in severe malnutrition, HIV, miliary TB"
+        },
+        {
+          "name": "IGRA (Interferon-Gamma Release Assay)",
+          "priority": "if available",
+          "yield": 0.8,
+          "note": "More specific than TST in BCG-vaccinated children; cannot distinguish latent vs active TB"
+        },
+        {
+          "name": "HIV test (PCR for <18 months, rapid for older)",
+          "priority": "mandatory",
+          "yield": 1.0,
+          "indication": "all children diagnosed with TB"
+        },
+        {
+          "name": "LFT baseline (ALT, AST, bilirubin)",
+          "priority": "before starting TB treatment",
+          "yield": 0.8,
+          "note": "Essential due to hepatotoxicity of INH, RIF, PZA"
+        },
+        {
+          "name": "FBC",
+          "priority": "supportive"
+        },
+        {
+          "name": "CSF analysis (if TBM suspected)",
+          "priority": "urgent",
+          "yield": 0.9,
+          "findings": "Lymphocytic pleocytosis, elevated protein, low glucose. GeneXpert on CSF."
+        }
+      ],
+      "imaging": [
+        {
+          "name": "Chest X-ray PA and lateral",
+          "priority": "high",
+          "yield": 0.85,
+          "indication": "all suspected pediatric TB",
+          "typicalFindings": {
+            "primary_tb": "hilar/mediastinal lymphadenopathy (more common than parenchymal changes in children), Ghon complex, segmental hyperinflation or atelectasis",
+            "miliary": "diffuse 1-2 mm micronodules throughout both lung fields",
+            "older_child_cavitation": "apical cavitation (more common in children >5 years)",
+            "pleural_effusion": "blunted costophrenic angle, opacification"
+          }
+        },
+        {
+          "name": "CT chest",
+          "priority": "low",
+          "indication": "diagnostic doubt, evaluate lymphadenopathy, complications (bronchiectasis, airway compression)",
+          "yield": 0.95
+        },
+        {
+          "name": "Cranial CT/MRI (if TBM suspected)",
+          "priority": "urgent",
+          "indication": "altered consciousness, seizures, neurological deficits",
+          "findings": "Basal meningeal enhancement, hydrocephalus, tuberculomas"
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Gastric aspirate for GeneXpert and culture",
+          "indication": "children unable to expectorate (usually <6-8 years)",
+          "note": "Collect 3 early morning specimens before feeds"
+        },
+        {
+          "name": "Lymph node aspirate/biopsy",
+          "indication": "peripheral lymphadenopathy, diagnostic confirmation"
+        }
+      ]
+    },
+    "management": {
+      "protocolReference": "Kenya National Guidelines for Management of Tuberculosis in Children + WHO Pediatric TB Guidelines",
+      "pathways": [
+        {
+          "severity": "drug_sensitive_pulmonary_tb",
+          "criteria": "GeneXpert MTB detected, RIF sensitive. No severe/disseminated disease.",
+          "treatment": [
+            "Intensive phase: 2 months of RHZE (Rifampicin, Isoniazid, Pyrazinamide, Ethambutol) daily",
+            "Continuation phase: 4 months of RH (Rifampicin, Isoniazid) daily",
+            "Total duration: 6 months",
+            "Weight-band-based dosing per national guidelines",
+            "Directly Observed Therapy (DOT) recommended"
+          ]
+        },
+        {
+          "severity": "severe_tb_disseminated_tbm",
+          "criteria": "TB meningitis, miliary TB, spinal TB, osteoarticular TB",
+          "treatment": [
+            "Intensive phase: 2 months RHZE daily",
+            "Continuation phase: 7-10 months RH daily (total 9-12 months)",
+            "Adjunct corticosteroids: Prednisolone 2 mg/kg/day PO for TB meningitis, taper over 4-6 weeks",
+            "Admit for intensive monitoring"
+          ]
+        },
+        {
+          "severity": "drug_resistant_tb_rif_resistance",
+          "criteria": "Rifampicin resistant on GeneXpert (RR/MDR-TB)",
+          "treatment": [
+            "Refer to DR-TB center immediately",
+            "All-oral MDR-TB regimen per WHO guidelines (6-9 months): Bedaquiline, Linezolid, Levofloxacin, Clofazimine, Cycloserine",
+            "Individualized treatment based on DST pattern"
+          ]
+        }
+      ],
+      "weightBasedDosing": {
+        "note": "Dosing per WHO weight bands for pediatric TB. Critical to calculate correctly — overdose risks toxicity, underdose risks treatment failure and resistance.",
+        "drugs": [
+          { "name": "Rifampicin", "dose": "15 mg/kg/day (range 10-20)" },
+          { "name": "Isoniazid", "dose": "10 mg/kg/day (range 7-15)" },
+          { "name": "Pyrazinamide", "dose": "35 mg/kg/day (range 30-40)" },
+          { "name": "Ethambutol", "dose": "20 mg/kg/day (range 15-25)" }
+        ]
+      },
+      "tbPreventiveTherapy": {
+        "indications": ["Child <5 years with household TB contact, asymptomatic with negative TB workup", "HIV-infected children on ART"],
+        "regimen": "6 months of Isoniazid 10 mg/kg/day (6H) OR 3 months of weekly Rifapentine + INH (3HP) for children ≥2 years"
+      },
+      "supportiveCare": [
+        "Nutritional assessment and supplementation — weight gain is the best marker of treatment response",
+        "HIV care if co-infected: cotrimoxazole prophylaxis, ART initiation (usually 2-8 weeks after starting TB treatment)",
+        "Vitamin B6 (pyridoxine) 12.5-25 mg/day to prevent INH-induced peripheral neuropathy",
+        "Monitor LFTs monthly — INH, RIF, PZA all hepatotoxic",
+        "Assess adherence at every visit"
+      ],
+      "followUp": "Monthly weight, symptom review, and adherence check. Repeat CXR at 2 months (end of intensive phase) and at treatment completion."
+    },
+    "treatmentResponseLogic": {
+      "expectedImprovement": "Clinical improvement (weight gain, reduced cough, reduced fever) within 2-4 weeks. Weight gain is often the best early marker of response in children.",
+      "noImprovementAfter4_8Weeks": {
+        "actions": [
+          "Check adherence (pill counts, DOT)",
+          "Repeat GeneXpert and culture for drug susceptibility testing",
+          "Exclude drug-resistant TB",
+          "Re-evaluate for alternative diagnoses: HIV-related lung disease, malignancy, bronchiectasis, aspiration",
+          "Consider malabsorption of TB drugs (especially in malnourished children)",
+          "If confirmed RR/MDR-TB, switch to second-line regimen"
+        ]
+      }
+    },
+    "pathophysiology": [
+      "inhalation_of_mycobacterium_tuberculosis",
+      "alveolar_macrophage_phagocytosis",
+      "granuloma_formation_cell_mediated_immunity",
+      "caseous_necrosis",
+      "ghon_complex_parenchymal_focus_plus_lymph_node",
+      "lymphohematogenous_dissemination",
+      "rank_complex_in_children_lymph_node_dominant",
+      "immunopathology_tissue_destruction",
+      "cavitation_in_older_children"
+    ],
+    "complications": [
+      {
+        "diseaseId": "tb_meningitis",
+        "probability": 0.05,
+        "agePeak": [0, 24],
+        "severityBoost": 0.5,
+        "clues": ["altered_consciousness", "seizures", "neck_stiffness", "vomiting", "cranial_nerve_palsy"]
+      },
+      {
+        "diseaseId": "miliary_tuberculosis",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["diffuse_micronodules_on_CXR", "severe_systemic_illness", "hepatosplenomegaly"]
+      },
+      {
+        "diseaseId": "pleural_effusion",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["stony_dull_percussion", "reduced_breath_sounds", "pleuritic_pain"]
+      },
+      {
+        "diseaseId": "airway_compression",
+        "probability": 0.15,
+        "clues": ["stridor", "unilateral_wheeze", "recurrent_atelectasis"],
+        "note": "Enlarged hilar lymph nodes can compress airways in young children"
+      },
+      {
+        "diseaseId": "bronchiectasis",
+        "probability": 0.1,
+        "note": "Long-term complication of inadequately treated TB"
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "probability": 0.05,
+        "clues": ["jaundice", "elevated_LFTs", "nausea_vomiting"],
+        "note": "Monitor LFTs regularly during TB treatment"
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "TB meningitis, miliary TB, and severe respiratory distress require immediate admission and multidisciplinary care",
+    "diagnosticClues": [
+      "chronic_cough_>2_weeks_plus_weight_loss",
+      "night_sweats_and_fever_in_child_with_tb_contact",
+      "hilar_or_mediastinal_lymphadenopathy_on_CXR",
+      "failure_to_thrive_with_no_other_explanation",
+      "poor_response_to_standard_antibiotics_for_pneumonia"
+    ],
+    "exclusionClues": [
+      "rapid_symptom_resolution_with_antibiotics",
+      "acute_onset_with_high_fever_and_focal_crackles",
+      "strong_bronchodilator_response_in_episodic_wheeze",
+      "normal_CXR_and_growth_and_no_TB_contact"
+    ]
+  }
+}

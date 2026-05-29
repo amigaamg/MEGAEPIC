@@ -1,0 +1,176 @@
+{
+  "disease": {
+    "id": "optic_neuritis",
+    "name": "Optic Neuritis",
+    "system": "OPHTH",
+    "agePeak_months": [240, 420],
+    "note": "Acute inflammation of the optic nerve, most commonly associated with demyelinating disease (multiple sclerosis). Characterized by acute unilateral vision loss, pain on eye movement, and dyschromatopsia.",
+    "prevalenceWeight": 0.003,
+    "syndromeTags": ["optic_neuropathy", "neuro_ophthalmology", "vision_loss_acute"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "no_light_perception_vision", "weight": 8 },
+        { "sign": "bilateral_sequential_rapid", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_visual_acuity_loss_20_200_or_worse", "weight": 7 },
+          { "sign": "RAPD_marked", "weight": 6 },
+          { "sign": "optic_disc_edema_severe", "weight": 5 },
+          { "sign": "failure_to_improve_in_2_weeks", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Severe vision loss or bilateral -> SEVERE; Mild with good recovery potential -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "vision_loss_unilateral", "weight": 5 },
+      { "symptomId": "vision_loss_subacute_hours_to_days", "weight": 5 },
+      { "symptomId": "pain_on_eye_movement", "weight": 5 },
+      { "symptomId": "decreased_color_vision_dyschromatopsia", "weight": 4 },
+      { "symptomId": "blurred_vision_central_scotoma", "weight": 4 },
+      { "symptomId": "phosphenes_or_flash_with_eye_movement", "weight": 3 },
+      { "symptomId": "uhthoff_phenomenon_worse_with_heat", "weight": 3 },
+      { "symptomId": "previous_episode_of_vision_loss", "weight": 3 },
+      { "symptomId": "previous_neurological_symptoms_numbness", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "reduced_visual_acuity", "baseWeight": 5 },
+      { "signId": "relative_afferent_pupillary_defect_RAPD", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "color_vision_loss_desaturated", "baseWeight": 4 },
+      { "signId": "visual_field_defect_central_scotoma", "baseWeight": 4 },
+      { "signId": "optic_disc_edema_in_30_percent", "baseWeight": 3, "note": "Papillitis" },
+      { "signId": "normal_disc_in_70_percent_retrobulbar", "baseWeight": 2 },
+      { "signId": "reduced_contrast_sensitivity", "baseWeight": 3 },
+      { "signId": "pain_on_eye_movement_on_exam", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "multiple_sclerosis", "multiplier": 10.0 },
+      { "id": "family_history_of_MS", "multiplier": 3.0 },
+      { "id": "female_sex", "multiplier": 3.0 },
+      { "id": "northern_latitude_residence", "multiplier": 2.0 },
+      { "id": "previous_episode_of_optic_neuritis", "multiplier": 5.0 },
+      { "id": "vitamin_D_deficiency", "multiplier": 2.0 },
+      { "id": "EBV_infection_history", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "typical_demyelinating",
+        "name": "Typical Demyelinating Optic Neuritis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "pain_on_eye_movement", "weight": 5 },
+          { "feature": "good_recovery_weeks", "weight": 4 },
+          { "feature": "central_scotoma", "weight": 4 },
+          { "feature": "RAPD_positive", "weight": 5 },
+          { "feature": "MRI_brain_shows_demyelination", "weight": 4 }
+        ],
+        "management": "IV Methylprednisolone 1g daily for 3-5 days if severe vision loss. Otherwise observation (spontaneous recovery in 2-4 weeks). MS disease-modifying therapy if MRI shows lesions."
+      },
+      {
+        "id": "atypical_optic_neuritis",
+        "name": "Atypical Optic Neuritis (NMDA, CRION, Sarcoid)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "pain_severe_at_onset", "weight": 4 },
+          { "feature": "severe_vision_loss_NLP", "weight": 5 },
+          { "feature": "bilateral_or_rapidly_sequential", "weight": 4 },
+          { "feature": "poor_or_no_recovery", "weight": 5 },
+          { "feature": "optic_disc_hemorrhage_exudates", "weight": 3 },
+          { "feature": "NMDA_IgG_positive", "weight": 5 }
+        ],
+        "management": "IV Methylprednisolone 1g daily x 5 days. Plasma exchange if steroid-refractory. NMO/MOG serology. Long-term immunosuppression (Azathioprine, Mycophenolate, Rituximab)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "anterior_ischemic_optic_neuropathy",
+        "discriminators": ["age_over_50", "no_pain", "altitudinal_field_defect", "no_recovery"]
+      },
+      {
+        "diseaseId": "papilledema",
+        "discriminators": ["bilateral_disc_edema", "normal_vision_early", "no_RAPD"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Visual acuity (Snellen or LogMAR)", "priority": "immediate", "yield": 0.9, "indication": "baseline" },
+        { "name": "Pupillary exam for RAPD (swinging flashlight)", "priority": "immediate", "yield": 0.95, "indication": "key diagnostic sign" },
+        { "name": "Color vision (Ishihara plates)", "priority": "high", "yield": 0.8, "indication": "dyschromatopsia" }
+      ],
+      "laboratory": [
+        { "name": "NMDA-IgG (Aquaporin-4 antibody)", "priority": "high", "yield": 0.5, "indication": "if atypical features" },
+        { "name": "MOG-IgG", "priority": "high", "yield": 0.4, "indication": "MOGAD related" },
+        { "name": "ACE and lysozyme", "priority": "medium", "yield": 0.2, "indication": "sarcoidosis" }
+      ],
+      "imaging": [
+        { "name": "MRI brain + orbits with contrast (orbital fat-suppressed T2)", "priority": "immediate", "yield": 0.9, "indication": "optic nerve enhancement, brain white matter lesions" },
+        { "name": "OCT (optic nerve head and RNFL)", "priority": "high", "yield": 0.85, "indication": "swelling initially, atrophy later" },
+        { "name": "Visual field perimetry (Humphrey 30-2)", "priority": "high", "yield": 0.8, "indication": "central scotoma" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Optic Neuritis Treatment Trial (ONTT) / MS Guidelines",
+      "pathways": [
+        {
+          "severity": "typical_mild",
+          "criteria": "acuity >20/40, mild pain, no severe scotoma",
+          "treatment": "Observation. Spontaneous recovery expected. Reassurance. No steroids needed. Follow-up in 2-4 weeks. MRI brain for MS risk stratification."
+        },
+        {
+          "severity": "typical_severe",
+          "criteria": "acuity <20/200, severe pain, large scotoma",
+          "treatment": "IV Methylprednisolone 1g IV daily x 3-5 days (speeds recovery, does not improve final outcome). Oral Prednisone taper after. NO oral prednisone alone (increases risk of recurrence). MS disease-modifying therapy if brain lesions."
+        },
+        {
+          "severity": "atypical_or_refractory",
+          "criteria": "bilateral, very severe, no improvement, NMO/MOG positive",
+          "treatment": "IV Methylprednisolone 1g daily x 5 days. Plasma exchange if no response (5 sessions). Immunosuppression for NMO/MOG. Rituximab or Mycophenolate."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "demyelination_of_optic_nerve",
+      "inflammatory_infiltration",
+      "axonal_damage",
+      "conduction_block",
+      "remyelination"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "multiple_sclerosis",
+        "probability": 0.3,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.5,
+        "clues": ["brain_MRI_lesions", "relapses"]
+      },
+      {
+        "diseaseId": "optic_atrophy",
+        "probability": 0.3,
+        "lagDays": [90, 365],
+        "severityBoost": 0.4,
+        "clues": ["pale_disc", "persistent_vision_deficit"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["acute_unilateral_vision_loss", "pain_on_eye_movement", "RAPD_positive", "dyschromatopsia"],
+    "exclusionClues": ["bilateral_symmetric", "painless", "no_RAPD"]
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "bowel_obstruction",
+    "name": "Bowel Obstruction",
+    "system": "surgical",
+    "agePeak_months": [480, 960],
+    "note": "Colicky abdominal pain, vomiting, distension, and obstipation. High risk of strangulation and perforation.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["acute_abdomen", "abdominal_distension", "vomiting"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "strangulation_signs", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "absent_bowel_sounds", "weight": 7 },
+          { "sign": "guarding_rigidity", "weight": 7 },
+          { "sign": "high_pitched_bowel_sounds", "weight": 4 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Peritonitis/strangulation -> SEVERE; simple obstruction -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "colicky_abdominal_pain", "weight": 5 },
+      { "symptomId": "vomiting", "weight": 4, "note": "Bilious then feculent in distal obstruction" },
+      { "symptomId": "abdominal_distension", "weight": 4 },
+      { "symptomId": "constipation_obstipation", "weight": 5, "note": "Absolute constipation in complete obstruction" },
+      { "symptomId": "previous_abdominal_surgery", "weight": 4, "note": "Adhesions most common cause" },
+      { "symptomId": "flatus_cessation", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_distension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "high_pitched_bowel_sounds", "baseWeight": 4, "doubleWeight": true, "note": "Classic early sign" },
+      { "signId": "absent_bowel_sounds", "baseWeight": 4, "note": "Late or strangulation" },
+      { "signId": "tympanic_percussion", "baseWeight": 3 },
+      { "signId": "visible_peristalsis", "baseWeight": 3 },
+      { "signId": "hernia_orifice_exam", "baseWeight": 4, "note": "Always check for obstructed hernia" }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_abdominal_surgery", "multiplier": 2.5 },
+      { "id": "incisional_hernia", "multiplier": 1.8 },
+      { "id": "colorectal_cancer", "multiplier": 1.5 },
+      { "id": "crohn_disease", "multiplier": 1.6 },
+      { "id": "previous_radiation", "multiplier": 1.4 },
+      { "id": "intra_abdominal_abscess", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "small_bowel_obstruction",
+        "name": "Small Bowel Obstruction",
+        "prevalenceModifier": 0.65,
+        "keyFeatures": [
+          { "feature": "central_colicky_pain", "weight": 5 },
+          { "feature": "early_vomiting", "weight": 5 },
+          { "feature": "mild_distension", "weight": 3 }
+        ],
+        "management": "NBM, NG tube decompression, IV fluids, monitoring. Laparoscopy/laparotomy if no resolution in 24-48h or signs of strangulation."
+      },
+      {
+        "id": "large_bowel_obstruction",
+        "name": "Large Bowel Obstruction",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "lower_abdominal_pain", "weight": 4 },
+          { "feature": "late_vomiting_feculent", "weight": 4 },
+          { "feature": "severe_distension", "weight": 5 },
+          { "feature": "absolute_constipation", "weight": 5 }
+        ],
+        "management": "NBM, NG tube, IV fluids. CT to identify cause. Emergency surgery for tumor/volvulus. Self-expanding metallic stent as bridge to surgery in left-sided lesions."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pancreatitis",
+        "discriminators": ["elevated_amylase", "pain_radiating_to_back", "no_bowel_sounds_increase"]
+      },
+      {
+        "diseaseId": "gastroenteritis",
+        "discriminators": ["diarrhea", "no_distension", "hypoactive_not_high_pitched_sounds"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "NG tube output", "priority": "immediate", "yield": 0.5, "indication": "therapeutic and diagnostic" },
+        { "name": "Urine output monitoring", "priority": "high", "yield": 0.4, "indication": "assess hydration status" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leukocytosis suggests strangulation" },
+        { "name": "Lactate", "priority": "high", "yield": 0.75, "indication": "elevated in ischemia/strangulation" },
+        { "name": "Electrolytes", "priority": "high", "yield": 0.6, "indication": "assess dehydration and metabolic disturbance" },
+        { "name": "CRP", "priority": "medium", "yield": 0.5, "indication": "elevated in inflammation/strangulation" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-Ray erect + supine", "priority": "immediate", "yield": 0.8, "indication": "air-fluid levels, dilated bowel loops" },
+        { "name": "CT Abdomen with IV + oral contrast", "priority": "high", "yield": 0.95, "indication": "identify cause, site, and degree of obstruction" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "World Society of Emergency Surgery Guidelines for Bowel Obstruction",
+      "pathways": [
+        {
+          "severity": "simple obstruction",
+          "criteria": "no peritonitis, no signs of strangulation, no complete obstruction",
+          "treatment": "Conservative: NBM, NG tube, IV fluids, electrolyte correction. Serial exams. If no resolution in 24-48h, proceed to surgery."
+        },
+        {
+          "severity": "strangulated obstruction",
+          "criteria": "peritonitis, persistent severe pain, leukocytosis, elevated lactate, acidosis",
+          "treatment": "Emergency laparotomy/laparoscopy. Resection of non-viable bowel. Primary anastomosis if feasible, otherwise stoma. IV broad-spectrum antibiotics."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mechanical_obstruction",
+      "fluid_electrolyte_sequestration",
+      "bowel_distension",
+      "impaired_blood_supply",
+      "strangulation",
+      "necrosis",
+      "perforation",
+      "peritonitis_sepsis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bowel_strangulation",
+        "probability": 0.15,
+        "lagDays": [1, 3],
+        "severityBoost": 0.4,
+        "clues": ["persistent_severe_pain", "fever", "tachycardia", "leukocytosis"]
+      },
+      {
+        "diseaseId": "bowel_perforation",
+        "probability": 0.1,
+        "lagDays": [2, 5],
+        "severityBoost": 0.5,
+        "clues": ["peritonitis", "free_air_on_imaging", "worsening_sepsis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["colicky_pain", "vomiting", "distension", "constipation", "previous_surgery_history"],
+    "exclusionClues": ["diarrhea_as_presenting_symptom", "pain_relieved_by_defecation"]
+  }
+}

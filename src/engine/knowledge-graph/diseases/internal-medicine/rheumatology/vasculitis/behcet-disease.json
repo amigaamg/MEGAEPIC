@@ -1,0 +1,158 @@
+{
+  "disease": {
+    "id": "behcet_disease",
+    "name": "Behcet's Disease",
+    "system": "rheumatology",
+    "agePeak_months": [240, 480],
+    "note": "Chronic multisystem inflammatory disorder characterized by recurrent oral and genital ulcers, uveitis, and skin lesions. Associated with vasculitis of all vessel sizes. Highest prevalence along the Silk Road.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["vasculitis", "systemic_inflammation", "oral_ulcers", "uveitis", "pathergy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cerebral_venous_sinus_thrombosis", "weight": 9 },
+        { "sign": "acute_anterior_uveitis_hypopyon", "weight": 7 },
+        { "sign": "pulmonary_artery_aneurysm", "weight": 10 },
+        { "sign": "major_vessel_thrombosis", "weight": 8 },
+        { "sign": "intestinal_perforation", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If ocular, vascular, or CNS involvement -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "recurrent_oral_ulcers_aphthous", "weight": 5 },
+      { "symptomId": "genital_ulcers_scrotal_vulvar", "weight": 5 },
+      { "symptomId": "eye_redness_uveitis", "weight": 4 },
+      { "symptomId": "skin_lesions_erythema_nodosum", "weight": 3 },
+      { "symptomId": "arthralgia_arthritis", "weight": 3 },
+      { "symptomId": "pathergy_after_minor_trauma", "weight": 4 },
+      { "symptomId": "leg_dvt", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "oral_aphthous_ulcers", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "genital_ulcer_scarring", "baseWeight": 5 },
+      { "signId": "pathergy_test_positive", "baseWeight": 5 },
+      { "signId": "anterior_uveitis_hypopyon", "baseWeight": 5 },
+      { "signId": "erythema_nodosum", "baseWeight": 3 },
+      { "signId": "papulopustular_lesions", "baseWeight": 3 },
+      { "signId": "retinal_vasculitis", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "hla_b51", "multiplier": 4.0 },
+      { "id": "silk_road_ethnicity", "multiplier": 5.0 },
+      { "id": "family_history_behcet", "multiplier": 2.0 },
+      { "id": "male_sex_severe_disease", "multiplier": 2.0 },
+      { "id": "age_20_40", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mucocutaneous_behcet",
+        "name": "Mucocutaneous Behcet's Disease",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "oral_genital_ulcers_skin_lesions", "weight": 5 },
+          { "feature": "no_major_organ_threat", "weight": 4 },
+          { "feature": "chronic_relapsing_course", "weight": 3 }
+        ],
+        "management": "Topical steroids for ulcers. Colchicine. Apremilast for refractory oral ulcers."
+      },
+      {
+        "id": "severe_organ_behcet",
+        "name": "Organ-Threatening Behcet's Disease",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "uveitis_retinal_vasculitis", "weight": 5 },
+          { "feature": "major_vessel_thrombosis_aneurysm", "weight": 5 },
+          { "feature": "cns_involvement", "weight": 5 }
+        ],
+        "management": "Corticosteroids. Cyclophosphamide for severe vascular/CNS. Anti-TNF (infliximab). Anticoagulation for thrombosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "complex_aphthosis",
+        "discriminators": ["oral_ulcers_only", "no_genital_ulcers", "no_eye_involvement", "negative_pathergy"]
+      },
+      {
+        "diseaseId": "inflammatory_bowel_disease",
+        "discriminators": ["predominant_gi_symptoms", "colonic_ulcers_on_colonoscopy", "no_ocular", "no_bipolar_ulcers"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pathergy test", "priority": "high", "yield": 0.6, "indication": "sterile needle prick -> papule/pustule in 24-48h" },
+        { "name": "Slit lamp eye exam", "priority": "high", "yield": 0.7, "indication": "anterior uveitis, hypopyon" }
+      ],
+      "laboratory": [
+        { "name": "HLA-B51", "priority": "medium", "yield": 0.5, "indication": "supportive but not diagnostic" },
+        { "name": "CRP and ESR", "priority": "medium", "yield": 0.6, "indication": "elevated during flares" }
+      ],
+      "imaging": [
+        { "name": "Fundoscopy / fluorescein angiography", "priority": "high", "yield": 0.8, "indication": "retinal vasculitis" },
+        { "name": "MR venography (if CNS suspected)", "priority": "high", "yield": 0.8, "indication": "cerebral venous thrombosis" },
+        { "name": "CT angiography (if vascular)", "priority": "high", "yield": 0.9, "indication": "aneurysm, thrombosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR Recommendations for Behcet's Disease",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "oral/genital ulcers, skin, arthralgia",
+          "treatment": "Topical steroids. Colchicine. Apremilast. Oral steroids for flares."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "persistent mucocutaneous, arthritis, mild eye",
+          "treatment": "Azathioprine. Cyclosporine A. Anti-TNF if resistant."
+        },
+        {
+          "severity": "severe",
+          "criteria": "uveitis, vascular, CNS, GI ulceration",
+          "treatment": "High-dose steroids. Cyclophosphamide for vascular/CNS. Anti-TNF (infliximab). Anticoagulation for thrombosis (with immunosuppression)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "neutrophil_hyperactivity",
+      "hla_b51_antigen_presentation",
+      "tnf_alpha_driven_inflammation",
+      "th1_th17_pathway",
+      "vessel_wall_inflammation",
+      "hypercoagulability"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "permanent_vision_loss_uveitis",
+        "probability": 0.15,
+        "severityBoost": 0.7,
+        "clues": ["posterior_uveitis", "retinal_vasculitis", "macular_edema", "recurrent_attacks"]
+      },
+      {
+        "diseaseId": "pulmonary_artery_aneurysm",
+        "probability": 0.03,
+        "severityBoost": 0.9,
+        "clues": ["hemoptysis", "dyspnea", "hilar_mass", "rupture_risk"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if ocular, vascular, or CNS",
+    "diagnosticClues": ["recurrent_oral_plus_genital_ulcers", "uveitis", "pathergy", "skin_lesions", "hla_b51"],
+    "exclusionClues": ["oral_ulcers_only", "no_genital_or_eye", "negative_pathergy", "no_vascular_cns"]
+  }
+}

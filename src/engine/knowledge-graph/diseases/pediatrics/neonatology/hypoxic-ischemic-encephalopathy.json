@@ -1,0 +1,190 @@
+{
+  "disease": {
+    "id": "hypoxic-ischemic-encephalopathy",
+    "name": "Hypoxic-Ischemic Encephalopathy",
+    "system": "PAED",
+    "agePeak_months": [0, 0],
+    "note": "Neonatal brain injury due to perinatal asphyxia. Major cause of neonatal mortality and long-term neurodevelopmental disability.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["neonatal_encephalopathy", "perinatal_asphyxia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "apgar_less_than_3_at_5_minutes", "weight": 10 },
+        { "sign": "cord_ph_less_than_7_0", "weight": 10 },
+        { "sign": "seizures", "weight": 10 },
+        { "sign": "coma", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hypotonia_severe", "weight": 8 },
+          { "sign": "absent_moro_reflex", "weight": 8 },
+          { "sign": "intubation_in_delivery_room", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If seizures, coma, or severe acidosis -> SEVERE (Sarnat stage 2-3); else -> NON-SEVERE (mild HIE)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "perinatal_asphyxia_event", "weight": 5 },
+      { "symptomId": "prolonged_labor", "weight": 4 },
+      { "symptomId": "uterine_rupture", "weight": 5 },
+      { "symptomId": "cord_prolapse", "weight": 5 },
+      { "symptomId": "meconium_stained_liquor", "weight": 3 },
+      { "symptomId": "shoulder_dystocia", "weight": 4 },
+      { "symptomId": "maternal_hypotension", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "low_apgar_scores", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "seizures", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypotonia", "baseWeight": 4 },
+      { "signId": "poor_conscious_state", "baseWeight": 5 },
+      { "signId": "absent_reflexes", "baseWeight": 4 },
+      { "signId": "poor_moro_reflex", "baseWeight": 4 },
+      { "signId": "weak_cry", "baseWeight": 3 },
+      { "signId": "bradycardia", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "prolonged_labor", "multiplier": 2.0 },
+      { "id": "prematurity", "multiplier": 1.8 },
+      { "id": "uterine_abnormalities", "multiplier": 2.0 },
+      { "id": "placental_abruption", "multiplier": 4.0 },
+      { "id": "cord_accident", "multiplier": 4.0 },
+      { "id": "maternal_infection_chorioamnionitis", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_hie",
+        "name": "Mild HIE (Sarnat Stage 1)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "hyperalert_state", "weight": 4 },
+          { "feature": "normal_muscle_tone", "weight": 4 },
+          { "feature": "no_seizures", "weight": 5 },
+          { "feature": "normal_sucking_reflex", "weight": 4 }
+        ],
+        "management": "Supportive care. Monitor vitals and neuro status. Maintain normothermia. No therapeutic hypothermia typically needed."
+      },
+      {
+        "id": "moderate_hie",
+        "name": "Moderate HIE (Sarnat Stage 2)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "lethargic_state", "weight": 5 },
+          { "feature": "hypotonia", "weight": 4 },
+          { "feature": "seizures", "weight": 5 },
+          { "feature": "constricted_pupils", "weight": 3 }
+        ],
+        "management": "Therapeutic hypothermia (33.5C for 72h). Antiepileptics for seizures. NICU admission. Multimodal neuromonitoring (aEEG, NIRS)."
+      },
+      {
+        "id": "severe_hie",
+        "name": "Severe HIE (Sarnat Stage 3)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "comatose", "weight": 5 },
+          { "feature": "flaccid_tone", "weight": 5 },
+          { "feature": "absent_reflexes", "weight": 5 },
+          { "feature": "dilated_fixed_pupils", "weight": 5 }
+        ],
+        "management": "Therapeutic hypothermia if within 6h window. Intensive NICU care. Ventilatory support. Inotropic support. Discuss prognosis with family. Consider MRI for prognostication."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "neonatal_sepsis",
+        "discriminators": ["fever", "positive_blood_culture", "elevated_crp", "maternal_signs_of_infection"]
+      },
+      {
+        "diseaseId": "congenital_metabolic_disorder",
+        "discriminators": ["family_history", "dysmorphic_features", "episodic_decompensation", "ammonia_elevated"]
+      },
+      {
+        "diseaseId": "neonatal_stroke",
+        "discriminators": ["focal_seizures", "focal_neurologic_signs", "normal_cord_ph"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Apgar score", "priority": "immediate", "yield": 0.8, "indication": "immediate neonatal assessment" },
+        { "name": "Cord blood gas", "priority": "immediate", "yield": 0.95, "indication": "confirm acidosis" },
+        { "name": "aEEG monitoring", "priority": "immediate", "yield": 0.85, "indication": "seizure detection and background pattern" }
+      ],
+      "laboratory": [
+        { "name": "Blood gas", "priority": "immediate", "yield": 0.9, "indication": "assess acidosis and ventilation" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "tissue hypoxia marker" },
+        { "name": "Liver enzymes", "priority": "high", "yield": 0.5, "indication": "assess multiorgan dysfunction" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.5, "indication": "assess renal involvement" },
+        { "name": "Ammonia", "priority": "medium", "yield": 0.3, "indication": "rule out metabolic disorder" }
+      ],
+      "imaging": [
+        { "name": "Cranial Ultrasound", "priority": "immediate", "yield": 0.5, "indication": "initial bedside screening for hemorrhage" },
+        { "name": "MRI Brain (DWI)", "priority": "high", "yield": 0.9, "indication": "definitive imaging at day 4-7 of life for prognostication" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICHD Whole Body Cooling Protocol / TOBY Trial Protocol",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "Sarnat stage 1, no seizures, normal aEEG",
+          "treatment": "Supportive care, normothermia, monitor neurological status, enteral feeding, parental counseling."
+        },
+        {
+          "severity": "moderate_to_severe",
+          "criteria": "Sarnat stage 2-3, or seizures, or abnormal aEEG",
+          "treatment": "Therapeutic hypothermia (33.5C) for 72 hours using servo-controlled cooling blanket. Rewarm 0.5C/hour. Antiepileptics (phenobarbital first line). Ventilatory support. Inotropes if hypotensive. MRI at day 7 for prognostication."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "perinatal_asphyxia",
+      "cerebral_ischemia",
+      "excitotoxicity",
+      "oxidative_stress",
+      "apoptosis",
+      "secondary_energy_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cerebral_palsy",
+        "probability": 0.3,
+        "lagDays": [180, 730],
+        "severityBoost": 0.5,
+        "clues": ["spasticity", "developmental_delay", "abnormal_mri"]
+      },
+      {
+        "diseaseId": "epilepsy",
+        "probability": 0.15,
+        "lagDays": [30, 365],
+        "severityBoost": 0.3,
+        "clues": ["neonatal_seizures", "abnormal_aEEG"]
+      },
+      {
+        "diseaseId": "cognitive_impairment",
+        "probability": 0.25,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.3,
+        "clues": ["severe_hie", "basal_ganglia_injury_on_mri"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["low_apgar", "cord_acidosis", "neonatal_encephalopathy", "seizures"],
+    "exclusionClues": ["normal_cord_ph", "normal_apgar", "spontaneous_recovery"]
+  }
+}

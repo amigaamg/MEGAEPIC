@@ -1,0 +1,110 @@
+{
+  "disease": {
+    "id": "meniscal-tear",
+    "name": "Meniscal Tear",
+    "system": "ORTHO",
+    "agePeak_months": [180, 600],
+    "note": "Tear of medial or lateral meniscus. Acute tears in young athletes. Degenerative tears in older adults. Can cause locking, catching, and giving way.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["knee_injury", "sports_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "locked_knee_unable_to_extend", "weight": 8 },
+        { "sign": "bucket_handle_tear_displaced", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "associated_acl_tear", "weight": 6 },
+          { "sign": "tear_in_red_white_zone", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If locked knee or bucket handle -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "twisting_injury_knee", "weight": 4 },
+      { "symptomId": "knee_pain_joint_line", "weight": 5 },
+      { "symptomId": "mechanical_symptoms_locking_catching", "weight": 5 },
+      { "symptomId": "knee_giving_way", "weight": 3 },
+      { "symptomId": "effusion_delayed_24h", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "joint_line_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "positive_mcmurray_test", "baseWeight": 5 },
+      { "signId": "effusion", "baseWeight": 3 },
+      { "signId": "loss_of_full_extension_locking", "baseWeight": 4 },
+      { "signId": "positive_thessaly_test", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "contact_sports", "multiplier": 2.5 },
+      { "id": "previous_meniscal_tear", "multiplier": 2.0 },
+      { "id": "acl_deficiency", "multiplier": 3.0 },
+      { "id": "age_>40", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "traumatic_meniscal_tear",
+        "name": "Traumatic Meniscal Tear (Young Athlete)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "bucket_handle_or_vertical_tear", "weight": 4 },
+          { "feature": "associated_acl_tear_often", "weight": 3 }
+        ],
+        "management": "Arthroscopic repair (inside-out, all-inside, or outside-in) for red-zone tears. Partial meniscectomy if non-repairable. Post-op bracing and physiotherapy."
+      },
+      {
+        "id": "degenerative_meniscal_tear",
+        "name": "Degenerative Meniscal Tear (Older Adult)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "horizontal_or_complex_tear", "weight": 4 },
+          { "feature": "associated_osteoarthritis", "weight": 3 }
+        ],
+        "management": "Conservative: physiotherapy, activity modification. Arthroscopic partial meniscectomy if mechanical symptoms. Consider meniscal transplant if young and post-meniscectomy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "patellofemoral_syndrome",
+        "discriminators": ["anterior_knee_pain", "patellar_tenderness", "negative_mcmurray"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Knee X-ray", "priority": "high", "yield": 0.2, "indication": "rule out fracture, assess OA" },
+        { "name": "MRI knee", "priority": "high", "yield": 0.95, "indication": "confirm size, location, repairability" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAOS Meniscal Tears Guidelines",
+      "pathways": [
+        {
+          "severity": "repairable_non_locking",
+          "criteria": "Red-white zone, vertical longitudinal, stable knee, no locking",
+          "treatment": "Arthroscopic meniscal repair. Post-op: partial weight bearing 4-6 weeks, brace in extension, limited range of motion."
+        },
+        {
+          "severity": "non_repairable_or_degenerative",
+          "criteria": "White zone, complex/horizontal, degenerative, locked knee",
+          "treatment": "Arthroscopic partial meniscectomy. Immediate weight bearing. Physiotherapy. Return to sports 4-6 weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": ["rotational_force_on_flexed_knee", "degenerative_thinning", "compressive_loading"]
+  }
+}

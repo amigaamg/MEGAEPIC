@@ -1,0 +1,207 @@
+{
+  "disease": {
+    "id": "salivary_gland_tumors",
+    "name": "Salivary Gland Tumors",
+    "system": "ent",
+    "agePeak_months": [360, 720],
+    "note": "Neoplasms of salivary glands. Majority are benign and occur in the parotid. Mixed tumor (pleomorphic adenoma) is most common. Parotid tumors are mostly benign; submandibular and minor glands have higher malignancy rates.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["salivary_gland_mass", "parotid_swelling", "facial_nerve_deficit"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapid_airway_compromise", "weight": 10 },
+        { "sign": "strider", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "facial_nerve_palsy", "weight": 9 },
+          { "sign": "fixed_mass", "weight": 7 },
+          { "sign": "painful_mass", "weight": 6 },
+          { "sign": "rapid_growth", "weight": 6 },
+          { "sign": "cervical_lymphadenopathy", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If facial palsy/fixed/painful/rapid growth -> SEVERE (likely malignant); else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_swelling", "weight": 4, "modifiers": [
+          { "condition": "preauricular_or_neck", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "duration_months_years", "weight": 2, "note": "Benign tumors grow slowly over years" },
+      { "symptomId": "rapid_growth", "weight": 4, "note": "Suggests malignancy or transformation" },
+      { "symptomId": "pain", "weight": 3, "note": "Pain suggests inflammation or malignancy" },
+      { "symptomId": "facial_weakness", "weight": 5, "note": "Almost always indicates malignancy" },
+      { "symptomId": "trismus", "weight": 3, "note": "Suggests deep lobe or malignant extension" },
+      { "symptomId": "numbness_lip_face", "weight": 3, "note": "Perineural invasion by malignancy" },
+      { "symptomId": "dysphagia", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_parotid_or_submandibular_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "facial_nerve_function", "baseWeight": 5 },
+      { "signId": "mass_consistency_fixed_or_mobile", "baseWeight": 4 },
+      { "signId": "cervical_lymphadenopathy", "baseWeight": 4 },
+      { "signId": "trismus", "baseWeight": 3 },
+      { "signId": "intraoral_mass", "baseWeight": 3 },
+      { "signId": "ear_canal_involvement", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "radiation_exposure", "multiplier": 4.0 },
+      { "id": "age_40_to_60", "multiplier": 2.0 },
+      { "id": "female_gender_benign", "multiplier": 2.0 },
+      { "id": "male_gender_malignant", "multiplier": 1.5 },
+      { "id": "immunosuppression", "multiplier": 1.8 },
+      { "id": "hiv_infection", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "pleomorphic_adenoma",
+        "name": "Pleomorphic Adenoma (Benign Mixed Tumor)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "slow_growing_years", "weight": 4 },
+          { "feature": "painless", "weight": 4 },
+          { "feature": "smooth_lobulated", "weight": 3 },
+          { "feature": "mobile_firm", "weight": 3 },
+          { "feature": "normal_facial_nerve", "weight": 3 }
+        ],
+        "management": "Superficial parotidectomy (for parotid) or submandibulectomy for SMG. Extracapsular dissection for select cases. Facial nerve monitoring. Recurrence if incomplete excision."
+      },
+      {
+        "id": "mucoepidermoid_carcinoma",
+        "name": "Mucoepidermoid Carcinoma",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "hard_mass", "weight": 4 },
+          { "feature": "may_be_painful", "weight": 3 },
+          { "feature": "facial_nerve_involvement", "weight": 4 },
+          { "feature": "lymph_node_metastasis", "weight": 3 }
+        ],
+        "management": "Total parotidectomy + facial nerve dissection (sacrifice if involved). Neck dissection if nodal disease. Adjuvant radiotherapy if high-grade, positive margins, or nodal disease."
+      },
+      {
+        "id": "adenoid_cystic_carcinoma",
+        "name": "Adenoid Cystic Carcinoma",
+        "prevalenceModifier": 0.08,
+        "keyFeatures": [
+          { "feature": "perineural_invasion", "weight": 5 },
+          { "feature": "slow_but_relentless", "weight": 4 },
+          { "feature": "late_recurrence", "weight": 4 },
+          { "feature": "distant_metastasis_lung", "weight": 4 }
+        ],
+        "management": "Wide local excision with nerve sacrifice if involved. Post-operative radiotherapy. Long-term surveillance for late recurrence and lung metastases."
+      },
+      {
+        "id": "warthin_tumor",
+        "name": "Warthin Tumor (Adenolymphoma)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "parotid_tail", "weight": 4 },
+          { "feature": "bilateral_10_percent", "weight": 3 },
+          { "feature": "smoking_strong_association", "weight": 4 },
+          { "feature": "male_predominance", "weight": 3 },
+          { "feature": "may_be_multifocal", "weight": 3 }
+        ],
+        "management": "Superficial parotidectomy or enucleation. Observation in elderly. No malignant transformation risk."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "salivary_gland_infection",
+        "discriminators": ["acute_onset", "pain", "erythema", "pus_from_duct", "fever"]
+      },
+      {
+        "diseaseId": "sialolithiasis",
+        "discriminators": ["meal_time_syndrome", "ductal_stone", "obstructive_pattern"]
+      },
+      {
+        "diseaseId": "lymphadenopathy",
+        "discriminators": ["multiple_nodes", "outside_gland", "infectious_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Bimanual Palpation", "priority": "immediate", "yield": 0.6, "indication": "all patients" },
+        { "name": "Facial Nerve Exam", "priority": "immediate", "yield": 0.8, "indication": "critical for management" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "US Neck with Doppler", "priority": "high", "yield": 0.8, "indication": "first-line - assess intraparotid vs extraparotid, solid vs cystic" },
+        { "name": "MRI Neck with Contrast", "priority": "high", "yield": 0.92, "indication": "best soft tissue resolution, assess deep lobe, perineural spread" },
+        { "name": "CT Neck with Contrast", "priority": "medium", "yield": 0.85, "indication": "alternate if MRI contraindicated, assess bony erosion" },
+        { "name": "FNA Biopsy", "priority": "high", "yield": 0.9, "indication": "pre-operative diagnosis" },
+        { "name": "Core Needle Biopsy", "priority": "medium", "yield": 0.92, "indication": "if FNA inconclusive" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines: Salivary Gland Tumors",
+      "pathways": [
+        {
+          "severity": "benign tumor",
+          "criteria": "pleomorphic adenoma, Warthin tumor, slow-growing, normal FN, no LN",
+          "treatment": "Superficial parotidectomy with facial nerve preservation (parotid). Submandibulectomy for SMG. Extracapsular dissection for select superficial tumors."
+        },
+        {
+          "severity": "low-grade malignant",
+          "criteria": "low-grade mucoepidermoid, no FN involvement, no LN",
+          "treatment": "Total parotidectomy preserving facial nerve + selective neck dissection (levels I-III). Adjuvant RT if positive margins."
+        },
+        {
+          "severity": "high-grade malignant",
+          "criteria": "high-grade histology, FN involvement, LN metastases, perineural spread",
+          "treatment": "Total parotidectomy with facial nerve sacrifice and immediate nerve grafting. Comprehensive neck dissection. Adjuvant radiotherapy. Systemic therapy for metastatic disease."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "salivary_acinar_or_ductal_origin",
+      "genetic_alterations",
+      "myoepithelial_cell_proliferation",
+      "stromal_mesenchymal_component",
+      "malignant_transformation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "facial_nerve_injury",
+        "probability": 0.2,
+        "lagDays": [0, 30],
+        "severityBoost": 0.4,
+        "clues": ["post_op_weakness", "eye_closure_deficit"]
+      },
+      {
+        "diseaseId": "freys_syndrome",
+        "probability": 0.1,
+        "lagDays": [180, 730],
+        "severityBoost": 0.1,
+        "clues": ["gustatory_sweating", "facial_flushing_with_eating"]
+      },
+      {
+        "diseaseId": "tumor_recurrence",
+        "probability": 0.08,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.3,
+        "clues": ["palpable_mass_at_site", "imaging_detected"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["parotid_mass", "slow_growth", "facial_nerve_intact_benign", "FN_palsy_malignant"],
+    "exclusionClues": ["acute_painful_swelling", "fever", "response_to_antibiotics"]
+  }
+}

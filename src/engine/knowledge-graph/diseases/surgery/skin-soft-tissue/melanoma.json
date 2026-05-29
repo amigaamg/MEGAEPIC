@@ -1,0 +1,208 @@
+{
+  "disease": {
+    "id": "melanoma",
+    "name": "Cutaneous Melanoma",
+    "system": "surgical",
+    "agePeak_months": [360, 720],
+    "note": "Most dangerous skin cancer arising from melanocytes. ABCDE criteria: Asymmetry, Border irregular, Color variegated, Diameter >6mm, Evolving.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["skin_lesion", "pigmented_mole", "skin_cancer"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "metastatic_melanoma", "weight": 9 },
+        { "sign": "cerebral_metastasis", "weight": 10 },
+        { "sign": "malignant_melanoma_bleeding_ulcerated", "weight": 7 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "breslow_thickness_greater_4mm", "weight": 9 },
+          { "sign": "ulceration_on_histology", "weight": 7 },
+          { "sign": "lymph_node_metastasis", "weight": 8 },
+          { "sign": "distant_metastasis", "weight": 10 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Metastatic/Breslow >4mm -> SEVERE; in situ / thin <1mm -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "changing_mole", "weight": 5 },
+      { "symptomId": "abcde_changes_asymmetry_border_color_diameter", "weight": 5 },
+      { "symptomId": "itching_bleeding_mole", "weight": 3 },
+      { "symptomId": "new_pigmented_lesion_in_adult", "weight": 4 },
+      { "symptomId": "sun_exposure_sunburn_history", "weight": 3 },
+      { "symptomId": "family_history_of_melanoma", "weight": 4 },
+      { "symptomId": "previous_melanoma_or_nmSC_reported", "weight": 3 },
+      { "symptomId": "multiple_atypical_nevi", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pigmented_lesion_with_abcd_criteria", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "irregular_pigment_network", "baseWeight": 4 },
+      { "signId": "ulceration_bleeding", "baseWeight": 3 },
+      { "signId": "palpable_lymph_nodes", "baseWeight": 4 },
+      { "signId": "satellite_in_transit_lesions", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "sun_exposure_uv_radiation", "multiplier": 3.0 },
+      { "id": "sunburn_history_severe_blistering", "multiplier": 2.5 },
+      { "id": "fair_skin_type_i_ii", "multiplier": 2.5 },
+      { "id": "family_history_of_melanoma", "multiplier": 3.5 },
+      { "id": "multiple_atypical_nevi_dysplastic_nevus", "multiplier": 3.0 },
+      { "id": "large_congenital_nevus", "multiplier": 2.5 },
+      { "id": "previous_melanoma", "multiplier": 4.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "superficial_spreading_melanoma",
+        "name": "Superficial Spreading Melanoma",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "radial_growth_phase", "weight": 5 },
+          { "feature": "intermediate_prognosis", "weight": 3 },
+          { "feature": "common_on_trunk_legs", "weight": 3 }
+        ],
+        "management": "Wide local excision (1-2cm margins depending on Breslow). Sentinel lymph node biopsy if >0.8mm thick. Adjuvant therapy (immunotherapy, targeted) for node-positive or high-risk."
+      },
+      {
+        "id": "nodular_melanoma",
+        "name": "Nodular Melanoma",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "vertical_growth_phase", "weight": 5 },
+          { "feature": "rapid_growth", "weight": 5 },
+          { "feature": "blue_black_nodule", "weight": 4 },
+          { "feature": "thicker_at_diagnosis_worse_prognosis", "weight": 5 }
+        ],
+        "management": "Wide local excision with margins 1-2cm. Sentinel node biopsy. Adjuvant therapy. Close follow-up."
+      },
+      {
+        "id": "lentigo_maligna_melanoma",
+        "name": "Lentigo Maligna Melanoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "elderly_patients", "weight": 4 },
+          { "feature": "sun_damaged_skin_face", "weight": 5 },
+          { "feature": "slow_growing_lentiginous", "weight": 4 },
+          { "feature": "better_prognosis", "weight": 3 }
+        ],
+        "management": "Wide local excision or Mohs micrographic surgery for cosmetically sensitive areas. Topical imiquimod for lentigo maligna (in situ). Sentinel node for invasive."
+      },
+      {
+        "id": "acral_lentiginous_melanoma",
+        "name": "Acral Lentiginous Melanoma",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "palms_soles_subungual", "weight": 5 },
+          { "feature": "dark_skinned_individuals", "weight": 4 },
+          { "feature": "hutchinsons_sign_periungual", "weight": 4 },
+          { "feature": "late_diagnosis_poor_prognosis", "weight": 4 }
+        ],
+        "management": "Wide excision often requiring amputation of digit. Sentinel node biopsy. Adjuvant therapy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "seborrheic_keratosis",
+        "discriminators": ["stuck_on_appearance", "waxy", "horn_cysts", "no_change"]
+      },
+      {
+        "diseaseId": "dysplastic_nevus",
+        "discriminators": ["less_atypical", "stable", "dermatoscopy_may_not_show_melanoma_criteria"]
+      },
+      {
+        "diseaseId": "pigmented_basal_cell_carcinoma",
+        "discriminators": ["rolled_border", "telangiectasia", "pearly_appearance", "slow_growth"]
+      },
+      {
+        "diseaseId": "blue_nevus",
+        "discriminators": ["stable", "uniform_blue_color", "dermal_dendritic_melanocytes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Dermatoscopy (Epiluminescence)", "priority": "immediate", "yield": 0.85, "indication": "identify suspicious melanoma features" }
+      ],
+      "laboratory": [
+        { "name": "LDH", "priority": "medium", "yield": 0.4, "indication": "prognostic marker in metastatic disease" },
+        { "name": "BRAF mutation testing", "priority": "high", "yield": 0.5, "indication": "guide targeted therapy if metastatic" }
+      ],
+      "imaging": [
+        { "name": "Excision biopsy (2mm margin) with histology", "priority": "immediate", "yield": 0.99, "indication": "definitive diagnosis with Breslow, Clark, ulceration" },
+        { "name": "Sentinel Lymph Node Biopsy (SLNB)", "priority": "medium", "yield": 0.9, "indication": "if Breslow >0.8mm" },
+        { "name": "CT Chest/Abdomen/Pelvis", "priority": "medium", "yield": 0.6, "indication": "if high-risk or symptomatic" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "if metastatic disease suspected" },
+        { "name": "Brain MRI", "priority": "medium", "yield": 0.6, "indication": "if high risk or neurological symptoms" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN/ESMO Guidelines for Melanoma",
+      "pathways": [
+        {
+          "severity": "in situ (Stage 0)",
+          "criteria": "confined to epidermis, no invasion",
+          "treatment": "Wide local excision with 0.5cm margins. No SLNB."
+        },
+        {
+          "severity": "thin (Stage I: <1mm)",
+          "criteria": "Breslow <1mm, no ulceration, no nodes",
+          "treatment": "Wide local excision with 1cm margins. SLNB optional if high-risk features. No adjuvant therapy."
+        },
+        {
+          "severity": "intermediate-thick (Stage II: 1-4mm)",
+          "criteria": "Breslow 1-4mm, +/- ulceration",
+          "treatment": "Wide local excision with 1-2cm margins. SLNB mandatory. Adjuvant immunotherapy if node-positive."
+        },
+        {
+          "severity": "thick/metastatic (Stage III-IV)",
+          "criteria": "Breslow >4mm, node metastases, distant metastases",
+          "treatment": "Wide local excision + lymphadenectomy (if palpable nodes). Adjuvant immunotherapy (Pembrolizumab, Nivolumab) or targeted (Dabrafenib + Trametinib if BRAF+). Palliative therapy for M1."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uv_induced_dna_damage",
+      "braf_nras_mutations",
+      "melanocyte_transformation",
+      "radial_growth",
+      "vertical_growth",
+      "invasion",
+      "metastasis_via_lymphatics_and_blood"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "lymph_node_metastasis",
+        "probability": 0.15,
+        "lagDays": [30, 720],
+        "severityBoost": 0.3,
+        "clues": ["palpable_nodes", "in_transit_metastasis"]
+      },
+      {
+        "diseaseId": "distant_metastasis",
+        "probability": 0.1,
+        "lagDays": [90, 720],
+        "severityBoost": 0.5,
+        "clues": ["lung_liver_brain_bone_lesions", "elevated_ldh"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["changing_mole", "abcde_criteria", "family_history_of_melanoma", "fair_skin_sun_damage"],
+    "exclusionClues": ["stable_benign_appearing_nevus", "no_change_over_years", "benign_dermatoscopy"]
+  }
+}

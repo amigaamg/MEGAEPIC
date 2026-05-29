@@ -1,0 +1,210 @@
+{
+  "disease": {
+    "id": "dvt_pe",
+    "name": "Postoperative Venous Thromboembolism (DVT/PE)",
+    "system": "surgical",
+    "agePeak_months": [480, 960],
+    "note": "Venous thromboembolism is a leading cause of preventable postoperative death. DVT arises from venous stasis, hypercoagulability, and endothelial injury (Virchow's triad). PE is the most feared complication, often presenting with sudden collapse.",
+    "prevalenceWeight": 0.08,
+    "syndromeTags": ["postoperative_complication", "venous_thromboembolism", "dvt", "pulmonary_embolism"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "massive_pe_with_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "refractory_hypoxemia", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "dyspnea_sudden_onset", "weight": 8 },
+          { "sign": "pleuritic_chest_pain", "weight": 7 },
+          { "sign": "tachycardia", "weight": 7 },
+          { "sign": "hypotension", "weight": 8 },
+          { "sign": "hemoptysis", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If shock/hypoxemia/cardiac arrest -> SEVERE (massive/high-risk PE); else -> NON-SEVERE (DVT alone, low-risk PE)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "unilateral_leg_swelling", "weight": 5 },
+      { "symptomId": "leg_pain_tenderness", "weight": 4 },
+      { "symptomId": "sudden_onset_dyspnea", "weight": 5 },
+      { "symptomId": "pleuritic_chest_pain", "weight": 4 },
+      { "symptomId": "hemoptysis", "weight": 3 },
+      { "symptomId": "syncope_near_syncope", "weight": 4 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "lower_limb_heavy_ache", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "calf_tenderness_unilateral", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "leg_edema_unilateral", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "homan_sign", "baseWeight": 2, "note": "Dorsiflexion calf pain; low sensitivity" },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "hypoxia_on_pulse_oximetry", "baseWeight": 5 },
+      { "signId": "raised_jvp", "baseWeight": 3, "note": "Right heart strain" },
+      { "signId": "accentuated_p2", "baseWeight": 2, "note": "Loud pulmonary component of S2" },
+      { "signId": "pleural_rub", "baseWeight": 2 },
+      { "signId": "warm_swollen_leg", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "major_surgery", "multiplier": 5.0 },
+      { "id": "hip_knee_surgery", "multiplier": 10.0 },
+      { "id": "cancer_surgery", "multiplier": 6.0 },
+      { "id": "prolonged_immobility", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "previous_dvt_pe", "multiplier": 4.0 },
+      { "id": "thrombophilia", "multiplier": 5.0 },
+      { "id": "oral_contraceptives_HRT", "multiplier": 3.0 },
+      { "id": "pregnancy_postpartum", "multiplier": 5.0 },
+      { "id": "age_over_60", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "distal_dvt",
+        "name": "Distal (Calf Vein) DVT",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "calf_pain_tenderness", "weight": 4 },
+          { "feature": "mild_ankle_edema", "weight": 3 },
+          { "feature": "homan_sign_positive", "weight": 2 },
+          { "feature": "no_proximal_symptoms", "weight": 5 }
+        ],
+        "management": "Anticoagulation (LMWH followed by DOAC) for 3 months. Compression stockings. Ambulation as tolerated."
+      },
+      {
+        "id": "proximal_dvt",
+        "name": "Proximal (Femoral/Iliac) DVT",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "whole_leg_swelling", "weight": 5 },
+          { "feature": "thigh_groin_pain", "weight": 4 },
+          { "feature": "dilated_superficial_veins", "weight": 3 },
+          { "feature": "cyanotic_leg", "weight": 3 }
+        ],
+        "management": "Therapeutic anticoagulation (LMWH bridging to Warfarin or DOAC). Thrombectomy/thrombolysis if phlegmasia cerulea dolens. IVC filter if contraindication to anticoagulation."
+      },
+      {
+        "id": "massive_pe",
+        "name": "Massive (High-Risk) PE",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "sudden_collapse", "weight": 5 },
+          { "feature": "hypotension_refractory", "weight": 5 },
+          { "feature": "severe_hypoxia", "weight": 5 },
+          { "feature": "raised_jvp", "weight": 4 },
+          { "feature": "syncope", "weight": 5 }
+        ],
+        "management": "Immediate resuscitation. IV fluids cautiously. Thrombolysis (Alteplase) unless contraindicated. Embolectomy if thrombolysis fails/high bleeding risk. ICU admission. IVC filter."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cellulitis_leg",
+        "discriminators": ["erythema", "warmth", "fever", "elevated_crp_wbc", "systemic_infection"]
+      },
+      {
+        "diseaseId": "ruptured_bakers_cyst",
+        "discriminators": ["popliteal_cyst", "ecchymosis_ankle", "ultrasound_showing_cyst_rupture"]
+      },
+      {
+        "diseaseId": "lymphedema",
+        "discriminators": ["chronic", "non_pitting", "foot_dorsum_swelling", "history_of_cancer_surgery_radiation"]
+      },
+      {
+        "diseaseId": "muscle_hematoma",
+        "discriminators": ["anticoagulation_history", "ecchymosis", "normal_dvt_ultrasound"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Wells Score for DVT/PE", "priority": "immediate", "yield": 0.85, "indication": "all suspected VTE; determines pre-test probability" },
+        { "name": "D-dimer (high-sensitivity)", "priority": "immediate", "yield": 0.9, "indication": "low/intermediate Wells probability; negative rule-out" },
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.7, "indication": "hypoxia detection in suspected PE" }
+      ],
+      "laboratory": [
+        { "name": "D-dimer", "priority": "high", "yield": 0.9, "indication": "elevated in VTE; low NPV" },
+        { "name": "Troponin", "priority": "high", "yield": 0.6, "indication": "elevated in high-risk PE (right heart strain)" },
+        { "name": "BNP/NT-proBNP", "priority": "medium", "yield": 0.6, "indication": "right ventricular dysfunction" },
+        { "name": "Coagulation profile", "priority": "medium", "yield": 0.3, "indication": "baseline before anticoagulation" }
+      ],
+      "imaging": [
+        { "name": "Compression Ultrasound (CUS)", "priority": "high", "yield": 0.95, "indication": "first-line imaging for DVT; non-compressible vein = DVT" },
+        { "name": "CT Pulmonary Angiography (CTPA)", "priority": "high", "yield": 0.97, "indication": "gold standard for PE; contraindicated if renal failure or contrast allergy" },
+        { "name": "V/Q Scan", "priority": "medium", "yield": 0.85, "indication": "CTPA contraindication (renal failure, contrast allergy)" },
+        { "name": "Echocardiography (TTE/TOE)", "priority": "high", "yield": 0.6, "indication": "bedside assessment for right heart strain in suspected massive PE" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines [NG158] for VTE Prevention and Management; ESC Guidelines for PE",
+      "pathways": [
+        {
+          "severity": "low_risk_pe_dvt_only",
+          "criteria": "hemodynamically stable, no RV strain, DVT alone or low-risk PE (PESI Class I-II)",
+          "treatment": "LMWH (e.g., Enoxaparin 1.5 mg/kg daily) or Fondaparinux. Bridge to DOAC (Rivaroxaban 15 mg BD for 21 days then 20 mg OD) or Warfarin (target INR 2-3). Compression stockings for DVT. Early ambulation."
+        },
+        {
+          "severity": "intermediate_risk_pe",
+          "criteria": "hemodynamically stable but RV dysfunction on echo/CT, elevated troponin",
+          "treatment": "Therapeutic anticoagulation as above. Close monitoring in HDU. Consider thrombolysis if deterioration."
+        },
+        {
+          "severity": "high_risk_massive_pe",
+          "criteria": "hypotension, shock, cardiac arrest, severe hypoxia",
+          "treatment": "Resuscitation. IV fluids cautiously. Thrombolysis (Alteplase 100 mg IV over 2h). Embolectomy (catheter-based or surgical) if contraindication/failure of thrombolysis. ICU. IVC filter if anticoagulation contraindicated."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "venous_stasis",
+      "hypercoagulability",
+      "endothelial_injury",
+      "thrombus_formation",
+      "thrombus_propagation",
+      "embolization_to_pulmonary_artery"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pulmonary_embolism",
+        "probability": 0.3,
+        "lagDays": [3, 14],
+        "severityBoost": 0.5,
+        "clues": ["sudden_dyspnea", "pleuritic_pain", "hemoptysis"]
+      },
+      {
+        "diseaseId": "post_thrombotic_syndrome",
+        "probability": 0.4,
+        "lagDays": [180, 730],
+        "severityBoost": 0.1,
+        "clues": ["chronic_leg_swelling", "skin_pigmentation", "ulceration"]
+      },
+      {
+        "diseaseId": "chronic_thromboembolic_pulmonary_hypertension",
+        "probability": 0.04,
+        "lagDays": [365, 1095],
+        "severityBoost": 0.3,
+        "clues": ["progressive_dyspnea", "fatigue", "right_heart_failure"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["unilateral_leg_swelling_postop", "sudden_dyspnea_postop", "pleuritic_chest_pain", "unexplained_hypoxia"],
+    "exclusionClues": ["normal_d_dimer_low_wells", "negative_cus", "normal_ctpa", "symptoms_explained_by_other_causes"]
+  }
+}

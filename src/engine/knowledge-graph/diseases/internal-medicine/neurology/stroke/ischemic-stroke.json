@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "ischemic_stroke",
+    "name": "Ischemic Stroke",
+    "system": "neurology",
+    "agePeak_months": [600, 960],
+    "note": "Time-critical emergency. Brain tissue salvageable with early reperfusion. Use FAST assessment.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["focal_neurological_deficit", "cerebrovascular_event"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "decreased_consciousness", "weight": 10 },
+        { "sign": "severe_nihss_greater_25", "weight": 9 },
+        { "sign": "seizures", "weight": 8 },
+        { "sign": "signs_of_herniation", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If decreased consciousness/severe deficit/herniation -> SEVERE (large vessel occlusion); else -> NON-SEVERE (small vessel)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_weakness_hemiparesis", "weight": 5 },
+      { "symptomId": "sudden_facial_droop", "weight": 4 },
+      { "symptomId": "sudden_speech_disturbance", "weight": 4 },
+      { "symptomId": "sudden_visual_loss", "weight": 3 },
+      { "symptomId": "sudden_severe_headache", "weight": 2, "note": "More typical of hemorrhagic stroke" },
+      { "symptomId": "dizziness_vertigo", "weight": 2 },
+      { "symptomId": "ataxia", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hemiparesis", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "facial_weakness", "baseWeight": 4 },
+      { "signId": "dysarthria", "baseWeight": 3 },
+      { "signId": "aphasia", "baseWeight": 3 },
+      { "signId": "hemisensory_loss", "baseWeight": 3 },
+      { "signId": "ataxia", "baseWeight": 2 },
+      { "signId": "homonymous_hemianopia", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "hypertension", "multiplier": 2.0 },
+      { "id": "atrial_fibrillation", "multiplier": 2.5 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "dyslipidemia", "multiplier": 1.3 },
+      { "id": "previous_stroke_tia", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "large_vessel_occlusion",
+        "name": "Large Vessel Occlusion Stroke",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "severe_deficit_nihss_greater_10", "weight": 5 },
+          { "feature": "cortical_signs_aphasia_neglect", "weight": 5 },
+          { "feature": "large_core_on_ct", "weight": 3 }
+        ],
+        "management": "Emergency thrombectomy within 6 hours (up to 24h with advanced imaging). IV thrombolysis if within 4.5h."
+      },
+      {
+        "id": "small_vessel_lacunar",
+        "name": "Small Vessel (Lacunar) Stroke",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "pure_motor_stroke", "weight": 5 },
+          { "feature": "mild_to_moderate_deficit", "weight": 4 },
+          { "feature": "deep_infarct_on_mri", "weight": 4 }
+        ],
+        "management": "IV thrombolysis if within window. Secondary prevention: antiplatelet, BP control, statin."
+      },
+      {
+        "id": "cardioembolic_stroke",
+        "name": "Cardioembolic Stroke",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "known_atrial_fibrillation", "weight": 5 },
+          { "feature": "sudden_maximum_onset", "weight": 4 },
+          { "feature": "multiple_territory_infarcts", "weight": 4 }
+        ],
+        "management": "Anticoagulation for secondary prevention. IV thrombolysis if within window and no contraindication."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "intracerebral_hemorrhage",
+        "discriminators": ["severe_headache", "vomiting", "rapid_deterioration", "hypertensive"]
+      },
+      {
+        "diseaseId": "hypoglycemia",
+        "discriminators": ["low_blood_glucose", "confusion", "history_of_diabetes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "FAST assessment", "priority": "immediate", "yield": 0.9, "indication": "all suspected stroke" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.8, "indication": "rule out hypoglycemia" },
+        { "name": "NIHSS score", "priority": "high", "yield": 0.85, "indication": "baseline severity assessment" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr, Glucose, INR", "priority": "immediate", "yield": 0.5, "indication": "baseline before thrombolysis" },
+        { "name": "Troponin", "priority": "high", "yield": 0.4, "indication": "rule out concomitant ACS" }
+      ],
+      "imaging": [
+        { "name": "Non-contrast CT Head", "priority": "immediate", "yield": 0.9, "indication": "rule out hemorrhage" },
+        { "name": "CT Angiography", "priority": "high", "yield": 0.85, "indication": "identify large vessel occlusion" },
+        { "name": "MRI Brain", "priority": "medium", "yield": 0.95, "indication": "definitive for ischemic stroke, posterior fossa" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AHA/ASA Guidelines for Acute Ischemic Stroke",
+      "pathways": [
+        {
+          "severity": "within window (<4.5h)",
+          "criteria": "onset within 4.5 hours, no contraindication to thrombolysis",
+          "treatment": "IV Alteplase 0.9 mg/kg (max 90 mg). 10% bolus, 90% infusion over 60 min. Monitor for bleeding. BP maintain <185/110."
+        },
+        {
+          "severity": "thrombectomy candidate",
+          "criteria": "large vessel occlusion, within 24h with perfusion mismatch",
+          "treatment": "Emergency endovascular thrombectomy. May receive bridging thrombolysis."
+        },
+        {
+          "severity": "supportive",
+          "criteria": "outside window or contraindication to reperfusion",
+          "treatment": "Aspirin 300 mg. BP management (permissive hypertension). DVT prophylaxis. Swallow assessment. Early mobilization. Speech therapy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cerebral_ischemia",
+      "thrombosis_or_embolism",
+      "excitotoxicity",
+      "penumbra",
+      "cerebral_edema",
+      "neuronal_death"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hemorrhagic_transformation",
+        "probability": 0.06,
+        "severityBoost": 0.5,
+        "clues": ["sudden_deterioration", "new_headache", "vomiting"]
+      },
+      {
+        "diseaseId": "malignant_mca_infarct",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["decreased_consciousness", "midline_shift"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_focal_neurological_deficit", "fast_positive", "negative_ct_hemorrhage"],
+    "exclusionClues": ["rapid_resolution_suggests_tia", "hypoglycemia"]
+  }
+}

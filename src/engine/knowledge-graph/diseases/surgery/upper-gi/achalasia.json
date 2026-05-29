@@ -1,0 +1,167 @@
+{
+  "disease": {
+    "id": "achalasia_cardia",
+    "name": "Achalasia Cardia",
+    "system": "surgical",
+    "agePeak_months": [300, 600],
+    "note": "Failure of LES relaxation due to loss of inhibitory neurons. Dysphagia, regurgitation, and chest pain.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["dysphagia", "regurgitation", "esophageal_motility_disorder"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "complete_esophageal_obstruction", "weight": 8 },
+        { "sign": "aspiration_pneumonia_severe", "weight": 8 },
+        { "sign": "weight_loss_severe", "weight": 7 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "megaeosphagus", "weight": 6 },
+          { "sign": "sigmoid_esophagus", "weight": 7 },
+          { "sign": "eckardt_score_greater_than_6", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Severe dysphagia/megaeosphagus -> SEVERE; mild-moderate symptoms -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dysphagia_for_both_solids_and_liquids", "weight": 5 },
+      { "symptomId": "regurgitation_of_undigested_food", "weight": 4, "note": "Nocturnal regurgitation can cause aspiration" },
+      { "symptomId": "chest_pain", "weight": 3, "note": "Retrosternal pain, often relieved by swallowing" },
+      { "symptomId": "heartburn", "weight": 3, "note": "From regurgitated food, not acid reflux" },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "cough_nocturnal_aspiration", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "weight_loss", "baseWeight": 3 },
+      { "signId": "signs_of_aspiration", "baseWeight": 3, "note": "Crackles in lung bases" },
+      { "signId": "cachexia", "baseWeight": 2, "note": "In advanced cases" }
+    ],
+
+    "riskFactors": [
+      { "id": "autoimmune_disease", "multiplier": 1.5 },
+      { "id": "family_history_of_achalasia", "multiplier": 1.3 },
+      { "id": "chagas_disease", "multiplier": 3.0, "note": "In endemic regions" }
+    ],
+
+    "subtypes": [
+      {
+        "id": "type_i_achalasia",
+        "name": "Type I (Classic) Achalasia",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "absent_peristalsis", "weight": 5 },
+          { "feature": "no_esophageal_pressurization", "weight": 4 },
+          { "feature": "minimal_dilatation_of_esophagus", "weight": 3 }
+        ],
+        "management": "Laparoscopic Heller myotomy with partial fundoplication (Dor). POEM (Peroral Endoscopic Myotomy) as alternative."
+      },
+      {
+        "id": "type_ii_achalasia",
+        "name": "Type II (Panesophageal Pressurization) Achalasia",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "absent_peristalsis", "weight": 5 },
+          { "feature": "panesophageal_pressurization", "weight": 5 },
+          { "feature": "best_response_to_treatment", "weight": 3 }
+        ],
+        "management": "Laparoscopic Heller myotomy + Dor fundoplication. POEM. Pneumatic dilation as alternative."
+      },
+      {
+        "id": "type_iii_achalasia",
+        "name": "Type III (Spastic) Achalasia",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "absent_peristalsis", "weight": 5 },
+          { "feature": "spastic_contractions", "weight": 5 },
+          { "feature": "chest_pain_prominent", "weight": 4 }
+        ],
+        "management": "POEM preferred (longer myotomy). Laparoscopic Heller myotomy with extended myotomy. Medical therapy (calcium channel blockers, nitrates) for poor surgical candidates."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pseudoachalasia",
+        "discriminators": ["age_over_60", "rapid_onset", "weight_loss_significant", "malignancy_on_ct", "normal_manometry_but_obstructed"]
+      },
+      {
+        "diseaseId": "benign_esophageal_stricture",
+        "discriminators": ["dysphagia_for_solids_only", "reflux_history", "normal_manometry"]
+      },
+      {
+        "diseaseId": "eosinophilic_esophagitis",
+        "discriminators": ["food_impaction", "allergic_history", "eosinophils_on_biopsy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Water swallow test", "priority": "medium", "yield": 0.4, "indication": "bedside screening" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "medium", "yield": 0.2, "indication": "rule out anemia" },
+        { "name": "Chagas serology", "priority": "low", "yield": 0.1, "indication": "in endemic areas" }
+      ],
+      "imaging": [
+        { "name": "Barium Swallow", "priority": "high", "yield": 0.85, "indication": "bird beak appearance, esophageal dilatation" },
+        { "name": "High-Resolution Manometry (HRM)", "priority": "high", "yield": 0.98, "indication": "gold standard for diagnosis (Chicago Classification)" },
+        { "name": "Upper GI Endoscopy (EGD)", "priority": "high", "yield": 0.7, "indication": "rule out pseudoachalasia, evaluate mucosa" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACG Clinical Guidelines for Achalasia",
+      "pathways": [
+        {
+          "severity": "mild to moderate",
+          "criteria": "Eckardt score 3-6, no megaesophagus, surgical candidate",
+          "treatment": "Laparoscopic Heller myotomy with Dor fundoplication. POEM as alternative. Pneumatic dilation if surgery contraindicated."
+        },
+        {
+          "severity": "severe/end-stage",
+          "criteria": "Eckardt score >6, megaesophagus, sigmoid esophagus, failed prior therapy",
+          "treatment": "Esophagectomy (transhiatal or Ivor Lewis) for end-stage. Repeat myotomy or POEM if prior myotomy failed. Botox injection for poor surgical candidates."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "loss_of_inhibitory_nitric_oxide_neurons",
+      "impaired_les_relaxation",
+      "absent_esophageal_peristalsis",
+      "esophageal_dilatation",
+      "food_stasis",
+      "megaesophagus"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "aspiration_pneumonia",
+        "probability": 0.15,
+        "lagDays": [30, 360],
+        "severityBoost": 0.3,
+        "clues": ["nocturnal_cough", "fever", "infiltrates_on_cxr"]
+      },
+      {
+        "diseaseId": "esophageal_cancer",
+        "probability": 0.03,
+        "lagDays": [720, 3600],
+        "severityBoost": 0.2,
+        "clues": ["worsening_dysphagia", "weight_loss", "food_impaction"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["dysphagia_both_solids_liquids", "regurgitation", "bird_beak_on_barium", "manometry_confirms"],
+    "exclusionClues": ["dysphagia_solids_only", "reflux_history_primarily", "normal_manometry"]
+  }
+}

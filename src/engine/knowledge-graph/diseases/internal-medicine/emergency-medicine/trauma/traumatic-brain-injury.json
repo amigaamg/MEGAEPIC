@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "traumatic_brain_injury",
+    "name": "Traumatic Brain Injury",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 720],
+    "note": "Brain injury caused by external mechanical force. Ranges from mild concussion to severe injury with intracranial hypertension. Preventing secondary injury is paramount.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["trauma", "neurological_emergency", "head_injury"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "gcs_less_than_9", "weight": 10 },
+        { "sign": "pupillary_asymmetry", "weight": 9 },
+        { "sign": "posturing_decerebrate_or_decorticate", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "seizure", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "GCS <=8 = SEVERE TBI (intubate). GCS 9-12 = MODERATE. GCS 13-15 = MILD."
+    },
+    "historyFeatures": [
+      { "symptomId": "head_trauma", "weight": 5 },
+      { "symptomId": "loss_of_consciousness", "weight": 5 },
+      { "symptomId": "vomiting", "weight": 3 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "amnesia", "weight": 4 },
+      { "symptomId": "seizure", "weight": 3 },
+      { "symptomId": "anticoagulant_use", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "gcs_less_than_15", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pupil_asymmetry", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "scalp_haematoma_or_laceration", "baseWeight": 2 },
+      { "signId": "periorbital_bruising", "baseWeight": 3 },
+      { "signId": "battle_sign", "baseWeight": 3 },
+      { "signId": "csf_rhinorrhoea_otorrhoea", "baseWeight": 4 },
+      { "signId": "focal_neurological_deficit", "baseWeight": 4 },
+      { "signId": "posturing", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "anticoagulation_therapy", "multiplier": 3.0 },
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "fall_from_height", "multiplier": 2.0 },
+      { "id": "motor_vehicle_collision", "multiplier": 2.5 },
+      { "id": "previous_brain_surgery", "multiplier": 1.5 },
+      { "id": "alcohol_intoxication", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "epidural_haematoma",
+        "name": "Epidural Haematoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "lucid_interval_followed_by_deterioration", "weight": 5 },
+          { "feature": "temporal_bone_fracture", "weight": 4 },
+          { "feature": "ipsilateral_pupil_dilation", "weight": 5 }
+        ],
+        "management": "Emergency neurosurgical evacuation. Burr hole or craniotomy."
+      },
+      {
+        "id": "subdural_haematoma",
+        "name": "Subdural Haematoma",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "gradual_neurological_decline", "weight": 4 },
+          { "feature": "chronic_alcoholism_or_elderly", "weight": 3 },
+          { "feature": "headache_with_fluctuating_consciousness", "weight": 4 }
+        ],
+        "management": "Surgical evacuation if >10mm thickness or midline shift >5mm. Conservative if small with no shift."
+      },
+      {
+        "id": "diffuse_axonal_injury",
+        "name": "Diffuse Axonal Injury",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "high_velocity_deceleration", "weight": 5 },
+          { "feature": "immediate_and_prolonged_coma", "weight": 5 },
+          { "feature": "ct_brain_initially_normal", "weight": 4 }
+        ],
+        "management": "ICU management. Intracranial pressure monitoring. Neuroprotective ventilation."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "GCS assessment", "priority": "immediate", "yield": 1.0, "indication": "all head injury" },
+        { "name": "Pupillary examination", "priority": "immediate", "yield": 0.9, "indication": "brainstem function" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.5, "indication": "hypoglycemia mimics" }
+      ],
+      "laboratory": [
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.6, "indication": "coagulopathy, reversal if needed" },
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.4, "indication": "baseline" },
+        { "name": "ABG", "priority": "high", "yield": 0.5, "indication": "PaCO2, PaO2" }
+      ],
+      "imaging": [
+        { "name": "CT head (non-contrast)", "priority": "immediate", "yield": 0.98, "indication": "all moderate-severe TBI, mild TBI with risk factors" },
+        { "name": "Cervical spine CT", "priority": "high", "yield": 0.7, "indication": "coexistent C-spine injury" },
+        { "name": "MRI brain", "priority": "low", "yield": 0.9, "indication": "DAI detection, prognostic assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Brain Trauma Foundation Guidelines / NICE Head Injury Guideline",
+      "pathways": [
+        {
+          "severity": "severe TBI (GCS <=8)",
+          "criteria": "GCS <=8, unable to protect airway",
+          "treatment": "Intubation and mechanical ventilation. Maintain PaCO2 35-40 (avoid hyperventilation). SBP >100, SpO2 >94%. Neurosurgical consultation. CT head stat. ICP monitoring if indicated. Elevate HOB 30 degrees. Sedation. Consider mannitol/hypertonic saline if herniation. Seizure prophylaxis."
+        },
+        {
+          "severity": "moderate TBI (GCS 9-12)",
+          "criteria": "GCS 9-12, stable airway",
+          "treatment": "CT head stat. Neurosurgical review. Admit for observation. Monitor GCS. Repeat CT if deterioration. No anticoagulation."
+        },
+        {
+          "severity": "mild TBI (GCS 13-15)",
+          "criteria": "GCS 13-15, no immediate danger signs",
+          "treatment": "CT head if per NICE/CHIP criteria. If normal CT and no risk factors, discharge with head injury advice. Observe 24 hours if on anticoagulation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "primary_axonal_injury",
+      "cerebral_contusion",
+      "intracranial_haemorrhage",
+      "cerebral_oedema",
+      "intracranial_hypertension",
+      "reduced_cerebral_perfusion_pressure",
+      "secondary_ischaemic_injury",
+      "excitotoxicity",
+      "inflammatory_cascade"
+    ],
+    "complications": [
+      {
+        "diseaseId": "intracranial_hypertension",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["worsening_gcs", "pupil_asymmetry", "cushing_response"]
+      },
+      {
+        "diseaseId": "post_traumatic_seizures",
+        "probability": 0.1,
+        "severityBoost": 0.2,
+        "clues": ["convulsions", "gcs_fluctuation"]
+      },
+      {
+        "diseaseId": "chronic_subdural_haematoma",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["elderly", "headache", "fluctuating_consciousness"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["head_trauma", "gcs_less_than_15", "pupil_asymmetry", "vomiting", "loss_of_consciousness"],
+    "exclusionClues": ["gcs_15", "no_head_trauma", "normal_ct_head", "no_neurological_signs"]
+  }
+}

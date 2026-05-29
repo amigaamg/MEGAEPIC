@@ -1,0 +1,131 @@
+{
+  "disease": {
+    "id": "alcohol_use_disorder",
+    "name": "Alcohol Use Disorder",
+    "system": "PSYCH",
+    "agePeak_months": [216, 600],
+    "note": "Problematic pattern of alcohol use leading to clinically significant impairment. Ranges from mild to severe. Withdrawal can be life-threatening.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["substance_use_disorder", "addiction", "alcohol"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "delirium_tremens", "weight": 10 },
+        { "sign": "seizures", "weight": 10 },
+        { "sign": "hallucinosis_alcohol", "weight": 9 },
+        { "sign": "suicidal_intent", "weight": 9 },
+        { "sign": "severe_withdrawal_ciwa_above_15", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If DT/seizures/severe withdrawal -> MEDICAL HOSPITALIZATION; else -> OUTPATIENT DETOX"
+    },
+    "historyFeatures": [
+      { "symptomId": "excessive_alcohol_consumption", "weight": 5 },
+      { "symptomId": "loss_of_control_over_drinking", "weight": 4 },
+      { "symptomId": "craving_strong_desire", "weight": 4 },
+      { "symptomId": "tolerance_increased", "weight": 3 },
+      { "symptomId": "withdrawal_symptoms", "weight": 4 },
+      { "symptomId": "neglect_of_roles_despite_harm", "weight": 3 },
+      { "symptomId": "continued_use_despite_consequences", "weight": 3 },
+      { "symptomId": "time_spent_drinking_recovering", "weight": 3 },
+      { "symptomId": "failed_attempts_to_cut_down", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "tachycardia_and_hypertension_withdrawal", "baseWeight": 4 },
+      { "signId": "tremor_alcohol_withdrawal", "baseWeight": 3 },
+      { "signId": "hepatomegaly_or_ascites", "baseWeight": 3 },
+      { "signId": "palmar_erythema_spider_angiomas", "baseWeight": 2 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "peripheral_neuropathy", "baseWeight": 2 },
+      { "signId": "ataxia_gait_instability", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_alcoholism", "multiplier": 3.0 },
+      { "id": "male_sex", "multiplier": 2.0 },
+      { "id": "age_18_to_25", "multiplier": 1.5 },
+      { "id": "peer_pressure_social_norms", "multiplier": 1.5 },
+      { "id": "comorbid_psychiatric_disorder", "multiplier": 2.5 },
+      { "id": "childhood_adversity_trauma", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "alcohol_dependence_mild",
+        "name": "Mild Alcohol Use Disorder",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "2_to_3_criteria_met", "weight": 5 },
+          { "feature": "minimal_withdrawal", "weight": 3 }
+        ],
+        "management": "Brief intervention. Motivational interviewing. Set drinking limits. Monitor. Naltrexone 50 mg daily or acamprosate 666 mg TID. Outpatient counseling."
+      },
+      {
+        "id": "alcohol_dependence_severe",
+        "name": "Severe Alcohol Use Disorder",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "6_or_more_criteria_met", "weight": 5 },
+          { "feature": "significant_withdrawal_history", "weight": 4 },
+          { "feature": "organ_damage", "weight": 3 }
+        ],
+        "management": "Medically supervised detox. CIWA-Ar protocol. Benzodiazepine (diazepam or chlordiazepoxide). Thiamine IV/IM to prevent Wernicke. Naltrexone/acamprosate. Residential rehab. AA/12-step."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "generalized_anxiety", "discriminators": ["anxiety_precedes_alcohol_use", "no_withdrawal_symptoms", "no_loss_of_control"] },
+      { "diseaseId": "major_depressive_disorder", "discriminators": ["mood_symptoms_precede", "no_relief_drinking_pattern", "no_loss_of_control"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "CIWA-Ar Scale", "priority": "immediate_serial", "yield": 0.9, "indication": "withdrawal monitoring, Q1-4h" },
+        { "name": "AUDIT (Alcohol Use Disorders Identification Test)", "priority": "high", "yield": 0.85, "indication": "screening and severity" }
+      ],
+      "laboratory": [
+        { "name": "LFT (GGT, ALT, AST)", "priority": "high", "yield": 0.7, "indication": "liver damage assessment" },
+        { "name": "MCV", "priority": "medium", "yield": 0.5, "indication": "chronic heavy use marker" },
+        { "name": "Blood alcohol level", "priority": "medium", "yield": 0.6, "indication": "acute intoxication assessment" },
+        { "name": "FBC, U&E, glucose, coagulation", "priority": "high", "yield": 0.5, "indication": "baseline and complication screening" },
+        { "name": "Urine toxicology", "priority": "medium", "yield": 0.3, "indication": "polysubstance use screen" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound liver", "priority": "medium", "yield": 0.5, "indication": "fatty liver, cirrhosis, portal hypertension" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Alcohol Use Disorders",
+      "pathways": [
+        {
+          "severity": "withdrawal (moderate-severe)",
+          "criteria": "CIWA-Ar >10, history of severe withdrawal, comorbidities",
+          "treatment": "Symptom-triggered benzodiazepine (diazepam 10-20 mg or chlordiazepoxide 25-100 mg Q1h PRN). Thiamine 250 mg IV/IM daily for 3-5 days. IV fluids. Monitor vitals."
+        },
+        {
+          "severity": "detoxification",
+          "criteria": "stable, CIWA-Ar <10, mild-moderate AUD",
+          "treatment": "Fixed-dose reducing benzodiazepine regimen. Thiamine 100 mg PO daily. Multivitamins. Naltrexone or acamprosate for relapse prevention. Counseling."
+        },
+        {
+          "severity": "maintenance/relapse prevention",
+          "criteria": "detox complete, abstinent",
+          "treatment": "Naltrexone 50-100 mg daily OR acamprosate 666 mg TID. Disulfiram 200-500 mg daily (second-line). CBT. Motivational interviewing. AA/12-step. Social support."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "gaba_receptor_modulation",
+      "glutamate_rebound_excitotoxicity",
+      "dopamine_reward_pathway_dysregulation",
+      "liver_injury_cirrhosis",
+      "thiamine_deficiency",
+      "neurotoxicity_brain_atrophy"
+    ],
+    "complications": [
+      { "diseaseId": "delirium_tremens", "probability": 0.05, "severityBoost": 0.5, "clues": ["ciwa_above_20", "prior_dt", "acute_illness"] },
+      { "diseaseId": "alcoholic_hepatitis", "probability": 0.2, "severityBoost": 0.3, "clues": ["jaundice", "elevated_ast_to_alt_ratio", "tenderness"] },
+      { "diseaseId": "wernicke_encephalopathy", "probability": 0.1, "severityBoost": 0.5, "clues": ["confusion", "ataxia", "ophthalmoplegia", "malnutrition"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if withdrawal or organ failure",
+    "diagnosticClues": ["increased_tolerance", "withdrawal_symptoms", "loss_of_control", "continued_despite_harm"],
+    "exclusionClues": ["mild_social_drinking", "no_impairment", "no_withdrawal", "controlled_use"]
+  }
+}

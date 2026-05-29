@@ -1,0 +1,120 @@
+{
+  "disease": {
+    "id": "mitral_stenosis",
+    "name": "Mitral Stenosis",
+    "system": "CARD",
+    "agePeak_months": [240, 600],
+    "note": "Narrowing of the mitral valve orifice, most commonly post-rheumatic. Impairs left atrial emptying, leading to pulmonary congestion.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["valvular_heart_disease", "left_heart_obstruction"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pulmonary_oedema", "weight": 9 },
+        { "sign": "severe_pulmonary_hypertension", "weight": 8 },
+        { "sign": "atrial_fibrillation_rapid_rate", "weight": 8 },
+        { "sign": "hemoptysis", "weight": 7 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If pulmonary oedema/PH/haemoptysis/rapid AF -> SEVERE; else -> MILD/MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea_on_exertion", "weight": 5 },
+      { "symptomId": "orthopnea", "weight": 4 },
+      { "symptomId": "paroxysmal_nocturnal_dyspnea", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "hemoptysis", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "history_of_rheumatic_fever", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "diastolic_murmur_apex", "baseWeight": 5, "doubleWeight": true, "note": "Low-pitched, middiastolic, with presystolic accentuation" },
+      { "signId": "opening_snap", "baseWeight": 4 },
+      { "signId": "malar_flush", "baseWeight": 2 },
+      { "signId": "signs_of_pulmonary_hypertension", "baseWeight": 3 },
+      { "signId": "crackles_lung_bases", "baseWeight": 3 },
+      { "signId": "jugular_venous_distension", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "rheumatic_fever_history", "multiplier": 4.0 },
+      { "id": "female_sex", "multiplier": 2.5 },
+      { "id": "developing_country_birth", "multiplier": 2.0 },
+      { "id": "streptococcal_infections", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "mild_ms",
+        "name": "Mild Mitral Stenosis (MVA >1.5 cm2)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [{ "feature": "mva_greater_1_point_5", "weight": 5 }],
+        "management": "Medical: rate control for AF, diuretics PRN, anticoagulation for AF. No intervention needed."
+      },
+      {
+        "id": "moderate_ms",
+        "name": "Moderate Mitral Stenosis (MVA 1.0-1.5 cm2)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [{ "feature": "mva_1_to_1_point_5", "weight": 5 }],
+        "management": "Medical as above. Consider percutaneous balloon mitral valvuloplasty if favorable valve morphology."
+      },
+      {
+        "id": "severe_ms",
+        "name": "Severe Mitral Stenosis (MVA <1.0 cm2)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [{ "feature": "mva_less_than_1", "weight": 5 }],
+        "management": "Percutaneous balloon mitral valvuloplasty (if suitable). Surgical mitral valve replacement if not suitable. Anticoagulation for AF."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "left_atrial_myxoma", "discriminators": ["tumor_plop", "positional_symptoms", "constitutional_symptoms"] },
+      { "diseaseId": "pulmonary_venous_hypertension_primary", "discriminators": ["no_valvular_lesion", "normal_mva_on_echo"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "high", "yield": 0.5, "indication": "LA enlargement, AF, RVH" }
+      ],
+      "laboratory": [
+        { "name": "ASOT/anti-DNase B", "priority": "medium", "yield": 0.3, "indication": "rheumatic activity", "limitations": "May be negative years after initial RF" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "MVA, mean gradient, Wilkins score, pulmonary pressure" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "LA enlargement, pulmonary congestion" },
+        { "name": "Transesophageal echo", "priority": "medium", "yield": 0.9, "indication": "LA thrombus exclusion before valvuloplasty" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC/EACTS Guidelines for Valvular Heart Disease",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "MVA >1.0 cm2, NYHA I-II, no pulmonary hypertension",
+          "treatment": "Medical: diuretics for congestion. Beta-blocker/CCB for rate control if AF. Anticoagulation if AF. Endocarditis prophylaxis if prosthetic valve."
+        },
+        {
+          "severity": "severe, favorable anatomy",
+          "criteria": "MVA <1.0 cm2, NYHA III-IV, suitable valve morphology (Wilkins score ≤8)",
+          "treatment": "Percutaneous balloon mitral valvuloplasty. TEE before procedure to exclude LA thrombus."
+        },
+        {
+          "severity": "severe, unfavorable anatomy",
+          "criteria": "MVA <1.0 cm2, NYHA III-IV, Wilkins score >8, contraindication to valvuloplasty",
+          "treatment": "Mitral valve replacement (mechanical if AF or pre-existing anticoagulation, bioprosthetic if not). Post-op anticoagulation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "rheumatic_valve_fusion",
+      "valve_thickening_calcification",
+      "left_atrial_hypertension",
+      "pulmonary_venous_congestion",
+      "pulmonary_arterial_hypertension",
+      "right_heart_strain"
+    ],
+    "complications": [
+      { "diseaseId": "atrial_fibrillation", "probability": 0.4, "severityBoost": 0.3, "clues": ["palpitations", "la_enlargement"] },
+      { "diseaseId": "systemic_embolism", "probability": 0.2, "severityBoost": 0.4, "clues": ["af", "la_thrombus"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["diastolic_murmur_apex", "opening_snap", "dyspnea_and_af"],
+    "exclusionClues": ["normal_mva", "normal_la_size"]
+  }
+}

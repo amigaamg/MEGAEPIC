@@ -1,0 +1,186 @@
+{
+  "disease": {
+    "id": "cardiomyopathy",
+    "name": "Cardiomyopathy (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [0, 24],
+    "note": "Primary myocardial disease in children. Dilated, hypertrophic, or restrictive forms. Leading cause of pediatric heart transplantation.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["myocardial_disease", "heart_failure_pediatric"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "pulmonary_edema", "weight": 10 },
+        { "sign": "ventricular_arrhythmia", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "refractory_heart_failure", "weight": 8 },
+          { "sign": "ejection_fraction_less_than_25", "weight": 8 },
+          { "sign": "ventricular_thrombus", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If shock, arrhythmia, or ejection fraction <25% -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue_weakness", "weight": 4 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 4 },
+      { "symptomId": "poor_feeding", "weight": 4 },
+      { "symptomId": "failure_to_thrive", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "syncope", "weight": 4 },
+      { "symptomId": "family_history_cardiomyopathy", "weight": 3 },
+      { "symptomId": "recent_viral_illness", "weight": 2, "note": "Suggestive of myocarditis transitioning to DCM" }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "gallop_rhythm_s3", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 4 },
+      { "signId": "pulmonary_wet_rales", "baseWeight": 3 },
+      { "signId": "peripheral_edema", "baseWeight": 3 },
+      { "signId": "murmur_regurgitant", "baseWeight": 2 },
+      { "signId": "cardiomegaly_on_palpation", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_cardiomyopathy", "multiplier": 4.0 },
+      { "id": "viral_myocarditis_history", "multiplier": 2.5 },
+      { "id": "neuromuscular_disorder", "multiplier": 3.0 },
+      { "id": "metabolic_storage_disease", "multiplier": 3.0 },
+      { "id": "anthracycline_exposure", "multiplier": 2.5 },
+      { "id": "carnitine_deficiency", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "dilated_cardiomyopathy",
+        "name": "Dilated Cardiomyopathy",
+        "prevalenceModifier": 0.55,
+        "keyFeatures": [
+          { "feature": "left_ventricular_dilation", "weight": 5 },
+          { "feature": "reduced_systolic_function", "weight": 5 },
+          { "feature": "heart_failure_symptoms", "weight": 4 }
+        ],
+        "management": "ACE inhibitors, beta-blockers, diuretics. Anticoagulation if EF <25%. Cardiac resynchronization therapy if wide QRS. Heart transplant listing for end-stage."
+      },
+      {
+        "id": "hypertrophic_cardiomyopathy",
+        "name": "Hypertrophic Cardiomyopathy",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "left_ventricular_hypertrophy", "weight": 5 },
+          { "feature": "dynamic_outflow_obstruction", "weight": 4 },
+          { "feature": "family_history_hcm", "weight": 4 }
+        ],
+        "management": "Beta-blockers first-line. Avoid dehydration and inotropes. ICD implantation for high-risk patients. Genetic counseling. Myectomy if refractory outflow obstruction."
+      },
+      {
+        "id": "restrictive_cardiomyopathy",
+        "name": "Restrictive Cardiomyopathy",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "restricted_filling_pattern", "weight": 5 },
+          { "feature": "preserved_systolic_function", "weight": 3 },
+          { "feature": "severe_diastolic_dysfunction", "weight": 5 }
+        ],
+        "management": "Diuretics cautiously. Avoid bradycardia. Heart transplant early consideration due to poor prognosis. Anticoagulation for atrial arrhythmias."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "myocarditis",
+        "discriminators": ["acute_onset_viral_prodrome", "elevated_troponin", "less_severe_remodeling"]
+      },
+      {
+        "diseaseId": "congenital_heart_disease",
+        "discriminators": ["structural_abnormality_on_echo", "specific_lesion_diagnosed"]
+      },
+      {
+        "diseaseId": "anomalous_left_coronary_artery",
+        "discriminators": ["ischemic_pattern_in_infants", "abnormal_coronary_origin_on_echo"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.7, "indication": "LVH, Q waves, arrhythmias" }
+      ],
+      "laboratory": [
+        { "name": "BNP/NT-proBNP", "priority": "high", "yield": 0.85, "indication": "heart failure marker, monitoring" },
+        { "name": "Troponin", "priority": "high", "yield": 0.5, "indication": "myocardial injury marker" },
+        { "name": "Genetic testing panel", "priority": "medium", "yield": 0.6, "indication": "identify sarcomeric mutations" },
+        { "name": "Metabolic screening", "priority": "medium", "yield": 0.3, "indication": "inborn errors of metabolism" }
+      ],
+      "imaging": [
+        { "name": "Echocardiogram", "priority": "immediate", "yield": 0.95, "indication": "LV dimensions, function, hypertrophy" },
+        { "name": "Cardiac MRI", "priority": "high", "yield": 0.9, "indication": "fibrosis (LGE), myocarditis, precise function" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "cardiomegaly, pulmonary congestion" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AHA/ACC Guidelines for Pediatric Cardiomyopathy",
+      "pathways": [
+        {
+          "severity": "stable",
+          "criteria": "Compensated HF, no arrhythmias, EF >35%",
+          "treatment": "ACE inhibitor (enalapril 0.1-0.5 mg/kg/day), beta-blocker (carvedilol), salt restriction, close follow-up with echo every 3-6 months."
+        },
+        {
+          "severity": "decompensated",
+          "criteria": "Pulmonary edema, shock, EF <25%, arrhythmias",
+          "treatment": "ICU admission. IV inotropes (milrinone, dobutamine). Diuretics. Mechanical ventilation if needed. Mechanical circulatory support (ECMO/VAD). Heart transplant evaluation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "genetic_mutation_sarcomere",
+      "myocyte_dysfunction",
+      "ventricular_remodeling",
+      "neurohormonal_activation",
+      "fibrosis",
+      "diastolic_and_systolic_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "heart_failure",
+        "probability": 0.6,
+        "lagDays": [30, 1825],
+        "severityBoost": 0.4,
+        "clues": ["worsening_ef", "increasing_nt_probnp", "hospitalization"]
+      },
+      {
+        "diseaseId": "ventricular_arrhythmia",
+        "probability": 0.15,
+        "lagDays": [30, 1825],
+        "severityBoost": 0.6,
+        "clues": ["syncope", "palpitations", "low_ef", "lge_on_mri"]
+      },
+      {
+        "diseaseId": "thromboembolism",
+        "probability": 0.1,
+        "lagDays": [30, 1095],
+        "severityBoost": 0.5,
+        "clues": ["low_ef", "atrial_fibrillation", "ventricular_thrombus"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["heart_failure_in_infant", "cardiomegaly", "reduced_ejection_fraction", "family_history"],
+    "exclusionClues": ["normal_echo", "structural_chd", "acute_myocarditis_recovery"]
+  }
+}

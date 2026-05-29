@@ -1,0 +1,191 @@
+{
+  "disease": {
+    "id": "somatic_symptom_disorder",
+    "name": "Somatic Symptom Disorder",
+    "system": "psychiatry",
+    "agePeak_months": [360, 720],
+    "note": "SSD is characterized by one or more distressing or disruptive somatic symptoms accompanied by excessive thoughts, feelings, or behaviors related to the symptoms. DSM-5 criteria require at least one somatic symptom causing distress/impairment, plus one or more of: disproportionate thoughts about seriousness, high health anxiety, or excessive time/energy devoted to concerns. Symptoms may be specific or nonspecific. CBT is first-line psychotherapy. Antidepressants (SSRIs/SNRIs) target comorbid depression/anxiety. Distinguish from factitious disorder (intentional feigning) and malingering (external incentive).",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["somatic", "medically_unexplained", "health_anxiety", "CBT"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "repeated_invasive_procedures_without_indication", "weight": 8 },
+        { "sign": "severe_functional_disability", "weight": 7 },
+        { "sign": "suicide_risk_from_hopelessness", "weight": 8 },
+        { "sign": "opioid_or_benzodiazepine_dependence", "weight": 7 },
+        { "sign": "caregiver_burnout_or_medical_child_abuse", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "still_employed_or_functional": true
+      },
+      "severityLabel": "If repeated procedures, opioid dependence, or suicidal -> HIGH; else -> MILD/MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "persistent_somatic_complaints", "weight": 5, "note": "Pain, fatigue, GI symptoms, neurological symptoms" },
+      { "symptomId": "high_healthcare_utilization", "weight": 5 },
+      { "symptomId": "catastrophic_thinking_about_symptoms", "weight": 4 },
+      { "symptomId": "dissatisfaction_with_medical_care", "weight": 3 },
+      { "symptomId": "multiple_doctor_shopping", "weight": 4 },
+      { "symptomId": "excessive_time_energy_on_health", "weight": 4 },
+      { "symptomId": "resistance_to_psychiatric_referral", "weight": 3 },
+      { "symptomId": "symptoms_migrate_or_change_over_time", "weight": 3 },
+      { "symptomId": "symptoms_worsen_with_stress", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "discrepancy_reported_vs_objective", "baseWeight": 5 },
+      { "signId": "multiple_scars_from_prior_surgeries", "baseWeight": 3 },
+      { "signId": "anxious_or_depressed_affect", "baseWeight": 3 },
+      { "signId": "signs_of_medication_seeking", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "childhood_adversity_sexual_abuse", "multiplier": 3.0 },
+      { "id": "chronic_medical_illness_history", "multiplier": 2.0 },
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "anxiety_or_depression", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "predominant_pain",
+        "name": "SSD with Predominant Pain",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "pain_disproportionate_to_pathology", "weight": 5 },
+          { "feature": "opioid_dependence_risk", "weight": 4 }
+        ],
+        "management": "Multidisciplinary pain management. CBT. Avoid opioids. Duloxetine, amitriptyline."
+      },
+      {
+        "id": "predominant_gastrointestinal",
+        "name": "SSD with Predominant GI Symptoms",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "normal_gi_workups", "weight": 5 },
+          { "feature": "nausea_bloating_ibs_overlap", "weight": 4 }
+        ],
+        "management": "CBT. Low-FODMAP. SSRIs/TCAs. GI collaboration. Avoid unnecessary endoscopies."
+      },
+      {
+        "id": "predominant_pseudoneurological",
+        "name": "SSD with Predominant Neurological Symptoms",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "functional_neurological_overlap", "weight": 5 },
+          { "feature": "normal_workup", "weight": 5 }
+        ],
+        "management": "CBT. Physical therapy. Psychoeducation. Avoid unnecessary imaging."
+      },
+      {
+        "id": "predominant_health_anxiety",
+        "name": "SSD with Predominant Health Anxiety",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "intense_worry_about_undiagnosed_illness", "weight": 5 },
+          { "feature": "frequent_consultations_and_reassurance_seeking", "weight": 5 }
+        ],
+        "management": "CBT targeting health anxiety. SSRIs (fluoxetine, paroxetine). Scheduled visits only."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "factitious_disorder",
+        "discriminators": ["intentional_feigning", "patient_role_motivation", "proven_fabrication"]
+      },
+      {
+        "diseaseId": "malingering",
+        "discriminators": ["external_incentive", "symptoms_resolve_when_gain_removed", "legal_context"]
+      },
+      {
+        "diseaseId": "conversion_disorder",
+        "discriminators": ["focal_neurological_symptom", "no_health_anxiety", "la_belle_indifference"]
+      },
+      {
+        "diseaseId": "illness_anxiety_disorder",
+        "discriminators": ["somatic_symptoms_absent_or_minimal", "fear_of_future_illness"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Patient Health Questionnaire-15 (PHQ-15)", "priority": "immediate", "yield": 0.85, "indication": "Somatic symptom severity screening" },
+        { "name": "Health Anxiety Inventory (HAI)", "priority": "high", "yield": 0.8, "indication": "Quantify health anxiety severity" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP, TSH, B12", "priority": "medium", "yield": 0.3, "indication": "Targeted workup; avoid shotgun panels" }
+      ],
+      "imaging": [
+        { "name": "Targeted imaging based on alarm symptoms only", "priority": "high", "yield": 0.1, "indication": "Avoid low-yield whole body imaging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "APA Practice Guidelines for Somatic Symptom Disorder",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "PHQ-15 <10, single system, still functional",
+          "treatment": "Therapeutic alliance. Validate without reinforcing pathology. Scheduled follow-up (not PRN). Brief CBT."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "PHQ-15 10-15, multiple systems, affected function",
+          "treatment": "Full CBT (12-16 sessions). SSRI/SNRI (duloxetine 60-120 mg, sertraline 100-200 mg) if comorbid anxiety/depression. Coordinate care."
+        },
+        {
+          "severity": "severe",
+          "criteria": "PHQ-15 >15, disabled, opioid/benzo dependent",
+          "treatment": "Multidisciplinary: psychiatry, primary care, PT. Intensive CBT. Taper opioids/benzodiazepines. Psychodynamic therapy. Day hospital if needed."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "enhanced_interoceptive_awareness",
+      "amygdala_and_anterior_cingulate_hyperactivity",
+      "aberrant_salience_network_processing",
+      "hpa_axis_dysregulation",
+      "cognitive_biases_towards_threat"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "opioid_use_disorder",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["multiple_opioid_prescribers", "escalating_dose", "functional_decline"]
+      },
+      {
+        "diseaseId": "iatrogenic_harm_from_procedures",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["multiple_surgeries", "adhesions", "repeat_noninvasive_tests"]
+      },
+      {
+        "diseaseId": "major_depressive_disorder",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["hopelessness", "low_mood", "anhedonia", "passive_suicidal_ideation"]
+      },
+      {
+        "diseaseId": "disability_dependence",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["work_disability_application", "sick_role_entrenchment"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "moderate if iatrogenic risk; high if suicidal",
+    "diagnosticClues": ["persistent_somatic_symptoms", "disproportionate_concern", "excessive_time_energy_on_health", "high_healthcare_utilization", "normal_workup", "phq15_elevated"],
+    "exclusionClues": ["objective_biomarker_found", "intentional_feigning_proven", "external_incentive_identified", "symptoms_only_when_observed"]
+  }
+}

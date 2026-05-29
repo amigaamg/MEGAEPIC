@@ -1,0 +1,120 @@
+{
+  "disease": {
+    "id": "toxic_epidermal_necrolysis",
+    "name": "Toxic Epidermal Necrolysis (TEN)",
+    "system": "dermatology",
+    "agePeak_months": [0, 960],
+    "note": "Most severe cutaneous adverse drug reaction. Epidermal detachment >30% BSA. Same spectrum as SJS. Extremely high mortality. MEDICAL EMERGENCY.",
+    "prevalenceWeight": 0.03,
+    "syndromeTags": ["severe_drug_reaction", "medical_emergency", "critical_care_dermatology"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_failure_multi_organ", "weight": 10 },
+        { "sign": "septic_shock_from_skin", "weight": 10 },
+        { "sign": "hypothermia_fluid_loss", "weight": 9 },
+        { "sign": "positive_nikolsky_widespread", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "TEN (>30% detachment) with SCORTEN score determining mortality (10-50%+)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "rapid_widespread_skin_pain_blistering", "weight": 5 },
+      { "symptomId": "culprit_drug_exposure_1_to_28_days", "weight": 5 },
+      { "symptomId": "oral_ocular_genital_anal_mucosal_erosions", "weight": 5 },
+      { "symptomId": "fever_prodrome", "weight": 4 },
+      { "symptomId": "sheets_of_skin_sloughing_off", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "large_areas_of_denuded_skin", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "positive_nikolsky_sign_extensive", "baseWeight": 5 },
+      { "signId": "erosions_of_oral_corneal_urogenital_mucosa", "baseWeight": 5 },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "signs_of_sepsis_hypotension_tachycardia", "baseWeight": 4 },
+      { "signId": "respiratory_distress_cough", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "certain_drugs_allopurinol_aromatic_anticonvulsants_sulfonamides_nevirapine_oxicams", "multiplier": 5.0 },
+      { "id": "hla_b5801_hla_b1502_hla_b5701", "multiplier": 5.0 },
+      { "id": "hiv_infection", "multiplier": 4.0 },
+      { "id": "slow_acetylation_or_impaired_drug_metabolism", "multiplier": 2.0 },
+      { "id": "immunosuppression_with_hiv", "multiplier": 4.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "staphylococcal_scalded_skin_syndrome",
+        "discriminators": ["child", "no_mucosal_involvement", "superficial_split_in_granular_layer", "rapid_response_to_antibiotics"]
+      },
+      {
+        "diseaseId": "severe_acute_gvhd",
+        "discriminators": ["post_bone_marrow_transplant", "other_gvhd_signs", "no_drug_trigger"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "SCORTEN score (age, malignancy, HR, SBP, BSA, BUN, HCO3, glucose)", "priority": "immediate", "yield": 0.9, "indication": "mortality prediction, daily" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr, LFT, glucose, ABG", "priority": "immediate", "yield": 0.7, "indication": "SCORTEN parameters, organ function" },
+        { "name": "Blood cultures (daily)", "priority": "high", "yield": 0.4, "indication": "sepsis monitoring" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "British Association / RegiSCAR / SCCM Guidelines for TEN",
+      "pathways": [
+        {
+          "severity": "immediate upon diagnosis",
+          "criteria": ">30% detachment, SCORTEN calculated",
+          "treatment": "Immediate ICU/burn unit. Withdraw ALL potential culprit drugs. Multidisciplinary: derm, ophtho, respiratory, nutrition. Strict aseptic handling. Warm environment. Central line. Aggressive fluid resuscitation (modified Parkland)."
+        },
+        {
+          "severity": "ongoing management",
+          "criteria": "ICU stay, wound care, complications",
+          "treatment": "Wound care: silver-impregnated dressings, avoid adhesives. Ophthalmology daily. Airway management (bronchoscopy for sloughing). Nutrition support. Pain and anxiety management. IVIG (2-3g/kg) or cyclosporine (3-5mg/kg/day) may be considered. Avoid corticosteroids. Screen for sepsis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "idiosyncratic_drug_reaction",
+      "hla_restricted_drug_presentation",
+      "t_cell_receptor_activation",
+      "cd8_cytotoxic_t_cell_and_nk_cell_activation",
+      "massive_keratinocyte_apoptosis_via_fas_fasl_granulysin",
+      "full_thickness_epidermal_necrosis",
+      "sepsis_and_multiorgan_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "sepsis_and_multiorgan_failure",
+        "probability": 0.6,
+        "severityBoost": 0.6,
+        "clues": ["fever", "hypotension", "oliguria", "leukocytosis"]
+      },
+      {
+        "diseaseId": "corneal_scarring_and_vision_loss",
+        "probability": 0.5,
+        "severityBoost": 0.5,
+        "clues": ["ocular_pain", "photophobia", "symblepharon"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["extensive_skin_detachment_more_30_percent", "mucosal_severe", "drug_cause", "positive_nikolsky"],
+    "exclusionClues": ["no_mucosal_involvement", "child_under_5_with_no_meds"]
+  }
+}

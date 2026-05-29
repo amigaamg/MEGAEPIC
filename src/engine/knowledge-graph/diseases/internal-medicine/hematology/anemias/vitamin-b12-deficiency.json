@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "vitamin_b12_deficiency",
+    "name": "Vitamin B12 Deficiency",
+    "system": "hematology",
+    "agePeak_months": [480, 960, 1080],
+    "note": "Can cause megaloblastic anemia and neurologic deficits. Often due to autoimmune pernicious anemia or malabsorption.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["anemia", "megaloblastic", "macrocytic", "neuropathy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_anemia_hb_below_5", "weight": 10 },
+        { "sign": "neurologic_deficit", "weight": 9 },
+        { "sign": "hemodynamic_instability", "weight": 9 },
+        { "sign": "confusion_or_psychosis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "hb_above_8": true
+      },
+      "severityLabel": "If Hb <5 or neurologic deficit -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "paresthesias", "weight": 4, "note": "Peripheral neuropathy" },
+      { "symptomId": "glossitis", "weight": 3 },
+      { "symptomId": "memory_loss", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "depression", "weight": 2 },
+      { "symptomId": "gait_disturbance", "weight": 3, "note": "Posterior column dysfunction" },
+      { "symptomId": "diarrhea", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "glossitis", "baseWeight": 4, "note": "Smooth, beefy red tongue" },
+      { "signId": "impaired_vibration_sense", "baseWeight": 4 },
+      { "signId": "impaired_proprioception", "baseWeight": 4 },
+      { "signId": "positive_romberg", "baseWeight": 3 },
+      { "signId": "jaundice_mild", "baseWeight": 3, "note": "Due to ineffective erythropoiesis" }
+    ],
+
+    "riskFactors": [
+      { "id": "pernicious_anemia", "multiplier": 3.0 },
+      { "id": "vegan_diet", "multiplier": 2.0 },
+      { "id": "gastric_surgery", "multiplier": 2.5 },
+      { "id": "crohns_disease", "multiplier": 1.8 },
+      { "id": "metformin_use", "multiplier": 1.3 },
+      { "id": "proton_pump_inhibitor", "multiplier": 1.3 },
+      { "id": "elderly_age", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "pernicious_anemia",
+        "name": "Pernicious Anemia",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "autoimmune_gastritis", "weight": 5 },
+          { "feature": "intrinsic_factor_antibodies", "weight": 5 },
+          { "feature": "parietal_cell_antibodies", "weight": 4 }
+        ],
+        "management": "Lifelong IM vitamin B12 replacement (1000mcg monthly)."
+      },
+      {
+        "id": "nutritional_b12_deficiency",
+        "name": "Nutritional B12 Deficiency",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "dietary_deficiency", "weight": 5 },
+          { "feature": "normal_antibody_tests", "weight": 3 }
+        ],
+        "management": "Oral or IM vitamin B12 supplementation. Dietary counseling."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "folate_deficiency",
+        "discriminators": ["normal_b12_levels", "low_folate", "no_neurologic_symptoms", "elevated_homocysteine_only"]
+      },
+      {
+        "diseaseId": "myelodysplastic_syndrome",
+        "discriminators": ["normal_b12_and_folate", "dysplastic_changes_on_film", "cytopenias"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "Macrocytic anemia, high MCV" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.9, "indication": "Macro-ovalocytes, hypersegmented neutrophils" }
+      ],
+      "laboratory": [
+        { "name": "Serum B12 level", "priority": "immediate", "yield": 0.98, "indication": "Low if deficient" },
+        { "name": "Intrinsic factor antibodies", "priority": "high", "yield": 0.7, "indication": "Diagnostic for pernicious anemia" },
+        { "name": "Homocysteine", "priority": "medium", "yield": 0.8, "indication": "Elevated in B12 deficiency" },
+        { "name": "Methylmalonic acid", "priority": "medium", "yield": 0.9, "indication": "Elevated in B12 deficiency, more specific" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "BSH Guidelines for Vitamin B12 Deficiency",
+      "pathways": [
+        {
+          "severity": "severe_neurologic",
+          "criteria": "neurologic symptoms, Hb <7",
+          "treatment": "IM hydroxycobalamin 1000mcg every 2-3 days until improvement, then monthly. Monitor neurologic recovery."
+        },
+        {
+          "severity": "mild_moderate",
+          "criteria": "Hb >7, no neurologic deficit",
+          "treatment": "IM hydroxycobalamin 1000mcg weekly for 4 weeks, then monthly. Consider oral B12 if dietary cause."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "b12_deficiency",
+      "impaired_dna_synthesis",
+      "megaloblastic_hematopoiesis",
+      "ineffective_erythropoiesis",
+      "myelin_sheath_degeneration",
+      "posterior_column_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "irreversible_neuropathy",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["prolonged_untreated_deficiency", "severe_sensory_loss", "gait_disturbance"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if neurologic symptoms present",
+    "diagnosticClues": ["macrocytic_anemia", "hypersegmented_neutrophils", "low_b12", "neuropathy"],
+    "exclusionClues": ["normal_b12", "microcytic_indices", "normal_blood_film"]
+  }
+}

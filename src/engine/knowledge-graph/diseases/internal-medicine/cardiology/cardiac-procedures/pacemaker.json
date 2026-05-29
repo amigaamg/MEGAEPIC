@@ -1,0 +1,117 @@
+{
+  "disease": {
+    "id": "pacemaker",
+    "name": "Pacemaker Implantation and Management",
+    "system": "CARD",
+    "agePeak_months": [600, 1080],
+    "note": "Implantable device for bradyarrhythmia management. Single, dual, or biventricular (CRT) pacing. Follow-up and complication management.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["cardiac_device", "arrhythmia_management"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pacemaker_malfunction", "weight": 10 },
+        { "sign": "pocket_infection_sepsis", "weight": 9 },
+        { "sign": "lead_dislodgement", "weight": 9 },
+        { "sign": "device_erosion", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If malfunction/infection/sepsis/erosion -> URGENT; else -> ROUTINE"
+    },
+    "historyFeatures": [
+      { "symptomId": "syncope", "weight": 4 },
+      { "symptomId": "dizziness", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 2 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "device_related_symptoms", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "pacemaker_pocket_normal", "baseWeight": 3 },
+      { "signId": "pocket_erythema_drainage", "baseWeight": 4 },
+      { "signId": "ecg_pacing_spikes", "baseWeight": 5 },
+      { "signId": "signs_of_low_cardiac_output", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "complete_heart_block", "multiplier": 3.0 },
+      { "id": "sick_sinus_syndrome", "multiplier": 2.0 },
+      { "id": "lbbb_with_hf_and_crt_indication", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "single_chamber_pacemaker",
+        "name": "Single Chamber (VVI/AAI) Pacemaker",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [{ "feature": "single_lead_right_ventricle_or_atrium", "weight": 5 }],
+        "management": "Indicated for chronic AF with slow ventricular response or infrequent bradycardia. VVI mode. Simple and reliable."
+      },
+      {
+        "id": "dual_chamber_pacemaker",
+        "name": "Dual Chamber (DDD) Pacemaker",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [{ "feature": "atrial_and_ventricular_leads", "weight": 5 }],
+        "management": "Indicated for AV block with normal sinus node or SSS. Maintains AV synchrony. DDD/R mode. More physiologic."
+      },
+      {
+        "id": "crt_pacemaker",
+        "name": "Cardiac Resynchronization Therapy (CRT-P/CRT-D)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "biventricular_pacing", "weight": 5 },
+          { "feature": "lbbb_qrs_greater_150", "weight": 5 }
+        ],
+        "management": "Indicated for HF with LVEF <35%, LBBB, QRS >150 ms. CRT-P if no ICD indication; CRT-D if also ICD indicated. Optimize AV/VV intervals."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.9, "indication": "pacing spikes, capture, sensing" },
+        { "name": "Device interrogation", "priority": "immediate", "yield": 0.98, "indication": "battery, thresholds, sensing, impedances, arrhythmia logs" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP, blood cultures", "priority": "high", "yield": 0.6, "indication": "if pocket infection suspected" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray (PA and lateral)", "priority": "high", "yield": 0.8, "indication": "lead position, fracture, pneumothorax, perforation" },
+        { "name": "Echocardiography", "priority": "medium", "yield": 0.5, "indication": "lead vegetation (endocarditis), LV lead position" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Cardiac Pacing and CRT",
+      "pathways": [
+        {
+          "severity": "implantation",
+          "criteria": "standard elective implant",
+          "treatment": "Local anesthesia +/- sedation. Cephalic or subclavian vein access. Lead placement. Pocket creation. Device programming. Chest X-ray post-op."
+        },
+        {
+          "severity": "post-operative (uncomplicated)",
+          "criteria": "successful implant, no complications",
+          "treatment": "Immobilize arm for 24-48h. Antibiotic prophylaxis (cefazolin pre-op). ECG and CXR post-op. Device check before discharge. Wound care. Follow-up at 1, 3, 6 months."
+        },
+        {
+          "severity": "infection management",
+          "criteria": "pocket erythema, purulent discharge, fever, positive cultures",
+          "treatment": "Blood cultures + pocket aspirate. IV antibiotics (vancomycin + ceftriaxone). Device and lead extraction (complete system removal). Contra-lateral re-implant after infection clearance."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "electrical_stimulation_of_myocardium",
+      "artificial_pacing_capture",
+      "sensing_of_intrinsic_rhythm",
+      "av_synchrony_preservation",
+      "resynchronization_in_crt",
+      "device_malfunction_risk"
+    ],
+    "complications": [
+      { "diseaseId": "pocket_hematoma", "probability": 0.05, "severityBoost": 0.1, "clues": ["swelling", "bruising"] },
+      { "diseaseId": "lead_dislodgement", "probability": 0.03, "severityBoost": 0.3, "clues": ["loss_of_pacing", "pectoral_muscle_stimulation"] },
+      { "diseaseId": "pneumothorax", "probability": 0.02, "severityBoost": 0.3, "clues": ["dyspnea", "absent_breath_sounds", "cxr_confirmed"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["bradyarrhythmia_indication", "pacing_on_ecg", "device_implant_history"],
+    "exclusionClues": ["no_indication_for_pacing", "normal_conduction"]
+  }
+}

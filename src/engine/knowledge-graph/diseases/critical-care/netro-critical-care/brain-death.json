@@ -1,0 +1,135 @@
+{
+  "disease": {
+    "id": "brain_death",
+    "name": "Brain Death (Brainstem Death)",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Complete and irreversible loss of all brain and brainstem function. Legal definition of death in most jurisdictions. Requires rigorous clinical testing and documentation.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["neuro_critical_care", "death_determination", "organ_donation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "absent_brainstem_reflexes", "weight": 10 },
+        { "sign": "apnea_on_apnea_test", "weight": 10 },
+        { "sign": "absent_motor_response_to_pain", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Brain death is binary: present or absent"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "profound_coma_gcs_3_t", "weight": 5 },
+      { "symptomId": "known_catastrophic_brain_injury", "weight": 5 },
+      { "symptomId": "cause_of_brain_injury_known_and_irreversible", "weight": 5 },
+      { "symptomId": "no_evidence_of_drugging_paralysis_or_hypothermia", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "gcs_3_no_eye_verbal_motor", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "absent_pupillary_light_reflex_bilateral", "baseWeight": 5 },
+      { "signId": "absent_corneal_reflexes", "baseWeight": 4 },
+      { "signId": "absent_oculocephalic_dolls_eye", "baseWeight": 4 },
+      { "signId": "absent_oculovestibular_cold_calorics", "baseWeight": 4 },
+      { "signId": "absent_gag_and_cough_reflex", "baseWeight": 4 },
+      { "signId": "absent_motor_response_to_supraorbital_pain", "baseWeight": 5 },
+      { "signId": "apnea_in_apnea_test", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "severe_traumatic_brain_injury", "multiplier": 3.0 },
+      { "id": "massive_intracranial_hemorrhage", "multiplier": 3.0 },
+      { "id": "anoxic_brain_injury_after_cardiac_arrest", "multiplier": 2.5 },
+      { "id": "massive_stroke_with_midline_shift", "multiplier": 3.0 },
+      { "id": "fulminant_hepatic_failure_with_brain_edema", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "locked_in_syndrome",
+        "discriminators": ["aware_alert", "voluntary_eye_movement_present", "eeg_normal"]
+      },
+      {
+        "diseaseId": "drug_induced_coma_barbiturates",
+        "discriminators": ["drug_levels_elevated", "pupils_may_react", "apnea_test_may_be_false"]
+      },
+      {
+        "diseaseId": "hypothermia_profound",
+        "discriminators": ["core_temp_less_28", "history_of_exposure", "reversible"]
+      },
+      {
+        "diseaseId": "guillain_barre_locked_in",
+        "discriminators": ["ascending_history", "areflexia", "normal_brain_imaging"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Apnea test", "priority": "immediate", "yield": 0.95, "indication": "confirm brainstem death" }
+      ],
+      "laboratory": [
+        { "name": "ABG (during apnea test)", "priority": "immediate", "yield": 0.95, "indication": "PaCO2 >60 or 20 above baseline" },
+        { "name": "Drug screening (serum and urine)", "priority": "high", "yield": 0.9, "indication": "exclude drug-induced coma" },
+        { "name": "Thyroid function, ammonia, glucose", "priority": "medium", "yield": 0.5, "indication": "reversible causes" }
+      ],
+      "imaging": [
+        { "name": "Cerebral angiography (4-vessel)", "priority": "gold_standard", "yield": 0.98, "indication": "confirm no intracranial blood flow" },
+        { "name": "CT angiography / MR angiography", "priority": "high", "yield": 0.95, "indication": "lack of cerebral perfusion" },
+        { "name": "EEG (electrocerebral silence)", "priority": "high", "yield": 0.9, "indication": "no electrical activity >2 microvolts" },
+        { "name": "Transcranial Doppler (TCD)", "priority": "high", "yield": 0.9, "indication": "reverberant or systolic spikes" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "American Academy of Neurology / WHO Brain Death Determination Guidelines",
+      "pathways": [
+        {
+          "severity": "prerequisites",
+          "criteria": "known cause, irreversible coma, no confounders",
+          "treatment": "Establish cause of coma is irreversible. Exclude confounders: drugs, hypothermia (<36C), hypotension, metabolic disturbances, paralytics. Two clinical exams by two physicians."
+        },
+        {
+          "severity": "clinical exam",
+          "criteria": "prerequisites met",
+          "treatment": "1. Coma (no eye opening, no motor, no verbal). 2. Absent brainstem reflexes (pupils, corneal, oculocephalic, cold calorics, gag, cough). 3. Apnea test. Document all findings. Consider ancillary testing if clinically uncertain."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "catastrophic_brain_injury",
+      "cerebral_edema",
+      "intracranial_hypertension_exceeding_map",
+      "global_cerebral_ischemia",
+      "irreversible_neuronal_death",
+      "loss_of_all_brainstem_function",
+      "somatic_death_inevitable"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "diabetes_insipidus",
+        "probability": 0.5,
+        "severityBoost": 0.3,
+        "clues": ["polyuria", "hypernatremia", "low_urine_osmolality"]
+      },
+      {
+        "diseaseId": "cardiovascular_instability_brain_storming",
+        "probability": 0.8,
+        "severityBoost": 0.3,
+        "clues": ["hypertension_tachycardia", "sweating", "arrhythmias"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["gcs_3_known_catastrophic_brain_injury", "absent_brainstem_reflexes", "apnea"],
+    "exclusionClues": ["drug_intoxication", "hypothermia", "reversible_metabolic_coma", "locked_in_syndrome"]
+  }
+}

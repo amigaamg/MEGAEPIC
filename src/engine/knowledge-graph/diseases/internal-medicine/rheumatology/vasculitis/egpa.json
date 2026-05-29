@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "egpa",
+    "name": "Eosinophilic Granulomatosis with Polyangiitis (Churg-Strauss Syndrome)",
+    "system": "rheumatology",
+    "agePeak_months": [480, 600],
+    "note": "ANCA-associated vasculitis characterized by asthma, eosinophilia, and necrotizing granulomatous inflammation of small to medium vessels. Typically has three phases: prodromal, eosinophilic, and vasculitic.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["vasculitis", "anca_associated", "eosinophilic", "asthma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapidly_progressive_glomerulonephritis", "weight": 9 },
+        { "sign": "alveolar_hemorrhage", "weight": 10 },
+        { "sign": "myocarditis_cardiomyopathy", "weight": 9 },
+        { "sign": "mononeuritis_multiplex_severe", "weight": 6 },
+        { "sign": "cerebral_vasculitis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If organ-threatening (renal, pulmonary hemorrhage, cardiac) -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "asthma_late_onset", "weight": 5 },
+      { "symptomId": "eosinophilia_symptoms", "weight": 5 },
+      { "symptomId": "allergic_rhinitis", "weight": 4 },
+      { "symptomId": "neuropathy_numbness_weakness", "weight": 4 },
+      { "symptomId": "purpura_petechiae", "weight": 3 },
+      { "symptomId": "sinusitis_nasal_polyps", "weight": 3 },
+      { "symptomId": "constitutional_symptoms", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "mononeuritis_multiplex", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "palpable_purpura", "baseWeight": 4 },
+      { "signId": "sinus_tenderness_polyps", "baseWeight": 3 },
+      { "signId": "wheezing_respiratory", "baseWeight": 3 },
+      { "signId": "joint_swelling", "baseWeight": 2 },
+      { "signId": "peripheral_edema_cardiac", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "asthma_history", "multiplier": 10.0 },
+      { "id": "allergic_rhinitis", "multiplier": 3.0 },
+      { "id": "leukotriene_receptor_antagonists", "multiplier": 1.5 },
+      { "id": "male_sex", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "anca_positive_egpa",
+        "name": "ANCA-Positive EGPA",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "anti_mpo_anca", "weight": 5 },
+          { "feature": "glomerulonephritis_mononeuritis", "weight": 5 },
+          { "feature": "more_vasculitic", "weight": 4 }
+        ],
+        "management": "Corticosteroids. Cyclophosphamide or rituximab for severe disease."
+      },
+      {
+        "id": "anca_negative_egpa",
+        "name": "ANCA-Negative EGPA",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "negative_anca", "weight": 5 },
+          { "feature": "eosinophilic_dominant", "weight": 5 },
+          { "feature": "cardiac_pulmonary_involvement", "weight": 4 }
+        ],
+        "management": "Corticosteroids. Mepolizumab (anti-IL5) for steroid-sparing. Treat cardiac involvement aggressively."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "granulomatosis_with_polyangiitis",
+        "discriminators": ["anti_pr3_anca", "nodules_cavitation_lungs", "no_asthma", "no_eosinophilia"]
+      },
+      {
+        "diseaseId": "hyper_eosinophilic_syndrome",
+        "discriminators": ["no_vasculitis", "no_asthma", "cardiac_thrombosis", "no_anca"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urinalysis", "priority": "immediate", "yield": 0.6, "indication": "proteinuria, hematuria, red cell casts" }
+      ],
+      "laboratory": [
+        { "name": "Full blood count (eosinophil count)", "priority": "immediate", "yield": 0.9, "indication": "eosinophilia > 1500/uL" },
+        { "name": "ANCA (MPO and PR3)", "priority": "high", "yield": 0.5, "indication": "anti-MPO p-ANCA in 40%" },
+        { "name": "CRP and ESR", "priority": "high", "yield": 0.7, "indication": "inflammatory markers" },
+        { "name": "Creatinine and eGFR", "priority": "high", "yield": 0.5, "indication": "renal function" },
+        { "name": "Troponin (if cardiac)", "priority": "high", "yield": 0.6, "indication": "cardiac involvement" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray / CT chest", "priority": "high", "yield": 0.8, "indication": "transient pulmonary infiltrates, hemorrhage" },
+        { "name": "Echocardiography", "priority": "high", "yield": 0.7, "indication": "myocarditis, cardiomyopathy" },
+        { "name": "MRI brain/spine (if neurological)", "priority": "medium", "yield": 0.6, "indication": "CNS involvement" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR/ERA-EDTA ANCA Vasculitis Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "asthma, rhinosinusitis, mild eosinophilia, no organ threat",
+          "treatment": "Prednisolone 0.5 mg/kg/day. Inhaled corticosteroids. Mepolizumab for steroid-sparing."
+        },
+        {
+          "severity": "severe",
+          "criteria": "renal, cardiac, pulmonary hemorrhage, neuropathy",
+          "treatment": "High-dose IV methylprednisolone. Cyclophosphamide or rituximab. Plasma exchange for severe alveolar hemorrhage."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "eosinophilic_inflammation",
+      "il_5_driven_eosinophilia",
+      "anca_mediated_neutrophil_activation",
+      "necrotizing_granulomatous_inflammation",
+      "small_vessel_vasculitis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cardiomyopathy_heart_failure",
+        "probability": 0.15,
+        "severityBoost": 0.7,
+        "clues": ["dyspnea", "edema", "elevated_bnp", "hypokinesia_on_echo"]
+      },
+      {
+        "diseaseId": "end_stage_renal_disease",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["rapidly_progressive_gn", "crescentic_gn", "dialysis_dependence"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if organ-threatening",
+    "diagnosticClues": ["asthma_plus_eosinophilia", "mononeuritis_multiplex", "purpura", "cardiac_involvement"],
+    "exclusionClues": ["no_asthma", "normal_eosinophils", "no_small_vessel_vasculitis", "anti_pr3_positive_only"]
+  }
+}

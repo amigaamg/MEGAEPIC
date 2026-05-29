@@ -1,0 +1,160 @@
+{
+  "disease": {
+    "id": "phenytoin_monitoring",
+    "name": "Phenytoin Therapeutic Drug Monitoring",
+    "system": "PHARM",
+    "agePeak_months": [12, 720],
+    "note": "Phenytoin has non-linear (Michaelis-Menten) pharmacokinetics - small dose changes cause large serum level changes. Free (unbound) level monitoring is critical in hypoalbuminemia and uremia. Corrected total phenytoin = measured total / (0.2 x albumin + 0.1).",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["therapeutic_drug_monitoring", "antiepileptic", "pharmacokinetics"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "phenytoin_total_level_gt_30_mcg_ml", "weight": 9 },
+        { "sign": "nystagmus_ataxia_lethargy", "weight": 8 },
+        { "sign": "stevens_johnson_syndrome", "weight": 10 },
+        { "sign": "cardiac_arrhythmia_iv_phenytoin_fosphenytoin", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "free_level_gt_2_mcg_ml", "weight": 8 },
+          { "sign": "subtherapeutic_level_with_breakthrough_seizures", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If level >30 or neurotoxicity -> TOXIC; if <10 with seizures -> SUBTHERAPEUTIC; if 10-20 -> THERAPEUTIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "epilepsy_on_phenytoin_maintenance", "weight": 5, "modifiers": [
+          { "condition": "new_seizure_or_breakthrough", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "nystagmus_diplopia_dizziness", "weight": 4 },
+      { "symptomId": "ataxia_or_gait_instability", "weight": 4 },
+      { "symptomId": "rash_or_hypersensitivity_reaction", "weight": 5 },
+      { "symptomId": "albumin_low_or_renal_failure", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "total_phenytoin_level", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "corrected_level_for_albumin", "baseWeight": 5 },
+      { "signId": "free_phenytoin_level", "baseWeight": 5 },
+      { "signId": "albumin_and_renal_function", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "low_albumin_lt_3_0", "multiplier": 2.5 },
+      { "id": "uremia_ckd", "multiplier": 2.5 },
+      { "id": "concurrent_cyp_inducer_carbamazepine", "multiplier": 1.5 },
+      { "id": "concurrent_cyp_inhibitor_amiodarone_fluconazole", "multiplier": 2.0 },
+      { "id": "age_over_65", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "subtherapeutic_phenytoin",
+        "name": "Subtherapeutic Levels (<10 mcg/mL)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "level_lt_10_seizure_breakthrough", "weight": 5 },
+          { "feature": "non_adherence_or_medication_change", "weight": 4 },
+          { "feature": "enzyme_induction_by_concurrent_drugs", "weight": 4 },
+          { "feature": "malabsorption_or_enteral_feeding_interaction", "weight": 3 }
+        ],
+        "management": "Assess adherence. Check for interacting drugs. Correct total for albumin. Increase dose by 50-100mg/day increments. Recheck level in 5-7 days (1-2 weeks for steady state). Consider switch to alternative if poor compliance."
+      },
+      {
+        "id": "toxicity",
+        "name": "Phenytoin Toxicity (>20 mcg/mL)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "nystagmus_on_lateral_gaze_at_20", "weight": 4 },
+          { "feature": "ataxia_at_30", "weight": 5 },
+          { "feature": "lethargy_confusion_at_40", "weight": 5 },
+          { "feature": "coma_seizures_paradoxical_at_gt_50", "weight": 5 },
+          { "feature": "dose_related_saturable_kinetics", "weight": 4 }
+        ],
+        "management": "Hold phenytoin until level therapeutic. Check free level if hypoalbuminemic. Assess for nystagmus, ataxia, mental status. If severe: consider fosphenytoin discontinuation, benzodiazepines for seizures, monitor airway."
+      },
+      {
+        "id": "hypersensitivity_reaction",
+        "name": "Phenytoin Hypersensitivity (DRESS/SJS)",
+        "prevalenceModifier": 0.02,
+        "keyFeatures": [
+          { "feature": "rash_fever_lymphadenopathy", "weight": 5 },
+          { "feature": "eosinophilia_and_organ_involvement", "weight": 5 },
+          { "feature": "onset_2_8_weeks_after_start", "weight": 4 },
+          { "feature": "stevens_johnson_syndrome_toxic_epidermal_necrolysis", "weight": 5 }
+        ],
+        "management": "Immediately discontinue phenytoin. Switch to alternative antiepileptic (levetiracetam, valproate). Systemic corticosteroids for severe DRESS. IVIG for SJS/TEN. HLA-B*1502 screening in Asian patients before starting."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "other_causes_of_ataxia_metabolic_wernicke",
+        "discriminators": ["normal_phenytoin_level", "alcohol_history", "thiamine_deficiency"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Neurological exam for nystagmus, ataxia", "priority": "immediate", "yield": 0.7, "indication": "all patients on phenytoin with symptoms" }
+      ],
+      "laboratory": [
+        { "name": "Total phenytoin (trough level, steady state)", "priority": "immediate", "yield": 0.95, "indication": "routine monitoring, toxicity, or subtherapeutic concern" },
+        { "name": "Free phenytoin level", "priority": "high", "yield": 0.8, "indication": "hypoalbuminemia, uremia, pregnancy, or total level discrepancy with clinical status" },
+        { "name": "Albumin", "priority": "high", "yield": 0.7, "indication": "calculated corrected level" },
+        { "name": "BUN/Creatinine", "priority": "medium", "yield": 0.5, "indication": "uremia displaces phenytoin from protein" },
+        { "name": "Liver function tests", "priority": "medium", "yield": 0.4, "indication": "hepatic metabolism, hepatotoxicity" },
+        { "name": "CBC with eosinophils", "priority": "medium", "yield": 0.3, "indication": "DRESS syndrome evaluation" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "IUPHAR/BPS Guide to TDM, Epilepsy Foundation Guidelines",
+      "pathways": [
+        {
+          "severity": "subtherapeutic",
+          "criteria": "total level <10 mcg/mL, corrected level <10, breakthrough seizures",
+          "treatment": "Increase dose by 25-50mg/day increments. Monitor free level if indicated. Recheck in 5-7 days. Consider loading dose if urgent (fosphenytoin IV/IM)."
+        },
+        {
+          "severity": "therapeutic",
+          "criteria": "total level 10-20 mcg/mL (corrected if low albumin), seizure-free, no toxicity",
+          "treatment": "Continue current dose. Schedule routine level q6-12 months. Monitor when interacting drugs added/stopped. Check if clinical status changes."
+        },
+        {
+          "severity": "toxic",
+          "criteria": "total level >20-30 mcg/mL, or any signs of neurotoxicity",
+          "treatment": "Hold next 1-2 doses. Recheck level in 2-3 days. Restart at lower dose when level 10-15. If severe toxicity (level >40, coma, seizures): ICU, consider charcoal hemoperfusion, seizure management."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "non_linear_michaelis_menten_kinetics",
+      "saturable_hepatic_metabolism_cyp2c9",
+      "protein_binding_albumin",
+      "voltage_gated_sodium_channel_blockade",
+      "central_nervous_system_depression_at_high_doses"
+    ],
+    "complications": [
+      {
+        "diseaseId": "osteoporosis_chronic_use",
+        "probability": 0.1,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.1,
+        "clues": ["vitamin_d_deficiency", "osteomalacia", "fractures"]
+      },
+      {
+        "diseaseId": "cerebellar_atrophy_chronic_toxicity",
+        "probability": 0.02,
+        "lagDays": [730, 3650],
+        "severityBoost": 0.3,
+        "clues": ["chronic_high_levels", "irreversible_ataxia", "mri_cerebellar_atrophy"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["phenytoin_therapy", "abnormal_levels", "neurotoxicity_signs", "low_albumin_uremia"],
+    "exclusionClues": ["not_on_phenytoin", "normal_albumin_and_level", "level_therapeutic"]
+  }
+}

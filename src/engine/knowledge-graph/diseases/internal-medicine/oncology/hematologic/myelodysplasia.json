@@ -1,0 +1,131 @@
+{
+  "disease": {
+    "id": "myelodysplasia",
+    "name": "Myelodysplastic Syndromes (MDS)",
+    "system": "ONCO",
+    "agePeak_months": [720, 1080],
+    "note": "Clonal hematopoietic stem cell disorder. Ineffective hematopoiesis leading to cytopenias. Risk of transformation to AML.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["bone_marrow_failure", "hematologic_malignancy", "myelodysplasia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_pancytopenia", "weight": 8 },
+        { "sign": "aml_transformation", "weight": 10 },
+        { "sign": "sepsis_neutropenic", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "IPSS-R risk categories: Very Low, Low, Intermediate, High, Very High"
+    },
+    "historyFeatures": [
+      { "symptomId": "fatigue_weakness", "weight": 5 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "easy_bruising_bleeding", "weight": 3 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "petechiae_ecchymoses", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "signs_of_anemia_tachycardia", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_70", "multiplier": 4.0 },
+      { "id": "prior_chemotherapy_alkylating_agents", "multiplier": 5.0 },
+      { "id": "ionizing_radiation_exposure", "multiplier": 3.0 },
+      { "id": "male_sex", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.3 }
+    ],
+    "subtypes": [
+      {
+        "id": "mds_with_single_lineage_dysplasia",
+        "name": "MDS with Single Lineage Dysplasia (MDS-SLD)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "one_cytopenia", "weight": 4 },
+          { "feature": "low_blasts_under_5_percent", "weight": 4 },
+          { "feature": "low_ipss_risk", "weight": 3 }
+        ],
+        "management": "Supportive care. Erythropoiesis-stimulating agents (ESA) if symptomatic anemia. Growth factors (G-CSF). RBC transfusion. Iron chelation if overloaded."
+      },
+      {
+        "id": "mds_with_excess_blasts",
+        "name": "MDS with Excess Blasts (MDS-EB)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "blast_percentage_5_to_19", "weight": 5 },
+          { "feature": "multiple_cytopenias", "weight": 4 },
+          { "feature": "high_risk_cytogenetics", "weight": 4 },
+          { "feature": "high_ipss_risk", "weight": 4 }
+        ],
+        "management": "Hypomethylating agents (HMA): azacitidine or decitabine. Allogeneic SCT if fit. Consider venetoclax + HMA. Clinical trials."
+      },
+      {
+        "id": "mds_del_5q",
+        "name": "MDS with Isolated del(5q)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "del_5q_cytogenetics", "weight": 5 },
+          { "feature": "anemia_predominant", "weight": 4 },
+          { "feature": "normal_or_high_platelets", "weight": 3 },
+          { "feature": "responsive_to_lenalidomide", "weight": 5 }
+        ],
+        "management": "Lenalidomide (first-line). ESA if lenalidomide fails. Monitor for AML transformation. AlloSCT if refractory and fit."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "aplastic_anemia", "discriminators": ["hypocellular_marrow_no_dysplasia", "no_mutational_profile_mds", "younger_age"] },
+      { "diseaseId": "nutritional_deficiencies_b12_folate_copper", "discriminators": ["low_b12_folate_copper_levels", "reversible_with_supplementation", "no_cytogenetic_abnormality"] },
+      { "diseaseId": "causes_of_secondary_myelodysplasia", "discriminators": ["alcohol_abuse", "hiv_infection", "medication_history", "toxin_exposure"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC with differential + reticulocyte count", "priority": "immediate", "yield": 0.9, "indication": "cytopenias, macrocytosis" },
+        { "name": "Peripheral blood smear", "priority": "high", "yield": 0.8, "indication": "dysplastic neutrophils, pelger-huet, ring sideroblasts" },
+        { "name": "Bone marrow aspirate + trephine biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "blast count, dysplasia, fibrosis, iron stain" },
+        { "name": "Cytogenetics (karyotype + FISH)", "priority": "gold_standard", "yield": 0.9, "indication": "IPSS-R scoring, del 5q, -7, complex" },
+        { "name": "MDS gene panel (NGS)", "priority": "high", "yield": 0.8, "indication": "SF3B1, TET2, ASXL1, DNMT3A, RUNX1, TP53 mutations" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "NCCN/ELN Guidelines for Myelodysplastic Syndromes",
+      "pathways": [
+        {
+          "severity": "very low/low risk (IPSS-R)",
+          "criteria": "IPSS-R very low/low, blast <5%",
+          "treatment": "Supportive care: RBC transfusion + iron chelation. ESA for anemia (EPO <500). G-CSF for neutropenia. Lenalidomide for del(5q). Luspatercept for SF3B1-mutated with ring sideroblasts."
+        },
+        {
+          "severity": "intermediate risk (IPSS-R)",
+          "criteria": "IPSS-R intermediate, blast 5-10%",
+          "treatment": "HMA (azacitidine or decitabine). Consider alloSCT if fit with donor. Supportive care as needed."
+        },
+        {
+          "severity": "high/very high risk (IPSS-R)",
+          "criteria": "IPSS-R high/very high, blast >10%",
+          "treatment": "HMA (azacitidine/decitabine). Allogeneic SCT for eligible patients. Venetoclax + HMA in clinical use. Intensive AML-like chemo in select cases. Clinical trials."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "clonal_hematopoietic_stem_cell_mutation",
+      "dysplastic_maturation",
+      "ineffective_erythropoiesis",
+      "increased_apoptosis_in_early_precursors",
+      "cytopenias_peripheral",
+      "bone_marrow_hypercellular_or_hypocellular",
+      "clonal_evolution_to_aml"
+    ],
+    "complications": [
+      { "diseaseId": "iron_overload_transfusion_dependent", "probability": 0.3, "severityBoost": 0.2, "clues": ["elevated_ferritin", "multiple_transfusion_history", "iron_on_marrow"] },
+      { "diseaseId": "aml_transformation", "probability": 0.15, "severityBoost": 0.7, "clues": ["rising_blast_percentage", "new_cytogenetic_abnormality", "worsening_cytopenias"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["persistent_cytopenia_older_adult", "macrocytic_anemia", "dysplasia_on_smear", "normal_b12_folate"],
+    "exclusionClues": ["reversible_cause_of_cytopenia", "no_dysplasia_on_marrow", "normal_cytogenetics", "resolved_with_treatment_of_underlying"]
+  }
+}

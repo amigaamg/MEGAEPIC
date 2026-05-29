@@ -1,0 +1,184 @@
+{
+  "disease": {
+    "id": "cholesteatoma",
+    "name": "Cholesteatoma",
+    "system": "ent",
+    "agePeak_months": [60, 600],
+    "note": "Keratinizing squamous epithelium within the middle ear or mastoid. Destructive and progressive. Not a true neoplasm but behaves expansively.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["hearing_loss", "chronic_ear_disease", "keratin_mass"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "meningism", "weight": 10 },
+        { "sign": "brain_abscess_signs", "weight": 10 },
+        { "sign": "lateral_sinus_thrombosis", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "facial_nerve_palsy", "weight": 9 },
+          { "sign": "labyrinthine_fistula", "weight": 8 },
+          { "sign": "extensive_bony_erosion", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If intracranial/facial fistula extensive erosion -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hearing_loss", "weight": 5 },
+      { "symptomId": "chronic_otorrhea", "weight": 4, "modifiers": [
+          { "condition": "foul_smelling_discharge", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "ear_fullness", "weight": 2 },
+      { "symptomId": "tinnitus", "weight": 2 },
+      { "symptomId": "vertigo", "weight": 3, "note": "Suggests labyrinthine fistula" },
+      { "symptomId": "facial_twitching_weakness", "weight": 4 },
+      { "symptomId": "headache", "weight": 2, "note": "May suggest intracranial extension" }
+    ],
+
+    "examFeatures": [
+      { "signId": "retraction_pocket", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "keratin_debris", "baseWeight": 5 },
+      { "signId": "attic_perforation", "baseWeight": 5 },
+      { "signId": "marginal_perforation", "baseWeight": 4 },
+      { "signId": "granulation_polyp", "baseWeight": 3 },
+      { "signId": "conductive_hearing_loss", "baseWeight": 4 },
+      { "signId": "positive_fistula_sign", "baseWeight": 4, "note": "Pneumatic otoscopy induces vertigo/nystagmus" },
+      { "signId": "facial_nerve_function_deficit", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "recurrent_aom", "multiplier": 2.0 },
+      { "id": "csom", "multiplier": 3.0 },
+      { "id": "eustachian_tube_dysfunction", "multiplier": 2.5 },
+      { "id": "cleft_palate", "multiplier": 3.5 },
+      { "id": "down_syndrome", "multiplier": 2.0 },
+      { "id": "family_history", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "congenital_cholesteatoma",
+        "name": "Congenital Cholesteatoma",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "white_mass_behind_intact_TM", "weight": 5 },
+          { "feature": "no_history_of_aom", "weight": 4 },
+          { "feature": "conductive_hearing_loss", "weight": 4 }
+        ],
+        "management": "Tympanotomy with excision. Type I-IV tympanoplasty depending on extent. Ossicular chain reconstruction if eroded."
+      },
+      {
+        "id": "acquired_cholesteatoma",
+        "name": "Acquired Cholesteatoma",
+        "prevalenceModifier": 0.95,
+        "keyFeatures": [
+          { "feature": "retraction_pocket", "weight": 5 },
+          { "feature": "chronic_otorrhea", "weight": 4 },
+          { "feature": "hearing_loss", "weight": 4 },
+          { "feature": "csom_history", "weight": 4 }
+        ],
+        "management": "Cortical mastoidectomy with atticotomy. Canal wall up vs down technique. Complete sac removal. Ossiculoplasty. Second-look surgery in 6-12 months."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "csom_tubotympanic",
+        "discriminators": ["central_perforation", "no_keratin_debris", "mucoid_discharge", "no_retraction_pocket"]
+      },
+      {
+        "diseaseId": "middle_ear_granulation",
+        "discriminators": ["no_keratin_pearls", "bleeds_easily", "medical_treatment_response"]
+      },
+      {
+        "diseaseId": "middle_ear_tumor",
+        "discriminators": ["glomus_tympanicum_pulsatile", "facial_nerve_schwannoma", "adenoma"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Otomicroscopy", "priority": "immediate", "yield": 0.9, "indication": "all cases - assess extent and retraction pockets" },
+        { "name": "Tuning Fork Tests", "priority": "high", "yield": 0.7, "indication": "conductive vs sensorineural loss" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "High Resolution CT Temporal Bone", "priority": "high", "yield": 0.9, "indication": "evaluate bony erosion, ossicular chain, tegmen, facial canal, labyrinth" },
+        { "name": "MRI with DWI", "priority": "medium", "yield": 0.85, "indication": "differentiate from granulation tissue, detect residual/recurrent disease" },
+        { "name": "Pure Tone Audiometry", "priority": "high", "yield": 0.9, "indication": "baseline and post-op hearing assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EAONO/JOS Cholesteatoma Staging and Management Guidelines",
+      "pathways": [
+        {
+          "severity": "limited",
+          "criteria": "retraction pocket, no extension to mastoid, intact ossicles",
+          "treatment": "Transcanal endoscopic ear surgery or atticotomy. Remove sac, reconstruct TM with cartilage. Follow-up imaging at 1 year."
+        },
+        {
+          "severity": "extensive",
+          "criteria": "mastoid extension, ossicular erosion, fistula risk",
+          "treatment": "Cortical mastoidectomy with intact canal wall (canal wall up). Remove all sac. Ossiculoplasty with autograft or prosthesis. Second-look in 6-12 months."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "labyrinthine fistula, facial nerve involvement, tegmen erosion, intracranial extension",
+          "treatment": "Canal wall down mastoidectomy. Close fistula with bone dust/fascia. Decompress facial nerve if needed. Neurosurgical consultation. Long-term follow-up for cavity care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "retraction_pocket_formation",
+      "squamous_epithelial_migration",
+      "keratin_accumulation",
+      "enzymatic_bone_erosion",
+      "inflammatory_osteolysis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "labyrinthine_fistula",
+        "probability": 0.1,
+        "lagDays": [180, 1095],
+        "severityBoost": 0.5,
+        "clues": ["vertigo", "sensorineural_loss_progression", "positive_fistula_sign"]
+      },
+      {
+        "diseaseId": "facial_nerve_palsy",
+        "probability": 0.05,
+        "lagDays": [90, 730],
+        "severityBoost": 0.6,
+        "clues": ["facial_twitching", "slowly_progressive_weakness"]
+      },
+      {
+        "diseaseId": "meningitis",
+        "probability": 0.03,
+        "lagDays": [180, 1460],
+        "severityBoost": 0.7,
+        "clues": ["headache", "fever", "neck_stiffness", "tegmen_erosion"]
+      },
+      {
+        "diseaseId": "brain_abscess",
+        "probability": 0.02,
+        "lagDays": [365, 1460],
+        "severityBoost": 0.8,
+        "clues": ["temporal_lobe_signs", "cerebellar_signs", "papilledema"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["retraction_pocket", "foul_discharge", "keratin_pearls", "attic_perforation", "conductive_loss"],
+    "exclusionClues": ["normal_TM", "central_perforation", "mucoid_discharge"]
+  }
+}

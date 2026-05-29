@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "lymphoma",
+    "name": "Lymphoma",
+    "system": "oncology",
+    "agePeak_months": [240, 720],
+    "note": "Hodgkin and Non-Hodgkin subtypes. Presentation with lymphadenopathy, B symptoms, or extranodal disease.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["lymphadenopathy", "hematologic_malignancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "superior_vena_cava_obstruction", "weight": 9 },
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "airway_compression", "weight": 9 },
+        { "sign": "tumor_lysis_syndrome", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Ann Arbor Stage I-IV determines treatment"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_lymphadenopathy", "weight": 5 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "night_sweats", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "alcohol_induced_pain", "weight": 2, "note": "Classic for Hodgkin" }
+    ],
+
+    "examFeatures": [
+      { "signId": "painless_firm_lymph_nodes", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "supraclavicular_nodes", "baseWeight": 4 },
+      { "signId": "mediastinal_mass_signs", "baseWeight": 3 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 3 },
+      { "signId": "wolfe_prairie_dog_sign", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "immunosuppression_hiv", "multiplier": 5.0 },
+      { "id": "ebv_infection", "multiplier": 2.5 },
+      { "id": "family_history", "multiplier": 1.5 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "organ_transplant", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hodgkin_lymphoma",
+        "name": "Hodgkin Lymphoma",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "reed_sternberg_cells", "weight": 5 },
+          { "feature": "young_adults", "weight": 4 },
+          { "feature": "contiguous_spread", "weight": 3 },
+          { "feature": "mediastinal_mass_common", "weight": 3 }
+        ],
+        "management": "ABVD chemotherapy. Radiation for early stage. Brentuximab vedotin if relapsed/refractory."
+      },
+      {
+        "id": "diffuse_large_b_cell_lymphoma",
+        "name": "Diffuse Large B-Cell Lymphoma",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "rapid_growing_mass", "weight": 5 },
+          { "feature": "extranodal_disease", "weight": 3 },
+          { "feature": "cd20_positive", "weight": 4 }
+        ],
+        "management": "R-CHOP chemotherapy (rituximab, cyclophosphamide, doxorubicin, vincristine, prednisolone)."
+      },
+      {
+        "id": "follicular_lymphoma",
+        "name": "Follicular Lymphoma",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "indolent_course", "weight": 4 },
+          { "feature": "widespread_disease_at_diagnosis", "weight": 3 },
+          { "feature": "older_patients", "weight": 3 }
+        ],
+        "management": "Watchful waiting if asymptomatic. Rituximab monotherapy or R-chemo if symptomatic. Rituximab maintenance."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "tuberculosis_lymphadenitis",
+        "discriminators": ["matted_nodes", "sinus_tract", "positive_gene_xpert"]
+      },
+      {
+        "diseaseId": "kikuchi_disease",
+        "discriminators": ["self_limiting", "cervical_predominance", "fever", "neutropenia"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC, ESR, LDH, Urate, LFT", "priority": "high", "yield": 0.7, "indication": "baseline and prognostic markers" },
+        { "name": "HIV, EBV, Hepatitis B/C serology", "priority": "high", "yield": 0.4, "indication": "infectious associations" }
+      ],
+      "imaging": [
+        { "name": "Excisional lymph node biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "definitive diagnosis" },
+        { "name": "PET-CT (staging)", "priority": "high", "yield": 0.9, "indication": "stage, treatment response assessment (Deauville)" },
+        { "name": "CT Neck/Chest/Abdomen/Pelvis", "priority": "high", "yield": 0.85, "indication": "initial staging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Hodgkin and Non-Hodgkin Lymphoma",
+      "pathways": [
+        {
+          "severity": "early stage (I-II)",
+          "criteria": "limited disease, above diaphragm",
+          "treatment": "ABVD x 2-4 cycles + involved field radiotherapy (for HL). R-CHOP x 3-4 cycles + rituximab (for DLBCL). Rituximab monotherapy (for follicular)."
+        },
+        {
+          "severity": "advanced stage (III-IV)",
+          "criteria": "widespread disease, B symptoms",
+          "treatment": "ABVD x 6-8 cycles (HL). R-CHOP x 6-8 cycles (DLBCL). Rituximab + chemotherapy (follicular). PET-adapted approach."
+        },
+        {
+          "severity": "relapsed/refractory",
+          "criteria": "progression after initial therapy",
+          "treatment": "Second-line chemotherapy + stem cell transplant (if fit). Novel agents (CAR-T, bispecifics, targeted therapy). Palliative care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "lymphoid_malignant_transformation",
+      "clonal_expansion",
+      "genetic_translocations",
+      "immune_evasion",
+      "nodal_and_extranodal_spread"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_lysis_syndrome",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "associatedSubtype": "aggressive_lymphoma",
+        "clues": ["hyperuricemia", "hyperkalemia", "hyperphosphatemia", "hypocalcemia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["painless_lymphadenopathy", "b_symptoms", "mediastinal_mass", "elevated_ldh"],
+    "exclusionClues": ["reactive_lymph_node_self_limited", "normal_pet_ct"]
+  }
+}

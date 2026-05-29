@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "pneumoperitoneum",
+    "name": "Pneumoperitoneum (Free Intraperitoneal Air)",
+    "system": "RAD",
+    "agePeak_months": [120, 720],
+    "note": "Pneumoperitoneum indicates hollow viscus perforation until proven otherwise. Erect chest X-ray (subdiaphragmatic air) is first-line. CT is more sensitive (98% vs 50-80%). Surgical emergency requiring immediate communication.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["critical_finding", "surgical_abdomen", "perforated_viscus"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "tension_pneumoperitoneum", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "large_volume_free_air", "weight": 8 },
+          { "sign": "free_fluid_with_peritonitis", "weight": 7 },
+          { "sign": "extraluminal_air_mesentery", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "CRITICAL FINDING - immediate surgical consultation required"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_severe_abdominal_pain", "weight": 5, "modifiers": [
+          { "condition": "peritonitis_signs", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "history_of_peptic_ulcer", "weight": 3 },
+      { "symptomId": "recent_abdominal_surgery", "weight": 3 },
+      { "symptomId": "nsaid_or_steroid_use", "weight": 2 },
+      { "symptomId": "vomiting_and_distention", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "free_air_below_diaphragm_on_erect_chest_xr", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "right_upper_quadrant_free_air_on_left_lateral", "baseWeight": 4 },
+      { "signId": "rigler_sign_both_sides_bowel_wall", "baseWeight": 4 },
+      { "signId": "football_sign_large_volume", "baseWeight": 3 },
+      { "signId": "falciform_ligament_sign", "baseWeight": 3 },
+      { "signId": "ct_free_air_anterior_to_liver", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "peptic_ulcer_disease", "multiplier": 3.0 },
+      { "id": "nsaid_use", "multiplier": 2.5 },
+      { "id": "diverticulitis", "multiplier": 2.0 },
+      { "id": "recent_colonoscopy", "multiplier": 1.5 },
+      { "id": "recent_abdominal_surgery", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "spontaneous_perforation",
+        "name": "Spontaneous GI Perforation",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "erect_chest_xr_free_subdiaphragmatic_air", "weight": 5 },
+          { "feature": "ct_identifies_perforation_site", "weight": 5 },
+          { "feature": "pneumoperitoneum_anterior_to_liver", "weight": 4 },
+          { "feature": "extraluminal_contrast_extravasation", "weight": 4 }
+        ],
+        "management": "Urgent surgical consultation (general surgery). NPO, NG tube, IV fluids, broad-spectrum antibiotics. Emergency laparotomy or laparoscopy. Repair perforation, peritoneal lavage."
+      },
+      {
+        "id": "post_surgical_benign",
+        "name": "Post-Surgical Pneumoperitoneum (Benign)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "free_air_resolving_on_serial_xr", "weight": 4 },
+          { "feature": "no_peritonitis_clinically", "weight": 5 },
+          { "feature": "post_laparoscopic_day_1", "weight": 4 },
+          { "feature": "small_volume_free_air", "weight": 3 }
+        ],
+        "management": "Observation. Free air resolves over 1-3 weeks after laparotomy. Serial exams. If increasing air or peritonitis develops, investigate for leak."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "pseudopneumoperitoneum_chilaiditi",
+        "discriminators": ["colon_interposed_between_liver_diaphragm", "haustral_markings", "no_peritonitis"]
+      },
+      {
+        "diseaseId": "subphrenic_abscess",
+        "discriminators": ["air_fluid_level_not_free", "loculated", "limiting_membrane", "concurrent_fever"]
+      },
+      {
+        "diseaseId": "mechanical_ventilation_barotrauma",
+        "discriminators": ["pneumothorax_or_pneuumediastinum", "retroperitoneal_air_only", "no_peritonitis"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.6, "indication": "leukocytosis" },
+        { "name": "CMP", "priority": "medium", "yield": 0.4, "indication": "electrolytes, renal function" },
+        { "name": "Lactate", "priority": "high", "yield": 0.5, "indication": "bowel ischemia marker" }
+      ],
+      "imaging": [
+        { "name": "Erect Chest X-ray", "priority": "immediate", "yield": 0.6, "indication": "first-line for suspected perforation" },
+        { "name": "CT Abdomen/Pelvis (IV contrast, ± PO)", "priority": "high", "yield": 0.98, "indication": "gold standard: locate perforation site, assess severity" },
+        { "name": "Left Lateral Decubitus X-ray", "priority": "medium", "yield": 0.7, "indication": "if patient cannot sit erect" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACR Critical Findings Communication Guidelines",
+      "pathways": [
+        {
+          "severity": "confirmed_pneumoperitoneum",
+          "criteria": "free air on imaging ± peritonitis",
+          "treatment": "CRITICAL RESULT - immediate verbal communication to referring physician/surgeon. Surgical consultation. NPO, IVF, broad-spectrum antibiotics. Emergency laparotomy for spontaneous perforation."
+        },
+        {
+          "severity": "equivocal_air",
+          "criteria": "tiny pocket of free air, no peritonitis, post-surgical",
+          "treatment": "Communicate as urgent finding. CT if not done. Serial exams. If increasing air or clinical deterioration, escalate."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "hollow_viscus_perforation",
+      "gastric_or_duodenal_ulcer_erosion",
+      "diverticular_rupture",
+      "traumatic_rupture",
+      "anastomotic_leak",
+      "air_from_genital_tract"
+    ],
+    "complications": [
+      {
+        "diseaseId": "peritonitis_generalized",
+        "probability": 0.8,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["guarding", "rigidity", "absent_bowel_sounds"]
+      },
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "probability": 0.2,
+        "lagDays": [3, 10],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "ileus"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["free_air_on_imaging", "peritoneal_signs", "sudden_abdominal_pain"],
+    "exclusionClues": ["post_surgical_day_1_improving", "no_peritonitis", "small_stable_volume"]
+  }
+}

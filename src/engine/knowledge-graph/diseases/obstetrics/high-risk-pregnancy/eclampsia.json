@@ -1,0 +1,198 @@
+{
+  "disease": {
+    "id": "eclampsia",
+    "name": "Eclampsia",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Generalized tonic-clonic seizures in a woman with preeclampsia, not attributable to other causes. Life-threatening obstetric emergency requiring immediate management.",
+    "prevalenceWeight": 0.002,
+    "syndromeTags": ["hypertensive_disorder_pregnancy", "maternal_emergency", "seizure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "status_epilepticus", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "maternal_coma", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "recurrent_seizures", "weight": 9 },
+          { "sign": "severe_hypertension_post_ictal", "weight": 8 },
+          { "sign": "post_ictal_consciousness_not_returned", "weight": 8 },
+          { "sign": "aspiration_suspected", "weight": 7 },
+          { "sign": "fetal_bradycardia", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "All cases of eclampsia are SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "generalized_tonic_clonic_seizure", "weight": 5 },
+      { "symptomId": "severe_headache_prodromal", "weight": 4 },
+      { "symptomId": "visual_disturbances_blurring", "weight": 4 },
+      { "symptomId": "altered_mental_status", "weight": 4 },
+      { "symptomId": "epigastric_pain", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "known_preeclampsia", "weight": 4 },
+      { "symptomId": "oliguria", "weight": 2 },
+      { "symptomId": "loss_of_consciousness", "weight": 5 },
+      { "symptomId": "tongue_bite", "weight": 2 },
+      { "symptomId": "urinary_incontinence", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "generalized_seizure_activity", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypertension_severe", "baseWeight": 5 },
+      { "signId": "hyperreflexia", "baseWeight": 4 },
+      { "signId": "clonus_sustained", "baseWeight": 4 },
+      { "signId": "post_ictal_coma_or_confusion", "baseWeight": 4 },
+      { "signId": "fetal_bradycardia", "baseWeight": 5 },
+      { "signId": "papilledema", "baseWeight": 2 },
+      { "signId": "edema_generalized", "baseWeight": 2 },
+      { "signId": "cyanosis_if_aspiration", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "preeclampsia", "multiplier": 20.0 },
+      { "id": "first_seizure_antenatal", "multiplier": 1.5 },
+      { "id": "age_under_20", "multiplier": 2.0 },
+      { "id": "multiple_gestation", "multiplier": 2.0 },
+      { "id": "nulliparity", "multiplier": 2.0 },
+      { "id": "family_history_of_eclampsia", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "antepartum_eclampsia",
+        "name": "Antepartum Eclampsia",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "seizure_before_labor", "weight": 5 },
+          { "feature": "preeclampsia_features_present", "weight": 5 },
+          { "feature": "gestation_over_20_weeks", "weight": 4 }
+        ],
+        "management": "Magnesium sulfate. Antihypertensives. Stabilize then deliver (usually C-section)."
+      },
+      {
+        "id": "intrapartum_eclampsia",
+        "name": "Intrapartum Eclampsia",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "seizure_during_labor", "weight": 5 },
+          { "feature": "contractions_present", "weight": 3 },
+          { "feature": "usually_rapid_delivery_needed", "weight": 4 }
+        ],
+        "management": "Magnesium sulfate. If cervix favorable, expedite delivery. If not, C-section."
+      },
+      {
+        "id": "postpartum_eclampsia",
+        "name": "Postpartum Eclampsia",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "seizure_within_48h_of_delivery", "weight": 5 },
+          { "feature": "can_occur_without_prior_preeclampsia", "weight": 3 },
+          { "feature": "seizure_after_delivery", "weight": 4 }
+        ],
+        "management": "Magnesium sulfate for 24 hours. Continue antihypertensives. MRI brain to exclude other causes if atypical."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "epilepsy",
+        "discriminators": ["history_of_seizures", "no_hypertension_proteinuria", "EEG_abnormal"]
+      },
+      {
+        "diseaseId": "cerebral_vein_thrombosis",
+        "discriminators": ["focal_neurological_deficits", "severe_headache", "imaging_abnormalities"]
+      },
+      {
+        "diseaseId": "hypoglycemia",
+        "discriminators": ["low_blood_glucose", "no_hypertension"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Blood pressure measurement", "priority": "immediate", "yield": 0.99, "indication": "severe hypertension" },
+        { "name": "Urine protein dipstick", "priority": "high", "yield": 0.7, "indication": "proteinuria" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.5, "indication": "rule out hypoglycemia" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "immediate", "yield": 0.8, "indication": "platelet count" },
+        { "name": "Liver function tests", "priority": "immediate", "yield": 0.8, "indication": "transaminases" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.7, "indication": "renal function" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.6, "indication": "DIC screen" },
+        { "name": "Uric acid", "priority": "medium", "yield": 0.5, "indication": "supportive" }
+      ],
+      "imaging": [
+        { "name": "CT or MRI brain", "priority": "medium", "yield": 0.5, "indication": "if atypical presentation, to exclude hemorrhage or thrombosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG133 - Hypertension in Pregnancy / WHO Guidelines",
+      "pathways": [
+        {
+          "severity": "acute_seizure",
+          "criteria": "active convulsion or post-ictal",
+          "treatment": "ABC approach. Magnesium sulfate 4g IV over 5-10 min, then 1g/h infusion for 24h. Airway protection. Left lateral position. Oxygen. IV labetalol or hydralazine for BP >160/110. Diazepam 10mg IV if MgSO4 fails. Treat recurrence with 2g MgSO4 bolus."
+        },
+        {
+          "severity": "post_stabilization",
+          "criteria": "seizure controlled, BP stabilized",
+          "treatment": "Plan delivery. If antepartum: deliver after stabilization regardless of gestation (C-section typically). Continue MgSO4 for 24h postpartum. IV antihypertensives until oral tolerated. ICU monitoring for 24h minimum."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cerebral_vasospasm",
+      "endothelial_dysfunction",
+      "disruption_of_cerebral_autoregulation",
+      "cerebral_edema",
+      "hypertensive_encephalopathy"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intracerebral_hemorrhage",
+        "probability": 0.02,
+        "lagDays": [0, 1],
+        "severityBoost": 1.0,
+        "clues": ["prolonged_coma", "focal_signs", "fixed_dilated_pupil"]
+      },
+      {
+        "diseaseId": "aspiration_pneumonia",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.4,
+        "clues": ["fever_post_ictal", "crackles", "hypoxia"]
+      },
+      {
+        "diseaseId": "maternal_death",
+        "probability": 0.02,
+        "lagDays": [0, 3],
+        "severityBoost": 1.0,
+        "clues": ["refractory_seizures", "cerebral_edema", "multi_organ_failure"]
+      },
+      {
+        "diseaseId": "fetal_demise",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.8,
+        "clues": ["prolonged_seizures", "placental_insufficiency"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["seizures_with_hypertension_in_pregnancy", "preeclampsia_features", "hyperreflexia"],
+    "exclusionClues": ["known_epilepsy_with_normal_bp", "hypoglycemic_seizure"]
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "disease": {
+    "id": "gestational_diabetes",
+    "name": "Gestational Diabetes Mellitus",
+    "system": "obstetrics",
+    "agePeak_months": [0, 0],
+    "note": "Glucose intolerance first recognized during pregnancy. Usually resolves after delivery. Screening at 24-28 weeks.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["metabolic_disorder_pregnancy", "maternal_risk_factor"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "diabetic_ketoacidosis", "weight": 10 },
+        { "sign": "severe_hypoglycemia", "weight": 9 },
+        { "sign": "severe_hyperglycemia", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "DIET CONTROLLED vs MEDICATION REQUIRED based on glucose levels"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "polyuria_polydipsia", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "recurrent_infections", "weight": 2 },
+      { "symptomId": "family_history_diabetes", "weight": 3 },
+      { "symptomId": "previous_gdm", "weight": 3 },
+      { "symptomId": "previous_macrosomic_baby", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "obesity", "baseWeight": 3 },
+      { "signId": "elevated_bmi", "baseWeight": 3 },
+      { "signId": "fetal_growth_acceleration", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "bmi_over_30", "multiplier": 3.0 },
+      { "id": "previous_gdm", "multiplier": 4.0 },
+      { "id": "family_history_type_2_diabetes", "multiplier": 2.5 },
+      { "id": "age_over_35", "multiplier": 2.0 },
+      { "id": "previous_macrosomic_baby", "multiplier": 2.5 },
+      { "id": "south_asian_ethnicity", "multiplier": 2.0 }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "OGTT 75g (fasting, 1h, 2h)", "priority": "gold_standard", "yield": 0.9, "indication": "screening at 24-28 weeks" },
+        { "name": "HbA1c", "priority": "medium", "yield": 0.5, "indication": "limited utility in pregnancy" },
+        { "name": "Fasting blood glucose", "priority": "high", "yield": 0.7, "indication": "initial screening if high risk" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG3 - Diabetes in Pregnancy",
+      "pathways": [
+        {
+          "severity": "diet controlled",
+          "criteria": "fasting <5.3, 1h <7.8, 2h <6.4 mmol/L",
+          "treatment": "Dietary counseling. Blood glucose monitoring 4x daily (fasting + 1h post-meals). Exercise. Target glucose levels."
+        },
+        {
+          "severity": "medication required",
+          "criteria": "glucose above targets despite diet for 1-2 weeks",
+          "treatment": "Metformin (first-line). Insulin (if metformin inadequate or contraindicated). Monitor fetal growth. Plan delivery at 38-40 weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "placental_hormone_induced_insulin_resistance",
+      "beta_cell_dysfunction",
+      "relative_insulin_deficiency",
+      "maternal_hyperglycemia",
+      "fetal_hyperinsulinemia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "fetal_macrosomia",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["estimated_fetal_weight_over_90th_centile"]
+      },
+      {
+        "diseaseId": "neonatal_hypoglycemia",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["baby_of_diabetic_mother"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["abnormal_ogtt", "obesity", "family_history_diabetes"],
+    "exclusionClues": ["normal_ogtt", "no_risk_factors"]
+  }
+}

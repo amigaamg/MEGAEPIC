@@ -1,0 +1,131 @@
+{
+  "disease": {
+    "id": "ureteric_stone",
+    "name": "Ureteric Stone (Ureterolithiasis)",
+    "system": "URO",
+    "agePeak_months": [240, 600],
+    "note": "Stone lodged in ureter causing renal colic. Most stones pass spontaneously. Size and location determine management.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["urolithiasis", "ureteric_colic", "flank_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "obstructive_pyelonephritis_sepsis", "weight": 10 },
+        { "sign": "anuria_acute_kidney_injury_from_bilateral", "weight": 9 },
+        { "sign": "uncontrolled_pain", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Stone size <5mm (likely pass), 5-10mm (may pass), >10mm (likely need intervention)"
+    },
+    "historyFeatures": [
+      { "symptomId": "severe_flank_pain_colicky", "weight": 5 },
+      { "symptomId": "pain_radiating_to_groin_testes_labia", "weight": 4 },
+      { "symptomId": "hematuria_gross_or_microscopic", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "dysuria_urinary_frequency", "weight": 3, "note": "Distal ureteric stone near VUJ" },
+      { "symptomId": "prior_stone_history", "weight": 3 },
+      { "symptomId": "fever_chills", "weight": 4, "note": "Suggests complicated UTI/obstruction" },
+      { "symptomId": "oliguria", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "costovertebral_angle_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "abdominal_tenderness_mild", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "signs_of_sepsis", "baseWeight": 4 },
+      { "signId": "testicular_tenderness_ipsilateral", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "dehydration_low_fluid_intake", "multiplier": 2.0 },
+      { "id": "family_history", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "hypercalciuria", "multiplier": 2.5 },
+      { "id": "hyperoxaluria", "multiplier": 2.0 },
+      { "id": "hyperuricosuria_gout", "multiplier": 1.8 },
+      { "id": "recurrent_uti", "multiplier": 1.5 },
+      { "id": "bowel_disease_crohn_ileostomy", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "proximal_ureteric_stone",
+        "name": "Proximal (Upper) Ureteric Stone",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "flank_pain_only", "weight": 4 },
+          { "feature": "abdominal_pain_may_be", "weight": 3 },
+          { "feature": "often_larger_stones", "weight": 3 }
+        ],
+        "management": "Medical expulsive therapy (MET) with tamsulosin 0.4 mg if <10mm. ESWL if 5-15mm and not passing. Ureteroscopy (URS) with laser lithotripsy if >10mm, ESWL failure, or contraindication. Stenting if obstruction with infection."
+      },
+      {
+        "id": "distal_ureteric_stone",
+        "name": "Distal (Lower) Ureteric Stone",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "pain_radiating_to_groin", "weight": 5 },
+          { "feature": "urinary_symptoms_dysuria_frequency", "weight": 4 },
+          { "feature": "higher_passage_rate", "weight": 4 },
+          { "feature": "vuj_stone", "weight": 3 }
+        ],
+        "management": "MET with tamsulosin. Observation if <5mm. URS with laser if >5mm and not passing. High spontaneous passage rate (up to 95% for <5mm). Repeat imaging at 2 weeks if no passage."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "acute_pyelonephritis", "discriminators": ["persistent_fever", "dysuria_positive_culture", "no_stone_on_ct"] },
+      { "diseaseId": "renal_infarction", "discriminators": ["atrial_fibrillation", "elevated_ldh", "normal_ct_kub", "wedge_shaped_infarct_on_ct_with_contrast"] },
+      { "diseaseId": "abdominal_aortic_aneurysm", "discriminators": ["pulsatile_mass", "age_over_60", "atherosclerosis", "expanding_aneurysm_on_ct"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dipstick", "priority": "immediate", "yield": 0.7, "indication": "hematuria, infection" }
+      ],
+      "laboratory": [
+        { "name": "Urinalysis + microscopy", "priority": "high", "yield": 0.7, "indication": "RBCs, WBCs, crystals, nitrites" },
+        { "name": "Serum creatinine, U&E", "priority": "high", "yield": 0.6, "indication": "renal function, obstruction" },
+        { "name": "Serum calcium, uric acid, phosphate", "priority": "medium", "yield": 0.5, "indication": "metabolic workup" }
+      ],
+      "imaging": [
+        { "name": "Non-contrast CT KUB (gold standard)", "priority": "immediate", "yield": 0.98, "indication": "stone size, location, density, hydronephrosis" },
+        { "name": "Renal Ultrasound", "priority": "high", "yield": 0.7, "indication": "hydronephrosis, pregnancy, children, serial follow-up" },
+        { "name": "KUB X-ray", "priority": "medium", "yield": 0.6, "indication": "radiopaque stone follow-up" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EAU Guidelines for Urolithiasis",
+      "pathways": [
+        {
+          "severity": "small stone <5mm, uncomplicated",
+          "criteria": "distal or mid ureter, <5mm, no infection, pain controlled",
+          "treatment": "Analgesia (NSAIDs first-line: diclofenac 75 mg IM/PO, ketorolac). Tamsulosin 0.4 mg daily for MET. Hydration. Strain urine to catch stone. Monitor weekly x 4-6 weeks. If not passed by 4 weeks: reimage."
+        },
+        {
+          "severity": "moderate stone 5-10mm",
+          "criteria": "stone 5-10mm, no infection, pain manageable",
+          "treatment": "MET with tamsulosin. If not passed in 2 weeks: URS with laser lithotripsy or ESWL (proximal ureter). Stone analysis on passed/retrieved stone."
+        },
+        {
+          "severity": "large stone >10mm or complicated",
+          "criteria": "stone >10mm, or hydronephrosis with infection/fever, or solitary kidney, or bilateral",
+          "treatment": "Urgent decompression (stent or nephrostomy) if infected/obstructed with fever. Definitive: URS with laser lithotripsy. PCNL if very large proximal stone. IV antibiotics if infection. Admit for pain control if needed."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "stone_nidus_in_ureter",
+      "ureteral_obstruction",
+      "increased_intraluminal_pressure",
+      "ureteral_spasm_and_hyperperistalsis",
+      "renal_pelvis_distension",
+      "prostaglandin_mediated_pain_and_inflammation",
+      "hydronephrosis_if_persistent_obstruction"
+    ],
+    "complications": [
+      { "diseaseId": "obstructive_pyelonephritis", "probability": 0.05, "severityBoost": 0.5, "clues": ["fever_chills", "wbc_elevated", "positive_urine_culture"] },
+      { "diseaseId": "hydronephrosis_renal_impairment", "probability": 0.1, "severityBoost": 0.3, "clues": ["dilated_collecting_system", "elevated_creatinine", "prolonged_obstruction"] },
+      { "diseaseId": "ureteral_stricture", "probability": 0.02, "severityBoost": 0.3, "clues": ["impacted_stone", "recurrent_obstruction", "history_of_urs"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "high if infected/obstructed",
+    "diagnosticClues": ["acute_unilateral_flank_pain_radiating_to_groin", "hematuria", "previous_stones", "ct_kub_positive"],
+    "exclusionClues": ["negative_ct_kub", "no_hydronephrosis", "atypical_pain_duration_location"]
+  }
+}

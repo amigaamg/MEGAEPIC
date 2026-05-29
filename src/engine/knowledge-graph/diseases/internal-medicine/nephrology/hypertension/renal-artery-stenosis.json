@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "renal_artery_stenosis",
+    "name": "Renal Artery Stenosis",
+    "system": "RENAL",
+    "agePeak_months": [540, 960],
+    "note": "Atherosclerotic (80%) or fibromuscular dysplasia (20%) causing narrowing of renal artery. Can lead to renovascular hypertension and ischemic nephropathy.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["renovascular_disease", "secondary_hypertension", "renal_artery_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypertensive_emergency_with_encephalopathy", "weight": 9 },
+        { "sign": "acute_kidney_injury_from_acei_arb", "weight": 8 },
+        { "sign": "flash_pulmonary_edema", "weight": 9 },
+        { "sign": "bilateral_stenosis_anuria", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Degree of stenosis: <50% (mild), 50-70% (moderate), >70% (severe/hemodynamically significant)"
+    },
+    "historyFeatures": [
+      { "symptomId": "hypertension_early_onset_before_30", "weight": 4, "note": "Suggests FMD" },
+      { "symptomId": "hypertension_late_onset_after_55_severe", "weight": 4, "note": "Suggests atherosclerotic" },
+      { "symptomId": "hypertension_refractory_to_3_or_more_drugs", "weight": 5 },
+      { "symptomId": "flash_pulmonary_edema_recurrent", "weight": 4 },
+      { "symptomId": "acute_kidney_injury_after_acei_arb", "weight": 4 },
+      { "symptomId": "atherosclerotic_disease_history", "weight": 4 },
+      { "symptomId": "dizziness_from_hypoperfusion", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "abdominal_bruit_systolic_diastolic", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "severe_hypertension_180_120", "baseWeight": 5 },
+      { "signId": "hypertensive_retinopathy_grade_3_4", "baseWeight": 3 },
+      { "signId": "signs_of_heart_failure_flash_pulmonary_edema", "baseWeight": 3 },
+      { "signId": "peripheral_vascular_disease_signs", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_55_for_atherosclerotic", "multiplier": 3.0 },
+      { "id": "female_sex_for_fmd", "multiplier": 4.0 },
+      { "id": "atherosclerosis_cad_pad_cvd", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "hyperlipidemia", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "atherosclerotic_ras",
+        "name": "Atherosclerotic Renal Artery Stenosis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "age_over_55", "weight": 4 },
+          { "feature": "other_vascular_disease", "weight": 4 },
+          { "feature": "ostial_lesion", "weight": 4 },
+          { "feature": "progressive_renal_impairment", "weight": 3 }
+        ],
+        "management": "Medical management first-line: BP control (ACEi/ARB preferred, but monitor creatinine), statin, antiplatelet, smoking cessation. Revascularization (stenting) if: resistant HTN, progressive CKD, flash pulmonary edema, or bilateral severe stenosis. Stenting preferred over angioplasty alone."
+      },
+      {
+        "id": "fibromuscular_dysplasia_ras",
+        "name": "Fibromuscular Dysplasia (FMD)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "young_women_20_50", "weight": 5 },
+          { "feature": "string_of_beads_on_angiography", "weight": 5 },
+          { "feature": "mid_distal_renal_artery", "weight": 4 },
+          { "feature": "good_response_to_ptra", "weight": 4 }
+        ],
+        "management": "Angioplasty without stent (PTRA) is treatment of choice for severe hypertension or FMD with complications. Antiplatelet post-procedure. BP control (ACEi/ARB). Cure rate ~50%, improvement in most. Periodic follow-up for restenosis."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "essential_hypertension", "discriminators": ["no_abdominal_bruit", "no_flash_pulmonary_edema", "age_matches_essential_htn", "normal_renal_artery_imaging"] },
+      { "diseaseId": "pheochromocytoma", "discriminators": ["paroxysmal_htn_with_palpitations", "elevated_metanephrines", "adrenal_mass"] },
+      { "diseaseId": "coarctation_of_aorta", "discriminators": ["upper_extremity_htn_with_lower_bp", "radiofemoral_delay", "chest_xray_rib_notching"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Abdominal auscultation for bruit", "priority": "immediate", "yield": 0.4, "indication": "systolic-diastolic bruit suggestive" }
+      ],
+      "laboratory": [
+        { "name": "Serum creatinine, eGFR", "priority": "high", "yield": 0.6, "indication": "baseline and monitor for ACEi-induced AKI" },
+        { "name": "Renin and aldosterone (plasma), renin ratio", "priority": "medium", "yield": 0.5, "indication": "elevated renin in unilateral stenosis" }
+      ],
+      "imaging": [
+        { "name": "Renal artery duplex ultrasound", "priority": "first-line screening", "yield": 0.8, "indication": "peak systolic velocity >200 cm/s, renal/aortic ratio >3.5" },
+        { "name": "CT angiography (CTA) or MR angiography (MRA)", "priority": "high", "yield": 0.9, "indication": "anatomy, degree of stenosis, FMD string of beads" },
+        { "name": "Catheter angiography with pressure gradient", "priority": "gold_standard", "yield": 0.98, "indication": "pre-procedure confirmation, simultaneous intervention" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ACC/KIDIGO Guidelines for Renal Artery Stenosis",
+      "pathways": [
+        {
+          "severity": "medical management (first-line for atherosclerotic)",
+          "criteria": "unilateral <70% stenosis, controlled BP, stable CKD",
+          "treatment": "ACEi/ARB (monitor creatinine within 1 week of start). Statin (atorvastatin 40-80 mg). Antiplatelet (aspirin 75-100 mg). BP target <130/80. Smoking cessation. Optimize other CV risk factors."
+        },
+        {
+          "severity": "revascularization indicated",
+          "criteria": "resistant HTN despite 3+ drugs, progressive CKD, flash pulmonary edema, bilateral/high-grade with renal impairment",
+          "treatment": "Renal artery stenting (atherosclerotic) or balloon angioplasty (FMD). Pre-procedure antiplatelet. Periprocedural hydration. Post-procedure monitoring for restenosis. Continue medical therapy."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "reduced_renal_perfusion_pressure",
+      "renin_angiotensin_aldosterone_system_activation",
+      "angiotensin_ii_mediated_vasoconstriction",
+      "aldosterone_driven_sodium_and_fluid_retention",
+      "hypertension_with_sodium_volume_component",
+      "ischemic_nephropathy_if_prolonged",
+      "tubular_atrophy_and_interstitial_fibrosis"
+    ],
+    "complications": [
+      { "diseaseId": "flash_pulmonary_edema", "probability": 0.1, "severityBoost": 0.6, "clues": ["recurrent_episodes", "rapid_onset", "bilateral_ras_or_solitary_kidney", "improves_with_revascularization"] },
+      { "diseaseId": "progressive_renal_failure_ischemic_nephropathy", "probability": 0.15, "severityBoost": 0.4, "clues": ["declining_egfr_despite_bp_control", "renal_atrophy_on_ultrasound", "bilateral_severe_stenosis"] },
+      { "diseaseId": "restenosis_post_stent", "probability": 0.15, "severityBoost": 0.2, "clues": ["recurrent_htn", "in_stent_restenosis_on_duplex", "usually_6_12_months_post"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["refractory_hypertension", "abdominal_bruit", "flash_pulmonary_edema", "aki_with_acei_arb"],
+    "exclusionClues": ["normal_renal_artery_imaging", "well_controlled_hypertension_on_1_2_drugs", "no_bruit_or_hypoperfusion_symptoms"]
+  }
+}

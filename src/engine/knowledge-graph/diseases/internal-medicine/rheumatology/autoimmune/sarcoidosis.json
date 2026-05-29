@@ -1,0 +1,159 @@
+{
+  "disease": {
+    "id": "sarcoidosis",
+    "name": "Sarcoidosis",
+    "system": "rheumatology",
+    "agePeak_months": [240, 480],
+    "note": "Multisystem granulomatous disorder of unknown etiology characterized by non-caseating epithelioid granulomas. Most commonly affects lungs, lymph nodes, skin, and eyes. Rheumatologic involvement includes arthritis and myopathy.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["autoimmune", "granulomatous", "multisystem", "pulmonary_skin_lymph_nodes"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_sarcoid_arrhythmia_heart_block", "weight": 9 },
+        { "sign": "neurosarcoidosis", "weight": 9 },
+        { "sign": "pulmonary_fibrosis_respiratory_failure", "weight": 8 },
+        { "sign": "lupus_pernio", "weight": 5 },
+        { "sign": "hypercalcemia_severe", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If cardiac, neuro, or severe pulmonary -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dyspnea_cough_exertional", "weight": 5 },
+      { "symptomId": "erythema_nodosum", "weight": 4 },
+      { "symptomId": "bilateral_hilar_lymphadenopathy", "weight": 4 },
+      { "symptomId": "fatigue_weight_loss_fever", "weight": 4 },
+      { "symptomId": "arthralgia_ankle_knee_wrist", "weight": 4 },
+      { "symptomId": "skin_lesions_plaque_nodule", "weight": 3 },
+      { "symptomId": "eye_redness_uveitis", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "erythema_nodosum_shins", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "bilateral_hilar_lymphadenopathy_exam", "baseWeight": 2 },
+      { "signId": "skin_plaque_lupus_pernio", "baseWeight": 3 },
+      { "signId": "bibasilar_crackles", "baseWeight": 3 },
+      { "signId": "peripheral_lymphadenopathy", "baseWeight": 2 },
+      { "signId": "uveitis_on_slit_lamp", "baseWeight": 4 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "african_caribbean_ethnicity", "multiplier": 5.0 },
+      { "id": "scandinavian_ethnicity", "multiplier": 3.0 },
+      { "id": "family_history_sarcoidosis", "multiplier": 2.5 },
+      { "id": "age_20_40", "multiplier": 2.0 },
+      { "id": "female_sex", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_sarcoidosis_lofgren",
+        "name": "Acute Sarcoidosis (Lofgren Syndrome)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "erythema_nodosum_bilateral_hilar_lymphadenopathy_arthritis", "weight": 5 },
+          { "feature": "acute_onset", "weight": 4 },
+          { "feature": "favorable_prognosis_spontaneous_remission", "weight": 4 }
+        ],
+        "management": "NSAIDs. Observation. Corticosteroids for persistent symptoms."
+      },
+      {
+        "id": "chronic_pulmonary_sarcoidosis",
+        "name": "Chronic Pulmonary Sarcoidosis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "progressive_dyspnea_fibrosis", "weight": 5 },
+          { "feature": "stage_2_4_on_chest_xray", "weight": 5 },
+          { "feature": "long_term_corticosteroid_need", "weight": 4 }
+        ],
+        "management": "Corticosteroids. Methotrexate or azathioprine. Anti-TNF for refractory. Monitor lung function."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "tuberculosis",
+        "discriminators": ["positive_quantiferon_mantoux", "caseating_granulomas", "cavitary_lesions", "afb_positive"]
+      },
+      {
+        "diseaseId": "lymphoma",
+        "discriminators": ["b_symptoms_night_sweats", "bulky_lymphadenopathy", "lactate_dehydrogenase_elevated", "different_histology"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Chest examination", "priority": "immediate", "yield": 0.5, "indication": "crackles, lymphadenopathy" }
+      ],
+      "laboratory": [
+        { "name": "Serum ACE", "priority": "high", "yield": 0.6, "indication": "elevated in 60% of active cases" },
+        { "name": "Serum calcium", "priority": "high", "yield": 0.3, "indication": "hypercalcemia from vitamin D activation" },
+        { "name": "CRP and ESR", "priority": "medium", "yield": 0.5, "indication": "non-specific elevation" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.8, "indication": "bilateral hilar lymphadenopathy (stage I), interstitial changes" },
+        { "name": "HRCT chest", "priority": "high", "yield": 0.9, "indication": "perilymphatic nodules, fibrosis pattern" },
+        { "name": "Tissue biopsy (endobronchial or CT-guided)", "priority": "high", "yield": 0.95, "indication": "non-caseating granulomas" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.9, "indication": "disease extent assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATS/ERS/WASOG Sarcoidosis Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "no organ threat, Lofgren syndrome, asymptomatic",
+          "treatment": "Observation. NSAIDs. Hydroxychloroquine for skin. Spontaneous remission expected."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "pulmonary symptoms, uveitis, skin disease",
+          "treatment": "Prednisolone 0.5 mg/kg/day. Methotrexate or azathioprine as steroid-sparing."
+        },
+        {
+          "severity": "severe",
+          "criteria": "cardiac, neurologic, severe pulmonary fibrosis",
+          "treatment": "High-dose steroids. Cyclophosphamide. Anti-TNF (infliximab). Cardiac pacing for heart block."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "non_caseating_granuloma_formation",
+      "macrophage_t_cell_interaction",
+      "tnf_alpha_ifn_gamma",
+      "antigen_persistence",
+      "fibrosis_remodeling",
+      "vitamin_d_dysregulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pulmonary_fibrosis",
+        "probability": 0.2,
+        "severityBoost": 0.6,
+        "clues": ["progressive_dyspnea", "restrictive_pfts", "honeycombing_on_hrct"]
+      },
+      {
+        "diseaseId": "cardiac_sarcoidosis",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["palpitations", "syncope", "heart_block", "arrhythmia", "lv_dysfunction"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if cardiac or neuro",
+    "diagnosticClues": ["bilateral_hilar_lymphadenopathy", "erythema_nodosum", "non_caseating_granulomas", "elevated_ace"],
+    "exclusionClues": ["positive_quantiferon_tb", "caseating_granulomas", "no_granulomas", "different_diagnosis"]
+  }
+}

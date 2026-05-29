@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "acute_respiratory_failure",
+    "name": "Acute Respiratory Failure",
+    "system": "emergency_medicine",
+    "agePeak_months": [0, 960],
+    "note": "Inadequate gas exchange with hypoxemia (type I) or hypercapnia (type II). ABG essential for classification. Rapid identification and treatment of underlying cause is key.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["respiratory_emergency", "respiratory_failure"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hypoxia_spo2_less_85", "weight": 10 },
+        { "sign": "respiratory_arrest", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "altered_consciousness_hypercapnia", "weight": 9 },
+        { "sign": "exhaustion_silent_chest", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Respiratory failure is a CRITICAL EMERGENCY. Determine type (I/II) and treat cause."
+    },
+    "historyFeatures": [
+      { "symptomId": "shortness_of_breath", "weight": 5 },
+      { "symptomId": "difficulty_breathing_increasing", "weight": 5 },
+      { "symptomId": "cough_sputum", "weight": 3 },
+      { "symptomId": "wheezing_or_stridor", "weight": 3 },
+      { "symptomId": "chest_pain", "weight": 2 },
+      { "symptomId": "confusion_drowsiness", "weight": 4 },
+      { "symptomId": "known_lung_disease_copd_asthma", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "severe_tachypnea", "baseWeight": 4 },
+      { "signId": "use_of_accessory_muscles", "baseWeight": 4 },
+      { "signId": "indrawing_intercostal_suprasternal", "baseWeight": 4 },
+      { "signId": "paradoxical_breathing", "baseWeight": 5 },
+      { "signId": "cyanosis", "baseWeight": 4 },
+      { "signId": "decreased_breath_sounds", "baseWeight": 3 },
+      { "signId": "wheezing_or_crackles", "baseWeight": 3 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "tachycardia_with_hypoxia", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "chronic_lung_disease_copd_asthma_fibrosis", "multiplier": 3.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "smoking_history", "multiplier": 2.0 },
+      { "id": "obesity_osa", "multiplier": 1.5 },
+      { "id": "chest_trauma", "multiplier": 2.0 },
+      { "id": "postoperative_state", "multiplier": 1.5 },
+      { "id": "neuromuscular_disease", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "type_1_hypoxemic",
+        "name": "Type I (Hypoxemic) Respiratory Failure",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "pao2_less_60", "weight": 5 },
+          { "feature": "paco2_normal_or_low", "weight": 4 },
+          { "feature": "vq_mismatch_or_shunt", "weight": 4 }
+        ],
+        "management": "High-flow oxygen. Treat cause (pneumonia, PE, asthma, ARDS). NIV if appropriate. Consider intubation if fails."
+      },
+      {
+        "id": "type_2_hypercapnic",
+        "name": "Type II (Hypercapnic) Respiratory Failure",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "paco2_greater_50", "weight": 5 },
+          { "feature": "pao2_less_60", "weight": 4 },
+          { "feature": "copd_exacerbation_or_ventilatory_failure", "weight": 4 }
+        ],
+        "management": "Controlled oxygen therapy (target SpO2 88-92%). NIV (BiPAP) first-line for COPD. Consider respiratory stimulants (doxapram). Intubation if NIV fails or patient exhausted."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABG/VBG", "priority": "immediate", "yield": 1.0, "indication": "definitive diagnosis, type I vs II, pH" },
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.9, "indication": "continuous SpO2 monitoring" },
+        { "name": "PEFR (if asthma)", "priority": "high", "yield": 0.6, "indication": "severity of airflow limitation" }
+      ],
+      "laboratory": [
+        { "name": "FBC", "priority": "high", "yield": 0.4, "indication": "anemia, infection" },
+        { "name": "CRP, procalcitonin", "priority": "high", "yield": 0.5, "indication": "infection marker" },
+        { "name": "Troponin", "priority": "medium", "yield": 0.3, "indication": "cardiac strain" },
+        { "name": "U&E, Cr", "priority": "medium", "yield": 0.3, "indication": "baseline" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.7, "indication": "identify cause (pneumonia, PTX, effusion, ARDS)" },
+        { "name": "CT chest", "priority": "medium", "yield": 0.8, "indication": "if CXR inconclusive, PE workup" }
+      ]
+    },
+    "management": {
+      "protocolReference": "BTS Guidelines for Acute Respiratory Failure / ERC Guidelines",
+      "pathways": [
+        {
+          "severity": "acute hypoxemic failure (Type I)",
+          "criteria": "PaO2 <60 on room air, SpO2 <90%, RR >25",
+          "treatment": "High-flow oxygen (target SpO2 94-98%). Treat underlying cause (antibiotics for pneumonia, bronchodilators for asthma, diuretics for pulmonary oedema, anticoagulation for PE). Trial of NIV (CPAP) for pulmonary oedema or pneumonia if not exhausted. Intubate if refractory, worsening, or patient exhausted."
+        },
+        {
+          "severity": "acute hypercapnic failure (Type II)",
+          "criteria": "PaCO2 >50 + pH <7.35, RR <12 or >30, drowsiness, exhaustion",
+          "treatment": "Controlled oxygen (target SpO2 88-92%). NIV (BiPAP) with IPAP/EPAP titration. ABG after 1h. Cease NIV and intubate if no improvement, pH drops, or consciousness deteriorates. ICU admission for invasive ventilation. Bronchodilators, steroids for COPD exacerbation. Antibiotics if infective."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "ventilation_perfusion_mismatch",
+      "shunt",
+      "hypoventilation",
+      "diffusion_impairment",
+      "decreased_inspired_oxygen",
+      "increased_work_of_breathing",
+      "respiratory_muscle_fatigue",
+      "hypercapnia_suppression_of_respiratory_drive"
+    ],
+    "complications": [
+      {
+        "diseaseId": "respiratory_arrest",
+        "probability": 0.1,
+        "severityBoost": 0.8,
+        "clues": ["exhaustion", "silent_chest", "hypercapnic_coma"]
+      },
+      {
+        "diseaseId": "ventilator_associated_pneumonia",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["intubated_patient", "new_infiltrates", "purulent_sputum"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["severe_dyspnea", "hypoxia", "tachypnea", "abg_abnormalities", "accessory_muscle_use", "altered_consciousness"],
+    "exclusionClues": ["normal_abg", "normal_spo2_on_room_air", "no_respiratory_distress"]
+  }
+}

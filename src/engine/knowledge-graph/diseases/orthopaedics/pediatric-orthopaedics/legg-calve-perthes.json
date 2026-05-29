@@ -1,0 +1,121 @@
+{
+  "disease": {
+    "id": "legg-calve-perthes",
+    "name": "Legg-Calve-Perthes Disease",
+    "system": "ORTHO",
+    "agePeak_months": [48, 96],
+    "note": "Idiopathic avascular necrosis of the femoral head in children. Self-limiting but runs a 2-4 year course. Outcomes depend on age at onset and extent of necrosis.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["pediatric_hip", "avascular_necrosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "severeCriteria": {
+        "anyDangerSign": false,
+        "additionalCriteria": [
+          { "sign": "lateral_pillar_collapse_catterall_3_4", "weight": 7 },
+          { "sign": "head_at_risk_signs", "weight": 7 },
+          { "sign": "age_>8_at_onset", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If lateral pillar collapse or >8 years old -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hip_pain_or_limp", "weight": 5 },
+      { "symptomId": "pain_referred_to_medial_thigh_knee", "weight": 4 },
+      { "symptomId": "antalgic_gait", "weight": 4 },
+      { "symptomId": "limited_range_of_motion_hip", "weight": 3 },
+      { "symptomId": "pain_worsened_by_activity_relieved_by_rest", "weight": 3 },
+      { "symptomId": "age_4_to_8_years", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "limited_hip_abduction_and_internal_rotation", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pain_on_passive_rom", "baseWeight": 4 },
+      { "signId": "hip_flexion_contracture_thomas_test", "baseWeight": 3 },
+      { "signId": "antalgic_limp", "baseWeight": 4 },
+      { "signId": "trendelenburg_gait", "baseWeight": 3 },
+      { "signId": "muscle_atrophy_thigh_gluteal", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_4_to_8_years", "multiplier": 4.0 },
+      { "id": "male_gender", "multiplier": 4.0 },
+      { "id": "white_ethnicity", "multiplier": 3.0 },
+      { "id": "low_socioeconomic", "multiplier": 2.0 },
+      { "id": "second_hand_smoke_exposure", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "perthes_early_stage",
+        "name": "Perthes - Early (Avascular Necrosis Phase)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "symptoms_<6_weeks", "weight": 4 },
+          { "feature": "xray_may_be_normal_early", "weight": 3 },
+          { "feature": "mri_shows_avn_before_xray", "weight": 5 }
+        ],
+        "management": "Containment: abduction brace or Petrie cast. Activity restriction. PT for range of motion. NSAIDs. Prognosis better for younger children (<6 years)."
+      },
+      {
+        "id": "perthes_late_fragmentation",
+        "name": "Perthes - Fragmentation/Reossification Phase",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "duration_>6_weeks", "weight": 4 },
+          { "feature": "femoral_head_fragmentation_on_xray", "weight": 5 }
+        ],
+        "management": "Containment if head at risk signs. Surgical containment: femoral varus osteotomy or pelvic osteotomy (Salter/Chiari). Maintain ROM. Prognosis depends on lateral pillar classification."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "transient_synovitis",
+        "discriminators": ["acute_onset", "resolves_in_days", "normal_xray_mri"]
+      },
+      {
+        "diseaseId": "septic_arthritis",
+        "discriminators": ["fever", "toxic_appearance", "elevated_crp", "positive_aspiration"]
+      },
+      {
+        "diseaseId": "slipped_capital_femoral_epiphysis",
+        "discriminators": ["older_age_10_to_15", "obese", "xray_shows_slippage"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Hip X-ray (AP pelvis + frog-leg lateral)", "priority": "high", "yield": 0.8, "indication": "staging: sclerosis, fragmentation, reossification" },
+        { "name": "MRI hip with contrast", "priority": "high", "yield": 0.95, "indication": "early detection, extent of necrosis" },
+        { "name": "Bone scan", "priority": "low", "yield": 0.7, "indication": "cold femoral head" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Perthes Study Group Guidelines",
+      "pathways": [
+        {
+          "severity": "non_surgical",
+          "criteria": "Age <6 years, Catterall <3, lateral pillar A/B, good ROM",
+          "treatment": "Observation with ROM exercises. Avoid high-impact activities. X-ray follow-up every 3-6 months. Most do well with conservative care."
+        },
+        {
+          "severity": "surgical_containment",
+          "criteria": "Age >8 years, Catterall 3/4, lateral pillar B/C, head at risk signs, loss of containment",
+          "treatment": "Femoral varus derotation osteotomy or Salter innominate osteotomy. Post-op spica cast for 6 weeks. PT to regain ROM. X-ray follow-up until healing."
+        }
+      ]
+    },
+
+    "pathophysiology": ["idiopathic_ischemic_necrosis_femoral_head", "revascularization", "bone_resorption_and_collapse", "remodeling"]
+  }
+}

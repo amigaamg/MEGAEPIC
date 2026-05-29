@@ -31,6 +31,18 @@ export interface VitalsData {
   bpDiastolic?: number;
   avpu?: 'alert' | 'voice' | 'pain' | 'unresponsive';
   capRefill?: number;
+  urineProtein?: string;
+  urineOutput?: number;
+  bloodGlucose?: number;
+  bmi?: number;
+  waistCircumference?: number;
+  ca125?: number;
+  he4?: number;
+  cortisolLevel?: number;
+  acthLevel?: number;
+  dexamethasoneSuppression?: number;
+  cortisolUrineFree?: number;
+  metabolicPanel?: string;
 }
 
 export interface ExamFindings {
@@ -50,6 +62,30 @@ export interface ExamFindings {
   oedema: boolean;
   rash: boolean;
   meningism: boolean;
+  // Obstetric
+  proteinuria: boolean;
+  clonus: boolean;
+  hyperreflexia: boolean;
+  rightUpperQuadrantTenderness: boolean;
+  // Hernia
+  herniaReducible: boolean;
+  herniaObstructed: boolean;
+  herniaStrangulated: boolean;
+  coughImpulse: boolean;
+  // Endocrine
+  proximalMyopathy: boolean;
+  buffaloHump: boolean;
+  moonFacies: boolean;
+  purpleStriae: boolean;
+  hirsutism: boolean;
+  // Psychiatric
+  pressuredSpeech: boolean;
+  psychomotorAgitation: boolean;
+  psychomotorRetardation: boolean;
+  // Oncology
+  pelvicMass: boolean;
+  lymphoedema: boolean;
+  pleuralEffusionSign: boolean;
 }
 
 export interface ClinicalContext {

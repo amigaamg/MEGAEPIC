@@ -1,0 +1,121 @@
+{
+  "disease": {
+    "id": "renal_stones",
+    "name": "Nephrolithiasis (Renal/Ureteric Stones)",
+    "system": "urology",
+    "agePeak_months": [240, 600],
+    "note": "Calcium oxalate stones most common. Classic presentation: acute colicky flank pain radiating to groin.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["flank_pain", "hematuria"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sepsis_with_obstruction", "weight": 10 },
+        { "sign": "anuria_renal_failure", "weight": 9 },
+        { "sign": "uncontrolled_pain", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If infected obstructed stone -> URGENT (sepsis risk); else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "severe_flank_pain", "weight": 5, "modifiers": [
+          { "condition": "colicky_radiating_to_groin", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "hematuria", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "dysuria", "weight": 2 },
+      { "symptomId": "frequency_urgency", "weight": 2 },
+      { "symptomId": "previous_stone_history", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "costovertebral_angle_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "abdominal_tenderness", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 3, "note": "Suggests complicated UTI/obstruction" },
+      { "signId": "renal_angle_rigidity", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "dehydration_low_fluid_intake", "multiplier": 2.0 },
+      { "id": "family_history", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "hypercalciuria", "multiplier": 2.5 },
+      { "id": "gout_hyperuricosuria", "multiplier": 1.8 },
+      { "id": "recurrent_uti", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pyelonephritis",
+        "discriminators": ["fever", "dysuria", "positive_urine_culture", "persistent_pain"]
+      },
+      {
+        "diseaseId": "abdominal_aortic_aneurysm",
+        "discriminators": ["pulsatile_mass", "age_over_60", "atherosclerotic"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dipstick", "priority": "immediate", "yield": 0.8, "indication": "hematuria, infection" }
+      ],
+      "laboratory": [
+        { "name": "Urinalysis and microscopy", "priority": "high", "yield": 0.7, "indication": "RBCs, crystals, infection" },
+        { "name": "Serum creatinine, U&E", "priority": "high", "yield": 0.6, "indication": "renal function" },
+        { "name": "Serum calcium, uric acid", "priority": "medium", "yield": 0.5, "indication": "metabolic workup" }
+      ],
+      "imaging": [
+        { "name": "Non-contrast CT KUB", "priority": "gold_standard", "yield": 0.98, "indication": "size, location, density of stone" },
+        { "name": "Renal Ultrasound", "priority": "high", "yield": 0.7, "indication": "hydronephrosis, radiation avoidance (pregnancy, children)" },
+        { "name": "KUB X-ray", "priority": "medium", "yield": 0.6, "indication": "radiopaque stones, follow-up" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EAU Guidelines for Urolithiasis",
+      "pathways": [
+        {
+          "severity": "uncomplicated",
+          "criteria": "stone <10 mm, no obstruction, no infection, pain controlled",
+          "treatment": "Analgesia (NSAIDs first-line). Alpha-blockers (tamsulosin) for medical expulsive therapy. Hydration. Strain urine. Follow-up in 2 weeks."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "stone >10 mm, obstruction, infection, uncontrolled pain",
+          "treatment": "Urgent urology referral. Decompression (stent or nephrostomy) if infected/obstructed. Definitive treatment: ESWL, ureteroscopy, or PCNL depending on size and location."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "urinary_supersaturation",
+      "crystal_nucleation",
+      "stone_formation",
+      "ureteral_obstruction",
+      "hydronephrosis",
+      "renal_colic"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "obstructive_pyelonephritis",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["fever", "leukocytosis", "positive_culture"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "high if infected/obstructed",
+    "diagnosticClues": ["acute_colicky_flank_pain", "radiation_to_groin", "hematuria", "previous_stones"],
+    "exclusionClues": ["negative_ct_kub", "no_hematuria", "atypical_pain_pattern"]
+  }
+}

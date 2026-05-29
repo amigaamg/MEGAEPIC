@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "intrauterine_growth_restriction",
+    "name": "Intrauterine Growth Restriction (IUGR)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Fetus that fails to reach its genetic growth potential, typically defined as estimated fetal weight below the 10th percentile for gestational age. Associated with increased perinatal morbidity and mortality.",
+    "prevalenceWeight": 0.08,
+    "syndromeTags": ["fetal_compromise", "high_risk_pregnancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "absent_end_diastolic_flow_umbilical_artery", "weight": 9 },
+        { "sign": "reversed_end_diastolic_flow_umbilical_artery", "weight": 10 },
+        { "sign": "fetal_hypoxia_decompensation", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "est_fetal_weight_below_3rd_percentile", "weight": 8 },
+          { "sign": "abnormal_ductus_venosus_Doppler", "weight": 8 },
+          { "sign": "oligohydramnios", "weight": 7 },
+          { "sign": "reduced_biophysical_profile_under_6", "weight": 7 },
+          { "sign": "abnormal_CTG", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "AEDF/REDF, BPP <6, or EFW <3rd percentile -> SEVERE; EFW 3rd-10th with normal Dopplers -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "small_fundal_height_for_dates", "weight": 5 },
+      { "symptomId": "reduced_fetal_movements", "weight": 4 },
+      { "symptomId": "poor_maternal_weight_gain", "weight": 3 },
+      { "symptomId": "abdominal_pain_hypertension", "weight": 2 },
+      { "symptomId": "previous_IUGR", "weight": 3 },
+      { "symptomId": "substance_use_smoking_alcohol", "weight": 3 },
+      { "symptomId": "chronic_disease_hypertension_diabetes", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fundal_height_two_or_more_smaller_than_dates", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fetal_size_small_on_palpation", "baseWeight": 4 },
+      { "signId": "maternal_hypertension", "baseWeight": 3 },
+      { "signId": "reduced_amniotic_fluid", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "maternal_hypertension_preeclampsia", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "low_maternal_weight_gain", "multiplier": 2.0 },
+      { "id": "previous_IUGR", "multiplier": 3.0 },
+      { "id": "multiple_gestation", "multiplier": 3.0 },
+      { "id": "malnutrition_anemia", "multiplier": 2.0 },
+      { "id": "drug_use_alcohol_cocaine", "multiplier": 3.0 },
+      { "id": "chronic_disease_renal_cardiac", "multiplier": 2.5 },
+      { "id": "thrombophilia", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "symmetrical_iugr",
+        "name": "Symmetrical (Early-Onset) IUGR",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "head_circumference_and_abdomen_proportionally_small", "weight": 5 },
+          { "feature": "early_onset_before_32_weeks", "weight": 4 },
+          { "feature": "often_intrinsic_cause", "weight": 4 },
+          { "feature": "poor_catch_up_growth", "weight": 3 }
+        ],
+        "management": "Investigate for chromosomal anomalies, congenital infections (TORCH). Fetal medicine referral. Serial growth scans. Deliver at 34-37 weeks based on Dopplers."
+      },
+      {
+        "id": "asymmetrical_iugr",
+        "name": "Asymmetrical (Late-Onset) IUGR",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "head_spared_abdomen_small", "weight": 5 },
+          { "feature": "late_onset_after_32_weeks", "weight": 4 },
+          { "feature": "placental_insufficiency_cause", "weight": 4 },
+          { "feature": "good_catch_up_growth", "weight": 3 }
+        ],
+        "management": "Serial growth scans every 2 weeks. Umbilical artery Doppler weekly. Biophysical profile weekly. Plan delivery based on Doppler deterioration."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "small_for_gestational_age_constitutional",
+        "discriminators": ["normal_Dopplers", "normal_growth_velocity", "mother_small", "previous_normal_outcomes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Symphysial-fundal height measurement", "priority": "routine", "yield": 0.6, "indication": "screening" }
+      ],
+      "laboratory": [
+        { "name": "TORCH screen", "priority": "medium", "yield": 0.3, "indication": "if early-onset symmetrical IUGR" },
+        { "name": "Karyotype / microarray", "priority": "low", "yield": 0.2, "indication": "if structural anomalies or early-onset" },
+        { "name": "Uric acid", "priority": "medium", "yield": 0.4, "indication": "preeclampsia marker" }
+      ],
+      "imaging": [
+        { "name": "Fetal growth ultrasound (biometry)", "priority": "immediate", "yield": 0.95, "indication": "EFW, HC, AC, FL, BPD" },
+        { "name": "Umbilical artery Doppler", "priority": "high", "yield": 0.85, "indication": "PI, AEDF, REDF" },
+        { "name": "Middle cerebral artery Doppler", "priority": "high", "yield": 0.8, "indication": "brain-sparing effect (low PI)" },
+        { "name": "Ductus venosus Doppler", "priority": "high", "yield": 0.8, "indication": "late sign of fetal compromise" },
+        { "name": "Biophysical profile", "priority": "high", "yield": 0.85, "indication": "composite score of fetal well-being" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 31 - The Investigation and Management of the Small-for-Gestational-Age Fetus",
+      "pathways": [
+        {
+          "severity": "non_severe",
+          "criteria": "EFW 3rd-10th, normal UA Doppler, normal BPP",
+          "treatment": "Serial growth scans every 2-4 weeks. UA Doppler weekly. Antenatal surveillance. Lifestyle advice: rest, nutrition. Delivery at 38-39 weeks if stable."
+        },
+        {
+          "severity": "severe",
+          "criteria": "EFW <3rd, or abnormal UA Doppler (AEDF/REDF), or low BPP",
+          "treatment": "Admit. Fetal monitoring (CTG, BPP daily). Betamethasone if <34 weeks. MgSO4 for neuroprotection if <30w. Delivery: AEDF at 34w, REDF at 32w, or earlier if BPP <6 or abnormal CTG. Mode: C-section if fetal compromise."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uteroplacental_insufficiency",
+      "reduced_nutrient_transport",
+      "chronic_hypoxia",
+      "fetal_redistribution",
+      "brain_sparing_effect"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "fetal_hypoxia_acidosis",
+        "probability": 0.2,
+        "lagDays": [0, 14],
+        "severityBoost": 0.7,
+        "clues": ["abnormal_CTG", "abnormal_dv_Doppler"]
+      },
+      {
+        "diseaseId": "stillbirth",
+        "probability": 0.05,
+        "lagDays": [0, 30],
+        "severityBoost": 1.0,
+        "clues": ["progressively_worsening_Dopplers", "reduced_movements"]
+      },
+      {
+        "diseaseId": "neonatal_hypoglycemia",
+        "probability": 0.2,
+        "lagDays": [0, 1],
+        "severityBoost": 0.3,
+        "clues": ["low_birth_weight", "preterm"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["fundal_height_small", "low_EFW", "abnormal_Dopplers"],
+    "exclusionClues": ["constitutionally_small", "normal_Dopplers", "normal_growth_velocity"]
+  }
+}

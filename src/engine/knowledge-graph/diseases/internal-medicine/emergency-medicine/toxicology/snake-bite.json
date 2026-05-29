@@ -1,0 +1,148 @@
+{
+  "disease": {
+    "id": "snake_bite_envenomation",
+    "name": "Snake Bite Envenomation",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 720],
+    "note": "Medical emergency from venomous snake bite. Venom effects vary: neurotoxic, haemotoxic, cytotoxic, myotoxic. Early antivenom is definitive treatment.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["toxicity", "envenomation", "emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_paralysis", "weight": 10 },
+        { "sign": "severe_coagulopathy_bleeding", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "anaphylaxis_to_venom", "weight": 9 },
+        { "sign": "compartment_syndrome", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "SNAKE BITE with systemic envenomation = EMERGENCY requiring immediate antivenom."
+    },
+    "historyFeatures": [
+      { "symptomId": "snake_bite_event", "weight": 5 },
+      { "symptomId": "snake_identification", "weight": 4 },
+      { "symptomId": "pain_at_bite_site", "weight": 4 },
+      { "symptomId": "swelling_spreading", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "blurred_vision_ptosis", "weight": 4 },
+      { "symptomId": "bleeding_gums_wounds", "weight": 4 },
+      { "symptomId": "difficulty_breathing", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "fang_marks", "baseWeight": 5 },
+      { "signId": "local_swelling_bruising", "baseWeight": 4 },
+      { "signId": "bleeding_from_bite_site", "baseWeight": 4 },
+      { "signId": "ptosis", "baseWeight": 4 },
+      { "signId": "external_ophthalmoplegia", "baseWeight": 4 },
+      { "signId": "respiratory_muscle_weakness", "baseWeight": 5 },
+      { "signId": "tachycardia_hypotension", "baseWeight": 3 },
+      { "signId": "petechiae_ecchymoses", "baseWeight": 4 },
+      { "signId": "compartment_syndrome_signs", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "rural_tropical_region", "multiplier": 3.0 },
+      { "id": "agricultural_worker", "multiplier": 2.0 },
+      { "id": "walking_barefoot_at_night", "multiplier": 2.0 },
+      { "id": "snake_handling", "multiplier": 3.0 },
+      { "id": "delayed_presentation", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "neurotoxic_envenomation",
+        "name": "Neurotoxic Envenomation (Elapidae)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "ptosis", "weight": 5 },
+          { "feature": "bulbar_palsy", "weight": 5 },
+          { "feature": "descending_paralysis", "weight": 5 }
+        ],
+        "management": "Antivenom specific to species. Neostigmine + atropine trial. Respiratory support. ICU."
+      },
+      {
+        "id": "haemotoxic_envenomation",
+        "name": "Haemotoxic Envenomation (Viperidae)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "bleeding_tendency", "weight": 5 },
+          { "feature": "local_swelling", "weight": 4 },
+          { "feature": "coagulopathy", "weight": 5 }
+        ],
+        "management": "Antivenom. FFP/cryoprecipitate if bleeding. Monitor for DIC."
+      },
+      {
+        "id": "cytotoxic_envenomation",
+        "name": "Cytotoxic Envenomation",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "severe_local_necrosis", "weight": 5 },
+          { "feature": "blistering", "weight": 4 },
+          { "feature": "compartment_syndrome", "weight": 5 }
+        ],
+        "management": "Antivenom. Wound care. Surgical debridement if necrosis. Fasciotomy only if compartment syndrome confirmed."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "20-minute whole blood clotting test (20WBCT)", "priority": "high", "yield": 0.9, "indication": "assess coagulopathy" },
+        { "name": "Bite site examination", "priority": "immediate", "yield": 0.8, "indication": "fang marks, swelling" },
+        { "name": "Neurological examination", "priority": "high", "yield": 0.9, "indication": "ptosis, bulbar signs" }
+      ],
+      "laboratory": [
+        { "name": "FBC, platelets", "priority": "high", "yield": 0.8, "indication": "thrombocytopenia, hemoconcentration" },
+        { "name": "Coagulation profile (PT, PTT, fibrinogen)", "priority": "high", "yield": 0.9, "indication": "DIC screen" },
+        { "name": "U&E, Cr, CK", "priority": "high", "yield": 0.6, "indication": "renal function, rhabdomyolysis" },
+        { "name": "ABG", "priority": "medium", "yield": 0.5, "indication": "respiratory failure" }
+      ]
+    },
+    "management": {
+      "protocolReference": "WHO Guidelines for Snake Bite Management / Regional Antivenom Guidelines",
+      "pathways": [
+        {
+          "severity": "systemic envenomation",
+          "criteria": "coagulopathy, neurotoxicity, hypotension, or significant local swelling crossing joint",
+          "treatment": "Immobilization (pressure bandage + splint for neurotoxic snakes only). ABCDE. IV access. Antivenom 4-6 vials IV (species-specific). Premedicate with IM epinephrine (0.25-0.5mg) to reduce anaphylaxis risk. Repeat 20WBCT after 6h. Monitor for serum sickness. Tetanus prophylaxis. Analgesia. Avoid NSAIDs (bleeding risk)."
+        },
+        {
+          "severity": "no systemic envenomation",
+          "criteria": "dry bite or minimal local effects, normal 20WBCT, normal neurology",
+          "treatment": "Observe minimum 12-24 hours. Repeat 20WBCT. Wound care. Discharge if no systemic signs develop."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "venom_injection",
+      "enzymatic_tissue_destruction",
+      "neurotoxin_postsynaptic_blockade",
+      "haemotoxin_coagulopathy",
+      "myotoxin_rhabdomyolysis",
+      "cytotoxin_local_necrosis",
+      "systemic_inflammatory_response",
+      "anaphylaxis_to_venom"
+    ],
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["rhabdomyolysis", "hypotension", "oliguria"]
+      },
+      {
+        "diseaseId": "compartment_syndrome",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "clues": ["tense_swollen_limb", "severe_pain", "paresthesia"]
+      },
+      {
+        "diseaseId": "antivenom_anaphylaxis",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["urticaria", "hypotension", "bronchospasm_after_antivenom"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["snake_bite_history", "fang_marks", "progressive_swelling", "ptosis", "coagulopathy", "bleeding_tendency"],
+    "exclusionClues": ["dry_bite_no_envenomation", "no_systemic_signs_after_12h", "non_venomous_snake_bite"]
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "perforated_ulcer",
+    "name": "Perforated Peptic Ulcer",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Sudden severe epigastric pain with board-like rigidity. Classic gas under diaphragm on erect CXR.",
+    "prevalenceWeight": 0.55,
+    "syndromeTags": ["acute_abdomen", "upper_abdominal_pain", "peritonitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "board_like_rigidity", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "rebound_tenderness", "weight": 7 },
+          { "sign": "absent_bowel_sounds", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If generalized peritonitis/shock -> SEVERE; else -> NON-SEVERE (contained perforation)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain", "weight": 5, "modifiers": [
+          { "condition": "sudden_onset", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "previous_dyspepsia", "weight": 4, "note": "History of peptic ulcer disease" },
+      { "symptomId": "nsaid_use", "weight": 4, "note": "Common precipitant" },
+      { "symptomId": "hematemesis", "weight": 2, "note": "May coexist with perforation" }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "board_like_rigidity", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "rebound_tenderness", "baseWeight": 4 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "guarding", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "nsaid_use", "multiplier": 2.0 },
+      { "id": "h_pylori_infection", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.3 },
+      { "id": "corticosteroid_use", "multiplier": 1.5 },
+      { "id": "previous_ulcer_history", "multiplier": 1.8 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "anterior_duodenal_perforation",
+        "name": "Anterior Duodenal Ulcer Perforation",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "sudden_severe_epigastric_pain", "weight": 5 },
+          { "feature": "board_like_rigidity", "weight": 5 },
+          { "feature": "gas_under_diaphragm", "weight": 5 }
+        ],
+        "management": "Emergency laparotomy with omental patch repair (Graham patch). IV PPI. IV antibiotics."
+      },
+      {
+        "id": "gastric_ulcer_perforation",
+        "name": "Gastric Ulcer Perforation",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "epigastric_pain", "weight": 5 },
+          { "feature": "vomiting", "weight": 4 },
+          { "feature": "peritonitis", "weight": 5 },
+          { "feature": "hematemesis", "weight": 3 }
+        ],
+        "management": "Emergency laparotomy. Ulcer excision or biopsy + closure. Rule out malignancy. IV PPI and antibiotics."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_pancreatitis",
+        "discriminators": ["serum_amylase_elevated", "pain_referred_to_back", "vomiting_prominent"]
+      },
+      {
+        "diseaseId": "acute_appendicitis",
+        "discriminators": ["pain_migration_to_rlq", "anorexia", "pain_not_relieved_by_antacids"]
+      },
+      {
+        "diseaseId": "myocardial_infarction",
+        "discriminators": ["ecg_changes", "cardiac_enzymes", "chest_pain_radiation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Erect Chest X-Ray", "priority": "immediate", "yield": 0.85, "indication": "free gas under diaphragm" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.2, "indication": "rule out MI" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "leukocytosis suggests perforation" },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "elevated in peritonitis" },
+        { "name": "Serum Amylase", "priority": "high", "yield": 0.6, "indication": "rule out pancreatitis" },
+        { "name": "Blood Gas", "priority": "high", "yield": 0.7, "indication": "assess metabolic acidosis and shock" }
+      ],
+      "imaging": [
+        { "name": "Erect CXR", "priority": "immediate", "yield": 0.85, "indication": "pneumoperitoneum" },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.98, "indication": "detect free gas and fluid, localize perforation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Perforated Peptic Ulcer",
+      "pathways": [
+        {
+          "severity": "severe",
+          "criteria": "generalized peritonitis, board-like rigidity, shock",
+          "treatment": "Emergency laparotomy. Resuscitation with IV fluids. Broad-spectrum IV antibiotics. Omental patch repair. Post-op ICU."
+        },
+        {
+          "severity": "non-severe",
+          "criteria": "localized tenderness, no peritonitis, contained perforation",
+          "treatment": "Consider conservative management: NBM, NG tube, IV PPI, IV antibiotics. Close monitoring. Surgical intervention if deterioration."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ulcer_penetration",
+      "gastric_or_duodenal_content_leak",
+      "chemical_peritonitis",
+      "bacterial_contamination",
+      "sepsis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "probability": 0.15,
+        "lagDays": [5, 10],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "ileus", "elevated_wbc"]
+      },
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.2,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "tachycardia", "oliguria"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_epigastric_pain", "board_like_rigidity", "previous_dyspepsia", "nsaid_use"],
+    "exclusionClues": ["left_lower_quadrant_pain", "bloody_diarrhea", "pain_relieved_by_food"]
+  }
+}

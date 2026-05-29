@@ -1,0 +1,117 @@
+{
+  "disease": {
+    "id": "pemphigus",
+    "name": "Pemphigus Vulgaris",
+    "system": "dermatology",
+    "agePeak_months": [360, 720],
+    "note": "Life-threatening autoimmune blistering disease. IgG autoantibodies against desmoglein 3 (and 1). Flaccid bullae, oral erosions, positive Nikolsky sign.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["autoimmune_blistering", "vesiculobullous", "mucocutaneous"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "extensive_skin_loss_erythroderma", "weight": 10 },
+        { "sign": "sepsis_from_skin_infection", "weight": 10 },
+        { "sign": "airway_compromise_laryngeal", "weight": 10 },
+        { "sign": "massive_fluid_loss_electrolytes", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Extensive/poorly controlled -> SEVERE; limited/mild -> MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painful_oral_erosions_ulcers", "weight": 5 },
+      { "symptomId": "flaccid_blisters_on_skin", "weight": 5 },
+      { "symptomId": "skin_breaks_easily_with_friction", "weight": 4 },
+      { "symptomId": "chronic_course_with_relapses", "weight": 3 },
+      { "symptomId": "pain_on_swallowing", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "flaccid_bullae_rupturing_easily", "baseWeight": 5 },
+      { "signId": "positive_nikolsky_sign", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "oral_erosions_mucosal", "baseWeight": 5 },
+      { "signId": "crusted_erosions_after_bulla_rupture", "baseWeight": 3 },
+      { "signId": "positive_asboe_hansen_sign", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "genetic_predisposition_hla_drb1_0402_dqb1_0503", "multiplier": 3.0 },
+      { "id": "mediterranean_middle_eastern_ethnicity", "multiplier": 2.5 },
+      { "id": "certain_drugs_penicillamine_captopril", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bullous_pemphigoid",
+        "discriminators": ["tense_bullae", "urticarial_plaques", "intact_blisters", "negative_nikolsky"]
+      },
+      {
+        "diseaseId": "pemphigus_foliaceus",
+        "discriminators": ["no_mucosal_involvement", "superficial_crusting", "desmoglein_1_only"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Nikolsky sign test", "priority": "high", "yield": 0.8, "indication": "lateral pressure causes skin separation" }
+      ],
+      "laboratory": [
+        { "name": "Skin biopsy for H&E (suprabasal acantholysis)", "priority": "gold_standard", "yield": 0.95, "indication": "tombstone pattern of basal cells" },
+        { "name": "Direct immunofluorescence (DIF) perilesional biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "IgG + C3 intercellular deposition" },
+        { "name": "Indirect IF for circulating IgG anti-desmoglein", "priority": "high", "yield": 0.9, "indication": "titer correlates with disease activity" },
+        { "name": "ELISA for anti-Dsg3 and anti-Dsg1", "priority": "high", "yield": 0.95, "indication": "confirm autoantibodies" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "European Dermatology Forum / British Association Guidelines for Pemphigus",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "limited skin lesions, mild oral involvement",
+          "treatment": "Potent topical corticosteroids. High-dose prednisolone 1mg/kg/day. Start steroid-sparing agent: azathioprine 2mg/kg/day or mycophenolate mofetil 2g/day. Calcium and vitamin D supplementation."
+        },
+        {
+          "severity": "severe/refractory",
+          "criteria": "extensive BSA, severe oral, resistant to above",
+          "treatment": "IV methylprednisolone 1g/day x 3 days pulse therapy. IVIG 2g/kg over 3-5 days. Rituximab 1g IV 2 weeks apart (first-line for moderate-severe). Plasmapheresis. Wound care. Monitor for infection."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "autoantibodies_desmoglein_3_and_1",
+      "acantholysis_loss_of_cell_cell_adhesion",
+      "suprabasal_split",
+      "nikolsky_sign_positive",
+      "t_cell_dysregulation",
+      "genetic_predisposition"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "steroid_induced_osteoporosis_diabetes",
+        "probability": 0.4,
+        "severityBoost": 0.2,
+        "clues": ["long_term_steroid_use", "bone_pain", "hyperglycemia"]
+      },
+      {
+        "diseaseId": "skin_infection_sepsis",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["fever", "purulent_exudate", "rapid_worsening"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["flaccid_bullae_oral_erosions", "positive_nikolsky", "acantholysis_on_biopsy", "positive_dif"],
+    "exclusionClues": ["subepidermal_split", "tense_bullae", "negative_dif"]
+  }
+}

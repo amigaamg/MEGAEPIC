@@ -1,0 +1,162 @@
+{
+  "disease": {
+    "id": "gastric_outlet_obstruction",
+    "name": "Gastric Outlet Obstruction",
+    "system": "surgical",
+    "agePeak_months": [360, 840],
+    "note": "Mechanical obstruction at the gastric outlet. Presents with vomiting of undigested food, weight loss, and epigastric distension.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["vomiting", "epigastric_distension", "weight_loss"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_dehydration", "weight": 8 },
+        { "sign": "metabolic_alkalosis_severe", "weight": 8 },
+        { "sign": "gastric_perforation", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hypokalemia", "weight": 7 },
+          { "sign": "gastric_dilatation_massive", "weight": 6 },
+          { "sign": "cachexia", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Severe metabolic disturbance/perforation -> SEVERE; chronic partial obstruction -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "vomiting_of_undigested_food", "weight": 5, "note": "Vomiting hours after meals, contains food eaten earlier" },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "epigastric_fullness_distension", "weight": 4 },
+      { "symptomId": "early_satiety", "weight": 3 },
+      { "symptomId": "previous_peptic_ulcer_history", "weight": 4, "note": "Most common benign cause" },
+      { "symptomId": "nsaid_use", "weight": 3 },
+      { "symptomId": "dysphagia", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_distension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "succussion_splash", "baseWeight": 5, "doubleWeight": true, "note": "Pathognomonic for gastric outlet obstruction" },
+      { "signId": "visible_peristalsis", "baseWeight": 3 },
+      { "signId": "epigastric_tenderness", "baseWeight": 2 },
+      { "signId": "palpable_mass", "baseWeight": 3, "note": "Suggests malignant cause" },
+      { "signId": "signs_of_dehydration", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "peptic_ulcer_disease", "multiplier": 2.5 },
+      { "id": "gastric_cancer", "multiplier": 2.0 },
+      { "id": "pancreatic_cancer", "multiplier": 1.8 },
+      { "id": "nsaid_use", "multiplier": 1.5 },
+      { "id": "h_pylori_infection", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "benign_goo",
+        "name": "Benign Gastric Outlet Obstruction",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "history_of_peptic_ulcer", "weight": 5 },
+          { "feature": "chronic_progressive_vomiting", "weight": 5 },
+          { "feature": "succussion_splash", "weight": 5 },
+          { "feature": "no_weight_loss_severe", "weight": 3 }
+        ],
+        "management": "NG tube decompression. Correction of dehydration and electrolyte imbalance (IV fluids + KCl). IV PPI. Balloon dilatation or surgical drainage (pyloroplasty, GJ). H. pylori eradication."
+      },
+      {
+        "id": "malignant_goo",
+        "name": "Malignant Gastric Outlet Obstruction",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "severe_weight_loss", "weight": 5 },
+          { "feature": "palpable_epigastric_mass", "weight": 4 },
+          { "feature": "older_age", "weight": 4 },
+          { "feature": "anorexia_early_satiety", "weight": 4 }
+        ],
+        "management": "Staging CT. Palliative gastrojejunostomy (open or laparoscopic). Self-expanding metallic stent (SEMS) for inoperable cases. Chemotherapy if metastatic."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "gastroparesis",
+        "discriminators": ["diabetes_history", "no_mechanical_obstruction_on_endoscopy", "gastric_scintigraphy_delayed_emptying"]
+      },
+      {
+        "diseaseId": "superior_mesenteric_artery_syndrome",
+        "discriminators": ["young_thin_female", "sma_angle_narrowed_on_ct", "relief_in_left_lateral_position"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "NG tube placement + residual volume", "priority": "immediate", "yield": 0.7, "indication": "large residual suggests obstruction" }
+      ],
+      "laboratory": [
+        { "name": "Electrolytes", "priority": "immediate", "yield": 0.8, "indication": "hypokalemic hypochloremic metabolic alkalosis" },
+        { "name": "Blood Gas", "priority": "immediate", "yield": 0.8, "indication": "metabolic alkalosis" },
+        { "name": "CBC", "priority": "high", "yield": 0.4, "indication": "hemoconcentration from dehydration" },
+        { "name": "Albumin", "priority": "medium", "yield": 0.3, "indication": "nutritional status" }
+      ],
+      "imaging": [
+        { "name": "Upper GI Endoscopy (EGD)", "priority": "immediate", "yield": 0.95, "indication": "identify cause and biopsy" },
+        { "name": "CT Abdomen with IV + oral contrast", "priority": "high", "yield": 0.9, "indication": "identify malignant cause, assess extent" },
+        { "name": "Upper GI barium meal", "priority": "medium", "yield": 0.8, "indication": "demonstrate obstruction level" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASGE Guidelines for Gastric Outlet Obstruction",
+      "pathways": [
+        {
+          "severity": "benign partial obstruction",
+          "criteria": "peptic ulcer etiology, no malignancy, partial obstruction",
+          "treatment": "Decompression with NG tube. IV fluids with KCl and electrolyte correction. IV PPI. Endoscopic balloon dilatation. H. pylori eradication. Surgical drainage if fails."
+        },
+        {
+          "severity": "malignant obstruction",
+          "criteria": "cancer confirmed, complete obstruction",
+          "treatment": "Staging laparoscopy. Palliative gastrojejunostomy (laparoscopic). Endoscopic SEMS placement if poor surgical candidate. Chemotherapy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mechanical_obstruction_of_gastric_outlet",
+      "gastric_dilation",
+      "fluid_electrolyte_loss",
+      "hypochloremic_hypokalemic_metabolic_alkalosis",
+      "malnutrition",
+      "cachexia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "gastric_rupture_perforation",
+        "probability": 0.03,
+        "lagDays": [1, 7],
+        "severityBoost": 0.5,
+        "clues": ["sudden_severe_pain_after_vomiting", "peritonitis", "pneumoperitoneum"]
+      },
+      {
+        "diseaseId": "severe_malnutrition",
+        "probability": 0.15,
+        "lagDays": [14, 60],
+        "severityBoost": 0.2,
+        "clues": ["weight_loss_greater_than_10_percent", "low_albumin", "cachexia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["vomiting_undigested_food", "succussion_splash", "hypochloremic_alkalosis", "weight_loss"],
+    "exclusionClues": ["bilious_vomiting", "diarrhea", "normal_electrolytes"]
+  }
+}

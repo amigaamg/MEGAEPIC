@@ -1,0 +1,151 @@
+{
+  "disease": {
+    "id": "psoriatic_arthritis",
+    "name": "Psoriatic Arthritis",
+    "system": "rheumatology",
+    "agePeak_months": [360, 600],
+    "note": "Inflammatory arthritis associated with psoriasis. Part of the spondyloarthritis family. May involve peripheral joints, axial skeleton, and entheses.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["inflammatory_arthritis", "spondyloarthritis", "autoimmune", "enthesitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "arthritis_mutilans", "weight": 8 },
+        { "sign": "inflammatory_back_pain_ankylosis", "weight": 7 },
+        { "sign": "acute_anterior_uveitis", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If rapidly erosive or severe axial involvement -> URGENT rheumatology; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "psoriasis_skin_lesions", "weight": 5 },
+      { "symptomId": "dactylitis_sausage_digit", "weight": 5 },
+      { "symptomId": "enthesitis_achilles", "weight": 4 },
+      { "symptomId": "asymmetric_joint_swelling", "weight": 4 },
+      { "symptomId": "inflammatory_back_pain", "weight": 3 },
+      { "symptomId": "nail_pitting_onycholysis", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "dactylitis", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "psoriatic_plaque", "baseWeight": 5 },
+      { "signId": "enthesitis_tenderness", "baseWeight": 4 },
+      { "signId": "nail_pitting", "baseWeight": 3 },
+      { "signId": "asymmetric_oligoarthritis", "baseWeight": 4 },
+      { "signId": "spondylitis_sacroiliitis", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_psoriasis", "multiplier": 3.0 },
+      { "id": "psoriasis", "multiplier": 10.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "hla_b27", "multiplier": 2.5 },
+      { "id": "trauma_kobner", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "oligoarticular_psa",
+        "name": "Oligoarticular Psoriatic Arthritis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "fewer_than_5_joints", "weight": 5 },
+          { "feature": "asymmetric_distribution", "weight": 4 },
+          { "feature": "dactylitis_common", "weight": 4 }
+        ],
+        "management": "NSAIDs. Local steroid injections. Consider DMARD if persistent."
+      },
+      {
+        "id": "polyarticular_psa",
+        "name": "Polyarticular Psoriatic Arthritis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "five_or_more_joints", "weight": 5 },
+          { "feature": "may_mimic_ra", "weight": 3 },
+          { "feature": "more_severe_course", "weight": 4 }
+        ],
+        "management": "Methotrexate first-line. Biologic (anti-TNF, IL-17/IL-23 inhibitor) for inadequate response."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "rheumatoid_arthritis",
+        "discriminators": ["negative_rf_anti_ccp", "dactylitis", "enthesitis", "nail_changes", "axial_involvement"]
+      },
+      {
+        "diseaseId": "reactive_arthritis",
+        "discriminators": ["recent_infection", "acute_onset", "self_limiting", "conjunctivitis"]
+      },
+      {
+        "diseaseId": "gout",
+        "discriminators": ["monoarticular_acute", "urate_crystals", "normal_crp_in_intercritical", "no_psoriasis"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Skin and nail examination", "priority": "immediate", "yield": 0.9, "indication": "identify psoriatic lesions" }
+      ],
+      "laboratory": [
+        { "name": "CRP and ESR", "priority": "high", "yield": 0.7, "indication": "assess inflammatory activity" },
+        { "name": "Rheumatoid factor", "priority": "high", "yield": 0.2, "indication": "usually negative (seronegative)" },
+        { "name": "HLA-B27", "priority": "medium", "yield": 0.4, "indication": "associated with axial disease" }
+      ],
+      "imaging": [
+        { "name": "Hand and foot X-rays", "priority": "high", "yield": 0.7, "indication": "pencil-in-cup deformity, osteolysis" },
+        { "name": "MRI sacroiliac joints", "priority": "medium", "yield": 0.8, "indication": "sacroiliitis detection" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "GRAPPA/EULAR Guidelines for Psoriatic Arthritis",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "oligoarticular, no erosions, mild psoriasis",
+          "treatment": "NSAIDs. Topical psoriasis therapy. Local steroid injections."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "polyarticular, persistent disease, enthesitis",
+          "treatment": "Methotrexate or TNF inhibitor. IL-17 inhibitor (secukinumab, ixekizumab) as alternative."
+        },
+        {
+          "severity": "severe",
+          "criteria": "erosive disease, arthritis mutilans, axial involvement",
+          "treatment": "Biologic therapy (anti-TNF, IL-17, or IL-23 inhibitor). Consider JAK inhibitor (tofacitinib)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "il_23_il_17_axis",
+      "tnf_alpha_driven_inflammation",
+      "hla_b27_association",
+      "entheseal_stress_response",
+      "osteoclast_activation",
+      "angiogenesis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "arthritis_mutilans",
+        "probability": 0.05,
+        "severityBoost": 0.7,
+        "clues": ["digital_telescoping", "severe_osteolysis", "gross_deformity"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["psoriasis_plus_arthritis", "dactylitis", "enthesitis", "nail_pitting"],
+    "exclusionClues": ["positive_rf_anti_ccp", "urate_crystals", "no_skin_lesions"]
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "disease": {
+    "id": "bronchiectasis",
+    "name": "Bronchiectasis",
+    "system": "respiratory",
+    "note": "Chronic irreversible airway dilation with impaired mucociliary clearance. HRCT is diagnostic gold standard. ATS/ERS guidelines recommend ABPA and MAC screening at diagnosis.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["chronic_suppurative_lung_disease", "airway_dilation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hemoptysis", "weight": 10, "description": ">200 mL/24h, may require bronchial artery embolisation" },
+        { "sign": "acute_respiratory_failure", "weight": 10 },
+        { "sign": "sepsis_shock", "weight": 9 },
+        { "sign": "spo2_less_than_88", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "frequent_exacerbations", "description": "≥3 per year", "weight": 7 },
+          { "sign": "BSI_score_high", "description": "Bronchiectasis Severity Index ≥9", "weight": 7 },
+          { "sign": "FEV1_less_than_30_percent", "weight": 6 },
+          { "sign": "pseudomonas_colonisation", "weight": 6 }
+        ]
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "BSI_score_intermediate", "description": "BSI 5–8", "weight": 5 },
+          { "sign": "FEV1_30_to_50_percent", "weight": 4 },
+          { "sign": "exacerbations_1_to_2_per_year", "weight": 4 }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "BSI_score_low": true,
+        "FEV1_greater_than_50_percent": true,
+        "infrequent_exacerbations": true
+      }
+    },
+
+    "historyFeatures": [
+      { "symptomId": "chronic_cough", "weight": 5, "note": "Daily productive cough most days over months to years" },
+      { "symptomId": "sputum_production", "weight": 5, "qualitativeModifiers": [
+          { "qualityKey": "purulent", "weightBoost": 2, "description": "Indicates active infection" },
+          { "qualityKey": "large_volume", "weightBoost": 1 }
+        ]
+      },
+      { "symptomId": "hemoptysis", "weight": 4, "note": "Ranges from blood-streaked to massive; BTS guidelines recommend bronchial artery embolisation for massive haemoptysis" },
+      { "symptomId": "dyspnea", "weight": 3, "note": "Progressive over time" },
+      { "symptomId": "recurrent_infections", "weight": 4, "note": "Frequent pneumonia or bronchitis episodes" },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "chest_pain", "weight": 2, "note": "Pleuritic; may indicate exacerbation" },
+      { "symptomId": "wheeze", "weight": 2, "note": "Associated with bronchial hyperreactivity" },
+      { "symptomId": "night_sweats", "weight": 2, "note": "May indicate underlying ABPA or TB" },
+      { "symptomId": "weight_loss", "weight": 2, "note": "Advanced or poorly controlled disease" }
+    ],
+
+    "examFeatures": [
+      { "signId": "crackles", "baseWeight": 5, "doubleWeight": true, "note": "Coarse inspiratory crackles, often at lung bases" },
+      { "signId": "wheeze", "baseWeight": 2 },
+      { "signId": "clubbing", "baseWeight": 3, "note": "Present in advanced disease" },
+      { "signId": "tachypnea", "baseWeight": 2 },
+      { "signId": "hypoxia", "baseWeight": 3, "severityBoost": true },
+      { "signId": "prolonged_expiration", "baseWeight": 2 },
+      { "signId": "hyperinflation_signs", "baseWeight": 2 },
+      { "signId": "digital_clubbing", "baseWeight": 2, "severityMarker": true }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_severe_pneumonia", "multiplier": 1.5, "note": "Especially TB, pertussis, measles" },
+      { "id": "immunodeficiency", "multiplier": 1.6 },
+      { "id": "ABPA", "multiplier": 1.8, "description": "Allergic bronchopulmonary aspergillosis" },
+      { "id": "primary_ciliary_dyskinesia", "multiplier": 1.7 },
+      { "id": "cystic_fibrosis", "multiplier": 2.0 },
+      { "id": "rheumatoid_arthritis", "multiplier": 1.4 },
+      { "id": "IBD", "multiplier": 1.3, "note": "Ulcerative colitis and Crohn disease associated" },
+      { "id": "chronic_aspiration", "multiplier": 1.4 },
+      { "id": "NTM_infection", "multiplier": 1.6, "description": "Non-tuberculous mycobacteria (MAC most common)" },
+      { "id": "alpha1_antitrypsin_deficiency", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "cystic_fibrosis_bronchiectasis",
+        "name": "CF-related Bronchiectasis",
+        "typicalOrganisms": ["Pseudomonas aeruginosa", "Staphylococcus aureus", "Burkholderia cepacia complex"],
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "meconium_ileus_history", "weight": 5 },
+          { "feature": "pancreatic_insufficiency", "weight": 4 },
+          { "feature": "sinusitis", "weight": 3 },
+          { "feature": "male_infertility", "weight": 3 }
+        ],
+        "management": "CFTR modulator therapy; Ivacaftor/Lumacaftor; aggressive airway clearance; antipseudomonal antibiotics"
+      },
+      {
+        "id": "post_infectious_bronchiectasis",
+        "name": "Post-infectious Bronchiectasis",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "prior_TB_history", "weight": 5 },
+          { "feature": "severe_pertussis_or_measles", "weight": 4 },
+          { "feature": "recurrent_childhood_pneumonia", "weight": 4 }
+        ],
+        "imagingFeatures": ["upper_lobe_predominant", "traction_bronchiectasis"],
+        "management": "Airway clearance; treat exacerbations; monitor for progression"
+      },
+      {
+        "id": "ABPA_related",
+        "name": "ABPA-related Bronchiectasis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "asthma_history", "weight": 5 },
+          { "feature": "elevated_IgE", "weight": 5 },
+          { "feature": "central_bronchiectasis", "weight": 5 },
+          { "feature": "high_eosinophils", "weight": 4 }
+        ],
+        "imagingFeatures": ["central_bronchiectasis", "mucoid_impaction"],
+        "management": "Oral corticosteroids; antifungal therapy (itraconazole/voriconazole)"
+      },
+      {
+        "id": "traction_bronchiectasis_ILD",
+        "name": "Traction Bronchiectasis (ILD-associated)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "UIP_fibrosis", "weight": 5 },
+          { "feature": "restrictive_PFTs", "weight": 4 },
+          { "feature": "dry_cough_predominant", "weight": 3 }
+        ],
+        "imagingFeatures": ["honeycombing", "traction_bronchiectasis", "reticulation"],
+        "management": "Treat underlying ILD; antifibrotics if IPF"
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "asthma",
+        "discriminators": ["reversible_obstruction", "nocturnal_symptoms", "bronchodilator_response"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "COPD",
+        "discriminators": ["smoking_history", "emphysema_dominant", "less_sputum"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "congestive_heart_failure",
+        "discriminators": ["paroxysmal_nocturnal_dyspnea", "orthopnea", "cardiomegaly", "BNP_elevated"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "tuberculosis",
+        "discriminators": ["chronic_cough", "night_sweats", "weight_loss", "GeneXpert_positive"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "chronic_aspiration",
+        "discriminators": ["dysphagia", "neurological_disease", "dependent_segment_opacities"],
+        "negativeImpactOnPneumonia": 2
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Pulse oximetry",
+          "priority": "initial",
+          "yield": 0.8,
+          "indication": "all patients at diagnosis and exacerbation"
+        },
+        {
+          "name": "MRC dyspnoea scale",
+          "priority": "initial",
+          "yield": 0.7,
+          "indication": "baseline functional assessment"
+        },
+        {
+          "name": "Sputum colour chart",
+          "priority": "exacerbation",
+          "yield": 0.6,
+          "indication": "purulence indicates exacerbation"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "Sputum microbiology (culture + sensitivity)",
+          "priority": "initial and each exacerbation",
+          "yield": 0.9,
+          "indication": "identify pathogens: Pseudomonas, H. influenzae, S. aureus, NTM",
+          "note": "ATS/ERS recommend sputum cultures at least annually and at each exacerbation"
+        },
+        {
+          "name": "Serum immunoglobulins (IgG, IgA, IgM)",
+          "priority": "initial diagnosis",
+          "yield": 0.7,
+          "indication": "screen for immunodeficiency"
+        },
+        {
+          "name": "Aspergillus serology (IgE, IgG)",
+          "priority": "initial diagnosis",
+          "yield": 0.8,
+          "indication": "screen for ABPA; total IgE and Aspergillus-specific IgE"
+        },
+        {
+          "name": "FBC with differential",
+          "priority": "baseline",
+          "yield": 0.5,
+          "indication": "eosinophilia suggests ABPA"
+        },
+        {
+          "name": "CFTR genetic testing",
+          "priority": "selected cases",
+          "yield": 0.6,
+          "indication": "young adults, unexplained bronchiectasis, male infertility"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "HRCT chest",
+          "priority": "diagnostic gold standard",
+          "yield": 1.0,
+          "indication": "all suspected bronchiectasis",
+          "typicalFindings": ["bronchial_dilation_signet_ring_sign", "tram_track_opacities", "lack_of_tapering", "airway_to_artery_ratio_greater_than_1", "mucoid_impaction"],
+          "note": "HRCT with 1 mm slices; four patterns: cylindrical, varicose, cystic, traction"
+        },
+        {
+          "name": "Chest X-ray",
+          "priority": "screening",
+          "yield": 0.4,
+          "indication": "initial chest imaging; may show tram tracks, ring shadows",
+          "limitations": "insensitive for early disease"
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Bronchoscopy with BAL",
+          "indication": "suspected NTM, foreign body, or when sputum non-diagnostic",
+          "priority": "selected"
+        },
+        {
+          "name": "Pulmonary function tests (spirometry, DLCO)",
+          "indication": "baseline and annual monitoring",
+          "priority": "routine"
+        }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BTS Guideline for Bronchiectasis (2019) / ATS/ERS Statement on Bronchiectasis",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "few exacerbations, low BSI, FEV1 >50%, single organism",
+          "treatment": [
+            "Airway clearance physiotherapy (e.g., active cycle of breathing, positive expiratory pressure, oscillatory PEP)",
+            "Bronchodilators if bronchial hyperreactivity present (inhaled beta-agonists PRN)",
+            "Inhaled corticosteroids only in asthma/ABPA overlap",
+            "Annual sputum surveillance and influenza/pneumococcal vaccination",
+            "Prompt antibiotic treatment for exacerbations based on sensitivities"
+          ],
+          "followUp": "Annual review with spirometry"
+        },
+        {
+          "severity": "moderate",
+          "criteria": "BSI 5–8, FEV1 30–50%, 1–2 exacerbations/year, Pseudomonas colonisation possible",
+          "treatment": [
+            "All mild measures plus:",
+            "Regular airway clearance twice daily with chest physiotherapy",
+            "Long-term macrolide therapy (azithromycin 250–500 mg 3x/week or 250 mg daily) per BTS guidelines for exacerbation prevention",
+            "Consider inhaled corticosteroids if significant bronchial hyperreactivity",
+            "Treat exacerbations with antibiotics guided by sputum culture for 14 days",
+            "Consider inhaled antibiotics if chronic Pseudomonas (colistin or tobramycin)"
+          ],
+          "followUp": "Six-monthly review with spirometry, annual HRCT"
+        },
+        {
+          "severity": "severe",
+          "criteria": "BSI ≥9, FEV1 <30%, ≥3 exacerbations/year, chronic Pseudomonas, frequent admissions",
+          "treatment": [
+            "All moderate measures plus:",
+            "Long-term antibiotics (oral or nebulised) based on microbiology",
+            "Oxygen therapy if hypoxaemic (LTOT if PaO2 <7.3 kPa)",
+            "Pulmonary rehabilitation",
+            "Bronchial artery embolisation for haemoptysis",
+            "Consider lung volume reduction surgery if localised disease",
+            "Lung transplant evaluation if progressive despite maximal therapy",
+            "Monitor for NTM (MAC); treat with rifampicin, ethambutol, azithromycin per ATS/ERS guidelines"
+          ],
+          "escalation": "Refer to tertiary bronchiectasis centre. Evaluate for surgical resection if focal disease, lung transplant if diffuse."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_airway_inflammation",
+      "impaired_mucociliary_clearance",
+      "irreversible_bronchial_dilation",
+      "recurrent_infection_cycle",
+      "neutrophilic_airway_inflammation",
+      "protease_antiprotease_imbalance",
+      "airway_obstruction_and_collapse",
+      "ventilation_perfusion_mismatch"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "massive_hemoptysis",
+        "probability": 0.08,
+        "severityBoost": 0.6,
+        "clues": ["bronchial_artery_hypertrophy", "sudden_cough_with_blood", "hemodynamic_instability"],
+        "management": "Bronchial artery embolisation (BAE) is first-line; surgical resection if BAE fails"
+      },
+      {
+        "diseaseId": "respiratory_failure",
+        "probability": 0.15,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.5,
+        "clues": ["declining_FEV1", "increasing_hypoxia", "cor_pulmonale_signs"]
+      },
+      {
+        "diseaseId": "exacerbation_acute",
+        "probability": 0.6,
+        "severityBoost": 0.3,
+        "clues": ["increased_sputum_purulence", "increased_sputum_volume", "worsening_dyspnea", "fever"]
+      },
+      {
+        "diseaseId": "pneumonia",
+        "probability": 0.2,
+        "clues": ["new_infiltrate", "fever", "elevated_CRP"]
+      },
+      {
+        "diseaseId": "empyema",
+        "probability": 0.05,
+        "clues": ["persistent_fever", "pleuritic_pain", "effusion_on_imaging"]
+      },
+      {
+        "diseaseId": "cor_pulmonale",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["peripheral_oedema", "raised_JVP", "right_ventricular_heave", "pulmonary_hypertension"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "if massive haemoptysis or acute respiratory failure",
+
+    "diagnosticClues": [
+      "chronic daily productive cough with recurrent exacerbations",
+      "coarse inspiratory crackles at lung bases",
+      "finger clubbing",
+      "signet ring sign and tram track opacities on HRCT",
+      "Pseudomonas aeruginosa on sputum culture"
+    ],
+    "exclusionClues": [
+      "isolated wheeze with reversibility (asthma)",
+      "dry cough with restrictive physiology (ILD)",
+      "normal HRCT excludes bronchiectasis",
+      "reversible airflow limitation with smoking history (COPD)"
+    ]
+  }
+}

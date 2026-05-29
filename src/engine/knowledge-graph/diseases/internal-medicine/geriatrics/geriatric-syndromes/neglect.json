@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "elder_abuse_neglect",
+    "name": "Elder Abuse and Neglect",
+    "system": "geriatrics",
+    "agePeak_months": [780, 1080],
+    "note": "Intentional or negligent act causing harm or distress to an older adult. Includes physical, emotional, financial, and sexual abuse, as well as neglect.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["abuse", "neglect", "safeguarding", "geriatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "physical_injury_suggestive_of_abuse", "weight": 10 },
+        { "sign": "sexual_assault", "weight": 10 },
+        { "sign": "severe_neglect_dehydration_malnutrition", "weight": 9 },
+        { "sign": "psychological_distress_acute", "weight": 7 },
+        { "sign": "financial_exploitation_crisis", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "verbal_report_only": true,
+        "no_immediate_harm": true,
+        "safe_environment": true
+      },
+      "severityLabel": "If injury, assault, or severe neglect -> EMERGENCY (safeguarding); report or concern -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "unexplained_injuries_burns_bruises", "weight": 5 },
+      { "symptomId": "fear_or_withdrawal_around_caregiver", "weight": 4 },
+      { "symptomId": "unexplained_weight_loss_or_dehydration", "weight": 4 },
+      { "symptomId": "missed_medical_appointments", "weight": 3 },
+      { "symptomId": "poor_personal_hygiene", "weight": 3 },
+      { "symptomId": "sudden_change_in_financial_status", "weight": 3 },
+      { "symptomId": "caregiver_stress_or_burnout", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bruises_in_unusual_patterns_or_locations", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "burn_marks_suggestive_of_immersion", "baseWeight": 5 },
+      { "signId": "pressure_ulcers_neglected", "baseWeight": 4 },
+      { "signId": "poor_oral_hygiene_or_dental_neglect", "baseWeight": 3 },
+      { "signId": "contractures_from_immobility", "baseWeight": 3 },
+      { "signId": "fearful_or_avoidant_behavior", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "cognitive_impairment", "multiplier": 3.0 },
+      { "id": "functional_dependence", "multiplier": 2.5 },
+      { "id": "social_isolation", "multiplier": 2.0 },
+      { "id": "caregiver_stress", "multiplier": 2.5 },
+      { "id": "shared_living_with_abuser", "multiplier": 2.0 },
+      { "id": "low_socioeconomic_status", "multiplier": 1.5 },
+      { "id": "previous_domestic_violence_history", "multiplier": 1.8 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "unintentional_fall_injury",
+        "discriminators": ["consistent_explanation", "appropriate_location", "no_delay_in_seeking_care"]
+      },
+      {
+        "diseaseId": "self_neglect",
+        "discriminators": ["no_caregiver_involved", "patient_lives_alone", "declines_help"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Elder Abuse Suspicion Index (EASI)", "priority": "immediate", "yield": 0.9, "indication": "screening" },
+        { "name": "Safeguarding assessment and documentation", "priority": "immediate", "yield": 0.95, "indication": "structured evaluation" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr, glucose, albumin", "priority": "high", "yield": 0.5, "indication": "assess neglect severity" },
+        { "name": "Toxicology screen", "priority": "medium", "yield": 0.3, "indication": "suspected chemical restraint" }
+      ],
+      "imaging": [
+        { "name": "Skeletal survey or X-ray of affected area", "priority": "high", "yield": 0.7, "indication": "suspected fractures" },
+        { "name": "CT head", "priority": "high", "yield": 0.6, "indication": "head trauma" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Elder Abuse Guidelines / Local Safeguarding Policy",
+      "pathways": [
+        {
+          "severity": "immediate_safety_risk",
+          "criteria": "acute injury, assault, severe neglect, sexual abuse",
+          "treatment": "Ensure immediate safety. Hospital admission if needed. Contact adult protective services / safeguarding team. Police involvement if criminal act. Forensic documentation. Photographs with consent."
+        },
+        {
+          "severity": "concern_report",
+          "criteria": "verbal disclosure, suspicious signs, caregiver concern",
+          "treatment": "Multiagency safeguarding referral. Risk assessment. Support for caregiver if stress related. Consider alternative care arrangements. Ongoing monitoring."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "caregiver_dependency_power_imbalance",
+      "caregiver_burnout_and_stress",
+      "cognitive_vulnerability",
+      "social_isolation",
+      "financial_dependence",
+      "ageism_and_social_devaluation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "depression",
+        "probability": 0.4,
+        "severityBoost": 0.4,
+        "clues": ["withdrawal", "hopelessness", "sleep_disturbance"]
+      },
+      {
+        "diseaseId": "malnutrition",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["weight_loss", "dehydration", "neglect_of_feeding"]
+      },
+      {
+        "diseaseId": "institutionalization",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["unsafe_home_environment", "repeated_abuse"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["discrepancy_injury_and_explanation", "unusual_bruise_patterns", "caregiver_dominance"],
+    "exclusionClues": ["consistent_plausible_explanation", "supportive_caregiver_relationship", "no_reported_fear"]
+  }
+}

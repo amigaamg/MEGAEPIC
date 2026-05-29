@@ -1,0 +1,191 @@
+{
+  "disease": {
+    "id": "multiple_gestation",
+    "name": "Multiple Gestation (Twin/Multiple Pregnancy)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Pregnancy with two or more fetuses. High-risk due to increased maternal and fetal complications. Dichorionic diamniotic (DCDA) twins have best prognosis; monochorionic monoamniotic (MCMA) have highest risk.",
+    "prevalenceWeight": 0.03,
+    "syndromeTags": ["high_risk_pregnancy", "multiple_fetuses"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "preterm_labor", "weight": 8 },
+        { "sign": "antepartum_hemorrhage", "weight": 9 },
+        { "sign": "severe_preeclampsia", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "twin_to_twin_transfusion", "weight": 9 },
+          { "sign": "fetal_growth_discordance_25_percent", "weight": 7 },
+          { "sign": "polyhydramnios_severe", "weight": 6 },
+          { "sign": "fetal_demise_of_one_twin", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Monochorionic complications, preterm labor, or severe preeclampsia -> SEVERE; Uncomplicated DCDA -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "large_uterine_size_for_dates", "weight": 5 },
+      { "symptomId": "excessive_maternal_weight_gain", "weight": 4 },
+      { "symptomId": "severe_nausea_vomiting", "weight": 3 },
+      { "symptomId": "increased_fetal_movements", "weight": 2 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "edema", "weight": 2 },
+      { "symptomId": "uterine_contractions_early", "weight": 3 },
+      { "symptomId": "history_of_IVF", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "uterine_size_greater_than_dates", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "auscultation_of_two_distinct_fetal_hearts", "baseWeight": 5 },
+      { "signId": "palpation_of_multiple_fetal_pole", "baseWeight": 4 },
+      { "signId": "excessive_fetal_activity", "baseWeight": 2 },
+      { "signId": "polyhydramnios_on_exam", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "IVF_assisted_conception", "multiplier": 4.0 },
+      { "id": "ovulation_induction", "multiplier": 3.0 },
+      { "id": "advanced_maternal_age", "multiplier": 2.0 },
+      { "id": "family_history_of_twins_maternal", "multiplier": 2.0 },
+      { "id": "high_parity", "multiplier": 1.5 },
+      { "id": "higher_maternal_parity", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "dichorionic_diamniotic",
+        "name": "Dichorionic Diamniotic (DCDA) Twins",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "two_placenta_sign", "weight": 5 },
+          { "feature": "lambda_sign_on_ultrasound", "weight": 5 },
+          { "feature": "thick_intertwin_membrane", "weight": 4 },
+          { "feature": "two_separate_sacs", "weight": 5 }
+        ],
+        "management": "Serial growth scans every 4 weeks from 24 weeks. Antenatal corticosteroids at 24-34 weeks if preterm labor. Planned delivery at 37-38 weeks."
+      },
+      {
+        "id": "monochorionic_diamniotic",
+        "name": "Monochorionic Diamniotic (MCDA) Twins",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "single_placenta", "weight": 5 },
+          { "feature": "T_sign_on_ultrasound", "weight": 5 },
+          { "feature": "thin_intertwin_membrane", "weight": 4 },
+          { "feature": "high_risk_of_TTTS", "weight": 4 }
+        ],
+        "management": "Fetal medicine referral. Growth scans every 2 weeks from 16 weeks for TTTS screening. Antenatal corticosteroids. Planned delivery at 36-37 weeks."
+      },
+      {
+        "id": "monochorionic_monoamniotic",
+        "name": "Monochorionic Monoamniotic (MCMA) Twins",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "single_amnion", "weight": 5 },
+          { "feature": "cord_entanglement_risk", "weight": 5 },
+          { "feature": "no_membrane_seen", "weight": 5 },
+          { "feature": "highest_perinatal_mortality", "weight": 4 }
+        ],
+        "management": "Fetal medicine referral. Serial scans every 2 weeks. Inpatient monitoring from viability. Antenatal corticosteroids. Planned delivery 32-34 weeks by cesarean section."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "molar_pregnancy",
+        "discriminators": ["snowstorm_ultrasound", "very_high_hCG", "no_fetal_parts"]
+      },
+      {
+        "diseaseId": "polyhydramnios",
+        "discriminators": ["excessive_amniotic_fluid", "single_fetus", "normal_hCG"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fundal height measurement", "priority": "immediate", "yield": 0.7, "indication": "routinely; > expected for dates" }
+      ],
+      "laboratory": [
+        { "name": "Serum beta-hCG", "priority": "medium", "yield": 0.6, "indication": "may be elevated, not diagnostic" },
+        { "name": "Alpha-fetoprotein (MSAFP)", "priority": "medium", "yield": 0.5, "indication": "elevated in multiple gestations" }
+      ],
+      "imaging": [
+        { "name": "First trimester ultrasound", "priority": "immediate", "yield": 0.99, "indication": "diagnose chorionicity, amnionicity" },
+        { "name": "Fetal growth scan", "priority": "high", "yield": 0.9, "indication": "serial every 2-4 weeks" },
+        { "name": "Fetal echo", "priority": "medium", "yield": 0.4, "indication": "screening for congenital heart disease" },
+        { "name": "Doppler ultrasound", "priority": "high", "yield": 0.8, "indication": "TTTS screening in monochorionic twins" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG137 - Twin and Triplet Pregnancy",
+      "pathways": [
+        {
+          "severity": "uncomplicated_dcda",
+          "criteria": "DCDA twins, concordant growth, no complications",
+          "treatment": "Serial growth scans 4-weekly from 24w. Regular antenatal visits. Aspirin 75-150mg daily from 12w for preeclampsia prophylaxis. Planned delivery 37-38w."
+        },
+        {
+          "severity": "mcda_with_complications",
+          "criteria": "MCDA, TTTS, sIUGR, or discordant growth",
+          "treatment": "Fetal medicine referral. Fetoscopic laser ablation for TTTS. Serial scans every 2 weeks. Antenatal corticosteroids. Delivery 36-37w."
+        },
+        {
+          "severity": "mcma_high_risk",
+          "criteria": "MCMA twins, cord entanglement risk",
+          "treatment": "Inpatient monitoring from 26-28 weeks. Fetal surveillance twice daily. Antenatal corticosteroids. Elective cesarean section at 32-34 weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "double_ovulation_heterozygous",
+      "zygotic_division_monozygous",
+      "assisted_reproductive_technologies",
+      "increased_placental_mass"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "preterm_labor",
+        "probability": 0.5,
+        "lagDays": [0, 90],
+        "severityBoost": 0.5,
+        "clues": ["contractions", "cervical_shortening", "membrane_rupture"]
+      },
+      {
+        "diseaseId": "preeclampsia",
+        "probability": 0.2,
+        "lagDays": [0, 90],
+        "severityBoost": 0.4,
+        "clues": ["hypertension", "proteinuria", "headache"]
+      },
+      {
+        "diseaseId": "twin_to_twin_transfusion_syndrome",
+        "probability": 0.1,
+        "lagDays": [50, 120],
+        "severityBoost": 0.8,
+        "clues": ["polyhydramnios_recipient", "oligohydramnios_donor", "growth_discordance"]
+      },
+      {
+        "diseaseId": "postpartum_hemorrhage",
+        "probability": 0.3,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["uterine_atony", "large_placenta", "overdistended_uterus"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["fundal_height_excess", "multiple_fetal_hearts", "IVF_history"],
+    "exclusionClues": ["single_fetus_on_ultrasound", "normal_fundal_height"]
+  }
+}

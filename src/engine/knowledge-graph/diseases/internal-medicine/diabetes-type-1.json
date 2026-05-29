@@ -1,0 +1,179 @@
+{
+  "disease": {
+    "id": "type_1_diabetes_mellitus",
+    "name": "Type 1 Diabetes Mellitus",
+    "system": "IMED",
+    "agePeak_months": [84, 360],
+    "note": "Type 1 DM results from autoimmune destruction of pancreatic beta cells, leading to absolute insulin deficiency. Peak onset in childhood and adolescence. Lifelong insulin dependence is managed with basal-bolus regimens (MDI) or continuous subcutaneous insulin infusion (CSII). Carbohydrate counting, CGM, and automated insulin delivery systems improve outcomes. DKA remains a life-threatening acute complication.",
+    "prevalenceWeight": 1.5,
+    "syndromeTags": ["type_1_diabetes", "autoimmune_diabetes", "insulin_dependence", "d_k_a", "c_g_m"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "diabetic_ketoacidosis_with_altered_mental_status", "weight": 10 },
+        { "sign": "cerebral_edema_in_child_with_dka", "weight": 10 },
+        { "sign": "hyperosmolar_hyperglycemic_state", "weight": 9 },
+        { "sign": "severe_hypoglycemia_unconscious_seizure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ph_venous_below_7_2_or_bicarbonate_below_10", "weight": 8 },
+          { "sign": "blood_glucose_above_600_with_hyperosmolality", "weight": 7 },
+          { "sign": "glycated_hemoglobin_above_10_percent", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If DKA with AMS or severe hypo -> EMERGENCY; if glucose >400 or recurrent DKA -> SEVERE; if HbA1c <8% stable -> MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "polyuria_polydipsia_weight_loss_classic_triad", "weight": 5, "modifiers": [
+          { "condition": "onset_over_weeks_to_months", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "enuresis_in_previously_continent_child", "weight": 4 },
+      { "symptomId": "fatigue_blurred_vision_recurrent_infections", "weight": 3 },
+      { "symptomId": "history_of_dka_episodes", "weight": 4 },
+      { "symptomId": "family_history_of_type_1_dm_or_other_autoimmune", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "random_blood_glucose_above_200_with_classic_symptoms", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fasting_plasma_glucose_above_126_confirmed", "baseWeight": 5 },
+      { "signId": "glycated_hemoglobin_hba1c_above_6_point_5", "baseWeight": 5 },
+      { "signId": "c_peptide_low_or_undetectable", "baseWeight": 4 },
+      { "signId": "islet_autoantibodies_positive_gad_ia2_insulin_znT8", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "first_degree_relative_with_type_1_dm", "multiplier": 15.0 },
+      { "id": "hla_dr3_dq2_or_dr4_dq8_genotype", "multiplier": 8.0 },
+      { "id": "other_autoimmune_disease_hashimoto_celiac_addison", "multiplier": 5.0 },
+      { "id": "early_exposure_to_cow_milk_controversial", "multiplier": 1.3 },
+      { "id": "enteroviral_infection_in_early_childhood", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "basal_bolus_insulin_mdi",
+        "name": "Multiple Daily Injections (MDI) Basal-Bolus Regimen",
+        "prevalenceModifier": 0.55,
+        "keyFeatures": [
+          { "feature": "basal_insulin_glargine_detemir_degludec_once_daily", "weight": 5 },
+          { "feature": "bolus_insulin_aspart_lispro_glulisine_with_meals", "weight": 5 },
+          { "feature": "carbohydrate_counting_to_determine_meal_dose", "weight": 5 },
+          { "feature": "correction_factor_and_sensitivity_factor_used", "weight": 4 }
+        ],
+        "management": "Total daily insulin (TDI) ~0.5-0.6 U/kg initially. Basal 40-50% TDI as glargine U100 (0.2-0.3 U/kg) once daily. Bolus 50-60% divided across meals. Insulin-to-carb ratio: 1U per 10-15g carbs. Correction factor: 1U lowers glucose ~50 mg/dL (1800/TDI rule). Titrate based on CGM and pre-meal glucose trends."
+      },
+      {
+        "id": "insulin_pump_csii",
+        "name": "Continuous Subcutaneous Insulin Infusion (CSII / Insulin Pump)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "continuous_basal_rate_programmable_by_hour", "weight": 5 },
+          { "feature": "bolus_doses_delivered_for_meals_and_corrections", "weight": 5 },
+          { "feature": "integrated_with_c_g_m_for_hybrid_closed_loop", "weight": 5 },
+          { "feature": "reduced_hypoglycemia_and_better_hba1c", "weight": 4 }
+        ],
+        "management": "Pump basal rate ~40-50% of TDI delivered over 24h with multiple hourly rates. Meal boluses via pump bolus calculator using ICR and CF. Hybrid closed-loop systems (MiniMed 780G, Tandem Control-IQ, Omnipod 5) automate basal with CGM. Change infusion set q2-3 days. Sick day rules: never disconnect >2h, check ketones if glucose >250."
+      },
+      {
+        "id": "dka_management",
+        "name": "Diabetic Ketoacidosis (DKA) Management Protocol",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "hyperglycemia_glucose_above_250_ketonuria_acidosis", "weight": 5 },
+          { "feature": "insulin_drip_0_point_1_u_per_kg_per_hour", "weight": 5 },
+          { "feature": "fluid_resuscitation_ns_10_to_20_ml_per_kg", "weight": 5 },
+          { "feature": "potassium_replacement_goal_4_to_5_point_5", "weight": 5 }
+        ],
+        "management": "IV fluids: 0.9% NS 10-20mL/kg over 1h, then 250-500mL/h. Insulin: regular IV 0.1 U/kg bolus, then 0.1 U/kg/h. When glucose <250, switch to D5 0.45 NS and decrease insulin to 0.05 U/kg/h. Potassium: start when K <5.3, goal 4-5.5. Bicarbonate only if pH <6.9. Monitor: glucose q1h, BMP q2-4h, VBG q2-4h. Transition to SC insulin when eating and pH >7.3."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "type_2_diabetes_mellitus",
+        "discriminators": ["obesity_present", "acanthosis_nigricans", "c_peptide_normal_or_high", "no_islet_autoantibodies"]
+      },
+      {
+        "diseaseId": "monogenic_diabetes_maturity_onset_young",
+        "discriminators": ["family_history_three_generations", "diagnosis_below_25", "c_peptide_detectable", "no_autoantibodies"]
+      },
+      {
+        "diseaseId": "drug_induced_hyperglycemia_steroids",
+        "discriminators": ["temporal_corticosteroid_exposure", "no_ketosis", "c_peptide_normal", "resolves_with_drug_stop"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Capillary blood glucose (CBG) monitoring", "priority": "immediate", "yield": 0.9, "indication": "all patients, before meals and at bedtime" },
+        { "name": "Continuous glucose monitoring (CGM) sensor insertion", "priority": "high", "yield": 0.95, "indication": "all T1D for optimal management" },
+        { "name": "Urine or blood ketone (beta-hydroxybutyrate) measurement", "priority": "high", "yield": 0.8, "indication": "illness, glucose >250, DKA suspicion" }
+      ],
+      "laboratory": [
+        { "name": "HbA1c", "priority": "high", "yield": 0.9, "indication": "glycemic control assessment q3 months" },
+        { "name": "C-peptide (fasting or stimulated)", "priority": "high", "yield": 0.8, "indication": "differentiate T1 from T2 at diagnosis" },
+        { "name": "Islet autoantibody panel (GAD-65, IA-2, insulin, ZnT8)", "priority": "high", "yield": 0.9, "indication": "confirm T1D diagnosis" },
+        { "name": "Basic metabolic panel (glucose, Na, K, Cl, CO2, BUN, Cr)", "priority": "high", "yield": 0.8, "indication": "DKA monitoring, baseline renal function" },
+        { "name": "TSH and celiac serology (tTG-IgA)", "priority": "medium", "yield": 0.3, "indication": "autoimmune comorbidities screening" },
+        { "name": "Lipid panel", "priority": "medium", "yield": 0.4, "indication": "CV risk assessment" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "ADA Standards of Care 2024, ISPAD Clinical Practice Guidelines, Joint British Diabetes Societies DKA Guidelines",
+      "pathways": [
+        {
+          "severity": "new_onset_type_1_dm",
+          "criteria": "hyperglycemia + ketones + positive autoantibodies, stable",
+          "treatment": "Hospital admission if DKA or significant hyperglycemia. Insulin initiation: TDI 0.5 U/kg/day. Basal-bolus education. Carbohydrate counting training. CGM initiation. Diabetes educator consult. Discharge with follow-up in 1-2 weeks. School/director care plan."
+        },
+        {
+          "severity": "dka_mild_moderate",
+          "criteria": "glucose >250, pH 7.2-7.3, bicarbonate 10-15, alert",
+          "treatment": "IV fluids 0.9% NS 10mL/kg. Insulin IV 0.1U/kg bolus then 0.1U/kg/h. Replace K when <5.3. Monitor glucose q1h, electrolytes q2h. Transition to SC insulin when pH >7.3 and patient eating. Give SC basal 2h before stopping IV insulin."
+        },
+        {
+          "severity": "hypoglycemia_management",
+          "criteria": "glucose <70 mg/dL with or without symptoms",
+          "treatment": "If conscious: 15g fast-acting carbs (glucose tabs 3-4, juice 4oz, glucose gel). Recheck in 15min. Repeat if still <70. Severe (unconscious/seizure): glucagon IM/SC 0.5mg (<5y) or 1mg (>=5y) or nasal glucagon 3mg. IV dextrose 50% 25g if IV access. Once recovered, give complex carb + protein."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "autoimmune_t_cell_mediated_beta_cell_destruction",
+      "absolute_insulin_deficiency_leads_to_hyperglycemia",
+      "increased_gluconeogenesis_and_glycogenolysis",
+      "lipolysis_and_ketone_body_production_in_insulin_deficiency",
+      "loss_of_first_phase_insulin_response",
+      "genetic_susceptibility_hla_and_non_hla_loci"
+    ],
+    "complications": [
+      {
+        "diseaseId": "diabetic_ketoacidosis_dka",
+        "probability": 0.3,
+        "lagDays": [0, 365],
+        "severityBoost": 0.7,
+        "clues": ["hyperglycemia", "ketonuria", "kussmaul_breathing", "abdominal_pain"]
+      },
+      {
+        "diseaseId": "severe_hypoglycemia",
+        "probability": 0.15,
+        "lagDays": [0, 365],
+        "severityBoost": 0.6,
+        "clues": ["glucose_below_54", "altered_mental_status", "diaphoresis", "tachycardia"]
+      },
+      {
+        "diseaseId": "microvascular_complications_retinopathy_nephropathy",
+        "probability": 0.25,
+        "lagDays": [1825, 7300],
+        "severityBoost": 0.4,
+        "clues": ["hba1c_above_8_persistent", "microalbuminuria", "background_retinopathy"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["polyuria_polydipsia_weight_loss", "glucose_above_200_random", "positive_islet_autoantibodies", "low_c_peptide"],
+    "exclusionClues": ["significant_c_peptide", "negative_autoantibodies", "obesity_acanthosis", "family_history_t2d"]
+  }
+}

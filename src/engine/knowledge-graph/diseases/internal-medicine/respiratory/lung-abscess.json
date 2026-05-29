@@ -1,0 +1,325 @@
+{
+  "disease": {
+    "id": "lung_abscess",
+    "name": "Lung Abscess",
+    "system": "respiratory",
+    "note": "A lung abscess is a necrotic cavity containing pus, most often complicating aspiration pneumonia. Putrid sputum is characteristic. Prolonged IV antibiotics are mainstay; bronchoscopic drainage or surgical resection for refractory cases.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["cavitary_lung_disease", "suppurative_pulmonary_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "large_abscess_diameter_>6_cm", "weight": 9, "description": "Higher risk of rupture and bronchopleural fistula" },
+        { "sign": "hemoptysis_massive", "weight": 10 },
+        { "sign": "sepsis_shock", "weight": 10 },
+        { "sign": "acute_respiratory_failure", "weight": 9 },
+        { "sign": "bronchopleural_fistula", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "abscess_persistent_>6_weeks_despite_antibiotics", "weight": 7 },
+          { "sign": "immunocompromised_host", "weight": 6 },
+          { "sign": "multiloculated_or_bilateral_abscesses", "weight": 6 }
+        ]
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "abscess_3_to_6_cm", "weight": 5 },
+          { "sign": "persistent_fever_>48h_on_antibiotics", "weight": 5 },
+          { "sign": "suspected_empyema", "weight": 4 }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "small_abscess_<3_cm": true,
+        "no_sepsis": true,
+        "good_response_to_antibiotics": true
+      }
+    },
+
+    "historyFeatures": [
+      { "symptomId": "cough", "weight": 4, "qualitativeModifiers": [
+          { "qualityKey": "productive", "weightBoost": 2 },
+          { "qualityKey": "putrid_sputum", "weightBoost": 5, "description": "Foul-smelling sputum is characteristic of anaerobic lung abscess" }
+        ]
+      },
+      { "symptomId": "fever", "weight": 4, "contextualWeights": [
+          { "condition": "high_grade_and_rigors", "weightBoost": 2 }
+        ]
+      },
+      { "symptomId": "hemoptysis", "weight": 3, "note": "May be blood-streaked; massive haemoptysis is a danger sign" },
+      { "symptomId": "chest_pain", "weight": 3, "note": "Pleuritic overlying the abscess" },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "night_sweats", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 3, "note": "Chronic infection leads to cachexia" },
+      { "symptomId": "malaise", "weight": 2 },
+      { "symptomId": "aspiration_history", "weight": 5, "note": "Loss of consciousness, dysphagia, seizures, alcoholism, sedation" },
+      { "symptomId": "dental_caries", "weight": 3, "note": "Periodontal disease increases anaerobic inoculum" }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_high", "baseWeight": 4 },
+      { "signId": "crackles_localised", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "bronchial_breathing", "baseWeight": 3 },
+      { "signId": "dullness_to_percussion", "baseWeight": 3 },
+      { "signId": "tachypnea", "baseWeight": 2 },
+      { "signId": "fetor_oris", "baseWeight": 2, "note": "Putrid breath odour" },
+      { "signId": "clubbing", "baseWeight": 2, "note": "Develops after 4–8 weeks of chronic infection" },
+      { "signId": "toxic_appearance", "baseWeight": 3, "severityMarker": true },
+      { "signId": "hypoxia", "baseWeight": 3, "severityBoost": true }
+    ],
+
+    "riskFactors": [
+      { "id": "aspiration_risk", "multiplier": 2.0, "note": "Alcoholism, seizure disorder, cerebrovascular accident, drug overdose, dementia, general anaesthesia" },
+      { "id": "periodontal_disease", "multiplier": 1.6 },
+      { "id": "immunosuppression", "multiplier": 1.7, "note": "HIV, neutropenia, transplant, corticosteroids" },
+      { "id": "bronchial_obstruction", "multiplier": 1.8, "note": "Foreign body, tumour, stricture" },
+      { "id": "GERD", "multiplier": 1.4 },
+      { "id": "poor_oral_hygiene", "multiplier": 1.5 },
+      { "id": "diabetes_mellitus", "multiplier": 1.3 },
+      { "id": "prior_lung_infarction", "multiplier": 1.4 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "aspiration_lung_abscess",
+        "name": "Aspiration Lung Abscess (Anaerobe)",
+        "typicalOrganisms": ["Bacteroides fragilis", "Fusobacterium nucleatum", "Prevotella melaninogenica", "Peptostreptococcus", "Streptococcus milleri group"],
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "aspiration_history", "weight": 5 },
+          { "feature": "putrid_sputum", "weight": 5 },
+          { "feature": "periodontal_disease", "weight": 4 },
+          { "feature": "right_lower_or_superior_segment_lower_lobe", "weight": 4 },
+          { "feature": "indolent_onset", "weight": 3 }
+        ],
+        "imagingFeatures": ["dependent_segment", "air_fluid_level", "cavity_with_thick_wall"],
+        "management": "Prolonged IV antibiotics: clindamycin 600–900 mg IV q8h or penicillin G 2–4 MU IV q4–6h; step-down to oral amoxicillin-clavulanate or clindamycin for 4–8 weeks total"
+      },
+      {
+        "id": "secondary_lung_abscess",
+        "name": "Secondary Lung Abscess (Bacterial/Aerobic)",
+        "typicalOrganisms": ["Staphylococcus aureus", "Klebsiella pneumoniae", "Streptococcus pneumoniae", "Pseudomonas aeruginosa", "Haemophilus influenzae"],
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "prior_pneumonia", "weight": 5 },
+          { "feature": "high_fever_rigors", "weight": 4 },
+          { "feature": "cavitation_on_prior_CXR", "weight": 5 },
+          { "feature": "immunocompromised", "weight": 3 }
+        ],
+        "imagingFeatures": ["thick_walled_cavity", "air_fluid_level", "surrounding_consolidation"],
+        "management": "IV antibiotics based on culture; consider MRSA coverage (vancomycin, linezolid); pseudomonas coverage if risk factors"
+      },
+      {
+        "id": "tuberculous_lung_abscess",
+        "name": "Tuberculous Lung Abscess",
+        "prevalenceModifier": 0.08,
+        "keyFeatures": [
+          { "feature": "chronic_cough_>2_weeks", "weight": 5 },
+          { "feature": "night_sweats", "weight": 4 },
+          { "feature": "TB_contact", "weight": 4 },
+          { "feature": "upper_lobe_predominant", "weight": 4 }
+        ],
+        "imagingFeatures": ["upper_lobe_cavity", "satellite_lesions", "tree_in_bud"],
+        "management": "Standard antitubercular therapy (RHZE); rifampicin, isoniazid, pyrazinamide, ethambutol for 2 months, then 4 months of RH"
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "tuberculosis",
+        "discriminators": ["upper_lobe_cavitation", "GeneXpert_positive", "TB_contact", "improves_on_ATT"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "empyema",
+        "discriminators": ["sonographic_hypoechoic", "loculated", "obtuse_angle_chest_wall", "Chest_tube_drains_pus"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "cavitary_malignancy",
+        "discriminators": ["no_fever", "cachexia_profound", "eccentric_cavity", "nodular_wall", "lymphadenopathy"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "bronchiectasis",
+        "discriminators": ["chronic_sputum", "HRCT_bronchial_dilation", "multiple_cavities"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "pneumatocoele",
+        "discriminators": ["thin_walled", "staphylococcal_pneumonia", "children", "resolves_spontaneously"],
+        "negativeImpactOnPneumonia": 2
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Pulse oximetry",
+          "priority": "immediate",
+          "yield": 0.8,
+          "indication": "all febrile patients with respiratory symptoms"
+        },
+        {
+          "name": "Respiratory rate",
+          "priority": "immediate",
+          "yield": 0.6,
+          "indication": "tachypnoea indicates distress"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "FBC + CRP + procalcitonin",
+          "priority": "initial",
+          "yield": 0.7,
+          "indication": "leucocytosis, left shift, elevated inflammatory markers"
+        },
+        {
+          "name": "Blood cultures (aerobic + anaerobic)",
+          "priority": "high before antibiotics",
+          "yield": 0.3,
+          "indication": "may identify causative organism in 20–30%"
+        },
+        {
+          "name": "Sputum Gram stain and culture (aerobic + anaerobic)",
+          "priority": "high",
+          "yield": 0.6,
+          "indication": "identify pathogen; anaerobic culture requires proper transport"
+        },
+        {
+          "name": "GeneXpert MTB/RIF",
+          "priority": "if TB suspected",
+          "yield": 0.9,
+          "indication": "exclude TB in cavitary lesions"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "CT chest with IV contrast",
+          "priority": "diagnostic gold standard",
+          "yield": 1.0,
+          "indication": "define abscess size, wall thickness, air-fluid level, rule out underlying mass",
+          "typicalFindings": "Cavitary lesion with thick irregular wall, air-fluid level, surrounding parenchymal consolidation, associated empyema possible"
+        },
+        {
+          "name": "Chest X-ray PA and lateral",
+          "priority": "initial imaging",
+          "yield": 0.7,
+          "indication": "screening; cavity with air-fluid level"
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Bronchoscopy with protected brush/BAL",
+          "indication": "when sputum non-diagnostic, suspected obstructing lesion, or failure to improve",
+          "priority": "selected",
+          "note": "Can obtain diagnostic specimens and drain abscess if endobronchial"
+        },
+        {
+          "name": "CT-guided percutaneous aspiration",
+          "indication": "large abscess not accessible bronchoscopically, or suspicion of unusual pathogen",
+          "priority": "selected"
+        }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BTS Guidelines on Lung Abscess (2024); ATS/ERS Community-Acquired Pneumonia Guidelines",
+      "pathways": [
+        {
+          "severity": "mild to moderate",
+          "criteria": "small abscess <4 cm, no danger signs, good oral intake, immunocompetent",
+          "treatment": [
+            "IV antibiotics: clindamycin 600–900 mg IV q8h OR penicillin G 2–4 million units IV q4–6h",
+            "Alternative IV regimens: ampicillin-sulbactam 1.5–3 g q6h, amoxicillin-clavulanate, piperacillin-tazobactam",
+            "Switch to oral when patient is afebrile and improving: amoxicillin-clavulanate 625 mg PO q8h or clindamycin 300 mg PO q6h",
+            "Total duration: 4–8 weeks (guided by clinical and radiological resolution)",
+            "Chest physiotherapy and postural drainage for dependent segments",
+            "Treat underlying aspiration risk factors"
+          ],
+          "followUp": "CT chest at 4 weeks to confirm resolution"
+        },
+        {
+          "severity": "severe or refractory",
+          "criteria": "abscess >6 cm, failure to improve after 2 weeks of IV antibiotics, immunocompromised, large air-fluid level",
+          "treatment": [
+            "Extended IV antibiotics for complete course (may require 8–12 weeks)",
+            "Consider bronchoscopic drainage: aspiration of pus, placement of pigtail catheter",
+            "CT-guided percutaneous catheter drainage if bronchoscopic approach fails or inaccessible",
+            "Surgical resection (lobectomy or segmentectomy) if:",
+            "  - Massive haemoptysis",
+            "  - Abscess persists >6–8 weeks despite medical therapy",
+            "  - Suspicion of underlying malignancy",
+            "  - Bronchopleural fistula",
+            "  - Rupture into pleural space (empyema)",
+            "Empiric MRSA coverage (vancomycin 15–20 mg/kg IV q12h, linezolid 600 mg IV/PO q12h) if risk factors",
+            "Empiric pseudomonas coverage (cefepime, piperacillin-tazobactam, levofloxacin) if immunocompromised or structural lung disease"
+          ],
+          "escalation": "Multidisciplinary input: respiratory, interventional pulmonology, thoracic surgery, infectious diseases"
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "aspiration_of_oropharyngeal_flora",
+      "anaerobic_pneumonitis",
+      "necrosis_and_cavitation",
+      "air_fluid_level_formation",
+      "fibrotic_wall_encapsulation",
+      "bronchopleural_fistula_risk",
+      "chronic_inflammatory_state",
+      "systemic_toxicity"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bronchopleural_fistula",
+        "probability": 0.15,
+        "severityBoost": 0.7,
+        "clues": ["sudden_fever_cough", "pleuritic_pain", "air_fluid_level_change", "persistent_air_leak"]
+      },
+      {
+        "diseaseId": "empyema",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["rupture_into_pleural_space", "persistent_fever", "loculated_effusion"]
+      },
+      {
+        "diseaseId": "massive_hemoptysis",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["large_abscess_eroding_vessel", "Rasmussen_aneurysm"]
+      },
+      {
+        "diseaseId": "sepsis_and_septic_shock",
+        "probability": 0.2,
+        "severityBoost": 0.6,
+        "clues": ["hypotension", "multi_organ_dysfunction", "lactic_acidosis"]
+      },
+      {
+        "diseaseId": "bronchogenic_carcinoma",
+        "probability": 0.02,
+        "clues": ["wall_nodularity", "no_infection_resolution", "post_obstructive"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "if massive haemoptysis, sepsis shock, or acute respiratory failure",
+
+    "diagnosticClues": [
+      "putrid sputum with foul odour",
+      "cavitary lesion with air-fluid level on CT chest",
+      "clinical aspiration history (loss of consciousness, dysphagia, seizures)",
+      "periodontal disease and poor oral hygiene",
+      "response to prolonged IV clindamycin or penicillin G"
+    ],
+    "exclusionClues": [
+      "upper lobe cavity without air-fluid level and positive GeneXpert suggests TB",
+      "thin-walled cavity suggests pneumatocoele or bulla",
+      "nodular cavity wall suggests malignancy",
+      "community-acquired pneumonia without cavitation is not a lung abscess"
+    ]
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "disease": {
+    "id": "rosacea",
+    "name": "Rosacea",
+    "system": "dermatology",
+    "agePeak_months": [360, 720],
+    "note": "Chronic inflammatory condition of central face. Flushing, erythema, telangiectasia, papules, pustules. No comedones. Subtypes: erythematotelangiectatic, papulopustular, phymatous, ocular.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["inflammatory_skin", "facial_dermatosis", "flushing_disorder"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rhinophyma_severe", "weight": 6 },
+        { "sign": "ocular_rosacea_keratitis_corneal_ulcer", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Phymatous/ocular -> MODERATE-SEVERE; mild flushing/papules -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "central_face_flushing_redness", "weight": 5 },
+      { "symptomId": "persistent_erythema_of_cheeks_nose_chin_forehead", "weight": 5 },
+      { "symptomId": "visible_broken_blood_vessels_telangiectasia", "weight": 4 },
+      { "symptomId": "red_bumps_and_pustules_similar_to_acne_but_no_blackheads", "weight": 4 },
+      { "symptomId": "triggers_sun_hot_drinks_spicy_food_alcohol", "weight": 3 },
+      { "symptomId": "eye_symptoms_dryness_burning_grittiness", "weight": 3 },
+      { "symptomId": "fair_skin_and_family_history", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "central_facial_erythema_flushing", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "telangiectasia", "baseWeight": 4 },
+      { "signId": "papules_and_pustules_without_comedones", "baseWeight": 4 },
+      { "signId": "skin_thickening_phymatous_changes_rhinophyma", "baseWeight": 3 },
+      { "signId": "ocular_erythema_blepharitis_conjunctivitis", "baseWeight": 3 },
+      { "signId": "edema_of_face_chronic", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "fair_skin_type_i_ii", "multiplier": 2.5 },
+      { "id": "family_history_of_rosacea", "multiplier": 2.0 },
+      { "id": "age_30_to_60", "multiplier": 2.0 },
+      { "id": "sun_damage", "multiplier": 1.5 },
+      { "id": "demodex_folliculorum_colonization", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "erythematotelangiectatic_rosacea",
+        "name": "Erythematotelangiectatic Rosacea (ETR)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "flushing_and_persistent_erythema", "weight": 5 },
+          { "feature": "telangiectasia_visible", "weight": 4 },
+          { "feature": "no_papules_pustules", "weight": 3 }
+        ],
+        "management": "Avoid triggers (sun, spicy food, alcohol, heat). Sunscreen (SPF50, physical barrier). Topical brimonidine or oxymetazoline for redness. Laser (PDL/KTP) for telangiectasia."
+      },
+      {
+        "id": "papulopustular_rosacea",
+        "name": "Papulopustular Rosacea",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "central_facial_papules_and_pustules", "weight": 5 },
+          { "feature": "no_comedones", "weight": 4 },
+          { "feature": "erythema_background", "weight": 3 }
+        ],
+        "management": "Topicals: ivermectin 1% cream, metronidazole 0.75-1% gel, azelaic acid 15% gel. Oral: doxycycline 40mg MR OD or 100mg BD for 6-12 weeks. Avoid topical steroids."
+      },
+      {
+        "id": "phymatous_rosacea",
+        "name": "Phymatous Rosacea (Rhinophyma)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "skin_thickening_enlarged_nose", "weight": 5 },
+          { "feature": "irregular_nodular_surface", "weight": 4 },
+          { "feature": "more_common_in_men", "weight": 3 }
+        ],
+        "management": "Oral isotretinoin for inflammatory component. Laser ablation (CO2, Er:YAG). Surgical excision and electrocautery. Avoid topical steroids."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acne_vulgaris",
+        "discriminators": ["comedones_present", "sebum_excess", "younger_age"]
+      },
+      {
+        "diseaseId": "seborrheic_dermatitis",
+        "discriminators": ["scaly_greasy_lesions", "eyebrows_nasolabial", "scalp_involved"]
+      },
+      {
+        "diseaseId": "lupus_erythematosus_cutaneous",
+        "discriminators": ["spares_nasolabial_folds", "photosensitivity", "malar_diffuse", "positive_autoantibodies"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical diagnosis based on characteristic findings", "priority": "high", "yield": 0.9, "indication": "central face erythema, papules/pustules, telangiectasia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "National Rosacea Society / NICE Clinical Guidelines",
+      "pathways": [
+        {
+          "severity": "mild (ETR or few papules)",
+          "criteria": "mild erythema, occasional papules",
+          "treatment": "Trigger avoidance. Sunscreen. Metronidazole 0.75% gel or azelaic acid 15% gel BD. Brimonidine gel for redness PRN."
+        },
+        {
+          "severity": "moderate-severe (papulopustular)",
+          "criteria": "many papules/pustules, significant erythema",
+          "treatment": "Topical ivermectin 1% cream OD. Oral doxycycline 40mg MR OD (subantimicrobial) or 100mg BD for 6-12 weeks. Azelaic acid 15% gel. Avoid topical steroids. Laser for telangiectasia."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "aberrant_innate_immune_response",
+      "tlr2_activation",
+      "kathelicidin_ll37_overexpression",
+      "vascular_hyperreactivity_and_flushing",
+      "demodex_mite_sensitization",
+      "uv_induced_inflammation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "ocular_rosacea_keratitis_corneal_ulcer",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["eye_redness_pain", "photophobia", "blurred_vision"]
+      },
+      {
+        "diseaseId": "rhinophyma_progressive",
+        "probability": 0.1,
+        "severityBoost": 0.1,
+        "clues": ["nasal_enlargement", "telangiectasia", "thickened_skin"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["central_facial_erythema_flushing", "papules_pustules_without_comedones", "telangiectasia", "trigger_factors"],
+    "exclusionClues": ["comedones", "scalp_involvement", "malar_butterfly_pattern_with_systemic_symptoms"]
+  }
+}

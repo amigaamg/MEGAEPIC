@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "uti",
+    "name": "Urinary Tract Infection (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [0, 24],
+    "note": "Common bacterial infection in children. May cause renal scarring if pyelonephritis unrecognized. E. coli is most common pathogen.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["urinary_infection", "febrile_illness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 9 },
+        { "sign": "anuria", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_fever_>39C_with_rigors", "weight": 7 },
+          { "sign": "flank_pain_cva_tenderness", "weight": 7 },
+          { "sign": "vomiting_severe", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If high fever with systemic symptoms, flank pain -> SEVERE (pyelonephritis); else -> NON-SEVERE (cystitis)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "dysuria_painful_urination", "weight": 4 },
+      { "symptomId": "frequency_urinary", "weight": 3 },
+      { "symptomId": "foul_smelling_urine", "weight": 3 },
+      { "symptomId": "irritability_poor_feeding_infant", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 3 },
+      { "symptomId": "abdominal_or_flank_pain", "weight": 3 },
+      { "symptomId": "history_of_previous_uti", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "cva_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "suprapubic_tenderness", "baseWeight": 3 },
+      { "signId": "dehydration", "baseWeight": 2 },
+      { "signId": "fever_high_grade", "baseWeight": 4 },
+      { "signId": "loin_pain_on_palpation", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_under_2_years", "multiplier": 3.0 },
+      { "id": "female_gender_age_>1", "multiplier": 2.5 },
+      { "id": "uncircumcised_male", "multiplier": 2.0 },
+      { "id": "vesicoureteral_reflux", "multiplier": 4.0 },
+      { "id": "constipation", "multiplier": 2.0 },
+      { "id": "poor_voiding_habits", "multiplier": 2.0 },
+      { "id": "catheterization", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "cystitis_lower_uti",
+        "name": "Cystitis (Lower UTI)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "dysuria", "weight": 5 },
+          { "feature": "frequency", "weight": 4 },
+          { "feature": "no_fever_or_low_grade", "weight": 3 },
+          { "feature": "suprapubic_pain", "weight": 3 }
+        ],
+        "management": "Oral antibiotics 3-5 days: trimethoprim-sulfamethoxazole, nitrofurantoin, or cephalexin. Adequate hydration. Urine culture to confirm sensitivity."
+      },
+      {
+        "id": "pyelonephritis_upper_uti",
+        "name": "Pyelonephritis (Upper UTI)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "high_fever_>39C", "weight": 5 },
+          { "feature": "flank_pain_cva_tenderness", "weight": 5 },
+          { "feature": "vomiting_ill_appearing", "weight": 4 },
+          { "feature": "positive_urine_culture", "weight": 5 }
+        ],
+        "management": "Hospitalize if <3 months or toxic. IV antibiotics (ceftriaxone/cefotaxime ± gentamicin) for 2-4 days then switch to oral for total 10-14 days. Renal/bladder ultrasound. VCUG if recurrent or age <2."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "vulvovaginitis",
+        "discriminators": ["vaginal_discharge", "vulvar_erythema", "normal_urinalysis"]
+      },
+      {
+        "diseaseId": "appendicitis",
+        "discriminators": ["rlq_pain", "pain_before_vomiting", "normal_urinalysis"]
+      },
+      {
+        "diseaseId": "gastroenteritis",
+        "discriminators": ["diarrhea_predominant", "no_dysuria", "normal_urinalysis"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urinalysis and microscopy", "priority": "immediate", "yield": 0.85, "indication": "pyuria, bacteriuria, nitrites" }
+      ],
+      "laboratory": [
+        { "name": "Urine culture and sensitivity", "priority": "immediate", "yield": 0.95, "indication": "confirm and guide antibiotics" },
+        { "name": "CRP", "priority": "medium", "yield": 0.6, "indication": "pyelonephritis marker" },
+        { "name": "Blood culture", "priority": "high", "yield": 0.3, "indication": "if febrile, high risk" }
+      ],
+      "imaging": [
+        { "name": "Renal and bladder Ultrasound", "priority": "high", "yield": 0.5, "indication": "hydronephrosis, abscess, stones after first febrile UTI" },
+        { "name": "VCUG", "priority": "medium", "yield": 0.6, "indication": "VUR evaluation after recurrent febrile UTI" },
+        { "name": "DMSA scan", "priority": "low", "yield": 0.7, "indication": "renal scarring assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline CG54 / AAP UTI Guidelines",
+      "pathways": [
+        {
+          "severity": "cystitis",
+          "criteria": "Low-grade fever or afebrile, no systemic symptoms, older child",
+          "treatment": "Oral antibiotics 3-5 days (TMP-SMX, nitrofurantoin, cephalexin). Urine culture before starting. Adequate hydration. Follow-up urine culture if symptoms persist."
+        },
+        {
+          "severity": "pyelonephritis",
+          "criteria": "Fever >39C, flank pain, toxic appearance, vomiting, age <3 months",
+          "treatment": "Hospitalize. IV ceftriaxone 50-75 mg/kg/day. IV fluids. Antipyretics. Blood and urine cultures. Switch to oral when afebrile 24-48h. Total 10-14 days. Renal US during admission. VCUG after resolution."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ascending_infection_from_perineum",
+      "bacterial_virulence_factors",
+      "urothelial_adherence",
+      "inflammation",
+      "renal_parenchymal_invasion",
+      "renal_scarring"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "renal_scarring",
+        "probability": 0.15,
+        "lagDays": [30, 365],
+        "severityBoost": 0.3,
+        "clues": ["recurrent_pyelonephritis", "vur", "delayed_treatment"]
+      },
+      {
+        "diseaseId": "recurrent_uti",
+        "probability": 0.3,
+        "lagDays": [30, 365],
+        "severityBoost": 0.2,
+        "clues": ["vur", "female", "voiding_dysfunction"]
+      },
+      {
+        "diseaseId": "renal_abscess",
+        "probability": 0.02,
+        "lagDays": [3, 14],
+        "severityBoost": 0.5,
+        "clues": ["persistent_fever_despite_antibiotics", "flank_mass"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["fever_without_source_in_infant", "dysuria", "flank_pain", "pyuria", "positive_culture"],
+    "exclusionClues": ["normal_urinalysis", "negative_culture", "alternative_source_of_fever"]
+  }
+}

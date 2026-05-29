@@ -1,0 +1,134 @@
+{
+  "disease": {
+    "id": "febrile_seizure",
+    "name": "Febrile Seizure",
+    "system": "emergency_medicine",
+    "agePeak_months": [12, 60],
+    "note": "Seizure associated with fever in children aged 6 months to 5 years, without CNS infection or acute electrolyte imbalance. Simple vs complex: simple is generalized, <15 min, no recurrence in 24h.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["pediatric_emergency", "seizure", "fever"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "prolonged_seizure_greater_5_min", "weight": 9 },
+        { "sign": "status_epilepticus", "weight": 10 },
+        { "sign": "signs_of_meningitis", "weight": 10 },
+        { "sign": "respiratory_depression", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Febrile seizure with prolonged convulsion or signs of meningitis = EMERGENCY. Simple febrile seizure is usually self-limiting."
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_rapid_rise", "weight": 5 },
+      { "symptomId": "generalized_convulsion", "weight": 5 },
+      { "symptomId": "age_6m_to_5y", "weight": 5 },
+      { "symptomId": "loss_of_consciousness_during", "weight": 4 },
+      { "symptomId": "viral_illness_preceding", "weight": 3 },
+      { "symptomId": "previous_febrile_seizure", "weight": 3 },
+      { "symptomId": "family_history_febrile_seizure", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "fever_temp_above_38", "baseWeight": 5 },
+      { "signId": "post_ictal_drowsiness", "baseWeight": 3 },
+      { "signId": "no_focal_neurological_signs", "baseWeight": 0 },
+      { "signId": "source_of_infection_ear_throat_lungs", "baseWeight": 3 },
+      { "signId": "normal_consciousness_post_ictal", "baseWeight": 0 }
+    ],
+    "riskFactors": [
+      { "id": "age_12_to_24_months", "multiplier": 2.0 },
+      { "id": "family_history_febrile_seizure", "multiplier": 2.5 },
+      { "id": "frequent_upper_respiratory_infections", "multiplier": 1.5 },
+      { "id": "daycare_attendance", "multiplier": 1.3 },
+      { "id": "previous_febrile_seizure", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "simple_febrile_seizure",
+        "name": "Simple Febrile Seizure",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "generalized_tonic_clonic", "weight": 5 },
+          { "feature": "duration_less_15_min", "weight": 5 },
+          { "feature": "single_seizure_in_24h", "weight": 5 }
+        ],
+        "management": "Reassure parents. Treat fever (antipyretics). Identify and treat source of infection. No routine investigation if child fully recovered. No EEG required. No long-term anticonvulsants."
+      },
+      {
+        "id": "complex_febrile_seizure",
+        "name": "Complex Febrile Seizure",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "focal_seizure", "weight": 5 },
+          { "feature": "duration_greater_15_min", "weight": 5 },
+          { "feature": "multiple_in_24h", "weight": 4 }
+        ],
+        "management": "Admit for observation. LP to exclude meningitis. EEG (not urgent). Consider neuroimaging. Follow-up for developmental assessment."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "meningitis_encephalitis",
+        "discriminators": ["neck_stiffness", "photophobia", "bulging_fontanelle", "irritable"]
+      },
+      {
+        "diseaseId": "rigors",
+        "discriminators": ["shivering_not_convulsive", "no_ictal_phase", "no_post_ictal"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature measurement", "priority": "immediate", "yield": 1.0, "indication": "confirm fever" },
+        { "name": "Blood glucose (bedside)", "priority": "immediate", "yield": 0.5, "indication": "hypoglycemia mimic" },
+        { "name": "Seizure observation", "priority": "immediate", "yield": 1.0, "indication": "classify simple vs complex" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP", "priority": "medium", "yield": 0.5, "indication": "infection severity" },
+        { "name": "U&E, Ca, Mg", "priority": "medium", "yield": 0.3, "indication": "electrolyte assessment (if complex)" },
+        { "name": "Urinalysis", "priority": "medium", "yield": 0.4, "indication": "UTI as cause" },
+        { "name": "CSF analysis", "priority": "high", "yield": 0.95, "indication": "if meningitis suspected or complex features" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Febrile Seizure Guidelines / AAP Guidelines",
+      "pathways": [
+        {
+          "severity": "acute convulsion (ongoing >5 min)",
+          "criteria": "seizure active >5 minutes",
+          "treatment": "ABCDE. Buccal midazolam 0.5mg/kg or IV lorazepam 0.1mg/kg. Repeat dose after 5 min if needed. Manage airway. Check blood glucose. Treat fever (paracetamol 15mg/kg, ibuprofen 10mg/kg). IV antibiotics if meningitis suspected."
+        },
+        {
+          "severity": "post-ictal / simple febrile seizure",
+          "criteria": "seizure stopped, child recovering, simple features",
+          "treatment": "Observe until fully alert. Identify and treat source of infection. Reassure parents. Discharge with safety net advice (fever management, when to return). No routine imaging, LP, or EEG."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "age_related_seizure_threshold",
+      "fever_induced_neuronal_excitability",
+      "rapid_temperature_rise",
+      "cytokine_mediated_effects",
+      "immature_inhibitory_circuits",
+      "self_limiting_seizure_activity"
+    ],
+    "complications": [
+      {
+        "diseaseId": "recurrent_febrile_seizures",
+        "probability": 0.3,
+        "severityBoost": 0.1,
+        "clues": ["age_less_18_months", "low_fever_at_onset", "family_history"]
+      },
+      {
+        "diseaseId": "afebrile_seizure_epilepsy_later",
+        "probability": 0.02,
+        "severityBoost": 0.2,
+        "clues": ["complex_features", "developmental_delay", "family_history_epilepsy"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["fever_plus_seizure", "age_6m_to_5y", "generalized_convulsion", "self_limiting", "post_ictal_drowsiness_then_full_recovery"],
+    "exclusionClues": ["no_fever", "age_outside_range", "cns_infection_found", "afebrile_seizure"]
+  }
+}

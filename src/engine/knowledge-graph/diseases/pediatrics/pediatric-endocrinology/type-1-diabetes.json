@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "type-1-diabetes",
+    "name": "Type 1 Diabetes Mellitus (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [48, 144],
+    "note": "Autoimmune destruction of pancreatic beta cells causing absolute insulin deficiency. Classic triad: polyuria, polydipsia, weight loss. DKA is life-threatening.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["diabetes_mellitus", "insulin_deficiency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "diabetic_ketoacidosis_severe", "weight": 10 },
+        { "sign": "hyperosmolar_hyperglycemic_state", "weight": 10 },
+        { "sign": "cerebral_edema", "weight": 10 },
+        { "sign": "hypoglycemic_coma", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ph_<7_1", "weight": 9 },
+          { "sign": "bicarbonate_<5", "weight": 8 },
+          { "sign": "kussmaul_breathing", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If DKA with acidosis (pH <7.3) or cerebral edema -> SEVERE; else -> NON-SEVERE (new-onset stable or established diabetes)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "polyuria", "weight": 5 },
+      { "symptomId": "polydipsia", "weight": 5 },
+      { "symptomId": "weight_loss_unexplained", "weight": 5 },
+      { "symptomId": "fatigue_lethargy", "weight": 3 },
+      { "symptomId": "nocturia_enuresis_secondary", "weight": 4 },
+      { "symptomId": "blurred_vision", "weight": 2 },
+      { "symptomId": "vomiting_abdominal_pain_dka", "weight": 4 },
+      { "symptomId": "hyperphagia_or_anorexia", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "dehydration_signs", "baseWeight": 4 },
+      { "signId": "kussmaul_breathing", "baseWeight": 5, "note": "DKA" },
+      { "signId": "acetone_breath", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "altered_consciousness_cerebral_edema", "baseWeight": 5 },
+      { "signId": "weight_loss_wasting", "baseWeight": 3 },
+      { "signId": "abdominal_tenderness", "baseWeight": 2 },
+      { "signId": "candida_infection", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_type_1_diabetes", "multiplier": 5.0 },
+      { "id": "certain_hla_types", "multiplier": 3.0 },
+      { "id": "viral_trigger_coxsackie_enterovirus", "multiplier": 1.5 },
+      { "id": "early_cow_milk_exposure", "multiplier": 1.3 },
+      { "id": "vitamin_d_deficiency", "multiplier": 1.5 },
+      { "id": "celiac_disease", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "new_onset_type_1",
+        "name": "New-Onset Type 1 Diabetes",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "classic_triad_polyuria_polydipsia_weight_loss", "weight": 5 },
+          { "feature": "hyperglycemia_>200_mg_dL", "weight": 5 },
+          { "feature": "ketonuria", "weight": 4 },
+          { "feature": "positive_islet_autoantibodies", "weight": 4 }
+        ],
+        "management": "Insulin therapy (MDI or CSII). Carbohydrate counting. Blood glucose monitoring. Diabetes education. Insulin: 0.5-1 unit/kg/day total. Basal-bolus regimen."
+      },
+      {
+        "id": "diabetic_ketoacidosis",
+        "name": "Diabetic Ketoacidosis (DKA)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "hyperglycemia_>250_mg_dL", "weight": 5 },
+          { "feature": "ph_<7_3_or_bicarb_<15", "weight": 5 },
+          { "feature": "ketonemia_or_ketonuria", "weight": 5 },
+          { "feature": "kussmaul_breathing", "weight": 4 }
+        ],
+        "management": "IV fluids (10-20 mL/kg NS bolus then deficit correction over 48h). IV insulin infusion 0.1 units/kg/h. Monitor blood glucose q1h, electrolytes q2-4h. Replace K+ when <5.5. Monitor for cerebral edema."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "type_2_diabetes",
+        "discriminators": ["obesity", "acanthosis_nigricans", "negative_autoantibodies", "not_insulin_dependent_initially"]
+      },
+      {
+        "diseaseId": "diabetes_insipidus",
+        "discriminators": ["polyuria_polydipsia_but_normoglycemia", "low_urine_osmolality", "water_deprivation_test"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Capillary blood glucose", "priority": "immediate", "yield": 0.95, "indication": "all suspected cases" },
+        { "name": "Urine dipstick for glucose and ketones", "priority": "immediate", "yield": 0.9, "indication": "glucosuria, ketonuria" }
+      ],
+      "laboratory": [
+        { "name": "Serum glucose", "priority": "immediate", "yield": 1.0, "indication": "confirm hyperglycemia" },
+        { "name": "Blood gas (pH, HCO3)", "priority": "immediate", "yield": 0.9, "indication": "DKA diagnosis and severity" },
+        { "name": "Serum electrolytes", "priority": "immediate", "yield": 0.8, "indication": "K+, Na+, anion gap" },
+        { "name": "HbA1c", "priority": "high", "yield": 0.95, "indication": "glycemic control over 3 months" },
+        { "name": "Islet autoantibodies (GAD, IA2, insulin, ZnT8)", "priority": "medium", "yield": 0.85, "indication": "confirm autoimmune etiology" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "ISPAD Clinical Practice Consensus Guidelines / ADA Standards",
+      "pathways": [
+        {
+          "severity": "stable_new_onset",
+          "criteria": "No DKA, pH >7.3, no vomiting, able to hydrate orally",
+          "treatment": "Outpatient initiation of insulin therapy. Total daily insulin 0.5-1 U/kg/day. Basal (glargine/detemir) + bolus (aspart/lispro). Carbohydrate counting. Diabetes education. HbA1c follow-up."
+        },
+        {
+          "severity": "dka",
+          "criteria": "pH <7.3 or HCO3 <15, hyperglycemia, ketonemia",
+          "treatment": "Hospitalize/ICU. IV NS 10-20 mL/kg bolus if shock. Deficit replacement over 48h. IV insulin 0.1 U/kg/h (do not start until fluids running). Correct K+ carefully. Monitor neuro status q1h for cerebral edema. If cerebral edema: mannitol 0.5-1 g/kg, hyperventilation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "autoimmune_beta_cell_destruction",
+      "absolute_insulin_deficiency",
+      "hyperglycemia",
+      "lipolysis",
+      "ketogenesis",
+      "metabolic_acidosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "diabetic_ketoacidosis",
+        "probability": 0.35,
+        "lagDays": [0, 365],
+        "severityBoost": 0.5,
+        "clues": ["vomiting", "kussmaul", "high_glucose", "ketonuria"]
+      },
+      {
+        "diseaseId": "hypoglycemia",
+        "probability": 0.6,
+        "lagDays": [0, 365],
+        "severityBoost": 0.3,
+        "clues": ["excess_insulin", "missed_meal", "exercise", "sweating", "confusion"]
+      },
+      {
+        "diseaseId": "cerebral_edema_dka",
+        "probability": 0.01,
+        "lagDays": [0, 1],
+        "severityBoost": 0.7,
+        "clues": ["headache", "falling_gcs", "hypertension", "bradycardia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["polyuria_polydipsia", "weight_loss", "hyperglycemia", "ketonuria"],
+    "exclusionClues": ["normoglycemia", "negative_autoantibodies", "obesity_with_acanthosis"]
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "disease": {
+    "id": "kaposi_sarcoma",
+    "name": "Kaposi Sarcoma (KS)",
+    "system": "dermatology",
+    "agePeak_months": [240, 960],
+    "note": "Vascular tumor caused by HHV-8 (KSHV). Four variants: classic (elderly Mediterranean), endemic (African children), iatrogenic (transplant), AIDS-associated (most common).",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["skin_malignancy", "hhv8_associated", "vascular_tumor"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "visceral_involvement_lung_gi", "weight": 10 },
+        { "sign": "extensive_edema_painful", "weight": 8 },
+        { "sign": "hemorrhagic_pleural_effusion_pericardial", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Visceral/extensive -> SEVERE; limited cutaneous -> MILD-MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "purple_brown_skin_patches_nodules", "weight": 5 },
+      { "symptomId": "hiv_aids_or_immunosuppression", "weight": 5 },
+      { "symptomId": "edema_of_limbs", "weight": 3 },
+      { "symptomId": "oral_lesions_palate_gingiva", "weight": 3 },
+      { "symptomId": "dyspnea_cough_gi_symptoms", "weight": 3 },
+      { "symptomId": "classic_caucasian_or_african_descent", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "violaceous_patches_plaques_nodules", "baseWeight": 5 },
+      { "signId": "linear_following_skin_cleavage_lines", "baseWeight": 3 },
+      { "signId": "lower_limb_distribution_classic", "baseWeight": 4 },
+      { "signId": "oral_palatal_lesions", "baseWeight": 4 },
+      { "signId": "pitting_edema", "baseWeight": 3 },
+      { "signId": "lymphadenopathy", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "hiv_aids_infection", "multiplier": 5.0 },
+      { "id": "organ_transplant_immunosuppression", "multiplier": 4.0 },
+      { "id": "hhv8_infection", "multiplier": 5.0 },
+      { "id": "male_gender", "multiplier": 3.0 },
+      { "id": "mediterranean_or_african_ethnicity", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "aids_associated_ks",
+        "name": "AIDS-Associated KS (Epidemic)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "hiv_positive_cd4_low", "weight": 5 },
+          { "feature": "multiple_bilateral_lesions", "weight": 4 },
+          { "feature": "oral_and_visceral_possible", "weight": 4 }
+        ],
+        "management": "ART (antiretroviral therapy) is cornerstone. Local therapy (cryo, laser, topical) for limited disease. Systemic chemotherapy (liposomal doxorubicin or paclitaxel) for extensive/visceral."
+      },
+      {
+        "id": "classic_ks",
+        "name": "Classic KS (Elderly Men)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "lower_limb_nodules_plaques", "weight": 5 },
+          { "feature": "indolent_course_over_years", "weight": 4 },
+          { "feature": "no_hiv_or_immunosuppression", "weight": 4 }
+        ],
+        "management": "Observation if indolent. Local excision, cryotherapy, laser. Radiotherapy for local control. Interferon-alpha or chemotherapy if progressive."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bacillary_angiomatosis",
+        "discriminators": ["rod_bacteria_on_biopsy", "responds_to_antibiotics", "bartonella_serology"]
+      },
+      {
+        "diseaseId": "hemangioma_or_ecchymosis",
+        "discriminators": ["blanches_with_pressure", "trauma_history", "self_limiting"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Dermatoscopy (rainbow pattern, multicolored)", "priority": "medium", "yield": 0.7, "indication": "suggestive but not diagnostic" }
+      ],
+      "laboratory": [
+        { "name": "HHV-8 PCR or serology", "priority": "high", "yield": 0.9, "indication": "confirm viral association" },
+        { "name": "HIV test", "priority": "immediate", "yield": 0.99, "indication": "all patients, mandatory" }
+      ],
+      "imaging": [
+        { "name": "Skin biopsy (spindle cells, slit-like vessels, HHV-8 IHC)", "priority": "gold_standard", "yield": 0.98, "indication": "histopathology with immunohistochemistry" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / ACTG Guidelines for Kaposi Sarcoma",
+      "pathways": [
+        {
+          "severity": "limited/mild KS",
+          "criteria": "<10 lesions, no edema, no visceral",
+          "treatment": "Local therapy: intralesional vinblastine, cryotherapy, topical altretinoin gel, laser. In HIV: optimize ART. Observation if stable/indolent."
+        },
+        {
+          "severity": "extensive/visceral KS",
+          "criteria": ">20 lesions, lymphedema, oral/visceral, symptomatic or rapidly progressive",
+          "treatment": "Systemic therapy: liposomal doxorubicin 20mg/m2 IV q2-3 weeks. Paclitaxel second-line. ART optimization in HIV. Radiation for painful/bulky lesions. Supportive care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hhv8_kaposi_sarcoma_associated_herpesvirus",
+      "lytic_and_latent_infection",
+      "endothelial_spindle_cell_proliferation",
+      "angiogenesis_and_inflammation",
+      "immune_evasion",
+      "immune_reconstitution_with_art"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "immune_reconstitution_inflammatory_syndrome_ks_flare",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["worsening_lesions_after_starting_art", "cd4_rising"]
+      },
+      {
+        "diseaseId": "lymphedema_severe",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["swollen_limb", "skin_thickening"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["violaceous_skin_lesions_in_hiv_patient", "hhv8_positive", "spindle_cells_on_biopsy"],
+    "exclusionClues": ["negative_hiv_in_low_risk", "negative_hhv8", "alternative_vascular_tumor"]
+  }
+}

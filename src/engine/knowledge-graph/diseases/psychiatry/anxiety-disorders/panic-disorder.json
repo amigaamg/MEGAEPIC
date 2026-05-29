@@ -1,0 +1,86 @@
+{
+  "disease": {
+    "id": "panic_disorder",
+    "name": "Panic Disorder",
+    "system": "PSYCH",
+    "agePeak_months": [180, 420],
+    "note": "Recurrent unexpected panic attacks with fear of additional attacks or their consequences. May present to ED with cardiac symptoms.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["anxiety_disorder", "panic", "suprasternal"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_ideation", "weight": 10 },
+        { "sign": "severe_agoraphobia_housebound", "weight": 8 },
+        { "sign": "recurrent_ed_visits_cardiac", "weight": 7 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If suicidal/housebound -> URGENT; else -> OUTPATIENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "recurrent_unexpected_panic_attacks", "weight": 5 },
+      { "symptomId": "palpitations_chest_pain", "weight": 4 },
+      { "symptomId": "shortness_of_breath_choking", "weight": 3 },
+      { "symptomId": "fear_of_dying_losing_control", "weight": 4 },
+      { "symptomId": "worry_about_future_attacks", "weight": 4 },
+      { "symptomId": "avoidance_of_places_agoraphobia", "weight": 3 },
+      { "symptomId": "derealization_depersonalization", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "anxious_appearance", "baseWeight": 3 },
+      { "signId": "tachycardia_during_exam_if_anxious", "baseWeight": 2 },
+      { "signId": "hyperventilation", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_panic", "multiplier": 3.0 },
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "childhood_trauma", "multiplier": 2.0 },
+      { "id": "stressful_life_events", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 }
+    ],
+    "mimics": [
+      { "diseaseId": "hyperthyroidism", "discriminators": ["weight_loss", "heat_intolerance", "tremor", "abnormal_tsh"] },
+      { "diseaseId": "mitral_valve_prolapse", "discriminators": ["mid_systolic_click", "murmur", "echo_diagnostic"] },
+      { "diseaseId": "generalized_anxiety", "discriminators": ["no_panic_attacks", "excessive_worry_between"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Panic Disorder Severity Scale (PDSS)", "priority": "high", "yield": 0.8, "indication": "severity assessment" }
+      ],
+      "laboratory": [
+        { "name": "TSH", "priority": "medium", "yield": 0.2, "indication": "rule out hyperthyroidism" },
+        { "name": "Urine toxicology", "priority": "medium", "yield": 0.2, "indication": "stimulant-induced anxiety" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Panic Disorder",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "PDSS <10, attacks less than weekly, no agoraphobia",
+          "treatment": "CBT (first-line). SSRI (sertraline, escitalopram, fluoxetine) if CBT declined. Start low, titrate slowly (may worsen anxiety initially)."
+        },
+        {
+          "severity": "moderate-severe",
+          "criteria": "PDSS ≥10, frequent attacks, agoraphobia, marked avoidance",
+          "treatment": "CBT + SSRI combined. Benzodiazepine short-term only (lorazepam 0.5-1 mg PRN). Intensive CBT. Address agoraphobia with exposure. Treat comorbid depression."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "amygdala_hyperreactivity",
+      "locus_coeruleus_dysfunction",
+      "decreased_gaba_activity",
+      "serotonin_dysregulation",
+      "suffocation_alarm_false_trigger",
+      "conditioned_fear"
+    ],
+    "complications": [
+      { "diseaseId": "agoraphobia", "probability": 0.4, "severityBoost": 0.3, "clues": ["avoidance_of_crowds", "homebound"] },
+      { "diseaseId": "major_depressive_disorder", "probability": 0.3, "severityBoost": 0.2, "clues": ["low_mood", "hopelessness"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["recurrent_unexpected_panic_attacks", "fear_of_next_attack", "cardiac_symptoms_workup_negative"],
+    "exclusionClues": ["medical_cause_confirmed", "substance_induced"]
+  }
+}

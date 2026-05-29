@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "orbital_cellulitis",
+    "name": "Orbital Cellulitis",
+    "system": "ophthalmology",
+    "alsoPresentIn": ["ent", "infectious-disease", "emergency-medicine"],
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["periorbital_infection", "proptosis", "ophthalmoplegia", "vision_loss"],
+    "mustNotMiss": true,
+    "emergencyPriority": "immediate",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "vision_loss_decreased_acuity", "weight": 5, "description": "Optic nerve compression" },
+        { "sign": "afferent_pupillary_defect", "weight": 5, "description": "Optic neuropathy" },
+        { "sign": "proptosis", "weight": 4, "description": "Significant orbital involvement" },
+        { "sign": "ophthalmoplegia", "weight": 4, "description": "Cranial nerve or muscle involvement" },
+        { "sign": "altered_consciousness", "weight": 5, "description": "Intracranial extension" },
+        { "sign": "fever_with_toxic_appearance", "weight": 4, "description": "Systemic sepsis" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "elevated_intraocular_pressure", "weight": 3 },
+          { "sign": "bilateral_involvement", "weight": 4 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "orbital-infection"
+    },
+    "historyFeatures": [
+      { "symptomId": "periorbital_swelling_erythema", "weight": 5 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "decreased_vision", "weight": 5 },
+      { "symptomId": "double_vision", "weight": 4 },
+      { "symptomId": "eye_pain", "weight": 4, "condition": "worse with eye movement" },
+      { "symptomId": "sinusitis_symptoms", "weight": 4, "note": "nasal congestion, facial pain" },
+      { "symptomId": "eye_protrusion", "weight": 4 },
+      { "symptomId": "recent_upper_respiratory_infection", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "proptosis", "baseWeight": 5, "severityIndicator": true, "doubleWeight": true },
+      { "signId": "ophthalmoplegia", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "decreased_visual_acuity", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "afferent_pupillary_defect", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "chemosis_conjunctival_edema", "baseWeight": 4 },
+      { "signId": "elevated_intraocular_pressure", "baseWeight": 3, "severityIndicator": true },
+      { "signId": "pain_on_eye_movement", "baseWeight": 4 },
+      { "signId": "optic_disk_edema_or_pallor_on_fundoscopy", "baseWeight": 4, "severityIndicator": true }
+    ],
+    "riskFactors": [
+      { "id": "acute_or_chronic_sinusitis", "multiplier": 4.0, "note": "most common source (ethmoid sinus)" },
+      { "id": "periorbital_trauma_or_dental_infection", "multiplier": 2.5 },
+      { "id": "immunosuppression_diabetes", "multiplier": 2.0 },
+      { "id": "intravenous_drug_use", "multiplier": 2.0 }
+    ],
+    "diagnosticClues": [
+      "fever + proptosis + ophthalmoplegia + decreased vision",
+      "periorbital edema with pain on eye movement",
+      "sinusitis symptoms preceding orbital signs",
+      "CT orbits showing postseptal fat stranding and abscess"
+    ],
+    "exclusionClues": [
+      "no proptosis or ophthalmoplegia suggests preseptal",
+      "normal CT orbits with no postseptal involvement"
+    ],
+    "subtypes": [
+      {
+        "id": "preseptal_cellulitis",
+        "name": "Preseptal (Periorbital) Cellulitis",
+        "prevalenceModifier": 0.5,
+        "riskFactors": ["insect_bite", "periorbital_trauma", "local_skin_infection"],
+        "keyFeatures": [
+          { "feature": "eyelid_swelling_erythema", "weight": 5 },
+          { "feature": "no_proptosis", "weight": 5 },
+          { "feature": "normal_extraocular_movements", "weight": 5 },
+          { "feature": "normal_vision", "weight": 5 }
+        ],
+        "management": { "management": "Oral or IV antibiotics, CT to exclude postseptal extension" }
+      },
+      {
+        "id": "postseptal_orbital_cellulitis",
+        "name": "Postseptal Orbital Cellulitis",
+        "prevalenceModifier": 0.4,
+        "riskFactors": ["sinusitis", "trauma"],
+        "keyFeatures": [
+          { "feature": "proptosis", "weight": 5 },
+          { "feature": "ophthalmoplegia", "weight": 5 },
+          { "feature": "pain_on_eye_movement", "weight": 4 },
+          { "feature": "vision_loss_or_APD", "weight": 5 }
+        ],
+        "management": { "management": "IV antibiotics, CT guided, ENT + ophthalmology, surgical drainage if abscess" }
+      },
+      {
+        "id": "orbital_abscess",
+        "name": "Orbital Abscess",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "defined_abscess_cavity_on_CT", "weight": 5 },
+          { "feature": "severe_proptosis", "weight": 4 },
+          { "feature": "compressive_optic_neuropathy", "weight": 5 }
+        ],
+        "management": { "management": "Surgical drainage, IV antibiotics, urgent decompression" }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "allergic_periorbital_edema", "discriminators": ["bilateral", "pruritus", "no fever", "normal EOM and vision"] },
+      { "diseaseId": "cavernous_sinus_thrombosis", "discriminators": ["bilateral", "multiple CN palsies", "meningeal signs", "MRV shows thrombosis"] },
+      { "diseaseId": "graves_orbitopathy", "discriminators": ["bilateral", "no fever", "thyroid dysfunction", "painless"] },
+      { "diseaseId": "orbital_pseudotumor", "discriminators": ["no fever", "responds to steroids", "no abscess on CT"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Visual Acuity (Snellen Chart)", "priority": "critical", "yield": 5, "indication": "baseline and serial vision assessment" },
+        { "name": "Pupillary Exam for APD", "priority": "critical", "yield": 5, "indication": "optic nerve compromise" },
+        { "name": "Extraocular Movement Assessment", "priority": "critical", "yield": 5, "indication": "muscle entrapment or nerve palsy" },
+        { "name": "Exophthalmometry and Fundoscopy", "priority": "essential", "yield": 4, "indication": "quantify proptosis, assess optic disc" }
+      ],
+      "laboratory": [
+        { "name": "Complete Blood Count with Differential", "priority": "essential", "yield": 4, "indication": "leukocytosis, bandemia" },
+        { "name": "Blood Cultures x 2", "priority": "essential", "yield": 3, "indication": "identify pathogen" },
+        { "name": "CRP / ESR", "priority": "supportive", "yield": 3, "indication": "inflammatory markers" }
+      ],
+      "imaging": [
+        { "name": "CT Orbits with Contrast (axial + coronal)", "priority": "critical", "yield": 5, "indication": "definitive — differentiate preseptal vs postseptal, abscess, sinusitis" },
+        { "name": "CT Paranasal Sinuses", "priority": "essential", "yield": 5, "indication": "evaluate sinusitis source, plan drainage" },
+        { "name": "MRI Brain + Orbits with MRV", "priority": "if intracranial extension", "yield": 5, "indication": "cavernous sinus thrombosis evaluation" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AAO Preferred Practice Pattern: Orbital Cellulitis; IDSA Sinusitis Guidelines",
+      "pathways": [
+        {
+          "severity": "preseptal-mild",
+          "criteria": "eyelid swelling only, no proptosis, normal vision, no fever",
+          "treatment": [
+            "Outpatient if reliable: Amoxicillin-clavulanate 875/125 mg PO BID",
+            "Clindamycin 300 mg PO QID if penicillin allergy",
+            "Return if worsening: fever, vision change, proptosis"
+          ]
+        },
+        {
+          "severity": "postseptal-moderate",
+          "criteria": "proptosis, ophthalmoplegia, fever without vision loss",
+          "treatment": [
+            "Admit — IV Ceftriaxone 2 g Q12H + Metronidazole 500 mg Q8H",
+            "Vancomycin if MRSA risk; nasal decongestants",
+            "CT orbits; monitor vision, APD, EOM, IOP Q4H",
+            "If no improvement 24-48h: repeat CT and consider surgical drainage"
+          ]
+        },
+        {
+          "severity": "severe",
+          "criteria": "vision loss, APD, abscess >10 mm, intracranial extension",
+          "treatment": [
+            "ICU admission, IV antibiotics as above",
+            "Urgent surgical drainage: endoscopic sinus surgery + orbital decompression",
+            "Duration: 4-6 weeks total guided by response"
+          ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Most commonly spreads from ethmoid sinusitis via lamina papyracea (thin medial orbital wall)",
+      "Preseptal: anterior to orbital septum — no proptosis or EOM restriction",
+      "Postseptal: violates septum, involves orbital fat and extraocular muscles",
+      "Subperiosteal abscess forms between periorbita and bone; intraconal abscess compresses optic nerve",
+      "Increased orbital pressure causes optic nerve ischemia and vision loss",
+      "Intracranial extension via superior orbital fissure risks cavernous sinus thrombosis"
+    ],
+    "complications": [
+      { "diseaseId": "vision_loss_permanent", "probability": 0.1, "severityBoost": 0.9 },
+      { "diseaseId": "cavernous_sinus_thrombosis", "probability": 0.05, "severityBoost": 1.0 },
+      { "diseaseId": "orbital_compartment_syndrome", "probability": 0.03, "severityBoost": 1.0 },
+      { "diseaseId": "persistent_diplopia", "probability": 0.15, "severityBoost": 0.2 }
+    ]
+  }
+}

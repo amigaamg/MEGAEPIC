@@ -1,0 +1,129 @@
+{
+  "disease": {
+    "id": "periprosthetic-fracture",
+    "name": "Periprosthetic Fracture",
+    "system": "ORTHO",
+    "agePeak_months": [600, 960],
+    "note": "Fracture around a joint prosthesis. Usually from low-energy falls. Vancouver classification for hip, Rorabeck for knee. Implant stability determines treatment.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["post_operative_complication", "fracture"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture", "weight": 10 },
+        { "sign": "vascular_injury", "weight": 10 },
+        { "sign": "loose_implant_with_gross_instability", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "vancouver_b2_b3_hip_fracture", "weight": 8 },
+          { "sign": "comminuted_fracture", "weight": 7 },
+          { "sign": "stem_loosening_on_xray", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If loose implant, comminuted, or open -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fall_from_standing_height", "weight": 5 },
+      { "symptomId": "pain_around_prosthesis_sudden", "weight": 5 },
+      { "symptomId": "inability_to_weight_bear", "weight": 4 },
+      { "symptomId": "known_prosthesis_loosening_before_fall", "weight": 3 },
+      { "symptomId": "deformity_limb_shortening", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "deformity_angulation_shortening", "baseWeight": 4 },
+      { "signId": "pain_on_axial_loading", "baseWeight": 4 },
+      { "signId": "swelling_ecchymosis", "baseWeight": 3 },
+      { "signId": "neurovascular_status_distal", "baseWeight": 5 },
+      { "signId": "open_wound_assessment", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "osteoporosis", "multiplier": 3.0 },
+      { "id": "loose_implant_osteolysis", "multiplier": 4.0 },
+      { "id": "previous_revision_surgery", "multiplier": 2.5 },
+      { "id": "female_gender", "multiplier": 2.0 },
+      { "id": "advanced_age", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "vancouver_a",
+        "name": "Vancouver A (Trochanteric) - Hip Periprosthetic Fracture",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "greater_or_lesser_trochanter", "weight": 5 },
+          { "feature": "stable_implant", "weight": 4 }
+        ],
+        "management": "Non-displaced: protected weight bearing. Displaced: ORIF with cables or claw plate."
+      },
+      {
+        "id": "vancouver_b",
+        "name": "Vancouver B (Around Stem) - Hip Periprosthetic Fracture",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "fracture_around_or_just_below_stem", "weight": 5 },
+          { "feature": "needs_stem_assessment", "weight": 5 }
+        ],
+        "management": "B1 (stem well-fixed): ORIF with plate and cables. B2 (stem loose): revision to longer stem. B3 (poor bone stock + loose stem): revision with impaction grafting or proximal femoral replacement."
+      },
+      {
+        "id": "rorabeck_knee",
+        "name": "Rorabeck Classification - Knee Periprosthetic Fracture",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "supracondylar_femur_above_tka", "weight": 5 },
+          { "feature": "±_implant_loosening", "weight": 4 }
+        ],
+        "management": "Type 1 (non-displaced, stable implant): conservative/cast. Type 2 (displaced, stable implant): ORIF with locked plate. Type 3 (unstable/loose): revision TKA with stem."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "prosthetic_joint_infection",
+        "discriminators": ["subacute_onset", "fever", "elevated_crp", "no_trauma"]
+      },
+      {
+        "diseaseId": "aseptic_loosening_without_fracture",
+        "discriminators": ["progressive_pain", "no_trauma", "normal_xray_no_fracture"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC, CRP", "priority": "high", "yield": 0.4, "indication": "rule out concurrent infection" }
+      ],
+      "imaging": [
+        { "name": "Hip/knee X-ray (AP, lateral, full-length femur)", "priority": "immediate", "yield": 0.95, "indication": "fracture pattern, implant stability assessment" },
+        { "name": "CT scan", "priority": "medium", "yield": 0.8, "indication": "bone stock, complex fracture patterns" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAOS Periprosthetic Fracture Guidelines / Vancouver Classification",
+      "pathways": [
+        {
+          "severity": "stable_implant",
+          "criteria": "Well-fixed implant, non-displaced or minimally displaced fracture",
+          "treatment": "Protected weight bearing. ORIF if displaced (plate + cables). Heal in 6-12 weeks. Serial X-rays."
+        },
+        {
+          "severity": "loose_implant",
+          "criteria": "Vancouver B2/B3, Rorabeck 3, unstable on X-ray",
+          "treatment": "Revision arthroplasty with long stem. Impaction grafting or proximal femoral replacement for poor bone stock. Post-op protected weight bearing. X-ray at 6, 12, 26 weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": ["low_energy_fall", "stress_riser_at_prosthesis_tip", "osteolysis_weakening_bone", "implant_loosening"]
+  }
+}

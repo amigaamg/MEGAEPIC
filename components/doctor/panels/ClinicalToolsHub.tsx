@@ -39,6 +39,23 @@ const ALL_TOOLS: ToolDef[] = [
   { id: 'abx_guide', name: 'Antibiotic Guide', category: 'Infectious Disease', icon: '🦠', description: 'Empiric antibiotic therapy by infection site', specialty: ['All'], component: 'guide' },
   { id: 'pain_mgmt', name: 'Pain Management Ladder', category: 'General', icon: '💉', description: 'WHO analgesic ladder & pain management', specialty: ['All'], component: 'protocol' },
   { id: 'triage_severity', name: 'Triage Severity Guide', category: 'Emergency', icon: '🚦', description: 'Emergency triage severity categorization', specialty: ['Emergency Medicine','All'], component: 'protocol' },
+
+  // ── New Comprehensive Clinical Tools (with full interactive panels) ──
+  { id: 'bp_trend', name: '📈 BP Trend Chart', category: 'Cardiovascular', icon: '📈', description: 'Track blood pressure over time with ESC/ESH classification & trend analysis', specialty: ['Cardiology','General Practice','Nephrology','All'], component: 'calculator' },
+  { id: 'cv_risk_framingham', name: '🧮 CV Risk (Framingham)', category: 'Cardiovascular', icon: '🧮', description: '10-year cardiovascular risk assessment with Framingham equation', specialty: ['Cardiology','General Practice','Internal Medicine','All'], component: 'calculator' },
+  { id: 'cha2ds2_vasc', name: '🧮 CHA₂DS₂-VASc Score', category: 'Cardiovascular', icon: '🧮', description: 'Stroke risk in atrial fibrillation with management recommendations', specialty: ['Cardiology','Neurology','All'], component: 'calculator' },
+  { id: 'antihypertensive_protocol', name: '📋 Antihypertensive Protocol', category: 'Cardiovascular', icon: '📋', description: 'ESC/ESH 2023 stepwise medication protocol by hypertension stage', specialty: ['Cardiology','General Practice','Nephrology','All'], component: 'protocol' },
+  { id: 'bp_target', name: '🎯 BP Target Achievement', category: 'Cardiovascular', icon: '🎯', description: 'Monitor bp goal attainment with configurable targets & trends', specialty: ['Cardiology','General Practice','Nephrology','All'], component: 'calculator' },
+  { id: 'med_adherence', name: '💊 Medication Adherence', category: 'General', icon: '💊', description: 'Track medication compliance, identify barriers, and log doses', specialty: ['All'], component: 'calculator' },
+  { id: 'renal_panel', name: '🧪 Order Renal Function Panel', category: 'Renal', icon: '🧪', description: 'Creatinine, eGFR, electrolytes with drug dose adjustment guide', specialty: ['Cardiology','Nephrology','General Practice','Internal Medicine','All'], component: 'calculator' },
+  { id: 'ecg_echo', name: '🩻 Request ECG / Echo', category: 'Cardiovascular', icon: '🩻', description: 'Order cardiac imaging with HTN-specific interpretation guide', specialty: ['Cardiology','General Practice','All'], component: 'guide' },
+  { id: 'home_bp_guide', name: '🏠 Home BP Monitoring Guide', category: 'Cardiovascular', icon: '🏠', description: 'Patient education for accurate home BP measurement technique', specialty: ['All'], component: 'guide' },
+  { id: 'htn_staging', name: '📊 HTN Severity Staging', category: 'Cardiovascular', icon: '📊', description: 'ESC/ESH 2023 hypertension staging by BP level', specialty: ['Cardiology','General Practice','Nephrology','All'], component: 'calculator' },
+  { id: 'hba1c_trend', name: '📈 HbA1c Trend', category: 'Endocrinology', icon: '📈', description: 'Track hba1c over time with diabetes control status & medication guide', specialty: ['Endocrinology','General Practice','Internal Medicine','All'], component: 'calculator' },
+  { id: 'glucose_log', name: '🩸 Glucose Log', category: 'Endocrinology', icon: '🩸', description: 'Daily blood glucose tracking with meal context and trend analysis', specialty: ['Endocrinology','General Practice','All'], component: 'calculator' },
+  { id: 'insulin_dose', name: '💉 Insulin Dose Tracker', category: 'Endocrinology', icon: '💉', description: 'Insulin titration & dosing with type-specific pharmacodynamics', specialty: ['Endocrinology','General Practice','All'], component: 'calculator' },
+  { id: 'foot_exam', name: '🦶 Foot Examination Score', category: 'Endocrinology', icon: '🦶', description: 'Diabetic foot risk assessment (SINBAD/IDSA guideline)', specialty: ['Endocrinology','General Practice','Podiatry','All'], component: 'calculator' },
+  { id: 'retinopathy', name: '👁️ Retinopathy Status', category: 'Endocrinology', icon: '👁️', description: 'Diabetic retinopathy staging (ETDRS/AAO) with screening schedule', specialty: ['Endocrinology','Ophthalmology','General Practice','All'], component: 'calculator' },
 ];
 
 const CATEGORY_ICONS: Record<string, string> = {

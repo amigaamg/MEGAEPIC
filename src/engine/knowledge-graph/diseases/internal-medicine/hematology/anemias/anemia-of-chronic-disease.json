@@ -1,0 +1,110 @@
+{
+  "disease": {
+    "id": "anemia_of_chronic_disease",
+    "name": "Anemia of Chronic Disease",
+    "system": "hematology",
+    "agePeak_months": [480, 960, 1080],
+    "note": "Anemia secondary to chronic inflammation, infection, malignancy, or autoimmune disease. Mediated by hepcidin and inflammatory cytokines.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["anemia", "normocytic", "microcytic", "inflammation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "severe_anemia_hb_below_6", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "hb_above_8": true
+      },
+      "severityLabel": "Rarely emergency; severity driven by underlying disease"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "weakness", "weight": 4 },
+      { "symptomId": "anorexia", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "fever", "weight": 2, "note": "If due to underlying infection or autoimmune disease" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "signs_of_underlying_disease", "baseWeight": 3, "note": "Arthritis, rash, organomegaly, lymphadenopathy" }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_infection", "multiplier": 2.0 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "malignancy", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.5 },
+      { "id": "chronic_heart_failure", "multiplier": 1.5 },
+      { "id": "elderly_age", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [],
+
+    "mimics": [
+      {
+        "diseaseId": "iron_deficiency_anemia",
+        "discriminators": ["ferritin_low_in_ida", "transferrin_saturation_different", "crp_esr_normal_in_ida"]
+      },
+      {
+        "diseaseId": "myelodysplastic_syndrome",
+        "discriminators": ["dysplastic_film", "cytopenias", "normal_ferritin"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.9, "indication": "Normocytic or mildly microcytic anemia" },
+        { "name": "Blood film", "priority": "high", "yield": 0.6, "indication": "Non-specific changes" }
+      ],
+      "laboratory": [
+        { "name": "Serum ferritin", "priority": "immediate", "yield": 0.85, "indication": "Normal or high (acute phase reactant)" },
+        { "name": "Serum iron and TIBC", "priority": "high", "yield": 0.8, "indication": "Low iron, low TIBC" },
+        { "name": "Transferrin saturation", "priority": "high", "yield": 0.75, "indication": "Typically low" },
+        { "name": "CRP and ESR", "priority": "high", "yield": 0.7, "indication": "Elevated in inflammation" },
+        { "name": "Hepcidin level", "priority": "low", "yield": 0.6, "indication": "Elevated in ACD" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "BSH Guidelines for Anemia of Chronic Disease",
+      "pathways": [
+        {
+          "severity": "symptomatic",
+          "criteria": "Hb <8, symptomatic, underlying disease treated",
+          "treatment": "Treat underlying disease. Consider ESA (epoetin alfa) if CKD. IV iron only if true iron deficiency coexists."
+        },
+        {
+          "severity": "asymptomatic",
+          "criteria": "Hb >8, no symptoms",
+          "treatment": "No specific anemia treatment. Focus on managing underlying chronic condition."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "inflammatory_cytokines",
+      "hepcidin_elevation",
+      "iron_sequestration_in_macrophages",
+      "impaired_erythropoietin_response",
+      "reduced_rbc_lifespan",
+      "blunted_erythropoiesis"
+    ],
+
+    "complications": [],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["normocytic_anemia", "low_iron_low_tibc", "high_ferritin", "elevated_crp"],
+    "exclusionClues": ["low_ferritin", "high_tibc", "normal_crp"]
+  }
+}

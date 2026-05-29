@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "aminoglycoside_dosing",
+    "name": "Aminoglycoside Dosing and Therapeutic Monitoring",
+    "system": "PHARM",
+    "agePeak_months": [12, 840],
+    "note": "Aminoglycosides (gentamicin, tobramycin, amikacin) have concentration-dependent killing and require monitoring for efficacy and toxicity. Extended-interval dosing (7mg/kg) is standard. Peak levels monitor efficacy, trough levels monitor toxicity (nephrotoxicity and ototoxicity).",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["therapeutic_drug_monitoring", "antibiotic_dosing", "nephrotoxicity"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_kidney_injury_creatinine_rise_gt_0_5", "weight": 9 },
+        { "sign": "trough_gt_2_gentamicin_gt_10_amikacin", "weight": 8 },
+        { "sign": "anuria_or_dialysis_needed", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "peak_gentamicin_gt_12_or_amikacin_gt_40", "weight": 7 },
+          { "sign": "concomitant_nephrotoxic_drugs", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If high trough or AKI -> TOXIC; else -> THERAPEUTIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "aminoglycoside_therapy_started", "weight": 5, "modifiers": [
+          { "condition": "extended_interval_dosing", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "pre_existing_renal_impairment", "weight": 5 },
+      { "symptomId": "concomitant_vancomycin_or_contrast", "weight": 4 },
+      { "symptomId": "hearing_loss_or_vertigo", "weight": 4 },
+      { "symptomId": "prolonged_course_gt_7_days", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "peak_level_therapeutic_range", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "trough_level_toxic_range", "baseWeight": 5 },
+      { "signId": "creatinine_change_from_baseline", "baseWeight": 4 },
+      { "signId": "urine_output_monitoring", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "pre_existing_ckd", "multiplier": 3.0 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "volume_depletion", "multiplier": 1.5 },
+      { "id": "concurrent_nephrotoxins_vancomycin_nsaid", "multiplier": 2.5 },
+      { "id": "prolonged_therapy_gt_7_days", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "extended_interval_dosing",
+        "name": "Extended-Interval Dosing Protocol",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "gentamicin_tobramycin_5_7_mg_kg_dose", "weight": 5 },
+          { "feature": "amikacin_15_20_mg_kg_dose", "weight": 5 },
+          { "feature": "dosing_interval_24_36_48h_based_on_crcl", "weight": 4 },
+          { "feature": "trough_level_before_next_dose", "weight": 4 },
+          { "feature": "random_level_6_14h_post_dose", "weight": 3 }
+        ],
+        "management": "Dose 7mg/kg gentamicin (or 20mg/kg amikacin) IV. Interval based on CrCl: >60 = q24h, 40-60 = q36h, <40 = q48h. Check trough before 2nd dose: target <1 (gentamicin) or <5 (amikacin). Hartford nomogram for monitoring."
+      },
+      {
+        "id": "conventional_dosing",
+        "name": "Conventional (Multi-Daily) Dosing",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "gentamicin_1_5_2_5_mg_kg_q8h", "weight": 5 },
+          { "feature": "peak_level_1h_post_30_min_infusion", "weight": 5 },
+          { "feature": "trough_level_just_before_next_dose", "weight": 5 },
+          { "feature": "target_peak_5_10_gentamicin", "weight": 4 },
+          { "feature": "target_trough_lt_1_2_gentamicin", "weight": 4 }
+        ],
+        "management": "Used for synergy (e.g., endocarditis with ampicillin). Check steady-state levels after 3rd dose. Adjust dose to achieve target peaks. Extend interval if trough elevated. Monitor creatinine every 2-3 days."
+      },
+      {
+        "id": "ototoxicity_monitoring",
+        "name": "Aminoglycoside Ototoxicity",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "bilateral_high_frequency_hearing_loss", "weight": 5 },
+          { "feature": "vestibular_toxicity_vertigo_ataxia", "weight": 4 },
+          { "feature": "may_be_irreversible", "weight": 5 },
+          { "feature": "cumulative_dose_and_duration_correlate", "weight": 3 },
+          { "feature": "audiometry_screening", "weight": 3 }
+        ],
+        "management": "Baseline audiogram if prolonged therapy planned. Discontinue if hearing loss or vestibular symptoms develop. Avoid other ototoxins (furosemide, cisplatin). Consider switch to alternative antibiotic."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "pre_renal_aki_from_underlying_sepsis",
+        "discriminators": ["aminoglycoside_not_yet_given", "creatinine_elevated_pre_dose"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Serum creatinine (baseline and q2-3d)", "priority": "immediate", "yield": 0.9, "indication": "all patients on aminoglycosides" },
+        { "name": "Aminoglycoside trough level", "priority": "high", "yield": 0.95, "indication": "before 2nd/3rd dose for extended interval" },
+        { "name": "Aminoglycoside peak level (conventional dosing)", "priority": "high", "yield": 0.9, "indication": "1h post-dose for conventional" },
+        { "name": "Urine output monitoring", "priority": "medium", "yield": 0.6, "indication": "AKI surveillance" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "Sanford Guide, IDSA Guidelines, Hartford Nomogram",
+      "pathways": [
+        {
+          "severity": "therapeutic",
+          "criteria": "trough <1 (gentamicin), CrCl stable, no ototoxic symptoms",
+          "treatment": "Continue current regimen. Repeat levels weekly (or with change in renal function). Monitor creatinine twice weekly."
+        },
+        {
+          "severity": "toxic_levels",
+          "criteria": "trough >2 gentamicin or >10 amikacin, or rising creatinine >0.5",
+          "treatment": "Hold next dose. Recheck trough and creatinine in 24h. Recalculate dose and interval. Consider switching to alternative antibiotic. Audiology consult if hearing changes."
+        },
+        {
+          "severity": "acute_kidney_injury",
+          "criteria": "creatinine rise >0.5mg/dL or >50% from baseline, oliguria",
+          "treatment": "Discontinue aminoglycoside immediately. Hydrate. Avoid other nephrotoxins. Nephrology consult. Drug level monitoring. May need RRT if severe."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "concentration_dependent_killing",
+      "renal_cortical_accumulation",
+      "tubular_injury_necrosis",
+      "cochlear_hair_cell_damage",
+      "vestibular_toxicity"
+    ],
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury_nephrotoxic",
+        "probability": 0.15,
+        "lagDays": [3, 10],
+        "severityBoost": 0.5,
+        "clues": ["rising_creatinine", "elevated_troughs", "oliguria"]
+      },
+      {
+        "diseaseId": "hearing_loss_ototoxic",
+        "probability": 0.05,
+        "lagDays": [14, 90],
+        "severityBoost": 0.3,
+        "clues": ["high_frequency_loss", "tinnitus", "cumulative_dose_high"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["aminoglycoside_therapy", "renal_function_monitoring", "drug_levels_out_of_range"],
+    "exclusionClues": ["not_on_aminoglycoside", "normal_renal_function_and_levels"]
+  }
+}

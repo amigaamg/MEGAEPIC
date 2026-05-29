@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "diabetes_mellitus_type2",
+    "name": "Type 2 Diabetes Mellitus",
+    "system": "internal_medicine",
+    "agePeak_months": [480, 840],
+    "note": "Metabolic disorder characterized by hyperglycemia due to insulin resistance and relative insulin deficiency.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["metabolic_disorder", "hyperglycemia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "diabetic_ketoacidosis_or_hhs", "weight": 10 },
+        { "sign": "hypoglycemia_severe", "weight": 9 },
+        { "sign": "severe_hyperglycemia_symptoms", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "HbA1c <7% = CONTROLLED; 7-9% = UNCONTROLLED; >9% = POORLY CONTROLLED"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "polyuria", "weight": 4 },
+      { "symptomId": "polydipsia", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "blurred_vision", "weight": 2 },
+      { "symptomId": "recurrent_infections", "weight": 2 },
+      { "symptomId": "slow_wound_healing", "weight": 2 },
+      { "symptomId": "family_history_diabetes", "weight": 3 },
+      { "symptomId": "obesity", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "obesity_high_bmi", "baseWeight": 4 },
+      { "signId": "acanthosis_nigricans", "baseWeight": 3 },
+      { "signId": "hypertension", "baseWeight": 3 },
+      { "signId": "central_obesity", "baseWeight": 3 },
+      { "signId": "signs_of_neuropathy", "baseWeight": 2 },
+      { "signId": "foot_ulcers", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "bmi_over_30", "multiplier": 3.0 },
+      { "id": "family_history", "multiplier": 2.5 },
+      { "id": "sedentary_lifestyle", "multiplier": 2.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "gestational_diabetes_history", "multiplier": 3.0 },
+      { "id": "polycystic_ovary_syndrome", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "type_1_diabetes",
+        "discriminators": ["younger_age", "ketosis_prone", "low_c_peptide", "positive_antibodies"]
+      },
+      {
+        "diseaseId": "steroid_induced_diabetes",
+        "discriminators": ["corticosteroid_use", "temporal_relationship"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Fasting blood glucose", "priority": "immediate", "yield": 0.85, "indication": ">=7.0 mmol/L = diabetes" },
+        { "name": "HbA1c", "priority": "high", "yield": 0.9, "indication": ">=48 mmol/mol (6.5%) = diabetes, monitoring" },
+        { "name": "OGTT 75g", "priority": "medium", "yield": 0.85, "indication": "borderline cases" },
+        { "name": "Fasting lipid profile", "priority": "high", "yield": 0.6, "indication": "comorbidity assessment" },
+        { "name": "Urine ACR, Serum creatinine", "priority": "high", "yield": 0.5, "indication": "nephropathy screening" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ADA Standards of Medical Care in Diabetes",
+      "pathways": [
+        {
+          "severity": "early/controlled",
+          "criteria": "HbA1c <7.5%, no complications",
+          "treatment": "Metformin first-line. Lifestyle modification (diet, exercise, weight loss). Annual complication screening."
+        },
+        {
+          "severity": "uncontrolled",
+          "criteria": "HbA1c >7.5% despite metformin",
+          "treatment": "Add second agent (SGLT2i, DPP4i, sulfonylurea, GLP-1 RA). Consider insulin if HbA1c >9%. Cardiovascular and renal protective agents preferred."
+        },
+        {
+          "severity": "hyperglycemic emergency",
+          "criteria": "DKA or HHS",
+          "treatment": "IV fluids. Insulin infusion. Correct electrolytes. Identify and treat precipitant. ICU admission."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "insulin_resistance",
+      "beta_cell_dysfunction",
+      "impaired_glucose_uptake",
+      "increased_hepatic_gluconeogenesis",
+      "metabolic_syndrome",
+      "chronic_hyperglycemia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "diabetic_nephropathy",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["albuminuria", "declining_egfr"]
+      },
+      {
+        "diseaseId": "diabetic_retinopathy",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["visual_changes", "fundoscopic_findings"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["polyuria_polydipsia", "weight_loss", "elevated_fbg_hba1c", "obesity_family_history"],
+    "exclusionClues": ["normal_fbg_hba1c", "no_symptoms"]
+  }
+}

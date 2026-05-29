@@ -1,0 +1,150 @@
+{
+  "disease": {
+    "id": "plantar_fasciitis",
+    "name": "Plantar Fasciitis",
+    "system": "rheumatology",
+    "agePeak_months": [480, 720],
+    "note": "Common cause of heel pain due to degeneration and microtears of the plantar fascia at its origin on the medial calcaneal tubercle. Typically presents with sharp first-step pain in the morning that improves with activity.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["soft_tissue", "foot_pain", "heel_pain", "fasciopathy", "overuse"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "calcaneal_stress_fracture", "weight": 7 },
+        { "sign": "plantar_fascia_rupture", "weight": 6 },
+        { "sign": "tarsal_tunnel_syndrome_severe", "weight": 5 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If suspected fracture or rupture -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "heel_pain_first_steps_morning", "weight": 5 },
+      { "symptomId": "sharp_stabbing_heel_pain", "weight": 5 },
+      { "symptomId": "improves_after_walking_few_minutes", "weight": 4 },
+      { "symptomId": "worsens_after_prolonged_standing", "weight": 4 },
+      { "symptomId": "pain_reproduced_calcaneal_medial", "weight": 4 },
+      { "symptomId": "increased_activity_standing_work", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "medial_calcaneal_tubercle_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "windlass_test_positive", "baseWeight": 4 },
+      { "signId": "tight_achilles_gastrocnemius", "baseWeight": 3 },
+      { "signId": "pes_planus_or_cavus", "baseWeight": 2 },
+      { "signId": "ankle_dorsiflexion_limited", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "tight_gastrocnemius_achilles", "multiplier": 3.0 },
+      { "id": "pes_planus_flat_feet", "multiplier": 2.5 },
+      { "id": "obesity_increased_bmi", "multiplier": 3.0 },
+      { "id": "prolonged_standing_occupation", "multiplier": 2.0 },
+      { "id": "running_increased_mileage", "multiplier": 2.5 },
+      { "id": "poor_footwear", "multiplier": 2.0 },
+      { "id": "age_40_60", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mechanical_plantar_fasciitis",
+        "name": "Mechanical Plantar Fasciitis",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "classic_first_step_pain", "weight": 5 },
+          { "feature": "biomechanical_predisposition", "weight": 4 },
+          { "feature": "responds_to_conservative_care", "weight": 4 }
+        ],
+        "management": "Stretching (gastrocnemius, plantar fascia). Orthotics. NSAIDs. Night splint."
+      },
+      {
+        "id": "reactive_enthesitis_pf",
+        "name": "Plantar Fasciitis as Enthesitis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "bilateral_heel_pain", "weight": 4 },
+          { "feature": "other_enthesitis_sites", "weight": 4 },
+          { "feature": "associated_spondyloarthritis", "weight": 5 }
+        ],
+        "management": "Treat underlying spondyloarthritis. NSAIDs. Physiotherapy. TNF inhibitors if systemic disease."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "calcaneal_stress_fracture",
+        "discriminators": ["non_weight_bearing_pain", "tender_calcaneal_body", "insult_imaging_mri", "recent_increase_activity"]
+      },
+      {
+        "diseaseId": "tarsal_tunnel_syndrome",
+        "discriminators": ["burning_numbness_medial_arch", "positive_tinel_tarsal", "nerve_conduction_abnormal"]
+      },
+      {
+        "diseaseId": "achilles_tendinopathy",
+        "discriminators": ["posterior_heel_pain", "tenderness_achilles_insertion", "no_plantar_medial_pain"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Heel palpation and Windlass test", "priority": "immediate", "yield": 0.9, "indication": "reproduce plantar fascia pain" },
+        { "name": "Squeeze test for stress fracture", "priority": "high", "yield": 0.5, "indication": "exclude calcaneal fracture" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Foot X-ray", "priority": "medium", "yield": 0.3, "indication": "exclude fracture, calcaneal spur (incidental)" },
+        { "name": "Foot ultrasound", "priority": "medium", "yield": 0.85, "indication": "thickened plantar fascia > 4 mm, hypoechogenicity" },
+        { "name": "MRI foot", "priority": "low", "yield": 0.9, "indication": "edema, partial tears, exclude other pathology" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Clinical Practice Guidelines for Plantar Fasciitis",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "first step pain only, minimal activity impact",
+          "treatment": "Calf and plantar fascia stretching. Supportive footwear. Ice massage. OTC orthotics."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "persistent pain, difficulty standing for > 30 min",
+          "treatment": "Night splint. Physical therapy (manual therapy, stretching). NSAIDs. Custom orthotics."
+        },
+        {
+          "severity": "refractory",
+          "criteria": "> 6 months, failed conservative therapy",
+          "treatment": "Extracorporeal shockwave therapy. Steroid injection (caution: rupture risk). PRP injection. Plantar fasciotomy (last resort)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "repetitive_microtrauma",
+      "collagen_degeneration",
+      "fasciosis_not_fasciitis",
+      "myxoid_degeneration",
+      "vascular_compromise",
+      "biomechanical_overload"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "plantar_fascia_rupture",
+        "probability": 0.02,
+        "severityBoost": 0.7,
+        "clues": ["sudden_sharp_pain", "ecchymosis_arch", "flat_foot_deformity", "steroid_injection_history"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["first_step_morning_heel_pain", "medial_calcaneal_tenderness", "improves_after_walking", "windlass_test_positive"],
+    "exclusionClues": ["posterior_heel_pain", "burning_numbness", "diffuse_foot_pain", "inflammatory_back_pain"]
+  }
+}

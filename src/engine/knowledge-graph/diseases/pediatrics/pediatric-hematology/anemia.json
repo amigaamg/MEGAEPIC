@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "anemia",
+    "name": "Anemia (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [6, 36],
+    "note": "Reduction in hemoglobin concentration below age-adjusted normal. Iron deficiency most common cause. Also hemolytic, megaloblastic, aplastic anemias.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["low_hemoglobin", "pallor"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_anemia_hb_<4", "weight": 10 },
+        { "sign": "heart_failure_anemic", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hemoglobin_<7", "weight": 8 },
+          { "sign": "tachycardia_at_rest", "weight": 7 },
+          { "sign": "jaundice_hemolysis", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If Hb <7, heart failure, or acute hemolysis -> SEVERE; else -> NON-SEVERE (mild-moderate anemia)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "pallor_fatigue", "weight": 5 },
+      { "symptomId": "poor_feeding_irritability", "weight": 3 },
+      { "symptomId": "pica_soil_ice_craving", "weight": 3, "note": "Iron deficiency anemia" },
+      { "symptomId": "shortness_of_breath_on_exertion", "weight": 3 },
+      { "symptomId": "jaundice_dark_urine", "weight": 3, "note": "Hemolytic anemia" },
+      { "symptomId": "bleeding_tendencies", "weight": 3 },
+      { "symptomId": "poor_dietary_history", "weight": 4 },
+      { "symptomId": "recurrent_infections", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor_conjunctival_palmar", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "systolic_flow_murmur", "baseWeight": 3 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "koilonychia", "baseWeight": 2, "note": "Spoon nails in iron deficiency" },
+      { "signId": "glossitis", "baseWeight": 2 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 3 },
+      { "signId": "growth_retardation", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "exclusive_breastfeeding_beyond_6_months_no_iron", "multiplier": 3.0 },
+      { "id": "prematurity_low_birth_weight", "multiplier": 2.5 },
+      { "id": "poor_dietary_iron_intake", "multiplier": 3.0 },
+      { "id": "chronic_infections_inflammatory", "multiplier": 2.0 },
+      { "id": "family_history_hemoglobinopathy", "multiplier": 2.5 },
+      { "id": "gi_blood_loss_malabsorption", "multiplier": 2.5 },
+      { "id": "lead_exposure", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "iron_deficiency_anemia",
+        "name": "Iron Deficiency Anemia",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "microcytic_hypochromic", "weight": 5 },
+          { "feature": "low_ferritin", "weight": 5 },
+          { "feature": "pica", "weight": 3 },
+          { "feature": "poor_dietary_history", "weight": 4 }
+        ],
+        "management": "Oral iron supplementation (3-6 mg/kg/day elemental iron). Dietary counseling (red meat, fortified cereals, vitamin C for absorption). Treat underlying cause (GI bleeding). Follow Hb at 4 weeks."
+      },
+      {
+        "id": "hemolytic_anemia",
+        "name": "Hemolytic Anemia (Not Sickle/Thalassemia)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "jaundice", "weight": 5 },
+          { "feature": "reticulocytosis", "weight": 5 },
+          { "feature": "splenomegaly", "weight": 4 },
+          { "feature": "dark_urine", "weight": 3 }
+        ],
+        "management": "Folic acid supplementation. Identify and treat cause (antibody-mediated, G6PD, autoimmune). Steroids for autoimmune hemolytic anemia. Transfusion if severe. Splenectomy if refractory."
+      },
+      {
+        "id": "megaloblastic_anemia",
+        "name": "Megaloblastic Anemia (B12/Folate Deficiency)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "macrocytic_anemia", "weight": 5 },
+          { "feature": "glossitis", "weight": 3 },
+          { "feature": "neurologic_symptoms", "weight": 3 },
+          { "feature": "dietary_b12_or_folate_deficiency", "weight": 4 }
+        ],
+        "management": "Vitamin B12 injections (1000 mcg IM daily for 1 week, then weekly) if B12 deficient. Folic acid 5 mg/day if folate deficient. Treat underlying cause (malabsorption, vegetarian diet)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "thalassemia_trait",
+        "discriminators": ["normal_ferritin", "mentzer_index_<13", "elevated_hba2", "no_response_to_iron"]
+      },
+      {
+        "diseaseId": "anemia_of_chronic_disease",
+        "discriminators": ["chronic_inflammatory_condition", "normal_ferritin_or_high", "low_iron_but_normal_transferrin"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC with RBC indices and reticulocyte count", "priority": "immediate", "yield": 0.95, "indication": "classification of anemia" },
+        { "name": "Peripheral blood film", "priority": "high", "yield": 0.85, "indication": "cell morphology, parasites" },
+        { "name": "Serum ferritin", "priority": "high", "yield": 0.85, "indication": "iron stores" },
+        { "name": "Serum iron and TIBC", "priority": "medium", "yield": 0.7, "indication": "iron deficiency confirmation" },
+        { "name": "B12 and folate levels", "priority": "medium", "yield": 0.5, "indication": "megaloblastic anemia" },
+        { "name": "Hb electrophoresis", "priority": "medium", "yield": 0.7, "indication": "hemoglobinopathies" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO/UNICEF Guidelines for Anemia Management",
+      "pathways": [
+        {
+          "severity": "mild_moderate_hb_7_to_11",
+          "criteria": "Hb >7, compensated, no cardiac compromise",
+          "treatment": "Oral iron 3-6 mg/kg/day elemental (for IDA). Treat underlying cause. Dietary counseling. Recheck Hb in 4 weeks. Continue iron for 3 months after Hb normal to replenish stores."
+        },
+        {
+          "severity": "severe_hb_<7_or_acute_decompensation",
+          "criteria": "Hb <7, symptomatic, cardiac compromise, acute severe hemolysis",
+          "treatment": "Hospitalize. PRBC transfusion 10-15 mL/kg (slowly, with furosemide if cardiac compromise). Identify and treat specific cause. ICU if heart failure. IV iron if severe IDA."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "reduced_rbc_production",
+      "increased_rbc_destruction",
+      "nutritional_deficiency",
+      "blood_loss",
+      "ineffective_erythropoiesis",
+      "hemolysis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "heart_failure",
+        "probability": 0.1,
+        "lagDays": [30, 365],
+        "severityBoost": 0.5,
+        "clues": ["hb_<5", "tachycardia", "cardiomegaly", "hepatomegaly"]
+      },
+      {
+        "diseaseId": "cognitive_impairment",
+        "probability": 0.3,
+        "lagDays": [180, 1095],
+        "severityBoost": 0.3,
+        "clues": ["chronic_iron_deficiency", "age_<2_years"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["pallor", "fatigue", "pica", "microcytosis", "low_ferritin"],
+    "exclusionClues": ["normal_hb", "normal_rbc_indices", "well_appearing"]
+  }
+}

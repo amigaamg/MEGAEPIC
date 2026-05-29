@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "peripheral_arterial_disease",
+    "name": "Peripheral Arterial Disease",
+    "system": "CARD",
+    "agePeak_months": [540, 1080],
+    "note": "Atherosclerotic occlusive disease of lower extremity arteries. Range: asymptomatic to critical limb ischemia.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["vascular_disease", "atherosclerosis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_limb_ischemia", "weight": 10 },
+        { "sign": "critical_limb_ischemia", "weight": 9 },
+        { "sign": "rest_pain", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If acute ischemia/rest pain/tissue loss -> URGENT; else -> CLAUDICATION"
+    },
+    "historyFeatures": [
+      { "symptomId": "intermittent_claudication", "weight": 5 },
+      { "symptomId": "leg_pain_with_walking", "weight": 5 },
+      { "symptomId": "relieved_by_rest", "weight": 4 },
+      { "symptomId": "rest_pain", "weight": 4 },
+      { "symptomId": "numbness_or_coolness_of_foot", "weight": 3 },
+      { "symptomId": "slow_healing_wounds", "weight": 3 },
+      { "symptomId": "hair_loss_on_legs", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "absent_or_diminished_pedal_pulses", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "femoral_bruit", "baseWeight": 3 },
+      { "signId": "cool_skin", "baseWeight": 3 },
+      { "signId": "pallor_on_elevation", "baseWeight": 3 },
+      { "signId": "dependent_rubor", "baseWeight": 3 },
+      { "signId": "trophic_changes_hair_loss_nail", "baseWeight": 2 },
+      { "signId": "ulceration_or_gangrene", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 3.0 },
+      { "id": "diabetes", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "dyslipidemia", "multiplier": 1.5 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.0 },
+      { "id": "age_over_70", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "intermittent_claudication",
+        "name": "Intermittent Claudication (Fontaine I-II)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "muscle_cramp_pain_with_walking", "weight": 5 },
+          { "feature": "relieved_within_minutes_of_rest", "weight": 5 },
+          { "feature": "ankle_brachial_index_0_5_0_9", "weight": 4 }
+        ],
+        "management": "Supervised exercise therapy. Antiplatelet (aspirin or clopidogrel). Statin. Smoking cessation. Revascularization if disabling."
+      },
+      {
+        "id": "critical_limb_ischemia",
+        "name": "Critical Limb Ischemia (Fontaine III-IV)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "rest_pain_greater_2_weeks", "weight": 5 },
+          { "feature": "non_healing_ulcer", "weight": 5 },
+          { "feature": "abi_less_0_4", "weight": 5 }
+        ],
+        "management": "Urgent revascularization (endovascular or surgical bypass). Wound care. Antiplatelet + statin. Pain management. Amputation if unsalvageable."
+      },
+      {
+        "id": "acute_limb_ischemia",
+        "name": "Acute Limb Ischemia",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "sudden_pain_pallor_pulselessness", "weight": 5 },
+          { "feature": "paresthesia_paralysis", "weight": 5 },
+          { "feature": "sensory_or_motor_loss", "weight": 5 }
+        ],
+        "management": "Emergency heparin IV. Urgent embolectomy/thrombectomy or catheter-directed thrombolysis. Fasciotomy if compartment syndrome. Limb amputation if non-viable."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "neurogenic_claudication_spinal_stenosis", "discriminators": ["relieved_by_sitting_bending", "radicular_symptoms", "normal_pulses"] },
+      { "diseaseId": "chronic_venous_insufficiency", "discriminators": ["varicose_veins", "hyperpigmentation", "venous_ulcers"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Ankle-brachial index (ABI)", "priority": "immediate", "yield": 0.9, "indication": "ABI <0.9 diagnostic, <0.5 severe disease" },
+        { "name": "Toe-brachial index", "priority": "medium", "yield": 0.8, "indication": "if ABI unreliable (calcified vessels)" }
+      ],
+      "imaging": [
+        { "name": "Duplex ultrasound", "priority": "high", "yield": 0.85, "indication": "anatomic localization, stenosis severity" },
+        { "name": "CT angiography", "priority": "high", "yield": 0.95, "indication": "pre-revascularization planning" },
+        { "name": "Digital subtraction angiography", "priority": "medium", "yield": 0.98, "indication": "gold standard, can treat simultaneously" }
+      ],
+      "laboratory": [
+        { "name": "Fasting lipids, glucose, HbA1c", "priority": "high", "yield": 0.4, "indication": "CV risk assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Peripheral Arterial Disease",
+      "pathways": [
+        {
+          "severity": "claudication",
+          "criteria": "ABI 0.5-0.9, stable symptoms, no rest pain",
+          "treatment": "Supervised exercise 30-45 min, 3-5x/week. Aspirin 75-100 mg. Statin (atorvastatin 80 mg). Clopidogrel if aspirin intolerant. Smoking cessation."
+        },
+        {
+          "severity": "critical limb ischemia",
+          "criteria": "rest pain, ulceration, ABI <0.4",
+          "treatment": "Urgent vascular referral. Endovascular (angioplasty/stent) or surgical bypass. Wound debridement. Antiplatelet + statin. Pain management. Antibiotics if infection."
+        },
+        {
+          "severity": "acute limb ischemia",
+          "criteria": "sudden onset, threatened limb viability (sensory/motor loss)",
+          "treatment": "IV heparin 5000 U bolus + 1000 U/h infusion. Emergent embolectomy/thrombectomy. Catheter-directed thrombolysis if salvageable. Fasciotomy. Amputation if non-viable >6h."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "atherosclerotic_occlusion",
+      "reduced_blood_flow",
+      "muscle_ischemia_during_exercise",
+      "collateral_circulation",
+      "microvascular_dysfunction",
+      "tissue_hypoxia_ulceration"
+    ],
+    "complications": [
+      { "diseaseId": "critical_limb_ischemia", "probability": 0.1, "severityBoost": 0.4, "clues": ["rest_pain", "ulceration"] },
+      { "diseaseId": "myocardial_infarction", "probability": 0.05, "severityBoost": 0.4, "clues": ["chest_pain", "low_abi_associated"] },
+      { "diseaseId": "amputation", "probability": 0.05, "severityBoost": 0.5, "clues": ["non_healing_ulcer", "gangrene"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["intermittent_claudication", "absent_foot_pulses", "low_abi", "risk_factors"],
+    "exclusionClues": ["normal_pulses", "normal_abi", "venous_or_neurogenic_cause"]
+  }
+}

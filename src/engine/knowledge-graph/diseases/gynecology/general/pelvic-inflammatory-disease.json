@@ -1,0 +1,178 @@
+{
+  "disease": {
+    "id": "pelvic_inflammatory_disease",
+    "name": "Pelvic Inflammatory Disease (PID)",
+    "system": "GYN",
+    "agePeak_months": [240, 360],
+    "note": "Infection of the upper female genital tract, including endometritis, salpingitis, oophoritis, and pelvic peritonitis. Major cause of tubal infertility and ectopic pregnancy.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["pelvic_pain", "genital_tract_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "tubo_ovarian_abscess_rupture", "weight": 10 },
+        { "sign": "peritonitis_generalized", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_fever_over_38_5", "weight": 7 },
+          { "sign": "tubo_ovarian_abscess_on_imaging", "weight": 8 },
+          { "sign": "rebound_tenderness", "weight": 7 },
+          { "sign": "nausea_vomiting", "weight": 5 },
+          { "sign": "leukocytosis_marked", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Abscess, peritonitis, or sepsis -> SEVERE; Mild salpingitis without mass -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "lower_abdominal_pain_bilateral", "weight": 5 },
+      { "symptomId": "abnormal_vaginal_discharge", "weight": 4 },
+      { "symptomId": "dyspareunia", "weight": 3 },
+      { "symptomId": "intermenstrual_bleeding", "weight": 3 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "urinary_symptoms", "weight": 2 },
+      { "symptomId": "malaise_fatigue", "weight": 2 },
+      { "symptomId": "infertility_history", "weight": 2 },
+      { "symptomId": "IUD_in_situ_history", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "cervical_motion_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "adnexal_tenderness", "baseWeight": 5 },
+      { "signId": "uterine_tenderness", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "abnormal_purulent_cervical_discharge", "baseWeight": 4 },
+      { "signId": "rebound_tenderness_or_guarding", "baseWeight": 3 },
+      { "signId": "palpable_adnexal_mass_abscess", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "multiple_sexual_partners", "multiplier": 2.5 },
+      { "id": "age_under_25", "multiplier": 2.0 },
+      { "id": "IUD_insertion_recent", "multiplier": 2.0 },
+      { "id": "previous_PID", "multiplier": 3.0 },
+      { "id": "STI_history_gonorrhea_chlamydia", "multiplier": 3.0 },
+      { "id": "douching", "multiplier": 1.5 },
+      { "id": "cervical_ectopy", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_pid",
+        "name": "Acute PID",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "acute_onset_lower_abdominal_pain", "weight": 5 },
+          { "feature": "fever", "weight": 4 },
+          { "feature": "purulent_discharge", "weight": 4 },
+          { "feature": "cervical_motion_tenderness", "weight": 5 }
+        ],
+        "management": "IV broad-spectrum antibiotics (Ceftriaxone + Doxycycline + Metronidazole). Analgesia. IUD removal if present. Hospitalization if severe."
+      },
+      {
+        "id": "tubo_ovarian_abscess",
+        "name": "Tubo-Ovarian Abscess",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "palpable_adnexal_mass", "weight": 5 },
+          { "feature": "high_fever_chills", "weight": 5 },
+          { "feature": "persistent_pain_despite_antibiotics", "weight": 4 },
+          { "feature": "complex_cystic_mass_on_ultrasound", "weight": 5 }
+        ],
+        "management": "Hospitalization. IV antibiotics. Percutaneous or transvaginal drainage. Laparoscopic drainage if large. Salpingo-oophorectomy if rupture."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_appendicitis",
+        "discriminators": ["pain_migration_to_rlq", "anorexia", "no_cervical_motion_tenderness"]
+      },
+      {
+        "diseaseId": "ovarian_cyst_rupture",
+        "discriminators": ["sudden_onset", "no_fever", "no_vaginal_discharge"]
+      },
+      {
+        "diseaseId": "endometriosis",
+        "discriminators": ["cyclical_pain", "no_fever", "chronic_course"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Vital signs", "priority": "immediate", "yield": 0.7, "indication": "fever, tachycardia" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "high", "yield": 0.7, "indication": "leukocytosis" },
+        { "name": "CRP / ESR", "priority": "high", "yield": 0.7, "indication": "inflammatory markers" },
+        { "name": "NAAT for Chlamydia and Gonorrhea (cervical/urine)", "priority": "high", "yield": 0.8, "indication": "identify pathogen" },
+        { "name": "High vaginal swab / endocervical swab", "priority": "high", "yield": 0.7, "indication": "culture and sensitivity" },
+        { "name": "HIV and syphilis serology", "priority": "medium", "yield": 0.3, "indication": "STI screening" },
+        { "name": "Pregnancy test (beta-hCG)", "priority": "immediate", "yield": 0.9, "indication": "rule out ectopic pregnancy" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound", "priority": "high", "yield": 0.8, "indication": "thickened tubes, free fluid, abscess" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CDC STD Treatment Guidelines / RCOG PID Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "no abscess, mild symptoms, tolerating oral, no fever >38",
+          "treatment": "Outpatient: Ceftriaxone 500mg IM single dose + Doxycycline 100mg PO BID x 14 days + Metronidazole 400mg PO BID x 14 days. Partner treatment. Abstinence until treatment complete."
+        },
+        {
+          "severity": "severe",
+          "criteria": "high fever, abscess, peritonitis, intolerance to oral medications",
+          "treatment": "Admit. IV antibiotics: Ceftriaxone 2g IV daily + Doxycycline 100mg IV/PO BID + Metronidazole 500mg IV TDS. Switch to oral after 24-48h afebrile. Drain if abscess >4cm. Analgesia. Monitor for complications."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ascending_infection_from_lower_genital_tract",
+      "cervical_mucus_disruption",
+      "endometrial_invasion",
+      "tubal_mucosal_damage",
+      "adhesion_formation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tubal_infertility",
+        "probability": 0.1,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.3,
+        "clues": ["chronic_pelvic_pain", "hydrosalpinx"]
+      },
+      {
+        "diseaseId": "ectopic_pregnancy",
+        "probability": 0.05,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.4,
+        "clues": ["tubal_damage", "previous_pid"]
+      },
+      {
+        "diseaseId": "chronic_pelvic_pain",
+        "probability": 0.2,
+        "lagDays": [90, 730],
+        "severityBoost": 0.2,
+        "clues": ["adhesions", "hydrosalpinx"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["bilateral_lower_abdominal_pain", "cervical_motion_tenderness", "vaginal_discharge", "fever"],
+    "exclusionClues": ["negative_cervical_swabs", "no_adnexal_tenderness", "negative_pregnancy_test_without_pain"]
+  }
+}

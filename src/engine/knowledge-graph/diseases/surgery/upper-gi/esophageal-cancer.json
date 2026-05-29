@@ -1,0 +1,186 @@
+{
+  "disease": {
+    "id": "esophageal_cancer",
+    "name": "Esophageal Cancer",
+    "system": "surgical",
+    "agePeak_months": [600, 840],
+    "note": "Progressive dysphagia, weight loss. Squamous cell and adenocarcinoma are the two main histological types.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["dysphagia", "weight_loss", "esophageal_mass"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "complete_esophageal_obstruction", "weight": 8 },
+        { "sign": "hematemesis_massive", "weight": 9 },
+        { "sign": "tracheoesophageal_fistula", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "malignant_pleural_effusion", "weight": 7 },
+          { "sign": "recurrent_laryngeal_nerve_palsy", "weight": 7 },
+          { "sign": "distant_metastases", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Metastatic/fistula/complete obstruction -> SEVERE; early/localized -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "progressive_dysphagia", "weight": 5, "modifiers": [
+          { "condition": "solids_then_liquids", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "weight_loss", "weight": 5 },
+      { "symptomId": "odynophagia", "weight": 3 },
+      { "symptomId": "regurgitation", "weight": 3 },
+      { "symptomId": "chronic_reflux_history", "weight": 4, "note": "Barrett's esophagus in adenocarcinoma" },
+      { "symptomId": "smoking_and_alcohol", "weight": 4, "note": "Main risk for squamous cell" },
+      { "symptomId": "hoarseness", "weight": 3, "note": "Recurrent laryngeal nerve involvement" },
+      { "symptomId": "cough_with_swallowing", "weight": 4, "note": "Tracheoesophageal fistula" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "cachexia", "baseWeight": 3 },
+      { "signId": "supraclavicular_lymphadenopathy", "baseWeight": 4, "note": "Virchow's node" },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "pleural_effusion_signs", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 3.0 },
+      { "id": "heavy_alcohol_use", "multiplier": 3.5 },
+      { "id": "barretts_esophagus", "multiplier": 5.0 },
+      { "id": "chronic_gastroesophageal_reflux", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "achalasia_history", "multiplier": 2.0 },
+      { "id": "tylosis", "multiplier": 5.0 },
+      { "id": "plummer_vinson_syndrome", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "esophageal_squamous_cell_carcinoma",
+        "name": "Squamous Cell Carcinoma",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "mid_esophageal_location", "weight": 4 },
+          { "feature": "smoking_alcohol_history", "weight": 5 },
+          { "feature": "dysphagia_progressive", "weight": 5 }
+        ],
+        "management": "Neoadjuvant chemoradiation (CROSS regimen) followed by esophagectomy (Ivor Lewis or McKeown). Definitive chemoradiation if unresectable."
+      },
+      {
+        "id": "esophageal_adenocarcinoma",
+        "name": "Adenocarcinoma",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "distal_esophagus_gej_location", "weight": 5 },
+          { "feature": "barretts_esophagus_history", "weight": 5 },
+          { "feature": "reflux_history", "weight": 4 },
+          { "feature": "obesity", "weight": 3 }
+        ],
+        "management": "Neoadjuvant chemoradiation or perioperative chemotherapy. Esophagectomy (Ivor Lewis or transhiatal). Targeted therapy if HER2 positive."
+      },
+      {
+        "id": "esophageal_small_cell",
+        "name": "Small Cell Carcinoma",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "rapid_progression", "weight": 5 },
+          { "feature": "early_metastasis", "weight": 5 },
+          { "feature": "paraneoplastic_syndromes", "weight": 3 }
+        ],
+        "management": "Chemotherapy (platinum-based + etoposide). Palliative radiotherapy. Surgery rarely indicated."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "benign_esophageal_stricture",
+        "discriminators": ["long_history_of_reflux", "no_weight_loss", "responds_to_dilatation", "benign_appearance_on_endoscopy"]
+      },
+      {
+        "diseaseId": "achalasia_cardia",
+        "discriminators": ["intermittent_dysphagia", "bird_beak_on_barium", "manometry_confirms", "younger_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Swallow test", "priority": "high", "yield": 0.5, "indication": "assess degree of dysphagia" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.4, "indication": "anemia from chronic disease" },
+        { "name": "LFTs", "priority": "high", "yield": 0.4, "indication": "liver metastases" },
+        { "name": "Albumin", "priority": "medium", "yield": 0.3, "indication": "nutritional status" }
+      ],
+      "imaging": [
+        { "name": "Upper GI Endoscopy with biopsy", "priority": "immediate", "yield": 0.98, "indication": "gold standard for diagnosis" },
+        { "name": "Endoscopic Ultrasound (EUS)", "priority": "high", "yield": 0.9, "indication": "T and N staging" },
+        { "name": "CT Chest/Abdomen with IV contrast", "priority": "high", "yield": 0.85, "indication": "staging and detect metastases" },
+        { "name": "PET-CT", "priority": "high", "yield": 0.85, "indication": "detect occult metastases" },
+        { "name": "Barium swallow", "priority": "medium", "yield": 0.75, "indication": "morphology and level of obstruction" },
+        { "name": "Bronchoscopy", "priority": "medium", "yield": 0.5, "indication": "tracheal invasion in upper/mid tumors" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Esophageal Cancer",
+      "pathways": [
+        {
+          "severity": "early (T1a, N0)",
+          "criteria": "confined to mucosa, no node involvement",
+          "treatment": "Endoscopic mucosal resection (EMR) or endoscopic submucosal dissection (ESD). Radiofrequency ablation for Barrett's."
+        },
+        {
+          "severity": "locally advanced (T2-T4, N+)",
+          "criteria": "invasion beyond submucosa, node positive, resectable",
+          "treatment": "Neoadjuvant chemoradiation (CROSS: Carboplatin + Paclitaxel + 41.4Gy). Esophagectomy (Ivor Lewis or McKeown)."
+        },
+        {
+          "severity": "metastatic (M1)",
+          "criteria": "distant metastases, T4b unresectable",
+          "treatment": "Palliative chemotherapy. SEMS for dysphagia. Palliative radiotherapy. Best supportive care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_inflammation",
+      "metaplasia",
+      "dysplasia",
+      "carcinoma_in_situ",
+      "invasive_carcinoma",
+      "lymphatic_spread",
+      "hematogenous_spread"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tracheoesophageal_fistula",
+        "probability": 0.05,
+        "lagDays": [30, 180],
+        "severityBoost": 0.5,
+        "clues": ["cough_with_swallowing", "recurrent_pneumonia", "aspiration"]
+      },
+      {
+        "diseaseId": "complete_esophageal_obstruction",
+        "probability": 0.1,
+        "lagDays": [30, 180],
+        "severityBoost": 0.3,
+        "clues": ["inability_to_swallow_saliva", "regurgitation", "aspiration"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["progressive_dysphagia", "weight_loss", "age_over_50", "smoking_alcohol_or_reflux_history"],
+    "exclusionClues": ["intermittent_dysphagia", "no_weight_loss", "normal_endoscopy"]
+  }
+}

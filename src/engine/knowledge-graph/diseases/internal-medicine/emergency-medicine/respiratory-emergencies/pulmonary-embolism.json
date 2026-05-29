@@ -1,0 +1,128 @@
+{
+  "disease": {
+    "id": "pulmonary_embolism",
+    "name": "Pulmonary Embolism",
+    "system": "emergency_medicine",
+    "agePeak_months": [480, 960],
+    "note": "Occlusion of pulmonary arteries by thrombus from deep veins. High mortality if untreated. Stratify by PE severity: massive (high-risk) vs submassive vs low-risk. MUST consider PE in unexplained breathlessness.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["respiratory_emergency", "thromboembolism", "chest_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "obstructive_shock_hypotension", "weight": 10 },
+        { "sign": "severe_hypoxia", "weight": 9 },
+        { "sign": "right_heart_strain_on_echo", "weight": 9 },
+        { "sign": "syncope", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "HIGH-RISK PE (hypotensive) = critical emergency requiring immediate reperfusion. Intermediate/low risk = anticoagulate."
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_onset_dyspnea", "weight": 5 },
+      { "symptomId": "pleuritic_chest_pain", "weight": 4 },
+      { "symptomId": "cough_haemoptysis", "weight": 3 },
+      { "symptomId": "syncope_or_near_syncope", "weight": 4 },
+      { "symptomId": "unilateral_leg_swelling_pain", "weight": 4 },
+      { "symptomId": "risk_factors_dvt_surgery_immobilisation", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "hypoxia", "baseWeight": 5 },
+      { "signId": "hypotension_massive_pe", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "distended_neck_veins", "baseWeight": 3 },
+      { "signId": "right_ventricular_heave", "baseWeight": 3 },
+      { "signId": "loud_p2", "baseWeight": 3 },
+      { "signId": "leg_swelling_tenderness", "baseWeight": 3 },
+      { "signId": "crackles_or_pleural_rub", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "recent_surgery_trauma", "multiplier": 3.0 },
+      { "id": "immobilisation_long_travel", "multiplier": 2.5 },
+      { "id": "malignancy_active", "multiplier": 3.0 },
+      { "id": "previous_vte", "multiplier": 3.5 },
+      { "id": "pregnancy_or_postpartum", "multiplier": 3.0 },
+      { "id": "oral_contraceptives_HRT", "multiplier": 2.0 },
+      { "id": "thrombophilia", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "age_over_60", "multiplier": 2.0 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.5, "indication": "S1Q3T3 pattern, RV strain, sinus tachycardia, RBBB" },
+        { "name": "POCUS echocardiography", "priority": "high", "yield": 0.8, "indication": "RV dilation, McConnell's sign, 60/60 sign" },
+        { "name": "Wells score / PERC rule", "priority": "immediate", "yield": 0.9, "indication": "pre-test probability assessment" }
+      ],
+      "laboratory": [
+        { "name": "D-dimer (high sensitivity)", "priority": "high", "yield": 0.95, "indication": "rule-out PE in low/intermediate probability" },
+        { "name": "ABG", "priority": "high", "yield": 0.6, "indication": "hypoxia, respiratory alkalosis" },
+        { "name": "Troponin", "priority": "high", "yield": 0.7, "indication": "RV myocardial injury, risk stratification" },
+        { "name": "BNP/NT-proBNP", "priority": "medium", "yield": 0.7, "indication": "RV strain marker, prognostic" },
+        { "name": "Coagulation profile", "priority": "medium", "yield": 0.3, "indication": "baseline before anticoagulation" }
+      ],
+      "imaging": [
+        { "name": "CT pulmonary angiogram (CTPA)", "priority": "high", "yield": 0.98, "indication": "gold standard for PE diagnosis" },
+        { "name": "V/Q scan", "priority": "medium", "yield": 0.9, "indication": "if CTPA contraindicated (renal impairment, contrast allergy)" },
+        { "name": "Lower limb Doppler venous ultrasound", "priority": "medium", "yield": 0.6, "indication": "confirm DVT if PE suspected" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for PE / BTS Guidelines",
+      "pathways": [
+        {
+          "severity": "high-risk PE (massive)",
+          "criteria": "hemodynamic instability (SBP <90, shock, arrest, syncope)",
+          "treatment": "Immediate reperfusion: systemic thrombolysis (alteplase 100mg over 2h or 50mg bolus in arrest) if no absolute contraindications. Otherwise surgical embolectomy or catheter-directed therapy. IV heparin infusion. ICU admission. Inotropes/vasopressors. Do NOT bolus fluids aggressively."
+        },
+        {
+          "severity": "intermediate-risk PE (submassive)",
+          "criteria": "stable BP but with RV dysfunction (echo, troponin, BNP)",
+          "treatment": "Anticoagulation: LMWH or fondaparinux. Monitor for decompensation. Consider rescue thrombolysis if deterioration. Do not routinely thrombolyse. Consider catheter-directed thrombolysis."
+        },
+        {
+          "severity": "low-risk PE",
+          "criteria": "stable BP, no RV dysfunction, no high-risk features",
+          "treatment": "Anticoagulation: DOAC (apixaban, rivaroxaban) or LMWH + warfarin. Consider home treatment if suitable. Assess for cancer screening."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "deep_vein_thrombosis_embolization",
+      "pulmonary_artery_occlusion",
+      "increased_dead_space",
+      "ventilation_perfusion_mismatch",
+      "hypoxia",
+      "pulmonary_hypertension",
+      "right_ventricular_afterload_increase",
+      "right_ventricular_failure",
+      "decreased_left_ventricular_preload",
+      "hypotension_shock"
+    ],
+    "complications": [
+      {
+        "diseaseId": "obstructive_shock",
+        "probability": 0.05,
+        "severityBoost": 0.7,
+        "clues": ["hypotension", "jvd", "pulsus_paradoxus"]
+      },
+      {
+        "diseaseId": "chronic_thromboembolic_pulmonary_hypertension",
+        "probability": 0.04,
+        "severityBoost": 0.4,
+        "clues": ["persistent_dyspnea", "pulmonary_hypertension_months_later"]
+      },
+      {
+        "diseaseId": "post_thrombotic_syndrome",
+        "probability": 0.2,
+        "severityBoost": 0.1,
+        "clues": ["chronic_leg_swelling", "skin_changes", "ulceration"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_dyspnea", "pleuritic_chest_pain", "syncope", "hypoxia", "dvt_signs", "risk_factors", "positive_ctpa"],
+    "exclusionClues": ["negative_high_sensitivity_d_dimer_low_probability", "negative_ctpa", "alternative_diagnosis_on_ctpa"]
+  }
+}

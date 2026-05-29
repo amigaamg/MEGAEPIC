@@ -1,0 +1,183 @@
+{
+  "disease": {
+    "id": "ovarian_cysts",
+    "name": "Ovarian Cysts",
+    "system": "GYN",
+    "agePeak_months": [240, 540],
+    "note": "Fluid-filled sacs within or on the surface of the ovary. Majority are benign and physiological (functional cysts), but can be pathological (endometrioma, dermoid, cystadenoma).",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["pelvic_mass", "pelvic_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "ovarian_torsion", "weight": 9 },
+        { "sign": "cyst_rupture_with_hemoperitoneum", "weight": 9 },
+        { "sign": "severe_abdominal_pain", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "complex_cyst_with_solid_components", "weight": 7 },
+          { "sign": "cyst_size_over_10cm", "weight": 6 },
+          { "sign": "suspicious_features_on_ultrasound", "weight": 7 },
+          { "sign": "free_fluid_in_pelvis", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Suspicious for malignancy, torsion, or rupture -> SEVERE; Simple cysts -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "asymptomatic_incidental_finding", "weight": 3 },
+      { "symptomId": "pelvic_pain_dull_or_aching", "weight": 4 },
+      { "symptomId": "sudden_severe_pelvic_pain", "weight": 4, "note": "Suggests torsion or rupture" },
+      { "symptomId": "pelvic_fullness_or_pressure", "weight": 3 },
+      { "symptomId": "bloating", "weight": 3 },
+      { "symptomId": "menstrual_irregularity", "weight": 2 },
+      { "symptomId": "dyspareunia", "weight": 2 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "urinary_frequency_or_retention", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_adnexal_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ovarian_tenderness", "baseWeight": 3 },
+      { "signId": "distended_abdomen_if_large_cyst", "baseWeight": 2 },
+      { "signId": "abdominal_tenderness", "baseWeight": 2 },
+      { "signId": "signs_of_peritonism_if_ruptured", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "reproductive_age", "multiplier": 2.0 },
+      { "id": "ovulation_induction", "multiplier": 3.0 },
+      { "id": "fertility_treatment", "multiplier": 2.5 },
+      { "id": "family_history_of_ovarian_cancer", "multiplier": 1.5 },
+      { "id": "endometriosis_history", "multiplier": 2.0 },
+      { "id": "PCOS", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "functional_follicular_cyst",
+        "name": "Functional Follicular Cyst",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "simple_cyst_under_5cm", "weight": 5 },
+          { "feature": "thin_walled", "weight": 4 },
+          { "feature": "resolves_with_menstruation", "weight": 5 },
+          { "feature": "asymptomatic_often", "weight": 3 }
+        ],
+        "management": "Reassurance. Repeat ultrasound in 6-8 weeks. OCP for suppression if recurrent. No intervention needed."
+      },
+      {
+        "id": "dermoid_cyst",
+        "name": "Mature Cystic Teratoma (Dermoid Cyst)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "mixed_echogenicity_on_ultrasound", "weight": 5 },
+          { "feature": "fat_fluid_level_or_rogue_calcification", "weight": 5 },
+          { "feature": "hair_or_echogenic_dot", "weight": 4 },
+          { "feature": "bilateral_in_15_percent", "weight": 3 }
+        ],
+        "management": "Laparoscopic ovarian cystectomy. Risk of torsion. Recurrence possible. If large >10cm, open approach."
+      },
+      {
+        "id": "hemorrhagic_cyst",
+        "name": "Hemorrhagic Ovarian Cyst",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "reticular_or_fishnet_pattern_on_ultrasound", "weight": 5 },
+          { "feature": "acute_pain", "weight": 4 },
+          { "feature": "spontaneous_resolution", "weight": 4 }
+        ],
+        "management": "Analgesia. Serial ultrasound to ensure resolution. Exclude ectopic pregnancy. If persistent >6 weeks, surgical evaluation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "ectopic_pregnancy",
+        "discriminators": ["positive_pregnancy_test", "empty_uterus", "adnexal_mass"]
+      },
+      {
+        "diseaseId": "tubo_ovarian_abscess",
+        "discriminators": ["fever", "purulent_discharge", "thick_irregular_wall"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine pregnancy test", "priority": "immediate", "yield": 0.9, "indication": "rule out ectopic" }
+      ],
+      "laboratory": [
+        { "name": "CA-125", "priority": "medium", "yield": 0.5, "indication": "elevated in malignancy; not sensitive in premenopausal" },
+        { "name": "Carcinoembryonic antigen", "priority": "low", "yield": 0.3, "indication": "if mucinous suspected" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound", "priority": "first_line", "yield": 0.9, "indication": "characterize cyst: simple vs complex, IOTA rules" },
+        { "name": "MRI pelvis", "priority": "medium", "yield": 0.85, "indication": "indeterminate ultrasound, dermoid confirmation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 62 - Ovarian Cysts in Premenopausal Women",
+      "pathways": [
+        {
+          "severity": "simple_cyst_under_5cm",
+          "criteria": "simple, anechoic, thin walled, <5cm, asymptomatic",
+          "treatment": "Reassurance. No follow-up needed if premenopausal and asymptomatic. Repeat scan if symptomatic."
+        },
+        {
+          "severity": "simple_cyst_5_to_10cm",
+          "criteria": "simple cyst 5-10cm, premenopausal",
+          "treatment": "Annual ultrasound follow-up. Surgical removal if >10cm, persistent, or symptomatic."
+        },
+        {
+          "severity": "complex_or_suspicious",
+          "criteria": "solid components, septations, papillary projections, suspicious IOTA features",
+          "treatment": "Refer to gynecologic oncology. MRI for further characterization. Surgical removal (laparoscopy or laparotomy based on suspicion). CA-125 and HE4."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "follicle_failure_to_rupture",
+      "corpus_luteum_persistence",
+      "inclusion_cyst_formation",
+      "germ_cell_proliferation",
+      "epithelial_inclusion"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "ovarian_torsion",
+        "probability": 0.03,
+        "lagDays": [0, 30],
+        "severityBoost": 0.6,
+        "clues": ["sudden_severe_unilateral_pain", "nausea_vomiting", "cyst_size_5_to_10cm"]
+      },
+      {
+        "diseaseId": "cyst_rupture",
+        "probability": 0.05,
+        "lagDays": [0, 30],
+        "severityBoost": 0.4,
+        "clues": ["sudden_pain_decrease", "free_fluid", "peritonism"]
+      },
+      {
+        "diseaseId": "hemorrhage_into_cyst",
+        "probability": 0.05,
+        "lagDays": [0, 14],
+        "severityBoost": 0.3,
+        "clues": ["acute_pain", "internal_echoes"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["adnexal_mass", "ultrasound_characteristics", "pain_cyclical_or_acute"],
+    "exclusionClues": ["normal_ovaries_on_exam_and_scan"]
+  }
+}

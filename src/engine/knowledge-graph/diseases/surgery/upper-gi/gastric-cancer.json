@@ -1,0 +1,187 @@
+{
+  "disease": {
+    "id": "gastric_cancer",
+    "name": "Gastric Cancer",
+    "system": "surgical",
+    "agePeak_months": [600, 840],
+    "note": "Often asymptomatic until advanced. Epigastric pain, weight loss, and anorexia are late presentation.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["dyspepsia", "weight_loss", "epigastric_mass"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "gastric_bleeding_massive", "weight": 9 },
+        { "sign": "gastric_outlet_obstruction", "weight": 8 },
+        { "sign": "malignant_ascites", "weight": 8 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "metastatic_disease", "weight": 9 },
+          { "sign": "virchows_node", "weight": 7 },
+          { "sign": "sister_mary_joseph_nodule", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Metastatic/obstructing/bleeding -> SEVERE (advanced); early stage -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 5, "note": "Significant involuntary weight loss" },
+      { "symptomId": "anorexia", "weight": 4 },
+      { "symptomId": "early_satiety", "weight": 4 },
+      { "symptomId": "dysphagia", "weight": 3, "note": "Suggests cardia/gastroesophageal junction involvement" },
+      { "symptomId": "vomiting", "weight": 3, "note": "Suggests gastric outlet obstruction" },
+      { "symptomId": "melena_or_hematemesis", "weight": 3 },
+      { "symptomId": "family_history_of_gastric_cancer", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "palpable_lymph_nodes", "baseWeight": 4, "note": "Virchow's node (left supraclavicular)" },
+      { "signId": "abdominal_distension", "baseWeight": 3, "note": "Malignant ascites" },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 3, "note": "Liver metastases" },
+      { "signId": "rectal_blumer_shelf", "baseWeight": 2, "note": "Rectal shelf from peritoneal seeding" }
+    ],
+
+    "riskFactors": [
+      { "id": "h_pylori_infection", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "family_history_of_gastric_cancer", "multiplier": 3.0 },
+      { "id": "diet_high_in_salt_smoked_foods", "multiplier": 1.5 },
+      { "id": "chronic_atrophic_gastritis", "multiplier": 3.0 },
+      { "id": "pernicious_anemia", "multiplier": 2.5 },
+      { "id": "history_of_gastric_surgery", "multiplier": 2.0 },
+      { "id": "epstein_barr_virus_infection", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "intestinal_type_adenocarcinoma",
+        "name": "Intestinal-Type Adenocarcinoma (Lauren)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "gland_formation_on_histology", "weight": 5 },
+          { "feature": "intestinal_metaplasia_background", "weight": 4 },
+          { "feature": "better_prognosis", "weight": 3 }
+        ],
+        "management": "Gastrectomy (subtotal or total) with D2 lymphadenectomy. Perioperative chemotherapy (FLOT regimen)."
+      },
+      {
+        "id": "diffuse_type_adenocarcinoma",
+        "name": "Diffuse-Type Adenocarcinoma (Lauren)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "signet_ring_cells", "weight": 5 },
+          { "feature": "infiltrative_growth_linitis_plastica", "weight": 5 },
+          { "feature": "worse_prognosis", "weight": 4 },
+          { "feature": "cdh1_mutation", "weight": 4 }
+        ],
+        "management": "Total gastrectomy with D2 lymphadenectomy. Perioperative chemotherapy. Targeted therapy if HER2 positive."
+      },
+      {
+        "id": "gej_cancer",
+        "name": "Gastroesophageal Junction Cancer (Siewert I-III)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "dysphagia_prominent", "weight": 5 },
+          { "feature": "retrosternal_pain", "weight": 3 },
+          { "feature": "reflux_history", "weight": 3 }
+        ],
+        "management": "Siewert I-II: Esophagectomy + proximal gastrectomy. Siewert III: Total gastrectomy + distal esophagectomy. Neoadjuvant chemoradiation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["pain_relieved_by_ppi", "no_weight_loss", "no_mass", "endoscopy_shows_benign_ulcer"]
+      },
+      {
+        "diseaseId": "pancreatic_cancer",
+        "discriminators": ["painless_jaundice", "elevated_ca19_9", "pancreatic_mass_on_ct"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fecal occult blood test", "priority": "medium", "yield": 0.4, "indication": "may be positive" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.5, "indication": "anemia from chronic blood loss" },
+        { "name": "LFTs", "priority": "high", "yield": 0.4, "indication": "elevated ALP suggests liver metastases" },
+        { "name": "Tumor markers (CEA, CA19-9)", "priority": "medium", "yield": 0.5, "indication": "monitoring response, not diagnostic" },
+        { "name": "Albumin", "priority": "medium", "yield": 0.3, "indication": "nutritional status" }
+      ],
+      "imaging": [
+        { "name": "Upper GI Endoscopy with biopsy", "priority": "immediate", "yield": 0.98, "indication": "gold standard for diagnosis" },
+        { "name": "CT Chest/Abdomen/Pelvis with IV contrast", "priority": "high", "yield": 0.85, "indication": "staging, detect metastases" },
+        { "name": "Endoscopic Ultrasound (EUS)", "priority": "high", "yield": 0.9, "indication": "T and N staging" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "detect occult metastases" },
+        { "name": "Staging laparoscopy", "priority": "medium", "yield": 0.85, "indication": "detect peritoneal metastases" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Gastric Cancer",
+      "pathways": [
+        {
+          "severity": "early stage (T1-T2, N0)",
+          "criteria": "early gastric cancer, confined to mucosa/submucosa, no node involvement",
+          "treatment": "Endoscopic mucosal resection (EMR) or endoscopic submucosal dissection (ESD) for select cases. Otherwise gastrectomy with D1 lymphadenectomy."
+        },
+        {
+          "severity": "locally advanced (T2-T4, N+)",
+          "criteria": "invasion beyond submucosa, node positive, no metastases",
+          "treatment": "Perioperative chemotherapy (FLOT: 5-FU, Leucovorin, Oxaliplatin, Docetaxel). Total/subtotal gastrectomy with D2 lymphadenectomy."
+        },
+        {
+          "severity": "metastatic (M1)",
+          "criteria": "distant metastases, peritoneal carcinomatosis",
+          "treatment": "Palliative chemotherapy. Palliative surgery for obstruction/bleeding. Palliative radiotherapy. Best supportive care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_gastritis",
+      "h_pylori_infection",
+      "atrophic_gastritis",
+      "intestinal_metaplasia",
+      "dysplasia",
+      "carcinoma_in_situ",
+      "invasive_adenocarcinoma",
+      "lymphatic_spread",
+      "hematogenous_spread",
+      "peritoneal_seeding"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "gastric_outlet_obstruction",
+        "probability": 0.15,
+        "lagDays": [60, 360],
+        "severityBoost": 0.3,
+        "clues": ["vomiting", "early_satiety", "weight_loss"]
+      },
+      {
+        "diseaseId": "upper_gi_bleeding",
+        "probability": 0.1,
+        "lagDays": [30, 180],
+        "severityBoost": 0.3,
+        "clues": ["melena", "hematemesis", "anemia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["epigastric_pain_with_weight_loss", "age_over_50", "anorexia", "persistent_dyspepsia_over_40"],
+    "exclusionClues": ["pain_only_with_meals", "relieved_by_ppi", "weight_stable"]
+  }
+}

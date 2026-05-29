@@ -1,0 +1,104 @@
+{
+  "disease": {
+    "id": "warfarin_interactions",
+    "name": "Warfarin - Drug Interactions and Management",
+    "system": "pharmacy",
+    "note": "Warfarin has narrow therapeutic index with many drug-drug and drug-food interactions. INR monitoring critical.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["anticoagulation_management", "medication_safety"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "major_bleeding_intracranial_gi", "weight": 10 },
+        { "sign": "inr_greater_8_with_bleeding", "weight": 10 },
+        { "sign": "thrombotic_event_on_warfarin", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "INR in range (2-3) = THERAPEUTIC; INR above range = OVER-ANTICOAGULATED; INR below = SUB-THERAPEUTIC"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "bleeding_bruising", "weight": 4 },
+      { "symptomId": "dark_black_tarry_stools", "weight": 5 },
+      { "symptomId": "hematuria", "weight": 4 },
+      { "symptomId": "new_medication_added", "weight": 4 },
+      { "symptomId": "dietary_change", "weight": 3 },
+      { "symptomId": "alcohol_intake_change", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bruising_ecchymoses", "baseWeight": 3 },
+      { "signId": "signs_of_bleeding", "baseWeight": 4 },
+      { "signId": "hemodynamic_instability", "baseWeight": 4 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "inr_elevation",
+        "name": "Elevated INR (Over-anticoagulation)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "inr_greater_4", "weight": 5 },
+          { "feature": "antibiotics_added", "weight": 4 },
+          { "feature": "dietary_change_low_vitamin_k", "weight": 3 }
+        ],
+        "management": "Hold warfarin. If INR >8 with bleeding: IV Vitamin K 5-10 mg + FFP/PCC. If INR >8 no bleeding: hold warfarin, give oral Vitamin K 1-5 mg. If 4.5-8: hold 1-2 doses and reduce dose."
+      },
+      {
+        "id": "inr_decrease",
+        "name": "Decreased INR (Sub-therapeutic)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "inr_less_2", "weight": 5 },
+          { "feature": "high_vitamin_k_foods", "weight": 3 },
+          { "feature": "enzyme_inducing_drugs", "weight": 4 }
+        ],
+        "management": "Increase warfarin dose by 5-20%. Recheck INR in 3-7 days. Address dietary causes. Review interacting medications."
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.95, "indication": "monitor anticoagulation effect" },
+        { "name": "FBC (Hb, platelets)", "priority": "high", "yield": 0.6, "indication": "detect bleeding" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BCSH Guidelines for Warfarin Management",
+      "pathways": [
+        {
+          "severity": "INR 1.5-3.0 (therapeutic)",
+          "criteria": "INR in target range for indication",
+          "treatment": "Continue current dose. Recheck INR at interval per stability."
+        },
+        {
+          "severity": "INR 3.1-4.5 (mild elevation)",
+          "criteria": "INR above range, no bleeding",
+          "treatment": "Reduce dose by 10-20%. Recheck in 1-2 weeks."
+        },
+        {
+          "severity": "INR 4.6-8.0 (moderate elevation)",
+          "criteria": "significantly elevated, no major bleeding",
+          "treatment": "Hold warfarin. If INR >6: consider oral Vitamin K 1-2.5 mg. Recheck INR daily until therapeutic."
+        },
+        {
+          "severity": "INR >8.0 (severe elevation)",
+          "criteria": "major bleeding risk",
+          "treatment": "Hold warfarin. Oral Vitamin K 2.5-5 mg (IV if major bleeding). IV Vitamin K 10 mg + FFP/PCC if life-threatening bleeding."
+        }
+      ]
+    },
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if bleeding",
+    "diagnosticClues": ["elevated_inr", "bleeding", "interacting_medication"],
+    "exclusionClues": ["inr_in_range", "no_bleeding"]
+  }
+}

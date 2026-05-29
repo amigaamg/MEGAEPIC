@@ -1,0 +1,111 @@
+{
+  "disease": {
+    "id": "fracture-tibia-fibula",
+    "name": "Tibia and Fibula Fracture",
+    "system": "ORTHO",
+    "agePeak_months": [120, 480],
+    "note": "Most common long bone fracture. Tibial shaft is subcutaneous with high risk of open fracture and compartment syndrome. Fibula often fractured with tibia.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["lower_limb_fracture", "leg_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture_gustilo_3", "weight": 10 },
+        { "sign": "compartment_syndrome", "weight": 10 },
+        { "sign": "vascular_injury", "weight": 10 },
+        { "sign": "crush_injury", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "comminuted_fracture", "weight": 7 },
+          { "sign": "segmental_fracture", "weight": 7 },
+          { "sign": "significant_displacement", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If open, compartment syndrome, or comminuted -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "direct_trauma_sports_mva", "weight": 5 },
+      { "symptomId": "leg_pain_and_deformity", "weight": 5 },
+      { "symptomId": "inability_to_walk", "weight": 4 },
+      { "symptomId": "wound_on_leg_open_fracture", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "leg_deformity_angulation", "baseWeight": 5 },
+      { "signId": "swelling_and_tenderness", "baseWeight": 4 },
+      { "signId": "open_wound_assessment_gustilo", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "compartment_syndrome_assessment", "baseWeight": 5 },
+      { "signId": "distal_pulses_and_sensation", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "contact_sports", "multiplier": 2.5 },
+      { "id": "osteoporosis", "multiplier": 2.0 },
+      { "id": "road_traffic_accident", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "tibial_shaft",
+        "name": "Tibial Shaft Fracture",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "midshaft_fracture", "weight": 5 },
+          { "feature": "high_open_fracture_risk", "weight": 4 }
+        ],
+        "management": "Closed: long leg cast or functional brace. Unstable/displaced: intramedullary nail. Open: urgent I&D + stabilization with external fixator or nail."
+      },
+      {
+        "id": "tibial_plateau",
+        "name": "Tibial Plateau Fracture (Intra-articular)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "knee_pain_effusion", "weight": 5 },
+          { "feature": "valgus_or_varus_instability", "weight": 4 }
+        ],
+        "management": "Non-displaced: hinged brace, NWB 6-8 weeks. Displaced: ORIF with plate and screws. Meniscal/ligamentous repair if needed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "isolated_fibula_fracture",
+        "discriminators": ["tibia_intact", "xray_shows_only_fibula_fracture"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Tibia/fibula AP and lateral X-ray", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "CT knee", "priority": "medium", "yield": 0.85, "indication": "tibial plateau fracture" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "OTA Tibia Fracture Guidelines",
+      "pathways": [
+        {
+          "severity": "closed_stable",
+          "criteria": "Closed, minimally displaced, <5 degrees angulation, intact fibula",
+          "treatment": "Long leg cast for 4-6 weeks, then functional brace. NWB for 6 weeks. X-ray at 2, 6, 12 weeks."
+        },
+        {
+          "severity": "unstable_open",
+          "criteria": "Open, displaced, comminuted, segmental, or unstable pattern",
+          "treatment": "Urgent I&D. IV antibiotics. Intramedullary nail or external fixator. Soft tissue coverage planning. Compartment syndrome monitoring."
+        }
+      ]
+    },
+
+    "pathophysiology": ["direct_trauma", "rotational_injury", "axial_loading"]
+  }
+}

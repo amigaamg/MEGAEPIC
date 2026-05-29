@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { db } from '@/lib/firebase';
 import {
   collection, query, where, onSnapshot, orderBy, doc, getDoc, getDocs,
 } from 'firebase/firestore';
-import ChronicDiseaseMonitor from '../panels/ChronicDiseaseMonitor';
+import DiseaseDashboardHub, { DiseaseType, DISEASE_META } from '@/components/clinical-dashboards/DiseaseDashboardHub';
+import MonitoringDashboard from '@/components/clinical-monitoring/MonitoringDashboard';
 import MedicationAdherence from '../panels/MedicationAdherence';
 import LabImagingReview from '../panels/LabImagingReview';
+import ClinicalToolLauncher from '@/components/clinical-monitoring/ClinicalToolLauncher';
 
 interface PatientEntry {
   uid: string; fullName: string; age?: number; sex?: string;
@@ -15,17 +17,17 @@ interface PatientEntry {
 }
 
 const DISEASE_OPTIONS = [
-  { type: 'hypertension' as const, icon: '❤️', label: 'Hypertension', color: '#ef4444' },
-  { type: 'diabetes_t2' as const, icon: '🍬', label: 'Type 2 Diabetes', color: '#f59e0b' },
-  { type: 'asthma' as const, icon: '🌬️', label: 'Asthma', color: '#3b82f6' },
-  { type: 'hiv' as const, icon: '🧬', label: 'HIV', color: '#8b5cf6' },
-  { type: 'ckd' as const, icon: '🫘', label: 'CKD', color: '#10b981' },
-  { type: 'heart_failure' as const, icon: '💔', label: 'Heart Failure', color: '#ec4899' },
-  { type: 'copd' as const, icon: '🫁', label: 'COPD', color: '#6366f1' },
-  { type: 'sickle_cell' as const, icon: '🩸', label: 'Sickle Cell', color: '#ef4444' },
+  { type: 'hypertension' as DiseaseType, icon: '❤️', label: 'Hypertension', color: '#ef4444' },
+  { type: 'diabetes_t2' as DiseaseType, icon: '🍬', label: 'Type 2 Diabetes', color: '#f59e0b' },
+  { type: 'asthma' as DiseaseType, icon: '🌬️', label: 'Asthma', color: '#3b82f6' },
+  { type: 'hiv' as DiseaseType, icon: '🧬', label: 'HIV', color: '#8b5cf6' },
+  { type: 'ckd' as DiseaseType, icon: '🫘', label: 'CKD', color: '#10b981' },
+  { type: 'heart_failure' as DiseaseType, icon: '💔', label: 'Heart Failure', color: '#ec4899' },
+  { type: 'copd' as DiseaseType, icon: '🫁', label: 'COPD', color: '#6366f1' },
+  { type: 'sickle_cell' as DiseaseType, icon: '🩸', label: 'Sickle Cell', color: '#ef4444' },
 ];
 
-type WorkspaceTab = 'disease_registry' | 'adherence' | 'lab_imaging';
+type WorkspaceTab = 'monitoring' | 'disease_registry' | 'adherence' | 'lab_imaging';
 
 interface Props {
   doctorId: string; doctorName: string;
@@ -33,14 +35,14 @@ interface Props {
 
 export default function ClinicalMonitoringWorkspace({ doctorId, doctorName }: Props) {
   const [tab, setTab] = useState<WorkspaceTab>('disease_registry');
-  const [selectedDisease, setSelectedDisease] = useState<string>('hypertension');
+  const [selectedDisease, setSelectedDisease] = useState<DiseaseType | 'all'>('all');
   const [enrolledPatients, setEnrolledPatients] = useState<PatientEntry[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
   const [patientNames, setPatientNames] = useState<Record<string, string>>({});
   const [patientInfo, setPatientInfo] = useState<Record<string, { age?: number; sex?: string }>>({});
   const [loading, setLoading] = useState(true);
+  const [launchedTool, setLaunchedTool] = useState<string | null>(null);
 
-  // Fetch disease enrollments
   useEffect(() => {
     const unsub = onSnapshot(
       query(collection(db, 'disease_enrollments'), where('doctorId', '==', doctorId), where('status', '==', 'active')),
@@ -85,7 +87,6 @@ export default function ClinicalMonitoringWorkspace({ doctorId, doctorName }: Pr
     return () => unsub();
   }, [doctorId]);
 
-  // Count per disease
   const diseaseCounts: Record<string, number> = {};
   enrolledPatients.forEach(p => p.diseaseTypes.forEach(d => { diseaseCounts[d] = (diseaseCounts[d] || 0) + 1; }));
 
@@ -93,18 +94,40 @@ export default function ClinicalMonitoringWorkspace({ doctorId, doctorName }: Pr
     ? enrolledPatients
     : enrolledPatients.filter(p => p.diseaseTypes.includes(selectedDisease));
 
+  const handleLaunchTool = useCallback((toolId: string) => {
+    setLaunchedTool(toolId);
+  }, []);
+
+  if (launchedTool) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, animation: 'slideUp .25s ease' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button onClick={() => setLaunchedTool(null)} style={{ padding: '8px 16px', borderRadius: 8, border: '1.5px solid #e2e9f3', background: '#fff', cursor: 'pointer', fontFamily: 'inherit', fontSize: 12, fontWeight: 700, color: '#64748b' }}>
+            ← Back to Monitoring
+          </button>
+        </div>
+        <ClinicalToolLauncher
+          toolId={launchedTool}
+          patientName="Demo Patient"
+          doctorId={doctorId}
+          doctorName={doctorName}
+          onClose={() => setLaunchedTool(null)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, animation: 'slideUp .25s ease' }}>
-      {/* Header */}
       <div className="panel">
         <div className="panel-hd">
-          <div className="panel-title">📊 Clinical Monitoring</div>
+          <div className="panel-title">🏥 Clinical Monitoring & Disease Registries</div>
         </div>
       </div>
 
-      {/* Sub-tabs */}
       <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
         {([
+          { id: 'monitoring' as WorkspaceTab, icon: '📊', label: 'Patient Monitoring' },
           { id: 'disease_registry' as WorkspaceTab, icon: '📋', label: 'Disease Registry', count: enrolledPatients.length },
           { id: 'adherence' as WorkspaceTab, icon: '✅', label: 'Adherence Dashboard' },
           { id: 'lab_imaging' as WorkspaceTab, icon: '🔬', label: 'Lab & Imaging Review' },
@@ -115,9 +138,18 @@ export default function ClinicalMonitoringWorkspace({ doctorId, doctorName }: Pr
         ))}
       </div>
 
+      {tab === 'monitoring' && (
+        <MonitoringDashboard
+          patientId={selectedPatient || undefined}
+          patientName={selectedPatient ? patientNames[selectedPatient] : undefined}
+          doctorId={doctorId}
+          doctorName={doctorName}
+          onLaunchTool={handleLaunchTool}
+        />
+      )}
+
       {tab === 'disease_registry' && (
         <>
-          {/* Disease quick stats */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 8 }}>
             <div key="all" onClick={() => { setSelectedDisease('all'); setSelectedPatient(null); }}
               style={{
@@ -147,7 +179,6 @@ export default function ClinicalMonitoringWorkspace({ doctorId, doctorName }: Pr
             ))}
           </div>
 
-          {/* Patient list for selected disease */}
           <div className="panel">
             <div className="panel-hd">
               <div className="panel-title">
@@ -199,19 +230,18 @@ export default function ClinicalMonitoringWorkspace({ doctorId, doctorName }: Pr
                           {DISEASE_OPTIONS.filter(d => p.diseaseTypes.includes(d.type)).map(d => (
                             <span key={d.type} style={{
                               padding: '2px 8px', borderRadius: 99, fontSize: 10, fontWeight: 700,
-                              background: `${d.color}15`, color: d.color,
-                            }}>
+                              background: `${d.color}15`, color: d.color, cursor: 'pointer',
+                            }} onClick={(e) => { e.stopPropagation(); setSelectedDisease(d.type); }}>
                               {d.icon} {d.label}
                             </span>
                           ))}
                         </div>
-                        <div style={{ maxHeight: 400, overflowY: 'auto' }}>
-                          <ChronicDiseaseMonitor
+                        <div style={{ maxHeight: '70vh', overflowY: 'auto', borderRadius: 12, border: '1px solid var(--border)' }}>
+                          <DiseaseDashboardHub
                             patientId={p.uid}
                             doctorId={doctorId}
                             doctorName={doctorName}
-                            diseaseType={selectedDisease === 'all' ? 'hypertension' : selectedDisease as any}
-                            compact
+                            diseaseType={selectedDisease === 'all' ? 'hypertension' : selectedDisease as DiseaseType}
                           />
                         </div>
                       </div>
@@ -234,7 +264,7 @@ export default function ClinicalMonitoringWorkspace({ doctorId, doctorName }: Pr
               {[1,2,3].map(i => <div key={i} className="skeleton" style={{ height: 60, borderRadius: 8 }} />)}
             </div>
           ) : enrolledPatients.length === 0 ? (
-            <div className="empty-sm">No patients with adherence data yet. Data appears when patients log medication use.</div>
+            <div className="empty-sm">No patients with adherence data yet.</div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {enrolledPatients.slice(0, 10).map(p => (

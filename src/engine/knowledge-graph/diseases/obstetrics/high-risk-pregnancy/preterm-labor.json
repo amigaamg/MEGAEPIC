@@ -1,0 +1,199 @@
+{
+  "disease": {
+    "id": "preterm_labor",
+    "name": "Preterm Labor",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Regular uterine contractions with cervical change between 22 and 36+6 weeks of gestation. Leading cause of neonatal morbidity and mortality worldwide.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["preterm_birth", "high_risk_pregnancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "advanced_cervical_dilation_over_4cm", "weight": 9 },
+        { "sign": "cord_prolapse", "weight": 10 },
+        { "sign": "chorioamnionitis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "cervical_length_below_15mm", "weight": 8 },
+          { "sign": "contractions_regular_and_painful", "weight": 5 },
+          { "sign": "ffn_positive", "weight": 6 },
+          { "sign": "cervical_dilation_over_3cm", "weight": 7 },
+          { "sign": "preterm_premature_rupture_of_membranes", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Active labor with cervical change -> SEVERE (threatened); Mild contractions without cervical change -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "regular_uterine_contractions", "weight": 5 },
+      { "symptomId": "lower_abdominal_pain_cramping", "weight": 4 },
+      { "symptomId": "back_pain", "weight": 3 },
+      { "symptomId": "vaginal_pressure", "weight": 3 },
+      { "symptomId": "vaginal_discharge_increase_or_change", "weight": 3 },
+      { "symptomId": "watery_discharge_membrane_rupture", "weight": 4 },
+      { "symptomId": "vaginal_spotting_bleeding", "weight": 2 },
+      { "symptomId": "pelvic_pressure", "weight": 3 },
+      { "symptomId": "diarrhea_or_cramping", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "regular_contractions_palpable", "baseWeight": 5 },
+      { "signId": "cervical_dilation_on_sterile_vaginal_exam", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cervical_effacement", "baseWeight": 4 },
+      { "signId": "cervical_length_short_on_ultrasound", "baseWeight": 4 },
+      { "signId": "vaginal_discharge_amniotic_fluid_pooling", "baseWeight": 4 },
+      { "signId": "fetal_fibronectin_positive", "baseWeight": 4 },
+      { "signId": "presenting_part_low", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_preterm_birth", "multiplier": 3.0 },
+      { "id": "multiple_gestation", "multiplier": 4.0 },
+      { "id": "short_cervix_below_25mm", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "low_BMI_under_19", "multiplier": 1.5 },
+      { "id": "infection_uti_bv_chorioamnionitis", "multiplier": 2.0 },
+      { "id": "cervical_surgery_or_cone_biopsy", "multiplier": 2.0 },
+      { "id": "antepartum_hemorrhage", "multiplier": 2.0 },
+      { "id": "stressful_life_events", "multiplier": 1.5 },
+      { "id": "periodontal_disease", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "threatened_preterm_labor",
+        "name": "Threatened Preterm Labor",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "contractions_but_no_cervical_change", "weight": 4 },
+          { "feature": "cervical_length_above_25mm", "weight": 4 },
+          { "feature": "ffn_negative", "weight": 4 },
+          { "feature": "membranes_intact", "weight": 3 }
+        ],
+        "management": "Monitor. Betamethasone if <34 weeks. Tocolysis (nifedipine or atosiban) may be used to delay for steroids. No admission if cervix long and closed. Reassess in 24-48h."
+      },
+      {
+        "id": "established_preterm_labor",
+        "name": "Established Preterm Labor",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "cervical_dilation_3cm_or_more", "weight": 5 },
+          { "feature": "regular_contractions", "weight": 5 },
+          { "feature": "progressive_cervical_change", "weight": 5 },
+          { "feature": "short_cervix", "weight": 4 }
+        ],
+        "management": "Betamethasone. Magnesium sulfate for neuroprotection (if <30 weeks). Antibiotics if PPROM. Tocolysis to complete steroids. Transfer to unit with NICU. Plan delivery mode."
+      },
+      {
+        "id": "preterm_labor_with_pprom",
+        "name": "Preterm Labor with PPROM",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "pooling_of_fluid_on_speculum", "weight": 5 },
+          { "feature": "positive_amnisure_or_ferning", "weight": 5 },
+          { "feature": "oligohydramnios_on_ultrasound", "weight": 4 },
+          { "feature": "contractions_after_membrane_rupture", "weight": 4 }
+        ],
+        "management": "IV antibiotics (Erythromycin + Amoxicillin). Betamethasone. MgSO4 neuroprotection. Monitor for chorioamnionitis. Deliver at 37w for late PPROM."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "braxton_hicks_contractions",
+        "discriminators": ["irregular", "no_cervical_change", "resolve_with_hydration"]
+      },
+      {
+        "diseaseId": "urinary_tract_infection",
+        "discriminators": ["dysuria", "positive_urine_culture", "no_cervical_change"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fetal fibronectin test (fFN)", "priority": "high", "yield": 0.85, "indication": "negative test <2% chance of delivery in 7 days" },
+        { "name": "Speculum examination", "priority": "immediate", "yield": 0.8, "indication": "assess membranes, discharge, pooling" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "medium", "yield": 0.5, "indication": "infection screen" },
+        { "name": "CRP", "priority": "medium", "yield": 0.5, "indication": "marker of inflammation" },
+        { "name": "High vaginal swab", "priority": "medium", "yield": 0.4, "indication": "GBS, infection screening" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal cervical length ultrasound", "priority": "immediate", "yield": 0.9, "indication": "<25mm high risk for preterm delivery" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG25 - Preterm Labour and Birth",
+      "pathways": [
+        {
+          "severity": "threatened",
+          "criteria": "contractions, cervix >25mm, fFN negative, no progressive change",
+          "treatment": "Home if appropriate. Advise rest, hydration. No tocolysis routine. Betamethasone only if gestation <34w. Reassess if symptoms persist."
+        },
+        {
+          "severity": "established_24_to_34_weeks",
+          "criteria": "cervical dilation, short cervix, positive fFN",
+          "treatment": "Admit. Betamethasone 12mg IM q24h x 2 doses. Tocolysis (nifedipine MR 20mg PO, then 10-20mg TID, or atosiban IV). MgSO4 for neuroprotection if <30w. Monitor for chorioamnionitis. Transfer to perinatal center."
+        },
+        {
+          "severity": "established_34_to_36_weeks",
+          "criteria": "cervical change, late preterm",
+          "treatment": "No tocolysis. No steroids (if 35-36w). Allow delivery. Neonatal team present. Cord clamping delayed. Skin-to-skin if stable."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uterine_distension",
+      "cervical_insufficiency",
+      "intrauterine_inflammation",
+      "infection_chorioamnionitis",
+      "preterm_activation_of_parturition_pathways"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "neonatal_respiratory_distress_syndrome",
+        "probability": 0.3,
+        "lagDays": [0, 0],
+        "severityBoost": 0.5,
+        "clues": ["preterm_less_34w", "tachypnea", "grunting"]
+      },
+      {
+        "diseaseId": "intraventricular_hemorrhage",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.7,
+        "clues": ["very_preterm", "hypotension"]
+      },
+      {
+        "diseaseId": "necrotizing_enterocolitis",
+        "probability": 0.05,
+        "lagDays": [2, 14],
+        "severityBoost": 0.6,
+        "clues": ["abdominal_distension", "feeding_intolerance"]
+      },
+      {
+        "diseaseId": "chorioamnionitis",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["maternal_fever", "fetal_tachycardia", "uterine_tenderness"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["regular_contractions_before_37w", "cervical_change", "short_cervix"],
+    "exclusionClues": ["term_gestation", "irregular_contractions_no_cervical_change"]
+  }
+}

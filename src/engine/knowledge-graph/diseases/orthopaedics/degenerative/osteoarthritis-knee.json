@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "osteoarthritis_knee",
+    "name": "Osteoarthritis of the Knee",
+    "system": "orthopaedics",
+    "agePeak_months": [540, 960],
+    "note": "Most common joint disorder. Degenerative disease of articular cartilage. Often bilateral.",
+    "prevalenceWeight": 0.65,
+    "syndromeTags": ["joint_pain", "degenerative_joint_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_instability", "weight": 9 },
+        { "sign": "locked_joint", "weight": 8 },
+        { "sign": "acute_exacerbation_with_effusion", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If locked joint/severe instability -> ACUTE; else -> CHRONIC with severity grading"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "knee_pain", "weight": 5, "modifiers": [
+          { "condition": "worse_with_activity_better_with_rest", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "morning_stiffness_less_30_min", "weight": 4 },
+      { "symptomId": "crepitus", "weight": 3 },
+      { "symptomId": "reduced_range_of_motion", "weight": 3 },
+      { "symptomId": "instability_giving_way", "weight": 2 },
+      { "symptomId": "swelling_after_activity", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "joint_line_tenderness", "baseWeight": 4 },
+      { "signId": "crepitus_on_movement", "baseWeight": 3 },
+      { "signId": "bony_enlargement", "baseWeight": 3 },
+      { "signId": "effusion", "baseWeight": 3 },
+      { "signId": "reduced_range_of_motion", "baseWeight": 3 },
+      { "signId": "varus_or_valgus_deformity", "baseWeight": 3 },
+      { "signId": "antalgic_gait", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "previous_knee_injury", "multiplier": 1.8 },
+      { "id": "female_sex", "multiplier": 1.5 },
+      { "id": "occupational_knee_bending", "multiplier": 1.3 },
+      { "id": "family_history", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "medial_compartment_oa",
+        "name": "Medial Compartment Osteoarthritis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "medial_joint_line_tenderness", "weight": 5 },
+          { "feature": "varus_deformity", "weight": 4 }
+        ],
+        "management": "Physiotherapy, weight loss, bracing, NSAIDs. High tibial osteotomy if young. Unicompartmental or total knee replacement."
+      },
+      {
+        "id": "patellofemoral_oa",
+        "name": "Patellofemoral Osteoarthritis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "anterior_knee_pain", "weight": 5 },
+          { "feature": "pain_on_stairs", "weight": 5 },
+          { "feature": "pain_on_prolonged_flexion", "weight": 4 }
+        ],
+        "management": "Quadriceps strengthening. Patellar taping. Activity modification. Patellofemoral replacement if severe."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "rheumatoid_arthritis",
+        "discriminators": ["morning_stiffness_over_30_min", "symmetrical", "inflammatory_markers"]
+      },
+      {
+        "diseaseId": "meniscal_tear",
+        "discriminators": ["locking", "clicking", "specific_mechanism", "acute_onset"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Knee examination (WOMAC score)", "priority": "immediate", "yield": 0.8, "indication": "all knee pain patients" }
+      ],
+      "imaging": [
+        { "name": "Weight-bearing Knee X-ray (AP, Lateral, Skyline)", "priority": "high", "yield": 0.9, "indication": "joint space narrowing, osteophytes, subchondral sclerosis" },
+        { "name": "MRI Knee", "priority": "medium", "yield": 0.85, "indication": "assess cartilage, menisci, ligaments if atypical features" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Osteoarthritis",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "VAS 1-3, intermittent pain",
+          "treatment": "Exercise (strengthening, aerobic). Weight loss if obese. Education and self-management. Paracetamol PRN."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "VAS 4-7, daily pain, some functional limitation",
+          "treatment": "Topical NSAIDs. Oral NSAIDs (short course). Physiotherapy. Walking aids. Intra-articular corticosteroids."
+        },
+        {
+          "severity": "severe",
+          "criteria": "VAS 8-10, significant disability, failed conservative",
+          "treatment": "Total knee arthroplasty. Pre-operative optimization. Post-operative physiotherapy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "articular_cartilage_degradation",
+      "subchondral_bone_sclerosis",
+      "osteophyte_formation",
+      "synovial_inflammation",
+      "joint_space_narrowing"
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["activity_related_pain", "morning_stiffness_under_30_min", "crepitus", "osteophytes_on_xray"],
+    "exclusionClues": ["inflammatory_arthritis_features", "acute_monoarticular_red_hot_joint"]
+  }
+}

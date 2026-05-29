@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "breast_engorgement",
+    "name": "Breast Engorgement",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Physiological swelling and congestion of the breasts due to vascular dilation and milk accumulation in the early postpartum period. Can progress to mastitis if not managed.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["postpartum_breast_condition", "lactation_problem"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "severeCriteria": {
+        "anyDangerSign": false,
+        "additionalCriteria": [
+          { "sign": "severe_pain_breast_feeding_difficulty", "weight": 6 },
+          { "sign": "skin_shiny_and_tight", "weight": 5 },
+          { "sign": "nipple_flattening", "weight": 4 },
+          { "sign": "inability_to_latch_baby", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Severe engorgement with inability to breastfeed -> SEVERE; Mild bilateral fullness -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "breast_fullness_heaviness", "weight": 5 },
+      { "symptomId": "breast_pain", "weight": 4 },
+      { "symptomId": "difficulty_breastfeeding", "weight": 4 },
+      { "symptomId": "baby_latching_problems", "weight": 4 },
+      { "symptomId": "breast_warmth", "weight": 3 },
+      { "symptomId": "low_grade_fever", "weight": 2 },
+      { "symptomId": "axillary_tenderness", "weight": 2 },
+      { "symptomId": "onset_3_to_5_days_postpartum", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "breast_bilateral_swollen_firm", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "breast_tenderness_diffuse", "baseWeight": 4 },
+      { "signId": "skin_tight_and_shiny", "baseWeight": 4 },
+      { "signId": "nipple_flattened_or_non_protruding", "baseWeight": 3 },
+      { "signId": "axillary_lymphadenopathy", "baseWeight": 2 },
+      { "signId": "temperature_elevation_mild", "baseWeight": 2 },
+      { "signId": "venous_distension_on_breast_surface", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "primiparity", "multiplier": 2.0 },
+      { "id": "delayed_initiation_of_breastfeeding", "multiplier": 2.5 },
+      { "id": "infrequent_feeding", "multiplier": 2.0 },
+      { "id": "supplementation_with_formula", "multiplier": 1.5 },
+      { "id": "poor_latch_technique", "multiplier": 2.0 },
+      { "id": "cessation_of_breastfeeding_abrupt", "multiplier": 2.0 },
+      { "id": "large_breasts", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "mastitis",
+        "discriminators": ["unilateral", "systemic_symptoms_fever_rigors", "erythema_localized"]
+      },
+      {
+        "diseaseId": "inflammatory_breast_cancer",
+        "discriminators": ["peau_d_orange", "no_temporal_relation_to_delivery", "non_puerperal"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "low", "yield": 0.3, "indication": "if fever or mastitis suspected" },
+        { "name": "CRP", "priority": "low", "yield": 0.3, "indication": "if infection suspected" }
+      ],
+      "imaging": [
+        { "name": "Breast ultrasound", "priority": "low", "yield": 0.4, "indication": "if abscess suspected, rule out mastitis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / UNICEF Breastfeeding Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_to_moderate",
+          "criteria": "bilateral fullness, mild pain, baby can still latch",
+          "treatment": "Frequent breastfeeding (8-12 times/day). Ensure good latch. Warm compress before feeding. Cold compress after feeding. Gentle breast massage during feeds. Hand express if baby cannot latch."
+        },
+        {
+          "severity": "severe",
+          "criteria": "severe pain, flat nipples, baby unable to latch, skin tight",
+          "treatment": "Express milk manually or with pump until soft enough for latch. Reverse pressure softening to exert nipple. Cold compresses between feeds. Analgesia (paracetamol, ibuprofen). Lactation consultant referral. Avoid stopping breastfeeding."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "milk_accumulation",
+      "vascular_and_lymphatic_engorgement",
+      "interstitial_edema",
+      "alveolar_compression",
+      "delayed_milk_ejection_reflex"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "mastitis",
+        "probability": 0.1,
+        "lagDays": [1, 5],
+        "severityBoost": 0.3,
+        "clues": ["unilateral_pain", "fever", "erythema"]
+      },
+      {
+        "diseaseId": "nipple_trauma",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.1,
+        "clues": ["cracked_nipples", "bleeding"]
+      },
+      {
+        "diseaseId": "early_cessation_of_breastfeeding",
+        "probability": 0.2,
+        "lagDays": [1, 7],
+        "severityBoost": 0.1,
+        "clues": ["maternal_frustration", "pain", "poor_milk_transfer"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["postpartum_day_3_to_5", "bilateral_breast_fullness", "no_systemic_symptoms"],
+    "exclusionClues": ["unilateral_erythema", "fever_over_38", "purulent_discharge"]
+  }
+}

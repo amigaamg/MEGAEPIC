@@ -1,0 +1,175 @@
+{
+  "disease": {
+    "id": "acute_abdomen_imaging",
+    "name": "Acute Abdomen Imaging Assessment",
+    "system": "RAD",
+    "agePeak_months": [120, 720],
+    "note": "CT abdomen/pelvis with IV contrast is the workhorse for acute abdomen evaluation. Key pathologies: appendicitis, diverticulitis, bowel obstruction, perforation, and abscess. Ultrasound first-line in children and young adults.",
+    "prevalenceWeight": 0.85,
+    "syndromeTags": ["acute_abdomen", "abdominal_pain", "surgical_abdomen"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pneumoperitoneum", "weight": 10 },
+        { "sign": "bowel_ischemia_or_infarction", "weight": 10 },
+        { "sign": "ruptured_aneurysm", "weight": 10 },
+        { "sign": "closed_loop_obstruction", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "abscess_requiring_drainage", "weight": 7 },
+          { "sign": "free_fluid_with_peritonitis", "weight": 7 },
+          { "sign": "bowel_obstruction_with_strangulation", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If pneumoperitoneum/ischemia -> SURGICAL EMERGENCY; else -> NON-EMERGENCY"
+    },
+    "historyFeatures": [
+      { "symptomId": "abdominal_pain", "weight": 5, "modifiers": [
+          { "condition": "localized_or_generalized", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "obstipation_or_diarrhea", "weight": 3 },
+      { "symptomId": "distention", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "peritonitis_guarding_rigidity", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "rebound_tenderness", "baseWeight": 4 },
+      { "signId": "distended_abdomen", "baseWeight": 3 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 1.8 },
+      { "id": "prior_abdominal_surgery", "multiplier": 1.5 },
+      { "id": "constipation_history", "multiplier": 1.3 },
+      { "id": "nsaid_or_aspirin_use", "multiplier": 1.4 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_appendicitis_ct",
+        "name": "Acute Appendicitis (CT Findings)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "dilated_appendiceal_diameter_gt_7mm", "weight": 5 },
+          { "feature": "appendiceal_wall_thickening_or_enhancement", "weight": 5 },
+          { "feature": "peri_appendiceal_fat_stranding", "weight": 5 },
+          { "feature": "appendicolith", "weight": 4 },
+          { "feature": "cecal_wall_thickening", "weight": 3 },
+          { "feature": "fluid_in_rlq_or_pouch_of_douglas", "weight": 3 }
+        ],
+        "management": "CT findings confirm surgical pathology. Emergency appendicectomy. Abscess if perforated requires drainage."
+      },
+      {
+        "id": "acute_diverticulitis",
+        "name": "Acute Diverticulitis (CT Findings)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "colonic_wall_thickening_sigmoid", "weight": 5 },
+          { "feature": "peri_colonic_fat_stranding", "weight": 5 },
+          { "feature": "diverticula_present", "weight": 4 },
+          { "feature": "abscess_formation", "weight": 4 },
+          { "feature": "extraluminal_air", "weight": 4 },
+          { "feature": "Hinchey_classification", "weight": 5 }
+        ],
+        "management": "Hinchey Ia: antibiotics + bowel rest. Hinchey Ib/II: IV antibiotics ± percutaneous drainage. Hinchey III/IV: surgical resection."
+      },
+      {
+        "id": "small_bowel_obstruction",
+        "name": "Small Bowel Obstruction",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "dilated_small_bowel_loops_gt_3cm", "weight": 5 },
+          { "feature": "transition_point", "weight": 5 },
+          { "feature": "collapsed_distal_bowel", "weight": 5 },
+          { "feature": "small_bowel_fecalization", "weight": 3 },
+          { "feature": "closed_loop_sign", "weight": 5 },
+          { "feature": "mesenteric_edema_or_venous_congestion", "weight": 4 }
+        ],
+        "management": "NG decompression, NPO, IV fluids. CT distinguishes simple vs strangulating. Surgical consult: closed loop or ischemia requires emergent surgery."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "gastroenteritis",
+        "discriminators": ["diffuse_bowel_wall_thickening", "normal_appendix", "no_fat_stranding"]
+      },
+      {
+        "diseaseId": "mesenteric_adenitis",
+        "discriminators": ["enlarged_mesenteric_nodes", "normal_appendix", "pediatric_patient"]
+      },
+      {
+        "diseaseId": "pancreatitis",
+        "discriminators": ["pancreatic_edema_or_necrosis", "retroperitoneal_stranding", "elevated_lipase"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Alvarado or AIR score", "priority": "immediate", "yield": 0.7, "indication": "suspected appendicitis" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.5, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "medium", "yield": 0.5, "indication": "inflammation" },
+        { "name": "BMP", "priority": "medium", "yield": 0.3, "indication": "electrolytes, renal function" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen/Pelvis with IV contrast", "priority": "high", "yield": 0.95, "indication": "standard for acute abdomen (non-pregnant adults)" },
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.8, "indication": "first-line in children, pregnant, suspicion of biliary pathology" },
+        { "name": "Abdominal X-ray (AXR)", "priority": "medium", "yield": 0.4, "indication": "free air, obstruction, foreign body" },
+        { "name": "CT with PO contrast only", "priority": "low", "yield": 0.6, "indication": "if contrast allergy, better for enterography" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACR Appropriateness Criteria for Acute Abdominal Pain",
+      "pathways": [
+        {
+          "severity": "non_surgical",
+          "criteria": "negative CT, no peritonitis, stable patient",
+          "treatment": "Medical management per specific diagnosis. Discharge if improving. Outpatient follow-up."
+        },
+        {
+          "severity": "surgical_non_emergent",
+          "criteria": "localized pathology (appendicitis, cholecystitis), no perforation",
+          "treatment": "Surgical consult. Antibiotics. Semi-elective surgery within 24-48 hours for appendicitis."
+        },
+        {
+          "severity": "surgical_emergent",
+          "criteria": "pneumoperitoneum, ischemia, closed loop, abscess with sepsis",
+          "treatment": "Immediate surgical consult. IV fluids, antibiotics. Emergency laparotomy or laparoscopy."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "inflammation_or_infection",
+      "hollow_viscus_obstruction",
+      "ischemia",
+      "perforation",
+      "vascular_compromise"
+    ],
+    "complications": [
+      {
+        "diseaseId": "generalized_peritonitis",
+        "probability": 0.15,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["free_air", "free_fluid", "sepsis"]
+      },
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "probability": 0.1,
+        "lagDays": [3, 10],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "rim_enhancing_fluid_collection", "ileus"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["acute_abdominal_pain", "peritoneal_signs", "ct_findings_correlate"],
+    "exclusionClues": ["chronic_pain_months", "extrabdominal_cause_identified"]
+  }
+}

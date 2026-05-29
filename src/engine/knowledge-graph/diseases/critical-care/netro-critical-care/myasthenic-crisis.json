@@ -1,0 +1,128 @@
+{
+  "disease": {
+    "id": "myasthenic_crisis",
+    "name": "Myasthenic Crisis",
+    "system": "critical_care",
+    "agePeak_months": [120, 600],
+    "note": "Acute respiratory failure due to myasthenia gravis exacerbation. Triggered by infection, surgery, medication changes, or stress. Requires ICU for ventilatory support.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["neuromuscular_respiratory_failure", "critical_care", "autoimmune"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_failure_requiring_ventilation", "weight": 10 },
+        { "sign": "bulbar_palsy_aspiration_inability_to_swallow", "weight": 9 },
+        { "sign": "complete_ophthalmoplegia_ptosis", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Respiratory failure / impending -> CRITICAL; significant bulbar weakness -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "generalized_muscle_weakness", "weight": 4 },
+      { "symptomId": "ptosis_diplopia_variable", "weight": 3 },
+      { "symptomId": "dysphagia_difficulty_swallowing", "weight": 4 },
+      { "symptomId": "dysarthria_slurred_speech", "weight": 3 },
+      { "symptomId": "shortness_of_breath", "weight": 5 },
+      { "symptomId": "fatigue_worsening_with_exertion_improving_with_rest", "weight": 4 },
+      { "symptomId": "known_myasthenia_gravis_diagnosis", "weight": 5 },
+      { "symptomId": "recent_infection_or_surgery_or_steroid_taper", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "ptosis_on_upward_gaze", "baseWeight": 4 },
+      { "signId": "diplopia_on_lateral_gaze", "baseWeight": 3 },
+      { "signId": "facial_muscle_weakness", "baseWeight": 3 },
+      { "signId": "nasal_speech", "baseWeight": 3 },
+      { "signId": "poor_cough_and_swallow", "baseWeight": 4 },
+      { "signId": "tachypnea_abdominal_breathing", "baseWeight": 4 },
+      { "signId": "paradoxical_breathing", "baseWeight": 5 },
+      { "signId": "fasciculations_not_present", "baseWeight": 2, "note": "Helps differentiate from ALS" }
+    ],
+
+    "riskFactors": [
+      { "id": "known_myasthenia_gravis", "multiplier": 5.0 },
+      { "id": "recent_infection_respiratory_or_uti", "multiplier": 3.0 },
+      { "id": "surgery_recent_thymectomy_other", "multiplier": 2.5 },
+      { "id": "medication_change_steroid_withdrawal_or_increase", "multiplier": 2.0 },
+      { "id": "pregnancy_or_postpartum", "multiplier": 2.0 },
+      { "id": "drugs_that_worsen_mg_aminoglycosides_beta_blockers_magnesium", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "guillain_barre_syndrome",
+        "discriminators": ["ascending_weakness", "areflexia", "csf_albumin_cytologic_dissociation"]
+      },
+      {
+        "diseaseId": "multiple_sclerosis_exacerbation",
+        "discriminators": ["optic_neuritis", "sensory_symptoms", "brain_mri_lesions"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "VC (Vital Capacity) and NIF (Negative Inspiratory Force)", "priority": "immediate", "yield": 0.9, "indication": "VC <20 mL/kg or NIF <-30 suggests impending failure" }
+      ],
+      "laboratory": [
+        { "name": "Anti-AChR antibody (binding, blocking, modulating)", "priority": "high", "yield": 0.85, "indication": "confirm diagnosis if not known" },
+        { "name": "Anti-MuSK antibody", "priority": "high", "yield": 0.7, "indication": "if AChR negative" },
+        { "name": "ABG (PaCO2, PaO2)", "priority": "immediate", "yield": 0.8, "indication": "hypercapnia = impending failure" }
+      ],
+      "imaging": [
+        { "name": "CT Chest with contrast (thymus)", "priority": "high", "yield": 0.8, "indication": "thymoma screening" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Myasthenia Gravis Foundation of America / Neurocritical Care Guidelines",
+      "pathways": [
+        {
+          "severity": "impending crisis (VC 20-30, NIF -30 to -40)",
+          "criteria": "rising PaCO2, VC <30 mL/kg, declining NIF",
+          "treatment": "ICU monitoring. Pyridostigmine 30-60mg PO/NG Q4H. Plasmapheresis or IVIG (2g/kg over 5 days). High-dose corticosteroids. Non-invasive ventilation trial cautiously."
+        },
+        {
+          "severity": "established crisis (VC <20, NIF >-30, hypercapnia)",
+          "criteria": "intubation criteria met (VC <20, PaCO2 >50, hypoxia, exhaustion)",
+          "treatment": "Intubation and mechanical ventilation. Hold pyridostigmine (decrease secretions). Plasmapheresis (5-7 exchanges) or IVIG. Avoid NMBAs if possible. Treat underlying trigger. Steroids."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "achr_antibody_induced_postsynaptic_blockade",
+      "neuromuscular_junction_dysfunction",
+      "muscle_weakness_and_fatigability",
+      "respiratory_muscle_weakness",
+      "bulbar_weakness_aspiration_risk",
+      "ventilatory_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "ventilator_associated_pneumonia",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["new_fever", "purulent_secretions"]
+      },
+      {
+        "diseaseId": "tracheostomy_need",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["prolonged_ventilation_over_14_days"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["known_mg", "variable_weakness_ptosis_diplopia", "bulbar_weakness", "falling_vc_nif"],
+    "exclusionClues": ["cholinergic_crisis_improves_with_hold", "no_response_to_pyridostigmine_plasmapheresis"]
+  }
+}

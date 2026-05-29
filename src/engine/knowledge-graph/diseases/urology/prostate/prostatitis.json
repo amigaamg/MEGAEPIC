@@ -1,0 +1,137 @@
+{
+  "disease": {
+    "id": "prostatitis",
+    "name": "Prostatitis",
+    "system": "URO",
+    "agePeak_months": [240, 600],
+    "note": "Inflammation of prostate. Four NIH categories: acute bacterial (I), chronic bacterial (II), chronic pelvic pain syndrome (III), asymptomatic (IV).",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["pelvic_pain", "urinary_tract_infection", "prostate_disorder"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_urinary_retention", "weight": 8 },
+        { "sign": "sepsis_bacteremia", "weight": 10 },
+        { "sign": "prostatic_abscess", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Acute vs Chronic vs CP/CPPS. NIH Category I-IV."
+    },
+    "historyFeatures": [
+      { "symptomId": "perineal_pain", "weight": 5 },
+      { "symptomId": "fever_chills", "weight": 4, "note": "Category I acute" },
+      { "symptomId": "dysuria_frequency_urgency", "weight": 4 },
+      { "symptomId": "hesitancy_weak_stream", "weight": 3 },
+      { "symptomId": "pelvic_lower_back_pain", "weight": 3 },
+      { "symptomId": "ejaculatory_pain_hematospermia", "weight": 3 },
+      { "symptomId": "uti_history", "weight": 2 },
+      { "symptomId": "recurrent_episodes", "weight": 3, "note": "Chronic" }
+    ],
+    "examFeatures": [
+      { "signId": "tender_swollen_prostate_on_dre", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "suprapubic_tenderness", "baseWeight": 2 },
+      { "signId": "palpable_bladder_retention", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "uti_history", "multiplier": 2.0 },
+      { "id": "urethral_catheterization", "multiplier": 2.5 },
+      { "id": "unprotected_anal_intercourse", "multiplier": 2.0 },
+      { "id": "bladder_outlet_obstruction", "multiplier": 1.5 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_bacterial_prostatitis",
+        "name": "Acute Bacterial Prostatitis (NIH I)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "acute_onset_fever", "weight": 5 },
+          { "feature": "tender_swollen_prostate", "weight": 5 },
+          { "feature": "positive_urine_culture", "weight": 5 },
+          { "feature": "systemic_symptoms", "weight": 4 }
+        ],
+        "management": "Empiric IV antibiotics (ceftriaxone + gentamicin, or piperacillin-tazobactam) initially if severe/septic. Oral fluoroquinolones (ciprofloxacin 500 mg BID or levofloxacin 750 mg) for 4 weeks when stable. Alpha-blockers for voiding symptoms. Avoid vigorous DRE. Supportive: NSAIDs, hydration, bed rest."
+      },
+      {
+        "id": "chronic_bacterial_prostatitis",
+        "name": "Chronic Bacterial Prostatitis (NIH II)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "recurrent_uti_same_organism", "weight": 5 },
+          { "feature": "perineal_pelvic_pain_3_months", "weight": 4 },
+          { "feature": "positive_expressed_prostatic_secretion_culture", "weight": 5 },
+          { "feature": "no_fever", "weight": 3 }
+        ],
+        "management": "Prolonged antibiotics (4-12 weeks): fluoroquinolones (levofloxacin 750 mg) or TMP-SMX. Alpha-blockers. NSAIDs. Repeat cultures. Surgical resection (TURP) if refractory and with prostatic calculi."
+      },
+      {
+        "id": "chronic_pelvic_pain_syndrome",
+        "name": "Chronic Pelvic Pain Syndrome (NIH III)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "pelvic_pain_3_months_no_infection", "weight": 5 },
+          { "feature": "pain_in_perineum_testes_penis", "weight": 4 },
+          { "feature": "negative_cultures", "weight": 5 },
+          { "feature": "no_uti_history", "weight": 3 },
+          { "feature": "psychosocial_component", "weight": 2 }
+        ],
+        "management": "Multimodal: alpha-blockers, NSAIDs, physical therapy (pelvic floor), antidepressants (amitriptyline), gabapentinoids (pregabalin), psychological support. Avoid prolonged antibiotics. Phytotherapy (quercetin, saw palmetto). Lifestyle modifications."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "bph", "discriminators": ["no_fever", "no_pain", "smooth_enlarged_prostate", "normal_culture"] },
+      { "diseaseId": "interstitial_cystitis", "discriminators": ["bladder_pain_with_filling", "relieved_by_voiding", "glomerulations_on_cystoscopy", "no_prostate_tenderness"] },
+      { "diseaseId": "prostate_cancer", "discriminators": ["hard_irregular_prostate", "elevated_psa_may_overlap"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Urinalysis + culture", "priority": "immediate", "yield": 0.7, "indication": "pyuria, bacteriuria" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.4, "indication": "if febrile/septic" },
+        { "name": "Expressed prostatic secretion (EPS) culture", "priority": "high", "yield": 0.7, "indication": "definitive for bacterial prostatitis" },
+        { "name": "PSA (total)", "priority": "medium", "yield": 0.5, "indication": "may be elevated in acute prostatitis; recheck after treatment" }
+      ],
+      "imaging": [
+        { "name": "Transrectal Ultrasound (TRUS)", "priority": "medium", "yield": 0.6, "indication": "prostatic abscess if suspected, prostatic calculi" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EAU Guidelines on Urological Infections / NIH Prostatitis Guidelines",
+      "pathways": [
+        {
+          "severity": "acute bacterial - mild",
+          "criteria": "mild symptoms, no fever, able to void",
+          "treatment": "Oral antibiotics (ciprofloxacin 500 mg BID or levofloxacin 750 mg x 4 weeks). NSAIDs. Alpha-blockers (tamsulosin 0.4 mg)."
+        },
+        {
+          "severity": "acute bacterial - severe/sepsis",
+          "criteria": "high fever, retention, septic shock",
+          "treatment": "IV antibiotics (ceftriaxone + gentamicin, or piperacillin-tazobactam). IV fluids. Alpha-blockers. Catheter (suprapubic preferred if retention). Transition to oral when afebrile. Total 4 weeks."
+        },
+        {
+          "severity": "CP/CPPS",
+          "criteria": "pain >3 months, negative cultures, no fever",
+          "treatment": "Trial of alpha-blockers (4-6 weeks). NSAIDs. Pelvic floor physical therapy. Low-dose amitriptyline. Pregabalin/gabapentin for neuropathic pain. CBT if psychological factors. No role for antibiotics unless cultures positive."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "ascending_infection_from_urethra",
+      "reflux_of_infected_urine_into_prostatic_ducts",
+      "biofilm_formation_in_prostatic_ducts",
+      "prostatic_inflammation_and_edema",
+      "impaired_voiding_from_obstruction",
+      "pelvic_floor_muscle_tension_in_cppps",
+      "neurogenic_inflammation_and_central_sensitization"
+    ],
+    "complications": [
+      { "diseaseId": "prostatic_abscess", "probability": 0.05, "severityBoost": 0.5, "clues": ["persistent_fever_despite_antibiotics", "fluctuant_area_on_dre_or_trus", "worsening_pain"] },
+      { "diseaseId": "acute_urinary_retention", "probability": 0.1, "severityBoost": 0.3, "clues": ["inability_to_void", "palpable_bladder", "severe_edema_of_prostate"] },
+      { "diseaseId": "chronic_prostatitis_chronic_pelvic_pain", "probability": 0.2, "severityBoost": 0.2, "clues": ["persistent_pain_beyond_3_months", "recurrent_symptoms", "negative_cultures"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "high if acute/septic",
+    "diagnosticClues": ["perineal_pain_fever", "tender_prostate_on_dre", "dysuria_frequency", "positive_culture"],
+    "exclusionClues": ["normal_prostate_on_dre_no_tenderness", "negative_cultures", "no_pain"]
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "disease": {
+    "id": "adrenal_tumors",
+    "name": "Adrenal Tumors",
+    "system": "surgical",
+    "agePeak_months": [300, 720],
+    "note": "Incidental adrenal masses (incidentaloma) or functional tumors. Pheochromocytoma, aldosteronoma, cortisol-secreting adenoma, or malignancy.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["adrenal_mass", "hypertension", "endocrine_disorder"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypertensive_crisis", "weight": 10 },
+        { "sign": "pheochromocytoma_crisis", "weight": 10 },
+        { "sign": "catecholamine_cardiomyopathy", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tumor_size_large_greater_6cm", "weight": 7 },
+          { "sign": "rapid_growth", "weight": 7 },
+          { "sign": "malignant_features_on_imaging", "weight": 7 },
+          { "sign": "metastatic_disease", "weight": 9 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Crisis/malignant/metastatic -> SEVERE; small non-functional -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "incidental_finding_on_imaging", "weight": 5, "note": "Incidentaloma" },
+      { "symptomId": "hypertension", "weight": 4 },
+      { "symptomId": "headache_palpitations_sweating_triad", "weight": 5, "note": "Pheochromocytoma classic triad" },
+      { "symptomId": "episodic_hypertension_or_anxiety", "weight": 4 },
+      { "symptomId": "muscle_weakness_hypokalemia", "weight": 4, "note": "Aldosteronoma (Conn's) features" },
+      { "symptomId": "weight_gain_central_obesity_cushing", "weight": 4, "note": "Cortisol-secreting features" },
+      { "symptomId": "fatigue_diabetes_hypertension", "weight": 3 },
+      { "symptomId": "palpable_flank_mass", "weight": 2 },
+      { "symptomId": "family_history_men2_vhl", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypertension_resistant_or_paroxysmal", "baseWeight": 5 },
+      { "signId": "cushingoid_features", "baseWeight": 4 },
+      { "signId": "hypokalemia_signs_muscle_weakness", "baseWeight": 3 },
+      { "signId": "palpable_abdominal_mass", "baseWeight": 2 },
+      { "signId": "tachycardia_orthostatic_hypotension", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_40", "multiplier": 2.0 },
+      { "id": "hypertension_difficult_to_control", "multiplier": 2.0 },
+      { "id": "men2_syndrome", "multiplier": 5.0 },
+      { "id": "von_hippel_lindau_disease", "multiplier": 5.0 },
+      { "id": "neurofibromatosis_type_1", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "pheochromocytoma",
+        "name": "Pheochromocytoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "paroxysmal_hypertension", "weight": 5 },
+          { "feature": "headache_palpitations_sweating", "weight": 5 },
+          { "feature": "elevated_metanephrines", "weight": 5 },
+          { "feature": "10_percent_rule", "weight": 3 }
+        ],
+        "management": "Alpha-blockade (Phenoxybenzamine or Doxazosin) for 10-14 days pre-op. Beta-blockade after alpha-blockade. Laparoscopic adrenalectomy. MIBG scan for metastatic disease."
+      },
+      {
+        "id": "aldosterone_producing_adenoma",
+        "name": "Aldosteronoma (Conn's Syndrome)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "hypertension_hypokalemia", "weight": 5 },
+          { "feature": "low_renin_high_aldosterone", "weight": 5 },
+          { "feature": "muscle_weakness_fatigue", "weight": 3 },
+          { "feature": "adrenal_adenoma_on_ct", "weight": 4 }
+        ],
+        "management": "Laparoscopic adrenalectomy. Pre-op: Spironolactone or Eplerenone to control BP and K+. Confirm lateralization with adrenal vein sampling."
+      },
+      {
+        "id": "cortisol_secreting_adenoma",
+        "name": "Cortisol-Secreting Adenoma (Cushing's)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "central_obesity_moon_face", "weight": 5 },
+          { "feature": "osteoporosis_diabetes", "weight": 4 },
+          { "feature": "elevated_cortisol_not_suppressed", "weight": 5 },
+          { "feature": "low_acthp", "weight": 4 }
+        ],
+        "management": "Laparoscopic adrenalectomy. Peri-operative stress-dose steroids. Gradual steroid taper post-op. Monitor for adrenal insufficiency."
+      },
+      {
+        "id": "adrenocortical_carcinoma",
+        "name": "Adrenocortical Carcinoma (ACC)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "large_size_greater_6cm", "weight": 5 },
+          { "feature": "rapid_growth", "weight": 5 },
+          { "feature": "irregular_margins_necrosis", "weight": 4 },
+          { "feature": "hormone_secretion_mixed", "weight": 3 }
+        ],
+        "management": "Open adrenalectomy with en bloc resection. Complete lymphadenectomy. Mitotane therapy. Chemotherapy (EDP regimen). R1 resection margin common, need radiotherapy."
+      },
+      {
+        "id": "non_functioning_adenoma",
+        "name": "Non-Functioning Adrenal Adenoma (Incidentaloma)",
+        "prevalenceModifier": 0.55,
+        "keyFeatures": [
+          { "feature": "incidental_finding", "weight": 5 },
+          { "feature": "size_less_than_4cm", "weight": 4 },
+          { "feature": "homogeneous_low_hu_on_ct", "weight": 4 },
+          { "feature": "no_hormonal_excess", "weight": 5 }
+        ],
+        "management": "Resection if: size >4-6cm, rapid growth, suspicious imaging features, or functional. Follow-up CT at 6-12 months. Hormonal workup annually for 4 years."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "adrenal_myelolipoma",
+        "discriminators": ["fat_containing_on_ct", "benign", "no_hormonal_activity", "no_change_on_follow_up"]
+      },
+      {
+        "diseaseId": "adrenal_hemorrhage",
+        "discriminators": ["acute_onset_pain", "ct_high_attenuation", "resolution_over_time"]
+      },
+      {
+        "diseaseId": "adrenal_metastasis",
+        "discriminators": ["known_primary_malignancy", "bilateral", "rapid_growth", "no_hormonality"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "24h urine collection", "priority": "high", "yield": 0.6, "indication": "metanephrines, cortisol" }
+      ],
+      "laboratory": [
+        { "name": "Plasma or Urine Metanephrines", "priority": "high", "yield": 0.95, "indication": "screen for pheochromocytoma" },
+        { "name": "Aldosterone/Renin ratio (ARR)", "priority": "high", "yield": 0.85, "indication": "screen for Conn's" },
+        { "name": "Dexamethasone suppression test", "priority": "high", "yield": 0.85, "indication": "screen for Cushing's" },
+        { "name": "Cortisol, ACTHP", "priority": "medium", "yield": 0.6, "indication": "differentiate adrenal vs pituitary" },
+        { "name": "Electrolytes", "priority": "high", "yield": 0.5, "indication": "hypokalemia in Conn's" }
+      ],
+      "imaging": [
+        { "name": "CT Adrenal Protocol (non-contrast + delayed)", "priority": "immediate", "yield": 0.9, "indication": "characterization (HU <10 = benign)" },
+        { "name": "MRI with chemical shift", "priority": "high", "yield": 0.85, "indication": "if CT indeterminate" },
+        { "name": "MIBG Scintigraphy", "priority": "medium", "yield": 0.8, "indication": "pheochromocytoma localization and mets" },
+        { "name": "Adrenal Vein Sampling (AVS)", "priority": "medium", "yield": 0.85, "indication": "lateralization in Conn's" },
+        { "name": "FDG-PET/CT", "priority": "medium", "yield": 0.8, "indication": "if ACC suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAES Guidelines for Adrenal Tumors",
+      "pathways": [
+        {
+          "severity": "non-functional <4cm",
+          "criteria": "HU <10, <4cm, no hormonal activity, no growth",
+          "treatment": "Observation. Repeat CT in 6-12 months. Hormonal workup yearly for 4 years. Discharge if stable."
+        },
+        {
+          "severity": "functional tumor or >4cm",
+          "criteria": "hormonal excess, size >4-6cm, growth on follow-up",
+          "treatment": "Laparoscopic adrenalectomy. Pre-op preparation: alpha-blockade for pheo, Spironolactone for Conn's, stress steroids for Cushing's."
+        },
+        {
+          "severity": "suspicious for ACC",
+          "criteria": ">6cm, irregular margins, necrosis, rapid growth, metastatic",
+          "treatment": "Open adrenalectomy with en bloc resection. Mitotane. Chemotherapy. Radiotherapy for R1 margins."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "adrenal_cortical_or_medullary_cell_transformation",
+      "hormonal_hypersecretion",
+      "catecholamine_excess_pheochromocytoma",
+      "aldosterone_excess_conn",
+      "cortisol_excess_cushing",
+      "malignant_transformation_acc"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pheochromocytoma_crisis",
+        "probability": 0.05,
+        "lagDays": [0, 7],
+        "severityBoost": 0.5,
+        "clues": ["severe_hypertension", "headache", "palpitations", "sweating", "catecholamine_related"]
+      },
+      {
+        "diseaseId": "adrenal_insufficiency_post_op",
+        "probability": 0.05,
+        "lagDays": [1, 14],
+        "severityBoost": 0.3,
+        "clues": ["hypotension", "hyponatremia", "hyperkalemia", "pigmentation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["incidental_adrenal_mass", "hypertension_with_hypokalemia", "paroxysmal_hypertension_sweating", "cushingoid_features"],
+    "exclusionClues": ["normal_hormonal_workup", "stable_size_on_follow_up", "typical_benign_ct_features"]
+  }
+}

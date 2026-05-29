@@ -1,0 +1,381 @@
+{
+  "disease": {
+    "id": "pulmonary_hypertension",
+    "name": "Pulmonary Hypertension",
+    "system": "respiratory",
+    "note": "Pulmonary hypertension is defined by mean pulmonary artery pressure >20 mmHg at rest on right heart catheterisation. WHO classification (Groups 1–5) guides aetiology and treatment. PAH-specific therapy includes prostacyclin analogues, endothelin receptor antagonists, and PDE-5 inhibitors.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["pulmonary_vascular_disease", "right_heart_strain", "progressive_cardiopulmonary"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "right_heart_failure_decompensated", "weight": 10, "description": "Signs of low cardiac output, raised JVP, ascites, peripheral oedema" },
+        { "sign": "syncope_at_rest_or_mild_exertion", "weight": 10 },
+        { "sign": "spo2_less_than_88", "weight": 9 },
+        { "sign": "WHO_functional_class_IV", "weight": 9, "description": "Unable to perform any physical activity without symptoms" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "REVEAL_risk_score_high", "description": "REVEAL 2.0 score ≥10", "weight": 7 },
+          { "sign": "6MWD_less_than_165_meters", "weight": 6 },
+          { "sign": "RA_pressure_greater_than_14_mmHg", "weight": 6 },
+          { "sign": "cardiac_index_less_than_2_0", "weight": 7 },
+          { "sign": "pericardial_effusion_on_echo", "weight": 5 }
+        ]
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "WHO_class_III", "weight": 5 },
+          { "sign": "6MWD_165_to_440_m", "weight": 4 },
+          { "sign": "RA_pressure_8_to_14", "weight": 4 },
+          { "sign": "cardiac_index_2_0_to_2_5", "weight": 4 }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "WHO_class_I_to_II": true,
+        "6MWD_greater_than_440_m": true,
+        "RA_pressure_less_than_8": true,
+        "cardiac_index_greater_than_2_5": true
+      }
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 5, "qualitativeModifiers": [
+          { "qualityKey": "exertional_progressive", "weightBoost": 3 },
+          { "qualityKey": "restrictive_pattern", "weightBoost": 1 }
+        ]
+      },
+      { "symptomId": "fatigue", "weight": 4, "note": "Most common early symptom" },
+      { "symptomId": "syncope", "weight": 4, "note": "Exertional syncope suggests fixed cardiac output" },
+      { "symptomId": "presyncope_dizziness", "weight": 3 },
+      { "symptomId": "chest_pain", "weight": 3, "note": "Right ventricular angina due to RV ischaemia" },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "peripheral_oedema", "weight": 3, "note": "Right heart failure sign" },
+      { "symptomId": "abdominal_distension", "weight": 2, "note": "Ascites due to right heart failure" },
+      { "symptomId": "early_satiety", "weight": 2, "note": "Gastric congestion" },
+      { "symptomId": "dry_cough", "weight": 2, "note": "May occur at rest" },
+      { "symptomId": "hemoptysis", "weight": 1, "note": "May indicate pulmonary veno-occlusive disease" }
+    ],
+
+    "examFeatures": [
+      { "signId": "loud_P2", "baseWeight": 5, "doubleWeight": true, "note": "Accentuated pulmonary component of S2" },
+      { "signId": "raised_JVP", "baseWeight": 4, "severityMarker": true },
+      { "signId": "RV_heave", "baseWeight": 4, "note": "Parasternal lift indicates RV hypertrophy" },
+      { "signId": "tricuspid_regurgitation_murmur", "baseWeight": 3, "note": "Holosystolic at left lower sternal border" },
+      { "signId": "pedal_oedema", "baseWeight": 3, "severityMarker": true },
+      { "signId": "hepatomegaly", "baseWeight": 3, "severityMarker": true },
+      { "signId": "ascites", "baseWeight": 3, "severityMarker": true },
+      { "signId": "right_sided_S3_gallop", "baseWeight": 3, "note": "RV third heart sound" },
+      { "signId": "pulmonary_artery_pulsation", "baseWeight": 2 },
+      { "signId": "tachypnea", "baseWeight": 2 },
+      { "signId": "hypoxia", "baseWeight": 3, "severityBoost": true },
+      { "signId": "cool_peripheries", "baseWeight": 2, "severityMarker": true }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_PAH", "multiplier": 1.8, "note": "BMPR2 mutation accounts for 70% of heritable PAH" },
+      { "id": "connective_tissue_disease", "multiplier": 1.6, "note": "Systemic sclerosis (especially limited), SLE, MCTD" },
+      { "id": "congenital_heart_disease", "multiplier": 1.6, "note": "Eisenmenger physiology, ASD, VSD, PDA" },
+      { "id": "portal_hypertension", "multiplier": 1.4 },
+      { "id": "HIV_infection", "multiplier": 1.5 },
+      { "id": "drug_toxin_exposure", "multiplier": 1.5, "note": "Aminorex, fenfluramine, dexfenfluramine, methamphetamine, cocaine, dasatinib" },
+      { "id": "left_heart_disease", "multiplier": 1.5, "note": "Heart failure with preserved or reduced EF, valvular disease" },
+      { "id": "chronic_lung_disease", "multiplier": 1.4, "note": "COPD, ILD, OSA, obesity hypoventilation" },
+      { "id": "chronic_thromboembolism", "multiplier": 1.6, "note": "Prior PE, CTEPH" },
+      { "id": "schistosomiasis", "multiplier": 1.3, "note": "Endemic regions" }
+    ],
+
+    "subtypes": [
+      {
+        "id": "PAH_group_1",
+        "name": "Pulmonary Arterial Hypertension (Group 1 PAH)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "no_left_heart_or_lung_disease", "weight": 5 },
+          { "feature": "BMPR2_mutation_or_family_history", "weight": 5 },
+          { "feature": "CTD_association", "weight": 4 },
+          { "feature": "young_to_middle_age_women", "weight": 3 }
+        ],
+        "management": "PAH-specific therapy: calcium channel blockers (if acute vasoreactivity positive); ERA (bosentan/ambrisentan/macitentan); PDE-5 inhibitors (sildenafil/tadalafil); prostacyclin analogues (epoprostenol IV, treprostinil SC/IV, iloprost inhaled); combination therapy; lung transplant"
+      },
+      {
+        "id": "PH_group_2_left_heart",
+        "name": "PH due to Left Heart Disease (Group 2)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "left_ventricular_dysfunction", "weight": 5 },
+          { "feature": "valvular_heart_disease", "weight": 4 },
+          { "feature": "left_atrial_enlargement", "weight": 4 },
+          { "feature": "paroxysmal_nocturnal_dyspnea", "weight": 3 },
+          { "feature": "orthopnea", "weight": 3 }
+        ],
+        "management": "Treat underlying left heart disease; diuretics; PAH therapies NOT indicated (except in CpcPH under trial)"
+      },
+      {
+        "id": "PH_group_3_lung_disease",
+        "name": "PH due to Lung Disease/Hypoxia (Group 3)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "COPD_or_ILD_history", "weight": 5 },
+          { "feature": "chronic_hypoxia", "weight": 5 },
+          { "feature": "restrictive_or_obstructive_PFTs", "weight": 4 },
+          { "feature": "OSA_OHS", "weight": 3 }
+        ],
+        "management": "Optimise lung disease; LTOT; treat sleep-disordered breathing; NO routine PAH therapy (may worsen V/Q mismatch)"
+      },
+      {
+        "id": "CTEPH_group_4",
+        "name": "Chronic Thromboembolic PH (Group 4 CTEPH)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "prior_PE_history", "weight": 5 },
+          { "feature": "persistent_dyspnea_after_anticoagulation", "weight": 5 },
+          { "feature": "perfusion_defects_on_V_Q", "weight": 5 },
+          { "feature": "webs_or_bands_on_PA_angiogram", "weight": 5 }
+        ],
+        "management": "Anticoagulation lifelong; pulmonary endarterectomy (PEA) potentially curative; inhaled riociguat (sGC stimulator) if inoperable; balloon pulmonary angioplasty (BPA)"
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "left_heart_failure",
+        "discriminators": ["orthopnea", "PND", "left_ventricular_dysfunction", "BNP_elevated_out_of_proportion"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "COPD",
+        "discriminators": ["obstructive_PFTs", "smoking_history", "hyperinflation", "wheeze"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "ILD",
+        "discriminators": ["restrictive_PFTs_low_DLCO", "velcro_crackles", "fibrosis_on_HRCT"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["acute_onset", "Wells_score", "positive_CTPA"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "valvular_heart_disease",
+        "discriminators": ["murmur", "echocardiographic_valve_pathology"],
+        "negativeImpactOnPneumonia": 2
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Pulse oximetry",
+          "priority": "initial and each visit",
+          "yield": 0.7,
+          "indication": "desaturation suggests advanced disease"
+        },
+        {
+          "name": "Six-minute walk test (6MWT)",
+          "priority": "baseline and each follow-up",
+          "yield": 0.9,
+          "indication": "assess functional capacity and prognosis; distance <165 m predicts mortality",
+          "note": "WHO class and 6MWT distance guide therapy escalation"
+        },
+        {
+          "name": "WHO functional class",
+          "priority": "initial and each visit",
+          "yield": 0.8,
+          "indication": "prognostic classification I–IV"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "BNP or NT-proBNP",
+          "priority": "baseline and monitoring",
+          "yield": 0.8,
+          "indication": "prognostic marker; correlates with RV function"
+        },
+        {
+          "name": "CTD serology (ANA, RF, anti-CCP, anti-Scl70, anti-RNP)",
+          "priority": "initial to identify group 1 aetiology",
+          "yield": 0.6,
+          "indication": "detect connective tissue disease-associated PAH"
+        },
+        {
+          "name": "HIV serology",
+          "priority": "initial screening",
+          "yield": 0.2,
+          "indication": "HIV-associated PAH"
+        },
+        {
+          "name": "Thrombophilia screen",
+          "priority": "if CTEPH suspected",
+          "yield": 0.4,
+          "indication": "antiphospholipid antibodies, factor V Leiden"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "Echocardiogram (transthoracic) with Doppler",
+          "priority": "first-line imaging",
+          "yield": 0.85,
+          "indication": "estimate PAP (TR jet), RA size, RV size/function, pericardial effusion, left heart function",
+          "note": "PASP >40 mmHg suggests PH; TAPSE, FAC, S' assess RV function"
+        },
+        {
+          "name": "Chest X-ray",
+          "priority": "initial",
+          "yield": 0.3,
+          "indication": "prominent PA, RA enlargement, oligaemic lung fields"
+        },
+        {
+          "name": "V/Q scan",
+          "priority": "essential for CTEPH exclusion",
+          "yield": 0.75,
+          "indication": "all PH patients should have V/Q to exclude CTEPH"
+        },
+        {
+          "name": "HRCT chest",
+          "priority": "assess lung parenchyma (group 3)",
+          "yield": 0.5,
+          "indication": "if lung disease suspected as cause"
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Right heart catheterisation (RHC)",
+          "indication": "definitive diagnosis; mPAP >20 mmHg confirms PH",
+          "priority": "mandatory before PAH-specific therapy",
+          "note": "Measure mPAP, PCWP (≤15 excludes group 2), PVR, cardiac output, RA pressure, acute vasoreactivity testing (nitric oxide)"
+        },
+        {
+          "name": "Pulmonary function tests (spirometry, lung volumes, DLCO)",
+          "indication": "assess lung function contribution; reduced DLCO out of proportion to restriction suggests PAH",
+          "priority": "baseline"
+        },
+        {
+          "name": "Cardiac MRI",
+          "indication": "RV volumetric assessment, stroke volume, late gadolinium enhancement",
+          "priority": "selected"
+        },
+        {
+          "name": "Pulmonary angiography",
+          "indication": "CTEPH evaluation for pulmonary endarterectomy",
+          "priority": "before PEA"
+        }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ERS/ESC Guidelines on Pulmonary Hypertension (2022/2024); WHO PH Classification",
+      "pathways": [
+        {
+          "severity": "mild (WHO class I–II, low REVEAL risk)",
+          "criteria": "6MWD >440 m, RA pressure <8, CI >2.5, low BNP",
+          "treatment": [
+            "Diagnostic RHC with vasoreactivity testing",
+            "If positive acute vasoreactivity (fall in mPAP ≥10 mmHg to ≤40 mmHg with preserved CO): high-dose CCB (nifedipine or diltiazem)",
+            "If negative or no sustained response: initiate PAH-specific oral monotherapy (ERA or PDE-5i)",
+            "General: diuretics if fluid overload, warfarin in IPAH (controversial), oxygen if hypoxaemic",
+            "Supervised exercise training and pulmonary rehabilitation",
+            "Avoid pregnancy, high altitude, heavy isometric exertion"
+          ],
+          "followUp": "3-monthly: WHO class, 6MWT, BNP; annual RHC"
+        },
+        {
+          "severity": "moderate (WHO class III, intermediate risk)",
+          "criteria": "6MWD 165–440 m, RA pressure 8–14, CI 2.0–2.5, BNP elevated",
+          "treatment": [
+            "Initial oral combination therapy: ERA + PDE-5 inhibitor (e.g., ambrisentan + tadalafil, bosentan + sildenafil)",
+            "If inadequate response: triple therapy with prostacyclin pathway agent (selexipag oral or IV/SC prostacyclin)",
+            "Diuretics aggressively for right heart failure",
+            "Consider atrial septostomy if refractory with recurrent syncope (bridge to transplant)"
+          ],
+          "followUp": "3-monthly reassessment; escalate therapy if intermediate risk persists"
+        },
+        {
+          "severity": "severe (WHO class IV, high risk)",
+          "criteria": "6MWD <165 m, RA pressure >14, CI <2.0, BNP very high, right heart failure",
+          "treatment": [
+            "Parenteral prostacyclin analogue: IV epoprostenol (continuous infusion via tunneled catheter) or SC/IV treprostinil",
+            "Combination oral ERA + PDE-5i plus parenteral prostacyclin",
+            "Intensified diuretic therapy, inotropes if low cardiac output",
+            "Lung transplant evaluation (bilateral lung or heart-lung for advanced PAH)",
+            "Palliative care integration if not transplant candidate",
+            "Potassium supplementation and careful fluid management"
+          ],
+          "escalation": "Urgent lung transplant referral. Atrial septostomy as bridge. ECMO as bridge to transplant in refractory cases."
+        }
+      ],
+      "specialConsiderations": {
+        "Group_2_PH": "Treat left heart disease; PAH therapies not recommended (may cause pulmonary oedema)",
+        "Group_3_PH": "Treat underlying lung disease; LTOT; no routine PAH therapy",
+        "Group_4_CTEPH": "Lifelong anticoagulation; pulmonary endarterectomy is potentially curative; riociguat if inoperable",
+        "Group_5_PH": "Treat underlying condition (sarcoidosis, metabolic, haematologic, systemic)"
+      }
+    },
+
+    "pathophysiology": [
+      "pulmonary_vasoconstriction",
+      "endothelial_dysfunction",
+      "vascular_remodelling",
+      "intimal_hyperplasia",
+      "medial_hypertrophy",
+      "plexiform_lesion_formation",
+      "increased_PVR",
+      "right_ventricular_hypertrophy",
+      "right_ventricular_failure",
+      "decreased_cardiac_output",
+      "reduced_exercise_capacity"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "right_ventricular_failure",
+        "probability": 0.4,
+        "severityBoost": 0.6,
+        "clues": ["oedema", "ascites", "raised_JVP", "low_cardiac_output", "elevated_BNP"]
+      },
+      {
+        "diseaseId": "syncope",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["exertional_syncope", "presyncope", "inability_to_increase_CO"]
+      },
+      {
+        "diseaseId": "arrhythmias",
+        "probability": 0.2,
+        "clues": ["atrial_arrhythmia", "AF_flutter", "sudden_cardiac_death"]
+      },
+      {
+        "diseaseId": "hemoptysis",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "clues": ["bronchial_artery_dilatation", "rupture_aneurysm"]
+      },
+      {
+        "diseaseId": "pulmonary_artery_thrombosis_in_situ",
+        "probability": 0.1,
+        "clues": ["worsening_dyspnea", "increased_PVR", "anticoagulation_indicated"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "if right heart failure decompensation, refractory syncope, or WHO class IV with low cardiac output",
+
+    "diagnosticClues": [
+      "exertional dyspnoea out of proportion to lung function",
+      "loud P2, RV heave, raised JVP",
+      "reduced DLCO with preserved lung volumes",
+      "mPAP >20 mmHg on RHC with PCWP ≤15",
+      "enlarged PA on CXR with RV hypertrophy on echo"
+    ],
+    "exclusionClues": [
+      "normal echo with estimated PAP <35 mmHg and no RV abnormality",
+      "normal RHC excludes diagnosis",
+      "left heart disease with elevated PCWP >15 suggests group 2 PH",
+      "PFTs showing obstruction or restriction suggests group 3 cause"
+    ]
+  }
+}

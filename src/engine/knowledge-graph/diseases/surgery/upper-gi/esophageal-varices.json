@@ -1,0 +1,179 @@
+{
+  "disease": {
+    "id": "esophageal_varices",
+    "name": "Esophageal Varices",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Portosystemic collaterals due to portal hypertension. Life-threatening bleeding risk. Most common cause is cirrhosis.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["upper_gi_bleeding", "portal_hypertension", "hematemesis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hematemesis_massive", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "ongoing_active_bleeding", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hemoglobin_below_7", "weight": 9 },
+          { "sign": "hemodynamic_instability", "weight": 8 },
+          { "sign": "hepatic_encephalopathy", "weight": 8 },
+          { "sign": "coagulopathy", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Active bleeding/shock -> SEVERE; no bleeding history with varices -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hematemesis", "weight": 5, "note": "Painless massive hematemesis is classic" },
+      { "symptomId": "melena", "weight": 4 },
+      { "symptomId": "known_cirrhosis_or_chronic_liver_disease", "weight": 5 },
+      { "symptomId": "alcohol_abuse", "weight": 4 },
+      { "symptomId": "prior_variceal_bleed", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 1, "note": "Vomiting can precipitate variceal rupture" }
+    ],
+
+    "examFeatures": [
+      { "signId": "signs_of_chronic_liver_disease", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "stigmata_of_cirrhosis", "baseWeight": 4, "note": "Spider angiomas, palmar erythema, gynecomastia" },
+      { "signId": "ascites", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "caput_medusae", "baseWeight": 3 },
+      { "signId": "tachycardia_hypotension", "baseWeight": 4 },
+      { "signId": "jaundice", "baseWeight": 3 },
+      { "signId": "hepatic_encephalopathy_signs", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "cirrhosis", "multiplier": 4.0 },
+      { "id": "portal_hypertension", "multiplier": 4.0 },
+      { "id": "alcohol_abuse", "multiplier": 2.5 },
+      { "id": "hepatitis_b_or_c", "multiplier": 2.5 },
+      { "id": "nonalcoholic_steatohepatitis", "multiplier": 2.0 },
+      { "id": "variceal_size_large", "multiplier": 3.0 },
+      { "id": "red_wale_signs_on_endoscopy", "multiplier": 2.5 },
+      { "id": "child_pugh_class_c", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "esophageal_varices_no_bleed",
+        "name": "Esophageal Varices (No Prior Bleed)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "known_cirrhosis", "weight": 5 },
+          { "feature": "no_history_of_bleeding", "weight": 5 },
+          { "feature": "varices_on_screening_endoscopy", "weight": 5 }
+        ],
+        "management": "Primary prophylaxis: Non-selective beta-blocker (Propranolol/Nadolol) or EVL for high-risk varices. Screen with EGD at diagnosis and every 1-2 years."
+      },
+      {
+        "id": "acute_variceal_bleeding",
+        "name": "Acute Variceal Bleeding",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "massive_hematemesis", "weight": 5 },
+          { "feature": "hemodynamic_instability", "weight": 5 },
+          { "feature": "cirrhosis_history", "weight": 5 },
+          { "feature": "active_bleeding_on_endoscopy", "weight": 5 }
+        ],
+        "management": "Resuscitation (restrictive). IV Terlipressin or Octreotide. IV antibiotics (Ceftriaxone). Urgent EGD with EVL or sclerotherapy. Balloon tamponade (Sengstaken-Blakemore tube) as bridge. TIPS for refractory bleeding."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_bleeding",
+        "discriminators": ["epigastric_pain", "no_signs_of_liver_disease", "nsaid_history", "bleeding_less_massive"]
+      },
+      {
+        "diseaseId": "mallory_weiss_syndrome",
+        "discriminators": ["history_of_vomiting_before_bleeding", "no_liver_disease", "self_limiting"]
+      },
+      {
+        "diseaseId": "gastric_varices",
+        "discriminators": ["isolated_gastric_varices", "splenic_vein_thrombosis", "no_esophageal_varices"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "NG tube", "priority": "immediate", "yield": 0.6, "indication": "confirm upper GI bleeding source, gastric lavage" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.7, "indication": "hemoglobin, platelets" },
+        { "name": "Coagulation profile (PT/INR)", "priority": "immediate", "yield": 0.7, "indication": "coagulopathy in liver disease" },
+        { "name": "LFTs", "priority": "immediate", "yield": 0.6, "indication": "assess liver function" },
+        { "name": "Child-Pugh Score", "priority": "high", "yield": 0.8, "indication": "severity of liver disease" },
+        { "name": "Cross-match", "priority": "immediate", "yield": 0.5, "indication": "prepare for transfusion" }
+      ],
+      "imaging": [
+        { "name": "Upper GI Endoscopy (EGD)", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis and treat" },
+        { "name": "Doppler Ultrasound abdomen", "priority": "medium", "yield": 0.6, "indication": "assess portal hypertension, splenic vein patency" },
+        { "name": "CT Angiography", "priority": "medium", "yield": 0.7, "indication": "if endoscopy unavailable or inconclusive" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Baveno VII Consensus Guidelines for Portal Hypertension",
+      "pathways": [
+        {
+          "severity": "primary prophylaxis",
+          "criteria": "cirrhosis with varices but no prior bleeding",
+          "treatment": "Non-selective beta-blocker (NSBB) or EVL every 2-4 weeks until obliterated for high-risk varices. Repeat EGD in 1 year."
+        },
+        {
+          "severity": "acute variceal bleeding",
+          "criteria": "active hematemesis/melena, known cirrhosis, hemodynamic instability",
+          "treatment": "Resuscitation (Hb target 7-8 g/dL). Terlipressin/Octreotide infusion. IV Ceftriaxone. Urgent EGD <12h. EVL or sclerotherapy. Balloon tamponade if uncontrolled. TIPS if failure. ICU admission."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "portal_hypertension",
+      "increased_hepatic_resistance",
+      "portosystemic_shunting",
+      "esophageal_venous_dilatation",
+      "wall_tension_increase",
+      "variceal_rupture",
+      "hemorrhage"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypovolemic_shock",
+        "probability": 0.3,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "tachycardia", "oliguria", "altered_mental_state"]
+      },
+      {
+        "diseaseId": "aspiration_pneumonia",
+        "probability": 0.15,
+        "lagDays": [1, 3],
+        "severityBoost": 0.2,
+        "clues": ["cough", "fever", "infiltrates_on_cxr"]
+      },
+      {
+        "diseaseId": "hepatic_encephalopathy",
+        "probability": 0.2,
+        "lagDays": [1, 5],
+        "severityBoost": 0.3,
+        "clues": ["altered_consciousness", "asterixis", "elevated_ammonia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painless_massive_hematemesis", "known_cirrhosis", "signs_of_chronic_liver_disease", "hemodynamic_instability"],
+    "exclusionClues": ["epigastric_pain", "nsaid_use", "no_liver_disease_history"]
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "hypothermia",
+    "name": "Hypothermia",
+    "system": "emergency_medicine",
+    "agePeak_months": [0, 960],
+    "note": "Core temperature <35C. Systemic effects: cardiac irritability, coagulopathy, metabolic depression. Reversible cause of cardiac arrest. Swiss staging system: I (<35C conscious/shivering), II (<32C no shivering), III (<28C unconscious), IV (<24C cardiac arrest).",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["environmental", "hypothermia", "emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "core_temp_below_28c", "weight": 10 },
+        { "sign": "unconsciousness", "weight": 9 },
+        { "sign": "hypotension_unresponsive", "weight": 9 },
+        { "sign": "arrhythmia_vf_vt", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Severe hypothermia (<28C) or any hypothermia with cardiovascular instability = CRITICAL."
+    },
+    "historyFeatures": [
+      { "symptomId": "cold_exposure", "weight": 5 },
+      { "symptomId": "immersion", "weight": 4 },
+      { "symptomId": "alcohol_or_drug_intoxication", "weight": 4 },
+      { "symptomId": "shivering_early", "weight": 3 },
+      { "symptomId": "confusion_lethargy", "weight": 4 },
+      { "symptomId": "falls_trauma", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "core_temp_below_35", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "shivering_absent_below_32", "baseWeight": 4 },
+      { "signId": "bradycardia", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "arrhythmia_atrial_fibrillation", "baseWeight": 3 },
+      { "signId": "cold_pale_skin", "baseWeight": 3 },
+      { "signId": "depressed_consciousness", "baseWeight": 4 },
+      { "signId": "hyporeflexia", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "elderly_age", "multiplier": 3.0 },
+      { "id": "infants_and_young_children", "multiplier": 2.5 },
+      { "id": "alcohol_or_drug_use", "multiplier": 2.5 },
+      { "id": "homelessness", "multiplier": 3.0 },
+      { "id": "hypothyroidism", "multiplier": 2.0 },
+      { "id": "hypoglycemia", "multiplier": 1.5 },
+      { "id": "immersion", "multiplier": 3.0 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Core temperature (low-reading rectal/esophageal)", "priority": "immediate", "yield": 1.0, "indication": "all suspected hypothermia" },
+        { "name": "ECG", "priority": "high", "yield": 0.8, "indication": "J (Osborn) waves, arrhythmia" },
+        { "name": "Blood glucose", "priority": "high", "yield": 0.6, "indication": "hypoglycemia cause or complication" }
+      ],
+      "laboratory": [
+        { "name": "ABG/VBG (uncorrected)", "priority": "high", "yield": 0.7, "indication": "acid-base status" },
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.5, "indication": "baseline, electrolyte imbalances" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.6, "indication": "coagulopathy of hypothermia" },
+        { "name": "Serum amylase/lipase", "priority": "medium", "yield": 0.3, "indication": "pancreatitis complication" },
+        { "name": "Thyroid function, cortisol", "priority": "medium", "yield": 0.3, "indication": "endocrine cause" },
+        { "name": "Toxicology screen", "priority": "medium", "yield": 0.3, "indication": "alcohol, drugs" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ERC Guidelines / Wilderness Medical Society Guidelines",
+      "pathways": [
+        {
+          "severity": "mild (32-35C) + conscious + shivering",
+          "criteria": "core 32-35C, conscious, shivering, stable vitals",
+          "treatment": "Passive external rewarming: warm environment, remove wet clothing, warm blankets, warm oral fluids. Active movement. Avoid rough handling (risk of VF)."
+        },
+        {
+          "severity": "moderate (28-32C) + reduced consciousness",
+          "criteria": "core 28-32C, reduced consciousness, no shivering",
+          "treatment": "Active external rewarming: forced air warmer, warm blankets, warm IV fluids (40C). Handle gently. Cardiac monitoring. Warm humidified oxygen."
+        },
+        {
+          "severity": "severe (<28C) or unconscious or unstable",
+          "criteria": "core <28C, unconscious, hypotension, arrhythmia",
+          "treatment": "Active core rewarming: warm IV fluids, warm humidified oxygen, pleural/peritoneal lavage (40-45C), ECMO (most effective). CPR if arrest (prolonged resuscitation). Defibrillation: limit to 3 shocks until core >30C. Advanced life support per protocol. Rewarm 0.5-2C/hour. ICU admission."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "reduced_metabolic_rate",
+      "decreased_oxygen_consumption",
+      "cardiac_depression",
+      "bradycardia",
+      "arrhythmia_susceptibility",
+      "cold_diuresis",
+      "coagulopathy",
+      "shift_of_oxyhemoglobin_dissociation_curve",
+      "depressed_cns_function",
+      "paradoxical_afterdrop"
+    ],
+    "complications": [
+      {
+        "diseaseId": "ventricular_fibrillation",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["core_below_28c", "rough_handling", "pre-existing_cardiac_disease"]
+      },
+      {
+        "diseaseId": "rewarming_shock",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["rapid_rewarming", "hypotension_during_rewarming"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["cold_exposure", "core_temp_below_35c", "shivering_or_absent", "bradycardia", "j_waves_on_ecg", "altered_consciousness"],
+    "exclusionClues": ["normal_temperature", "no_cold_exposure", "different_cause_for_symptoms"]
+  }
+}

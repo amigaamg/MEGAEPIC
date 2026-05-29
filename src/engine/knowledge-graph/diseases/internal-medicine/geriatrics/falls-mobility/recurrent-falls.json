@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "recurrent_falls",
+    "name": "Recurrent Falls in the Elderly",
+    "system": "geriatrics",
+    "agePeak_months": [720, 1080],
+    "note": "Leading cause of injury and disability in older adults. Often multifactorial; requires systematic evaluation.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["falls", "mobility", "geriatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "head_injury_on_anticoagulation", "weight": 10 },
+        { "sign": "hip_fracture", "weight": 9 },
+        { "sign": "loss_of_consciousness", "weight": 8 },
+        { "sign": "significant_trauma", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "no_injury": true,
+        "no_danger_signs": true
+      },
+      "severityLabel": "If trauma, LOC, or anticoagulation -> EMERGENCY; mechanical fall without injury -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "recent_fall", "weight": 5 },
+      { "symptomId": "fear_of_falling", "weight": 3 },
+      { "symptomId": "near_falls", "weight": 2 },
+      { "symptomId": "dizziness_or_lightheadedness", "weight": 3 },
+      { "symptomId": "syncope", "weight": 4 },
+      { "symptomId": "tripping_hazards", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "impaired_gait", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "positive_timed_up_and_go", "baseWeight": 4 },
+      { "signId": "orthostatic_hypotension", "baseWeight": 4 },
+      { "signId": "reduced_visual_acuity", "baseWeight": 3 },
+      { "signId": "peripheral_neuropathy", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_75", "multiplier": 2.0 },
+      { "id": "previous_falls", "multiplier": 2.5 },
+      { "id": "muscle_weakness", "multiplier": 1.8 },
+      { "id": "polypharmacy_4plus", "multiplier": 1.5 },
+      { "id": "visual_impairment", "multiplier": 1.4 },
+      { "id": "cognitive_impairment", "multiplier": 1.6 },
+      { "id": "environmental_hazards", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "syncope",
+        "discriminators": ["complete_loss_of_consciousness", "spontaneous_recovery", "prodromal_symptoms"]
+      },
+      {
+        "diseaseId": "seizure",
+        "discriminators": ["tonic_clonic_movements", "post_ictal_confusion", "tongue_biting"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Timed Up and Go test", "priority": "immediate", "yield": 0.9, "indication": "mobility assessment" },
+        { "name": "Orthostatic BP measurement", "priority": "immediate", "yield": 0.8, "indication": "postural hypotension" }
+      ],
+      "laboratory": [
+        { "name": "Vitamin B12 and D levels", "priority": "high", "yield": 0.4, "indication": "deficiency workup" },
+        { "name": "Thyroid function tests", "priority": "medium", "yield": 0.3, "indication": "thyroid dysfunction" }
+      ],
+      "imaging": [
+        { "name": "CT head", "priority": "high", "yield": 0.6, "indication": "if head trauma or anticoagulated" },
+        { "name": "X-ray affected limb", "priority": "medium", "yield": 0.7, "indication": "suspected fracture" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline CG161 – Falls in older people",
+      "pathways": [
+        {
+          "severity": "acute_injury",
+          "criteria": "fracture, head trauma, bleeding",
+          "treatment": "Stabilize injury. Reverse anticoagulation if indicated. Neurosurgical consult if head injury."
+        },
+        {
+          "severity": "no_injury",
+          "criteria": "mechanical fall without injury",
+          "treatment": "Multifactorial risk assessment. Strength and balance training. Medication review. Home hazard assessment. Vision check."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "age_related_gait_changes",
+      "sarcopenia",
+      "impaired_balance",
+      "orthostatic_hypotension",
+      "vestibular_dysfunction",
+      "environmental_trip_hazards"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hip_fracture",
+        "probability": 0.08,
+        "severityBoost": 0.6,
+        "clues": ["inability_to_weight_bear", "shortened_rotated_leg"]
+      },
+      {
+        "diseaseId": "subdural_hematoma",
+        "probability": 0.02,
+        "severityBoost": 0.9,
+        "clues": ["anticoagulation", "head_strike", "confusion"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if anticoagulated or head trauma",
+    "diagnosticClues": ["age_over_65", "history_of_falls", "impaired_tug_test"],
+    "exclusionClues": ["single_mechanical_trip", "no_recurrence", "no_risk_factors"]
+  }
+}

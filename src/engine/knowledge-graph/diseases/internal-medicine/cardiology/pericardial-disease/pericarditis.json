@@ -1,0 +1,142 @@
+{
+  "disease": {
+    "id": "pericarditis_cardiology",
+    "name": "Acute Pericarditis",
+    "system": "CARD",
+    "agePeak_months": [240, 720],
+    "note": "Inflammation of the pericardium. Typical: pleuritic chest pain, pericardial rub, diffuse ST elevation. Many causes.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["pericardial_disease", "chest_pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_tamponade", "weight": 10 },
+        { "sign": "pulsus_paradoxus", "weight": 9 },
+        { "sign": "hemodynamic_instability", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If tamponade/instability -> EMERGENCY; else -> NON-SEVERE"
+    },
+    "historyFeatures": [
+      { "symptomId": "chest_pain", "weight": 5, "modifiers": [{ "condition": "pleuritic_positional", "suspectTB": false }] },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "malaise_fatigue", "weight": 2 },
+      { "symptomId": "preceding_viral_illness", "weight": 2 },
+      { "symptomId": "odynophagia", "weight": 1, "note": "Pain on swallowing" }
+    ],
+    "examFeatures": [
+      { "signId": "pericardial_rub", "baseWeight": 5, "doubleWeight": true, "note": "Best heard with diaphragm at LLSB, patient leaning forward" },
+      { "signId": "muffled_heart_sounds", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 2 },
+      { "signId": "tachycardia", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "viral_infection_recent", "multiplier": 2.0 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "post_mi_dressler", "multiplier": 2.5 },
+      { "id": "post_cardiac_surgery", "multiplier": 2.0 },
+      { "id": "renal_failure_uremia", "multiplier": 2.5 },
+      { "id": "tb_in_endemic_area", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "viral_pericarditis",
+        "name": "Viral/Idiopathic Pericarditis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "viral_prodrome", "weight": 4 },
+          { "feature": "self_limited", "weight": 4 }
+        ],
+        "management": "NSAIDs (ibuprofen 600-800 mg TDS) + colchicine 0.5 mg BD. Activity restriction. Follow-up in 1 week."
+      },
+      {
+        "id": "tb_pericarditis",
+        "name": "Tuberculous Pericarditis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "fever_night_sweats", "weight": 5 },
+          { "feature": "weight_loss", "weight": 4 },
+          { "feature": "large_pericardial_effusion", "weight": 5 }
+        ],
+        "management": "Anti-TB therapy (4 drugs, 6 months). Prednisolone 60 mg taper. Pericardiocentesis if tamponade."
+      },
+      {
+        "id": "uremic_pericarditis",
+        "name": "Uremic Pericarditis",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "end_stage_renal_disease", "weight": 5 },
+          { "feature": "elevated_urea_creatinine", "weight": 4 }
+        ],
+        "management": "Intensify dialysis. NSAIDs cautiously. Colchicine. Pericardiocentesis if effusion."
+      },
+      {
+        "id": "purulent_pericarditis",
+        "name": "Purulent (Bacterial) Pericarditis",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "high_fever", "weight": 5 },
+          { "feature": "toxic_appearance", "weight": 5 },
+          { "feature": "elevated_inflammatory_markers", "weight": 4 }
+        ],
+        "management": "IV antibiotics (empiric vancomycin + ceftriaxone + metronidazole). Pericardial drainage. Surgical pericardiotomy if loculated."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "acute_mi", "discriminators": ["non_positional_pain", "troponin_rise", "regional_st_elevation"] },
+      { "diseaseId": "pulmonary_embolism", "discriminators": ["pleuritic_pain_plus_hemoptysis", "dvt", "right_heart_strain"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.85, "indication": "diffuse ST elevation, PR depression" },
+        { "name": "Echocardiography", "priority": "high", "yield": 0.8, "indication": "effusion, tamponade signs" }
+      ],
+      "laboratory": [
+        { "name": "Full blood count, CRP", "priority": "high", "yield": 0.6, "indication": "inflammatory markers" },
+        { "name": "Troponin", "priority": "high", "yield": 0.4, "indication": "myopericarditis" },
+        { "name": "Urea, creatinine", "priority": "medium", "yield": 0.3, "indication": "uremic pericarditis" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.4, "indication": "water-bottle heart if large effusion" },
+        { "name": "Cardiac MRI", "priority": "medium", "yield": 0.9, "indication": "pericardial inflammation (edema, LGE)" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Pericardial Diseases",
+      "pathways": [
+        {
+          "severity": "mild (no high-risk features)",
+          "criteria": "viral/idiopathic, no effusion, good response to NSAIDs",
+          "treatment": "Ibuprofen 600 mg TDS or ASA 500-1000 mg TDS. Colchicine 0.5 mg BD (weight-adjusted). Restrict activity for 4-6 weeks. PPI cover."
+        },
+        {
+          "severity": "moderate (high-risk features)",
+          "criteria": "large effusion, fever >38, subacute onset, immunosuppressed, anticoagulated",
+          "treatment": "Hospital admission. NSAIDs + colchicine. Consider colchicine + prednisolone if NSAID contraindicated. Echo-guided pericardiocentesis if effusion significant."
+        },
+        {
+          "severity": "recurrent pericarditis",
+          "criteria": "recurrence after initial episode, symptom-free interval",
+          "treatment": "Colchicine indefinitely. NSAIDs PRN. Prednisolone only if refractory (low dose, taper slowly). Consider anakinra (IL-1 antagonist)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "pericardial_inflammation",
+      "fibrinous_exudate",
+      "pericardial_effusion",
+      "pain_from_parietal_pericardium",
+      "ecg_changes_from_epicardial_inflammation"
+    ],
+    "complications": [
+      { "diseaseId": "pericardial_effusion", "probability": 0.3, "severityBoost": 0.2, "clues": ["muffled_hearts", "echolucent_space"] },
+      { "diseaseId": "cardiac_tamponade", "probability": 0.05, "severityBoost": 0.5, "clues": ["hypotension", "jvd", "pulsus_paradoxus"] },
+      { "diseaseId": "constrictive_pericarditis", "probability": 0.03, "severityBoost": 0.3, "clues": ["chronic_jvd", "kussmaul", "pericardial_thickening"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "moderate",
+    "diagnosticClues": ["pleuritic_chest_pain", "pericardial_rub", "diffuse_st_elevation", "pr_depression"],
+    "exclusionClues": ["localized_st_elevation", "troponin_rise_dominant", "normal_ecg_pain_free"]
+  }
+}

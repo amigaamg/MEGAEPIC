@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "haemorrhagic_shock",
+    "name": "Haemorrhagic Shock",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 720],
+    "note": "Shock resulting from acute blood loss. Leading cause of preventable trauma death. ATLS classification: Class I-IV based on blood loss volume.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["trauma", "haemorrhage", "shock", "resuscitation"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "hypotension_unresponsive", "weight": 10 },
+        { "sign": "gcs_less_than_9", "weight": 9 },
+        { "sign": "severe_tachycardia_greater_140", "weight": 8 },
+        { "sign": "agonal_breathing", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "HAEMORRHAGIC SHOCK is immediately life-threatening. Control haemorrhage as the priority over fluid resuscitation."
+    },
+    "historyFeatures": [
+      { "symptomId": "trauma_bleeding", "weight": 5 },
+      { "symptomId": "visible_haemorrhage", "weight": 5 },
+      { "symptomId": "weakness_dizziness", "weight": 3 },
+      { "symptomId": "thirst", "weight": 2 },
+      { "symptomId": "loss_of_consciousness", "weight": 4 },
+      { "symptomId": "anticoagulation_history", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 4 },
+      { "signId": "cold_clammy_skin", "baseWeight": 3 },
+      { "signId": "narrow_pulse_pressure", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "visible_external_bleeding", "baseWeight": 5 },
+      { "signId": "distended_abdomen", "baseWeight": 4 },
+      { "signId": "pelvic_instability", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "penetrating_trauma", "multiplier": 3.0 },
+      { "id": "blunt_trauma_high_energy", "multiplier": 2.5 },
+      { "id": "anticoagulation_therapy", "multiplier": 4.0 },
+      { "id": "coagulopathy", "multiplier": 3.0 },
+      { "id": "multiple_long_bone_fractures", "multiplier": 2.0 },
+      { "id": "age_over_65", "multiplier": 1.8 }
+    ],
+    "subtypes": [
+      {
+        "id": "haemorrhage_class_iii",
+        "name": "Class III Haemorrhage (30-40% loss)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "hr_120_140", "weight": 4 },
+          { "feature": "sbp_70_90", "weight": 4 },
+          { "feature": "altered_consciousness", "weight": 4 }
+        ],
+        "management": "Activate massive transfusion. 1:1:1 blood products. Damage control resuscitation."
+      },
+      {
+        "id": "haemorrhage_class_iv",
+        "name": "Class IV Haemorrhage (>40% loss)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "hr_greater_140", "weight": 5 },
+          { "feature": "sbp_less_70", "weight": 5 },
+          { "feature": "unconsciousness", "weight": 5 }
+        ],
+        "management": "Immediate surgical haemorrhage control. Massive transfusion protocol. Surgical team activation."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ATLS primary survey haemorrhage assessment", "priority": "immediate", "yield": 1.0, "indication": "all trauma" },
+        { "name": "E-FAST", "priority": "immediate", "yield": 0.9, "indication": "intra-abdominal/thoracic bleeding" },
+        { "name": "Pelvic compression/binder", "priority": "immediate", "yield": 0.8, "indication": "pelvic fracture haemorrhage" },
+        { "name": "Shock Index (HR/SBP)", "priority": "immediate", "yield": 0.7, "indication": ">1.0 suggests significant haemorrhage" }
+      ],
+      "laboratory": [
+        { "name": "ABG with lactate", "priority": "high", "yield": 0.9, "indication": "shock severity, base deficit" },
+        { "name": "Cross-match / group and screen", "priority": "high", "yield": 1.0, "indication": "transfusion preparation" },
+        { "name": "FBC", "priority": "high", "yield": 0.5, "indication": "Hb (may be initially normal)" },
+        { "name": "Coagulation profile + TEG/ROTEM", "priority": "high", "yield": 0.8, "indication": "trauma-induced coagulopathy" },
+        { "name": "Calcium", "priority": "high", "yield": 0.4, "indication": "hypocalcemia from transfusion" }
+      ],
+      "imaging": [
+        { "name": "Whole-body CT (if stable)", "priority": "high", "yield": 0.95, "indication": "comprehensive injury assessment" },
+        { "name": "Pelvic X-ray", "priority": "immediate", "yield": 0.6, "indication": "pelvic fracture" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ATLS 10th Edition / NICE Major Haemorrhage Guidelines / CRASH-2",
+      "pathways": [
+        {
+          "severity": "haemorrhagic shock",
+          "criteria": "suspected active bleeding + tachycardia, hypotension, altered mental status",
+          "treatment": "C: Circulation - direct pressure on external bleeding, pelvic binder, tourniquet for life-threatening extremity bleed. 2 large-bore IVs. Blood products: RBC:FFP:Platelets 1:1:1. Avoid crystalloid excess (permissive hypotension until surgical control). Tranexamic acid 1g over 10min then 1g over 8h (CRASH-2). Activate massive transfusion protocol if ongoing need. Damage control surgery."
+        },
+        {
+          "severity": "resuscitated",
+          "criteria": "haemorrhage controlled, normalizing vital signs",
+          "treatment": "Restore normotension gradually. Correct coagulopathy. Rewarm. Reassess for ongoing bleeding. MDT approach."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "acute_blood_loss",
+      "reduced_preload",
+      "decreased_cardiac_output",
+      "compensatory_tachycardia",
+      "peripheral_vasoconstriction",
+      "tissue_hypoperfusion",
+      "lactic_acidosis",
+      "trauma_induced_coagulopathy",
+      "dilutional_coagulopathy",
+      "hypothermia_acidosis_coagulopathy_triad"
+    ],
+    "complications": [
+      {
+        "diseaseId": "trauma_induced_coagulopathy",
+        "probability": 0.4,
+        "severityBoost": 0.5,
+        "clues": ["ongoing_bleeding", "elevated_pt_ptt", "thrombocytopenia"]
+      },
+      {
+        "diseaseId": "hypothermia",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["cold_skin", "shivering", "low_core_temp"]
+      },
+      {
+        "diseaseId": "abdominal_compartment_syndrome",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["distended_abdomen", "elevated_intraabdominal_pressure", "oliguria"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["trauma_with_bleeding", "tachycardia", "hypotension", "cold_clammy_skin", "narrow_pulse_pressure"],
+    "exclusionClues": ["no_trauma", "normal_blood_pressure_and_pulse", "no_source_of_bleeding"]
+  }
+}

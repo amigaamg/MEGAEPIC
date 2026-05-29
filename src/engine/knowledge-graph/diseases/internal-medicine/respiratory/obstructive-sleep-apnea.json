@@ -1,0 +1,401 @@
+{
+  "disease": {
+    "id": "obstructive_sleep_apnea",
+    "name": "Obstructive Sleep Apnoea",
+    "system": "respiratory",
+    "note": "OSA is characterised by repetitive partial or complete upper airway collapse during sleep, causing intermittent hypoxia and sleep fragmentation. STOP-BANG and Epworth Sleepiness Scale screen at-risk populations. Polysomnography (AHI) confirms diagnosis. CPAP/BiPAP is first-line therapy.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["sleep_disordered_breathing", "upper_airway_obstruction_sleep", "hypoxemic_sleep_disorder"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "AHI_greater_than_30", "description": "Severe OSA per AASM criteria", "weight": 8 },
+        { "sign": "O2_desaturation_less_than_70_percent", "weight": 9 },
+        { "sign": "hypercapnic_respiratory_failure", "weight": 10, "description": "Acute-on-chronic hypercapnia in OHS overlap" },
+        { "sign": "cor_pulmonale_decompensated", "weight": 9 },
+        { "sign": "severe_bradyarrhythmia_during_sleep", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "AHI_greater_than_30", "weight": 7 },
+          { "sign": "Epworth_greater_than_16", "description": "Epworth Sleepiness Scale ≥16", "weight": 6 },
+          { "sign": "STOP_BANG_7_or_8", "weight": 6 },
+          { "sign": "nocturnal_hypoxemia", "description": "<90% for >20% of sleep time", "weight": 6 },
+          { "sign": "comorbid_OHS", "weight": 7 }
+        ]
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "AHI_15_to_30", "weight": 5 },
+          { "sign": "Epworth_11_to_15", "weight": 4 },
+          { "sign": "STOP_BANG_5_or_6", "weight": 4 },
+          { "sign": "desaturation_80_to_89_percent", "weight": 4 }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "AHI_5_to_15": true,
+        "Epworth_less_than_11": true,
+        "minimal_hypoxemia": true,
+        "no_cardiovascular_comorbidity": true
+      }
+    },
+
+    "historyFeatures": [
+      { "symptomId": "snoring", "weight": 5, "qualitativeModifiers": [
+          { "qualityKey": "loud_frequent", "weightBoost": 2 },
+          { "qualityKey": "witnessed", "weightBoost": 2, "description": "Loud snoring reported by bed partner" }
+        ]
+      },
+      { "symptomId": "apneas_witnessed", "weight": 5, "note": "Bed partner reports pauses in breathing during sleep" },
+      { "symptomId": "gasping_choking_at_night", "weight": 4, "note": "Patient wakes with sensation of choking or gasping" },
+      { "symptomId": "excessive_daytime_sleepiness", "weight": 5, "note": "Epworth Sleepiness Scale objectively quantifies" },
+      { "symptomId": "non_refreshing_sleep", "weight": 3 },
+      { "symptomId": "morning_headache", "weight": 3, "note": "Nocturnal hypercapnia and hypoxia" },
+      { "symptomId": "nocturia", "weight": 3, "note": "Increased atrial natriuretic peptide from hypoxia" },
+      { "symptomId": "daytime_fatigue", "weight": 4 },
+      { "symptomId": "poor_concentration", "weight": 2 },
+      { "symptomId": "mood_changes", "weight": 2 },
+      { "symptomId": "decreased_libido_erectile_dysfunction", "weight": 2 },
+      { "symptomId": "GERD_symptoms", "weight": 2, "note": "Associated with increased negative intrathoracic pressure" }
+    ],
+
+    "examFeatures": [
+      { "signId": "obesity", "baseWeight": 4, "note": "BMI >30 is strong risk factor; neck circumference >40 cm (M) or >36 cm (F) increases risk" },
+      { "signId": "large_neck_circumference", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "retrognathia_micrognathia", "baseWeight": 3, "note": "Craniofacial abnormalities reduce posterior airway space" },
+      { "signId": "tonsillar_hypertrophy", "baseWeight": 3, "note": "Mallampati grade 3–4 predicts OSA in children and adults" },
+      { "signId": "macroglossia", "baseWeight": 3 },
+      { "signId": "high_arched_palate", "baseWeight": 2 },
+      { "signId": "Mallampati_grade_3_or_4", "baseWeight": 3, "note": "Limited visibility of posterior oropharynx" },
+      { "signId": "hypertension", "baseWeight": 3, "note": "Resistant hypertension is strongly associated" },
+      { "signId": "pulmonary_hypertension_signs", "baseWeight": 3, "severityMarker": true },
+      { "signId": "pedal_oedema", "baseWeight": 2, "severityMarker": true },
+      { "signId": "BMI_greater_than_35", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "obesity", "multiplier": 2.5, "note": "BMI >30 increases risk 2–5 fold; central obesity most predictive" },
+      { "id": "male_sex", "multiplier": 1.5, "note": "Men 2–3 times more likely than premenopausal women" },
+      { "id": "age_over_50", "multiplier": 1.5 },
+      { "id": "family_history_OSA", "multiplier": 1.4 },
+      { "id": "craniofacial_abnormalities", "multiplier": 1.6, "note": "Retrognathia, micrognathia, maxillary hypoplasia" },
+      { "id": "tonsillar_adenoid_hypertrophy", "multiplier": 1.6, "note": "Especially in children; adenotonsillectomy is curative in many" },
+      { "id": "menopause", "multiplier": 1.4 },
+      { "id": "smoking", "multiplier": 1.3 },
+      { "id": "alcohol_before_bed", "multiplier": 1.4, "note": "Reduces pharyngeal muscle tone" },
+      { "id": "hypothyroidism", "multiplier": 1.3, "note": "Macroglossia and obesity; also acromegaly" }
+    ],
+
+    "subtypes": [
+      {
+        "id": "adult_OSA",
+        "name": "Adult Obstructive Sleep Apnoea",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "age_over_18", "weight": 5 },
+          { "feature": "obesity_and_large_neck", "weight": 5 },
+          { "feature": "loud_snoring", "weight": 4 },
+          { "feature": "excessive_daytime_sleepiness", "weight": 4 },
+          { "feature": "witnessed_apneas", "weight": 4 }
+        ],
+        "management": "CPAP first-line for moderate–severe OSA (AHI ≥15 or AHI 5–14 with symptoms/comorbidities); BiPAP if CPAP fails or OHS overlap; weight loss; MAD (mandibular advancement device) for mild–moderate or CPAP intolerant; hypoglossal nerve stimulation if CPAP fails"
+      },
+      {
+        "id": "paediatric_OSA",
+        "name": "Paediatric Obstructive Sleep Apnoea",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "age_2_to_8", "weight": 5 },
+          { "feature": "tonsillar_adenoid_hypertrophy", "weight": 5 },
+          { "feature": "mouth_breathing_during_sleep", "weight": 4 },
+          { "feature": "restless_sleep", "weight": 4 },
+          { "feature": "enuresis_secondary", "weight": 3 },
+          { "feature": "behavioural_problems_ADHD_symptoms", "weight": 3 }
+        ],
+        "management": "Adenotonsillectomy first-line; CPAP if residual OSA post-surgery; weight management; anti-inflammatory therapy (nasal steroids, montelukast)"
+      },
+      {
+        "id": "OSA_OHS_overlap",
+        "name": "OSA-OHS Overlap Syndrome (Obesity Hypoventilation Syndrome)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "BMI_greater_than_40", "weight": 5 },
+          { "feature": "daytime_hypercapnia_PaCO2_above_45", "weight": 5 },
+          { "feature": "hypoxia_severe_nocturnal", "weight": 5 },
+          { "feature": "cor_pulmonale_right_heart_failure", "weight": 4 },
+          { "feature": "polycythaemia", "weight": 3 }
+        ],
+        "management": "BiPAP (not CPAP) to manage hypercapnia; weight loss; aggressive oxygen therapy; treatment of cor pulmonale; consider GLP-1 agonists for weight loss"
+      },
+      {
+        "id": "positional_OSA",
+        "name": "Positional OSA",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "AHI_doubles_in_supine_position", "weight": 5 },
+          { "feature": "mild_to_moderate_overall_AHI", "weight": 4 },
+          { "feature": "non_supine_AHI_normal_or_mild", "weight": 4 }
+        ],
+        "management": "Positional therapy (sleeping on side, tennis ball technique, vibrating devices); avoid supine sleep"
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "chronic_insomnia",
+        "discriminators": ["no_snoring", "no_witnessed_apnea", "sleep_onset_difficulty", "no_hypoxia"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "narcolepsy",
+        "discriminators": ["cataplexy", "sleep_paralysis", "hypnagogic_hallucinations", "sleep_onset_REM", "no_apneas"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "depression",
+        "discriminators": ["anhedonia", "low_mood", "early_morning_waking", "no_snoring_or_apneas"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "restless_leg_syndrome",
+        "discriminators": ["urge_to_move_legs_at_rest", "worse_evening_night", "normal_PSG_except_PLMS"],
+        "negativeImpactOnPneumonia": 1
+      },
+      {
+        "diseaseId": "obesity_hypoventilation_syndrome",
+        "discriminators": ["daytime_hypercapnia", "obesity_severe", "chronic_hypoxia_awake", "may_overlap_with_OSA"],
+        "negativeImpactOnPneumonia": 2
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Epworth Sleepiness Scale (ESS)",
+          "priority": "initial screening",
+          "yield": 0.7,
+          "indication": "assess daytime sleepiness; score ≥11 suggests pathological sleepiness",
+          "note": "Self-administered 8-item questionnaire (0–24); >16 severe"
+        },
+        {
+          "name": "STOP-BANG questionnaire",
+          "priority": "initial screening",
+          "yield": 0.85,
+          "indication": "validated OSA screening; ≥3 points high risk; ≥5 moderate-severe OSA likelihood",
+          "note": "Snoring, Tiredness, Observed apnea, Pressure (HTN), BMI >35, Age >50, Neck circumference >40 cm, Gender male"
+        },
+        {
+          "name": "Pulse oximetry nocturnal",
+          "priority": "screening when PSG unavailable",
+          "yield": 0.7,
+          "indication": "desaturation index may suggest OSA severity"
+        },
+        {
+          "name": "Berlin Questionnaire",
+          "priority": "alternative screening",
+          "yield": 0.75,
+          "indication": "categorises high/low risk for OSA"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "Arterial blood gas (awake)",
+          "priority": "if suspected OHS or hypercapnia",
+          "yield": 0.6,
+          "indication": "daytime hypercapnia (PaCO2 >45) suggests OHS overlap"
+        },
+        {
+          "name": "FBC",
+          "priority": "baseline",
+          "yield": 0.3,
+          "indication": "polycythaemia suggests chronic nocturnal hypoxia"
+        },
+        {
+          "name": "Thyroid function (TSH)",
+          "priority": "if clinical suspicion",
+          "yield": 0.2,
+          "indication": "hypothyroidism can cause or worsen OSA"
+        },
+        {
+          "name": "BNP",
+          "priority": "if right heart failure signs",
+          "yield": 0.5,
+          "indication": "cor pulmonale assessment"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "Polysomnography (PSG) Level 1",
+          "priority": "diagnostic gold standard",
+          "yield": 1.0,
+          "indication": "definitive diagnosis; measures AHI (apnoea-hypopnoea index), oxygen nadir, sleep architecture, limb movements, ECG",
+          "note": "AHI 5–14: mild; 15–30: moderate; >30: severe. Also scored as arousals per hour"
+        },
+        {
+          "name": "Home sleep apnoea test (HSAT) Level 3",
+          "priority": "if high pre-test probability and no comorbidities",
+          "yield": 0.8,
+          "indication": "limited channels (flow, effort, oximetry); acceptable alternative per AASM guidelines"
+        },
+        {
+          "name": "Upper airway assessment (nasendoscopy, DISE)",
+          "priority": "selected for surgical planning",
+          "yield": 0.6,
+          "indication": "drug-induced sleep endoscopy (DISE) visualises collapse site for targeted surgery or hypoglossal nerve stimulation"
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Multiple Sleep Latency Test (MSLT)",
+          "indication": "if narcolepsy suspected",
+          "priority": "selected",
+          "note": "Mean sleep latency <8 min pathological; SOREM ≥2 suggests narcolepsy"
+        },
+        {
+          "name": "Echocardiogram",
+          "indication": "if pulmonary hypertension or right heart strain suspected",
+          "priority": "selected"
+        }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASM Clinical Practice Guidelines for OSA (2023); BTS/NICE Guidelines for Sleep Apnoea",
+      "pathways": [
+        {
+          "severity": "mild (AHI 5–14, minimal symptoms)",
+          "criteria": "AHI 5–14, Epworth <11, no cardiovascular comorbidity, minimal hypoxia",
+          "treatment": [
+            "Lifestyle modification: weight loss (≥10% reduction significantly improves AHI and symptoms per AASM)",
+            "Exercise programme (even without weight loss improves AHI)",
+            "Alcohol avoidance 3–4 hours before bedtime",
+            "Sleep positioning: avoid supine sleep (positional therapy if AHI normalises in non-supine)",
+            "Sleep hygiene optimisation (adequate sleep duration, consistent schedule)",
+            "Mandibular advancement device (MAD) if patient prefers device therapy",
+            "Re-evaluate response in 3–6 months"
+          ],
+          "followUp": "Repeat ESS and consider follow-up PSG if symptoms persist"
+        },
+        {
+          "severity": "moderate (AHI 15–30)",
+          "criteria": "AHI 15–30 with symptoms (ESS ≥11) or cardiovascular comorbidity",
+          "treatment": [
+            "CPAP (continuous positive airway pressure) first-line therapy per AASM",
+            "Auto-CPAP or fixed CPAP: titrated pressure 5–20 cmH2O to abolish apnoeas/hypopnoeas",
+            "CPAP adherence ≥4 hours/night for ≥70% of nights improves outcomes",
+            "Heated humidification and mask fitting optimisation to improve tolerance",
+            "Weight loss programme (refer to bariatric medicine if BMI >35)",
+            "Consider MAD as alternative if CPAP intolerant or declined",
+            "Nasal corticosteroids if concomitant allergic rhinitis"
+          ],
+          "followUp": "CPAP download review at 1 month, then 3–6 monthly. Repeat PSG if issues. ESS reassessment."
+        },
+        {
+          "severity": "severe (AHI >30 or AHI >15 with severe hypoxia/complications)",
+          "criteria": "AHI >30, or AHI >15 with severe desaturation (<80%), OHS, cor pulmonale, or refractory hypertension",
+          "treatment": [
+            "CPAP or BiPAP (if OHS overlap: BiPAP-S/T to address hypercapnia)",
+            "CPAP titration PSG to determine optimal pressure (manually supervised titration preferred)",
+            "If CPAP fails: evaluate for hypoglossal nerve stimulation (Inspire device) - suitable if non-obese with specific collapse pattern (concentric complete collapse excluded)",
+            "Surgical options: uvulopalatopharyngoplasty (UPPP) - variable success; maxillomandibular advancement (MMA) - high success but invasive",
+            "Tonsillectomy if tonsillar hypertrophy is the primary cause",
+            "Bariatric surgery evaluation if BMI ≥40 or ≥35 with comorbidities",
+            "Oxygen supplementation if significant nocturnal hypoxemia despite optimal PAP therapy",
+            "Treat complications: hypertension (ACE-i/ARB often first-line), arrhythmias, right heart failure"
+          ],
+          "escalation": "BiPAP for persistent hypercapnia; hypoglossal nerve stimulation or maxillomandibular advancement for CPAP failure in selected patients"
+        },
+        {
+          "severity": "paediatric OSA",
+          "criteria": "polysomnography-confirmed OSA in a child",
+          "treatment": [
+            "Adenotonsillectomy first-line (cure rate 80–90% in otherwise healthy children)",
+            "If residual OSA post-surgery or contraindication to surgery: CPAP",
+            "Nasal corticosteroids (fluticasone) + montelukast for mild OSA if adenotonsillar hypertrophy not severe",
+            "Weight management if obesity present",
+            "Monitor for growth, school performance, behavioural issues"
+          ],
+          "followUp": "Post-operative PSG in 3–6 months if severe OSA, obesity, or symptoms persist"
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "pharyngeal_collapsibility_increased",
+      "repetitive_upper_airway_obstruction_during_sleep",
+      "intermittent_hypoxemia_reoxygenation",
+      "sleep_fragmentation",
+      "sympathetic_nervous_system_activation",
+      "oxidative_stress",
+      "systemic_inflammation",
+      "endothelial_dysfunction",
+      "negative_intrathoracic_pressure_swings",
+      "metabolic_dysregulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "systemic_hypertension",
+        "probability": 0.5,
+        "severityBoost": 0.3,
+        "clues": ["resistant_hypertension", "non_dipping_nocturnal_BP"],
+        "note": "OSA is the most common cause of resistant hypertension"
+      },
+      {
+        "diseaseId": "cardiovascular_disease",
+        "probability": 0.25,
+        "clues": ["CAD", "heart_failure", "atrial_fibrillation"],
+        "note": "AF recurrence after cardioversion is higher with untreated OSA"
+      },
+      {
+        "diseaseId": "pulmonary_hypertension",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["right_ventricular_strain", "hypoxia_severe_nocturnal"]
+      },
+      {
+        "diseaseId": "stroke",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["ischaemic_stroke", "cryptogenic_stroke_in_young"]
+      },
+      {
+        "diseaseId": "type_2_diabetes_mellitus",
+        "probability": 0.2,
+        "clues": ["insulin_resistance", "metabolic_syndrome"]
+      },
+      {
+        "diseaseId": "worsening_heart_failure",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["central_sleep_apnea_development", "Cheyne_Stokes_respiration"]
+      },
+      {
+        "diseaseId": "motor_vehicle_accident",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["history_of_drowsy_driving", "near_miss_accidents"],
+        "note": "Untreated OSA increases accident risk 2–7 fold"
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "if severe OSA with cor pulmonale, daytime hypercapnia, or severe bradyarrhythmia",
+
+    "diagnosticClues": [
+      "loud habitual snoring with witnessed apnoeas",
+      "excessive daytime sleepiness (Epworth ≥11)",
+      "STOP-BANG ≥3 (≥5 strongly suggests moderate–severe OSA)",
+      "AHI ≥5 on PSG with compatible symptoms or comorbidities",
+      "nocturnal oxygen desaturation with cyclic pattern"
+    ],
+    "exclusionClues": [
+      "negative home sleep apnoea test in high-risk patient requires in-laboratory PSG for definitive exclusion",
+      "pure insomnia without snoring or witnessed apnoeas",
+      "PSG with AHI <5 effectively excludes OSA in symptomatic patients",
+      "cataplexy and sleep-onset REM on MSLT suggest narcolepsy rather than OSA"
+    ]
+  }
+}

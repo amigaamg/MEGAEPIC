@@ -1,0 +1,165 @@
+{
+  "disease": {
+    "id": "thyroid_nodule",
+    "name": "Thyroid Nodule",
+    "system": "surgical",
+    "agePeak_months": [300, 600],
+    "note": "Common finding on neck exam or imaging. Majority benign. Risk stratification based on US and FNA cytology (Bethesda system).",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["neck_mass", "thyroid_lesion"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapid_growth", "weight": 7 },
+        { "sign": "airway_compression", "weight": 10 },
+        { "sign": "hoarseness_recurrent_laryngeal_nerve", "weight": 7 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bethesda_v_or_vi", "weight": 9 },
+          { "sign": "tirards_5_on_us", "weight": 8 },
+          { "sign": "fixed_mass", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Suspicious/malignant FNA -> SEVERE; benign FNA -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "palpable_neck_lump", "weight": 5 },
+      { "symptomId": "incidental_finding_on_imaging", "weight": 4 },
+      { "symptomId": "neck_fullness_discomfort", "weight": 2 },
+      { "symptomId": "dysphagia", "weight": 2, "note": "Large nodule compressing esophagus" },
+      { "symptomId": "dysphonia_hoarseness", "weight": 2, "note": "RLN involvement" },
+      { "symptomId": "dyspnea", "weight": 2, "note": "Tracheal compression" },
+      { "symptomId": "family_history_of_thyroid_cancer", "weight": 3 },
+      { "symptomId": "previous_neck_radiation", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_thyroid_nodule", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "size_and_consistency", "baseWeight": 3 },
+      { "signId": "fixed_or_mobile_on_swallowing", "baseWeight": 3 },
+      { "signId": "cervical_lymphadenopathy", "baseWeight": 3 },
+      { "signId": "tracheal_deviation", "baseWeight": 2 },
+      { "signId": "signs_of_hyperthyroidism", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender", "multiplier": 3.0 },
+      { "id": "age_over_40", "multiplier": 1.5 },
+      { "id": "neck_radiation_history", "multiplier": 4.0 },
+      { "id": "family_history_of_thyroid_cancer", "multiplier": 3.0 },
+      { "id": "iodine_deficiency", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "benign_thyroid_nodule",
+        "name": "Benign Thyroid Nodule (Bethesda II)",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "benign_fna", "weight": 5 },
+          { "feature": "low_risk_us_features", "weight": 4 },
+          { "feature": "no_lymphadenopathy", "weight": 4 }
+        ],
+        "management": "Clinical follow-up. No surgery needed unless symptomatic (cosmetic, compressive) or enlarging. Repeat US in 1-2 years."
+      },
+      {
+        "id": "suspicious_thyroid_nodule",
+        "name": "Suspicious/Malignant Nodule (Bethesda IV-VI)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "fna_suspicious_or_malignant", "weight": 5 },
+          { "feature": "high_risk_us_features_microcalcifications", "weight": 5 },
+          { "feature": "taller_than_wide_shape", "weight": 4 },
+          { "feature": "irregular_margins", "weight": 4 }
+        ],
+        "management": "Thyroid lobectomy (if Bethesda IV-V) or total thyroidectomy (if Bethesda VI, bilateral nodules, or high risk). Central neck dissection if nodal involvement."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "thyroid_cyst",
+        "discriminators": ["cystic_on_us", "aspirates_straw_colored", "colloid_on_cytology"]
+      },
+      {
+        "diseaseId": "lymph_node_metastasis",
+        "discriminators": ["lymph_node_morphology", "known_primary_cancer", "no_connection_to_thyroid"]
+      },
+      {
+        "diseaseId": "thyroid_adenoma",
+        "discriminators": ["functioning_on_scan", "suppresses_tsh", "hot_on_technetium"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Neck palpation with swallowing", "priority": "immediate", "yield": 0.6, "indication": "assess mobility" }
+      ],
+      "laboratory": [
+        { "name": "TSH", "priority": "high", "yield": 0.5, "indication": "assess thyroid function" },
+        { "name": "Free T4, T3", "priority": "medium", "yield": 0.3, "indication": "if TSH abnormal" },
+        { "name": "Thyroglobulin", "priority": "low", "yield": 0.2, "indication": "tumor marker, not diagnostic" },
+        { "name": "Calcitonin", "priority": "medium", "yield": 0.3, "indication": "suspicion of medullary thyroid cancer" }
+      ],
+      "imaging": [
+        { "name": "Thyroid Ultrasound (TIRADS)", "priority": "immediate", "yield": 0.85, "indication": "risk stratification" },
+        { "name": "FNA with Bethesda classification", "priority": "high", "yield": 0.95, "indication": "gold standard for cytology" },
+        { "name": "Thyroid scintigraphy (Technetium-99m)", "priority": "medium", "yield": 0.6, "indication": "if TSH suppressed to assess function" },
+        { "name": "CT Neck", "priority": "medium", "yield": 0.7, "indication": "if large nodule, compression, or lymphadenopathy" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATA Guidelines for Thyroid Nodule Management",
+      "pathways": [
+        {
+          "severity": "benign (Bethesda II)",
+          "criteria": "benign cytology, low-risk US, asymptomatic",
+          "treatment": "Observation. Repeat US in 1-2 years. No intervention needed."
+        },
+        {
+          "severity": "indeterminate (Bethesda III-IV)",
+          "criteria": "atypia or follicular lesion, inconclusive FNA",
+          "treatment": "Repeat FNA or molecular testing (ThyroSeq, Afirma). Diagnostic thyroid lobectomy if still indeterminate. Based on results and risk factors."
+        },
+        {
+          "severity": "suspicious/malignant (Bethesda V-VI)",
+          "criteria": "suspicious for or diagnostic of malignancy",
+          "treatment": "Thyroid lobectomy (for low-risk, small, unilateral) or total thyroidectomy (for high-risk, bilateral, nodal mets). Central neck dissection."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "follicular_cell_proliferation",
+      "benign_hyperplasia",
+      "colloid_accumulation",
+      "cystic_degeneration",
+      "neoplastic_transformation",
+      "malignant_growth"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "thyroid_cancer",
+        "probability": 0.05,
+        "lagDays": [30, 720],
+        "severityBoost": 0.3,
+        "clues": ["suspicious_fna", "microcalcifications", "irregular_margins", "lymph_node"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["palpable_neck_lump_moves_with_swallowing", "incidental_finding", "thyroid_origin_on_us"],
+    "exclusionClues": ["midline_neck_lesion_not_moving_with_swallowing", "lymph_node_morphology"]
+  }
+}

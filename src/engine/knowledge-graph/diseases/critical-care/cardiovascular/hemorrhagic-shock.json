@@ -1,0 +1,157 @@
+{
+  "disease": {
+    "id": "hemorrhagic_shock",
+    "name": "Hemorrhagic Shock (Hypovolemic Shock due to Hemorrhage)",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Shock state resulting from acute blood loss. Classified by ATLS classes I-IV based on blood loss percentage. Trauma, GI bleed, ruptured AAA, obstetric causes.",
+    "prevalenceWeight": 0.45,
+    "syndromeTags": ["shock", "trauma", "hemorrhage", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest_imminent", "weight": 10 },
+        { "sign": "massive_ongoing_bleeding", "weight": 10 },
+        { "sign": "unconscious_no_palpable_pulse", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "ATLS Class I (<15% loss=compensated), II (15-30%=mild), III (30-40%=severe), IV (>40%=life-threatening)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "visible_bleeding_or_trauma", "weight": 5 },
+      { "symptomId": "hematemesis_melena_or_hematochezia", "weight": 4 },
+      { "symptomId": "abdominal_pain_distension", "weight": 3 },
+      { "symptomId": "dizziness_lightheadedness", "weight": 3 },
+      { "symptomId": "syncope", "weight": 3 },
+      { "symptomId": "rapid_blood_loss_scenario_surgery_trauma_obstetric", "weight": 5 },
+      { "symptomId": "anticoagulant_or_antiplatelet_therapy", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "cold_clammy_pale_skin", "baseWeight": 3 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 3 },
+      { "signId": "flat_neck_veins_low_jvp", "baseWeight": 3 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "oliguria_anuria", "baseWeight": 3 },
+      { "signId": "signs_of_source_bleeding", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "trauma_penetrating_or_blunt", "multiplier": 3.0 },
+      { "id": "anticoagulation_warfarin_doac", "multiplier": 3.0 },
+      { "id": "antiplatelet_therapy_aspirin_clopidogrel", "multiplier": 2.0 },
+      { "id": "coagulopathy_liver_disease", "multiplier": 2.5 },
+      { "id": "peptic_ulcer_disease_gi_bleed", "multiplier": 2.0 },
+      { "id": "ruptured_aaa_or_aortic_aneurysm", "multiplier": 3.0 },
+      { "id": "ectopic_pregnancy_obstetric_hemorrhage", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "class_iii_hemorrhagic_shock",
+        "name": "Class III Hemorrhagic Shock (30-40% loss)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "sbp_less_90", "weight": 5 },
+          { "feature": "hr_greater_120", "weight": 4 },
+          { "feature": "altered_consciousness", "weight": 4 },
+          { "feature": "urine_output_less_20_ml_h", "weight": 3 }
+        ],
+        "management": "Massive transfusion protocol activation. 1:1:1 (PRBC:FFP:Platelets). Permissive hypotension (SBP 80-90) until surgical control. TXA 1g IV. Source control surgery/embolization."
+      },
+      {
+        "id": "class_iv_hemorrhagic_shock",
+        "name": "Class IV Hemorrhagic Shock (>40% loss)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "profound_hypotension", "weight": 5 },
+          { "feature": "weak_or_absent_pulse", "weight": 5 },
+          { "feature": "unconscious", "weight": 5 }
+        ],
+        "management": "Immediate transfusion (O-negative or cross-matched). Massive transfusion protocol. Surgical hemorrhage control. ICU. TEG/ROTEM-guided resuscitation. Correct hypothermia, acidosis, hypocalcemia."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "septic_shock",
+        "discriminators": ["fever", "warm_vasodilated", "source_of_infection"]
+      },
+      {
+        "diseaseId": "cardiogenic_shock",
+        "discriminators": ["elevated_jvp", "pulmonary_oedema", "cardiac_cause"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Shock index (HR/SBP)", "priority": "immediate", "yield": 0.8, "indication": ">1 suggests significant hemorrhage" },
+        { "name": "FAST scan (Focused Assessment with Sonography in Trauma)", "priority": "immediate", "yield": 0.85, "indication": "intra-abdominal free fluid" }
+      ],
+      "laboratory": [
+        { "name": "FBC, Hb/Hct", "priority": "immediate", "yield": 0.7, "indication": "baseline, may initially be normal" },
+        { "name": "Lactate, ABG", "priority": "immediate", "yield": 0.85, "indication": "tissue hypoperfusion marker" },
+        { "name": "Coagulation profile (PT, aPTT, fibrinogen)", "priority": "high", "yield": 0.7, "indication": "trauma-induced coagulopathy" },
+        { "name": "Cross-match and group & save", "priority": "immediate", "yield": 0.95, "indication": "transfusion preparation" }
+      ],
+      "imaging": [
+        { "name": "CT body (if stable enough)", "priority": "medium", "yield": 0.9, "indication": "source identification in trauma" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATLS / CRASH-2 / Massive Transfusion Guidelines",
+      "pathways": [
+        {
+          "severity": "class I-II (compensated)",
+          "criteria": "HR <120, SBP >90, normal consciousness",
+          "treatment": "IV access (2 large bore). Crystalloid 500mL bolus (titrate). Cross-match blood. Identify and control source. Prepare for massive transfusion if ongoing loss."
+        },
+        {
+          "severity": "class III-IV (uncompensated/life-threatening)",
+          "criteria": "SBP <90, HR >120, altered consciousness, ongoing hemorrhage",
+          "treatment": "Massive transfusion protocol. Blood products 1:1:1. Permissive hypotension (SBP 80) if no TBI. TXA 1g IV over 10 min then 1g over 8h. Surgical/IR control. ICU. Rewarm, correct acidosis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "acute_blood_loss",
+      "reduced_preload_and_cardiac_output",
+      "compensatory_sympathetic_activation",
+      "vasoconstriction_and_tachycardia",
+      "tissue_hypoperfusion",
+      "lactic_acidosis",
+      "coagulopathy_hypothermia_acidosis_triad_of_death"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "trauma_induced_coagulopathy",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["prolonged_pt_aptt", "thrombocytopenia", "hypothermia"]
+      },
+      {
+        "diseaseId": "transfusion_related_complications",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["hypocalcemia", "citrate_toxicity", "hyperkalemia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["active_bleeding_history", "hypotension_tachycardia", "pale_cold_skin", "low_jvp"],
+    "exclusionClues": ["bleeding_controlled", "hemodynamically_stable", "no_ongoing_loss"]
+  }
+}

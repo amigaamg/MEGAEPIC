@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "heart_failure",
+    "name": "Heart Failure",
+    "system": "cardiology",
+    "agePeak_months": [600, 1080],
+    "note": "Clinical syndrome due to structural/functional cardiac abnormality. Classified by ejection fraction.",
+    "prevalenceWeight": 0.75,
+    "syndromeTags": ["dyspnea", "fluid_overload", "cardiac_failure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "pulmonary_oedema", "weight": 9 },
+        { "sign": "anuria_oliguria", "weight": 8 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If shock/pulmonary oedema -> ACUTE DECOMPENSATED HF; else -> COMPENSATED HF"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 5, "modifiers": [
+          { "condition": "exertional", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "orthopnea", "weight": 4 },
+      { "symptomId": "paroxysmal_nocturnal_dyspnea", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "lower_limb_swelling", "weight": 3 },
+      { "symptomId": "nocturnal_cough", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bibasilar_crackles", "baseWeight": 4 },
+      { "signId": "jugular_venous_distension", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "peripheral_oedema", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "gallop_rhythm_s3", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "coronary_artery_disease", "multiplier": 2.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "valvular_disease", "multiplier": 1.8 },
+      { "id": "cardiomyopathy_family_history", "multiplier": 1.4 },
+      { "id": "alcohol_excess", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hfref",
+        "name": "Heart Failure with Reduced Ejection Fraction (HFrEF)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "ef_less_than_40", "weight": 5 },
+          { "feature": "s3_gallop", "weight": 4 }
+        ],
+        "management": "ACEi/ARB, beta-blocker, MRA, SGLT2i. Device therapy if indicated."
+      },
+      {
+        "id": "hfpef",
+        "name": "Heart Failure with Preserved Ejection Fraction (HFpEF)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "ef_greater_than_50", "weight": 5 },
+          { "feature": "signs_of_diastolic_dysfunction", "weight": 4 }
+        ],
+        "management": "Diuretics for congestion. Manage comorbidities. SGLT2i may benefit."
+      },
+      {
+        "id": "acutely_decompensated_hf",
+        "name": "Acutely Decompensated Heart Failure",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "acute_pulmonary_oedema", "weight": 5 },
+          { "feature": "severe_dyspnea_at_rest", "weight": 5 },
+          { "feature": "hypoxia", "weight": 5 }
+        ],
+        "management": "IV diuretics. Vasodilators (nitroglycerin). Non-invasive ventilation. Inotropes if shock."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.7, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "BNP/NT-proBNP", "priority": "high", "yield": 0.9, "indication": "diagnosis and prognosis" },
+        { "name": "Serum electrolytes, Cr, eGFR", "priority": "high", "yield": 0.6, "indication": "renal function, diuretic monitoring" },
+        { "name": "Troponin", "priority": "high", "yield": 0.5, "indication": "rule out ACS" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.95, "indication": "assess EF, valves, wall motion" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.8, "indication": "cardiomegaly, pulmonary congestion" },
+        { "name": "Coronary angiography", "priority": "medium", "yield": 0.7, "indication": "if CAD suspected as cause" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESC Guidelines for Heart Failure",
+      "pathways": [
+        {
+          "severity": "acute decompensated",
+          "criteria": "pulmonary oedema, hypoxia, severe dyspnea at rest",
+          "treatment": "IV furosemide 40-80 mg. Non-invasive ventilation (CPAP/BiPAP). Nitroglycerin IV if no hypotension. Inotropes if shock. ICU admission."
+        },
+        {
+          "severity": "chronic compensated",
+          "criteria": "no acute decompensation",
+          "treatment": "ACEi/ARB, beta-blocker, MRA, SGLT2i. Diuretics for fluid balance. Salt and fluid restriction. Daily weight monitoring."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "reduced_cardiac_output",
+      "neurohormonal_activation",
+      "renin_angiotensin_system",
+      "sympathetic_activation",
+      "ventricular_remodeling",
+      "fluid_retention"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pulmonary_oedema",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["severe_dyspnea", "crackles", "hypoxia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if acute",
+    "diagnosticClues": ["dyspnea_orthopnea_pnd", "jvd", "oedema", "raised_bnp"],
+    "exclusionClues": ["normal_bnp", "normal_echo"]
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "ulcerative_colitis",
+    "name": "Ulcerative Colitis",
+    "system": "surgical",
+    "agePeak_months": [180, 480],
+    "note": "Chronic inflammatory bowel disease affecting colorectal mucosa. Bloody diarrhea, tenesmus, and abdominal pain.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["bloody_diarrhea", "colitis", "chronic_abdominal_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "toxic_megacolon", "weight": 10 },
+        { "sign": "colonic_perforation", "weight": 10 },
+        { "sign": "massive_hemorrhage", "weight": 9 },
+        { "sign": "septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "fulminant_colitis", "weight": 8 },
+          { "sign": "severe_bleeding", "weight": 7 },
+          { "sign": "systemic_toxicity", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Toxic megacolon/perforation/massive bleed -> SEVERE; mild-moderate colitis -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "bloody_diarrhea", "weight": 5 },
+      { "symptomId": "tenesmus", "weight": 4 },
+      { "symptomId": "abdominal_cramping_pain", "weight": 3 },
+      { "symptomId": "urgency_of_defecation", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "extra_intestinal_manifestations", "weight": 2 },
+      { "symptomId": "nocturnal_diarrhea", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "left_lower_quadrant_tenderness", "baseWeight": 3 },
+      { "signId": "guarding", "baseWeight": 2 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "signs_of_toxic_megacolon", "baseWeight": 4 },
+      { "signId": "perianal_exam_unremarkable", "baseWeight": 1, "note": "Perianal disease absent in UC" },
+      { "signId": "pulse_temperature", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_of_ibd", "multiplier": 3.0 },
+      { "id": "ashkenazi_jewish_ancestry", "multiplier": 2.0 },
+      { "id": "western_diet", "multiplier": 1.5 },
+      { "id": "appendectomy", "multiplier": 0.5, "note": "Protective factor" },
+      { "id": "smoking", "multiplier": 0.4, "note": "Protective factor in UC" }
+    ],
+
+    "subtypes": [
+      {
+        "id": "proctitis",
+        "name": "Ulcerative Proctitis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "rectal_bleeding_only", "weight": 5 },
+          { "feature": "tenesmus", "weight": 4 },
+          { "feature": "no_proximal_disease", "weight": 5 }
+        ],
+        "management": "Topical 5-ASA (mesalamine suppositories or enemas). Topical corticosteroids. Oral 5-ASA if refractory."
+      },
+      {
+        "id": "left_sided_colitis",
+        "name": "Left-Sided Colitis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "bloody_diarrhea", "weight": 5 },
+          { "feature": "left_lower_quadrant_pain", "weight": 4 },
+          { "feature": "disease_to_splenic_flexure", "weight": 5 },
+          { "feature": "tenesmus_urgency", "weight": 4 }
+        ],
+        "management": "Oral and topical 5-ASA. Corticosteroids if moderate-severe. Immunomodulators (Azathioprine) for steroid-dependent. Biologics (Anti-TNF) if refractory."
+      },
+      {
+        "id": "pancolitis",
+        "name": "Pancolitis / Extensive Colitis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "severe_bloody_diarrhea", "weight": 5 },
+          { "feature": "systemic_symptoms", "weight": 4 },
+          { "feature": "anemia_hypoalbuminemia", "weight": 4 },
+          { "feature": "disease_beyond_splenic_flexure", "weight": 5 }
+        ],
+        "management": "IV corticosteroids. IV cyclosporine or Anti-TNF (Infliximab) for severe/fulminant. Colectomy if medical therapy fails. Surveillance colonoscopy due to cancer risk."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "crohn_disease",
+        "discriminators": ["skip_lesions", "transmural_inflammation", "perianal_disease", "non_bloody_diarrhea_often"]
+      },
+      {
+        "diseaseId": "infectious_colitis",
+        "discriminators": ["acute_onset", "positive_stool_culture", "self_limiting", "recent_antibiotics_or_travel"]
+      },
+      {
+        "diseaseId": "colorectal_cancer",
+        "discriminators": ["older_age", "no_extraintestinal_manifestations", "mass_on_imaging"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Stool culture + Ova/Parasites", "priority": "high", "yield": 0.3, "indication": "rule out infectious cause" }
+      ],
+      "laboratory": [
+        { "name": "CRP", "priority": "high", "yield": 0.8, "indication": "inflammatory marker" },
+        { "name": "CBC", "priority": "high", "yield": 0.6, "indication": "anemia, thrombocytosis" },
+        { "name": "Albumin", "priority": "high", "yield": 0.5, "indication": "severity marker" },
+        { "name": "pANCA", "priority": "medium", "yield": 0.5, "indication": "positive in UC, helps differentiate" },
+        { "name": "Fecal Calprotectin", "priority": "high", "yield": 0.85, "indication": "marker of intestinal inflammation" }
+      ],
+      "imaging": [
+        { "name": "Colonoscopy with biopsy", "priority": "high", "yield": 0.98, "indication": "gold standard for diagnosis and extent" },
+        { "name": "Abdominal X-Ray", "priority": "medium", "yield": 0.5, "indication": "assess for toxic megacolon" },
+        { "name": "CT Abdomen", "priority": "medium", "yield": 0.7, "indication": "assess severity and complications" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ECCO/ACG Guidelines for Ulcerative Colitis",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "<6 stools/day, no systemic toxicity, CRP <30",
+          "treatment": "Oral 5-ASA (Mesalamine 2-4.8g/day). Topical 5-ASA for proctitis. Step up to corticosteroids if no response."
+        },
+        {
+          "severity": "severe",
+          "criteria": ">6 bloody stools/day, systemic toxicity, CRP >30, anemia",
+          "treatment": "Hospitalization. IV corticosteroids (Hydrocortisone 100mg QID). IV fluids. DVT prophylaxis. Rescue therapy (Infliximab or Cyclosporine) if no response in 3-5 days. Colectomy if medical therapy fails."
+        },
+        {
+          "severity": "fulminant/toxic megacolon",
+          "criteria": "colonic dilation >6cm, systemic toxicity, peritonitis",
+          "treatment": "NBM, NG tube, IV fluids. IV steroids + IV Cyclosporine or Infliximab. Urgent colectomy if no improvement in 24-48h."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "abnormal_immune_response",
+      "genetic_predisposition",
+      "dysfunctional_epithelial_barrier",
+      "dysbiosis",
+      "chronic_mucosal_inflammation",
+      "crypt_abscesses",
+      "mucosal_ulceration"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "toxic_megacolon",
+        "probability": 0.05,
+        "lagDays": [1, 7],
+        "severityBoost": 0.5,
+        "clues": ["abdominal_distension", "systemic_toxicity", "colonic_dilation_more_than_6cm"]
+      },
+      {
+        "diseaseId": "colorectal_cancer",
+        "probability": 0.1,
+        "lagDays": [120, 360],
+        "severityBoost": 0.2,
+        "clues": ["longstanding_disease", "pancolitis", "dysplasia_on_surveillance"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["bloody_diarrhea", "tenesmus", "left_sided_abdominal_pain", "continuous_mucosal_inflammation"],
+    "exclusionClues": ["non_bloody_diarrhea", "perianal_fistula", "skip_lesions_on_colonoscopy"]
+  }
+}

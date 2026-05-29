@@ -1,0 +1,189 @@
+{
+  "disease": {
+    "id": "renal_dose_adjustment",
+    "name": "Renal Dose Adjustment in Chronic Kidney Disease and Acute Kidney Injury",
+    "system": "PHARM",
+    "agePeak_months": [360, 1080],
+    "note": "Drug dosing in renal impairment requires accurate estimation of kidney function using Cockcroft-Gault (CG), MDRD-4, or CKD-EPI equations. CG is preferred for drug dosing due to weight-based estimation. Dialysis drug removal depends on molecular size, protein binding, volume of distribution, and dialyzer characteristics. Nephrotoxic drug monitoring includes aminoglycosides, vancomycin, calcineurin inhibitors, and NSAIDs.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["renal_dosing", "ckd_aki", "crcl_thresholds", "dialysis_pharmacokinetics", "nephrotoxicity_monitoring"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anuric_aki_requiring_dialysis", "weight": 10 },
+        { "sign": "drug_accumulation_causing_toxicity_seizures_arrhythmia", "weight": 10 },
+        { "sign": "hyperkalemia_from_renally_cleared_medication", "weight": 9 },
+        { "sign": "nephrotoxic_drug_combination_causing_renal_failure", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "creatinine_clearance_below_30_ml_min", "weight": 8 },
+          { "sign": "rapid_deterioration_of_renal_function_by_above_50_percent", "weight": 8 },
+          { "sign": "serum_creatinine_above_3_0_or_rising_daily", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If CrCl <15 or anuric -> ESKD; if CrCl 15-29 -> SEVERE; if CrCl 30-59 -> MODERATE; if CrCl >60 -> MILD"
+    },
+    "historyFeatures": [
+      { "symptomId": "known_chronic_kidney_disease_or_aki_recent", "weight": 5, "modifiers": [
+          { "condition": "stage_3b_or_worse_egfr_below_45", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "receiving_dialysis_hemodialysis_or_peritoneal", "weight": 5 },
+      { "symptomId": "prescribed_nephrotoxic_medication_aminoglycoside_nsaid", "weight": 5 },
+      { "symptomId": "multiple_renally_cleared_drugs_prescribed", "weight": 4 },
+      { "symptomId": "dehydration_hypotension_contrast_exposure_recent", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "serum_creatinine_trend_and_baseline", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cockcroft_gault_crcl_calculation_result", "baseWeight": 5 },
+      { "signId": "egfr_by_ckd_epi_or_mdrd_equation", "baseWeight": 4 },
+      { "signId": "blood_urea_nitrogen_and_creatinine_ratio", "baseWeight": 3 },
+      { "signId": "dialysis_access_functional_or_maturing", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_above_75", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus_with_nephropathy", "multiplier": 4.0 },
+      { "id": "hypertension_chronic_uncontrolled", "multiplier": 3.0 },
+      { "id": "concurrent_nephrotoxic_drugs", "multiplier": 4.0 },
+      { "id": "heart_failure_reduced_renal_perfusion", "multiplier": 2.5 },
+      { "id": "radiocontrast_recent_exposure", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "cockcroft_gault_dosing",
+        "name": "Cockcroft-Gault Equation for Drug Dosing Preferences",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "preferred_by_fda_for_dosing_studies", "weight": 5 },
+          { "feature": "uses_actual_body_weight_important_for_drug_dosing", "weight": 5 },
+          { "feature": "overestimates_in_obesity_use_ideal_or_adjusted_weight", "weight": 4 },
+          { "feature": "females_multiply_by_0_point_85_correction", "weight": 4 }
+        ],
+        "management": "CG equation: CrCl (mL/min) = [(140 - age) x ABW] / (72 x SCr) x 0.85 if female. For obesity (BMI >30), use adjusted body weight (AdjBW = IBW + 0.4 x (ABW - IBW)). For all drug dosing decisions, use CG over eGFR. Adjust drug interval or dose based on CrCl thresholds specific to each drug."
+      },
+      {
+        "id": "ckd_epi_vs_mdrd",
+        "name": "CKD-EPI vs MDRD-4 for Staging and Dosing",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "ckd_epi_more_accurate_than_mdrd_at_higher_gfr", "weight": 5 },
+          { "feature": "mdrd_less_reliable_above_60_tends_to_underestimate", "weight": 4 },
+          { "feature": "both_report_as_ml_min_1_point_73_m2_not_corrected_bsa", "weight": 4 },
+          { "feature": "neither_preferred_for_drug_dosing_by_fda", "weight": 4 }
+        ],
+        "management": "Use CKD-EPI for CKD staging (KDIGO guidelines). For drug dosing, convert eGFR to CG equivalent or use BSA-unadjusted values. When eGFR <60, always use CG for dosing decisions. For chemotherapy carboplatin, use Calvert formula with CG-based CrCl."
+      },
+      {
+        "id": "dialysis_dosing",
+        "name": "Drug Dosing in Dialysis (HD/PD/CRRT)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "hemodialysis_removes_small_mws_less_than_500_Da", "weight": 5 },
+          { "feature": "protein_binding_above_90_percent_minimizes_removal", "weight": 5 },
+          { "feature": "large_vd_above_2_L_per_kg_limits_dialytic_clearance", "weight": 4 },
+          { "feature": "post_dialysis_supplemental_dose_needed_for_some_drugs", "weight": 4 }
+        ],
+        "management": "Drugs significantly removed by HD: aminoglycosides, vancomycin, levetiracetam, metronidazole. Give after dialysis or supplement. Drugs NOT removed: amiodarone, ceftriaxone, phenytoin, warfarin (high protein binding). For CRRT, use eCrCl = 15-25 + UF rate for dosing approximations."
+      },
+      {
+        "id": "nephrotoxic_monitoring",
+        "name": "Nephrotoxic Drug Monitoring and Prevention",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "aminoglycoside_ototoxicity_and_nephrotoxicity_tdm", "weight": 5 },
+          { "feature": "vancomycin_auc_guided_dosing_and_trough_monitoring", "weight": 5 },
+          { "feature": "calcineurin_inhibitor_tacrolimus_cyclosporine_tdm", "weight": 5 },
+          { "feature": "nsaids_contrast_acei_arb_combination_warning", "weight": 4 }
+        ],
+        "management": "Aminoglycosides: once-daily dosing, monitor peak/trough. Vancomycin: target AUC/MIC 400-600, trough 15-20 for serious infections. Avoid triple whammy: ACEi/ARB + diuretic + NSAID. Hold metformin if CrCl <30. Hold SGLT2i if CrCl <45. Monitor SCr and urine output q8h in AKI."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "hepatic_disease_altering_drug_metabolism",
+        "discriminators": ["liver_enzymes_elevated", "inr_elevated", "normal_creatinine", "ascites"]
+      },
+      {
+        "diseaseId": "volume_depletion_pseudo_aki",
+        "discriminators": ["bun_cr_ratio_above_20", "orthostatic_hypotension", "improves_with_fluids", "normal_cr_baseline"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Intake and output charting", "priority": "high", "yield": 0.7, "indication": "daily urine output assessment" },
+        { "name": "Daily weight", "priority": "medium", "yield": 0.5, "indication": "fluid balance in CKD/AKI" },
+        { "name": "Blood pressure monitoring", "priority": "high", "yield": 0.6, "indication": "hemodynamic assessment" }
+      ],
+      "laboratory": [
+        { "name": "Serum creatinine, BUN, eGFR (CKD-EPI), CrCl (CG)", "priority": "immediate", "yield": 0.95, "indication": "all patients on renally cleared drugs" },
+        { "name": "Serum potassium, sodium, chloride, bicarbonate", "priority": "high", "yield": 0.8, "indication": "electrolyte monitoring" },
+        { "name": "Urine albumin-to-creatinine ratio (UACR)", "priority": "medium", "yield": 0.4, "indication": "CKD assessment and staging" },
+        { "name": "Therapeutic drug monitoring levels as applicable", "priority": "high", "yield": 0.9, "indication": "vancomycin, aminoglycosides, tacrolimus, cyclosporine" },
+        { "name": "Urinalysis and urine microscopy", "priority": "medium", "yield": 0.4, "indication": "hematuria, proteinuria, casts" }
+      ],
+      "imaging": [
+        { "name": "Renal ultrasound", "priority": "medium", "yield": 0.3, "indication": "rule out obstruction, assess kidney size" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO 2024 CKD Guidelines, FDA Guidance for Renal Impairment Dosing Studies, Sanford Guide Renal Dosing Tables, AHFS Drug Information",
+      "pathways": [
+        {
+          "severity": "normal_renal_function",
+          "criteria": "CrCl >60 mL/min, no AKI, no dialysis",
+          "treatment": "Standard drug dosing per manufacturer. No dose adjustment needed for most drugs. Document baseline renal function. Reassess if clinical status changes or nephrotoxic drugs started."
+        },
+        {
+          "severity": "moderate_renal_impairment",
+          "criteria": "CrCl 30-59 mL/min, CKD stage 3a-3b",
+          "treatment": "Reduce dose or extend interval per drug-specific tables. Common adjustments: reduce dose by 25-50%. Avoid NSAIDs if possible. Monitor CrCl monthly. Check for drug-drug interactions. Preferred ACEi/ARB for BP lowering."
+        },
+        {
+          "severity": "severe_renal_impairment_or_dialysis",
+          "criteria": "CrCl <30 mL/min, CKD stage 4-5, HD/PD",
+          "treatment": "Dose reduce per specific guidelines (often 50-75% reduction). Extend dosing intervals. Give post-dialysis when applicable. Choose non-nephrotoxic alternatives. Monitor drug levels where available. Avoid metformin, SGLT2i, nitrofurantoin, and TMP-SMX (high dose)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "reduced_gfr_decreases_renal_drug_clearance",
+      "accumulation_of_active_or_toxic_metabolites",
+      "altered_protein_binding_due_to_uremia",
+      "reduced_tubular_secretion_of_organic_anions_cations",
+      "increased_volume_of_distribution_in_fluid_overload",
+      "dialytic_clearance_bypasses_renal_excretion"
+    ],
+    "complications": [
+      {
+        "diseaseId": "drug_accumulation_toxicity_neurotoxicity_cardiotoxicity",
+        "probability": 0.15,
+        "lagDays": [2, 30],
+        "severityBoost": 0.6,
+        "clues": ["rising_serum_drug_levels", "mental_status_change", "qtc_prolongation"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury_worsening",
+        "probability": 0.1,
+        "lagDays": [1, 14],
+        "severityBoost": 0.5,
+        "clues": ["rising_creatinine", "oliguria", "nephrotoxic_drug_exposure"]
+      },
+      {
+        "diseaseId": "hyperkalemia_from_drug_interaction",
+        "probability": 0.08,
+        "lagDays": [1, 7],
+        "severityBoost": 0.5,
+        "clues": ["potassium_above_5_5", "ecg_changes_tented_t", "acei_arb_mra_k_sparing_diuretic"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["crcl_below_60_or_declining", "multiple_renally_cleared_drugs", "nephrotoxic_drug_combination", "dialysis_prescribed"],
+    "exclusionClues": ["crcl_above_90_stable", "no_nephrotoxic_drug_exposure", "drugs_not_renally_cleared"]
+  }
+}

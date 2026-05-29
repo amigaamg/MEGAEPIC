@@ -1,0 +1,114 @@
+{
+  "disease": {
+    "id": "narcolepsy",
+    "name": "Narcolepsy",
+    "system": "PSYCH",
+    "agePeak_months": [120, 360],
+    "note": "Chronic sleep disorder with excessive daytime sleepiness, cataplexy (in type 1), sleep paralysis, hypnagogic hallucinations, and disrupted nighttime sleep.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["sleep_disorder", "hypersomnia", "cataplexy"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cataplexy_causing_falls_injury", "weight": 8 },
+        { "sign": "driving_machinery_accidents_sleep_attacks", "weight": 8 },
+        { "sign": "suicidal_intent_due_to_impairment", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If injury risk -> SPECIALIST REFERRAL; else -> OUTPATIENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "excessive_daytime_sleepiness", "weight": 5 },
+      { "symptomId": "cataplexy_sudden_muscle_weakness_with_emotion", "weight": 5, "note": "Pathognomonic for type 1 narcolepsy" },
+      { "symptomId": "hypnagogic_hypnopompic_hallucinations", "weight": 4 },
+      { "symptomId": "sleep_paralysis", "weight": 4 },
+      { "symptomId": "fragmented_nighttime_sleep", "weight": 3 },
+      { "symptomId": "automatic_behaviors", "weight": 3 },
+      { "symptomId": "irresistible_sleep_attacks", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "cataplexy_elicited_by_laughter_or_surprise", "baseWeight": 5 },
+      { "signId": "tendency_to_fall_asleep_in_waiting_room", "baseWeight": 3 },
+      { "signId": "obesity_common", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_narcolepsy", "multiplier": 10.0 },
+      { "id": "hla_dqb1_0602_positive", "multiplier": 7.0 },
+      { "id": "infection_trigger_strep_h1n1", "multiplier": 2.0 },
+      { "id": "head_trauma", "multiplier": 2.0 },
+      { "id": "age_peak_15_to_30", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "narcolepsy_type_1",
+        "name": "Narcolepsy Type 1 (with Cataplexy)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "cataplexy_present", "weight": 5 },
+          { "feature": "low_or_absent_hypocretin_orexin_csf", "weight": 5 },
+          { "feature": "hla_dqb1_0602_positive", "weight": 4 }
+        ],
+        "management": "Modafinil or armodafinil for EDS (first-line). Sodium oxybate (GHB) for cataplexy and disrupted sleep. Pitolisant for EDS and cataplexy. Venlafaxine or clomipramine for cataplexy if sodium oxybate not tolerated."
+      },
+      {
+        "id": "narcolepsy_type_2",
+        "name": "Narcolepsy Type 2 (without Cataplexy)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "no_cataplexy", "weight": 5 },
+          { "feature": "normal_hypocretin_csf", "weight": 3 }
+        ],
+        "management": "Modafinil/armodafinil for EDS. Pitolisant. Scheduled naps. Sleep hygiene. Avoid driving if uncontrolled."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "obstructive_sleep_apnea", "discriminators": ["snoring_witnessed_apneas", "obesity_typical", "no_cataplexy", "msl_normal_or_mild"] },
+      { "diseaseId": "idiopathic_hypersomnia", "discriminators": ["prolonged_sleep_(>10_hours)", "sleep_drunkenness", "no_cataplexy", "normal_msl_or>8_minutes"] },
+      { "diseaseId": "insufficient_sleep_syndrome", "discriminators": ["resolves_with_adequate_sleep", "history_of_sleep_deprivation", "no_soremn_on_mslt"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Epworth Sleepiness Scale (ESS)", "priority": "high", "yield": 0.9, "indication": "subjective sleepiness" },
+        { "name": "Sleep diary (2 weeks)", "priority": "high", "yield": 0.7, "indication": "sleep-wake pattern" }
+      ],
+      "laboratory": [
+        { "name": "Polysomnography (overnight)", "priority": "immediate", "yield": 0.85, "indication": "rule out other sleep disorders, confirm REM abnormalities" },
+        { "name": "Multiple Sleep Latency Test (MSLT)", "priority": "immediate", "yield": 0.9, "indication": "mean sleep latency <8 min + 2+ SOREMPs" },
+        { "name": "CSF hypocretin-1 level", "priority": "selective", "yield": 0.95, "indication": "definitive for type 1 (<110 pg/mL)" },
+        { "name": "HLA DQB1*0602 typing", "priority": "medium", "yield": 0.85, "indication": "supportive evidence" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AASM Guidelines for Narcolepsy / NICE Guidelines",
+      "pathways": [
+        {
+          "severity": "type 1 (with cataplexy)",
+          "criteria": "EDS + cataplexy, MSLT/SOREMP confirmation",
+          "treatment": "Modafinil 200-400 mg or armodafinil 150-250 mg for EDS. Sodium oxybate 4.5-9 g/night (split dose) for cataplexy + EDS + disrupted sleep. Pitolisant 10-40 mg for EDS/cataplexy. Venlafaxine 75-225 mg for cataplexy if needed. Scheduled naps."
+        },
+        {
+          "severity": "type 2 (no cataplexy)",
+          "criteria": "EDS without cataplexy, MSLT criteria met",
+          "treatment": "Modafinil/armodafinil first-line. Pitolisant or sodium oxybate if inadequate response. Scheduled naps. Sleep hygiene. Driving restriction if uncontrolled."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "hypocretin_orexin_deficiency_type_1",
+      "autoimmune_destruction_of_hypocretin_neurons",
+      "rem_sleep_dysregulation",
+      "hla_dqb1_0602_association",
+      "genetic_predisposition",
+      "environmental_trigger_infection"
+    ],
+    "complications": [
+      { "diseaseId": "car_accident_sleep_attack", "probability": 0.1, "severityBoost": 0.3, "clues": ["uncontrolled_eds", "driving_commute", "no_treatment"] },
+      { "diseaseId": "obesity", "probability": 0.3, "severityBoost": 0.1, "clues": ["hypocretin_deficiency_linked_to_obesity"] },
+      { "diseaseId": "depression", "probability": 0.3, "severityBoost": 0.1, "clues": ["chronic_illness_burden", "social_impairment"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["excessive_daytime_sleepiness", "cataplexy", "sleep_paralysis", "hypnagogic_hallucinations", "mslt_soremps"],
+    "exclusionClues": ["sleepiness_explained_by_another_sleep_disorder", "no_mslt_confirmation"]
+  }
+}

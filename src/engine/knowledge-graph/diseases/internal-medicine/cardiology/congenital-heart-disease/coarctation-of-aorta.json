@@ -1,0 +1,119 @@
+{
+  "disease": {
+    "id": "coarctation_of_aorta",
+    "name": "Coarctation of the Aorta",
+    "system": "CARD",
+    "agePeak_months": [0, 240],
+    "note": "Narrowing of the descending aorta, typically distal to left subclavian artery. Hypertension in upper extremities, weak femoral pulses.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["congenital_heart_disease", "aortic_obstruction"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "neonatal_heart_failure", "weight": 10 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "hypertensive_encephalopathy", "weight": 9 },
+        { "sign": "intracranial_hemorrhage", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If neonatal HF/shock -> CRITICAL (duct-dependent); else -> CHRONIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "asymptomatic", "weight": 2, "note": "May be asymptomatic until adulthood" },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "leg_cramping_with_exercise", "weight": 3 },
+      { "symptomId": "cold_legs_feet", "weight": 3 },
+      { "symptomId": "epistaxis", "weight": 2 },
+      { "symptomId": "dyspnea", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "hypertension_upper_extremities", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "weak_or_delayed_femoral_pulses", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bp_difference_arm_leg_greater_20", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "interscapular_murmur_collaterals", "baseWeight": 3 },
+      { "signId": "radiofemoral_delay", "baseWeight": 4 },
+      { "signId": "notching_of_ribs_on_cxr", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "turner_syndrome", "multiplier": 10.0 },
+      { "id": "bicuspid_aortic_valve", "multiplier": 5.0 },
+      { "id": "williams_syndrome", "multiplier": 2.5 },
+      { "id": "family_history_coarctation", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "infantile_preductal",
+        "name": "Infantile (Preductal/PDA-Dependent) Coarctation",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "duct_dependent_lower_body", "weight": 5 },
+          { "feature": "neonatal_hf", "weight": 5 },
+          { "feature": "differential_cyanosis", "weight": 4 }
+        ],
+        "management": "PGE1 infusion. Surgical repair (end-to-end anastomosis). ICU. Treat HF."
+      },
+      {
+        "id": "adult_postductal",
+        "name": "Adult (Postductal) Coarctation",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "upper_body_hypertension", "weight": 5 },
+          { "feature": "collateral_circulation", "weight": 4 },
+          { "feature": "rib_notching_cxr", "weight": 3 }
+        ],
+        "management": "Surgical repair or balloon angioplasty with stent. Monitor for restenosis, aneurysm, hypertension. Treat hypertension."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "aortic_arch_hypoplasia", "discriminators": ["diffusely_hypoplastic_arch", "not_discrete_narrowing"] },
+      { "diseaseId": "essential_hypertension", "discriminators": ["normal_femoral_pulses", "no_bp_differential", "no_echo_coarctation"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Four-limb BP measurement", "priority": "immediate", "yield": 0.95, "indication": "diagnostic (arm-leg gradient >20 mmHg)" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.95, "indication": "discrete narrowing, gradient, bicuspid AV, LVH" },
+        { "name": "CT aortogram or MRA", "priority": "high", "yield": 0.98, "indication": "exact anatomy, collaterals, post-surgical assessment" },
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.6, "indication": "3 sign, rib notching, cardiomegaly" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Congenital Heart Disease - Coarctation",
+      "pathways": [
+        {
+          "severity": "critical neonatal",
+          "criteria": "duct-dependent, shock, HF in first days",
+          "treatment": "PGE1 10-20 ng/kg/min IV. Inotropic support. Correct acidosis. Emergency surgical repair (end-to-end anastomosis)."
+        },
+        {
+          "severity": "stable child/adult",
+          "criteria": "discrete coarctation, gradient >20 mmHg or hypertension",
+          "treatment": "Surgical repair (if young age or complex anatomy) or percutaneous intervention (balloon angioplasty + stent). Pre-op and post-op BP management."
+        },
+        {
+          "severity": "post-repair follow-up",
+          "criteria": "lifelong after repair",
+          "treatment": "Annual cardiac follow-up. BP monitoring. MRI for restenosis and aneurysm. Treat hypertension aggressively. Endocarditis prophylaxis if residual defect."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "aortic_narrowing",
+      "increased_afterload_proximal",
+      "upper_body_hypertension",
+      "lower_body_hypoperfusion",
+      "collateral_vessel_formation",
+      "left_ventricular_hypertrophy"
+    ],
+    "complications": [
+      { "diseaseId": "systemic_hypertension", "probability": 0.5, "severityBoost": 0.2, "clues": ["htn_persistent"] },
+      { "diseaseId": "aortic_aneurysm", "probability": 0.05, "severityBoost": 0.4, "clues": ["dilated_aorta_at_repair_site"] },
+      { "diseaseId": "intracranial_aneurysm", "probability": 0.1, "severityBoost": 0.5, "clues": ["circle_of_willis_aneurysm"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if neonatal",
+    "diagnosticClues": ["upper_body_htn_with_weak_femoral_pulses", "bp_differential", "coarctation_on_echo"],
+    "exclusionClues": ["normal_femoral_pulses", "no_bp_gradient", "normal_aorta"]
+  }
+}

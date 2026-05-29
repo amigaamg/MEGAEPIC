@@ -1,0 +1,90 @@
+{
+  "disease": {
+    "id": "ventricular_fibrillation",
+    "name": "Ventricular Fibrillation",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Chaotic ventricular rhythm with no effective cardiac output. Cause of sudden cardiac death. Immediate defibrillation required.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["cardiac_arrest", "arrhythmia", "cardiac_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest_pulseless", "weight": 10 },
+        { "sign": "refractory_vf", "weight": 10 },
+        { "sign": "recurrent_vf", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "All VF is SEVERE - cardiac arrest management required"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_collapse", "weight": 5 },
+      { "symptomId": "witnessed_arrest", "weight": 5 },
+      { "symptomId": "preceding_chest_pain", "weight": 2 },
+      { "symptomId": "history_of_heart_disease", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "pulselessness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "unresponsiveness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "agonal_breathing_or_apnea", "baseWeight": 4 },
+      { "signId": "no_heart_sounds", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "cad_prior_mi", "multiplier": 4.0 },
+      { "id": "lv_ef_less_35", "multiplier": 5.0 },
+      { "id": "prior_vf", "multiplier": 5.0 },
+      { "id": "electrolyte_abnormalities", "multiplier": 2.0 },
+      { "id": "drug_proarrhythmia", "multiplier": 2.0 },
+      { "id": "brugada_channelopathy", "multiplier": 3.0 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG rhythm strip", "priority": "immediate", "yield": 1.0, "indication": "chaotic irregular rhythm, no QRS complexes" },
+        { "name": "End-tidal CO2 monitoring", "priority": "high", "yield": 0.8, "indication": "ROSC detection, CPR quality" }
+      ],
+      "laboratory": [
+        { "name": "ABG with lactate", "priority": "high", "yield": 0.7, "indication": "acidosis, ischemia severity" },
+        { "name": "Potassium, Magnesium", "priority": "high", "yield": 0.4, "indication": "correctable cause" },
+        { "name": "Troponin", "priority": "medium", "yield": 0.5, "indication": "post-ROSC ischemia assessment" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "intermittent_pulse_checks", "yield": 0.6, "indication": "assess for reversible causes, contractility post-ROSC" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ERC Guidelines for Cardiac Arrest (VF/VT Algorithm)",
+      "pathways": [
+        {
+          "severity": "initial VF",
+          "criteria": "shockable rhythm, witnessed or unwitnessed arrest",
+          "treatment": "Defibrillate 200 J biphasic. Immediate CPR 2 min. Epinephrine 1 mg IV Q3-5 min. Repeat defibrillation. Amiodarone 300 mg after 3rd shock."
+        },
+        {
+          "severity": "refractory VF",
+          "criteria": "persistent VF after 3+ shocks and amiodarone",
+          "treatment": "Continue CPR. Amiodarone 150 mg IV bolus (or lidocaine 1-1.5 mg/kg). Treat reversible causes (Hs and Ts). Consider double sequential defibrillation."
+        },
+        {
+          "severity": "post-ROSC",
+          "criteria": "return of spontaneous circulation",
+          "treatment": "Targeted temperature management (32-36°C). Coronary angiography if suspected ischemia. ICU for supportive care. Identify and treat cause."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "chaotic_ventricular_depolarization",
+      "multiple_reentry_wavelets",
+      "no_coordinated_contraction",
+      "sudden_cardiac_death",
+      "ischemia_trigger",
+      "electrical_heterogeneity"
+    ],
+    "complications": [
+      { "diseaseId": "anoxic_brain_injury", "probability": 0.5, "severityBoost": 0.5, "clues": ["prolonged_arrest", "no_witness", "poor_rosc"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pulseless_collapse", "ecg_chaotic_rhythm", "no_qrs"],
+    "exclusionClues": ["organized_rhythm", "pulse_present"]
+  }
+}

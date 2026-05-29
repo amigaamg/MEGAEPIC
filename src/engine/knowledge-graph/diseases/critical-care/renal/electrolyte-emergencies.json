@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "electrolyte_emergencies",
+    "name": "Electrolyte Emergencies",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Life-threatening derangements of potassium, sodium, calcium, magnesium, and phosphate. Require immediate recognition and correction in ICU setting.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["metabolic_emergency", "electrolyte_disorder", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest_arrhythmia", "weight": 10 },
+        { "sign": "seizures", "weight": 9 },
+        { "sign": "coma", "weight": 9 },
+        { "sign": "respiratory_muscle_weakness", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Life-threatening ECG changes/seizures/coma -> CRITICAL; severe lab abnormalities -> MODERATE-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "palpitations_chest_discomfort", "weight": 3 },
+      { "symptomId": "muscle_weakness_cramps", "weight": 3 },
+      { "symptomId": "altered_consciousness_confusion", "weight": 4 },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "polyuria_or_oliguria", "weight": 3 },
+      { "symptomId": "history_of_renal_disease_or_diuretics", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "ecg_changes_arrhythmia", "baseWeight": 5 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "muscle_fasciculations_weakness", "baseWeight": 3 },
+      { "signId": "tetany_chvostek_trousseau", "baseWeight": 3 },
+      { "signId": "seizures", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_kidney_disease", "multiplier": 3.0 },
+      { "id": "diuretic_therapy", "multiplier": 2.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "vomiting_diarrhea", "multiplier": 2.0 },
+      { "id": "medications_acei_arb_nsaids", "multiplier": 2.0 },
+      { "id": "malnutrition_or_refeeding", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "severe_hyperkalemia",
+        "name": "Severe Hyperkalemia (K+ >6.5)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "k_greater_6.5", "weight": 5 },
+          { "feature": "ecg_peaked_t_widened_qrs", "weight": 5 },
+          { "feature": "renal_failure_or_acei_or_ksparing_diuretic", "weight": 4 }
+        ],
+        "management": "IV calcium gluconate (membrane stabilization). Insulin + glucose (shift). Albuterol nebulizer. Sodium bicarbonate if acidotic. Dialysis if refractory."
+      },
+      {
+        "id": "severe_hyponatremia",
+        "name": "Severe Hyponatremia (Na <120)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "na_less_120", "weight": 5 },
+          { "feature": "neurological_symptoms_seizure_coma", "weight": 5 },
+          { "feature": "siatdh_or_hypovolemia_or_hypervolemia", "weight": 4 }
+        ],
+        "management": "Hypertonic saline 3% 2-3 mL/kg IV over 20 min if seizures/coma. Goal 4-6 mEq/L rise. Avoid overcorrection >8-10 mEq/L in 24h (osmotic demyelination)."
+      },
+      {
+        "id": "severe_hypocalcemia",
+        "name": "Severe Hypocalcemia (ionized Ca <0.8)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "tetany_carpopedal_spasm", "weight": 4 },
+          { "feature": "chvostek_trousseau_positive", "weight": 4 },
+          { "feature": "prolonged_qt_on_ecg", "weight": 4 }
+        ],
+        "management": "IV calcium gluconate 10-20 mL in D5W over 10-20 min. Then IV infusion. Check Mg (correct if low). Oral calcium + vitamin D maintenance."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECG 12-lead", "priority": "immediate", "yield": 0.9, "indication": "all electrolyte emergencies" },
+        { "name": "POC electrolytes (ABG/i-STAT)", "priority": "immediate", "yield": 0.95, "indication": "rapid bedside assessment" }
+      ],
+      "laboratory": [
+        { "name": "Serum K, Na, ionized Ca, Mg, PO4", "priority": "immediate", "yield": 0.98, "indication": "definitive levels" },
+        { "name": "U&E, Cr, serum osmolality", "priority": "high", "yield": 0.7, "indication": "renal function, osmolal gap" },
+        { "name": "ABG for pH", "priority": "high", "yield": 0.6, "indication": "acid-base contribution to K shifts" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "KDIGO / ICU Electrolyte Management Guidelines",
+      "pathways": [
+        {
+          "severity": "immediate life-threatening",
+          "criteria": "ECG changes, arrhythmia, seizures, or coma",
+          "treatment": "Hyperkalemia: Ca gluconate 10mL IV + insulin/glucose. Hyponatremia: hypertonic saline 100mL IV. Hypocalcemia: Ca gluconate 20mL IV. Continuous monitoring."
+        },
+        {
+          "severity": "severe lab-only",
+          "criteria": "severe derangement without ECG/neurologic symptoms",
+          "treatment": "Identify and treat underlying cause. Correct electrolyte gradually. Monitor for overcorrection. Cardiac monitoring. Renal replacement therapy if indicated."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "imbalance_of_intake_distribution_excretion",
+      "membrane_potential_disruption",
+      "cardiac_myocyte_excitability_change",
+      "neuromuscular_transmission_abnormality",
+      "renal_or_endocrine_regulatory_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cardiac_arrhythmia_cardiac_arrest",
+        "probability": 0.2,
+        "severityBoost": 0.6,
+        "clues": ["ecg_changes", "palpitations", "syncope"]
+      },
+      {
+        "diseaseId": "osmotic_demyelination_syndrome",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["rapid_na_correction", "neurologic_deficit_days_later"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["ecg_changes", "neurological_symptoms", "known_renal_disease", "extreme_lab_values"],
+    "exclusionClues": ["normal_electrolytes", "no_ecg_changes"]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "disease": {
+    "id": "aortic_aneurysm",
+    "name": "Aortic Aneurysm",
+    "system": "CARD",
+    "agePeak_months": [600, 1080],
+    "note": "Permanent dilation of the aorta. Risk of rupture increases with size. Most are asymptomatic until rupture.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["vascular_disease", "aortic_pathology"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "ruptured_aneurysm", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "acute_severe_pain", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If rupture/symptomatic -> EMERGENCY; else -> ELECTIVE"
+    },
+    "historyFeatures": [
+      { "symptomId": "asymptomatic", "weight": 4, "note": "Incidental finding on imaging" },
+      { "symptomId": "deep_abdominal_back_pain", "weight": 4 },
+      { "symptomId": "pulsating_abdominal_mass", "weight": 3 },
+      { "symptomId": "chest_or_back_pain", "weight": 4 },
+      { "symptomId": "hoarseness", "weight": 2, "note": "Recurrent laryngeal nerve stretch" },
+      { "symptomId": "dysphagia", "weight": 1 },
+      { "symptomId": "smoking_history", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "pulsatile_abdominal_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bp_difference_arms", "baseWeight": 3 },
+      { "signId": "aortic_regurgitation_murmur", "baseWeight": 2 },
+      { "signId": "hypertension", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 3.0 },
+      { "id": "age_over_65", "multiplier": 2.5 },
+      { "id": "male_sex", "multiplier": 3.0 },
+      { "id": "family_history_aaa", "multiplier": 2.5 },
+      { "id": "hypertension", "multiplier": 1.8 },
+      { "id": "copd", "multiplier": 1.5 },
+      { "id": "atherosclerosis", "multiplier": 1.5 },
+      { "id": "marfan_syndrome", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "abdominal_aortic_aneurysm",
+        "name": "Abdominal Aortic Aneurysm",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "infrarenal_location", "weight": 5 },
+          { "feature": "maximum_diameter_greater_3_cm", "weight": 5 }
+        ],
+        "management": "Surveillance if <55 mm (US Q6-12 months). Repair (EVAR or open) if ≥55 mm, rapid growth >10 mm/y, or symptomatic."
+      },
+      {
+        "id": "thoracic_aortic_aneurysm",
+        "name": "Thoracic Aortic Aneurysm",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "ascending_or_arch_location", "weight": 5 },
+          "feature": "aortic_root_dilation", "weight": 4 }
+        ],
+        "management": "Surveillance if <55 mm (ascending). Repair at ≥55 mm or ≥50 mm if bicuspid AV or connective tissue disease. Beta-blockers. Surgery vs TEVAR."
+      },
+      {
+        "id": "ruptured_aaa",
+        "name": "Ruptured Abdominal Aortic Aneurysm",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "sudden_severe_abdominal_back_pain", "weight": 5 },
+          { "feature": "hypotension_shock", "weight": 5 },
+          { "feature": "pulsatile_mass_and_tenderness", "weight": 5 }
+        ],
+        "management": "Emergency open repair or EVAR. Permissive hypotension. Massive transfusion protocol. ICU."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "aortic_dissection", "discriminators": ["tearing_pain", "intimal_flap", "false_lumen"] },
+      { "diseaseId": "renal_colic", "discriminators": ["flank_to_groin_pain", "hematuria", "normal_aorta"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Abdominal palpation", "priority": "high", "yield": 0.5, "indication": "pulsatile mass detection" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound", "priority": "first_line", "yield": 0.95, "indication": "AAA screening and surveillance" },
+        { "name": "CT aortogram", "priority": "immediate_if_rupture", "yield": 0.98, "indication": "pre-surgical planning, rupture detection" },
+        { "name": "MRI/MRA", "priority": "medium", "yield": 0.95, "indication": "thoracic aneurysm, elective planning" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Aortic Diseases",
+      "pathways": [
+        {
+          "severity": "small AAA (<55 mm)",
+          "criteria": "asymptomatic, no rapid growth, diameter 30-54 mm",
+          "treatment": "US surveillance: 3.0-3.9 cm Q3y, 4.0-4.9 cm Q12m, 5.0-5.4 cm Q6m. Smoking cessation. BP control. Statin."
+        },
+        {
+          "severity": "large AAA (≥55 mm or rapid growth)",
+          "criteria": "diameter ≥55 mm or growth >10 mm/y or symptomatic",
+          "treatment": "Elective repair: EVAR (if anatomy suitable) or open surgical repair. Pre-op cardiac assessment. Post-op surveillance."
+        },
+        {
+          "severity": "ruptured AAA",
+          "criteria": "hypotension, severe pain, pulsatile mass",
+          "treatment": "Immediate surgical repair (open or EVAR). Permissive hypotension (SBP 70-90). Massive transfusion. ICU. Avoid over-resuscitation (may increase bleeding)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "atherosclerotic_degeneration",
+      "medial_necrosis",
+      "proteolytic_enzyme_activity",
+      "extracellular_matrix_degradation",
+      "wall_stress_increasing",
+      "progressive_dilation",
+      "rupture"
+    ],
+    "complications": [
+      { "diseaseId": "aortic_rupture", "probability": 0.05, "severityBoost": 0.7, "clues": ["sudden_pain", "hypotension", "pulsatile_mass"] },
+      { "diseaseId": "rupture_per_year_large", "probability": 0.1, "severityBoost": 0.5, "clues": ["size_above_55_mm"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pulsatile_abdominal_mass", "smoker_over_65", "incidental_finding_on_imaging"],
+    "exclusionClues": ["normal_aortic_diameter", "no_dilation"]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "scoliosis",
+    "name": "Scoliosis",
+    "system": "ORTHO",
+    "agePeak_months": [120, 180],
+    "note": "Lateral curvature of the spine >10 degrees with rotation. Adolescent idiopathic scoliosis (AIS) most common. Risk of progression correlates with growth potential.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["spinal_deformity", "pediatric_orthopaedics"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "curve_>50_degrees_in_skeletally_immature", "weight": 8 },
+        { "sign": "rapid_progression_>10_degrees_year", "weight": 8 },
+        { "sign": "neurologic_deficit", "weight": 10 },
+        { "sign": "cardiopulmonary_compromise", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "curve_>40_degrees_adolescent", "weight": 7 },
+          { "sign": "thoracic_curve_>70_degrees", "weight": 7 },
+          { "sign": "significant_trunk_imbalance", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If curve >40 degrees or rapidly progressive -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "shoulder_asymmetry", "weight": 4 },
+      { "symptomId": "prominent_shoulder_blade", "weight": 4 },
+      { "symptomId": "unequal_waist_hip_elevation", "weight": 4 },
+      { "symptomId": "back_pain_may_be_absent", "weight": 2 },
+      { "symptomId": "family_history_scoliosis", "weight": 3 },
+      { "symptomId": "curve_progression_with_growth", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "adams_forward_bend_test_positive_rib_hump", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "shoulder_height_inequality", "baseWeight": 4 },
+      { "signId": "scapular_prominence", "baseWeight": 4 },
+      { "signId": "waist_crease_asymmetry", "baseWeight": 3 },
+      { "signId": "pelvic_tilt", "baseWeight": 3 },
+      { "signId": "scoliometer_reading_>7_degrees", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender", "multiplier": 3.0 },
+      { "id": "family_history_scoliosis", "multiplier": 3.0 },
+      { "id": "skeletally_immature_risser_0_2", "multiplier": 2.5 },
+      { "id": "rapid_growth_puberty", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "adolescent_idiopathic_scoliosis",
+        "name": "Adolescent Idiopathic Scoliosis",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "age_10_to_18", "weight": 5 },
+          { "feature": "right_thoracic_curve_most_common", "weight": 3 },
+          { "feature": "no_underlying_cause", "weight": 3 }
+        ],
+        "management": "<20 degrees: observe. 20-40 degrees: bracing (TLSO) if growing. >40-50 degrees (or progressing): surgical correction (posterior spinal fusion with pedicle screws)."
+      },
+      {
+        "id": "congenital_scoliosis",
+        "name": "Congenital Scoliosis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "vertebral_anomaly_hemivertebra", "weight": 5 },
+          { "feature": "presentation_<2_years", "weight": 4 }
+        ],
+        "management": "Hemivertebra resection or growth-friendly surgery (growing rods/VEPTR). Close monitoring for progression."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "postural_scoliosis",
+        "discriminators": ["corrects_with_position_change", "no_rib_hump_on_forward_bend", "normal_xray"]
+      },
+      {
+        "diseaseId": "leg_length_discrepancy",
+        "discriminators": ["pelvic_tilt_corrects_with_blocks", "no_rotational_rib_hump"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Adam's forward bend test + scoliometer", "priority": "immediate", "yield": 0.8, "indication": "screening" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Standing PA and lateral spine X-ray (full length)", "priority": "high", "yield": 0.95, "indication": "Cobb angle measurement, Risser sign" },
+        { "name": "MRI spine", "priority": "medium", "yield": 0.5, "indication": "atypical curve, neurologic signs, congenital" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "SRS (Scoliosis Research Society) Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_observation",
+          "criteria": "Cobb angle <20 degrees, any age",
+          "treatment": "Observation with standing X-ray every 6-12 months. Monitor until skeletal maturity. No bracing. Encourage normal activities."
+        },
+        {
+          "severity": "moderate_bracing",
+          "criteria": "Cobb angle 20-40 degrees in growing child (Risser 0-2)",
+          "treatment": "TLSO/Charleston bending brace worn 16-23 hours/day. Follow-up X-rays q6 months until skeletal maturity. Stop bracing after Risser 4-5."
+        },
+        {
+          "severity": "severe_surgical",
+          "criteria": "Cobb angle >40-50 degrees, or rapidly progressing (>10 degrees/year)",
+          "treatment": "Posterior spinal fusion with pedicle screw instrumentation. Intraoperative neuromonitoring. Post-op: TLSO brace for 3-6 months. Follow-up X-rays at 6 weeks, 3, 6, 12 months."
+        }
+      ]
+    },
+
+    "pathophysiology": ["idiopathic_etiology", "asymmetric_vertebral_growth", "rotational_deformity", "curve_progression_with_growth"]
+  }
+}

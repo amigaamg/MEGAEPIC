@@ -1,0 +1,132 @@
+{
+  "disease": {
+    "id": "spinal_cord_injury",
+    "name": "Spinal Cord Injury",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 720],
+    "note": "Acute injury to the spinal cord resulting in temporary or permanent loss of motor, sensory, and autonomic function below the level of injury. High risk of secondary cord damage.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["trauma", "neurological_emergency", "spinal_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_insufficiency_c4_above", "weight": 10 },
+        { "sign": "neurogenic_shock", "weight": 9 },
+        { "sign": "complete_cord_transection", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "SPINAL CORD INJURY is a neurological emergency. Immobilize immediately to prevent secondary injury."
+    },
+    "historyFeatures": [
+      { "symptomId": "trauma_to_spine", "weight": 5 },
+      { "symptomId": "loss_of_motor_function", "weight": 5 },
+      { "symptomId": "loss_of_sensation", "weight": 5 },
+      { "symptomId": "neck_or_back_pain", "weight": 4 },
+      { "symptomId": "bowel_or_bladder_dysfunction", "weight": 4 },
+      { "symptomId": "paralysis", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "motor_deficit_below_level", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "sensory_level_identified", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "loss_of_sphincter_tone", "baseWeight": 4 },
+      { "signId": "priapism", "baseWeight": 3 },
+      { "signId": "diaphragmatic_breathing_c4_above", "baseWeight": 5 },
+      { "signId": "hypotension_with_bradycardia", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "motor_vehicle_collision", "multiplier": 2.5 },
+      { "id": "fall_from_height", "multiplier": 2.0 },
+      { "id": "diving_accident", "multiplier": 3.0 },
+      { "id": "penetrating_spine_injury", "multiplier": 2.0 },
+      { "id": "cervical_spondylosis_elderly", "multiplier": 1.5 },
+      { "id": "ankylosing_spondylitis", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "complete_cord_injury",
+        "name": "Complete Cord Injury (ASIA A)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "no_motor_or_sensory_below_level", "weight": 5 },
+          { "feature": "no_sacral_sparing", "weight": 5 }
+        ],
+        "management": "Spinal immobilization. High-dose methylprednisolone (NASCIS II protocol, controversial). Surgical decompression."
+      },
+      {
+        "id": "incomplete_cord_injury",
+        "name": "Incomplete Cord Injury (ASIA B-D)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "some_preserved_function_below_level", "weight": 5 },
+          { "feature": "sacral_sparing", "weight": 5 }
+        ],
+        "management": "Spinal immobilization. Urgent MRI. Surgical decompression within 24 hours. Blood pressure augmentation (MAP 85-90) to maintain cord perfusion."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ASIA impairment scale", "priority": "immediate", "yield": 1.0, "indication": "classify severity and level" },
+        { "name": "Spinal immobilization check", "priority": "immediate", "yield": 1.0, "indication": "all suspected SCI" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr", "priority": "medium", "yield": 0.3, "indication": "baseline" }
+      ],
+      "imaging": [
+        { "name": "CT cervical/thoracic/lumbar spine", "priority": "immediate", "yield": 0.9, "indication": "identify fractures, dislocations" },
+        { "name": "MRI spine", "priority": "high", "yield": 0.95, "indication": "cord compression, contusion, ligamentous injury" },
+        { "name": "X-ray spine (3 views)", "priority": "medium", "yield": 0.6, "indication": "initial screening if CT unavailable" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Spinal Injury Guidelines / AO Spine Guidelines",
+      "pathways": [
+        {
+          "severity": "acute SCI with suspected instability",
+          "criteria": "trauma + motor/sensory deficit or spinal tenderness with neurological symptoms",
+          "treatment": "Immobilize: hard collar, blocks, spine board. Maintain MAP >85 with vasopressors. Avoid hypotension and hypoxia. Urgent MRI. Neurosurgical consultation. Consider methylprednisolone 30mg/kg bolus + 5.4mg/kg/hr x 23h (controversial). NGT for ileus. Foleys for retention."
+        },
+        {
+          "severity": "neurogenic shock",
+          "criteria": "hypotension + bradycardia + warm peripheries (T6 or above)",
+          "treatment": "IV fluids cautiously (avoid overload). Vasopressors: phenylephrine or norepinephrine. Atropine for bradycardia. Treat as distributive shock."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "primary_mechanical_injury",
+      "cord_contusion_or_transection",
+      "haemorrhage",
+      "oedema",
+      "ischaemia",
+      "secondary_inflammatory_cascade",
+      "excitotoxicity",
+      "apoptosis",
+      "demyelination"
+    ],
+    "complications": [
+      {
+        "diseaseId": "neurogenic_shock",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "bradycardia", "warm_skin"]
+      },
+      {
+        "diseaseId": "spinal_shock",
+        "probability": 0.4,
+        "severityBoost": 0.2,
+        "clues": ["flaccid_paralysis", "areflexia", "absent_bulbocavernosus"]
+      },
+      {
+        "diseaseId": "deep_vein_thrombosis",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["leg_swelling", "immobility"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["trauma", "motor_deficit", "sensory_level", "loss_of_sphincter_control", "neck_or_back_pain"],
+    "exclusionClues": ["no_trauma", "full_neurological_function", "normal_spinal_imaging"]
+  }
+}

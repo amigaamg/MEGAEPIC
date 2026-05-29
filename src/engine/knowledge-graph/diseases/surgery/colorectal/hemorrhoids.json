@@ -1,0 +1,179 @@
+{
+  "disease": {
+    "id": "hemorrhoids",
+    "name": "Hemorrhoids",
+    "system": "surgical",
+    "agePeak_months": [300, 720],
+    "note": "Vascular cushions in the anal canal. Internal (above dentate line) and external (below). Bleeding, prolapse, and pain.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["rectal_bleeding", "anal_pain", "prolapse"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "strangulated_hemorrhoid", "weight": 7 },
+        { "sign": "massive_bleeding", "weight": 7 },
+        { "sign": "severe_thrombosis", "weight": 6 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "incarcerated_prolapse", "weight": 6 },
+          { "sign": "ulceration_gangrene", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Strangulated/incarcerated/gangrenous -> SEVERE; grades I-III -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_rectal_bleeding", "weight": 5, "note": "Bright red blood per rectum, on toilet paper or dripping" },
+      { "symptomId": "prolapse", "weight": 4, "note": "Lump protruding on defecation, may reduce spontaneously or manually" },
+      { "symptomId": "anal_pain", "weight": 3, "note": "Usually from thrombosed external hemorrhoid" },
+      { "symptomId": "pruritus_ani", "weight": 2 },
+      { "symptomId": "mucous_discharge", "weight": 2 },
+      { "symptomId": "constipation_straining", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "external_hemorrhoids", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "internal_hemorrhoids_on_proctoscopy", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "thrombosed_hemorrhoid", "baseWeight": 4 },
+      { "signId": "prolapse_on_straining", "baseWeight": 4 },
+      { "signId": "digital_rectal_exam", "baseWeight": 2, "note": "Evaluate sphincter tone, rule out other causes" },
+      { "signId": "perianal_skin_tags", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_constipation", "multiplier": 2.0 },
+      { "id": "prolonged_straining", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "family_history", "multiplier": 1.3 },
+      { "id": "low_fiber_diet", "multiplier": 1.8 },
+      { "id": "prolonged_sitting", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "internal_hemorrhoids",
+        "name": "Internal Hemorrhoids (Goligher Classification)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "painless_bleeding", "weight": 5 },
+          { "feature": "prolapse_that_reduces", "weight": 4 },
+          { "feature": "above_dentate_line", "weight": 5 },
+          { "feature": "graded_i_to_iv", "weight": 3 }
+        ],
+        "management": "Grade I-II: Lifestyle modification, high fiber, fluids, stool softeners. Rubber band ligation. Sclerotherapy. Grade III-IV: Hemorrhoidectomy (Milligan-Morgan or Ferguson). Stapled hemorrhoidopexy (PPH) for circumferential."
+      },
+      {
+        "id": "external_hemorrhoids",
+        "name": "External Hemorrhoids",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "painful_lump_at_anus", "weight": 5 },
+          { "feature": "below_dentate_line", "weight": 5 },
+          { "feature": "thrombosis_common", "weight": 4 }
+        ],
+        "management": "Conservative: warm baths, topical anesthetics, oral analgesia. Excision of thrombosed hemorrhoid if <72h. Hemorrhoidectomy if large/symptomatic."
+      },
+      {
+        "id": "thrombosed_hemorrhoid",
+        "name": "Thrombosed External Hemorrhoid",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "sudden_severe_anal_pain", "weight": 5 },
+          { "feature": "blue_purple_lump_at_anus", "weight": 5 },
+          { "feature": "pain_worst_at_48h", "weight": 4 }
+        ],
+        "management": "Excision under local anesthesia if within 72h. Conservative: warm baths, topical anesthetics, stool softeners if after 72h."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "anal_fissure",
+        "discriminators": ["sharp_pain_on_defecation", "bleeding_streaks", "sentinel_tag", "no_prolapse"]
+      },
+      {
+        "diseaseId": "fistula_in_ano",
+        "discriminators": ["discharge", "external_opening", "history_of_abscess", "no_bleeding"]
+      },
+      {
+        "diseaseId": "colorectal_cancer",
+        "discriminators": ["change_in_bowel_habit", "weight_loss", "dark_blood", "age_over_50"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Digital rectal exam", "priority": "immediate", "yield": 0.5, "indication": "rule out other pathology" },
+        { "name": "Proctoscopy", "priority": "high", "yield": 0.9, "indication": "visualize internal hemorrhoids" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "medium", "yield": 0.2, "indication": "if chronic bleeding with anemia" }
+      ],
+      "imaging": [
+        { "name": "Colonoscopy", "priority": "high", "yield": 0.3, "indication": "if alarm symptoms or age >50 to rule out malignancy" },
+        { "name": "Flexible sigmoidoscopy", "priority": "medium", "yield": 0.4, "indication": "if younger patient with typical symptoms" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASCRS Practice Parameters for Hemorrhoids",
+      "pathways": [
+        {
+          "severity": "grade I-II internal",
+          "criteria": "non-prolapsing or prolapses spontaneously reducing, bleeding",
+          "treatment": "Dietary modification (high fiber, increased fluid). Stool softeners. Rubber band ligation. Sclerotherapy. Infrared coagulation."
+        },
+        {
+          "severity": "grade III-IV internal",
+          "criteria": "prolapse requiring manual reduction or irreducible",
+          "treatment": "Hemorrhoidectomy (Milligan-Morgan open or Ferguson closed). Stapled hemorrhoidopexy for circumferential prolapse. Doppler-guided hemorrhoidal artery ligation (THD)."
+        },
+        {
+          "severity": "thrombosed external",
+          "criteria": "acute painful lump at anal verge",
+          "treatment": "Excision under LA if <72h. Conservative management if >72h. Stool softeners. Warm baths."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "increased_intra_abdominal_pressure",
+      "venous_engorgement",
+      "cushion_displacement",
+      "vascular_dilatation",
+      "bleeding",
+      "prolapse",
+      "thrombosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "strangulated_hemorrhoid",
+        "probability": 0.05,
+        "lagDays": [1, 3],
+        "severityBoost": 0.3,
+        "clues": ["irreducible_prolapse", "severe_pain", "ischemic_changes"]
+      },
+      {
+        "diseaseId": "anemia",
+        "probability": 0.05,
+        "lagDays": [60, 720],
+        "severityBoost": 0.1,
+        "clues": ["fatigue", "pallor", "chronic_bleeding", "low_hemoglobin"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["painless_rectal_bleeding", "prolapse_on_straining", "pruritus", "confirmed_on_proctoscopy"],
+    "exclusionClues": ["dark_blood", "weight_loss", "mucus_in_stool", "age_over_50_with_new_symptoms"]
+  }
+}

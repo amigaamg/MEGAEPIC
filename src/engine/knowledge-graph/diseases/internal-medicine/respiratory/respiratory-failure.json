@@ -1,0 +1,355 @@
+{
+  "disease": {
+    "id": "respiratory_failure",
+    "name": "Respiratory Failure",
+    "system": "respiratory",
+    "note": "Respiratory failure is the inability of the respiratory system to maintain adequate gas exchange. Type 1 (hypoxemic): PaO2 <60 mmHg; Type 2 (hypercapnic): PaCO2 >45 mmHg with or without hypoxia. Management follows ARDSnet lung protective ventilation and evidence-based weaning protocols.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["gas_exchange_failure", "critical_care_syndrome", "ventilatory_failure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "paO2_less_than_40_mmHg", "weight": 10 },
+        { "sign": "paCO2_greater_than_80_mmHg", "weight": 10 },
+        { "sign": "pH_less_than_7_15", "weight": 10, "description": "Severe respiratory acidosis" },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "comatose_GCS_less_than_8", "weight": 9 },
+        { "sign": "hemodynamic_instability", "weight": 9 },
+        { "sign": "impending_exhaustion", "weight": 9, "description": "Fatigue, paradoxical breathing, inability to protect airway" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "PaO2_FiO2_less_than_100", "description": "Severe ARDS per Berlin criteria", "weight": 7 },
+          { "sign": "pH_7_15_to_7_25", "weight": 6 },
+          { "sign": "PaCO2_greater_than_60_with_acidosis", "weight": 6 },
+          { "sign": "multi_organ_failure", "weight": 7 }
+        ]
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "PaO2_FiO2_100_to_200", "description": "Moderate ARDS", "weight": 5 },
+          { "sign": "pH_7_25_to_7_30", "weight": 5 },
+          { "sign": "PaCO2_50_to_60_without_acidosis", "weight": 4 },
+          { "sign": "type_1_failure_hypoxia_only", "weight": 4 }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "PaO2_FiO2_200_to_300": true,
+        "mild_hypoxia": true,
+        "stable_acid_base": true,
+        "no_ventilatory_fatigue": true
+      }
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 5, "note": "Sudden or progressive onset" },
+      { "symptomId": "tachypnea_history", "weight": 3 },
+      { "symptomId": "cyanosis", "weight": 4, "note": "Late sign; central cyanosis indicates severe hypoxia" },
+      { "symptomId": "confusion", "weight": 4, "note": "Hypercapnic encephalopathy: confusion, drowsiness, asterixis, coma" },
+      { "symptomId": "headache_morning", "weight": 3, "note": "Suggests nocturnal hypercapnia" },
+      { "symptomId": "use_of_accessory_muscles", "weight": 3 },
+      { "symptomId": "reduced_sputum_clearance", "weight": 2, "note": "Weak cough and retained secretions" },
+      { "symptomId": "causes_of_hypoventilation", "weight": 3, "note": "COPD, OHS, neuromuscular disease, chest wall deformity, CNS depression" },
+      { "symptomId": "causes_of_hypoxemia", "weight": 3, "note": "Pneumonia, PE, ARDS, ILD, pulmonary oedema" }
+    ],
+
+    "examFeatures": [
+      { "signId": "tachypnea", "baseWeight": 5, "doubleWeight": true, "note": "Early compensatory sign" },
+      { "signId": "accessory_muscle_use", "baseWeight": 4, "severityMarker": true },
+      { "signId": "paradoxical_breathing", "baseWeight": 5, "severityMarker": true, "note": "Thoracoabdominal asynchrony indicates respiratory muscle fatigue" },
+      { "signId": "intercostal_recession", "baseWeight": 3 },
+      { "signId": "drowsiness_consciousness", "baseWeight": 4, "severityMarker": true },
+      { "signId": "cyanosis", "baseWeight": 4, "severityMarker": true },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "hypertension_or_hypotension", "baseWeight": 3 },
+      { "signId": "diaphoresis", "baseWeight": 2, "note": "Sign of increased work of breathing" },
+      { "signId": "asterixis", "baseWeight": 3, "note": "CO2 retention flap" },
+      { "signId": "reduced_air_entry", "baseWeight": 3 },
+      { "signId": "tracheal_tug", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "COPD", "multiplier": 2.0, "note": "Most common cause of type 2 respiratory failure" },
+      { "id": "asthma_severe_exacerbation", "multiplier": 1.6 },
+      { "id": "pneumonia_severe", "multiplier": 1.7 },
+      { "id": "ARDS", "multiplier": 2.0, "note": "Sepsis, pancreatitis, trauma, aspiration, COVID-19" },
+      { "id": "pulmonary_embolism", "multiplier": 1.5 },
+      { "id": "neuromuscular_disease", "multiplier": 1.6, "note": "GBS, myasthenia gravis, ALS, muscular dystrophy" },
+      { "id": "OHS_obesity_hypoventilation", "multiplier": 1.5 },
+      { "id": "sleep_apnoea", "multiplier": 1.4 },
+      { "id": "chest_wall_deformity", "multiplier": 1.4, "note": "Kyphoscoliosis, flail chest" },
+      { "id": "CNS_depression", "multiplier": 1.5, "note": "Opioids, sedatives, stroke, raised ICP" },
+      { "id": "cardiac_oedema", "multiplier": 1.4 },
+      { "id": "sepsis", "multiplier": 1.6 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "type_1_hypoxemic",
+        "name": "Type 1 Hypoxemic Respiratory Failure (PaO2 <60 mmHg)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "PaO2_below_60", "weight": 5 },
+          { "feature": "normal_or_low_PaCO2", "weight": 4 },
+          { "feature": "increased_A_a_gradient", "weight": 5 },
+          { "feature": "VQ_mismatch_or_shunt", "weight": 4 },
+          { "feature": "dyspnea_and_tachypnea", "weight": 4 }
+        ],
+        "management": "High-flow nasal oxygen (HFNC); treat underlying cause (pneumonia, PE, ARDS); lung protective ventilation if no improvement; prone positioning for ARDS"
+      },
+      {
+        "id": "type_2_hypercapnic",
+        "name": "Type 2 Hypercapnic Respiratory Failure (PaCO2 >45 mmHg)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "PaCO2_above_45_with_acidosis", "weight": 5 },
+          { "feature": "COPD_exacerbation", "weight": 5 },
+          { "feature": "OHS_or_neuromuscular", "weight": 4 },
+          { "feature": "morning_headache", "weight": 3 },
+          { "feature": "drowsiness_confusion", "weight": 4 }
+        ],
+        "management": "NIPPV/BiPAP first-line (if pH 7.25–7.35 and cooperative); treat precipitant; respiratory stimulants (doxapram) only if NIV not suitable; intubation if worsening acidosis, coma, exhaustion"
+      },
+      {
+        "id": "ARDS_acute_respiratory_distress_syndrome",
+        "name": "Acute Respiratory Distress Syndrome (ARDS)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "acute_onset_<7_days", "weight": 5 },
+          { "feature": "bilateral_opacities_on_CXR", "weight": 5 },
+          { "feature": "PaO2_FiO2_<_300", "weight": 5 },
+          { "feature": "non_cardiogenic_oedema", "weight": 5, "note": "PCWP <18 or no clinical evidence of left atrial hypertension" },
+          { "feature": "known_risk_factor_sepsis_pancreatitis_trauma", "weight": 4 }
+        ],
+        "management": "Lung protective ventilation (ARDSnet protocol: TV 6 mL/kg PBW, plateau pressure ≤30 cmH2O); high PEEP; prone positioning for PaO2/FiO2 <150; neuromuscular blockade (early); ECMO for refractory"
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "congestive_heart_failure",
+        "discriminators": ["cardiomegaly", "BNP_elevated", "PCWP_elevated", "diuretic_response"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["acute_dyspnea_normal_CXR", "CTPA_filling_defect", "D_dimer_positive"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "panic_attack_hyperventilation",
+        "discriminators": ["normal_ABG", "low_PaCO2_respiratory_alkalosis", "normal_CXR"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "metabolic_acidosis_compensatory",
+        "discriminators": ["low_HCO3", "low_pH_metabolic", "kussmaul_breathing", "normal_PaO2"],
+        "negativeImpactOnPneumonia": 2
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Pulse oximetry",
+          "priority": "continuous monitoring",
+          "yield": 1.0,
+          "indication": "all patients; target SpO2 92–96% (ARDS: 88–92%)"
+        },
+        {
+          "name": "Respiratory rate and pattern monitoring",
+          "priority": "continuous",
+          "yield": 0.8,
+          "indication": "trend RR, accessory muscle use, paradoxical breathing"
+        },
+        {
+          "name": "Capnography (EtCO2)",
+          "priority": "if intubated or on NIV",
+          "yield": 0.7,
+          "indication": "trend PaCO2 non-invasively"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "Arterial blood gas (ABG)",
+          "priority": "essential for diagnosis and management",
+          "yield": 1.0,
+          "indication": "define type of failure; guide ventilator settings; assess response to therapy",
+          "note": "Type 1: PaO2 <60, PaCO2 normal/low; Type 2: PaCO2 >45 with acidosis (acute) or normal pH (chronic compensated)"
+        },
+        {
+          "name": "FBC, CRP, procalcitonin",
+          "priority": "sepsis workup",
+          "yield": 0.6,
+          "indication": "infection as precipitant"
+        },
+        {
+          "name": "Serum electrolytes, renal function, LFTs",
+          "priority": "baseline",
+          "yield": 0.5,
+          "indication": "multi-organ assessment"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "Chest X-ray",
+          "priority": "immediate",
+          "yield": 0.8,
+          "indication": "bilateral infiltrates, pneumothorax, effusion, atelectasis"
+        },
+        {
+          "name": "CT chest (non-contrast or contrast)",
+          "priority": "if ARDS uncertain or underlying pathology unclear",
+          "yield": 0.7,
+          "indication": "characterise parenchymal disease, PE, malignancy"
+        },
+        {
+          "name": "Echocardiogram",
+          "priority": "if cardiogenic oedema suspected",
+          "yield": 0.6,
+          "indication": "exclude cardiogenic pulmonary oedema (ARDS differential)"
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Weaning parameters (RSBI, MIP, NIF, VT, VC)",
+          "indication": "daily assessment for extubation readiness",
+          "priority": "in all intubated patients",
+          "note": "RSBI <105 (rapid shallow breathing index) predicts successful weaning. MIP < -30 cmH2O good"
+        },
+        {
+          "name": "Spontaneous breathing trial (SBT)",
+          "indication": "assess readiness for extubation",
+          "priority": "daily once weaning criteria met",
+          "note": "Performed on pressure support 5–8 cmH2O or T-piece for 30–120 min"
+        },
+        {
+          "name": "Neuromuscular monitoring (NIF, PImax)",
+          "indication": "neuromuscular disease patients",
+          "priority": "selected"
+        }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ARDSnet Ventilation Protocol (2000); BTS Guidelines on NIV (2023); ATS/ERS Critical Care Consensus",
+      "pathways": [
+        {
+          "severity": "mild (type 1, PaO2 >60 on FiO2 <0.4)",
+          "criteria": "mild hypoxia, no acidosis, no respiratory fatigue",
+          "treatment": [
+            "Oxygen via nasal cannula or simple face mask to target SpO2 92–96%",
+            "Treat underlying cause (antibiotics, bronchodilators, diuretics, steroids)",
+            "Positioning: semi-recumbent, encourage coughing and deep breathing",
+            "Monitor with serial ABGs and pulse oximetry",
+            "Physiotherapy for airway clearance"
+          ],
+          "escalation": "If SpO2 cannot be maintained or PaCO2 rises, escalate to HFNC or NIV"
+        },
+        {
+          "severity": "moderate (type 1 worsening or type 2 with pH >7.25)",
+          "criteria": "PaO2/FiO2 100–200, or hypercapnia with pH 7.25–7.35 and cooperative patient",
+          "treatment": [
+            "High-flow nasal oxygen (HFNC) up to 60 L/min, FiO2 0.4–1.0",
+            "OR NIPPV (BiPAP) for hypercapnic failure: IPAP 10–25 cmH2O, EPAP 4–8 cmH2O, titrated to target TV 6–8 mL/kg",
+            "NIV contraindications: coma, cardiovascular instability, facial deformity, unable to protect airway, vomiting",
+            "Lung protective ventilation if intubated: TV 6 mL/kg PBW, plateau pressure ≤30 cmH2O",
+            "Treat precipitant aggressively"
+          ],
+          "reassessment": "ABG in 1–2 hours; if pH <7.25 or worsening, consider intubation"
+        },
+        {
+          "severity": "severe (type 2 with acidosis, or ARDS)",
+          "criteria": "PaO2/FiO2 <100 (severe ARDS), pH <7.25, exhaustion, coma, hemodynamic instability",
+          "treatment": [
+            "Early intubation and invasive mechanical ventilation",
+            "Lung protective ventilation per ARDSnet protocol:",
+            "  - TV 6 mL/kg predicted body weight (PBW: males 50+0.91×(height-152.4); females 45.5+0.91×(height-152.4))",
+            "  - Plateau pressure ≤30 cmH2O",
+            "  - PEEP: high PEEP strategy (PEEP/FiO2 table per ARDSnet)",
+            "  - Respiratory rate to achieve pH 7.30–7.45 (max RR 35)",
+            "  - Permissive hypercapnia if plateau pressure limits tidal volume",
+            "  - I:E ratio 1:2–1:3 (inverse ratio if oxygenation refractory)",
+            "Prone positioning for PaO2/FiO2 <150 (12–16 hours/day)",
+            "Neuromuscular blockade (cisatracurium) if PaO2/FiO2 <120 + prone (early course 48 h)",
+            "ECMO (VV-ECMO) if PaO2/FiO2 <80 on FiO2 >0.9 or uncompensated hypercapnia despite optimal ventilation",
+            "Sedation: goal RASS -2 to -5 (light sedation unless severe ARDS)",
+            "Conservative fluid strategy (ARDSnet fluid protocol: target CVP <4 or PCWP <8 if not in shock)",
+            "Daily SBT/weaning assessment: RSBI <105, adequate cough, no vasopressors"
+          ],
+          "escalation": "ECMO referral criteria: PaO2/FiO2 <80 for >6 h or pH <7.25 with PaCO2 >60 for >6 h despite optimal settings"
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hypoventilation_or_VQ_mismatch",
+      "alveolar_hypoventilation_type_2",
+      "intrapulmonary_shunt_type_1",
+      "impaired_gas_exchange",
+      "respiratory_muscle_fatigue",
+      "increased_work_of_breathing",
+      "respiratory_acidosis",
+      "hypoxemic_tissue_hypoxia",
+      "multi_organ_dysfunction",
+      "ventilator_induced_lung_injury_preventable"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "ventilator_associated_pneumonia",
+        "probability": 0.25,
+        "severityBoost": 0.4,
+        "clues": ["new_or_progressive_infiltrate", "fever", "purulent_sputum", "elevated_CRP"]
+      },
+      {
+        "diseaseId": "ventilator_induced_lung_injury",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["worsening_hypoxia", "barotrauma", "volutrauma"]
+      },
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.08,
+        "severityBoost": 0.5,
+        "clues": ["sudden_deterioration", "increased_PIP", "hyperresonance"]
+      },
+      {
+        "diseaseId": "multi_organ_failure",
+        "probability": 0.25,
+        "severityBoost": 0.6,
+        "clues": ["sepsis", "AKI", "cardiovascular_dysfunction", "hepatic_dysfunction"]
+      },
+      {
+        "diseaseId": "ICU_acquired_weakness",
+        "probability": 0.2,
+        "clues": ["difficult_weaning", "generalised_weakness", "critical_illness_myopathy_neuropathy"]
+      },
+      {
+        "diseaseId": "tracheostomy_related",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["bleeding", "infection", "tracheal_stenosis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "HIGH - severe hypoxemia or hypercapnia with acidosis requires immediate respiratory support escalation",
+
+    "diagnosticClues": [
+      "PaO2 <60 mmHg (type 1) or PaCO2 >45 mmHg (type 2) on ABG",
+      "tachypnoea with accessory muscle use and paradoxical breathing",
+      "bilateral infiltrates on CXR (ARDS)",
+      "hypercapnic encephalopathy: confusion, asterixis, drowsiness",
+      "failure to maintain SpO2 despite increasing oxygen"
+    ],
+    "exclusionClues": [
+      "normal ABG with adequate oxygenation excludes respiratory failure",
+      "hypoxia that corrects immediately with low-flow O2 suggests mild V/Q mismatch",
+      "isolated tachypnoea with normal ABG may be anxiety or compensation",
+      "rapid improvement with bronchodilators suggests asthma/COPD exacerbation, not fixed respiratory failure"
+    ]
+  }
+}

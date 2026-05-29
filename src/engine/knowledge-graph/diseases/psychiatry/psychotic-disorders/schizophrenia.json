@@ -1,0 +1,128 @@
+{
+  "disease": {
+    "id": "schizophrenia",
+    "name": "Schizophrenia",
+    "system": "psychiatry",
+    "agePeak_months": [180, 420],
+    "note": "Chronic psychotic disorder. Positive symptoms (hallucinations, delusions) and negative symptoms (apathy, social withdrawal).",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["psychotic_disorder", "chronic_mental_illness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "risk_of_harm_to_self_or_others", "weight": 10 },
+        { "sign": "command_hallucinations", "weight": 9 },
+        { "sign": "catatonia", "weight": 9 },
+        { "sign": "severe_agitation", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If risk of harm/command hallucinations/catatonia -> ACUTE exacerbation requiring inpatient; else -> STABLE/CHRONIC"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "delusions", "weight": 5 },
+      { "symptomId": "hallucinations", "weight": 5 },
+      { "symptomId": "disorganized_speech", "weight": 4 },
+      { "symptomId": "social_withdrawal", "weight": 3 },
+      { "symptomId": "apathy_avolition", "weight": 3 },
+      { "symptomId": "cognitive_decline", "weight": 2 },
+      { "symptomId": "prodromal_symptoms", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "blunted_affect", "baseWeight": 4 },
+      { "signId": "disorganized_behavior", "baseWeight": 3 },
+      { "signId": "inappropriate_affect", "baseWeight": 3 },
+      { "signId": "poverty_of_speech", "baseWeight": 3 },
+      { "signId": "poor_insight", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_schizophrenia", "multiplier": 3.0 },
+      { "id": "obstetric_complications", "multiplier": 1.5 },
+      { "id": "cannabis_use_adolescent", "multiplier": 2.0 },
+      { "id": "urban_upbringing", "multiplier": 1.3 },
+      { "id": "migration", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bipolar_disorder_manic",
+        "discriminators": ["episodic_course", "elevated_mood", "decreased_sleep", "grandiose_delusions"]
+      },
+      {
+        "diseaseId": "substance_induced_psychosis",
+        "discriminators": ["temporal_use", "positive_urine_tox", "resolution_with_abstinence"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Mental State Examination", "priority": "immediate", "yield": 0.95, "indication": "all patients" },
+        { "name": "Risk assessment", "priority": "immediate", "yield": 1.0, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "Urine toxicology", "priority": "high", "yield": 0.5, "indication": "rule out substance-induced psychosis" },
+        { "name": "TSH, FBC, LFT, U&E, Vitamin B12", "priority": "medium", "yield": 0.2, "indication": "medical causes" }
+      ],
+      "imaging": [
+        { "name": "CT/MRI Brain", "priority": "medium", "yield": 0.1, "indication": "first episode, atypical features, focal signs" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Schizophrenia and Psychosis",
+      "pathways": [
+        {
+          "severity": "first episode",
+          "criteria": "newly diagnosed, no prior treatment",
+          "treatment": "Oral antipsychotic (olanzapine, risperidone). Start low, go slow. Psychoeducation. Family intervention. CBT."
+        },
+        {
+          "severity": "acute exacerbation",
+          "criteria": "worsening positive symptoms, risk of harm",
+          "treatment": "Inpatient admission. Oral or IM antipsychotic. Consider rapid tranquilization if agitated. Titrate effectively."
+        },
+        {
+          "severity": "treatment resistant",
+          "criteria": "failed >=2 adequate antipsychotic trials",
+          "treatment": "Clozapine. Monitor WBC for agranulocytosis. Depot antipsychotic if adherence concern."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "dopamine_hypothesis",
+      "mesolimbic_dysfunction",
+      "prefrontal_cortex_dysfunction",
+      "glutamate_hypothesis",
+      "neurodevelopmental_abnormalities"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "self_harm",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["command_hallucinations", "hopelessness"]
+      },
+      {
+        "diseaseId": "metabolic_syndrome",
+        "probability": 0.3,
+        "severityBoost": 0.1,
+        "clues": ["weight_gain_on_antipsychotic", "dyslipidemia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if acute",
+    "diagnosticClues": ["delusions_hallucinations_6_months", "social_occupational_dysfunction", "negative_symptoms"],
+    "exclusionClues": ["symptoms_due_to_substance", "mood_episode_only", "duration_less_1_month"]
+  }
+}

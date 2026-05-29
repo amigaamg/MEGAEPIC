@@ -1,0 +1,169 @@
+{
+  "disease": {
+    "id": "status-epilepticus",
+    "name": "Status Epilepticus (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [0, 60],
+    "note": "Seizure lasting >5 minutes or recurrent seizures without regaining consciousness. Medical emergency requiring immediate termination to prevent brain injury.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["seizure_emergency", "pediatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "prolonged_seizure_>30_min", "weight": 10 },
+        { "sign": "respiratory_insufficiency", "weight": 10 },
+        { "sign": "cardiac_arrhythmia", "weight": 10 },
+        { "sign": "refractory_to_antiepileptics", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "fever_high_grade_suggests_meningitis", "weight": 7 },
+          { "sign": "prolonged_post_ictal_coma", "weight": 7 },
+          { "sign": "focal_seizure_suggests_structural_cause", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If seizure >30 min, refractory to 2 drugs, or respiratory compromise -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prolonged_seizure_>5_min", "weight": 5 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "known_epilepsy", "weight": 3 },
+      { "symptomId": "missed_antiepileptic_doses", "weight": 3 },
+      { "symptomId": "head_trauma_recent", "weight": 3 },
+      { "symptomId": "ingestion_poisoning", "weight": 3 },
+      { "symptomId": "acute_illness_infection", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tonic_clonic_movements", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "altered_consciousness", "baseWeight": 5 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "cyanosis_during_seizure", "baseWeight": 4 },
+      { "signId": "focal_neurologic_signs", "baseWeight": 3 },
+      { "signId": "signs_of_raised_icp", "baseWeight": 3 },
+      { "signId": "incontinence", "baseWeight": 2 },
+      { "signId": "meningismus_signs", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "known_epilepsy_poorly_controlled", "multiplier": 3.0 },
+      { "id": "age_<2_years_febrile", "multiplier": 2.0 },
+      { "id": "cns_infection", "multiplier": 3.0 },
+      { "id": "antiepileptic_non_compliance", "multiplier": 3.5 },
+      { "id": "cerebral_palsy_structural_brain_lesion", "multiplier": 2.5 },
+      { "id": "metabolic_disorder", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "generalized_convulsive_se",
+        "name": "Generalized Convulsive Status Epilepticus",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "generalized_tonic_clonic", "weight": 5 },
+          { "feature": "duration_>5_min", "weight": 5 },
+          { "feature": "no_regain_of_consciousness_between", "weight": 5 }
+        ],
+        "management": "Stepwise: 1st line: benzodiazepine (diazepam 0.3 mg/kg IV/IO or midazolam 0.2 mg/kg IM). 2nd line: fosphenytoin 20 mg/kg IV or levetiracetam 40-60 mg/kg IV. 3rd line: ICU, midazolam infusion/thiopental coma."
+      },
+      {
+        "id": "non_convulsive_se",
+        "name": "Non-Convulsive Status Epilepticus",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "altered_mental_status_without_convulsions", "weight": 5 },
+          { "feature": "staring_spells", "weight": 3 },
+          { "feature": "subtle_myoclonic_movements", "weight": 3 },
+          { "feature": "eeg_confirmation", "weight": 5 }
+        ],
+        "management": "EEG confirmation. IV benzodiazepine. If prolonged, treat as convulsive SE. Identify underlying cause."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pseudoseizures_psychogenic",
+        "discriminators": ["non_rhythmic_movements", "eyes_closed_during_event", "normal_eeg", "no_post_ictal_state"]
+      },
+      {
+        "diseaseId": "prolonged_febrile_seizure",
+        "discriminators": ["age_6m_5y", "fever", "simple_febrile_criteria", "resolves_with_single_benzo"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Blood glucose (fingerstick)", "priority": "immediate", "yield": 0.5, "indication": "hypoglycemia" }
+      ],
+      "laboratory": [
+        { "name": "Serum electrolytes (Na, Ca, Mg, PO4)", "priority": "immediate", "yield": 0.4, "indication": "electrolyte imbalance" },
+        { "name": "Antiepileptic drug levels", "priority": "high", "yield": 0.4, "indication": "subtherapeutic levels" },
+        { "name": "Blood gas", "priority": "high", "yield": 0.4, "indication": "metabolic acidosis" },
+        { "name": "CBC and CRP", "priority": "medium", "yield": 0.3, "indication": "infection" }
+      ],
+      "imaging": [
+        { "name": "CT/MRI Brain", "priority": "high", "yield": 0.4, "indication": "structural lesion, after stabilization" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ILAE Status Epilepticus Guidelines / NICE",
+      "pathways": [
+        {
+          "severity": "early_status_0_5_min",
+          "criteria": "Seizure ongoing at 5 min",
+          "treatment": "ABC. Check glucose. IV/IO access. Midazolam 0.2 mg/kg IV/IM or diazepam 0.3 mg/kg IV/PR. If IV access: lorazepam 0.1 mg/kg. Oxygen. Monitor vitals."
+        },
+        {
+          "severity": "established_10_30_min",
+          "criteria": "Seizure continues after 10 min or after first line benzodiazepine",
+          "treatment": "Second line: fosphenytoin 20 mg/kg phenytoin equivalents IV over 10 min, OR levetiracetam 40-60 mg/kg IV, OR valproate 20-40 mg/kg IV. Prepare for intubation."
+        },
+        {
+          "severity": "refractory_>30_min",
+          "criteria": "Seizure continues despite first and second line agents",
+          "treatment": "ICU. Intubate and ventilate. Midazolam infusion 0.1-0.4 mg/kg/h. Thiopental/pentobarbital coma if needed. Continuous EEG monitoring. Treat underlying cause. Inotropes if hypotensive."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "excessive_neuronal_excitation", "gaba_depletion", "nmda_receptor_activation", "excitotoxicity", "neuronal_injury", "metabolic_exhaustion"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "respiratory_failure",
+        "probability": 0.3,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["prolonged_seizure", "benzodiazepine_use", "aspiration"]
+      },
+      {
+        "diseaseId": "refractory_se",
+        "probability": 0.2,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["continues_despite_2_drugs", "structural_brain_lesion", "severe_cause"]
+      },
+      {
+        "diseaseId": "rhabdomyolysis",
+        "probability": 0.1,
+        "lagDays": [0, 2],
+        "severityBoost": 0.3,
+        "clues": ["prolonged_convulsions", "dark_urine", "elevated_ck"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["seizure_>5_min", "no_regain_of_consciousness", "tonic_clonic_movements"],
+    "exclusionClues": ["seizure_ceased", "post_ictal_recovering", "normal_consciousness"]
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "disease": {
+    "id": "paracetamol_overdose",
+    "name": "Paracetamol Overdose",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 600],
+    "note": "Common overdose causing potentially fatal hepatotoxicity. Early recognition and NAC therapy prevent liver failure. Toxic dose >75mg/kg in 24h (>150mg/kg in high-risk).",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["toxicity", "overdose", "hepatotoxicity"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "fulminant_hepatic_failure", "weight": 10 },
+        { "sign": "hepatic_encephalopathy", "weight": 10 },
+        { "sign": "severe_coagulopathy_inr_greater_2", "weight": 9 },
+        { "sign": "hypoglycaemia", "weight": 8 },
+        { "sign": "cardiac_arrest", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Paracetamol overdose requires immediate risk assessment and NAC therapy. Treatment based on time from ingestion and serum level."
+    },
+    "historyFeatures": [
+      { "symptomId": "paracetamol_ingestion_single_or_staggered", "weight": 5 },
+      { "symptomId": "unknown_dose_quantity", "weight": 3 },
+      { "symptomId": "nausea_vomiting_early", "weight": 3 },
+      { "symptomId": "abdominal_pain_ruq", "weight": 3 },
+      { "symptomId": "suicidal_intent", "weight": 2 },
+      { "symptomId": "co_ingestions", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "jaundice_late", "baseWeight": 4 },
+      { "signId": "ruq_tenderness", "baseWeight": 3 },
+      { "signId": "hepatic_encephalopathy", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "asterixis", "baseWeight": 4 },
+      { "signId": "purpura_bruising", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "staggered_overdose", "multiplier": 2.0 },
+      { "id": "chronic_alcoholism", "multiplier": 2.0 },
+      { "id": "malnutrition_fasting", "multiplier": 1.5 },
+      { "id": "hepatic_enzyme_induction", "multiplier": 1.8 },
+      { "id": "glutathione_depletion", "multiplier": 2.0 },
+      { "id": "weight_less_than_50kg", "multiplier": 1.3 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Time from ingestion assessment", "priority": "immediate", "yield": 1.0, "indication": "determine need for NAC, which nomogram" }
+      ],
+      "laboratory": [
+        { "name": "Serum paracetamol level (4h post-ingestion)", "priority": "high", "yield": 0.98, "indication": "plot on treatment nomogram" },
+        { "name": "ALT/AST, ALP, bilirubin, GGT", "priority": "high", "yield": 0.9, "indication": "hepatic injury assessment" },
+        { "name": "INR/PT", "priority": "high", "yield": 0.8, "indication": "synthetic liver function" },
+        { "name": "U&E, Cr, glucose", "priority": "high", "yield": 0.5, "indication": "renal function, hypoglycemia" },
+        { "name": "ABG", "priority": "medium", "yield": 0.5, "indication": "metabolic acidosis (late marker)" },
+        { "name": "Salicylate level (co-ingestion screen)", "priority": "medium", "yield": 0.3, "indication": "common co-ingestant" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NPIS Guidelines / NICE Guideline NG251 / Rumack-Matthew Nomogram",
+      "pathways": [
+        {
+          "severity": "early (<24h) with toxic level",
+          "criteria": "paracetamol level above treatment line on nomogram, or staggered overdose >75mg/kg/24h",
+          "treatment": "N-acetylcysteine (NAC): 150mg/kg in 200mL D5W over 1h, then 50mg/kg in 500mL over 4h, then 100mg/kg in 1000mL over 16h. Activated charcoal 50g if within 1h of ingestion (and airway protected). Repeat ALT/INR at end of NAC course. Continue NAC if rising ALT or INR."
+        },
+        {
+          "severity": "late presentation or established hepatotoxicity",
+          "criteria": "presentation >24h, or ALT >1000, or INR >1.5",
+          "treatment": "Start NAC immediately regardless of level. Continue NAC until improvement (ALT falling, INR improving). Assess for liver transplant: Kings College Criteria (pH <7.3, INR >6.5, Cr >300, grade 3-4 encephalopathy). Transplant center referral if criteria met."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "n_acetyl_p_benzoquinone_imine_napqi_formation",
+      "glutathione_depletion",
+      "hepatocyte_necrosis",
+      "oxidative_stress",
+      "mitochondrial_dysfunction",
+      "centrilobular_liver_necrosis",
+      "fulminant_hepatic_failure",
+      "multi_organ_dysfunction"
+    ],
+    "complications": [
+      {
+        "diseaseId": "acute_liver_failure",
+        "probability": 0.05,
+        "severityBoost": 0.7,
+        "clues": ["high_alt", "high_inr", "encephalopathy", "hypoglycaemia"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["paracetamol_ingestion_history", "elevated_paracetamol_level", "rising_alt", "prolonged_inr"],
+    "exclusionClues": ["no_ingestion_history", "subtherapeutic_level_after_4h", "normal_lfts"]
+  }
+}

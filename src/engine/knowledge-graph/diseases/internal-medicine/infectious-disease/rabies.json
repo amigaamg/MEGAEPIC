@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "rabies",
+    "name": "Rabies",
+    "system": "infectious-disease",
+    "alsoPresentIn": ["neurology", "emergency-medicine"],
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["encephalitis", "zoonosis", "vaccine_preventable", "lethal"],
+    "mustNotMiss": true,
+    "emergencyPriority": "immediate",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hydrophobia", "weight": 5, "description": "Pathognomonic for furious rabies" },
+        { "sign": "aerophobia", "weight": 5, "description": "Triggers pharyngeal spasm" },
+        { "sign": "autonomic_dysfunction", "weight": 4, "description": "Progressive autonomic failure" },
+        { "sign": "coma", "weight": 5, "description": "Pre-terminal" },
+        { "sign": "respiratory_paralysis", "weight": 5, "description": "Imminent death" }
+      ],
+      "severeCriteria": { "anyDangerSign": true, "additionalCriteria": [ { "sign": "clinical_rabies_encephalitis", "weight": 5 }, { "sign": "no_rabies_PEP_received", "weight": 5 } ] },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "encephalitic-lethal"
+    },
+    "historyFeatures": [
+      { "symptomId": "animal_bite_exposure", "weight": 5 },
+      { "symptomId": "prodromal_fever_malaise", "weight": 3 },
+      { "symptomId": "paresthesia_at_bite_site", "weight": 4 },
+      { "symptomId": "hydrophobia", "weight": 5 },
+      { "symptomId": "aerophobia", "weight": 5 },
+      { "symptomId": "excessive_salivation", "weight": 4 },
+      { "symptomId": "agitation_hallucinations", "weight": 4 },
+      { "symptomId": "ascending_weakness", "weight": 4, "note": "paralytic rabies form" },
+      { "symptomId": "no_vaccination_post_exposure", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "hydrophobia_trials", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "aerophobia", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypersalivation", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 4, "severityIndicator": true },
+      { "signId": "autonomic_instability", "baseWeight": 4, "severityIndicator": true },
+      { "signId": "ascending_flaccid_paralysis", "baseWeight": 4 },
+      { "signId": "areflexia", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "animal_bite_in_endemic_area", "multiplier": 5.0 },
+      { "id": "bat_exposure", "multiplier": 4.0 },
+      { "id": "no_post_exposure_prophylaxis", "multiplier": 5.0 },
+      { "id": "bite_to_head_face_neck", "multiplier": 3.0 },
+      { "id": "deep_wound_multiple_bites", "multiplier": 2.5 }
+    ],
+    "diagnosticClues": [
+      "hydrophobia and aerophobia are pathognomonic",
+      "history of animal bite with no PEP in endemic area",
+      "furious: hyperactivity, hallucinations; paralytic: ascending flaccid paralysis"
+    ],
+    "exclusionClues": [ "rabies antibodies in vaccinated patient without clinical disease", "alternative diagnosis (tetanus, GBS, other encephalitis)" ],
+    "subtypes": [
+      {
+        "id": "furious_rabies", "name": "Furious (Classic) Rabies",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [ { "feature": "hydrophobia", "weight": 5 }, { "feature": "aerophobia", "weight": 5 }, { "feature": "agitation_bizarre_behavior", "weight": 4 } ],
+        "management": { "management": "Milwaukee protocol (experimental), intensive supportive care" }
+      },
+      {
+        "id": "paralytic_rabies", "name": "Paralytic (Dumb) Rabies",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [ { "feature": "ascending_paralysis", "weight": 5 }, { "feature": "areflexia", "weight": 4 }, { "feature": "no_hydrophobia_early", "weight": 3 } ],
+        "management": { "management": "Supportive care, Milwaukee protocol consideration" }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "tetanus", "discriminators": ["trismus", "risus sardonicus", "opisthotonos", "no hydrophobia"] },
+      { "diseaseId": "guillain_barre_syndrome", "discriminators": ["ascending paralysis with sensory symptoms", "CSF albuminocytologic dissociation", "no encephalitis"] },
+      { "diseaseId": "viral_encephalitis", "discriminators": ["fever and altered consciousness", "CSF PCR positive for other virus", "response to acyclovir"] },
+      { "diseaseId": "hysterical_pseudorabies", "discriminators": ["psychological triggers", "no true hydrophobia", "no autonomic signs"] }
+    ],
+    "investigations": {
+      "bedside": [ { "name": "Hydrophobia Assessment", "priority": "bedside", "yield": 5, "indication": "offer water and observe pharyngeal spasm" } ],
+      "laboratory": [
+        { "name": "Rabies RT-PCR (saliva, skin biopsy, CSF)", "priority": "essential", "yield": 5, "indication": "confirm diagnosis ante-mortem" },
+        { "name": "Skin Biopsy (nuchal hair follicles) for DFA", "priority": "essential", "yield": 4, "indication": "detect rabies antigen in cutaneous nerves" },
+        { "name": "Serum and CSF Rabies Antibodies", "priority": "essential", "yield": 4, "indication": "rising titers in unvaccinated patient" },
+        { "name": "CSF Analysis and MRI Brain", "priority": "essential", "yield": 3, "indication": "lymphocytic pleocytosis, brainstem T2 hyperintensity" }
+      ],
+      "imaging": [ { "name": "MRI Brain with Contrast", "priority": "supportive", "yield": 3, "indication": "T2/FLAIR hyperintensity in brainstem, thalamus, limbic system" } ]
+    },
+    "management": {
+      "protocolReference": "WHO Rabies Guidelines 2022; CDC Rabies Prevention",
+      "pathways": [
+        {
+          "severity": "post-exposure-prophylaxis",
+          "criteria": "Category II or III animal bite exposure",
+          "treatment": [
+            "Wound care: copious irrigation with water and soap for 15 minutes",
+            "Rabies immunoglobulin (RIG) 20 IU/kg infiltrate around wound, remainder IM at distant site",
+            "Rabies vaccine (HDCV or PCECV): 4 doses IM days 0, 3, 7, 14",
+            "Tetanus prophylaxis and antibiotics as indicated",
+            "Observe animal if possible (10-day confinement for dogs/cats)"
+          ]
+        },
+        {
+          "severity": "clinical-rabies",
+          "criteria": "symptomatic rabies encephalitis",
+          "treatment": [
+            "ICU with strict isolation",
+            "Milwaukee Protocol (experimental): ketamine 2 mg/kg/h infusion + midazolam",
+            "Ribavirin and amantadine (limited evidence)",
+            "Supportive: mechanical ventilation, vasopressors, seizure control",
+            "Palliative care if no response; notify public health immediately"
+          ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Rabies virus (lyssavirus) transmitted via infected animal saliva through bite",
+      "Replicates locally in muscle, enters PNS via neuromuscular junctions",
+      "Retrograde axonal transport to CNS at 50-100 mm/day",
+      "Viral replication in limbic system and brainstem produces encephalitis",
+      "Hydrophobia from pharyngeal/laryngeal spasm triggered by swallow reflex"
+    ],
+    "complications": [
+      { "diseaseId": "respiratory_failure_death", "probability": 0.99, "severityBoost": 1.0, "lagDays": [5, 14] },
+      { "diseaseId": "autonomic_dysfunction_cardiac_arrhythmia", "probability": 0.4, "severityBoost": 0.8 },
+      { "diseaseId": "seizures_status_epilepticus", "probability": 0.3, "severityBoost": 0.5 },
+      { "diseaseId": "secondary_bacterial_infections", "probability": 0.4, "severityBoost": 0.3 }
+    ]
+  }
+}

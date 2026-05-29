@@ -1,0 +1,164 @@
+{
+  "disease": {
+    "id": "cholecystitis",
+    "name": "Acute Cholecystitis",
+    "system": "surgical",
+    "agePeak_months": [360, 720],
+    "note": "Calculous cholecystitis is most common. Acalculous cholecystitis seen in critically ill patients.",
+    "prevalenceWeight": 0.65,
+    "syndromeTags": ["acute_abdomen", "right_upper_quadrant_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "jaundice_with_fever", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "gallbladder_empyema", "weight": 8 },
+          { "sign": "gangrenous_cholecystitis", "weight": 9 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If septic/gangrenous/perforated -> SEVERE; else -> NON-SEVERE (mild cholecystitis)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "right_upper_quadrant_pain", "weight": 5, "modifiers": [
+          { "condition": "radiation_to_right_shoulder", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "fatty_food_intolerance", "weight": 3 },
+      { "symptomId": "previous_biliary_colic", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "murphy_sign", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ruq_tenderness", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "jaundice", "baseWeight": 3, "note": "Suggests choledocholithiasis" },
+      { "signId": "guarding_ruq", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "gallstones", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "female_sex", "multiplier": 1.4 },
+      { "id": "pregnancy", "multiplier": 1.3 },
+      { "id": "rapid_weight_loss", "multiplier": 1.2 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "calculous_cholecystitis",
+        "name": "Calculous Cholecystitis",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "known_gallstones", "weight": 5 },
+          { "feature": "post_prandial_pain", "weight": 4 },
+          { "feature": "positive_murphy", "weight": 5 }
+        ],
+        "management": "Laparoscopic cholecystectomy. IV antibiotics (Ceftriaxone + Metronidazole)."
+      },
+      {
+        "id": "acalculous_cholecystitis",
+        "name": "Acalculous Cholecystitis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "icu_patient", "weight": 5 },
+          { "feature": "prolonged_npo", "weight": 4 },
+          { "feature": "critical_illness", "weight": 5 },
+          { "feature": "no_gallstones_on_imaging", "weight": 4 }
+        ],
+        "management": "Broad-spectrum antibiotics. Percutaneous cholecystostomy if surgical candidate high-risk."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_perforation",
+        "discriminators": ["epigastric_pain", "melena", "hematemesis"]
+      },
+      {
+        "diseaseId": "hepatitis",
+        "discriminators": ["hepatomegaly", "transaminitis", "viral_prodrome"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Murphy sign test", "priority": "immediate", "yield": 0.85, "indication": "all RUQ pain" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "inflammatory marker" },
+        { "name": "LFTs (AST, ALT, ALP, GGT, Bilirubin)", "priority": "high", "yield": 0.8, "indication": "obstructive pattern suggests CBD stones" },
+        { "name": "Serum amylase/lipase", "priority": "high", "yield": 0.6, "indication": "rule out pancreatitis" }
+      ],
+      "imaging": [
+        { "name": "Right Upper Quadrant Ultrasound", "priority": "immediate", "yield": 0.9, "indication": "gallstones, wall thickening, pericholecystic fluid, Murphy sign" },
+        { "name": "HIDA scan", "priority": "medium", "yield": 0.88, "indication": "equivocal cases" },
+        { "name": "MRCP", "priority": "medium", "yield": 0.85, "indication": "suspected CBD stones" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Tokyo Guidelines 2018 (TG18) for Acute Cholecystitis",
+      "pathways": [
+        {
+          "severity": "mild (Grade I)",
+          "criteria": "mild inflammation, no organ dysfunction, no complications",
+          "treatment": "IV antibiotics (Ceftriaxone + Metronidazole). Early laparoscopic cholecystectomy within 72 hours."
+        },
+        {
+          "severity": "moderate (Grade II)",
+          "criteria": "elevated WBC >18k, palpable tender mass, duration >72h, local complications",
+          "treatment": "IV antibiotics. Urgent laparoscopic cholecystectomy. Consider percutaneous drainage if high surgical risk."
+        },
+        {
+          "severity": "severe (Grade III)",
+          "criteria": "organ dysfunction (CV, respiratory, renal, hepatic, neurological)",
+          "treatment": "ICU admission. IV antibiotics. Organ support. Percutaneous cholecystostomy. Delayed cholecystectomy after recovery."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cystic_duct_obstruction",
+      "gallstone_impaction",
+      "bile_stasis",
+      "gallbladder_distension",
+      "ischemia",
+      "bacterial_translocation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "gallbladder_empyema",
+        "probability": 0.1,
+        "lagDays": [3, 7],
+        "severityBoost": 0.3,
+        "clues": ["persistent_high_fever", "toxic_appearance"]
+      },
+      {
+        "diseaseId": "gallbladder_perforation",
+        "probability": 0.05,
+        "lagDays": [5, 10],
+        "severityBoost": 0.4,
+        "clues": ["generalized_peritonitis", "sepsis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["murphy_sign", "ruq_pain_post_prandial", "gallstones_on_uss"],
+    "exclusionClues": ["negative_murphy", "no_gallstones"]
+  }
+}

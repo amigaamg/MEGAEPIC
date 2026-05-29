@@ -1,0 +1,182 @@
+{
+  "disease": {
+    "id": "cardiac_marker_interpretation",
+    "name": "Cardiac Biomarker Interpretation",
+    "system": "LAB",
+    "agePeak_months": [360, 840],
+    "note": "High-sensitivity troponin (hs-cTn) is the gold standard for myocardial injury. Fourth universal definition of MI requires rise/fall of troponin with clinical evidence of ischemia. BNP/NT-proBNP for heart failure. CK-MB now rarely used.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["acute_chest_pain", "myocardial_infarction", "acute_coronary_syndrome"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "troponin_gt_100x_uln", "weight": 9 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "sT_elevation_mi_on_ecg", "weight": 10 },
+        { "sign": "malignant_arrhythmia", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "troponin_rising_pattern_over_3h", "weight": 7 },
+          { "sign": "bnp_gt_1000_with_heart_failure", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If STEMI or shock -> EMERGENT; if troponin elevated + symptoms -> NSTEMI; if normal -> NON-CARDIAC"
+    },
+    "historyFeatures": [
+      { "symptomId": "chest_pressure_or_pain", "weight": 5, "modifiers": [
+          { "condition": "radiating_to_left_arm_jaw", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "diaphoresis_nausea", "weight": 3 },
+      { "symptomId": "palpitations_or_syncope", "weight": 3 },
+      { "symptomId": "orthopnea_pnd_for_hf", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "hs_ctni_or_ctnt_elevated", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "troponin_rise_fall_pattern", "baseWeight": 5 },
+      { "signId": "bnp_or_nt_probnp_elevated", "baseWeight": 4 },
+      { "signId": "troponin_bnp_ratio", "baseWeight": 3 },
+      { "signId": "serial_changes_over_1_3_hours", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.5 },
+      { "id": "hypertension", "multiplier": 1.8 },
+      { "id": "hyperlipidemia", "multiplier": 2.0 },
+      { "id": "family_history_premature_cad", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "stemi",
+        "name": "STEMI (ST-Elevation MI)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "troponin_elevation_with_rise_fall", "weight": 5 },
+          { "feature": "sT_elevation_on_ecg", "weight": 5 },
+          { "feature": "ischemic_symptoms", "weight": 5 },
+          { "feature": "troponin_peak_12_24_hours", "weight": 3 }
+        ],
+        "management": "Emergent reperfusion: primary PCI within 90 minutes (or fibrinolysis within 30 min if PCI not available). Dual antiplatelet + anticoagulation. Beta-blocker, ACEi, statin."
+      },
+      {
+        "id": "nstemi",
+        "name": "NSTEMI (Non-ST Elevation MI)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "troponin_elevation_with_rise_fall", "weight": 5 },
+          { "feature": "sT_depression_or_t_inversion_on_ecg", "weight": 4 },
+          { "feature": "ischemic_symptoms", "weight": 5 },
+          { "feature": "no_sT_elevation", "weight": 4 }
+        ],
+        "management": "Risk stratify (GRACE score). Anticoagulation + DAPT. Early invasive (<24h) for high risk (GRACE >140, dynamic ECG, elevated troponin). Medical management for low risk."
+      },
+      {
+        "id": "heart_failure_bnp",
+        "name": "Heart Failure (BNP/NT-proBNP)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "bnp_gt_100_pg_ml_or_nt_probnp_gt_125", "weight": 5 },
+          { "feature": "nt_probnp_rule_out_cutoff_lt_300", "weight": 4 },
+          { "feature": "elevated_correlates_with_lvef", "weight": 3 },
+          { "feature": "exclude_other_causes_troponin", "weight": 3 }
+        ],
+        "management": "Acute HF: diuretics, vasodilators. Chronic: ACEi/ARB, beta-blocker, MRA, SGLT2i. Adjust per volume status and biomarkers."
+      },
+      {
+        "id": "myocardial_injury_non_ischemic",
+        "name": "Myocardial Injury (Non-Ischemic Troponin Elevation)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "troponin_elevated_but_no_ischemia", "weight": 5 },
+          { "feature": "sEpsis_pE_severe_renal_afib", "weight": 4 },
+          { "feature": "troponin_stable_no_rise_fall", "weight": 4 },
+          { "feature": "bNP_elevation_often_concurrent", "weight": 3 }
+        ],
+        "management": "Treat underlying condition (sepsis, PE, AF with rapid rate, renal failure). Do NOT treat as ACS unless concurrent ischemia. Cardiology consult if uncertain."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "chronic_troponin_elevation_ckd",
+        "discriminators": ["stable_elevation_no_change", "egfr_lt_30", "no_ischemic_symptoms"]
+      },
+      {
+        "diseaseId": "myocarditis",
+        "discriminators": ["viral_prodrome", "arrhythmia_out_of_proportion", "cardiac_mri_suggestive"]
+      },
+      {
+        "diseaseId": "takotsubo_cardiomyopathy",
+        "discriminators": ["emotional_stress_trigger", "apical_ballooning", "reversible"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.8, "indication": "all patients with suspected ACS or HF" }
+      ],
+      "laboratory": [
+        { "name": "High-sensitivity troponin (hs-cTnI or hs-cTnT)", "priority": "immediate", "yield": 0.95, "indication": "all patients with suspected ACS" },
+        { "name": "Serial troponin at 0h and 3h (0h/1h protocol for hs-cTn)", "priority": "immediate", "yield": 0.95, "indication": "ACS rule-in/rule-out" },
+        { "name": "BNP or NT-proBNP", "priority": "high", "yield": 0.85, "indication": "suspected acute or chronic HF" },
+        { "name": "CK-MB (if troponin unavailable)", "priority": "low", "yield": 0.6, "indication": "limited role in troponin era" },
+        { "name": "CMP (creatinine, electrolytes)", "priority": "high", "yield": 0.4, "indication": "renal function for contrast, potassium for arrhythmia" }
+      ],
+      "imaging": [
+        { "name": "Echocardiogram", "priority": "high", "yield": 0.7, "indication": "wall motion abnormalities, LV function, HF assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Fourth Universal Definition of MI, ESC Guidelines for ACS",
+      "pathways": [
+        {
+          "severity": "rule_out_acs",
+          "criteria": "hs-cTn below 99th percentile at 0h and 3h, GRACE <109, no ischemic pain",
+          "treatment": "No ACS. Evaluate alternative chest pain causes. Stress testing if indicated for stable CAD. Discharge if low risk."
+        },
+        {
+          "severity": "nstemi_myocardial_injury",
+          "criteria": "hs-cTn >99th percentile with rise/fall, no ST elevation",
+          "treatment": "Invasive strategy per risk (early <24h for high risk, selective for low). DAPT, anticoagulation, antianginal therapy. Manage comorbidities."
+        },
+        {
+          "severity": "stemi_emergency",
+          "criteria": "ST elevation + troponin elevation + symptoms",
+          "treatment": "Activate cath lab immediately. Primary PCI. DAPT loading. Unfractionated heparin. Glycoprotein IIb/IIIa inhibitor if high thrombus burden."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "myocardial_ischemia_necrosis",
+      "troponin_release_from_cardiomyocytes",
+      "myocardial_stretch_bnp_release",
+      "inflammatory_response",
+      "reperfusion_injury"
+    ],
+    "complications": [
+      {
+        "diseaseId": "cardiogenic_shock",
+        "probability": 0.08,
+        "lagDays": [0, 3],
+        "severityBoost": 0.6,
+        "clues": ["hypotension", "low_cardiac_output", "pulmonary_edema"]
+      },
+      {
+        "diseaseId": "ventricular_arrhythmia",
+        "probability": 0.1,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["vt_vf", "electrolyte_abnormalities", "large_mi"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["troponin_rise_fall", "ischemic_symptoms", "ecg_changes", "bNP_for_hF"],
+    "exclusionClues": ["normal_hs_troponin_at_0_and_3h", "low_pre_test_probability"]
+  }
+}

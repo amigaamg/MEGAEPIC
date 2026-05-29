@@ -1,0 +1,153 @@
+{
+  "disease": {
+    "id": "corneal_ulcer",
+    "name": "Corneal Ulcer",
+    "system": "OPHTH",
+    "agePeak_months": [120, 600],
+    "note": "Disruption of corneal epithelium with underlying stromal inflammation and necrosis. Medical emergency requiring urgent treatment to prevent perforation and vision loss. Causes: infection, neurotrophic keratopathy, chemical injury.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["red_eye", "corneal_disorder", "sight_threatening"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "corneal_perforation", "weight": 10 },
+        { "sign": "endophthalmitis", "weight": 10 },
+        { "sign": "impending_perforation", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "central_ulcer_involving_visual_axis", "weight": 8 },
+          { "sign": "hypopyon", "weight": 8 },
+          { "sign": "stromal_descemetocele", "weight": 9 },
+          { "sign": "ulcer_depth_stromal", "weight": 7 },
+          { "sign": "corneal_melting", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Central ulcer, hypopyon, thinning, or perforation -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "eye_pain_severe_gradual_or_sudden", "weight": 5 },
+      { "symptomId": "redness_eye", "weight": 4 },
+      { "symptomId": "photophobia_severe", "weight": 5 },
+      { "symptomId": "blurred_vision_or_vision_loss", "weight": 5 },
+      { "symptomId": "excess_tearing", "weight": 3 },
+      { "symptomId": "discharge_purulent", "weight": 3 },
+      { "symptomId": "contact_lens_overwear_or_unhygienic", "weight": 4 },
+      { "symptomId": "corneal_trauma_with_organic_matter", "weight": 4 },
+      { "symptomId": "previous_corneal_ulcer_or_eye_surgery", "weight": 3 },
+      { "symptomId": "dry_eyes_or_lagophthalmos", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "corneal_epithelial_defect_with_infiltrate", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fluorescein_uptake_positive_over_ulcer", "baseWeight": 5 },
+      { "signId": "stromal_opacity_edema", "baseWeight": 4 },
+      { "signId": "hypopyon", "baseWeight": 5 },
+      { "signId": "anterior_chamber_reaction_cells_flare", "baseWeight": 3 },
+      { "signId": "stromal_thinning_descemetocele", "baseWeight": 5 },
+      { "signId": "corneal_ulcer_edge_scalloped_pus", "baseWeight": 4 },
+      { "signId": "conjunctival_injection_marked", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "contact_lens_wear", "multiplier": 5.0 },
+      { "id": "corneal_trauma_vegetable_matter", "multiplier": 4.0 },
+      { "id": "ocular_surface_disease_dry_eye", "multiplier": 3.0 },
+      { "id": "lagophthalmos_bell_palsy", "multiplier": 3.0 },
+      { "id": "immunosuppression_diabetes", "multiplier": 3.0 },
+      { "id": "prior_corneal_surgery", "multiplier": 2.5 },
+      { "id": "trichiasis_entropion", "multiplier": 2.0 },
+      { "id": "vitamin_a_deficiency", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "keratitis",
+        "discriminators": ["superficial_inflammation", "no_frank_ulcer"]
+      },
+      {
+        "diseaseId": "corneal_abrasion",
+        "discriminators": ["epithelial_defect_only", "no_stromal_infiltrate", "traumatic"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Slit lamp with fluorescein", "priority": "immediate", "yield": 0.95, "indication": "definitive diagnosis" },
+        { "name": "Visual acuity", "priority": "immediate", "yield": 0.8, "indication": "baseline" },
+        { "name": "Seidel test", "priority": "high", "yield": 0.9, "indication": "check for perforation" }
+      ],
+      "laboratory": [
+        { "name": "Corneal scraping for Gram stain and culture", "priority": "high", "yield": 0.7, "indication": "microbiology-guided treatment" },
+        { "name": "PCR for HSV/VZV/Acanthamoeba", "priority": "medium", "yield": 0.8, "indication": "suspected viral or Acanthamoeba" },
+        { "name": "Corneal biopsy", "priority": "low", "yield": 0.6, "indication": "if deep or refractory ulcer" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "AAO Preferred Practice Pattern for Corneal Ulcer",
+      "pathways": [
+        {
+          "severity": "mild_superficial",
+          "criteria": "small peripheral ulcer, no hypopyon, no stromal thinning",
+          "treatment": "Topical broad-spectrum antibiotics (Moxifloxacin 0.5% or Ofloxacin 0.3% q1-2h). Cycloplegic (Cyclopentolate 1% tds). Do not patch. Review in 24h."
+        },
+        {
+          "severity": "moderate_severe",
+          "criteria": "central or large ulcer, hypopyon, stromal involvement",
+          "treatment": "Fortified topical antibiotics (Cefazolin 5% + Gentamicin 1.4% alternating hourly). Cycloplegics. Scraping for culture. Hospitalization. Oral antibiotics if scleral involvement. Cyanoacrylate glue + bandage contact lens if impending perforation."
+        },
+        {
+          "severity": "critical",
+          "criteria": "perforated, endophthalmitis, melting",
+          "treatment": "Therapeutic penetrating keratoplasty (TPK). Tissue adhesive (cyanoacrylate) for small perforations. Fortified antibiotics. ICU level monitoring."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "epithelial_breach",
+      "corneal_basement_membrane_exposure",
+      "microbial_adhesion_and_invasion",
+      "polymorphonuclear_infiltration",
+      "collagen_degradation_melting"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "corneal_perforation",
+        "probability": 0.08,
+        "lagDays": [2, 14],
+        "severityBoost": 0.9,
+        "clues": ["positive_seidel", "shallow_AC", "iris_prolapse"]
+      },
+      {
+        "diseaseId": "corneal_scarring_leukoma",
+        "probability": 0.4,
+        "lagDays": [14, 90],
+        "severityBoost": 0.4,
+        "clues": ["permanent_opacity", "visual_axis_involvement"]
+      },
+      {
+        "diseaseId": "endophthalmitis",
+        "probability": 0.02,
+        "lagDays": [2, 10],
+        "severityBoost": 1.0,
+        "clues": ["severe_pain_worsening", "fibrin", "loss_of_RAPD"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painful_red_eye", "corneal_white_lesion", "fluorescein_positive_defect", "hypopyon"],
+    "exclusionClues": ["clear_cornea", "normal_fluorescein", "no_infiltrate"]
+  }
+}

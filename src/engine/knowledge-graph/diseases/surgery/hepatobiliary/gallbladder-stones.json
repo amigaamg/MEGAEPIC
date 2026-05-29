@@ -1,0 +1,183 @@
+{
+  "disease": {
+    "id": "gallbladder_stones",
+    "name": "Cholelithiasis / Gallbladder Stones",
+    "system": "surgical",
+    "agePeak_months": [360, 720],
+    "note": "Calculi in the gallbladder. Often asymptomatic. Can cause biliary colic, cholecystitis, pancreatitis, or cholangitis.",
+    "prevalenceWeight": 0.65,
+    "syndromeTags": ["biliary_colic", "right_upper_quadrant_pain", "dyspepsia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "gangrenous_cholecystitis", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "impacted_stone_in_neck", "weight": 6 },
+          { "sign": "gallstone_pancreatitis", "weight": 7 },
+          { "sign": "obstructive_jaundice", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Complicated stone disease (pancreatitis/cholangitis) -> SEVERE; asymptomatic or biliary colic -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "right_upper_quadrant_pain", "weight": 5, "modifiers": [
+          { "condition": "post_prandial", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "fatty_food_intolerance", "weight": 3, "note": "Pain triggered by fatty meals" },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "indigestion_bloating", "weight": 2 },
+      { "symptomId": "pain_radiating_to_right_shoulder", "weight": 3 },
+      { "symptomId": "referred_pain_to_back", "weight": 2 },
+      { "symptomId": "asymptomatic_incidental", "weight": 3, "note": "Many are found incidentally" }
+    ],
+
+    "examFeatures": [
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 4 },
+      { "signId": "murphy_sign", "baseWeight": 3 },
+      { "signId": "palpable_gallbladder", "baseWeight": 2 },
+      { "signId": "jaundice", "baseWeight": 1, "note": "Only if stone passes into CBD" },
+      { "signId": "epigastric_tenderness", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "age_over_40", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 2.0 },
+      { "id": "rapid_weight_loss", "multiplier": 1.5 },
+      { "id": "family_history", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "cirrhosis", "multiplier": 2.0 },
+      { "id": "hemolytic_anemia", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "cholesterol_stones",
+        "name": "Cholesterol Stones",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "yellow_green_stones", "weight": 5 },
+          { "feature": "often_solitary_or_few_large", "weight": 3 },
+          { "feature": "radiolucent", "weight": 3 }
+        ],
+        "management": "Laparoscopic cholecystectomy for symptomatic stones. Expectant management for asymptomatic. Ursodeoxycholic acid for selected small stones."
+      },
+      {
+        "id": "pigment_stones",
+        "name": "Pigment Stones",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "dark_black_brown_stones", "weight": 5 },
+          { "feature": "multiple_small_faceted", "weight": 4 },
+          { "feature": "radiolucent", "weight": 3 }
+        ],
+        "management": "Laparoscopic cholecystectomy. Treat underlying cause (hemolysis, infection). Brown stones often associated with infection."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["epigastric_pain", "relieved_by_ppi", "normal_ultrasound", "h_pylori_positive"]
+      },
+      {
+        "diseaseId": "irritable_bowel_syndrome",
+        "discriminators": ["altered_bowel_habit", "pain_relieved_by_defecation", "normal_us", "chronic_relapsing"]
+      },
+      {
+        "diseaseId": "acute_cholecystitis",
+        "discriminators": ["persistent_pain_greater_6_hours", "murphy_sign", "fever", "elevated_wbc"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Murphy's sign test", "priority": "immediate", "yield": 0.6, "indication": "suggests acute cholecystitis" }
+      ],
+      "laboratory": [
+        { "name": "LFTs", "priority": "high", "yield": 0.5, "indication": "assess for CBD obstruction" },
+        { "name": "Bilirubin", "priority": "high", "yield": 0.4, "indication": "elevated if CBD stone" },
+        { "name": "ALP, GGT", "priority": "high", "yield": 0.5, "indication": "elevated with biliary obstruction" },
+        { "name": "Amylase/Lipase", "priority": "medium", "yield": 0.3, "indication": "rule out pancreatitis" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.95, "indication": "gold standard for gallstones" },
+        { "name": "MRCP", "priority": "medium", "yield": 0.9, "indication": "if CBD stones suspected" },
+        { "name": "CT Abdomen", "priority": "medium", "yield": 0.6, "indication": "less sensitive than US for gallstones" },
+        { "name": "ERCP", "priority": "low", "yield": 0.5, "indication": "therapeutic only, not diagnostic" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "SAGES Guidelines for Gallstone Disease",
+      "pathways": [
+        {
+          "severity": "asymptomatic",
+          "criteria": "incidental finding, no biliary colic",
+          "treatment": "Expectant management. No surgery indicated unless high risk for complications (large stone >3cm, non-functioning GB, calcified GB)."
+        },
+        {
+          "severity": "symptomatic (biliary colic)",
+          "criteria": "recurrent RUQ pain, confirmed stones on US",
+          "treatment": "Laparoscopic cholecystectomy (elective). Same-day surgery. No routine CBD imaging unless elevated LFTs."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "CBD stone, pancreatitis, cholecystitis, cholangitis",
+          "treatment": "ERCP for CBD stone clearance. Laparoscopic cholecystectomy (after resolution of acute episode). Urgent management as per specific complication."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "supersaturation_of_bile",
+      "cholesterol_nucleation",
+      "gallbladder_hypomotility",
+      "stone_growth",
+      "cystic_duct_obstruction",
+      "complications_arising_from_obstruction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_cholecystitis",
+        "probability": 0.2,
+        "lagDays": [1, 30],
+        "severityBoost": 0.3,
+        "clues": ["persistent_ruq_pain", "fever", "murphy_sign", "wall_thickening"]
+      },
+      {
+        "diseaseId": "choledocholithiasis",
+        "probability": 0.1,
+        "lagDays": [1, 30],
+        "severityBoost": 0.3,
+        "clues": ["jaundice", "dark_urine", "elevated_bilirubin_alp", "dilated_cbd"]
+      },
+      {
+        "diseaseId": "gallstone_pancreatitis",
+        "probability": 0.05,
+        "lagDays": [1, 7],
+        "severityBoost": 0.4,
+        "clues": ["epigastric_pain_radiating_to_back", "elevated_amylase", "gallstones_on_us"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["right_upper_quadrant_post_prandial_pain", "gallstones_on_ultrasound", "fatty_food_intolerance"],
+    "exclusionClues": ["normal_ultrasound", "left_sided_pain", "bloody_diarrhea"]
+  }
+}

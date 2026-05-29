@@ -1,0 +1,142 @@
+{
+  "disease": {
+    "id": "fibroadenoma",
+    "name": "Fibroadenoma",
+    "system": "surgical",
+    "agePeak_months": [180, 420],
+    "note": "Most common benign breast tumor in young women. Firm, smooth, mobile, and usually painless. 'Breast mouse'.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["breast_lump", "benign_breast_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapid_growth_phyllodes_suspicion", "weight": 6 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "size_more_than_5cm", "weight": 4 },
+          { "sign": "multiple_bilateral", "weight": 3 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Giant fibroadenoma/complex -> SEVERE; simple fibroadenoma -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "breast_lump", "weight": 5 },
+      { "symptomId": "lump_discovered_incidentally", "weight": 4 },
+      { "symptomId": "lump_smooth_and_mobile", "weight": 4 },
+      { "symptomId": "no_pain", "weight": 4 },
+      { "symptomId": "cyclic_changes_in_size", "weight": 2 },
+      { "symptomId": "lump_present_for_months_or_years", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_smooth_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "highly_mobile", "baseWeight": 5 },
+      { "signId": "rubbery_firm_consistency", "baseWeight": 4 },
+      { "signId": "well_circumscribed", "baseWeight": 4 },
+      { "signId": "no_axillary_lymphadenopathy", "baseWeight": 3 },
+      { "signId": "no_skin_changes", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_15_to_35", "multiplier": 3.0 },
+      { "id": "hormonal_influence", "multiplier": 1.5 },
+      { "id": "family_history_of_fibroadenoma", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "simple_fibroadenoma",
+        "name": "Simple Fibroadenoma",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "well_defined_lump", "weight": 5 },
+          { "feature": "size_1_3_cm", "weight": 4 },
+          { "feature": "no_complex_features", "weight": 5 }
+        ],
+        "management": "Triple assessment (clinical + imaging + biopsy). If benign and concordant: reassure, discharge. No need for excision unless symptomatic, enlarging, or patient preference."
+      },
+      {
+        "id": "giant_fibroadenoma",
+        "name": "Giant Fibroadenoma (>5cm)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "size_greater_than_5cm", "weight": 5 },
+          { "feature": "rapid_growth", "weight": 4 },
+          { "feature": "breast_distortion", "weight": 3 }
+        ],
+        "management": "Excision biopsy through periareolar or submammary incision. Histology to rule out phyllodes tumor. Breast reconstruction if needed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "phyllodes_tumor",
+        "discriminators": ["rapid_growth", "larger_at_presentation", "age_40_50", "leaf_like_pattern_on_us"]
+      },
+      {
+        "diseaseId": "breast_cancer",
+        "discriminators": ["hard_irregular", "skin_changes", "axillary_nodes", "older_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Triple assessment", "priority": "immediate", "yield": 0.95, "indication": "clinical, imaging, pathology" }
+      ],
+      "laboratory": [
+        { "name": "None routinely", "priority": "low", "yield": 0.1, "indication": "not indicated" }
+      ],
+      "imaging": [
+        { "name": "Breast Ultrasound", "priority": "immediate", "yield": 0.9, "indication": "classic oval, well-defined, homogeneous" },
+        { "name": "Mammogram", "priority": "medium", "yield": 0.7, "indication": "if age >35, well-defined round/oval mass" },
+        { "name": "Core needle biopsy or FNA", "priority": "high", "yield": 0.95, "indication": "confirm benign nature" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "American College of Radiology BI-RADS / ACR Guidelines",
+      "pathways": [
+        {
+          "severity": "confirmed benign",
+          "criteria": "biopsy proven fibroadenoma, <3cm, non-growing",
+          "treatment": "Reassure and discharge. No routine follow-up needed. Advise self-monitoring. Excision if patient preference or enlarging."
+        },
+        {
+          "severity": "complex or enlarging",
+          "criteria": "complex fibroadenoma, size >3cm, rapid growth, or symptomatic",
+          "treatment": "Excision biopsy. Vacuum-assisted excision. Histology to rule out phyllodes."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hormonal_stimulation",
+      "excessive_lobular_proliferation",
+      "fibrous_and_glandular_tissue_overgrowth",
+      "well_circumscribed_benign_tumor"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "infarction_tenderness",
+        "probability": 0.02,
+        "lagDays": [0, 30],
+        "severityBoost": 0,
+        "clues": ["sudden_pain_in_lump", "rapid_enlargement"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["young_female", "smooth_mobile_breast_lump", "well_defined_on_ultrasound", "no_lymph_nodes"],
+    "exclusionClues": ["age_over_40_new_lump", "fixed_irregular_mass", "axillary_lymphadenopathy", "skin_changes"]
+  }
+}

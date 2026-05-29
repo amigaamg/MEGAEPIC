@@ -1,0 +1,123 @@
+{
+  "disease": {
+    "id": "aortic_regurgitation",
+    "name": "Aortic Regurgitation",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Diastolic leakage from aorta into LV. Causes chronic volume overload. Acute AR is a surgical emergency.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["valvular_heart_disease", "aortic_valve_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_severe_ar", "weight": 10 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "pulmonary_oedema", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If acute/pulmonary oedema/shock -> ACUTE AR (emergency); else -> CHRONIC AR"
+    },
+    "historyFeatures": [
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 4 },
+      { "symptomId": "orthopnea", "weight": 3 },
+      { "symptomId": "chest_discomfort", "weight": 2 },
+      { "symptomId": "nocturnal_diaphoresis", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "head_bobbing", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "early_diastolic_murmur_left_sternal_border", "baseWeight": 5, "doubleWeight": true, "note": "High-pitched, blowing, best heard leaning forward with breath held" },
+      { "signId": "water_hammer_pulse_corrigan", "baseWeight": 4 },
+      { "signId": "wide_pulse_pressure", "baseWeight": 4 },
+      { "signId": "de_musset_sign_head_bobbing", "baseWeight": 2 },
+      { "signId": "quincke_pulse_capillary_bed", "baseWeight": 2 },
+      { "signId": "bisferiens_pulse", "baseWeight": 3 },
+      { "signId": "displaced_hyperdynamic_apex", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "bicuspid_aortic_valve", "multiplier": 3.0 },
+      { "id": "infective_endocarditis", "multiplier": 2.5 },
+      { "id": "aortic_root_dilation", "multiplier": 2.5 },
+      { "id": "marfan_syndrome", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "rheumatic_heart_disease", "multiplier": 1.5 },
+      { "id": "syphilis", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "chronic_ar",
+        "name": "Chronic Aortic Regurgitation",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "gradual_onset", "weight": 4 },
+          { "feature": "wide_pulse_pressure", "weight": 5 },
+          { "feature": "compensated_lv_dilation", "weight": 4 }
+        ],
+        "management": "Vasodilators (nifedipine, ACEi) if hypertensive. Surveillance echo. Surgery when symptoms develop or LV dysfunction."
+      },
+      {
+        "id": "acute_ar",
+        "name": "Acute Aortic Regurgitation",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "sudden_dyspnea", "weight": 5 },
+          { "feature": "pulmonary_oedema", "weight": 5 },
+          { "feature": "soft_short_murmur", "weight": 3, "note": "Murmur may be subtle due to rapid LV pressure rise" }
+        ],
+        "management": "Emergency aortic valve replacement. IV diuretics. Vasodilators. Avoid beta-blockers (block compensatory tachycardia)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "patent_ductus_arteriosus", "discriminators": ["continuous_murmur", "wide_pulse_pressure", "pediatric_population"] },
+      { "diseaseId": "pulmonary_regurgitation", "discriminators": ["left_lower_sternal", "increases_with_inspiration", "pulmonary_hypertension"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "high", "yield": 0.4, "indication": "LVH, volume overload pattern" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "severity (vena contracta, PHT, holodiastolic flow reversal in aorta), LV size/function" },
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.5, "indication": "cardiomegaly, aortic dilation" },
+        { "name": "Cardiac MRI", "priority": "medium", "yield": 0.9, "indication": "regurgitant volume, aortic root dimensions" },
+        { "name": "CT aortogram", "priority": "medium", "yield": 0.9, "indication": "aortic root and ascending aorta measurement" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC/EACTS Guidelines for Valvular Heart Disease",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "asymptomatic, LVEF >50%, LVESD <50 mm",
+          "treatment": "Surveillance echo annually. Vasodilators if hypertensive. Avoid isometric exercise."
+        },
+        {
+          "severity": "severe asymptomatic",
+          "criteria": "LVEF ≤50% or LVESD ≥50 mm or LVEDD ≥65 mm",
+          "treatment": "Aortic valve repair/replacement. Consider earlier if rapid progression or aortic root dilation."
+        },
+        {
+          "severity": "symptomatic severe",
+          "criteria": "dyspnea, angina, NYHA II-IV",
+          "treatment": "Aortic valve replacement (SAVR). Root replacement if dilated. Treat cause (endocarditis, dissection)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "diastolic_flow_reversal_into_lv",
+      "lv_volume_overload",
+      "eccentric_lv_hypertrophy",
+      "increased_stroke_volume",
+      "wide_pulse_pressure",
+      "decreased_aortic_diastolic_pressure",
+      "reduced_coronary_perfusion"
+    ],
+    "complications": [
+      { "diseaseId": "left_ventricular_dysfunction", "probability": 0.2, "severityBoost": 0.3, "clues": ["reduced_lvef", "symptoms"] },
+      { "diseaseId": "aortic_dissection", "probability": 0.02, "severityBoost": 0.5, "clues": ["tearing_pain", "dilated_aorta", "marfanoid"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["early_diastolic_murmur", "wide_pulse_pressure", "water_hammer_pulse", "hyperdynamic_circulation"],
+    "exclusionClues": ["normal_valve", "no_diastolic_flow_reversal"]
+  }
+}

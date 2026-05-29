@@ -1,0 +1,80 @@
+{
+  "disease": {
+    "id": "persistent_depressive_disorder",
+    "name": "Persistent Depressive Disorder (Dysthymia)",
+    "system": "PSYCH",
+    "agePeak_months": [240, 480],
+    "note": "Chronic low-grade depression lasting ≥2 years. Fewer symptoms than MDD but more persistent. Often comorbid with MDD (double depression).",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["mood_disorder", "chronic_depression"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_ideation", "weight": 10 },
+        { "sign": "severe_functional_decline", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If suicidal -> URGENT; else -> ROUTINE outpatient"
+    },
+    "historyFeatures": [
+      { "symptomId": "depressed_mood_most_days", "weight": 5 },
+      { "symptomId": "duration_more_than_2_years", "weight": 5 },
+      { "symptomId": "poor_appetite_or_overeating", "weight": 3 },
+      { "symptomId": "low_energy_fatigue", "weight": 3 },
+      { "symptomId": "low_self_esteem", "weight": 3 },
+      { "symptomId": "poor_concentration", "weight": 3 },
+      { "symptomId": "hopelessness", "weight": 3 },
+      { "symptomId": "sleep_disturbance", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "depressed_appearance", "baseWeight": 3 },
+      { "signId": "flat_or_constricted_affect", "baseWeight": 3 },
+      { "signId": "psychomotor_retardation", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_depression", "multiplier": 2.0 },
+      { "id": "childhood_adversity_trauma", "multiplier": 2.5 },
+      { "id": "neurotic_personality", "multiplier": 2.0 },
+      { "id": "chronic_stress", "multiplier": 1.8 }
+    ],
+    "mimics": [
+      { "diseaseId": "major_depressive_disorder", "discriminators": ["fewer_symptoms", "chronic_course", "less_severe", "longer_duration"] },
+      { "diseaseId": "personality_disorder", "discriminators": ["lifelong_pattern_ego_dystonic", "no_clear_onset", "other_domains_affected"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "PHQ-9 questionnaire", "priority": "high", "yield": 0.8, "indication": "depression severity, typically 5-9" }
+      ],
+      "laboratory": [
+        { "name": "TSH, FBC, B12, Folate", "priority": "medium", "yield": 0.2, "indication": "medical causes" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Persistent Depressive Disorder",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "PHQ-9 5-9, functional but chronically struggling",
+          "treatment": "CBT or IPT (psychotherapy first-line). SSRI if therapy inadequate. Lifestyle: exercise, sleep hygiene, social engagement."
+        },
+        {
+          "severity": "moderate-severe or double depression",
+          "criteria": "PHQ-9 ≥10, impaired function, superimposed MDD episodes",
+          "treatment": "Antidepressant (SSRI/SNRI) + psychotherapy. Combined best for chronic depression. Long-term treatment (years). Augmentation if partial response."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "chronic_stress_hpa_axis",
+      "monoamine_dysregulation",
+      "neuroinflammation",
+      "early_life_programming"
+    ],
+    "complications": [
+      { "diseaseId": "major_depressive_episode_superimposed", "probability": 0.3, "severityBoost": 0.3, "clues": ["worsening_symptoms", "hopelessness"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["chronic_depressive_mood", "fewer_symptoms_than_mdd", "duration_2_years", "insidious_onset"],
+    "exclusionClues": ["clear_episodes_with_intervening_euthymia", "symptoms_less_than_2_years"]
+  }
+}

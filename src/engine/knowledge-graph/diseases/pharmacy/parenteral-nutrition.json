@@ -1,0 +1,188 @@
+{
+  "disease": {
+    "id": "parenteral_nutrition",
+    "name": "Parenteral Nutrition Management and Formulation",
+    "system": "PHARM",
+    "agePeak_months": [0, 1200],
+    "note": "Total Parenteral Nutrition (TPN) provides complete nutritional support when enteral feeding is contraindicated or insufficient. Requires careful macronutrient (dextrose, amino acids, lipids) and micronutrient (electrolytes, vitamins, trace elements) formulation. Central vs peripheral PN depends on osmolarity. Refeeding syndrome is a potentially fatal complication.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["tpn_formulation", "nutritional_support", "refeeding_syndrome", "metabolic_monitoring"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "refeeding_syndrome_hypophosphatemia_severe", "weight": 10 },
+        { "sign": "air_embolism_from_central_line", "weight": 10 },
+        { "sign": "catheter_related_bloodstream_infection_sepsis", "weight": 10 },
+        { "sign": "hyperglycemic_hyperosmolar_state", "weight": 9 },
+        { "sign": "fat_embolism_from_intralipid_overload", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "serum_phosphorus_below_1_0_mg_dl", "weight": 8 },
+          { "sign": "blood_glucose_above_400_despite_insulin", "weight": 7 },
+          { "sign": "liver_enzymes_above_5x_uln_pn_associated", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If phosphorus <1.0 or glucose >400 -> SEVERE; if LFT >3x ULN -> MODERATE; if stable on PN -> MILD"
+    },
+    "historyFeatures": [
+      { "symptomId": "prolonged_npo_or_malabsorption_exceeding_7_days", "weight": 5, "modifiers": [
+          { "condition": "post_op_ileus_or_bowel_obstruction", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "unintentional_weight_loss_above_10_percent", "weight": 4 },
+      { "symptomId": "history_of_refeeding_syndrome_risk_factors", "weight": 5 },
+      { "symptomId": "chronic_illness_crohn_short_bowel_mesenteric_ischemia", "weight": 4 },
+      { "symptomId": "prior_pn_complications_line_infection_metabolic", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "weight_trend_and_bmi_calculation", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "serum_prealbumin_or_transthyretin", "baseWeight": 4 },
+      { "signId": "catheter_insertion_site_appearance", "baseWeight": 5 },
+      { "signId": "peripheral_vs_central_line_osmolality_check", "baseWeight": 3 },
+      { "signId": "signs_of_fluid_overload_or_dehydration", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "malnutrition_severe_bmi_below_16", "multiplier": 4.0 },
+      { "id": "alcohol_use_disorder", "multiplier": 3.0 },
+      { "id": "prolonged_npo_greater_than_7_days", "multiplier": 3.0 },
+      { "id": "electrolyte_abnormalities_pre_existing", "multiplier": 2.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "renal_or_hepatic_failure", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "central_tpn",
+        "name": "Central TPN (Hypertonic Solutions >900 mOsm/L)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "dextrose_concentration_above_12_point_5_percent", "weight": 5 },
+          { "feature": "osmolality_above_900_mosm_l", "weight": 5 },
+          { "feature": "requires_picc_or_central_venous_catheter", "weight": 5 },
+          { "feature": "full_caloric_requirements_met_safely", "weight": 4 }
+        ],
+        "management": "Central line required (PICC, subclavian, IJ). Infusion through dedicated port. Maximum dextrose 25% final concentration. Start at 50% goal rate, advance to goal over 2-3 days. Monitor glucose q6h initially. Add insulin to bag if needed."
+      },
+      {
+        "id": "peripheral_tpn",
+        "name": "Peripheral TPN (Isotonic Solutions <900 mOsm/L)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "dextrose_final_concentration_below_10_percent", "weight": 5 },
+          { "feature": "osmolality_below_900_mosm_l", "weight": 5 },
+          { "feature": "peripheral_iv_access_sufficient", "weight": 4 },
+          { "feature": "limited_to_short_term_less_than_14_days", "weight": 4 }
+        ],
+        "management": "Peripheral IV access, rotate site q48-72h. Maximum dextrose 10%, amino acids 5%. Cannot provide full caloric needs. Add heparin 1000U/L to reduce thrombophlebitis. Use inline filter 0.22 micron. Change tubing q24h. Not suitable for long-term support."
+      },
+      {
+        "id": "refeeding_syndrome_prevention",
+        "name": "Refeeding Syndrome Prevention Protocol",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "hypophosphatemia_core_marker_of_refeeding", "weight": 5 },
+          { "feature": "hypokalemia_hypomagnesemia_thiamine_deficiency", "weight": 5 },
+          { "feature": "cardiac_arrhythmia_and_respiratory_failure", "weight": 4 },
+          { "feature": "insulin_surge_after_carbohydrate_load", "weight": 4 }
+        ],
+        "management": "Correct electrolytes before starting: phosphorus, potassium, magnesium, calcium. Thiamine 100mg IV x3 days before and during initiation. Start at 25-50% of caloric goal, advance slowly over 4-7 days. Monitor phosphorus, K, Mg q6h for 48h, then daily. Restrict dextrose to 150-200g/day initially."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "enteral_feeding_intolerance",
+        "discriminators": ["bowel_sounds_present", "no_contraindication_to_enteral", "lower_risk_of_line_infection"]
+      },
+      {
+        "diseaseId": "acute_metabolic_decompensation_other_cause",
+        "discriminators": ["no_recent_pn_initiation", "alternative_etiology_found", "electrolytes_normal"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Daily weight measurement", "priority": "high", "yield": 0.8, "indication": "fluid balance and nutritional adequacy" },
+        { "name": "Strict intake and output charting", "priority": "high", "yield": 0.7, "indication": "fluid management" },
+        { "name": "Capillary blood glucose monitoring q6h", "priority": "high", "yield": 0.9, "indication": "hyperglycemia detection" }
+      ],
+      "laboratory": [
+        { "name": "Serum phosphorus, potassium, magnesium, calcium, sodium", "priority": "immediate", "yield": 0.95, "indication": "refeeding monitoring, before and after initiation" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.9, "indication": "hyperglycemia monitoring" },
+        { "name": "Prealbumin, albumin, CRP", "priority": "medium", "yield": 0.6, "indication": "nutritional status assessment weekly" },
+        { "name": "ALT, AST, ALP, GGT, total bilirubin", "priority": "high", "yield": 0.7, "indication": "PN-associated liver disease monitoring" },
+        { "name": "Triglycerides", "priority": "medium", "yield": 0.5, "indication": "lipid tolerance, avoid if >400" },
+        { "name": "CBC with differential", "priority": "medium", "yield": 0.4, "indication": "infection surveillance" },
+        { "name": "Blood cultures from line and periphery", "priority": "high", "yield": 0.3, "indication": "suspected CLABSI" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray for line tip position", "priority": "high", "yield": 0.9, "indication": "confirm central line placement before use" },
+        { "name": "Abdominal X-ray", "priority": "medium", "yield": 0.2, "indication": "bowel gas pattern assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ASPEN Clinical Guidelines, ESPEN Guidelines on Parenteral Nutrition, NICE Guidelines on Nutritional Support (CG32)",
+      "pathways": [
+        {
+          "severity": "pn_initiation",
+          "criteria": "patient NPO >7 days or malnourished, enteral route not feasible",
+          "treatment": "Assess refeeding risk. Correct electrolytes. Start TPN at 50% goal if high risk. Central vs peripheral based on osmolality. Standard macronutrients: dextrose 3-5g/kg/day, amino acids 1-1.5g/kg/day, lipids 0.5-1g/kg/day. MVI/ETE daily."
+        },
+        {
+          "severity": "metabolic_complication",
+          "criteria": "glucose >180, phosphorus <2.5, potassium <3.5, triglycerides >400",
+          "treatment": "Reduce dextrose infusion rate, add insulin to bag or sliding scale. Replete phosphorus (15-30mmol IV), potassium (10-20mEq/h), magnesium. Hold lipids if triglycerides >400. Recheck labs in 4-6h."
+        },
+        {
+          "severity": "suspected_clabsi",
+          "criteria": "fever, chills, erythema at exit site, positive blood cultures",
+          "treatment": "Draw cultures from line and peripheral. Start empiric antibiotics (vancomycin + antipseudomonal beta-lactam). Remove line if confirmed. Insert new line after 24-48h of negative cultures. Consider ethanol lock therapy for recurrent infections."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "bowel_rest_required_due_to_non_functioning_gut",
+      "direct_intravenous_nutrient_delivery_circumvents_digestion",
+      "insulin_surge_after_dextrose_load_triggers_refeeding",
+      "carbohydrate_load_shifts_phosphate_intracellularly",
+      "high_osmolality_damages_peripheral_veins",
+      "line_contamination_leads_to_biofilm_bacteremia"
+    ],
+    "complications": [
+      {
+        "diseaseId": "catheter_related_bloodstream_infection",
+        "probability": 0.15,
+        "lagDays": [7, 365],
+        "severityBoost": 0.7,
+        "clues": ["fever", "chills_during_infusion", "positive_line_culture"]
+      },
+      {
+        "diseaseId": "pn_associated_liver_disease",
+        "probability": 0.1,
+        "lagDays": [30, 365],
+        "severityBoost": 0.3,
+        "clues": ["elevated_lfts", "steatosis", "cholestasis", "elevated_bilirubin"]
+      },
+      {
+        "diseaseId": "refeeding_syndrome",
+        "probability": 0.08,
+        "lagDays": [0, 5],
+        "severityBoost": 0.8,
+        "clues": ["hypophosphatemia", "hypokalemia", "hypomagnesemia", "fluid_retention"]
+      },
+      {
+        "diseaseId": "hyperglycemia_related_complications",
+        "probability": 0.2,
+        "lagDays": [0, 30],
+        "severityBoost": 0.3,
+        "clues": ["glucose_above_180", "osmotic_diuresis", "electrolyte_derangements"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prolonged_npo_greater_7_days", "refeeding_risk_factors", "electrolyte_abnormalities_pre_initiation", "line_tip_above_vena_cava"],
+    "exclusionClues": ["functional_gut_accessible", "short_term_npo_less_72h", "no_refeeding_risk", "normal_electrolytes"]
+  }
+}

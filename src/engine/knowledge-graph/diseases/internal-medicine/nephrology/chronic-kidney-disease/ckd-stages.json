@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "ckd_stages",
+    "name": "Chronic Kidney Disease Stages",
+    "system": "RENAL",
+    "agePeak_months": [480, 1080],
+    "note": "Progressive loss of kidney function. Staged by eGFR and albuminuria. Risk of progression, cardiovascular events, and ESKD increase with stage.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["renal_disease", "chronic_illness", "ckd_staging"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "uremic_pericarditis", "weight": 10 },
+        { "sign": "pulmonary_edema_fluid_overload", "weight": 9 },
+        { "sign": "severe_hyperkalemia_arrhythmia", "weight": 10 },
+        { "sign": "uremic_encephalopathy_seizures", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "G1 (eGFR >90) → G2 (60-89) → G3a (45-59) → G3b (30-44) → G4 (15-29) → G5 (<15). Plus A1-A3 for albuminuria."
+    },
+    "historyFeatures": [
+      { "symptomId": "fatigue_weakness", "weight": 4 },
+      { "symptomId": "peripheral_edema", "weight": 3 },
+      { "symptomId": "nocturia", "weight": 3 },
+      { "symptomId": "foamy_urine", "weight": 3 },
+      { "symptomId": "anorexia_nausea", "weight": 3 },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "muscle_cramps_restless_legs", "weight": 2 },
+      { "symptomId": "known_diabetes_or_hypertension", "weight": 5 },
+      { "symptomId": "bony_pain_fractures_ckd_mbd", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "peripheral_edema", "baseWeight": 3 },
+      { "signId": "hypertension", "baseWeight": 4 },
+      { "signId": "pallor_anemia", "baseWeight": 3 },
+      { "signId": "uremic_fetor", "baseWeight": 2 },
+      { "signId": "scratch_marks_excoriations", "baseWeight": 2 },
+      { "signId": "asterixis_uremic_tremor", "baseWeight": 2 },
+      { "signId": "pericardial_rub", "baseWeight": 3 },
+      { "signId": "fundoscopic_hypertensive_retinopathy", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 3.0 },
+      { "id": "hypertension_uncontrolled", "multiplier": 2.5 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "cardiovascular_disease", "multiplier": 2.0 },
+      { "id": "family_history_ckd", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.3 },
+      { "id": "proteinuria_baseline", "multiplier": 3.0 },
+      { "id": "african_american_ethnicity", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "ckd_g1_g2_early",
+        "name": "CKD Stage G1-G2 (Early)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "egfr_above_60", "weight": 5 },
+          { "feature": "often_asymptomatic", "weight": 4 },
+          { "feature": "urine_acr_greater_than_30", "weight": 4 },
+          { "feature": "detected_on_routine_screening", "weight": 3 }
+        ],
+        "management": "Treat underlying cause (ACEi/ARB for diabetes/proteinuria). BP target <130/80. Lifestyle: low salt diet, exercise, smoking cessation. Avoid nephrotoxins (NSAIDs). Annual eGFR and ACR monitoring. Statin therapy. Glycemic control (HbA1c target <7% for diabetes)."
+      },
+      {
+        "id": "ckd_g3_g4_moderate_severe",
+        "name": "CKD Stage G3-G4 (Moderate-Severe)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "egfr_15_59", "weight": 5 },
+          { "feature": "symptoms_emerging_fatigue_edema", "weight": 3 },
+          { "feature": "complications_anemia_ckd_mbd_acidosis", "weight": 4 },
+          { "feature": "progressive_decline", "weight": 3 }
+        ],
+        "management": "Nephrology referral (at G4 or earlier). Manage complications: iron/ESA for anemia, phosphate binders + vitamin D for CKD-MBD, NaHCO3 for metabolic acidosis. Prepare for RRT: education, access planning. Vaccinations (flu, pneumococcal, Hep B). Dietary counseling (potassium, phosphate, salt, protein restriction). SGLT2 inhibitors (dapagliflozin/empagliflozin) to slow progression."
+      },
+      {
+        "id": "ckd_g5_kidney_failure",
+        "name": "CKD Stage G5 (Kidney Failure)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "egfr_under_15", "weight": 5 },
+          { "feature": "uremic_symptoms_nausea_pruritus_anorexia", "weight": 4 },
+          { "feature": "volume_overload_edema_dyspnea", "weight": 4 },
+          { "feature": "rrt_planned_or_initiated", "weight": 5 }
+        ],
+        "management": "RRT: hemodialysis (center or home), peritoneal dialysis, or pre-emptive kidney transplant. Access creation (AVF/AVG for HD, PD catheter for PD). Symptoms: diuretics for fluid, phosphate binders, antihypertensives, ESAs. Diet: restrict K, P, Na, fluid. Advance care planning. If choosing conservative care: symptom management, hospice referral."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "acute_kidney_injury", "discriminators": ["acute_rise_over_days_weeks", "normal_kidney_size_on_uss", "reversible_cause"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, eGFR (CKD-EPI equation)", "priority": "immediate", "yield": 0.98, "indication": "staging, monitoring progression" },
+        { "name": "Urine ACR (albumin-to-creatinine ratio)", "priority": "high", "yield": 0.9, "indication": "albuminuria category (A1, A2, A3), progression risk" },
+        { "name": "U&E, bicarbonate, calcium, phosphate, PTH, 25-OH vitamin D", "priority": "high", "yield": 0.7, "indication": "CKD-MBD, electrolyte and acid-base status" },
+        { "name": "FBC (hemoglobin, iron studies)", "priority": "high", "yield": 0.7, "indication": "anemia of CKD, iron deficiency" },
+        { "name": "HbA1c (if diabetic)", "priority": "high", "yield": 0.6, "indication": "glycemic control assessment" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "high", "yield": 0.6, "indication": "kidney size (small kidneys suggest chronicity), cortical thickness, obstruction" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO 2024 Guidelines for the Evaluation and Management of CKD",
+      "pathways": [
+        {
+          "severity": "G1-G3a (eGFR >45), A1-A2",
+          "criteria": "mild-moderate reduction, low albuminuria",
+          "treatment": "ACEi/ARB if hypertension or diabetes. SGLT2i (dapagliflozin/empagliflozin). BP <130/80. Statin. Lifestyle modification. Annual monitoring. Avoid NSAIDs."
+        },
+        {
+          "severity": "G3b-G4 (eGFR 15-44)",
+          "criteria": "moderate-severe reduction, any albuminuria",
+          "treatment": "Nephrology review. ACEi/ARB + SGLT2i (continue until dialysis). Finerenone (finerenone) if T2DM. Manage anemia, MBD, acidosis. Dietary counseling. RRT education. Vaccinations."
+        },
+        {
+          "severity": "G5 (eGFR <15)",
+          "criteria": "kidney failure, uremic symptoms or complications",
+          "treatment": "Initiate RRT. Choose modality: HD (in-center or home), PD, or transplant. If conservative care: symptom management, diuretics, binders, ESAs. Advance care planning."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "hyperfiltration_injury_in_remaining_nephrons",
+      "glomerular_sclerosis",
+      "interstitial_fibrosis_and_tubular_atrophy",
+      "nephron_loss",
+      "uremic_retention_of_toxins",
+      "mineral_bone_disorder_phosphate_retention",
+      "anemia_from_epo_deficiency_and_iron_restriction",
+      "metabolic_acidosis_from_decreased_ammoniagenesis"
+    ],
+    "complications": [
+      { "diseaseId": "renal_anemia", "probability": 0.5, "severityBoost": 0.2, "clues": ["hemoglobin_under_10", "fatigue", "pallor", "low_epo_level"] },
+      { "diseaseId": "hyperkalemia", "probability": 0.3, "severityBoost": 0.3, "clues": ["elevated_serum_k", "ecg_changes", "dietary_noncompliance"] },
+      { "diseaseId": "renal_osteodystrophy_ckd_mbd", "probability": 0.4, "severityBoost": 0.2, "clues": ["elevated_pth", "hyperphosphatemia", "bone_pain", "fractures"] },
+      { "diseaseId": "cardiovascular_disease_accelerated", "probability": 0.4, "severityBoost": 0.4, "clues": ["hypertension", "lvh_on_echo", "coronary_calcification", "heart_failure"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["egfr_under_60_for_over_3_months", "proteinuria", "small_kidneys_on_uss", "diabetes_hypertension_history"],
+    "exclusionClues": ["acute_rise_in_creatinine", "normal_kidney_size", "no_proteinuria", "normal_egfr"]
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "adverse_drug_reactions_geriatric",
+    "name": "Adverse Drug Reactions (Geriatric)",
+    "system": "geriatrics",
+    "agePeak_months": [660, 1080],
+    "note": "Harmful or unintended response to medication. Older adults are at 2-3x higher risk due to physiological changes and polypharmacy.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["medication_harm", "drug_toxicity", "geriatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anaphylaxis_or_angioedema", "weight": 10 },
+        { "sign": "anticoagulant_related_bleeding", "weight": 9 },
+        { "sign": "severe_hypoglycemia", "weight": 9 },
+        { "sign": "neuroleptic_malignant_syndrome", "weight": 9 },
+        { "sign": "serotonin_syndrome", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "mild_reaction": true,
+        "no_immediate_danger": true
+      },
+      "severityLabel": "Severe or life-threatening ADR -> EMERGENCY; mild reaction -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "recent_new_medication_or_dose_change", "weight": 5 },
+      { "symptomId": "symptoms_temporally_related_to_drug", "weight": 5 },
+      { "symptomId": "previous_drug_reaction_history", "weight": 4 },
+      { "symptomId": "confusion_or_fall_post_medication", "weight": 3 },
+      { "symptomId": "bleeding_or_bruising_easily", "weight": 3 },
+      { "symptomId": "gastrointestinal_symptoms", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "rash_or_urticaria", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "hypotension_or_bradycardia", "baseWeight": 4 },
+      { "signId": "confusion_or_delirium", "baseWeight": 3 },
+      { "signId": "extrapyramidal_signs", "baseWeight": 3 },
+      { "signId": "signs_of_bleeding", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "polypharmacy_5plus", "multiplier": 2.5 },
+      { "id": "age_over_75", "multiplier": 2.0 },
+      { "id": "renal_impairment", "multiplier": 2.0 },
+      { "id": "hepatic_impairment", "multiplier": 1.8 },
+      { "id": "low_bmi", "multiplier": 1.5 },
+      { "id": "female_sex", "multiplier": 1.3 },
+      { "id": "multiple_comorbidities", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "delirium",
+        "discriminators": ["infection_as_cause", "metabolic_derangement", "no_temporal_drug_relationship"]
+      },
+      {
+        "diseaseId": "geriatric_syndrome_decompensation",
+        "discriminators": ["multifactorial_cause", "non_drug_related"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Naranjo ADR probability scale", "priority": "immediate", "yield": 0.9, "indication": "causality assessment" },
+        { "name": "ECG", "priority": "high", "yield": 0.6, "indication": "QT prolongation, arrhythmia" }
+      ],
+      "laboratory": [
+        { "name": "Drug levels (digoxin, lithium, warfarin, etc)", "priority": "high", "yield": 0.8, "indication": "toxicity assessment" },
+        { "name": "FBC, U&E, Cr, LFTs", "priority": "high", "yield": 0.7, "indication": "organ function and baseline" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO ADR Monitoring / STOPP/START Criteria",
+      "pathways": [
+        {
+          "severity": "severe_life_threatening",
+          "criteria": "bleeding, anaphylaxis, serotonin syndrome, NMS",
+          "treatment": "Immediate drug cessation. Supportive care. Specific antidote if available (naloxone, flumazenil, vitamin K, octreotide). Admission for monitoring."
+        },
+        {
+          "severity": "mild_moderate",
+          "criteria": "rash, nausea, mild confusion",
+          "treatment": "Review medication list. Consider dose reduction or alternative. Report to pharmacovigilance. Counsel patient. Monitor for resolution."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "altered_pharmacokinetics_reduced_clearance",
+      "increased_receptor_sensitivity",
+      "drug_drug_interactions",
+      "anticholinergic_burden",
+      "reduced_homeostatic_reserve",
+      "cyp450_polymorphisms_and_interactions"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrent_falls",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["sedative_or_antihypertensive_drugs"]
+      },
+      {
+        "diseaseId": "hospitalization",
+        "probability": 0.25,
+        "severityBoost": 0.5,
+        "clues": ["severe_adr", "anticoagulant_bleed"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if severe",
+    "diagnosticClues": ["temporal_link_to_drug", "known_high_risk_medication", "age_over_65"],
+    "exclusionClues": ["no_temporal_relationship", "symptoms_pre_exist", "non_drug_explanation"]
+  }
+}

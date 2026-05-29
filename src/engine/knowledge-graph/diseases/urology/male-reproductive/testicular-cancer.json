@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "testicular_cancer",
+    "name": "Testicular Cancer",
+    "system": "URO",
+    "agePeak_months": [180, 480],
+    "note": "Most common solid malignancy in young men. Germ cell tumors (seminoma vs non-seminoma). Highly curable even with metastatic disease.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["testicular_malignancy", "germ_cell_tumor", "male_cancer"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pulmonary_metastases_respiratory_failure", "weight": 8 },
+        { "sign": "inferior_vena_cava_obstruction_from_massive_nodes", "weight": 7 },
+        { "sign": "brain_metastasis_neurological_deficit", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "TNM Stage I-III. Good, intermediate, poor prognosis per IGCCCG classification."
+    },
+    "historyFeatures": [
+      { "symptomId": "painless_testicular_mass_or_enlargement", "weight": 5 },
+      { "symptomId": "testicular_pain_dull_ache_or_heaviness", "weight": 3 },
+      { "symptomId": "scrotal_swelling_or_lump", "weight": 4 },
+      { "symptomId": "breast_tenderness_gynecomastia", "weight": 2, "note": "hCG-secreting tumors" },
+      { "symptomId": "back_pain_retroperitoneal_nodes", "weight": 3 },
+      { "symptomId": "cough_dyspnea_hemoptysis", "weight": 3, "note": "Lung metastases" },
+      { "symptomId": "cryptorchidism_history", "weight": 4 },
+      { "symptomId": "contralateral_testicular_atrophy", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "palpable_testicular_mass_firm_hard_nontender", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "testis_elevated_pain_negative", "baseWeight": 3 },
+      { "signId": "transillumination_negative_solid", "baseWeight": 3 },
+      { "signId": "supraclavicular_lymphadenopathy", "baseWeight": 3 },
+      { "signId": "abdominal_mass_retroperitoneal", "baseWeight": 3 },
+      { "signId": "gynecomastia", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "cryptorchidism_undescended_testis", "multiplier": 5.0 },
+      { "id": "family_history_testicular_cancer", "multiplier": 4.0 },
+      { "id": "contralateral_testicular_tumor", "multiplier": 10.0 },
+      { "id": "age_20_34", "multiplier": 3.0 },
+      { "id": "carcinoma_in_situ_intratubular_germ_cell_neoplasia", "multiplier": 10.0 },
+      { "id": "klinefelter_syndrome_mediastinal_germ_cell", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "seminoma",
+        "name": "Seminoma",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "homogeneous_divided_by_fibrous_septa", "weight": 4 },
+          { "feature": "plap_alkaline_phosphatase_positive", "weight": 4 },
+          { "feature": "radiosensitive_and_chemosensitive", "weight": 5 },
+          { "feature": "normal_afp_never_elevated", "weight": 5 },
+          { "feature": "hcg_may_be_elevated", "weight": 3 }
+        ],
+        "management": "Radical inguinal orchiectomy. Stage I: surveillance (classic) or single-dose carboplatin (AUC 7) or para-aortic RT (infrequently). Stage II: chemotherapy (BEP x 3 or EP x 4). Advanced: BEP x 3-4. Excellent prognosis."
+      },
+      {
+        "id": "non_seminomatous_germ_cell_tumor",
+        "name": "Non-Seminomatous Germ Cell Tumor (NSGCT)",
+        "prevalenceModifier": 0.45,
+        "keyFeatures": [
+          { "feature": "mixed_histology_teratoma_yolk_sac_chorio_embryonal", "weight": 5 },
+          { "feature": "afp_and_or_hcg_elevated", "weight": 5 },
+          { "feature": "more_aggressive_than_seminoma", "weight": 4 }
+        ],
+        "management": "Radical inguinal orchiectomy + tumor markers. Stage I: risk-adapted (surveillance for low-risk, RPLND or BEP x 1-2 for high-risk lymphovascular invasion). Stage II: primary RPLND or BEP x 3. Advanced: BEP x 3-4 (good/intermediate), VIP/BEP x 4 (poor). Post-chemo RPLND for residual masses."
+      },
+      {
+        "id": "burned_out_testicular_cancer",
+        "name": "Regressed (Burned-Out) Testicular Tumor",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "extragonadal_germ_cell_presentation", "weight": 4 },
+          { "feature": "retroperitoneal_or_mediastinal_mass", "weight": 4 },
+          { "feature": "testicular_scar_or_calcification_on_ultrasound", "weight": 3 }
+        ],
+        "management": "Treat based on histology and markers (same chemo as for testicular primary). Orchiectomy if contralateral testis or ultrasound abnormality."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "hydrocele", "discriminators": ["cystic_transilluminates", "can_get_above_mass", "ultrasound_fluid_only"] },
+      { "diseaseId": "epididymitis", "discriminators": ["pain_gradual", "tender_epididymis", "pyuria", "responds_to_antibiotics"] },
+      { "diseaseId": "varicocele", "discriminators": ["bag_of_worms_feeling", "decompresses_on_supine", "no_solid_mass"] },
+      { "diseaseId": "testicular_torsion", "discriminators": ["acute_sudden_pain", "sick_appearance", "absent_flow_on_doppler"] },
+      { "diseaseId": "spermatocele", "discriminators": ["cystic_at_epididymal_head", "transilluminates", "separate_from_testis"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Tumor markers: AFP, hCG, LDH", "priority": "immediate", "yield": 0.85, "indication": "diagnosis, subtype, prognosis (IGCCCG), monitoring" },
+        { "name": "hCG", "priority": "high", "yield": 0.7, "indication": "elevated in choriocarcinoma and some seminoma" },
+        { "name": "AFP", "priority": "high", "yield": 0.6, "indication": "elevated in NSGCT (yolk sac, embryonal); NEVER in pure seminoma" },
+        { "name": "LDH", "priority": "high", "yield": 0.5, "indication": "tumor burden marker" }
+      ],
+      "imaging": [
+        { "name": "Scrotal Ultrasound (7.5-10 MHz probe)", "priority": "first-line", "yield": 0.95, "indication": "intratesticular vs extratesticular lesion, vascularity, contralateral testis" },
+        { "name": "CT Chest/Abdomen/Pelvis with contrast", "priority": "staging", "yield": 0.9, "indication": "retroperitoneal and pulmonary metastases" },
+        { "name": "MRI Brain", "priority": "if neurological symptoms", "yield": 0.5, "indication": "brain metastases (especially choriocarcinoma)" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/EAU Guidelines for Testicular Cancer",
+      "pathways": [
+        {
+          "severity": "stage I seminoma",
+          "criteria": "confined to testis, normal markers",
+          "treatment": "Radical inguinal orchiectomy. Surveillance (CT q3-4m x 2y, q6m x 3y, annually to 10y) OR single-dose carboplatin AUC 7 OR para-aortic RT 20 Gy. Cure rate >99%."
+        },
+        {
+          "severity": "stage I NSGCT",
+          "criteria": "confined to testis, markers may be elevated",
+          "treatment": "Orchiectomy. Surveillance (low-risk: no LVI) OR RPLND (high-risk: LVI present) OR BEP x 1-2 cycles. Cure rate >98%."
+        },
+        {
+          "severity": "stage II/III - good prognosis",
+          "criteria": "IGCCCG good: testis primary, AFP <1000, hCG <5000, LDH <1.5x ULN, non-pulmonary visceral metastases negative",
+          "treatment": "BEP x 3 cycles (bleomycin, etoposide, cisplatin). Post-chemo RPLND if residual mass >1cm with negative markers."
+        },
+        {
+          "severity": "intermediate/poor prognosis",
+          "criteria": "IGCCCG intermediate or poor: AFP 1000-10000, hCG 5000-50000, non-pulmonary visceral mets, mediastinal primary",
+          "treatment": "BEP x 4 cycles or VIP x 4. Poor: BEP x 4. Post-chemo surgery for residual masses. High-dose chemo with SCT for relapsed/refractory."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "intratubular_germ_cell_neoplasia_in_situ",
+      "isochromosome_12p_i_12p_pathognomonic",
+      "germ_cell_maturation_along_seminomatous_or_nonseminomatous_pathway",
+      "trophoblastic_differentiation_produces_hcg",
+      "yolk_sac_differentiation_produces_afp",
+      "lymphatic_spread_to_retroperitoneal_nodes_first",
+      "hematogenous_spread_to_lungs_liver_bone_brain"
+    ],
+    "complications": [
+      { "diseaseId": "retroperitoneal_lymphadenopathy", "probability": 0.3, "severityBoost": 0.2, "clues": ["back_pain", "ureteric_obstruction", "palpable_mass_on_ct"] },
+      { "diseaseId": "bleomycin_pulmonary_toxicity", "probability": 0.05, "severityBoost": 0.4, "clues": ["dry_cough_dyspnea", "pulmonary_infiltrates", "decreased_dlco", "cumulative_dose_300_units"] },
+      { "diseaseId": "infertility_from_cisplatin", "probability": 0.3, "severityBoost": 0.2, "clues": ["sperm_analysis", "desire_for_fertility", "pre_chemo_sperm_banking"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["painless_testicular_mass", "young_adult_male", "elevated_afp_hcg_ldh", "cryptorchidism_history"],
+    "exclusionClues": ["extratesticular_lesion_on_uss", "normal_biopsy", "resolving_infectious_epididymitis"]
+  }
+}

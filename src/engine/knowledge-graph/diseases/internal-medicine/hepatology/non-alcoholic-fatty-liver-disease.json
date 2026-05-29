@@ -1,0 +1,232 @@
+{
+  "disease": {
+    "id": "non_alcoholic_fatty_liver_disease",
+    "name": "Non-Alcoholic Fatty Liver Disease (NAFLD/NASH)",
+    "system": "hepatology",
+    "agePeak_months": [480, 720],
+    "note": "Hepatic manifestation of metabolic syndrome. Spectrum from simple steatosis (NAFL) through steatohepatitis (NASH) to cirrhosis. Leading cause of chronic liver disease worldwide. Rebranded as MAFLD (Metabolic dysfunction-Associated Fatty Liver Disease).",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["liver", "metabolic", "steatosis", "steatohepatitis", "chronic_liver_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "decompensated_cirrhosis_ascites_encephalopathy_varices", "weight": 10 },
+        { "sign": "acute_on_chronic_liver_failure", "weight": 10 },
+        { "sign": "hepatorenal_syndrome", "weight": 9 },
+        { "sign": "hepatocellular_carcinoma_suspected", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "nash_with_bridging_fibrosis_f3": true,
+        "cirrhosis_f4": true,
+        "fib_4_score_greater_than_2_67": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "simple_steatosis_nafl": true,
+        "fib_4_less_than_1_3": true,
+        "no_significant_fibrosis": true
+      },
+      "severityLabel": "NASH cirrhosis decompensation -> EMERGENCY; F3-F4 fibrosis -> URGENT management; F0-F2 -> OUTPATIENT lifestyle intervention"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "vague_right_upper_quadrant_discomfort", "weight": 2 },
+      { "symptomId": "weight_gain_obesity", "weight": 4 },
+      { "symptomId": "sedentary_lifestyle", "weight": 3 },
+      { "symptomId": "history_of_diabetes_type_2", "weight": 4 },
+      { "symptomId": "history_of_dyslipidemia", "weight": 3 },
+      { "symptomId": "history_of_hypertension", "weight": 3 },
+      { "symptomId": "metabolic_syndrome_features", "weight": 4 },
+      { "symptomId": "polycystic_ovary_syndrome_women", "weight": 2 },
+      { "symptomId": "obstructive_sleep_apnea", "weight": 2 },
+      { "symptomId": "no_significant_alcohol_history", "weight": 5, "note": "Defined as <20g/day women, <30g/day men" },
+      { "symptomId": "family_history_of_nash_or_cryptogenic_cirrhosis", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hepatomegaly", "baseWeight": 4 },
+      { "signId": "abdominal_obesity_central", "baseWeight": 3 },
+      { "signId": "acanthosis_nigricans", "baseWeight": 2, "note": "Insulin resistance marker" },
+      { "signId": "features_of_metabolic_syndrome", "baseWeight": 3 },
+      { "signId": "stigmata_of_chronic_liver_disease", "baseWeight": 3, "note": "Only in advanced fibrosis/cirrhosis" },
+      { "signId": "splenomegaly", "baseWeight": 2, "note": "If portal hypertension" },
+      { "signId": "ascites_peripheral_edema", "baseWeight": 3, "note": "If decompensated" }
+    ],
+
+    "riskFactors": [
+      { "id": "obesity_bmi_greater_than_30", "multiplier": 4.0 },
+      { "id": "type_2_diabetes_mellitus", "multiplier": 3.5 },
+      { "id": "metabolic_syndrome", "multiplier": 3.0 },
+      { "id": "dyslipidemia_hypertriglyceridemia_low_hdl", "multiplier": 2.5 },
+      { "id": "hypertension", "multiplier": 2.0 },
+      { "id": "pnpla3_rs738409_genetic_variant", "multiplier": 2.0 },
+      { "id": "tm6sf2_genetic_variant", "multiplier": 1.5 },
+      { "id": "polycystic_ovary_syndrome", "multiplier": 2.0 },
+      { "id": "obstructive_sleep_apnea", "multiplier": 1.5 },
+      { "id": "rapid_weight_loss_or_starvation", "multiplier": 1.5 },
+      { "id": "western_diet_high_fructose_saturated_fat", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "simple_steatosis_nafl",
+        "name": "Non-Alcoholic Fatty Liver (NAFL)",
+        "note": "Steatosis in >5% of hepatocytes without ballooning or inflammation. Generally non-progressive or slowly progressive. Low risk of cirrhosis."
+      },
+      {
+        "id": "nash_f0_f2",
+        "name": "NASH without significant fibrosis (F0-F2)",
+        "note": "Steatosis + lobular inflammation + hepatocyte ballooning. Active steatohepatitis with potential for fibrosis progression. Intervention window."
+      },
+      {
+        "id": "nash_f3_f4",
+        "name": "NASH with advanced fibrosis (F3) or compensated cirrhosis (F4)",
+        "note": "Bridging fibrosis or cirrhosis. High risk of decompensation and HCC. Intensive management and surveillance required."
+      },
+      {
+        "id": "nash_cryptogenic_cirrhosis",
+        "name": "NASH-related Cirrhosis (inactive, 'burnt-out' NASH)",
+        "note": "End-stage NASH where features of steatohepatitis may regress. Often labeled cryptogenic cirrhosis. Persistent risk of HCC even without steatosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "alcoholic_liver_disease",
+        "discriminators": ["significant_alcohol_history_greater_than_20g_women_30g_men", "ast_alt_ratio_greater_than_1_5_often", "elevated_ggt_more_disproportionate", "mcv_elevated_macrocytosis"]
+      },
+      {
+        "diseaseId": "chronic_hepatitis_c_genotype_3",
+        "discriminators": ["anti_hcv_positive", "hcv_rna_positive", "parenteral_risk_factors", "genotype_3_steatosis"]
+      },
+      {
+        "diseaseId": "drug_induced_steatosis",
+        "discriminators": ["drug_exposure_amiodarone_methotrexate_valproate_tamoxifen", "dose_dependent", "temporal_relationship"]
+      },
+      {
+        "diseaseId": "autoimmune_hepatitis",
+        "discriminators": ["a_na_anti_smooth_muscle_antibody", "igg_elevated", "female", "elevated_transaminases_alt_ast", "interface_hepatitis_on_biopsy"]
+      },
+      {
+        "diseaseId": "hemochromatosis",
+        "discriminators": ["elevated_transferrin_saturation", "elevated_ferritin", "c282y_mutation", "hepatic_iron_deposition"]
+      },
+      {
+        "diseaseId": "wilson_disease",
+        "discriminators": ["younger_age", "neurologic_symptoms", "kayser_fleischer_rings", "low_ceruloplasmin"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Waist circumference measurement", "priority": "medium", "yield": 0.5, "indication": "central obesity assessment, metabolic syndrome criterion" }
+      ],
+      "laboratory": [
+        { "name": "LFTs (ALT, AST, GGT, ALP, bilirubin)", "priority": "high", "yield": 0.7, "indication": "ALT typically > AST in early NAFLD (ratio reverses with fibrosis); GGT elevated" },
+        { "name": "FBC with platelets", "priority": "high", "yield": 0.5, "indication": "thrombocytopenia suggests advanced fibrosis" },
+        { "name": "Fasting glucose and HbA1c", "priority": "high", "yield": 0.6, "indication": "screen for prediabetes/diabetes" },
+        { "name": "Fasting lipid profile", "priority": "high", "yield": 0.5, "indication": "hypertriglyceridemia, low HDL" },
+        { "name": "Serum albumin", "priority": "high", "yield": 0.4, "indication": "synthetic function decreases with advanced disease" },
+        { "name": "INR", "priority": "high", "yield": 0.4, "indication": "synthetic function; prolonged in advanced fibrosis/cirrhosis" },
+        { "name": "Serum ferritin", "priority": "medium", "yield": 0.4, "indication": "often elevated in NASH (not iron overload); >1.5x ULN suggests advanced fibrosis" },
+        { "name": "FIB-4 score [(Age x AST) / (Platelets x sqrt(ALT))]", "priority": "high", "yield": 0.85, "indication": "non-invasive fibrosis score; <1.3 excludes advanced fibrosis; >2.67 suggests advanced fibrosis" },
+        { "name": "NAFLD Fibrosis Score (NFS)", "priority": "high", "yield": 0.85, "indication": "validated score using age, BMI, IFG/diabetes, AST/ALT ratio, albumin, platelets" },
+        { "name": "AST to Platelet Ratio Index (APRI)", "priority": "high", "yield": 0.75, "indication": "alternative fibrosis assessment" },
+        { "name": "Enhanced Liver Fibrosis (ELF) panel", "priority": "medium", "yield": 0.9, "indication": "Hypertension, PIIINP, TIMP1; proprietary advanced fibrosis marker" },
+        { "name": "Hepatitis B/C serology", "priority": "high", "yield": 0.2, "indication": "rule out viral hepatitis" },
+        { "name": "Anti-mitochondrial antibody, ANA, anti-smooth muscle", "priority": "medium", "yield": 0.1, "indication": "rule out autoimmune/PBC if clinical suspicion" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.7, "indication": "detect steatosis (bright liver echo), hepatomegaly, splenomegaly; HCC screening if advanced" },
+        { "name": "Transient elastography (FibroScan) with CAP (Controlled Attenuation Parameter)", "priority": "high", "yield": 0.9, "indication": "quantify steatosis (CAP) and fibrosis (LSM); primary non-invasive test for NAFLD" },
+        { "name": "MRI-PDFF (Proton Density Fat Fraction)", "priority": "medium", "yield": 0.95, "indication": "most accurate non-invasive steatosis quantification; research/clinical trial use" },
+        { "name": "MR elastography", "priority": "medium", "yield": 0.9, "indication": "accurate fibrosis assessment; alternatives to FibroScan" },
+        { "name": "CT abdomen (non-contrast)", "priority": "low", "yield": 0.5, "indication": "liver density <40 HU suggests steatosis; radiation exposure limits repeated use" },
+        { "name": "Liver biopsy", "priority": "selected", "yield": 0.97, "indication": "gold standard for NASH diagnosis (steatosis + ballooning + inflammation); reserved for atypical cases, discordant non-invasive tests, or clinical trials. Histologic activity scoring via SAF or NAS." }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines: NAFLD/NASH; EASL-EASD-EASO Clinical Practice Guidelines: NAFLD",
+      "pathways": [
+        {
+          "severity": "simple_steatosis_nafl_f0_f1",
+          "criteria": "Steatosis on imaging or biopsy, no ballooning, minimal/no fibrosis, FIB-4 <1.3",
+          "treatment": "Lifestyle modification: weight loss 7-10% of body weight (optimal). Mediterranean diet (reduce fructose, saturated fats, processed foods). Aerobic exercise ≥150 min/week + resistance training. Treat metabolic syndrome components (optimize glycemic control, lipid management, blood pressure). Metformin if diabetes (no direct liver benefit from metformin alone). Vitamin E 800 IU/day not routinely indicated (only biopsy-proven NASH without diabetes). Reassess with LFTs and FIB-4 in 1-2 years."
+        },
+        {
+          "severity": "nash_without_advanced_fibrosis_f2",
+          "criteria": "Biopsy-proven NASH or high clinical suspicion, stage F0-F2 fibrosis, FIB-4 1.3-2.67",
+          "treatment": "Intensive lifestyle intervention (target weight loss >7-10%). Vitamin E 800 IU PO daily if non-diabetic with biopsy-proven NASH. Pioglitazone 30-45mg PO daily if diabetic or non-diabetic with NASH (benefits vs weight gain, edema, fractures). GLP-1 receptor agonists (semaglutide, liraglutide) improve steatohepatitis in clinical trials; consider if diabetic + NASH. Monitor ALT and FIB-4 q6-12m. Repeat FibroScan q2-3 years."
+        },
+        {
+          "severity": "nash_with_advanced_fibrosis_f3_f4_compensated",
+          "criteria": "FIB-4 >2.67, NFS >0.676, FibroScan LSM >12 kPa, F3-F4 on biopsy or elastography",
+          "treatment": "Intensive metabolic optimization. Vitamin E 800 IU/day (non-diabetic, biopsy-proven NASH). Pioglitazone 30mg/day (if diabetic/biopsy NASH). Consider obeticholic acid 10-25mg/day (OCA, FALCON trial data; FDA approved for NASH with fibrosis in some regions; monitor pruritus). Consider resmetirom (Rezdiffra) 80-100mg PO daily if F2-F3 (FDA approved 2024). HCC surveillance US + AFP q6m. Variceal screening EGD. Manage decompensation risk. Monitor for liver-related outcomes. Transplant evaluation if further progression."
+        },
+        {
+          "severity": "nash_cirrhosis_decompensated",
+          "criteria": "Child-Pugh B/C, ascites, variceal bleed, encephalopathy, jaundice",
+          "treatment": "Decompensation management (diuretics, lactulose, rifaximin, variceal banding) as per cirrhosis pathway. Transplant evaluation. DAAs if HCV present. Limit vitamin E (not proven in decompensated). Avoid obeticholic acid in decompensated (worsens liver function). Address metabolic comorbidities. Nutrition assessment and support. Weight management post-transplant."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "caloric_excess_and_sedentary_lifestyle",
+      "insulin_resistance_and_hyperinsulinemia",
+      "increased_free_fatty_acid_flux_from_adipose_tissue",
+      "hepatic_de_novo_lipogenesis",
+      "triglyceride_accumulation_in_hepatocytes_steatosis",
+      "lipotoxicity_from_free_fatty_acids_and_lipid_intermediates",
+      "mitochondrial_dysfunction_and_reactive_oxygen_species",
+      "endoplasmic_reticulum_stress",
+      "inflammasome_activation_nlrp3",
+      "hepatocyte_ballooning_and_cell_death",
+      "kupffer_cell_and_hepatic_stellate_cell_activation",
+      "collagen_deposition_and_fibrosis",
+      "cirrhosis_and_hepatocellular_carcinoma"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cirrhosis",
+        "probability": 0.15,
+        "lagYears": [15, 30],
+        "severityBoost": 0.6,
+        "clues": ["advanced_fibrosis_on_elastography", "thrombocytopenia", "fib_4_greater_than_2_67", "splenomegaly"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["cirrhosis_present", "rising_afp", "new_liver_mass", "obesity_diabetes", "can_occur_without_cirrhosis_in_nash"]
+      },
+      {
+        "diseaseId": "type_2_diabetes_mellitus",
+        "probability": 0.4,
+        "severityBoost": 0.3,
+        "clues": ["hba1c_elevated", "fasting_hyperglycemia", "insulin_resistance"]
+      },
+      {
+        "diseaseId": "cardiovascular_disease",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["shared_metabolic_risk_factors", "increased_cimt", "coronary_artery_calcification"]
+      },
+      {
+        "diseaseId": "obstructive_sleep_apnea",
+        "probability": 0.3,
+        "severityBoost": 0.1,
+        "clues": ["obesity", "snoring", "daytime_somnolence", "nocturnal_hypoxia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low for simple steatosis; medium for NASH F3-F4; high for decompensated",
+    "diagnosticClues": ["metabolic_syndrome_features", "elevated_alt_ggt", "steatosis_on_imaging", "no_significant_alcohol_history", "fib_4_score"],
+    "exclusionClues": ["significant_alcohol_history", "viral_hepatitis_serology_positive", "other_defined_liver_disease_etiology", "no_steatosis_on_imaging"]
+  }
+}

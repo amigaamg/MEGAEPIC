@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "acute_heart_failure",
+    "name": "Acute Heart Failure",
+    "system": "CARD",
+    "agePeak_months": [600, 1080],
+    "note": "Rapid onset or worsening of heart failure symptoms requiring urgent therapy. Life-threatening condition.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["cardiac_emergency", "acute_pulmonary_oedema", "heart_failure"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "refractory_hypoxia", "weight": 9 },
+        { "sign": "decreased_consciousness", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If respiratory failure/shock/hypoxia -> SEVERE ADHF; else -> MILD-MODERATE ADHF"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_severe_dyspnea", "weight": 5 },
+      { "symptomId": "orthopnea", "weight": 4 },
+      { "symptomId": "paroxysmal_nocturnal_dyspnea", "weight": 4 },
+      { "symptomId": "cough_with_frothy_sputum", "weight": 4 },
+      { "symptomId": "chest_discomfort", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "precipitating_factor", "weight": 3, "note": "Infection, arrhythmia, noncompliance, ischemia" }
+    ],
+    "examFeatures": [
+      { "signId": "severe_tachypnea", "baseWeight": 4 },
+      { "signId": "crackles_up_to_apices", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "jugular_venous_distension", "baseWeight": 4 },
+      { "signId": "peripheral_oedema", "baseWeight": 3 },
+      { "signId": "hypotension_or_hypertension", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "s3_gallop", "baseWeight": 4 },
+      { "signId": "cool_clammy_skin", "baseWeight": 3 },
+      { "signId": "cyanosis", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "prior_hf", "multiplier": 3.0 },
+      { "id": "medication_nonadherence", "multiplier": 2.5 },
+      { "id": "recent_ischemia", "multiplier": 2.0 },
+      { "id": "infection", "multiplier": 2.0 },
+      { "id": "arrhythmia_especially_af", "multiplier": 2.0 },
+      { "id": "renal_failure", "multiplier": 1.8 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_pulmonary_oedema",
+        "name": "Acute Pulmonary Oedema",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "severe_dyspnea_at_rest", "weight": 5 },
+          { "feature": "frothy_sputum", "weight": 5 },
+          { "feature": "crackles_all_fields", "weight": 5 }
+        ],
+        "management": "IV furosemide 80 mg. CPAP/BiPAP. IV nitroglycerin if BP adequate. Morphine 2-4 mg IV for distress."
+      },
+      {
+        "id": "acute_decompensated_hf",
+        "name": "Acutely Decompensated Heart Failure",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "gradual_worsening_congestion", "weight": 5 },
+          { "feature": "weight_gain", "weight": 4 },
+          { "feature": "increasing_dyspnea", "weight": 4 }
+        ],
+        "management": "IV furosemide 40-80 mg. Optimize oral HF medications. Identify and treat precipitant. Monitor daily weight and UO."
+      },
+      {
+        "id": "cardiogenic_shock",
+        "name": "Cardiogenic Shock",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "hypotension_sbp_less_90", "weight": 5 },
+          { "feature": "cold_peripheries", "weight": 5 },
+          { "feature": "oliguria", "weight": 5 }
+        ],
+        "management": "IV inotropes (dobutamine). Vasopressors (norepinephrine). IABP. Urgent revascularization if ischemic. ICU admission."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "copd_exacerbation", "discriminators": ["chronic_cough", "hyperinflation", "smoking", "normal_bnp"] },
+      { "diseaseId": "pulmonary_embolism", "discriminators": ["pleuritic_pain", "dvt", "right_heart_strain"] },
+      { "diseaseId": "pneumonia", "discriminators": ["fever", "productive_cough", "consolidation_cxr"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.8, "indication": "continuous monitoring" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "ischemia, arrhythmia" }
+      ],
+      "laboratory": [
+        { "name": "BNP/NT-proBNP", "priority": "immediate", "yield": 0.9, "indication": "confirm acute HF" },
+        { "name": "Troponin", "priority": "high", "yield": 0.5, "indication": "rule out ACS" },
+        { "name": "ABG", "priority": "high", "yield": 0.7, "indication": "hypoxia, acidosis assessment" },
+        { "name": "U&E, Cr, LFT", "priority": "high", "yield": 0.5, "indication": "end-organ function" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.85, "indication": "pulmonary congestion, cardiomegaly, effusion" },
+        { "name": "Echocardiography", "priority": "high", "yield": 0.9, "indication": "urgent if shock or suspected mechanical complication" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Acute Heart Failure",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "dyspnea on minimal exertion, saturations >90%, BP >100 systolic",
+          "treatment": "IV furosemide 40-80 mg. Oxygen to SpO2 >92%. Monitor UO. Identify precipitant. Continue oral HF therapy."
+        },
+        {
+          "severity": "severe - pulmonary oedema",
+          "criteria": "severe dyspnea at rest, SpO2 <90%, widespread crackles",
+          "treatment": "IV furosemide 80-120 mg. CPAP/BiPAP immediately. IV nitroglycerin infusion if SBP >110. Consider morphine. ICU admission if refractory."
+        },
+        {
+          "severity": "cardiogenic shock",
+          "criteria": "SBP <90, cold peripheries, oliguria, altered mental status",
+          "treatment": "Inotropes (dobutamine 2.5-10 mcg/kg/min). Vasopressors (norepinephrine). IABP if refractory. Urgent revascularization. ICU admission."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "rapid_fluid_overload",
+      "increased_filling_pressures",
+      "pulmonary_venous_congestion",
+      "alveolar_oedema",
+      "reduced_cardiac_output",
+      "tissue_hypoperfusion"
+    ],
+    "complications": [
+      { "diseaseId": "respiratory_failure", "probability": 0.2, "severityBoost": 0.5, "clues": ["refractory_hypoxia", "hypercapnia", "exhaustion"] },
+      { "diseaseId": "cardiogenic_shock", "probability": 0.1, "severityBoost": 0.5, "clues": ["hypotension", "oliguria", "cold_peripheries"] },
+      { "diseaseId": "cardiorenal_syndrome", "probability": 0.15, "severityBoost": 0.3, "clues": ["rising_creatinine", "refractory_congestion"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_dyspnea_orthopnea", "crackles_jvd_oedema", "raised_bnp"],
+    "exclusionClues": ["normal_bnp", "clear_cxr", "alternative_cause_dyspnea"]
+  }
+}

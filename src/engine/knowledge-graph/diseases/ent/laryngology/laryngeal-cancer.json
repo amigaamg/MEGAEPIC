@@ -1,0 +1,212 @@
+{
+  "disease": {
+    "id": "laryngeal_cancer",
+    "name": "Laryngeal Squamous Cell Carcinoma",
+    "system": "ent",
+    "agePeak_months": [600, 960],
+    "note": "Malignancy of the larynx, predominantly squamous cell carcinoma. Strongly associated with smoking and alcohol. Glottic cancers present early; supraglottic cancers present late.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["hoarseness", "stridor", "dysphagia", "neck_mass"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stridor", "weight": 10 },
+        { "sign": "respiratory_distress", "weight": 10 },
+        { "sign": "airway_obstruction", "weight": 10 },
+        { "sign": "hemoptysis_massive", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "airway_compromise", "weight": 9 },
+          { "sign": "fixation_vocal_cord", "weight": 8 },
+          { "sign": "neck_lymph_node_metastasis", "weight": 7 },
+          { "sign": "weight_loss_significant", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If airway compromise/advanced T stage/metastasis -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hoarseness_persistent", "weight": 5, "modifiers": [
+          { "condition": "over_3_weeks_smoker", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "dysphagia", "weight": 4, "note": "More common in supraglottic and transglottic tumors" },
+      { "symptomId": "stridor", "weight": 4, "note": "Late sign - indicates airway compromise" },
+      { "symptomId": "cough", "weight": 2 },
+      { "symptomId": "hemoptysis", "weight": 3 },
+      { "symptomId": "otalgia_referred", "weight": 3, "note": "Referred pain via vagus nerve" },
+      { "symptomId": "neck_mass", "weight": 4, "note": "Cervical lymph node metastasis" },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "smoking_history", "weight": 5 },
+      { "symptomId": "alcohol_use", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "vocal_cord_leukoplakia_erythroplakia", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "vocal_cord_immobility_fixation", "baseWeight": 5 },
+      { "signId": "supraglottic_mass", "baseWeight": 4 },
+      { "signId": "cervical_lymphadenopathy", "baseWeight": 4 },
+      { "signId": "stridor_wheeze", "baseWeight": 4 },
+      { "signId": "globular_mass_on_flexible_laryngoscopy", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking_current", "multiplier": 6.0 },
+      { "id": "alcohol_abuse", "multiplier": 3.0 },
+      { "id": "combined_smoking_alcohol", "multiplier": 12.0 },
+      { "id": "hpv_infection", "multiplier": 1.5 },
+      { "id": "asbestos_exposure", "multiplier": 2.0 },
+      { "id": "male_gender", "multiplier": 4.0 },
+      { "id": "age_over_50", "multiplier": 5.0 },
+      { "id": "laryngopharyngeal_reflux", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "glottic_cancer",
+        "name": "Glottic Carcinoma",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "hoarseness_early", "weight": 5 },
+          { "feature": "anterior_commissure_involvement", "weight": 3 },
+          { "feature": "late_lymph_node_metastasis", "weight": 3 }
+        ],
+        "management": "T1-T2: Transoral laser microsurgery or radiotherapy. T3-T4: Total laryngectomy with or without chemoradiotherapy. Voice rehabilitation with TEP or electrolarynx."
+      },
+      {
+        "id": "supraglottic_cancer",
+        "name": "Supraglottic Carcinoma",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "dysphagia_early", "weight": 4 },
+          { "feature": "neck_metastases_early", "weight": 4 },
+          { "feature": "hoarseness_late", "weight": 3 },
+          { "feature": "otalgia", "weight": 3 }
+        ],
+        "management": "Early: Supraglottic laryngectomy or radiotherapy. Advanced: Chemoradiotherapy (organ preservation) or total laryngectomy + bilateral neck dissection. Adjuvant radiotherapy if high-risk features."
+      },
+      {
+        "id": "subglottic_cancer",
+        "name": "Subglottic Carcinoma",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "dyspnea_stridor", "weight": 5 },
+          { "feature": "hoarseness_late", "weight": 3 },
+          { "feature": "subglottic_mass_on_endoscopy", "weight": 5 }
+        ],
+        "management": "Total laryngectomy + thyroidectomy + tracheoesophageal puncture. Adjuvant radiotherapy. Paratracheal lymph node dissection."
+      },
+      {
+        "id": "transglottic_cancer",
+        "name": "Transglottic Carcinoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "tumor_crossing_ventricle", "weight": 5 },
+          { "feature": "vocal_cord_fixation", "weight": 4 },
+          { "feature": "advanced_stage_presentation", "weight": 4 }
+        ],
+        "management": "Total laryngectomy + neck dissection + adjuvant chemoradiotherapy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "chronic_laryngitis",
+        "discriminators": ["bilateral_symmetric", "vocal_abuse_history", "improves_with_voice_rest", "no_progressive_worsening"]
+      },
+      {
+        "diseaseId": "vocal_cord_nodules",
+        "discriminators": ["bilateral", "younger_age", "lowest_at_third", "no_leukoplakia"]
+      },
+      {
+        "diseaseId": "laryngeal_tuberculosis",
+        "discriminators": ["pulmonary_symptoms", "exuberant_granulation", "culture_positive"]
+      },
+      {
+        "diseaseId": "laryngeal_papillomatosis",
+        "discriminators": ["younger_age", "multiple_papillary_lesions", "HPV_related"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Flexible Nasolaryngoscopy", "priority": "immediate", "yield": 0.9, "indication": "all suspected laryngeal cancers" }
+      ],
+      "laboratory": [
+        { "name": "Biopsy under Microlaryngoscopy", "priority": "high", "yield": 1.0, "indication": "definitive diagnosis" },
+        { "name": "HPV/p16 Immunohistochemistry", "priority": "medium", "yield": 0.8, "indication": "prognostic information" }
+      ],
+      "imaging": [
+        { "name": "CT Neck with Contrast", "priority": "high", "yield": 0.85, "indication": "local extent, cartilage invasion, lymph node metastases" },
+        { "name": "MRI Neck", "priority": "medium", "yield": 0.85, "indication": "soft tissue detail, pre-epiglottic space invasion" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.9, "indication": "staging, detection of distant metastases and second primary" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.4, "indication": "screen for lung metastases or second primary" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines: Head and Neck Cancers (Laryngeal)",
+      "pathways": [
+        {
+          "severity": "early glottic (T1-T2)",
+          "criteria": "limited to vocal cords, mobile cord, N0",
+          "treatment": "Transoral laser microsurgery (TLM) or radiotherapy (66-70 Gy). Single modality. Voice quality preserved."
+        },
+        {
+          "severity": "locally advanced (T3-T4a)",
+          "criteria": "cord fixation, cartilage invasion, extralaryngeal spread",
+          "treatment": "Total laryngectomy + neck dissection + adjuvant radiotherapy. Organ preservation: Chemoradiotherapy (Cisplatin + RT 70 Gy) with close follow-up and salvage laryngectomy."
+        },
+        {
+          "severity": "metastatic (N+/M1)",
+          "criteria": "nodal metastases, distant spread",
+          "treatment": "Palliative: Chemotherapy (Cisplatin/5-FU/Cetuximab). Immunotherapy (Nivolumab/Pembrolizumab if PD-L1+). Palliative RT. Best supportive care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "field_cancerization",
+      "squamous_dysplasia",
+      "carcinoma_in_situ",
+      "invasive_carcinoma",
+      "lymphatic_and_distant_metastasis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "airway_obstruction",
+        "probability": 0.15,
+        "lagDays": [30, 365],
+        "severityBoost": 0.7,
+        "clues": ["stridor_progressive", "dyspnea", "tracheostomy_required"]
+      },
+      {
+        "diseaseId": "aspiration_pneumonia",
+        "probability": 0.1,
+        "lagDays": [30, 365],
+        "severityBoost": 0.3,
+        "clues": ["cough_after_swallowing", "recurrent_pneumonia", "dysphagia"]
+      },
+      {
+        "diseaseId": "pharyngocutaneous_fistula",
+        "probability": 0.1,
+        "lagDays": [7, 21],
+        "severityBoost": 0.3,
+        "clues": ["saliva_from_neck_wound", "fever", "erythema"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["persistent_hoarseness_smoker", "stridor", "neck_mass", "leukoplakia_erythroplakia"],
+    "exclusionClues": ["young_age", "non_smoker", "acute_onset", "bilateral_symmetric"]
+  }
+}

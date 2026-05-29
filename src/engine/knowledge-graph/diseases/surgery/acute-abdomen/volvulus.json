@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "volvulus",
+    "name": "Volvulus",
+    "system": "surgical",
+    "agePeak_months": [600, 960],
+    "note": "Twisting of bowel around its mesentery causing closed-loop obstruction. Sigmoid most common, then cecal volvulus.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["acute_abdomen", "bowel_obstruction", "abdominal_distension"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "strangulation_signs", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "lactate_elevated", "weight": 8 },
+          { "sign": "absent_bowel_sounds", "weight": 7 },
+          { "sign": "guarding_rigidity", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Peritonitis/strangulation -> SEVERE; uncompromised bowel -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "severe_colicky_abdominal_pain", "weight": 5 },
+      { "symptomId": "abdominal_distension", "weight": 5, "note": "Massive distension in sigmoid volvulus" },
+      { "symptomId": "constipation_obstipation", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3, "note": "Late in sigmoid, early in cecal volvulus" },
+      { "symptomId": "previous_episodes", "weight": 3, "note": "May have history of recurrent volvulus" },
+      { "symptomId": "chronic_constipation", "weight": 4, "note": "Common in elderly with redundant sigmoid" }
+    ],
+
+    "examFeatures": [
+      { "signId": "massive_abdominal_distension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tympanic_percussion", "baseWeight": 4 },
+      { "signId": "high_pitched_or_absent_bowel_sounds", "baseWeight": 4 },
+      { "signId": "guarding", "baseWeight": 3, "note": "Late sign indicating ischemia" },
+      { "signId": "palpable_loops", "baseWeight": 3 },
+      { "signId": "tachycardia_hypotension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 2.5 },
+      { "id": "chronic_constipation", "multiplier": 2.0 },
+      { "id": "high_fiber_diet_in_africa", "multiplier": 1.5, "note": "Dietary pattern risk in endemic regions" },
+      { "id": "previous_volvulus", "multiplier": 3.0 },
+      { "id": "megacolon", "multiplier": 2.5 },
+      { "id": "neurologic_disorders", "multiplier": 1.6 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "sigmoid_volvulus",
+        "name": "Sigmoid Volvulus",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "massive_abdominal_distension", "weight": 5 },
+          { "feature": "coffee_bean_sign_on_xray", "weight": 5 },
+          { "feature": "previous_episodes", "weight": 4 }
+        ],
+        "management": "Endoscopic detorsion (flexible sigmoidoscopy). Rectal tube placement. Elective sigmoid resection after decompression. Emergency surgery if peritonitis or failed endoscopic reduction."
+      },
+      {
+        "id": "cecal_volvulus",
+        "name": "Cecal Volvulus",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "right_lower_quadrant_pain", "weight": 5 },
+          { "feature": "distension_less_marked", "weight": 4 },
+          { "feature": "early_vomiting", "weight": 3 }
+        ],
+        "management": "Emergency laparotomy. Right hemicolectomy if non-viable. Cecopexy if viable. Endoscopic reduction less effective."
+      },
+      {
+        "id": "gastric_volvulus",
+        "name": "Gastric Volvulus",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "epigastric_distension", "weight": 5 },
+          { "feature": "retching_without_vomiting", "weight": 5 },
+          { "feature": "inability_to_pass_ng_tube", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy. Gastric derotation. Gastropexy. Repair of diaphragmatic defect if present."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bowel_obstruction_due_to_tumor",
+        "discriminators": ["gradual_onset", "weight_loss", "rectal_bleeding"]
+      },
+      {
+        "diseaseId": "acute_pancreatitis",
+        "discriminators": ["elevated_amylase", "pain_radiating_to_back", "no_coffee_bean_sign"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Abdominal X-Ray supine + erect", "priority": "immediate", "yield": 0.85, "indication": "coffee bean sign, bent inner tube sign" },
+        { "name": "Gastrografin enema", "priority": "medium", "yield": 0.9, "indication": "diagnostic and potentially therapeutic for sigmoid volvulus" }
+      ],
+      "laboratory": [
+        { "name": "Lactate", "priority": "high", "yield": 0.75, "indication": "elevated with ischemia" },
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leukocytosis with strangulation" },
+        { "name": "Electrolytes", "priority": "high", "yield": 0.5, "indication": "assess dehydration" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.95, "indication": "mesenteric swirl sign, bird beak sign" },
+        { "name": "Abdominal X-Ray", "priority": "immediate", "yield": 0.85, "indication": "first-line imaging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Volvulus Management",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "no peritonitis, no ischemia, sigmoid volvulus",
+          "treatment": "Endoscopic detorsion + rectal tube. Elective sigmoid resection within same admission. Bowel prep and single-stage resection with anastomosis."
+        },
+        {
+          "severity": "severe",
+          "criteria": "peritonitis, ischemia, gangrene, failed endoscopic reduction",
+          "treatment": "Emergency laparotomy. Resection of non-viable bowel. Hartmann procedure for sigmoid (if unprepared). Primary anastomosis if viable and prepared. ICU care."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bowel_torsion",
+      "closed_loop_obstruction",
+      "venous_compression",
+      "arterial_compromise",
+      "ischemia",
+      "gangrene",
+      "perforation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bowel_gangrene",
+        "probability": 0.2,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["peritonitis", "lactic_acidosis", "bloody_peritoneal_fluid"]
+      },
+      {
+        "diseaseId": "bowel_perforation",
+        "probability": 0.1,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["free_air", "worsening_sepsis", "generalized_peritonitis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["massive_distension", "coffee_bean_sign", "previous_episodes", "elderly_constipated_patient"],
+    "exclusionClues": ["diarrhea", "pain_relieved_by_flatus", "mild_distension"]
+  }
+}

@@ -479,6 +479,7 @@ export default function PatientRxCenter({
   hospitalName = "AMEXAN Medical Centre",
   doctorLicense = "",
 }: Props) {
+  return null;
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [schedules, setSchedules] = useState<MedSchedule[]>([]);
   const [adherenceRecords, setAdherenceRecords] = useState<AdherenceRecord[]>([]);
@@ -1099,7 +1100,7 @@ export default function PatientRxCenter({
       <style>{css}</style>
       <div className="rx-center" style={{ padding: "0 0 40px" }}>
         <NotifToast />
-        {showDetail && selectedRx && <MedDetailModal rx={selectedRx} />}
+        {showDetail && selectedRx && <MedDetailModal rx={selectedRx!} />}
 
         {/* ── HEADER HERO ── */}
         <div style={{

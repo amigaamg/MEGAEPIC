@@ -1,0 +1,116 @@
+{
+  "disease": {
+    "id": "fracture-clavicle",
+    "name": "Clavicle Fracture",
+    "system": "ORTHO",
+    "agePeak_months": [120, 480],
+    "note": "Common fracture in children and young adults. Middle third most common. Usually falls onto shoulder or outstretched hand. Good healing with conservative management.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["upper_limb_fracture", "shoulder_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture", "weight": 10 },
+        { "sign": "vascular_injury_subclavian", "weight": 10 },
+        { "sign": "brachial_plexus_injury", "weight": 9 },
+        { "sign": "skin_compromise", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "displaced_fracture_with_skin_risk", "weight": 7 },
+          { "sign": "lateral_third_with_cc_ligament_injury", "weight": 6 },
+          { "sign": "neurovascular_deficit", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If open fracture, neurovascular compromise, or skin tenting -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fall_onto_shoulder_or_hand", "weight": 5 },
+      { "symptomId": "shoulder_pain", "weight": 5 },
+      { "symptomId": "difficulty_raising_arm", "weight": 4 },
+      { "symptomId": "hearing_or_feeling_snap", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "clavicle_deformity_bump", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tenderness_over_clavicle", "baseWeight": 5 },
+      { "signId": "ecchymosis_swelling", "baseWeight": 3 },
+      { "signId": "shoulder_drooping_downward", "baseWeight": 3 },
+      { "signId": "crepitus_on_movement", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "contact_sports", "multiplier": 2.5 },
+      { "id": "osteoporosis", "multiplier": 2.0 },
+      { "id": "pediatric_age", "multiplier": 2.0 },
+      { "id": "road_traffic_accident", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "middle_third",
+        "name": "Middle Third Clavicle Fracture (Most Common)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "fracture_middle_third", "weight": 5 },
+          { "feature": "minimal_displacement", "weight": 3 }
+        ],
+        "management": "Sling for 2-4 weeks (children) or 6-8 weeks (adults). Figure-of-8 bandage optional. Range of motion exercises after 2 weeks. Union expected."
+      },
+      {
+        "id": "lateral_third",
+        "name": "Lateral Third Clavicle Fracture",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "fracture_lateral_to_coracoclavicular_ligaments", "weight": 5 },
+          { "feature": "displaced_neer_type_2_requires_ORIF", "weight": 4 }
+        ],
+        "management": "Non-displaced: sling. Displaced (Neer type 2): ORIF with hook plate or suture fixation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acromioclavicular_joint_separation",
+        "discriminators": ["pain_at_acromioclavicular_joint", "piano_key_sign", "normal_clavicle_on_xray"]
+      },
+      {
+        "diseaseId": "sternoclavicular_dislocation",
+        "discriminators": ["pain_at_sternoclavicular_joint", "xray_shows_dislocation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Clavicle X-ray AP view", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "CT chest", "priority": "medium", "yield": 0.8, "indication": "complex fractures, medial third, vascular assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "OTA Fracture Classification and Management",
+      "pathways": [
+        {
+          "severity": "non_displaced",
+          "criteria": "Minimally displaced, skin intact, no neurovascular deficit",
+          "treatment": "Sling for comfort 2-4 weeks. Early range of motion. Analgesia. Follow-up X-ray at 4 weeks."
+        },
+        {
+          "severity": "displaced_or_complicated",
+          "criteria": "Displaced, skin tenting, open, or neurovascular deficit",
+          "treatment": "ORIF with plate and screws. Intraoperative neurovascular assessment. Post-op sling. X-ray at 2, 6, 12 weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": ["fall_onto_shoulder", "bending_load", "failure_of_clavicle"]
+  }
+}

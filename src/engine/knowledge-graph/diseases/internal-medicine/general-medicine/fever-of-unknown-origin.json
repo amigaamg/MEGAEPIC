@@ -1,0 +1,89 @@
+{
+  "disease": {
+    "id": "fever_of_unknown_origin",
+    "name": "Fever of Unknown Origin",
+    "system": "internal_medicine",
+    "agePeak_months": [0, 960],
+    "note": "Fever >38.3C on multiple occasions for >3 weeks without diagnosis after basic workup. Infections, malignancy, and autoimmune causes.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["febrile_illness", "diagnostic_challenge"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "multi_organ_dysfunction", "weight": 9 },
+        { "sign": "neurological_deterioration", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "ACUTE with danger signs -> EMERGENCY; CHRONIC stable -> ELECTIVE workup"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_prolonged", "weight": 5 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "night_sweats", "weight": 3 },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "travel_history", "weight": 3 },
+      { "symptomId": "animal_exposure", "weight": 2 },
+      { "symptomId": "medication_history", "weight": 2 },
+      { "symptomId": "family_history_inflammatory", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "lymphadenopathy", "baseWeight": 3 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 3 },
+      { "signId": "rash", "baseWeight": 2 },
+      { "signId": "joint_swelling_tenderness", "baseWeight": 2 },
+      { "signId": "heart_murmur", "baseWeight": 2 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature chart (every 6 hours)", "priority": "immediate", "yield": 0.8, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "FBC with differential, ESR, CRP", "priority": "first_line", "yield": 0.6, "indication": "inflammatory markers and cell lines" },
+        { "name": "Blood cultures x 3 sets", "priority": "high", "yield": 0.3, "indication": "before antibiotics" },
+        { "name": "LFT, U&E, Cr, LDH, Ferritin", "priority": "high", "yield": 0.4, "indication": "organ function and specific diagnoses" },
+        { "name": "HIV, EBV, CMV, TB workup", "priority": "high", "yield": 0.3, "indication": "common infectious causes" },
+        { "name": "ANA, RF, ANCA, anti-CCP", "priority": "medium", "yield": 0.2, "indication": "autoimmune causes" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.3, "indication": "TB, malignancy, sarcoidosis" },
+        { "name": "CT Chest/Abdomen/Pelvis", "priority": "high", "yield": 0.4, "indication": "occult abscess, lymphadenopathy, malignancy" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.5, "indication": "when conventional imaging negative" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "UpToDate / IDSA Guidelines for FUO",
+      "pathways": [
+        {
+          "severity": "diagnostic workup",
+          "criteria": "stable patient with persistent fever",
+          "treatment": "Stepwise diagnostic approach: blood cultures, inflammatory markers, imaging. Avoid empiric antibiotics unless septic. Biopsy of accessible sites. Treat underlying cause when identified."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cytokine_mediated_fever",
+      "infection",
+      "malignancy",
+      "autoimmune_inflammation",
+      "drug_reaction",
+      "granulomatous_disease"
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["prolonged_fever", "negative_initial_workup", "constitutional_symptoms"],
+    "exclusionClues": ["fever_resolved", "specific_diagnosis_found"]
+  }
+}

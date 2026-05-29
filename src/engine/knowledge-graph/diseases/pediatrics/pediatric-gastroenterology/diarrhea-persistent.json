@@ -1,0 +1,181 @@
+{
+  "disease": {
+    "id": "diarrhea-persistent",
+    "name": "Persistent Diarrhea",
+    "system": "PAED",
+    "agePeak_months": [6, 36],
+    "note": "Diarrhea lasting 14 days or longer. Often linked to malnutrition and impaired gut immunity. Vicious cycle of diarrhea-malnutrition-diarrhea.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["chronic_diarrhea", "malnutrition"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_dehydration", "weight": 9 },
+        { "sign": "severe_acute_malnutrition", "weight": 10 },
+        { "sign": "shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "weight_loss_>10%", "weight": 8 },
+          { "sign": "electrolyte_imbalance", "weight": 7 },
+          { "sign": "edema_hypoalbuminemia", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If severe malnutrition or metabolic complications -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "diarrhea_more_than_14_days", "weight": 5 },
+      { "symptomId": "weight_loss_faltering_growth", "weight": 5 },
+      { "symptomId": "history_of_acute_diarrhea", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "poor_appetite", "weight": 3 },
+      { "symptomId": "blood_or_mucus_in_stool", "weight": 2 },
+      { "symptomId": "antibiotic_use_recent", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "wasting_muscle_loss", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "edema", "baseWeight": 3 },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "dehydration_signs", "baseWeight": 3 },
+      { "signId": "skin_changes_dermatitis", "baseWeight": 2 },
+      { "signId": "hair_changes", "baseWeight": 2 },
+      { "signId": "oral_thrush", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "malnutrition_pre_existing", "multiplier": 4.0 },
+      { "id": "age_under_12_months", "multiplier": 2.5 },
+      { "id": "lack_of_breastfeeding", "multiplier": 2.0 },
+      { "id": "immune_deficiency_hiv", "multiplier": 3.0 },
+      { "id": "repeated_antibiotic_courses", "multiplier": 2.0 },
+      { "id": "poor_sanitation_hygiene", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "post_infectious_persistent_diarrhea",
+        "name": "Post-Infectious Persistent Diarrhea",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "acute_diarrhea_that_does_not_resolve", "weight": 5 },
+          { "feature": "mild_moderate_malnutrition", "weight": 4 },
+          { "feature": "stool_watery_or_mucoid", "weight": 3 }
+        ],
+        "management": "Dietary management: lactose-free or low-lactose diet. Calorie-dense feeds. Zinc 20 mg/day. Vitamin A. Folic acid. Treat underlying infections. Avoid unnecessary antibiotics."
+      },
+      {
+        "id": "persistent_diarrhea_with_severe_malnutrition",
+        "name": "Persistent Diarrhea with Severe Acute Malnutrition",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "severe_wasting", "weight": 5 },
+          { "feature": "edema", "weight": 4 },
+          { "feature": "diarrhea_more_than_14_days", "weight": 4 }
+        ],
+        "management": "Hospitalize. Stabilization phase: F-75 formula (small frequent feeds). Treat infections (HIV test, TB screen). Correct electrolyte imbalances. Micronutrients. Transition to F-100 when stable."
+      },
+      {
+        "id": "tropical_enteropathy",
+        "name": "Tropical Enteropathy",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "chronic_diarrhea", "weight": 4 },
+          { "feature": "malabsorption", "weight": 4 },
+          { "feature": "vitamin_deficiency", "weight": 3 }
+        ],
+        "management": "Environmental hygiene improvement. Nutritional rehabilitation. Folate and vitamin B12 supplementation. Consider empiric antibiotics if bacterial overgrowth suspected."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "celiac_disease",
+        "discriminators": ["chronic_diarrhea_with_gluten_exposure", "positive_serology", "duodenal_biopsy_confirm"]
+      },
+      {
+        "diseaseId": "cystic_fibrosis",
+        "discriminators": ["meconium_ileus_history", "recurrent_respiratory_infections", "sweat_chloride_elevated"]
+      },
+      {
+        "diseaseId": "giardia_infection",
+        "discriminators": ["bloated_abdomen", "foul_greasy_stools", "stool_giardia_antigen_positive"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Anthropometry (weight, height, MUAC)", "priority": "immediate", "yield": 0.9, "indication": "nutritional assessment" }
+      ],
+      "laboratory": [
+        { "name": "Stool microscopy and culture", "priority": "high", "yield": 0.5, "indication": "pathogen identification" },
+        { "name": "Stool reducing substances", "priority": "medium", "yield": 0.6, "indication": "lactose intolerance" },
+        { "name": "Serum electrolytes", "priority": "high", "yield": 0.5, "indication": "metabolic assessment" },
+        { "name": "Serum albumin", "priority": "high", "yield": 0.6, "indication": "protein status" },
+        { "name": "HIV test", "priority": "high", "yield": 0.3, "indication": "rule out HIV enteropathy" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Persistent Diarrhea Management",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "No severe malnutrition, no dehydration, able to tolerate oral feeds",
+          "treatment": "Lactose-free diet, calorie-dense small frequent meals. Zinc 20 mg/day. Vitamin A 200,000 IU. Folic acid 5 mg. Follow weekly. If not improving, admit."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Severe malnutrition, dehydration, electrolyte imbalance, or unable to tolerate oral",
+          "treatment": "Admit for stabilization. IV fluids if dehydrated. F-75 formula 130 mL/kg/day. Correct electrolytes. Broad-spectrum antibiotics if systemic infection. Nutritional rehabilitation in phases."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "persistent_enteric_infection",
+      "intestinal_mucosal_damage",
+      "disaccharidase_deficiency",
+      "gut_dysbiosis",
+      "malabsorption",
+      "immune_impairment",
+      "malnutrition_cycle"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "severe_acute_malnutrition",
+        "probability": 0.3,
+        "lagDays": [14, 90],
+        "severityBoost": 0.4,
+        "clues": ["worsening_wasting", "edema", "weight_loss"]
+      },
+      {
+        "diseaseId": "electrolyte_imbalance",
+        "probability": 0.2,
+        "lagDays": [7, 30],
+        "severityBoost": 0.3,
+        "clues": ["hypokalemia", "hyponatremia", "metabolic_acidosis"]
+      },
+      {
+        "diseaseId": "invasive_bacterial_infection",
+        "probability": 0.15,
+        "lagDays": [7, 30],
+        "severityBoost": 0.4,
+        "clues": ["fever", "worsening_condition", "sepsis"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["diarrhea_>14_days", "weight_loss", "malnutrition_signs", "lack_of_response_to_standard_treatment"],
+    "exclusionClues": ["acute_diarrhea_less_than_7_days", "normal_weight", "resolves_without_intervention"]
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "disease": {
+    "id": "brucellosis",
+    "name": "Brucellosis (Undulant Fever)",
+    "system": "infectious_disease",
+    "agePeak_months": [120, 600],
+    "note": "Zoonotic infection from Brucella spp. Transmitted via unpasteurized dairy or direct animal contact. Undulant fever pattern.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["febrile_illness", "zoonotic_infection", "granulomatous_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "neurobrucellosis", "weight": 9 },
+        { "sign": "endocarditis", "weight": 10 },
+        { "sign": "spinal_abscess", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Focal complications (neuro/endocarditis) -> SEVERE; uncomplicated -> MILD-MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_undulant", "weight": 5, "note": "Rising and falling fever pattern" },
+      { "symptomId": "night_sweats", "weight": 4 },
+      { "symptomId": "malaise_fatigue", "weight": 4 },
+      { "symptomId": "arthralgia_myalgia", "weight": 4 },
+      { "symptomId": "low_back_pain", "weight": 3 },
+      { "symptomId": "exposure_unpasteurized_dairy", "weight": 5 },
+      { "symptomId": "occupational_exposure_livestock", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "lymphadenopathy", "baseWeight": 3 },
+      { "signId": "sacrolitis_spinal_tenderness", "baseWeight": 3 },
+      { "signId": "arthritis_swollen_joint", "baseWeight": 3 },
+      { "signId": "orchiepididymitis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "unpasteurized_dairy_consumption", "multiplier": 3.0 },
+      { "id": "livestock_occupation_slaughterhouse", "multiplier": 3.0 },
+      { "id": "veterinary_work", "multiplier": 2.5 },
+      { "id": "travel_endemic_area_mediterranean_middle_east", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_brucellosis",
+        "name": "Acute Brucellosis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "symptoms_less_than_2_months", "weight": 4 },
+          { "feature": "fever_night_sweats", "weight": 5 },
+          { "feature": "positive_blood_culture", "weight": 5 }
+        ],
+        "management": "Doxycycline 100mg BD + Rifampin 600mg OD for 6-8 weeks. Or Streptomycin 1g IM OD for 2-3 weeks + Doxycycline."
+      },
+      {
+        "id": "chronic_brucellosis",
+        "name": "Chronic Brucellosis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "symptoms_more_than_1_year", "weight": 4 },
+          { "feature": "relapsing_symptoms", "weight": 4 },
+          { "feature": "focal_complications", "weight": 4 }
+        ],
+        "management": "Triple therapy: Doxycycline + Rifampin + Streptomycin or Gentamicin. Prolonged treatment for 12+ weeks. Surgical drainage if abscess."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "typhoid_fever",
+        "discriminators": ["step_ladder_fever", "rose_spots", "no_animal_exposure"]
+      },
+      {
+        "diseaseId": "tuberculosis",
+        "discriminators": ["cough", "positive_quantiferon", "apical_infiltrates"]
+      },
+      {
+        "diseaseId": "infective_endocarditis",
+        "discriminators": ["cardiac_murmur", "positive_echo", "no_animal_exposure"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Blood culture (Brucella broth)", "priority": "high", "yield": 0.7, "indication": "acute illness, hold for 4+ weeks" },
+        { "name": "Bone marrow culture", "priority": "medium", "yield": 0.85, "indication": "if blood cultures negative" },
+        { "name": "Serology: SAT (Standard Tube Agglutination)", "priority": "high", "yield": 0.9, "indication": "screening and diagnosis" },
+        { "name": "Brucella IgM/IgG ELISA", "priority": "high", "yield": 0.85, "indication": "confirm acute vs chronic" }
+      ],
+      "imaging": [
+        { "name": "Spinal MRI", "priority": "medium", "yield": 0.7, "indication": "if back pain or neurological symptoms" },
+        { "name": "Echocardiogram", "priority": "high", "yield": 0.5, "indication": "if murmur or suspected endocarditis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO/FAO Guidelines for Brucellosis Treatment",
+      "pathways": [
+        {
+          "severity": "uncomplicated acute",
+          "criteria": "no focal complications, <2 months symptoms",
+          "treatment": "Doxycycline 100mg PO BD + Rifampin 600mg PO OD x 6-8 weeks. Alternative: Doxycycline + Gentamicin 5mg/kg IV OD x 7-14 days."
+        },
+        {
+          "severity": "complicated / focal",
+          "criteria": "endocarditis, neurobrucellosis, spondylitis, abscess",
+          "treatment": "Triple therapy: Doxycycline + Rifampin + Aminoglycoside. Surgery for abscess or valve replacement if endocarditis. Prolonged therapy 12+ weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ingestion_or_inoculation",
+      "reticuloendothelial_invasion",
+      "intracellular_survival_within_macrophages",
+      "granuloma_formation",
+      "chronic_persistent_infection",
+      "focal_complications"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "brucella_endocarditis",
+        "probability": 0.02,
+        "severityBoost": 0.6,
+        "clues": ["murmur", "dyspnea", "positive_echo"]
+      },
+      {
+        "diseaseId": "neurobrucellosis",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["headache_confusion", "meningitis", "abnormal_csf"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["undulant_fever", "animal_exposure", "night_sweats", "arthralgia"],
+    "exclusionClues": ["negative_serology", "no_exposure_history", "rapid_response_to_beta_lactams"]
+  }
+}

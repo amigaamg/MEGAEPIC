@@ -1,0 +1,93 @@
+{
+  "disease": {
+    "id": "blood_culture_interpretation",
+    "name": "Blood Culture Interpretation",
+    "system": "laboratory_medicine",
+    "note": "Interpreting blood culture results to distinguish true bacteremia from contamination. Timing, number of sets, and organisms matter.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["microbiology", "antibiotic_decision"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "positive_culture_with_sepsis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "True pathogen vs contaminant determines clinical significance"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_or_hypothermia", "weight": 5 },
+      { "symptomId": "chills_rigors", "weight": 4 },
+      { "symptomId": "hypotension", "weight": 4 },
+      { "symptomId": "source_of_infection_suspected", "weight": 3 },
+      { "symptomId": "immunosuppression", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "signs_of_sepsis_source", "baseWeight": 3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "true_bacteremia",
+        "name": "True Bacteremia",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "2_or_more_bottles_positive_same_organism", "weight": 5 },
+          { "feature": "organism_typical_pathogen", "weight": 5 },
+          { "feature": "time_to_positivity_less_24h", "weight": 4 },
+          { "feature": "clinical_sepsis_correlates", "weight": 4 }
+        ],
+        "management": "Targeted antibiotics based on sensitivity. Source control. Repeat cultures to document clearance. Monitor for complications (endocarditis, septic metastases)."
+      },
+      {
+        "id": "contaminant",
+        "name": "Likely Contaminant",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "one_bottle_only_positive", "weight": 5 },
+          { "feature": "organism_typical_skin_flora", "weight": 5 },
+          { "feature": "time_to_positivity_over_48h", "weight": 3 },
+          { "feature": "no_clinical_correlate", "weight": 4 }
+        ],
+        "management": "No treatment if truly contaminant. Repeat cultures if suspicion remains. Common contaminants: Coagulase-negative Staph, Corynebacterium, Bacillus, Propionibacterium."
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Blood culture sets (2 sets, 2 bottles each)", "priority": "immediate", "yield": 0.9, "indication": "all suspected sepsis" },
+        { "name": "Gram stain (rapid preliminary result)", "priority": "immediate", "yield": 0.7, "indication": "preliminary organism identification" },
+        { "name": "Identification (MALDI-TOF or biochemical)", "priority": "high", "yield": 0.98, "indication": "species identification" },
+        { "name": "Antimicrobial susceptibility testing (AST)", "priority": "high", "yield": 0.95, "indication": "guide targeted therapy" }
+      ]
+    },
+
+    "management": {
+      "pathways": [
+        {
+          "severity": "true pathogen",
+          "criteria": "typical pathogen, >=2 positive bottles, clinical correlation",
+          "treatment": "Targeted antibiotics de-escalated from empiric. Repeat cultures at 48-72h. Duration 7-14 days depending on source and organism."
+        },
+        {
+          "severity": "uncertain significance",
+          "criteria": "single positive, skin flora, unclear clinical relevance",
+          "treatment": "Repeat blood cultures. Review if still clinically indicated. If growth confirmed, treat. If no growth and well, consider contaminant."
+        }
+      ]
+    },
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["clinical_sepsis", "positive_blood_cultures", "distinguish_contaminant_from_pathogen"]
+  }
+}

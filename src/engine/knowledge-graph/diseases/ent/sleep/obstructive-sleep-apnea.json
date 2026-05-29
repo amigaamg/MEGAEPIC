@@ -1,0 +1,207 @@
+{
+  "disease": {
+    "id": "obstructive_sleep_apnea",
+    "name": "Obstructive Sleep Apnea",
+    "system": "ent",
+    "agePeak_months": [360, 720],
+    "note": "Recurrent episodes of upper airway collapse during sleep, causing apnea/hypopnea, oxygen desaturation, and fragmented sleep. Strongly associated with obesity.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["snoring", "daytime_sleepiness", "apneas", "hypoxemia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypercapnic_respiratory_failure", "weight": 10 },
+        { "sign": "cor_pulmonale", "weight": 9 },
+        { "sign": "arrhythmia_life_threatening", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "AHI_over_30", "weight": 8 },
+          { "sign": "SpO2_below_80_percent", "weight": 7 },
+          { "sign": "excessive_daytime_sleepiness_driving", "weight": 6 },
+          { "sign": "resistant_hypertension", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If AHI>30, SpO2<80%, or complications -> SEVERE; else -> mild-moderate"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "snoring_loud_habitual", "weight": 5 },
+      { "symptomId": "witnessed_apneas", "weight": 5 },
+      { "symptomId": "daytime_sleepiness", "weight": 5, "modifiers": [
+          { "condition": "Epworth_>10", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "choking_gasping_at_night", "weight": 4 },
+      { "symptomId": "unrefreshing_sleep", "weight": 3 },
+      { "symptomId": "morning_headache", "weight": 3 },
+      { "symptomId": "nocturia", "weight": 2 },
+      { "symptomId": "dry_mouth_sore_throat_morning", "weight": 2 },
+      { "symptomId": "irritability_mood_changes", "weight": 2 },
+      { "symptomId": "decreased_libido", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "obesity_BMI_over_30", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "large_neck_circumference", "baseWeight": 4 },
+      { "signId": "Mallampati_score_III_IV", "baseWeight": 4 },
+      { "signId": "tonsillar_hypertrophy", "baseWeight": 3 },
+      { "signId": "retrognathia_micrognathia", "baseWeight": 3 },
+      { "signId": "high_arched_palate", "baseWeight": 2 },
+      { "signId": "nasal_obstruction", "baseWeight": 2 },
+      { "signId": "hypertension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "obesity_BMI_over_30", "multiplier": 4.0 },
+      { "id": "male_gender", "multiplier": 2.5 },
+      { "id": "age_over_40", "multiplier": 3.0 },
+      { "id": "menopausal_women", "multiplier": 2.0 },
+      { "id": "craniofacial_abnormalities", "multiplier": 3.0 },
+      { "id": "family_history_osa", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "alcohol_before_sleep", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_osa",
+        "name": "Mild Obstructive Sleep Apnea (AHI 5-15)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "snoring", "weight": 4 },
+          { "feature": "daytime_sleepiness_mild", "weight": 3 },
+          { "feature": "few_witnessed_apneas", "weight": 2 }
+        ],
+        "management": "Lifestyle modification: weight loss, exercise, avoid alcohol before bed, positional therapy (avoid supine). Oral appliance (mandibular advancement device). CPAP if symptoms or comorbidities."
+      },
+      {
+        "id": "moderate_osa",
+        "name": "Moderate Obstructive Sleep Apnea (AHI 15-30)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "loud_snoring", "weight": 4 },
+          { "feature": "frequent_apneas", "weight": 4 },
+          { "feature": "daytime_sleepiness_moderate", "weight": 4 },
+          { "feature": "nocturnal_choking", "weight": 3 }
+        ],
+        "management": "CPAP (auto-titrating or fixed). Weight loss program. Oral appliance if CPAP intolerant. ENT evaluation for upper airway surgery if correctable obstruction."
+      },
+      {
+        "id": "severe_osa",
+        "name": "Severe Obstructive Sleep Apnea (AHI >30)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "very_loud_snoring", "weight": 5 },
+          { "feature": "severe_desaturation", "weight": 5 },
+          { "feature": "falls_asleep_driving", "weight": 5 },
+          { "feature": "hypertension_resistant", "weight": 4 }
+        ],
+        "management": "CPAP/APAP (first-line). Weight loss surgery evaluation if BMI >40. Bilevel PAP if hypercapnia. ENT surgery (UPPP, tongue base reduction, hypoglossal nerve stimulation, maxillomandibular advancement). Oxygen therapy if persistent hypoxemia."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "central_sleep_apnea",
+        "discriminators": ["Cheyne_Stokes", "no_respiratory_effort_during_apnea", "heart_failure", "opioid_use"]
+      },
+      {
+        "diseaseId": "chronic_insomnia",
+        "discriminators": ["difficulty_initiating_sleep", "no_witnessed_apneas", "normal_BMI"]
+      },
+      {
+        "diseaseId": "narcolepsy",
+        "discriminators": ["cataplexy", "sleep_paralysis", "hypnagogic_hallucinations", "MSLT_abnormal"]
+      },
+      {
+        "diseaseId": "periodic_limb_movement_disorder",
+        "discriminators": ["leg_movements", "restless_legs", "no_snoring"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Epworth Sleepiness Scale", "priority": "high", "yield": 0.7, "indication": "subjective sleepiness assessment" },
+        { "name": "STOP-BANG Questionnaire", "priority": "high", "yield": 0.8, "indication": "screening tool" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Polysomnography (Type I Lab PSG)", "priority": "high", "yield": 0.95, "indication": "gold standard for diagnosis and severity" },
+        { "name": "Home Sleep Apnea Test (HSAT)", "priority": "high", "yield": 0.85, "indication": "suspected moderate-severe OSA without comorbidities" },
+        { "name": "Drug-Induced Sleep Endoscopy (DISE)", "priority": "medium", "yield": 0.8, "indication": "identify level of obstruction for surgical planning" },
+        { "name": "CT/MRI Upper Airway", "priority": "low", "yield": 0.5, "indication": "craniofacial abnormalities, pre-surgical planning" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASM Clinical Practice Guideline for OSA Management",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "AHI 5-15, no comorbidities, Epworth <10",
+          "treatment": "Weight loss (5-10% reduction). Positional therapy. Avoid alcohol/benzodiazepines. Oral appliance. Re-evaluate in 3-6 months."
+        },
+        {
+          "severity": "moderate-severe",
+          "criteria": "AHI >15, symptoms impacting QoL, comorbidities",
+          "treatment": "CPAP/APAP (first-line). Heated humidification. Mask fitting and desensitization. Telemonitoring for adherence. Weight loss program. Bariatric surgery evaluation."
+        },
+        {
+          "severity": "surgical candidate",
+          "criteria": "CPAP intolerant or failed, correctable obstruction on DISE",
+          "treatment": "Pharyngeal surgery: UPPP, tonsillectomy. Nasal surgery: septoplasty, turbinate reduction. Hypoglossal nerve stimulation (Inspire). Maxillomandibular advancement. Tracheostomy if life-threatening."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "pharyngeal_collapsibility",
+      "reduced_dilator_muscle_tone",
+      "anatomical_narrowing",
+      "obesity_related_fat_deposition",
+      "loop_gain_instability"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypertension",
+        "probability": 0.4,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.2,
+        "clues": ["morning_hypertension", "resistant_to_therapy"]
+      },
+      {
+        "diseaseId": "atrial_fibrillation",
+        "probability": 0.1,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.3,
+        "clues": ["palpitations", "irregular_pulse", "CHADSVASC"]
+      },
+      {
+        "diseaseId": "stroke",
+        "probability": 0.05,
+        "lagDays": [730, 3650],
+        "severityBoost": 0.4,
+        "clues": ["neurological_deficits", "hypertension"]
+      },
+      {
+        "diseaseId": "MVA_due_to_sleepiness",
+        "probability": 0.03,
+        "lagDays": [0, 365],
+        "severityBoost": 0.6,
+        "clues": ["Epworth_>16", "sleepy_driving_history"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["habitual_loud_snoring", "witnessed_apneas", "daytime_sleepiness", "obesity", "large_neck"],
+    "exclusionClues": ["no_snoring", "normal_PSG", "central_apnea"]
+  }
+}

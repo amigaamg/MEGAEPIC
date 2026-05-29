@@ -1,0 +1,132 @@
+{
+  "disease": {
+    "id": "septic_shock",
+    "name": "Septic Shock",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Sepsis with persisting hypotension requiring vasopressors to maintain MAP >=65 and lactate >2 despite adequate fluid resuscitation.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["shock", "systemic_infection", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "refractory_hypotension", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 },
+        { "sign": "lactate_greater_4", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Septic shock defined by vasopressor requirement + lactate >2"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_or_hypothermia", "weight": 4 },
+      { "symptomId": "known_or_suspected_infection", "weight": 5 },
+      { "symptomId": "confusion_altered_mental_status", "weight": 4 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "hypotension", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "fever_or_hypothermia", "baseWeight": 3 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "cold_peripheries_prolonged_cr", "baseWeight": 4 },
+      { "signId": "signs_of_infection_source", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "chronic_liver_disease", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease", "multiplier": 1.8 },
+      { "id": "indwelling_devices", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cardiogenic_shock",
+        "discriminators": ["pulmonary_oedema", "elevated_jvp", "low_cardiac_output"]
+      },
+      {
+        "diseaseId": "hypovolemic_shock",
+        "discriminators": ["obvious_fluid_loss", "low_jvp", "responds_to_fluids"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "MAP monitoring (invasive BP)", "priority": "immediate", "yield": 0.9, "indication": "all patients with shock" },
+        { "name": "Lactate (point-of-care)", "priority": "immediate", "yield": 0.9, "indication": "tissue hypoperfusion marker" },
+        { "name": "qSOFA score", "priority": "immediate", "yield": 0.7, "indication": "identify sepsis at bedside" }
+      ],
+      "laboratory": [
+        { "name": "Blood cultures x 2 sets", "priority": "immediate", "yield": 0.5, "indication": "before antibiotics" },
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.7, "indication": "infection markers" },
+        { "name": "Lactate, ABG", "priority": "immediate", "yield": 0.9, "indication": "tissue hypoxia and acid-base" },
+        { "name": "U&E, Cr, LFT, Coagulation", "priority": "high", "yield": 0.6, "indication": "organ function assessment" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "pneumonia as source" },
+        { "name": "CT Abdomen", "priority": "medium", "yield": 0.6, "indication": "intra-abdominal source" },
+        { "name": "Ultrasound (POCUS)", "priority": "high", "yield": 0.7, "indication": "source identification, volume status" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Surviving Sepsis Campaign Guidelines 2021",
+      "pathways": [
+        {
+          "severity": "sepsis without shock",
+          "criteria": "infection + organ dysfunction, MAP >=65 maintained",
+          "treatment": "Blood cultures. Start broad-spectrum antibiotics within 1 hour. IV fluids 30 mL/kg crystalloid. Lactate monitoring. Source control."
+        },
+        {
+          "severity": "septic shock",
+          "criteria": "hypotension requiring vasopressors after fluid resuscitation, lactate >2",
+          "treatment": "Vasopressors (norepinephrine first-line). Additional fluids guided by dynamic assessment. Central line. Consider vasopressin or epinephrine if refractory. Hydrocortisone if still on vasopressors. ICU admission. Target MAP >=65. Serial lactate clearance."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "systemic_inflammatory_response",
+      "endothelial_dysfunction",
+      "vasodilation",
+      "increased_capillary_permeability",
+      "tissue_hypoperfusion",
+      "cellular_hypoxia",
+      "multi_organ_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.4,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "dysfunctional_coagulation",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["thrombocytopenia", "prolonged_inr"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["hypotension_not_responding_to_fluids", "lactate_elevated", "source_of_infection"],
+    "exclusionClues": ["map_65_without_vasopressors", "lactate_normal"]
+  }
+}

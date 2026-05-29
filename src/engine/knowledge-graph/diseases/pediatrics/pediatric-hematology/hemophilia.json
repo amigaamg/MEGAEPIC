@@ -1,0 +1,166 @@
+{
+  "disease": {
+    "id": "hemophilia",
+    "name": "Hemophilia (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [0, 120],
+    "note": "X-linked recessive bleeding disorder due to deficiency of Factor VIII (Hemophilia A) or Factor IX (Hemophilia B). Severity correlates with factor level.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["bleeding_disorder", "coagulopathy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "intracranial_hemorrhage", "weight": 10 },
+        { "sign": "major_trauma_bleeding", "weight": 10 },
+        { "sign": "retroperitoneal_bleed", "weight": 9 },
+        { "sign": "airway_compromise_bleeding", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "spontaneous_bleeding_into_joints", "weight": 7 },
+          { "sign": "factor_level_<1%", "weight": 8 },
+          { "sign": "prolonged_bleeding_after_procedure", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If spontaneous bleeding, ICH, or major trauma -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "excessive_bruising_from_minor_trauma", "weight": 5 },
+      { "symptomId": "joint_swelling_hemarthrosis", "weight": 5 },
+      { "symptomId": "prolonged_bleeding_after_circumcision", "weight": 4, "note": "Often first presentation" },
+      { "symptomId": "muscle_hematomas", "weight": 4 },
+      { "symptomId": "prolonged_bleeding_after_dental_procedure", "weight": 3 },
+      { "symptomId": "family_history_of_bleeding_disorder", "weight": 5 },
+      { "symptomId": "male_gender", "weight": 5, "note": "X-linked inheritance" }
+    ],
+
+    "examFeatures": [
+      { "signId": "ecchymosis_large", "baseWeight": 4 },
+      { "signId": "joint_swelling_warmth_hemarthrosis", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hematoma_muscle_deep", "baseWeight": 4 },
+      { "signId": "signs_of_intracranial_bleed", "baseWeight": 5 },
+      { "signId": "oral_mucosal_bleeding", "baseWeight": 3 },
+      { "signId": "pallor_anemia", "baseWeight": 2 },
+      { "signId": "arthropathy_chronic_joint_deformity", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_hemophilia", "multiplier": 4.0 },
+      { "id": "male_gender", "multiplier": 5.0 },
+      { "id": "carrier_mother", "multiplier": 4.0 },
+      { "id": "factor_viii_level_<1%", "multiplier": 3.0 },
+      { "id": "inhibitor_development", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hemophilia_a",
+        "name": "Hemophilia A (Factor VIII Deficiency)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "low_factor_viii_activity", "weight": 5 },
+          { "feature": "prolonged_aptt_normal_pt_normal_bt", "weight": 5 },
+          { "feature": "x_linked_inheritance", "weight": 4 }
+        ],
+        "management": "Factor VIII replacement: 25-50 IU/kg for minor bleeds, 50-75 IU/kg for major. Desmopressin (DDAVP) for mild cases. Avoid NSAIDs. Prophylaxis for severe hemophilia."
+      },
+      {
+        "id": "hemophilia_b",
+        "name": "Hemophilia B (Factor IX Deficiency, Christmas Disease)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "low_factor_ix_activity", "weight": 5 },
+          { "feature": "prolonged_aptt", "weight": 5 },
+          { "feature": "clinically_indistinguishable_from_a", "weight": 3 }
+        ],
+        "management": "Factor IX replacement (PCC or recombinant). DDAVP ineffective. Prophylaxis for severe cases. Avoid intramuscular injections."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "von_willebrand_disease",
+        "discriminators": ["mucocutaneous_bleeding", "prolonged_bt", "low_vwf_activity", "autosomal_inheritance"]
+      },
+      {
+        "diseaseId": "vitamin_k_deficiency",
+        "discriminators": ["prolonged_pt", "neonatal_onset", "response_to_vitamin_k"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC with platelets", "priority": "immediate", "yield": 0.5, "indication": "exclude thrombocytopenia" },
+        { "name": "PT, APTT, BT, TT", "priority": "immediate", "yield": 0.9, "indication": "isolated prolonged APTT" },
+        { "name": "Factor VIII and IX assay", "priority": "immediate", "yield": 1.0, "indication": "definitive diagnosis and classification" },
+        { "name": "Mixing study (APTT correction)", "priority": "high", "yield": 0.8, "indication": "differentiate factor deficiency from inhibitor" },
+        { "name": "VWF panel", "priority": "medium", "yield": 0.5, "indication": "rule out VWD" }
+      ],
+      "imaging": [
+        { "name": "Joint X-ray/Ultrasound", "priority": "medium", "yield": 0.6, "indication": "assess hemarthrosis and chronic arthropathy" },
+        { "name": "CT/MRI Brain", "priority": "high", "yield": 0.9, "indication": "suspected intracranial hemorrhage" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WFH Guidelines for Management of Hemophilia",
+      "pathways": [
+        {
+          "severity": "mild_moderate_bleed",
+          "criteria": "Factor level >1%, minor trauma, superficial bruising, no joint bleed",
+          "treatment": "Factor replacement 25-40 IU/kg (VIII) or 50-80 IU/kg (IX) once. DDAVP 0.3 mcg/kg IV for mild A. Rest, ice, compression, elevation. Avoid aspirin/NSAIDs."
+        },
+        {
+          "severity": "severe_bleed_or_life_threatening",
+          "criteria": "Factor level <1%, spontaneous bleeding, hemarthrosis, ICH, major trauma",
+          "treatment": "Factor VIII 50-75 IU/kg (then 25-50 IU/kg q8-12h) or Factor IX 100-120 IU/kg (then 50-70 IU/kg q12-24h). Maintain factor >50% for 7-14 days. ICU for ICH. Orthopedic consultation for hemarthrosis. Avoid IM injections."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "factor_viii_or_ix_deficiency",
+      "impaired_intrinsic_pathway",
+      "defective_thrombin_generation",
+      "unstable_clot",
+      "recurrent_bleeding",
+      "joint_damage_chronic_arthropathy"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hemophilic_arthropathy",
+        "probability": 0.5,
+        "lagDays": [365, 7300],
+        "severityBoost": 0.3,
+        "clues": ["recurrent_hemarthrosis", "joint_deformity", "limited_range_of_motion"]
+      },
+      {
+        "diseaseId": "inhibitor_development",
+        "probability": 0.2,
+        "lagDays": [30, 365],
+        "severityBoost": 0.4,
+        "clues": ["inadequate_response_to_factor", "rising_aptt_post_infusion"]
+      },
+      {
+        "diseaseId": "intracranial_hemorrhage",
+        "probability": 0.03,
+        "lagDays": [0, 365],
+        "severityBoost": 0.7,
+        "clues": ["head_trauma", "headache", "vomiting", "seizures"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["excessive_bruising", "hemarthrosis", "prolonged_aptt", "positive_family_history", "male_gender"],
+    "exclusionClues": ["normal_factor_assay", "no_bleeding_history", "normal_aptt"]
+  }
+}

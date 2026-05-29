@@ -1,0 +1,156 @@
+{
+  "disease": {
+    "id": "tendinopathy",
+    "name": "Tendinopathy",
+    "system": "rheumatology",
+    "agePeak_months": [360, 720],
+    "note": "Overuse injury of tendons characterized by pain, swelling, and impaired performance. Involves degenerative changes (tendinosis) with or without inflammation (tendinitis). Common sites: Achilles, patellar, lateral epicondyle (tennis elbow).",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["soft_tissue", "tendon", "overuse_injury", "musculoskeletal_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "tendon_rupture_acute", "weight": 8 },
+        { "sign": "septic_tendinitis", "weight": 9 },
+        { "sign": "compartment_syndrome", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If acute rupture or infection suspected -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "tendon_site_pain_overuse", "weight": 5 },
+      { "symptomId": "gradual_onset_tendon_pain", "weight": 5 },
+      { "symptomId": "pain_with_eccentric_loading", "weight": 4 },
+      { "symptomId": "morning_stiffness_tendon", "weight": 3 },
+      { "symptomId": "swelling_nodularity_tendon", "weight": 3 },
+      { "symptomId": "recent_change_in_activity_level", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tendon_mid_substance_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "reproducible_pain_loading", "baseWeight": 4 },
+      { "signId": "tendon_thickening_nodule", "baseWeight": 3 },
+      { "signId": "weakness_associated_muscle", "baseWeight": 2 },
+      { "signId": "crepitus_tendon_sheath", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "overuse_repetitive_activity", "multiplier": 4.0 },
+      { "id": "sudden_increase_training", "multiplier": 3.0 },
+      { "id": "poor_ergonomics_technique", "multiplier": 2.5 },
+      { "id": "age_over_40", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "fluoroquinolone_antibiotics", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "achilles_tendinopathy",
+        "name": "Achilles Tendinopathy",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "heel_pain_achilles_mid_portion", "weight": 5 },
+          { "feature": "morning_stiffness_resolves", "weight": 4 },
+          { "feature": "running_running_sports", "weight": 4 }
+        ],
+        "management": "Eccentric exercises (Alfredson protocol). Shockwave therapy. Avoid steroid injection (rupture risk)."
+      },
+      {
+        "id": "lateral_epicondylitis",
+        "name": "Lateral Epicondylitis (Tennis Elbow)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "lateral_elbow_pain_grip", "weight": 5 },
+          { "feature": "cozen_test_positive", "weight": 4 },
+          { "feature": "extensor_carpi_radialis_brevis", "weight": 4 }
+        ],
+        "management": "Activity modification. Brace. Physiotherapy (eccentric). Steroid injection short-term. PRP injection."
+      },
+      {
+        "id": "patellar_tendinopathy",
+        "name": "Patellar Tendinopathy (Jumper's Knee)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "anterior_knee_patellar_tendon", "weight": 5 },
+          { "feature": "jumping_sports", "weight": 4 },
+          { "feature": "tenderness_patellar_apex", "weight": 4 }
+        ],
+        "management": "Eccentric squats on decline board. Physiotherapy. Load management."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "tendon_rupture",
+        "discriminators": ["acute_event", "gap_on_exam", "positive_thompson_test", "loss_of_function"]
+      },
+      {
+        "diseaseId": "enthesitis_related_arthritis",
+        "discriminators": ["multiple_sites", "inflammatory_back_pain", "psoriasis", "hla_b27"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Palpation along tendon length", "priority": "immediate", "yield": 0.8, "indication": "localize tenderness, detect nodules" },
+        { "name": "Resisted muscle testing", "priority": "immediate", "yield": 0.7, "indication": "reproduce pain, assess strength" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Tendon ultrasound", "priority": "high", "yield": 0.9, "indication": "tendon thickness, echotexture, neovascularization" },
+        { "name": "MRI", "priority": "medium", "yield": 0.85, "indication": "tendinosis, partial tears, paratenonitis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Clinical Practice Guidelines for Tendinopathy",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "pain with activity, normal daily life unaffected",
+          "treatment": "Relative rest. Activity modification. Ice. Eccentric exercises. NSAIDs PRN."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "pain limits sport/work, morning stiffness",
+          "treatment": "Physiotherapy (eccentric program). Shockwave therapy. Bracing/taping. Consider steroid injection carefully."
+        },
+        {
+          "severity": "refractory",
+          "criteria": "> 6 months, failed conservative therapy",
+          "treatment": "PRP injection. Tenotomy. Surgical release/ debridement. Consider alternative diagnoses."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "collagen_disorganization",
+      "increased_glycosaminoglycans",
+      "neovascularization",
+      "tenocyte_apoptosis",
+      "failed_healing_response",
+      "tendon_degeneration_tendinosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tendon_rupture",
+        "probability": 0.05,
+        "severityBoost": 0.7,
+        "clues": ["acute_severe_pain", "sudden_loss_of_function", "palpable_gap", "positive_special_test"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low (unless rupture)",
+    "diagnosticClues": ["overuse_onset_tendon_pain", "localized_tenderness_tendon", "loading_pain_eccentric", "normal_xray"],
+    "exclusionClues": ["tendon_rupture_gap", "joint_effusion", "systemic_inflammatory_arthritis", "infection"]
+  }
+}

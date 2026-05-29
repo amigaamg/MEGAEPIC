@@ -1,0 +1,116 @@
+{
+  "disease": {
+    "id": "rotator-cuff-tear",
+    "name": "Rotator Cuff Tear",
+    "system": "ORTHO",
+    "agePeak_months": [360, 720],
+    "note": "Tear of one or more rotator cuff tendons (supraspinatus most common). Partial or full thickness. Chronic degeneration or acute trauma.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["shoulder_injury", "sports_overuse"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_traumatic_tear_with_weakness", "weight": 7 },
+        { "sign": "massive_tear_irreparable", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "full_thickness_tear_>3cm", "weight": 7 },
+          { "sign": "fatty_infiltration_goutallier_3_4", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If massive or irreparable -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "shoulder_pain_lateral_deltoid", "weight": 5 },
+      { "symptomId": "night_pain_unable_to_sleep_on_shoulder", "weight": 4 },
+      { "symptomId": "weakness_abduction_forward_flexion", "weight": 5 },
+      { "symptomId": "difficulty_reaching_overhead", "weight": 4 },
+      { "symptomId": "history_of_overhead_activity", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "supraspinatus_weakness_jobe_test", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "painful_arc_60_to_120_degrees", "baseWeight": 4 },
+      { "signId": "external_rotation_weakness_infraspinatus", "baseWeight": 4 },
+      { "signId": "drop_arm_sign_positive", "baseWeight": 4 },
+      { "signId": "impingement_signs_neer_hawkins", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_>40_years", "multiplier": 3.0 },
+      { "id": "overhead_athletes_throwers", "multiplier": 2.5 },
+      { "id": "heavy_labor_occupations", "multiplier": 2.0 },
+      { "id": "previous_shoulder_injury", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "partial_thickness_tear",
+        "name": "Partial Thickness Rotator Cuff Tear",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "pain_with_preserved_strength", "weight": 4 },
+          { "feature": "mri_shows_partial_thickness", "weight": 5 }
+        ],
+        "management": "Conservative: PT (strengthening of remaining cuff, scapular stabilizers), NSAIDs, subacromial corticosteroid injection. Surgery if fails 3-6 months of conservative."
+      },
+      {
+        "id": "full_thickness_tear",
+        "name": "Full Thickness Rotator Cuff Tear",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "weakness_and_atrophy", "weight": 5 },
+          { "feature": "mri_confirms_complete_tear", "weight": 5 }
+        ],
+        "management": "Arthroscopic rotator cuff repair with suture anchors. Post-op sling 4-6 weeks. Passive ROM then active. Return to overhead sports 6-9 months."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "frozen_shoulder_adhesive_capsulitis",
+        "discriminators": ["global_loss_of_rom", "no_weakness", "capsular_tightness"]
+      },
+      {
+        "diseaseId": "shoulder_impingement",
+        "discriminators": ["painful_arc_positive", "normal_strength", "negative_drop_arm"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Shoulder X-ray (AP, axillary, outlet)", "priority": "high", "yield": 0.3, "indication": "rule out fracture, OA, calcific tendinitis" },
+        { "name": "Shoulder MRI (or MRA)", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis, tear size, retraction, fatty infiltration" },
+        { "name": "Shoulder Ultrasound", "priority": "medium", "yield": 0.85, "indication": "dynamic assessment, diagnostic alternative" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAOS Rotator Cuff Pathology Guidelines",
+      "pathways": [
+        {
+          "severity": "conservative_candidate",
+          "criteria": "Partial tear or small full-thickness, no significant weakness, low-demand",
+          "treatment": "Physiotherapy for 3-6 months. NSAIDs. Activity modification. Subacromial steroid injection. MRI/US to reassess if no improvement."
+        },
+        {
+          "severity": "surgical_candidate",
+          "criteria": "Acute traumatic tear with weakness, failed conservative, full-thickness tear in active patient",
+          "treatment": "Arthroscopic rotator cuff repair (single or double row). Post-op sling 4-6 weeks. Pendulum exercises. Graduated PT. Return to overhead sports 6-9 months."
+        }
+      ]
+    },
+
+    "pathophysiology": ["tendon_degeneration", "impingement", "acute_traumatic_loading", "repetitive_overhead_activity"]
+  }
+}

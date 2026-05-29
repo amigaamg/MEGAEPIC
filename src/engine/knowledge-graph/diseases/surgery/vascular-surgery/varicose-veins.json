@@ -1,0 +1,190 @@
+{
+  "disease": {
+    "id": "varicose_veins",
+    "name": "Varicose Veins",
+    "system": "surgical",
+    "agePeak_months": [300, 720],
+    "note": "Dilated, tortuous superficial veins of the lower limb due to venous valve incompetence. CEAP classification guides management.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["leg_veins", "leg_swelling", "venous_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "variceal_hemorrhage", "weight": 8 },
+        { "sign": "superficial_thrombophlebitis_severe", "weight": 6 },
+        { "sign": "venous_ulceration", "weight": 7 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ceap_c5_c6_active_healed_ulcer", "weight": 7 },
+          { "sign": "lipodermatosclerosis", "weight": 5 },
+          { "sign": "bleeding_varicosity", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Venous ulcer/bleeding -> SEVERE; C1-C4 disease -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "visible_tortuous_leg_veins", "weight": 5 },
+      { "symptomId": "leg_heaviness_fatigue", "weight": 4 },
+      { "symptomId": "aching_pain_worse_at_day_end", "weight": 3 },
+      { "symptomId": "ankle_swelling_evening", "weight": 3 },
+      { "symptomId": "itching_over_varicosities", "weight": 2 },
+      { "symptomId": "skin_changes_pigmentation", "weight": 2 },
+      { "symptomId": "prior_or_current_leg_ulcer", "weight": 3 },
+      { "symptomId": "previous_superficial_thrombophlebitis", "weight": 2 },
+      { "symptomId": "family_history_of_varicose_veins", "weight": 3 },
+      { "symptomId": "prolonged_standing_occupation", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "visible_tortuous_dilated_veins", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "venous_ulcer_at_gaiter_area", "baseWeight": 4 },
+      { "signId": "lipodermatosclerosis", "baseWeight": 3 },
+      { "signId": "pigmentation_hemosiderin", "baseWeight": 3 },
+      { "signId": "ankle_edema", "baseWeight": 3 },
+      { "signId": "tap_test_or_cough_impulse", "baseWeight": 2 },
+      { "signId": "trendelenburg_test_brody_trendelenburg", "baseWeight": 3 },
+      { "signId": "perthes_test", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history", "multiplier": 2.5 },
+      { "id": "female_gender", "multiplier": 2.0 },
+      { "id": "pregnancy_multiple", "multiplier": 2.5 },
+      { "id": "prolonged_standing_occupation", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "age_over_40", "multiplier": 2.0 },
+      { "id": "previous_dvt", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "truncal_varicose_veins",
+        "name": "Truncal Varicose Veins (Saphenous Trunk Incompetence)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "long_or_short_saphenous_incompetence", "weight": 5 },
+          { "feature": "dilated_trunk_and_branches", "weight": 5 },
+          { "feature": "positive_trendelenburg_test", "weight": 4 }
+        ],
+        "management": "Endovenous laser ablation (EVLA) or radiofrequency ablation (RFA). Foam sclerotherapy for branches. High ligation and stripping if not suitable for endovenous. Compression stockings post-op."
+      },
+      {
+        "id": "reticular_and_telangiectasia",
+        "name": "Reticular Veins and Telangiectasias (Spider Veins)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "dermal_veins_less_3mm", "weight": 5 },
+          { "feature": "cosmetic_concern", "weight": 4 },
+          { "feature": "no_truncal_incompetence", "weight": 4 }
+        ],
+        "management": "Sclerotherapy (liquid or foam). Laser therapy. Compression stockings for associated symptoms."
+      },
+      {
+        "id": "complicated_varicose_veins",
+        "name": "Complicated Varicose Veins (Ulcer, Bleeding, Thrombophlebitis)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "active_or_healed_ulcer", "weight": 5 },
+          { "feature": "skin_changes_lipodermatosclerosis", "weight": 5 },
+          { "feature": "bleeding_varicosity", "weight": 4 },
+          { "feature": "superficial_thrombophlebitis", "weight": 4 }
+        ],
+        "management": "Compression therapy (multi-layer bandaging). Wound care for ulcers. Endovenous ablation of incompetent truncal veins. Leg elevation. Superficial thrombophlebitis: NSAIDs, compression, anticoagulation if extensive."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "lymphedema",
+        "discriminators": ["non_pitting_edema", "stemmers_sign", "no_visible_varicosities"]
+      },
+      {
+        "diseaseId": "lipedema",
+        "discriminators": ["bilateral_symmetric", "painful_fat", "spares_feet", "no_venous_incompetence"]
+      },
+      {
+        "diseaseId": "dvt",
+        "discriminators": ["acute_onset", "entire_leg_swelling", "pain_severe", "doppler_confirms"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Trendelenburg Test", "priority": "high", "yield": 0.6, "indication": "assess saphenofemoral junction competence" },
+        { "name": "Perthes Test", "priority": "medium", "yield": 0.4, "indication": "assess deep vein patency" }
+      ],
+      "laboratory": [
+        { "name": "None routine", "priority": "low", "yield": 0.1, "indication": "not indicated" }
+      ],
+      "imaging": [
+        { "name": "Venous Duplex Ultrasound (Color Doppler)", "priority": "high", "yield": 0.95, "indication": "gold standard" },
+        { "name": "Venography", "priority": "low", "yield": 0.9, "indication": "rarely needed" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESVS Guidelines for Chronic Venous Disease",
+      "pathways": [
+        {
+          "severity": "C1-C2 (telangiectasias / uncomplicated varicose veins)",
+          "criteria": "reticular/telangiectasia or symptomatic varicose veins without complications",
+          "treatment": "Compression stockings (class 1-2). Sclerotherapy for C1. Endovenous ablation (EVLA/RFA) + foam sclerotherapy for C2. Elevation, exercise."
+        },
+        {
+          "severity": "C3-C6 (edema, skin changes, ulcer)",
+          "criteria": "edema, pigmentation, lipodermatosclerosis, healed or active ulcer",
+          "treatment": "Compression therapy (multi-layer bandaging for active ulcer). Endovenous ablation of incompetent veins. Ulcer care (debridement, dressings). Skin grafting for large ulcers. Surgery if endovenous not possible."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "venous_valve_incompetence",
+      "venous_hypertension",
+      "vein_wall_dilation",
+      "venous_reflux",
+      "capillary_leakage",
+      "edema",
+      "hemosiderin_deposition",
+      "lipodermatosclerosis",
+      "venous_ulceration"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "venous_ulcer",
+        "probability": 0.1,
+        "lagDays": [360, 3600],
+        "severityBoost": 0.2,
+        "clues": ["gaiter_ulcer", "pigmented_skin", "lipodermatosclerosis", "edema"]
+      },
+      {
+        "diseaseId": "superficial_thrombophlebitis",
+        "probability": 0.05,
+        "lagDays": [1, 30],
+        "severityBoost": 0.1,
+        "clues": ["red_tender_cord", "over_varicosity", "warmth"]
+      },
+      {
+        "diseaseId": "variceal_hemorrhage",
+        "probability": 0.01,
+        "lagDays": [0, 7],
+        "severityBoost": 0.3,
+        "clues": ["bleeding_from_varicosity", "often_minor_trauma"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["visible_tortuous_leg_veins", "aching_worse_end_of_day", "family_history", "prolonged_standing"],
+    "exclusionClues": ["arterial_disease_symptoms", "acute_swelling_single_limb", "normal_venous_doppler"]
+  }
+}

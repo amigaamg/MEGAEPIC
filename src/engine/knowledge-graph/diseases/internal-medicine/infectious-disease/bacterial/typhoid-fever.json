@@ -1,0 +1,151 @@
+{
+  "disease": {
+    "id": "typhoid_fever",
+    "name": "Typhoid Fever (Enteric Fever)",
+    "system": "infectious_disease",
+    "agePeak_months": [60, 360],
+    "note": "Systemic infection caused by Salmonella Typhi. Fecal-oral transmission. Step-ladder fever pattern. Endemic in developing regions.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["febrile_illness", "enteric_infection", "systemic_bacterial"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "intestinal_perforation", "weight": 10 },
+        { "sign": "gastrointestinal_hemorrhage", "weight": 9 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "encephalopathy", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Perforation/shock/encephalopathy -> SEVERE; else -> MILD-MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_step_ladder", "weight": 5, "note": "Gradual onset, step-ladder pattern" },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "malaise_fatigue", "weight": 3 },
+      { "symptomId": "abdominal_pain", "weight": 3 },
+      { "symptomId": "constipation_then_diarrhea", "weight": 3 },
+      { "symptomId": "anorexia", "weight": 2 },
+      { "symptomId": "travel_to_endemic_area", "weight": 4 },
+      { "symptomId": "exposure_to_contaminated_food_water", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_sustained", "baseWeight": 5 },
+      { "signId": "relative_bradycardia", "baseWeight": 4 },
+      { "signId": "rose_spots_trunk", "baseWeight": 4, "note": "Blanching maculopapular rash" },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "abdominal_distension_tenderness", "baseWeight": 3 },
+      { "signId": "coated_tongue", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "travel_to_endemic_area", "multiplier": 3.0 },
+      { "id": "contaminated_food_water", "multiplier": 2.5 },
+      { "id": "poor_sanitation", "multiplier": 2.0 },
+      { "id": "close_contact_carrier_or_case", "multiplier": 2.0 },
+      { "id": "low_gastric_acid", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_typhoid",
+        "name": "Uncomplicated Typhoid Fever",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "fever_less_than_2_weeks", "weight": 4 },
+          { "feature": "rose_spots", "weight": 3 },
+          { "feature": "no_bleeding_or_perforation", "weight": 5 }
+        ],
+        "management": "Azithromycin 1g PO then 500mg OD for 5-7 days. Or Ceftriaxone 2g IV OD for 7-10 days. Antipyretics. Hydration."
+      },
+      {
+        "id": "severe_typhoid",
+        "name": "Severe Typhoid with Complications",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "intestinal_hemorrhage", "weight": 5 },
+          { "feature": "perforation", "weight": 5 },
+          { "feature": "encephalopathy", "weight": 4 }
+        ],
+        "management": "IV Ceftriaxone 2g BD + Dexamethasone. Surgical repair if perforation. Blood transfusion if hemorrhage. ICU support."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "malaria",
+        "discriminators": ["periodic_fever", "chills_rigors", "positive_smear"]
+      },
+      {
+        "diseaseId": "brucellosis",
+        "discriminators": ["undulant_fever", "animal_exposure", "night_sweats"]
+      },
+      {
+        "diseaseId": "dengue_fever",
+        "discriminators": ["retro_orbital_pain", "severe_myalgia", "thrombocytopenia"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature pattern charting", "priority": "high", "yield": 0.6, "indication": "step-ladder pattern" }
+      ],
+      "laboratory": [
+        { "name": "Blood culture", "priority": "high", "yield": 0.8, "indication": "first week, sensitivity 80%" },
+        { "name": "Stool culture", "priority": "medium", "yield": 0.5, "indication": "after first week" },
+        { "name": "Widal test (Typhi O/H antibodies)", "priority": "medium", "yield": 0.6, "indication": ">1:160 titre significant" },
+        { "name": "FBC", "priority": "high", "yield": 0.5, "indication": "leukopenia common" },
+        { "name": "LFT", "priority": "high", "yield": 0.5, "indication": "transaminitis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Typhoid Fever / IDSA Guidelines",
+      "pathways": [
+        {
+          "severity": "uncomplicated",
+          "criteria": "mild-moderate fever, no complications, able to take oral",
+          "treatment": "Azithromycin 1g loading then 500mg OD x 5-7d. Or Ceftriaxone 2g IV OD x 7-10d. Avoid fluoroquinolones in resistant areas."
+        },
+        {
+          "severity": "severe / complicated",
+          "criteria": "perforation, hemorrhage, encephalopathy, or shock",
+          "treatment": "IV Ceftriaxone 2g BD. Dexamethasone loading 3mg/kg then 1mg/kg 6-hourly x 48h. Surgical intervention for perforation. Blood products. ICU."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "fecal_oral_ingestion",
+      "m_peyers_patch_invasion",
+      "lymphatic_spread",
+      "bloodstream_infection",
+      "reticuloendothelial_system_dissemination",
+      "intestinal_inflammation",
+      "perforation_or_hemorrhage"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intestinal_perforation",
+        "probability": 0.05,
+        "lagDays": [14, 28],
+        "severityBoost": 0.5,
+        "clues": ["acute_severe_abdominal_pain", "peritonitis", "free_air_under_diaphragm"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if complicated",
+    "diagnosticClues": ["step_ladder_fever", "relative_bradycardia", "rose_spots", "travel_endemic"],
+    "exclusionClues": ["negative_cultures", "rapid_defervescence_without_antibiotics", "cough_predominant"]
+  }
+}

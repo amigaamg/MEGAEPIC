@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "deep_vein_thrombosis",
+    "name": "Deep Vein Thrombosis (DVT)",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Thrombosis of deep veins, usually lower limb. Risk of pulmonary embolism (PE). Post-operative patient at high risk.",
+    "prevalenceWeight": 0.45,
+    "syndromeTags": ["leg_swelling", "leg_pain", "thromboembolism"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suspected_pulmonary_embolism", "weight": 10 },
+        { "sign": "phlegmasia_caerulea_dolens", "weight": 9 },
+        { "sign": "venous_gangrene", "weight": 9 },
+        { "sign": "cardiorespiratory_arrest", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "proximal_dvt_iliofemoral", "weight": 7 },
+          { "sign": "recurrent_dvt_on_anticoagulation", "weight": 6 },
+          { "sign": "phlegmasia_alba_dolens", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "PE/iliofemoral DVT/phlegmasia -> SEVERE; distal calf DVT -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "leg_swelling_unilateral", "weight": 5 },
+      { "symptomId": "leg_pain_tenderness", "weight": 4 },
+      { "symptomId": "warmth_redness_of_leg", "weight": 3 },
+      { "symptomId": "recent_surgery_trauma", "weight": 4 },
+      { "symptomId": "prolonged_immobilization", "weight": 4 },
+      { "symptomId": "pregnancy_or_postpartum", "weight": 3 },
+      { "symptomId": "oral_contraceptive_use", "weight": 3 },
+      { "symptomId": "previous_dvt_or_pe", "weight": 4 },
+      { "symptomId": "chest_pain_dyspnea_hemoptysis", "weight": 4, "note": "Suggests PE" }
+    ],
+
+    "examFeatures": [
+      { "signId": "unilateral_leg_edema", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "calf_tenderness", "baseWeight": 4 },
+      { "signId": "homans_sign", "baseWeight": 3 },
+      { "signId": "dilated_superficial_veins", "baseWeight": 3 },
+      { "signId": "warmth_of_affected_limb", "baseWeight": 2 },
+      { "signId": "phlegmasia_signs_painful_white_or_blue_leg", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "major_surgery_orthopedic_abdominal", "multiplier": 3.0 },
+      { "id": "prolonged_immobilization_flight", "multiplier": 2.5 },
+      { "id": "malignancy", "multiplier": 2.5 },
+      { "id": "previous_dvt_pe", "multiplier": 3.0 },
+      { "id": "pregnancy_postpartum", "multiplier": 2.5 },
+      { "id": "oral_contraceptives_HRT", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "thrombophilia_factor_v_leiden", "multiplier": 3.5 },
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "central_venous_line", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "distal_calf_dvt",
+        "name": "Distal (Calf) DVT",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "calf_swelling_pain", "weight": 5 },
+          { "feature": "below_popliteal_vein", "weight": 5 },
+          { "feature": "lower_risk_of_pe", "weight": 4 }
+        ],
+        "management": "Anticoagulation (LMWH or DOAC) for 3 months. Compression stockings. Mobilization. Serial ultrasound to monitor proximal extension."
+      },
+      {
+        "id": "proximal_iliofemoral_dvt",
+        "name": "Proximal (Iliofemoral) DVT",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "whole_leg_swelling", "weight": 5 },
+          { "feature": "thigh_groin_tenderness", "weight": 4 },
+          { "feature": "high_risk_of_pe", "weight": 5 },
+          { "feature": "post_thrombotic_syndrome_risk", "weight": 4 }
+        ],
+        "management": "Anticoagulation (therapeutic LMWH then DOAC or Warfarin). Catheter-directed thrombolysis if extensive/limb-threatening. Compression stockings. Assess for underlying malignancy."
+      },
+      {
+        "id": "phlegmasia_caerulea_dolens",
+        "name": "Phlegmasia Caerulea Dolens",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "massive_leg_swelling_blue", "weight": 5 },
+          { "feature": "severe_pain", "weight": 5 },
+          { "feature": "arterial_compromise_compartment_syndrome", "weight": 5 },
+          { "feature": "venous_gangrene_risk", "weight": 5 }
+        ],
+        "management": "Urgent anticoagulation. Catheter-directed thrombolysis or pharmacomechanical thrombectomy. Fasciotomy if compartment syndrome. IVC filter if contraindication to lytics."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cellulitis",
+        "discriminators": ["erythema_warmth_more_prominent", "fever", "elevated_crp_wbc", "no_wells_score"]
+      },
+      {
+        "diseaseId": "ruptured_bakers_cyst",
+        "discriminators": ["posterior_knee_swelling", "pseudothrombophlebitis", "ultrasound_shows_cyst_rupture"]
+      },
+      {
+        "diseaseId": "lymphedema",
+        "discriminators": ["chronic_longstanding", "stemmers_sign", "non_pitting", "bilateral_common"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Wells' DVT Score", "priority": "immediate", "yield": 0.8, "indication": "pre-test probability assessment" }
+      ],
+      "laboratory": [
+        { "name": "D-dimer", "priority": "high", "yield": 0.85, "indication": "elevated in DVT, good negative predictive value" },
+        { "name": "Coagulation profile (PT, aPTT)", "priority": "high", "yield": 0.3, "indication": "baseline before anticoagulation" },
+        { "name": "CBC", "priority": "medium", "yield": 0.2, "indication": "baseline" }
+      ],
+      "imaging": [
+        { "name": "Venous Doppler Ultrasound (Compression US)", "priority": "immediate", "yield": 0.95, "indication": "gold standard" },
+        { "name": "CT Venography or MR Venography", "priority": "medium", "yield": 0.9, "indication": "if US inconclusive or iliac DVT suspected" },
+        { "name": "Venography", "priority": "low", "yield": 0.95, "indication": "rarely used now" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACCP Guidelines for Antithrombotic Therapy for DVT",
+      "pathways": [
+        {
+          "severity": "distal DVT",
+          "criteria": "below popliteal, low risk, no symptoms of PE",
+          "treatment": "Anticoagulation for 3 months (DOAC or LMWH + Warfarin). Compression stockings. Ambulation."
+        },
+        {
+          "severity": "proximal DVT",
+          "criteria": "popliteal, femoral, iliac, or IVC involvement",
+          "treatment": "Therapeutic LMWH bridging to DOAC (Rivaroxaban/Apixaban) or Warfarin (INR 2-3). Anticoagulation for 3-6 months. Compression stockings. Consider IVC filter if anticoagulation contraindicated."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "virchows_triad",
+      "venous_stasis",
+      "endothelial_injury",
+      "hypercoagulability",
+      "thrombus_formation_in_deep_veins",
+      "venous_outflow_obstruction",
+      "leg_edema",
+      "embolization_to_pulmonary_artery"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pulmonary_embolism",
+        "probability": 0.2,
+        "lagDays": [1, 14],
+        "severityBoost": 0.5,
+        "clues": ["sudden_dyspnea", "chest_pain", "hemoptysis", "hypoxia"]
+      },
+      {
+        "diseaseId": "post_thrombotic_syndrome",
+        "probability": 0.3,
+        "lagDays": [90, 720],
+        "severityBoost": 0.1,
+        "clues": ["chronic_leg_swelling", "skin_pigmentation", "venous_ulceration"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["unilateral_leg_swelling", "post_operative", "wells_score_elevated", "d_dimer_positive", "doppler_confirms"],
+    "exclusionClues": ["bilateral_swelling", "normal_doppler", "low_wells_negative_d_dimer"]
+  }
+}

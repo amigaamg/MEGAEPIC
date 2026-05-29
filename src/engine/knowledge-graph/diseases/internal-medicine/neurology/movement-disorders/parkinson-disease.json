@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "parkinson_disease",
+    "name": "Parkinson Disease",
+    "system": "neurology",
+    "agePeak_months": [600, 960],
+    "note": "Progressive neurodegenerative disorder. Classic triad: tremor, rigidity, bradykinesia.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["movement_disorder", "neurodegenerative"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_dysphagia", "weight": 9 },
+        { "sign": "recurrent_falls", "weight": 8 },
+        { "sign": "acute_confusion", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If significant disability, falls, or complications -> ADVANCED; else -> EARLY/MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "resting_tremor", "weight": 5 },
+      { "symptomId": "slowness_of_movement", "weight": 4 },
+      { "symptomId": "stiffness_rigidity", "weight": 4 },
+      { "symptomId": "gait_difficulty", "weight": 3 },
+      { "symptomId": "postural_instability", "weight": 3 },
+      { "symptomId": "micrographia", "weight": 3 },
+      { "symptomId": "loss_of_smell", "weight": 2 },
+      { "symptomId": "constipation_preceding", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "resting_tremor_pill_rolling", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bradykinesia", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cogwheel_rigidity", "baseWeight": 4 },
+      { "signId": "masked_facies", "baseWeight": 3 },
+      { "signId": "shuffling_gait", "baseWeight": 3 },
+      { "signId": "postural_instability", "baseWeight": 3 },
+      { "signId": "reduced_arm_swing", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 2.0 },
+      { "id": "male_sex", "multiplier": 1.5 },
+      { "id": "family_history_pd", "multiplier": 1.3 },
+      { "id": "pesticide_exposure", "multiplier": 1.5 },
+      { "id": "head_injury", "multiplier": 1.2 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "essential_tremor",
+        "discriminators": ["action_tremor", "no_rigidity", "no_bradykinesia", "alcohol_response"]
+      },
+      {
+        "diseaseId": "multiple_system_atrophy",
+        "discriminators": ["early_autonomic", "cerebellar_signs", "poor_levodopa_response"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "UPDRS rating scale", "priority": "high", "yield": 0.9, "indication": "assess severity and progression" },
+        { "name": "Levodopa challenge test", "priority": "medium", "yield": 0.85, "indication": "confirm dopaminergic responsiveness" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain", "priority": "medium", "yield": 0.3, "indication": "rule out secondary Parkinsonism" },
+        { "name": "DaTSCAN (FP-CIT SPECT)", "priority": "medium", "yield": 0.9, "indication": "differentiate from essential tremor" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Parkinson Disease",
+      "pathways": [
+        {
+          "severity": "early",
+          "criteria": "mild symptoms, no functional impairment",
+          "treatment": "Levodopa/carbidopa or dopamine agonist. Exercise therapy. Physiotherapy referral."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "functional impairment, motor fluctuations",
+          "treatment": "Optimize levodopa dosing. Add COMT inhibitor or MAO-B inhibitor. Consider DBS evaluation."
+        },
+        {
+          "severity": "advanced",
+          "criteria": "falls, dysphagia, hallucinations, freezing",
+          "treatment": "DBS if candidate. Multidisciplinary care. Swallow assessment. Medication for non-motor symptoms."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "substantia_nigra_dopamine_loss",
+      "alpha_synuclein_aggregation",
+      "lewy_body_formation",
+      "basal_ganglia_dysfunction",
+      "dopamine_deficiency"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "levodopa_dyskinesia",
+        "probability": 0.4,
+        "severityBoost": 0.2,
+        "clues": ["choreiform_movements", "peak_dose"]
+      },
+      {
+        "diseaseId": "parkinson_dementia",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["cognitive_decline", "visual_hallucinations"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["resting_tremor_rigidity_bradykinesia", "levodopa_response", "asymmetric_onset"],
+    "exclusionClues": ["action_tremor_dominant", "early_severe_dementia", "negative_datscan"]
+  }
+}

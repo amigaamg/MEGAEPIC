@@ -1,0 +1,190 @@
+{
+  "disease": {
+    "id": "peritonsillar_abscess",
+    "name": "Peritonsillar Abscess (Quinsy)",
+    "system": "ent",
+    "agePeak_months": [180, 480],
+    "note": "Collection of pus between the tonsillar capsule and the superior constrictor muscle. Most common deep neck space infection.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["severe_sore_throat", "trismus", "muffled_voice", "dysphagia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stridor", "weight": 10 },
+        { "sign": "respiratory_distress", "weight": 10 },
+        { "sign": "airway_obstruction", "weight": 10 },
+        { "sign": "sepsis", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_trismus", "weight": 8 },
+          { "sign": "neck_swelling_extension", "weight": 7 },
+          { "sign": "high_fever", "weight": 6 },
+          { "sign": "dehydration_severe", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If airway compromise/descending infection -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sore_throat_unilateral", "weight": 5, "modifiers": [
+          { "condition": "worsening_over_days", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "dysphagia_severe", "weight": 5 },
+      { "symptomId": "trismus", "weight": 5 },
+      { "symptomId": "muffled_hot_potato_voice", "weight": 4 },
+      { "symptomId": "drooling", "weight": 3 },
+      { "symptomId": "otalgia_referred", "weight": 3 },
+      { "symptomId": "recent_tonsillitis_history", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "unilateral_tonsillar_bulge", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "uvula_deviation_contralateral", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "soft_palate_edema", "baseWeight": 4 },
+      { "signId": "trismus", "baseWeight": 4 },
+      { "signId": "cervical_lymphadenopathy", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "dehydration_signs", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "recurrent_tonsillitis", "multiplier": 3.0 },
+      { "id": "untreated_tonsillitis", "multiplier": 2.5 },
+      { "id": "age_15_to_30", "multiplier": 2.0 },
+      { "id": "male_gender", "multiplier": 1.5 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "anterior_pta",
+        "name": "Anterior Peritonsillar Abscess",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "superior_pole_bulge", "weight": 5 },
+          { "feature": "uvula_displacement", "weight": 4 },
+          { "feature": "trismus", "weight": 4 }
+        ],
+        "management": "Incision and drainage (I&D) via intraoral approach. Needle aspiration. IV antibiotics (Penicillin + Metronidazole or Clindamycin). Analgesia. IV fluids."
+      },
+      {
+        "id": "posterior_pta",
+        "name": "Posterior Peritonsillar Abscess",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "tonsil_displaced_anteriorly", "weight": 5 },
+          { "feature": "posterior_pillar_bulge", "weight": 4 },
+          { "feature": "minimal_trismus", "weight": 2 }
+        ],
+        "management": "I&D with adequate exposure. ENT consultation. IV antibiotics. May require general anesthesia for drainage."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "severe_tonsillitis",
+        "discriminators": ["bilateral_symptoms", "no_trismus", "no_uvula_deviation", "no_fluctuance"]
+      },
+      {
+        "diseaseId": "parapharyngeal_abscess",
+        "discriminators": ["neck_swelling_below_mandible", "torticollis", "CN_IX_XI_XII_deficits"]
+      },
+      {
+        "diseaseId": "infectious_mononucleosis",
+        "discriminators": ["bilateral", "generalized_lymphadenopathy", "splenomegaly", "positive_monospot"]
+      },
+      {
+        "diseaseId": "retropharyngeal_abscess",
+        "discriminators": ["stridor", "neck_extension", "midline_pharyngeal_bulge", "younger_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Oropharyngeal Exam", "priority": "immediate", "yield": 0.8, "indication": "first assessment" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.6, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "elevated" },
+        { "name": "Blood Culture", "priority": "medium", "yield": 0.2, "indication": "septic patients" }
+      ],
+      "imaging": [
+        { "name": "CT Neck with Contrast", "priority": "medium", "yield": 0.95, "indication": "equivocal cases, suspected deep extension, pre-surgical planning" },
+        { "name": "Intraoral Ultrasound", "priority": "medium", "yield": 0.85, "indication": "confirm fluid collection, guide aspiration" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Peritonsillar Abscess",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "localized PTA, no airway compromise, able to swallow",
+          "treatment": "Needle aspiration or I&D under topical anesthesia. IV antibiotics (Penicillin G 4M U Q4H + Metronidazole 500 mg Q8H or Clindamycin 900 mg Q8H). IV fluids. Discharge with oral antibiotics for 7-10 days."
+        },
+        {
+          "severity": "severe",
+          "criteria": "large abscess, severe trismus, dehydration, extension to deep neck spaces",
+          "treatment": "I&D under general anesthesia. Tonsillectomy (quinsy tonsillectomy) if recurrent or complicated. IV antibiotics. Admission for monitoring. CT neck to assess extension."
+        },
+        {
+          "severity": "airway compromise",
+          "criteria": "stridor, respiratory distress, impending airway loss",
+          "treatment": "Secure airway (awake fiberoptic intubation or tracheostomy). Emergency I&D. IV antibiotics. ICU admission. CT neck."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "tonsillar_crypt_infection",
+      "extension_past_capsule",
+      "suppuration_in_peritonsillar_space",
+      "abscess_formation",
+      "tissue_edema_and_trismus"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "parapharyngeal_abscess",
+        "probability": 0.05,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["neck_swelling", "fever_persistent", "CN_palsies"]
+      },
+      {
+        "diseaseId": "retropharyngeal_abscess",
+        "probability": 0.03,
+        "lagDays": [1, 4],
+        "severityBoost": 0.5,
+        "clues": ["stridor", "bulging_pharyngeal_wall", "difficulty_neck_extension"]
+      },
+      {
+        "diseaseId": "airway_obstruction",
+        "probability": 0.02,
+        "lagDays": [0, 2],
+        "severityBoost": 0.8,
+        "clues": ["stridor", "tachypnea", "retractions", "desaturation"]
+      },
+      {
+        "diseaseId": "septicemia",
+        "probability": 0.02,
+        "lagDays": [1, 5],
+        "severityBoost": 0.5,
+        "clues": ["high_fever", "hypotension", "tachycardia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["unilateral_tonsillar_bulge", "uvula_deviation", "trismus", "muffled_voice", "worsening_tonsillitis"],
+    "exclusionClues": ["bilateral_symptoms", "no_trismus", "no_uvula_deviation"]
+  }
+}

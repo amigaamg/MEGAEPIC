@@ -1,0 +1,123 @@
+{
+  "disease": {
+    "id": "renovascular_hypertension",
+    "name": "Renovascular Hypertension",
+    "system": "RENAL",
+    "agePeak_months": [240, 960],
+    "note": "Hypertension caused by reduced renal perfusion, most commonly from renal artery stenosis. Important cause of secondary hypertension.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["secondary_hypertension", "renovascular_disease", "hypertension"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypertensive_emergency", "weight": 10 },
+        { "sign": "flash_pulmonary_edema", "weight": 9 },
+        { "sign": "accelerated_malignant_hypertension", "weight": 9 },
+        { "sign": "aortic_dissection", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "BP level, duration, and presence of target organ damage determine severity"
+    },
+    "historyFeatures": [
+      { "symptomId": "hypertension_sudden_onset_or_worsening", "weight": 5 },
+      { "symptomId": "hypertension_difficult_to_control", "weight": 5 },
+      { "symptomId": "young_age_under_30_without_risk_factors", "weight": 4 },
+      { "symptomId": "flash_pulmonary_edema_recurrent", "weight": 4 },
+      { "symptomId": "renal_deterioration_after_acei_arb", "weight": 4 },
+      { "symptomId": "atherosclerotic_disease_elsewhere", "weight": 3 },
+      { "symptomId": "smoking_history", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "epigastric_or_flank_bruit", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "severe_hypertension_grade_3", "baseWeight": 5 },
+      { "signId": "hypertensive_retinopathy", "baseWeight": 3 },
+      { "signId": "left_ventricular_hypertrophy_heave", "baseWeight": 2 },
+      { "signId": "carotid_or_femoral_bruits", "baseWeight": 2 },
+      { "signId": "reduced_femoral_pulses_coarctation_screen", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_55", "multiplier": 2.5 },
+      { "id": "female_sex_for_fmd", "multiplier": 3.0 },
+      { "id": "atherosclerosis", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "hyperlipidemia", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "renovascular_htn_from_atherosclerotic_ras",
+        "name": "Renovascular HTN from Atherosclerotic RAS",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "older_age", "weight": 4 },
+          { "feature": "other_vascular_disease", "weight": 4 },
+          { "feature": "progressive_renal_insufficiency", "weight": 3 }
+        ],
+        "management": "Medical therapy: ACEi/ARB (monitor creatinine), CCB, diuretics as needed. Statin, aspirin, smoking cessation. Revascularization if resistant HTN, progressive CKD, or flash pulmonary edema. Stenting preferred."
+      },
+      {
+        "id": "renovascular_htn_from_fmd",
+        "name": "Renovascular HTN from FMD",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "young_women_20_50", "weight": 5 },
+          { "feature": "string_of_beads_sign", "weight": 5 },
+          { "feature": "high_renin_levels", "weight": 3 }
+        ],
+        "management": "PTRA (percutaneous transluminal renal angioplasty) without stent. High cure rate. ACEi/ARB if angioplasty not done or incomplete response. Follow for restenosis."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "essential_hypertension", "discriminators": ["gradual_onset", "family_history", "no_bruit", "normal_imaging"] },
+      { "diseaseId": "primary_hyperaldosteronism", "discriminators": ["low_renin_high_aldosterone", "hypokalemia", "adrenal_lesion", "no_bruit"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, eGFR, U&E", "priority": "high", "yield": 0.6, "indication": "renal function, hypokalemia" },
+        { "name": "Plasma renin activity, aldosterone/renin ratio", "priority": "high", "yield": 0.7, "indication": "high renin suggests renovascular" }
+      ],
+      "imaging": [
+        { "name": "Renal artery duplex ultrasound", "priority": "first-line", "yield": 0.8, "indication": "PSV >200, RAR >3.5" },
+        { "name": "CTA or MRA renal arteries", "priority": "high", "yield": 0.9, "indication": "stenosis detection" },
+        { "name": "Catheter angiography", "priority": "gold_standard", "yield": 0.98, "indication": "pre-intervention confirmation" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ACC Hypertension Guidelines / KDIGO",
+      "pathways": [
+        {
+          "severity": "FMD with hypertension",
+          "criteria": "confirmed FMD, HTN refractory or patient preference",
+          "treatment": "PTRA (angioplasty without stent). Post-procedure aspirin. BP typically improves or cures. ACEi/ARB for residual HTN."
+        },
+        {
+          "severity": "atherosclerotic RAS with medical management",
+          "criteria": "HTN controlled on 2-3 drugs, stable creatinine",
+          "treatment": "ACEi/ARB (first-line), CCB, diuretic. Statin. Antiplatelet. BP target <130/80. Lifestyle. Annual duplex surveillance."
+        },
+        {
+          "severity": "revascularization for atherosclerotic RAS",
+          "criteria": "resistant HTN (≥3 drugs), progressive CKD, flash PE, bilateral RAS",
+          "treatment": "Renal artery stent. Dual antiplatelet (aspirin + clopidogrel) for 1 month then aspirin alone. Life-long surveillance for restenosis. Continue medical therapy."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "renal_artery_narrowing",
+      "reduced_perfusion_to_juxtaglomerular_apparatus",
+      "renin_release",
+      "angiotensin_i_to_angiotensin_ii",
+      "systemic_vasoconstriction",
+      "aldosterone_mediated_sodium_retention",
+      "volume_expansion_and_further_htn"
+    ],
+    "complications": [
+      { "diseaseId": "hypertensive_emergency_target_organ_damage", "probability": 0.1, "severityBoost": 0.5, "clues": ["bp_220_120_plus", "headache_visual", "creatinine_rise", "chest_pain"] },
+      { "diseaseId": "chronic_kidney_disease_progression", "probability": 0.2, "severityBoost": 0.3, "clues": ["decreasing_egfr_over_time", "renal_atrophy", "bilateral_stenosis"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["htn_difficult_to_control", "young_onset_or_late_worsening", "abdominal_bruit", "flash_pulmonary_edema"],
+    "exclusionClues": ["normal_renal_artery_imaging", "well_controlled_essential_htn", "no_clinical_clues_for_secondary_htn"]
+  }
+}

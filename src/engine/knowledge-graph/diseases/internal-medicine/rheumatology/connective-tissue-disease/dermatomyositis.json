@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "dermatomyositis",
+    "name": "Dermatomyositis",
+    "system": "rheumatology",
+    "agePeak_months": [300, 600],
+    "note": "Idiopathic inflammatory myopathy characterized by proximal muscle weakness and characteristic skin manifestations. Associated with malignancy in adults. Part of the inflammatory myositis spectrum.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["inflammatory_myopathy", "autoimmune", "connective_tissue_disease", "myositis", "rash"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_proximal_weakness_respiratory", "weight": 9 },
+        { "sign": "dysphagia_aspiration", "weight": 8 },
+        { "sign": "interstitial_lung_disease", "weight": 8 },
+        { "sign": "myocarditis", "weight": 8 },
+        { "sign": "underlying_malignancy", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If respiratory weakness, dysphagia, or ILD -> URGENT; else -> NON-URGENT (malignancy screening mandatory)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "proximal_muscle_weakness", "weight": 5 },
+      { "symptomId": "heliotrope_rash_eyelids", "weight": 5 },
+      { "symptomId": "gottron_papules_knuckles", "weight": 5 },
+      { "symptomId": "photosensitive_rash", "weight": 3 },
+      { "symptomId": "dysphagia", "weight": 4 },
+      { "symptomId": "myalgia_tenderness", "weight": 3 },
+      { "symptomId": "raynaud_phenomenon", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "heliotrope_rash", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "gottron_papules", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "proximal_muscle_weakness", "baseWeight": 5 },
+      { "signId": "shawl_sign_rash_upper_back", "baseWeight": 4 },
+      { "signId": "mechanic_hands", "baseWeight": 3 },
+      { "signId": "periungual_telangiectasias", "baseWeight": 3 },
+      { "signId": "calcinosis_cutis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "adult_onset_40_plus", "multiplier": 2.5 },
+      { "id": "malignancy_underlying", "multiplier": 3.0 },
+      { "id": "hla_drb1_dqa", "multiplier": 2.0 },
+      { "id": "juvenile_onset", "multiplier": 0.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "classic_dermatomyositis",
+        "name": "Classic Dermatomyositis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "characteristic_rash_plus_myositis", "weight": 5 },
+          { "feature": "elevated_muscle_enzymes", "weight": 4 },
+          { "feature": "abnormal_emg_biopsy", "weight": 4 }
+        ],
+        "management": "Corticosteroids. Steroid-sparing agents (methotrexate, azathioprine). Malignancy screening."
+      },
+      {
+        "id": "amyopathic_dermatomyositis",
+        "name": "Amyopathic Dermatomyositis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "rash_typical_no_muscle_weakness", "weight": 5 },
+          { "feature": "normal_muscle_enzymes", "weight": 4 },
+          { "feature": "still_malignancy_risk", "weight": 4 }
+        ],
+        "management": "Topical and systemic therapy for rash. Malignancy screening. Monitor for muscle involvement."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "polymyositis",
+        "discriminators": ["no_rash", "anti_jo1", "older_onset", "similar_weakness"]
+      },
+      {
+        "diseaseId": "inclusion_body_myositis",
+        "discriminators": ["distal_weakness", "asymmetric", "dysphagia_prominent", "no_rash", "refractory_to_steroids"]
+      },
+      {
+        "diseaseId": "systemic_lupus_erythematosus",
+        "discriminators": ["no_muscle_weakness", "glomerulonephritis", "anti_dsdna", "different_rash_distribution"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Manual muscle testing (MRC)", "priority": "immediate", "yield": 0.8, "indication": "quantify proximal weakness" }
+      ],
+      "laboratory": [
+        { "name": "Creatine kinase (CK)", "priority": "high", "yield": 0.85, "indication": "elevated in active myositis" },
+        { "name": "Aldolase, LDH, AST, ALT", "priority": "high", "yield": 0.7, "indication": "muscle enzymes" },
+        { "name": "Myositis-specific antibodies", "priority": "high", "yield": 0.5, "indication": "anti-Mi2, anti-TIF1, anti-NXP2, anti-MDA5" },
+        { "name": "ESR and CRP", "priority": "medium", "yield": 0.5, "indication": "non-specific inflammatory markers" }
+      ],
+      "imaging": [
+        { "name": "MRI thigh muscles", "priority": "medium", "yield": 0.9, "indication": "muscle edema, inflammation pattern" },
+        { "name": "EMG/NCS", "priority": "medium", "yield": 0.8, "indication": "myopathic potentials, irritability" },
+        { "name": "Muscle biopsy", "priority": "high", "yield": 0.95, "indication": "perifascicular atrophy, C5b-9 deposition" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR/ACR Myositis Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "mild weakness, limited skin disease, no ILD",
+          "treatment": "Prednisolone 0.5-1 mg/kg/day. Methotrexate as steroid-sparing. Topical corticosteroids and sun protection."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "moderate weakness, dysphagia, systemic symptoms",
+          "treatment": "Prednisolone 1 mg/kg/day. Methotrexate or azathioprine. IVIG in refractory cases."
+        },
+        {
+          "severity": "severe",
+          "criteria": "respiratory weakness, severe dysphagia, ILD",
+          "treatment": "High-dose IV methylprednisolone. IVIG. Cyclophosphamide or rituximab for ILD. Malignancy screening and treatment."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "complement_mediated_microangiopathy",
+      "type_i_ifn_signature",
+      "autoantibody_production",
+      "cytotoxic_t_cell_infiltrate",
+      "paraneoplastic_trigger",
+      "muscle_fiber_necrosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "interstitial_lung_disease",
+        "probability": 0.2,
+        "severityBoost": 0.6,
+        "clues": ["dyspnea", "cough", "bibasilar_crepitations", "anti_mda5", "anti_jo1"]
+      },
+      {
+        "diseaseId": "associated_malignancy",
+        "probability": 0.15,
+        "severityBoost": 0.7,
+        "clues": ["age_over_50", "refractory_disease", "anti_tif1", "anti_nxp2"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if ILD, dysphagia, or respiratory weakness",
+    "diagnosticClues": ["heliotrope_rash_gottron_papules", "proximal_weakness", "elevated_ck", "perifascicular_atrophy"],
+    "exclusionClues": ["no_rash", "normal_ck", "distal_weakness_predominance", "no_inflammatory_biopsy"]
+  }
+}

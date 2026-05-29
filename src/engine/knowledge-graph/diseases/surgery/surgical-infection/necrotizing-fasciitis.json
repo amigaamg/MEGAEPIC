@@ -1,0 +1,188 @@
+{
+  "disease": {
+    "id": "necrotizing_fasciitis",
+    "name": "Necrotizing Fasciitis",
+    "system": "surgical",
+    "agePeak_months": [360, 720],
+    "note": "Rapidly progressive, life-threatening infection of subcutaneous tissue and fascia. Pain out of proportion. Surgical emergency.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["skin_infection", "sepsis", "surgical_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 },
+        { "sign": "crepitus", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "pain_out_of_proportion", "weight": 9 },
+          { "sign": "rapid_skin_change_bullae", "weight": 8 },
+          { "sign": "lyr_score_greater_6", "weight": 8 },
+          { "sign": "skin_necrosis_gangrene", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Any suspicion of necrotizing fasciitis -> ALL SEVERE (requires emergency surgery)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "severe_pain_out_of_proportion", "weight": 5 },
+      { "symptomId": "rapid_progression_hours", "weight": 5 },
+      { "symptomId": "fever_rigors", "weight": 4 },
+      { "symptomId": "skin_redness_swelling_rapid", "weight": 5 },
+      { "symptomId": "recent_surgery_trauma_wound", "weight": 4 },
+      { "symptomId": "systemic_malaise", "weight": 3 },
+      { "symptomId": "diabetes_or_immunosuppression", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pain_out_of_proportion_to_skin_appearance", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "crepitus_on_palpation", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "erythema_rapidly_spreading", "baseWeight": 4 },
+      { "signId": "hemorrhagic_bullae_blisters", "baseWeight": 4 },
+      { "signId": "skin_necrosis_discoloration", "baseWeight": 4 },
+      { "signId": "edema_beyond_erythema", "baseWeight": 4 },
+      { "signId": "fever_tachycardia_hypotension", "baseWeight": 4 },
+      { "signId": "loss_of_sensation_in_center", "baseWeight": 3 },
+      { "signId": "dishwater_discharge", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 3.0 },
+      { "id": "immunosuppression", "multiplier": 3.5 },
+      { "id": "peripheral_vascular_disease", "multiplier": 2.5 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.0 },
+      { "id": "chronic_liver_disease", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "intravenous_drug_use", "multiplier": 3.0 },
+      { "id": "recent_surgery_trauma", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "type_i_nf_polymicrobial",
+        "name": "Type I (Polymicrobial) Necrotizing Fasciitis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "mixed_aerobic_anaerobic", "weight": 5 },
+          { "feature": "trunk_perineum_lower_extremities", "weight": 4 },
+          { "feature": "comorbidities_common", "weight": 4 },
+          { "feature": "gas_on_imaging", "weight": 4 }
+        ],
+        "management": "Emergency wide debridement. IV broad-spectrum antibiotics (Piperacillin-Tazobactam + Clindamycin + Gentamicin). ICU. Repeat debridement in 24h. Vacuum therapy."
+      },
+      {
+        "id": "type_ii_nf_group_a_strep",
+        "name": "Type II (Group A Strep) Necrotizing Fasciitis",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "group_a_streptococcus", "weight": 5 },
+          { "feature": "extremities_more_common", "weight": 4 },
+          { "feature": "toxic_shock_syndrome", "weight": 4 },
+          { "feature": "younger_patients", "weight": 3 }
+        ],
+        "management": "Emergency debridement. IV antibiotics: Penicillin + Clindamycin + IVIG. ICU. Tight glycemic control. Limb amputation sometimes necessary."
+      },
+      {
+        "id": "fournier_gangrene",
+        "name": "Fournier's Gangrene (Perineal NF)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "perineal_scrotal_genital", "weight": 5 },
+          { "feature": "rapid_spread_to_abdominal_wall", "weight": 5 },
+          { "feature": "polymicrobial", "weight": 4 },
+          { "feature": "crepitus_common", "weight": 4 }
+        ],
+        "management": "Emergency debridement. Broad-spectrum IV antibiotics. Urinary and fecal diversion if needed. Hyperbaric oxygen. Multiple debridements."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cellulitis",
+        "discriminators": ["no_crepitus", "pain_proportional", "slower_progression", "no_necrotic_bullae"]
+      },
+      {
+        "diseaseId": "gas_gangrene_clostridial",
+        "discriminators": ["muscle_involvement_myonecrosis", "crepitus_prominent", "rapid_hemolysis", "previous_surgery_trauma_deep"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "LRINEC Score", "priority": "immediate", "yield": 0.8, "indication": "risk stratification for necrotizing fasciitis" },
+        { "name": "Finger test / Bedside biopsy", "priority": "high", "yield": 0.9, "indication": "fascial biopsy under LA" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "immediate", "yield": 0.7, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "immediate", "yield": 0.8, "indication": "markedly elevated" },
+        { "name": "Lactate", "priority": "immediate", "yield": 0.7, "indication": "tissue hypoperfusion" },
+        { "name": "Creatinine", "priority": "high", "yield": 0.5, "indication": "renal function" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.5, "indication": "identify organism" },
+        { "name": "Sodium, CRP, WBC for LRINEC", "priority": "immediate", "yield": 0.8, "indication": "LRINEC >6 strongly suggestive" }
+      ],
+      "imaging": [
+        { "name": "CT Soft Tissue with IV contrast", "priority": "high", "yield": 0.85, "indication": "gas in soft tissues, fascial thickening" },
+        { "name": "MRI with gadolinium", "priority": "medium", "yield": 0.9, "indication": "fascial enhancement, but do not delay surgery" },
+        { "name": "Plain X-Ray", "priority": "medium", "yield": 0.4, "indication": "soft tissue gas" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA Guidelines for Necrotizing Fasciitis",
+      "pathways": [
+        {
+          "severity": "all suspected NF",
+          "criteria": "pain out of proportion, crepitus, LRINEC >6, hemodynamic instability",
+          "treatment": "Emergency surgical exploration and debridement. Do NOT wait for imaging if clinical suspicion high. IV broad-spectrum antibiotics. ICU. Repeat debridement in 24h."
+        },
+        {
+          "severity": "post-debridement",
+          "criteria": "after initial debridement, stabilized",
+          "treatment": "ICU support. Repeated debridements every 24-48h until all necrotic tissue removed. Vacuum-assisted closure. Reconstructive surgery when clean. IV antibiotics (7-14 days)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bacterial_inoculation_through_skin_break",
+      "rapid_fascial_spread",
+      "thrombosis_of_fascial_nutrient_vessels",
+      "fascial_necrosis",
+      "subcutaneous_tissue_involvement",
+      "skin_ischemia",
+      "gas_formation",
+      "systemic_inflammatory_response",
+      "multi_organ_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "septic_shock_mof",
+        "probability": 0.4,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "organ_failure", "lactic_acidosis", "coagulopathy"]
+      },
+      {
+        "diseaseId": "limb_amputation",
+        "probability": 0.2,
+        "lagDays": [1, 7],
+        "severityBoost": 0.3,
+        "clues": ["extensive_necrosis", "non_viable_limb", "failed_debridement"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pain_out_of_proportion", "rapid_progression", "crepitus", "hemorrhagic_bullae", "systemic_toxicity"],
+    "exclusionClues": ["mild_cellulitis_without_systemic_features", "no_crepitus", "pain_proportional_to_findings"]
+  }
+}

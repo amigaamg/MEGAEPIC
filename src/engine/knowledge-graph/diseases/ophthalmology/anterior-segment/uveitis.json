@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "uveitis",
+    "name": "Anterior Uveitis (Iritis)",
+    "system": "OPHTH",
+    "agePeak_months": [240, 480],
+    "note": "Inflammation of the uveal tract, primarily the iris (iritis) and ciliary body (iridocyclitis). Can be associated with autoimmune diseases (ankylosing spondylitis, sarcoidosis, HLA-B27) or infections.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["red_eye", "ocular_inflammation", "uveitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "vision_loss_severe", "weight": 9 },
+        { "sign": "posterior_synechiae_formation", "weight": 7 },
+        { "sign": "secondary_glaucoma", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hypopyon", "weight": 7 },
+          { "sign": "fibrinous_reaction", "weight": 6 },
+          { "sign": "elevated_intraocular_pressure", "weight": 7 },
+          { "sign": "vitritis_or_posterior_extension", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Hypopyon, fibrin, glaucoma, or posterior involvement -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "eye_pain_aching_deep", "weight": 5 },
+      { "symptomId": "photophobia_severe", "weight": 5 },
+      { "symptomId": "redness_eye_circumcorneal", "weight": 5 },
+      { "symptomId": "blurred_vision", "weight": 4 },
+      { "symptomId": "excess_tearing", "weight": 3 },
+      { "symptomId": "floaters_less_common_anterior", "weight": 2 },
+      { "symptomId": "unilateral_often", "weight": 3 },
+      { "symptomId": "associated_systemic_symptoms_joint_pain", "weight": 3 },
+      { "symptomId": "history_of_autoimmune_condition", "weight": 3 },
+      { "symptomId": "recurrent_episodes", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "circumcorneal_ciliary_injection", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cells_in_anterior_chamber_on_slit_lamp", "baseWeight": 5 },
+      { "signId": "flare_in_anterior_chamber", "baseWeight": 4 },
+      { "signId": "posterior_synechiae", "baseWeight": 4 },
+      { "signId": "keratic_precipitates_KP", "baseWeight": 4 },
+      { "signId": "hypopyon", "baseWeight": 5 },
+      { "signId": "miosis_constricted_pupil", "baseWeight": 3 },
+      { "signId": "pupil_irregular_if_synechiae", "baseWeight": 3 },
+      { "signId": "elevated_intraocular_pressure", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "HLA_B27_positivity", "multiplier": 5.0 },
+      { "id": "ankylosing_spondylitis", "multiplier": 5.0 },
+      { "id": "sarcoidosis", "multiplier": 4.0 },
+      { "id": "behcets_disease", "multiplier": 5.0 },
+      { "id": "inflammatory_bowel_disease", "multiplier": 3.0 },
+      { "id": "psoriatic_arthritis", "multiplier": 3.0 },
+      { "id": "tuberculosis", "multiplier": 2.0 },
+      { "id": "syphilis", "multiplier": 2.0 },
+      { "id": "ocular_trauma", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_anterior_uvetis_HLA_B27",
+        "name": "Acute Anterior Uveitis (HLA-B27 Associated)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "acute_unilateral_onset", "weight": 5 },
+          { "feature": "severe_pain_photophobia", "weight": 5 },
+          { "feature": "fibrinous_reaction", "weight": 4 },
+          { "feature": "recurrent_episodes", "weight": 4 },
+          { "feature": "associated_with_back_joint_pain", "weight": 3 }
+        ],
+        "management": "Topical steroids (Prednisolone acetate 1% hourly). Cycloplegics (Cyclopentolate 1% or Atropine 1%). Systemic workup for HLA-B27 spondyloarthritis. Oral steroids if severe."
+      },
+      {
+        "id": "granulomatous_uvetis",
+        "name": "Granulomatous Anterior Uveitis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "mutton_fat_KP", "weight": 5 },
+          { "feature": "iris_nodules_koeppe_busacca", "weight": 5 },
+          { "feature": "chronic_course", "weight": 4 },
+          { "feature": "bilateral_often", "weight": 3 }
+        ],
+        "management": "Topical steroids. Systemic steroids if bilateral. Investigate (sarcoidosis, TB, syphilis, VKH). Long-term immunosuppression if needed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_angle_closure_glaucoma",
+        "discriminators": ["severe_pain", "dilated_fixed_pupil", "corneal_edema", "very_high_IOP"]
+      },
+      {
+        "diseaseId": "keratitis",
+        "discriminators": ["corneal_opacity", "fluorescein_positive", "KP_absence"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Slit lamp examination", "priority": "immediate", "yield": 0.95, "indication": "cells, flare, KP, synechiae" },
+        { "name": "Intraocular pressure measurement", "priority": "immediate", "yield": 0.8, "indication": "glaucoma risk" },
+        { "name": "Visual acuity", "priority": "immediate", "yield": 0.7, "indication": "baseline" }
+      ],
+      "laboratory": [
+        { "name": "HLA-B27 typing", "priority": "medium", "yield": 0.5, "indication": "recurrent acute uveitis" },
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.4, "indication": "sarcoidosis, TB" },
+        { "name": "Syphilis and TB serology", "priority": "medium", "yield": 0.3, "indication": "infectious causes" },
+        { "name": "ACE and lysozyme", "priority": "low", "yield": 0.3, "indication": "sarcoidosis" },
+        { "name": "ANCA, ANA, rheumatoid factor", "priority": "low", "yield": 0.3, "indication": "autoimmune workup" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "AAO / IUSG Guidelines for Uveitis",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "cells 1+, no hypopyon, no glaucoma, mild pain",
+          "treatment": "Topical Prednisolone acetate 1% q2-4h. Cycloplegic (Cyclopentolate 1% tds). Consider IOP-lowering drops if needed. Taper steroids over 4-6 weeks."
+        },
+        {
+          "severity": "severe",
+          "criteria": "hypopyon, fibrin, high IOP, severe pain, posterior synechiae",
+          "treatment": "Intensive topical steroid hourly. Cycloplegic (Atropine 1% tds). Periocular steroid injection (e.g., Triamcinolone 40mg). Oral steroids (Prednisolone 40-60mg/day) if bilateral or severe. IOP management. Systemic disease evaluation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "autoimmune_mediated_inflammation",
+      "breakdown_of_blood_aqueous_barrier",
+      "T_cell_mediated_response",
+      "prostaglandin_release",
+      "fibrin_and_protein_exudation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "posterior_synechiae",
+        "probability": 0.2,
+        "lagDays": [1, 14],
+        "severityBoost": 0.3,
+        "clues": ["irregular_pupil", "pupil_secluded"]
+      },
+      {
+        "diseaseId": "secondary_glaucoma",
+        "probability": 0.15,
+        "lagDays": [7, 90],
+        "severityBoost": 0.5,
+        "clues": ["elevated_IOP", "visual_field_loss"]
+      },
+      {
+        "diseaseId": "cataract",
+        "probability": 0.2,
+        "lagDays": [180, 730],
+        "severityBoost": 0.3,
+        "clues": ["lens_opacity", "steroid_induced"]
+      },
+      {
+        "diseaseId": "cystoid_macular_edema",
+        "probability": 0.1,
+        "lagDays": [30, 180],
+        "severityBoost": 0.4,
+        "clues": ["vision_loss_central", "OCT_findings"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painful_red_eye", "ciliary_injection", "AC_cells_and_flare", "photophobia"],
+    "exclusionClues": ["clear_AC", "normal_IOP", "quiet_eye"]
+  }
+}

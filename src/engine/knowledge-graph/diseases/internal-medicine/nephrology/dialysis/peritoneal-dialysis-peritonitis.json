@@ -1,0 +1,148 @@
+{
+  "disease": {
+    "id": "peritoneal_dialysis_peritonitis",
+    "name": "Peritoneal Dialysis-Associated Peritonitis",
+    "system": "RENAL",
+    "agePeak_months": [360, 840],
+    "note": "Major complication of peritoneal dialysis. Usually caused by touch contamination or catheter-related infection. Can lead to catheter loss and technique failure.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["peritoneal_dialysis_complication", "peritonitis", "dialysis_infection"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "severe_abdominal_pain_ileus", "weight": 8 },
+        { "sign": "fungal_peritonitis", "weight": 9 },
+        { "sign": "multidrug_resistant_infection", "weight": 8 },
+        { "sign": "peritoneal_abscess", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Mild (clear effluent, mild pain), Moderate (cloudy effluent, pain), Severe (sepsis, ileus, refractory)"
+    },
+    "historyFeatures": [
+      { "symptomId": "cloudy_peritoneal_dialysis_effluent", "weight": 5 },
+      { "symptomId": "abdominal_pain_diffuse", "weight": 5 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "constipation_diarrhea", "weight": 2 },
+      { "symptomId": "break_in_technique_contamination_history", "weight": 3 },
+      { "symptomId": "recent_exit_site_infection", "weight": 3 },
+      { "symptomId": "chills_rigors", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "abdominal_tenderness_diffuse", "baseWeight": 5 },
+      { "signId": "guarding_rebound", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "cloudy_drainage_bag_on_inspection", "baseWeight": 5 },
+      { "signId": "exit_site_erythema_pus", "baseWeight": 3 },
+      { "signId": "tunnel_tenderness", "baseWeight": 3 },
+      { "signId": "signs_of_sepsis_hypotension_tachycardia", "baseWeight": 4 },
+      { "signId": "ileus_absent_bowel_sounds", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "touch_contamination", "multiplier": 4.0 },
+      { "id": "exit_site_or_tunnel_infection", "multiplier": 3.0 },
+      { "id": "low_albumin_malnutrition", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "immunosuppression_steroid_use", "multiplier": 2.0 },
+      { "id": "previous_peritonitis_episodes", "multiplier": 2.0 },
+      { "id": "staphylococcus_aureus_nasal_carriage", "multiplier": 2.0 },
+      { "id": "hypokalemia", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "gram_positive_peritonitis",
+        "name": "Gram-Positive Peritonitis (Staph, Strep)",
+        "prevalenceModifier": 0.55,
+        "keyFeatures": [
+          { "feature": "touch_contamination_history", "weight": 4 },
+          { "feature": "coagulase_negative_staph_most_common", "weight": 4 },
+          { "feature": "mild_moderate_symptoms", "weight": 3 },
+          { "feature": "good_response_to_antibiotics", "weight": 4 }
+        ],
+        "management": "Empiric IP antibiotics: vancomycin (15-30 mg/kg IP q5-7d) or 1st gen cephalosporin (cefazolin 500 mg/L IP) for Gram-pos. Treat for 14-21 days. Can often be managed as outpatient with proper training. Relapse may require catheter removal."
+      },
+      {
+        "id": "gram_negative_peritonitis",
+        "name": "Gram-Negative Peritonitis (Pseudomonas, E. coli, Klebsiella)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "more_severe_symptoms", "weight": 4 },
+          { "feature": "pseudomonas_often_from_water_contamination_or_exit_site", "weight": 4 },
+          { "feature": "enteric_organisms_from_bowel", "weight": 3 },
+          { "feature": "higher_risk_of_catheter_loss", "weight": 4 }
+        ],
+        "management": "IP aminoglycoside (gentamicin 0.6 mg/kg/day) or ceftazidime 500 mg/L IP + cefazolin/vancomycin. Pseudomonas: double Gram-neg coverage (aminoglycoside + ceftazidime). Treat for 21 days. Catheter removal if refractory after 5 days or if pseudomonas tunnel infection."
+      },
+      {
+        "id": "fungal_peritonitis",
+        "name": "Fungal Peritonitis (Candida)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "recent_antibiotic_broad_spectrum_use", "weight": 4 },
+          { "feature": "immunosuppression", "weight": 3 },
+          { "feature": "indolent_course_but_persistent", "weight": 4 },
+          { "feature": "positive_fungal_culture_effluent", "weight": 5 }
+        ],
+        "management": "Immediate catheter removal. IV fluconazole or echinocandin (caspofungin/micafungin). Continue antifungal x 14-21 days post-removal. Switch to hemodialysis. Delay PD reinsertion for 4-6 weeks."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "chemical_peritonitis", "discriminators": ["clear_on_set_but_cloudy_yellow", "sterile_culture", "history_of_dialysate_irritant", "resolves_with_exchange"] },
+      { "diseaseId": "eosinophilic_peritonitis", "discriminators": ["eosinophils_in_effluent", "sterile_culture", "resolves_spontaneously_or_with_steroids"] },
+      { "diseaseId": "intra_abdominal_pathology_unrelated_to_pd", "discriminators": ["surgical_abdomen", "not_improving_with_ip_antibiotics", "CT_shows_other_pathology"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Effluent inspection (cloudy or clear)", "priority": "immediate", "yield": 0.8, "indication": "first sign of peritonitis" }
+      ],
+      "laboratory": [
+        { "name": "Effluent white cell count (WBC >100/mL, >50% PMN)", "priority": "immediate", "yield": 0.95, "indication": "gold standard for diagnosis" },
+        { "name": "Effluent Gram stain", "priority": "high", "yield": 0.4, "indication": "early organism identification (low sensitivity)" },
+        { "name": "Effluent culture (BACTEC blood culture bottles)", "priority": "gold_standard", "yield": 0.85, "indication": "identify organism and sensitivities" },
+        { "name": "Blood cultures", "priority": "medium", "yield": 0.3, "indication": "if sepsis present" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-ray or CT", "priority": "medium", "yield": 0.3, "indication": "if suspect surgical abdomen, abscess, or PD catheter complication" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ISPD Guidelines for Peritoneal Dialysis-Associated Peritonitis",
+      "pathways": [
+        {
+          "severity": "mild-moderate (first episode, non-septic)",
+          "criteria": "cloudy effluent with WBC >100, mild pain, no sepsis",
+          "treatment": "Empiric IP antibiotics: Gram-pos (vancomycin or cefazolin) + Gram-neg (ceftazidime or gentamicin). Continue PD (intermittent dosing, longer dwell). Monitor effluent daily. Treat for 14-21 days. Outpatient management possible."
+        },
+        {
+          "severity": "severe/refractory",
+          "criteria": "no clinical improvement after 5 days of appropriate antibiotics",
+          "treatment": "Re-culture effluent. Consider catheter removal. IV antibiotics if catheter removed. Temporary HD via tunneled catheter. Re-insert PD catheter after 4-6 weeks."
+        },
+        {
+          "severity": "fungal pre-empted or confirmed",
+          "criteria": "positive fungal culture or high suspicion (prolonged antibiotics, immunosuppression)",
+          "treatment": "Remove PD catheter immediately. IV fluconazole 400 mg or echinocandin. Continue 14-21 days post-removal. Switch to HD. Reinsert PD after 4-6 weeks."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "intraluminal_contamination_touch",
+      "periluminal_route_from_exit_site_tunnel",
+      "transmural_migration_from_bowel",
+      "hematogenous_seeding_rare",
+      "bacterial_glucose_binding-replication_in_dialysate",
+      "inflammatory_cytokine_release_il_6_tnf",
+      "neutrophil_recruitment_to_peritoneal_cavity",
+      "mesothelial_cell_injury_and_fibrosis"
+    ],
+    "complications": [
+      { "diseaseId": "catheter_loss_technique_failure", "probability": 0.15, "severityBoost": 0.4, "clues": ["refractory_peritonitis", "persistent_infection", "catheter_removal_required"] },
+      { "diseaseId": "peritoneal_membrane_failure_sclerosis", "probability": 0.05, "severityBoost": 0.5, "clues": ["recurrent_severe_peritonitis", "ultrafiltration_failure", "sclerosing_peritonitis_on_ct"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["cloudy_pd_effluent", "abdominal_pain_in_pd_patient", "effluent_wbc_greater_than_100", "positive_culture"],
+    "exclusionClues": ["clear_effluent", "normal_wbc_in_effluent", "sterile_culture_with_resolution"]
+  }
+}

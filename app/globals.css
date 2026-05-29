@@ -1,29 +1,137 @@
-/* app/globals.css */
+/* app/globals.css — AMEXAN Design System */
 
-/* Tailwind directives */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Google Fonts must come FIRST */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-/* Custom CSS variables */
+@import "tailwindcss";
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── AMEXAN Core Colors ── */
+  --midnight-900: #071029;
+  --midnight-800: #0b1230;
+  --midnight-700: #12193a;
+  --midnight-600: #1b234f;
+  --midnight-500: #283273;
+
+  /* Therapeutic signal colors */
+  --green: #00d68f;
+  --amber: #ffb020;
+  --red: #ff4560;
+  --purple: #7c5af5;
+  --teal: #00e5cc;
+
+  /* Frost white system */
+  --frost-50: #ffffff;
+  --frost-100: #fafafa;
+  --frost-200: #f5f5f5;
+  --frost-300: #e5e5e5;
+  --frost-400: #d4d4d4;
+  --frost-500: #a3a3a3;
+
+  /* Surface system */
+  --surface-base: #0b1230;
+  --surface-elevated: #12193a;
+  --surface-card: #1b234f;
+  --surface-glass: rgba(18, 25, 58, 0.6);
+
+  /* Text */
+  --text-primary: #e8edf5;
+  --text-secondary: #8b9bbf;
+  --text-muted: #546382;
+
+  /* Typography */
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Layout */
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 64px;
+  --command-bar-height: 48px;
+
+  /* Effects */
+  --glass-bg: rgba(18, 25, 58, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
 }
 
-/* Theme overrides */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { height: 100%; background: linear-gradient(180deg, var(--midnight-900), var(--midnight-800), var(--midnight-700)); color: var(--text-primary); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+}
+
+@layer components {
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-lg);
   }
+  .glass-card-sm {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-md);
+  }
+  .frost-card {
+    background: var(--surface-card);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: var(--radius-lg);
+  }
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0;
+    width: var(--sidebar-collapsed);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    z-index: 50;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+  .sidebar:hover { width: var(--sidebar-width); }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 20px; color: var(--text-muted); font-size: 12px; font-weight: 500;
+    white-space: nowrap; cursor: pointer; transition: all 0.15s;
+    border-radius: var(--radius-sm); margin: 2px 8px; text-decoration: none;
+  }
+  .sidebar-item:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+  .sidebar-item.active { background: rgba(0,229,204,0.1); color: var(--teal); font-weight: 700; }
+  .sidebar-icon { width: 20px; height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .command-bar {
+    height: var(--command-bar-height);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex; align-items: center; padding: 0 16px; gap: 12px;
+  }
+  .insight-card {
+    padding: 10px 14px; border-radius: var(--radius-md); font-size: 11px; line-height: 1.5;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .insight-card.success { background: rgba(0,214,143,0.1); border: 1px solid rgba(0,214,143,0.2); color: var(--green); }
+  .insight-card.warning { background: rgba(255,176,32,0.1); border: 1px solid rgba(255,176,32,0.2); color: var(--amber); }
+  .insight-card.danger { background: rgba(255,69,96,0.1); border: 1px solid rgba(255,69,96,0.2); color: var(--red); }
+  .insight-card.info { background: rgba(124,90,245,0.1); border: 1px solid rgba(124,90,245,0.2); color: var(--purple); }
 }
 
-/* Body styling */
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  margin: 0;
-  padding: 0;
+@layer utilities {
+  .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+  .text-balance { text-wrap: balance; }
 }

@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "undifferentiated_shock",
+    "name": "Undifferentiated Shock",
+    "system": "emergency_medicine",
+    "agePeak_months": [0, 960],
+    "note": "Life-threatening circulatory failure with inadequate oxygen delivery to tissues. Must rapidly classify as hypovolemic, cardiogenic, distributive, or obstructive.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["shock", "circulatory_failure", "resuscitation"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypotension_unresponsive", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "severe_lactic_acidosis", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "SHOCK is always a critical emergency. Immediate fluid resuscitation and identification of type is essential."
+    },
+    "historyFeatures": [
+      { "symptomId": "hypotension", "weight": 5 },
+      { "symptomId": "altered_mental_status", "weight": 4 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "tachycardia", "weight": 4 },
+      { "symptomId": "cold_clammy_skin", "weight": 3 },
+      { "symptomId": "fever_or_hypothermia", "weight": 3 },
+      { "symptomId": "trauma_or_bleeding", "weight": 4 },
+      { "symptomId": "chest_pain_or_dyspnea", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "hypotension_sbp_less_90", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 4 },
+      { "signId": "mottled_skin", "baseWeight": 3 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "oliguria", "baseWeight": 3 },
+      { "signId": "cold_peripheries", "baseWeight": 3 },
+      { "signId": "narrow_pulse_pressure", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "trauma", "multiplier": 2.5 },
+      { "id": "sepsis", "multiplier": 2.5 },
+      { "id": "myocardial_infarction", "multiplier": 2.0 },
+      { "id": "hemorrhage", "multiplier": 3.0 },
+      { "id": "anaphylaxis_risk", "multiplier": 2.0 },
+      { "id": "dehydration", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "hypovolemic_shock",
+        "name": "Hypovolemic Shock",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "fluid_loss_bleeding", "weight": 5 },
+          { "feature": "flat_neck_veins", "weight": 4 },
+          { "feature": "poor_skin_turgor", "weight": 3 }
+        ],
+        "management": "IV fluid bolus 500mL crystalloid. Repeat as needed. Blood products if hemorrhagic. Control bleeding source."
+      },
+      {
+        "id": "cardiogenic_shock",
+        "name": "Cardiogenic Shock",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "chest_pain", "weight": 4 },
+          { "feature": "elevated_jvp", "weight": 5 },
+          { "feature": "lung_crackles", "weight": 4 },
+          { "feature": "ecg_ischemia", "weight": 5 }
+        ],
+        "management": "Do not bolus fluids. Inotropes (dobutamine). Vasopressors (norepinephrine). Reperfusion for STEMI. Mechanical support (IABP, ECMO)."
+      },
+      {
+        "id": "distributive_shock",
+        "name": "Distributive Shock (Septic/Anaphylactic)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "fever_or_hypothermia", "weight": 4 },
+          { "feature": "warm_peripheries_early", "weight": 3 },
+          { "feature": "known_infection", "weight": 4 },
+          { "feature": "rash_or_urticaria", "weight": 3 }
+        ],
+        "management": "IV fluids 30mL/kg. Vasopressors (norepinephrine). Broad-spectrum antibiotics if septic. Epinephrine if anaphylactic."
+      },
+      {
+        "id": "obstructive_shock",
+        "name": "Obstructive Shock",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "elevated_jvp", "weight": 5 },
+          { "feature": "muffled_heart_sounds", "weight": 4 },
+          { "feature": "tracheal_deviation", "weight": 5 },
+          { "feature": "pulsus_paradoxus", "weight": 4 }
+        ],
+        "management": "Treat cause: needle decompression for tension PTX, pericardiocentesis for tamponade, thrombolysis for massive PE."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "adrenal_crisis",
+        "discriminators": ["hyponatremia", "hyperkalemia", "hyperpigmentation"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE assessment", "priority": "immediate", "yield": 1.0, "indication": "all patients" },
+        { "name": "Blood pressure, HR, SpO2 monitoring", "priority": "immediate", "yield": 1.0, "indication": "hemodynamic assessment" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "detect ischemia, arrhythmia" },
+        { "name": "POCUS (RUSH protocol)", "priority": "immediate", "yield": 0.9, "indication": "classify shock type" },
+        { "name": "Lactate (bedside)", "priority": "immediate", "yield": 0.8, "indication": "tissue hypoperfusion marker" }
+      ],
+      "laboratory": [
+        { "name": "ABG/VBG with lactate", "priority": "high", "yield": 0.9, "indication": "metabolic acidosis, oxygenation" },
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.5, "indication": "baseline, renal function" },
+        { "name": "Troponin", "priority": "high", "yield": 0.6, "indication": "cardiogenic shock" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.4, "indication": "if sepsis suspected" },
+        { "name": "Coagulation profile", "priority": "medium", "yield": 0.4, "indication": "DIC, coagulopathy" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "cardiomegaly, pneumonia, PTX" },
+        { "name": "CT scan (as indicated)", "priority": "medium", "yield": 0.7, "indication": "source of sepsis, hemorrhage" }
+      ]
+    },
+    "management": {
+      "protocolReference": "SSC Guidelines / ATLS / ERC Guidelines",
+      "pathways": [
+        {
+          "severity": "undifferentiated shock",
+          "criteria": "SBP <90, lactate >2, altered mental status, oliguria",
+          "treatment": "ABCDE approach. IV access 2 large-bore. Fluid bolus 500mL crystalloid (caution if cardiogenic). Identify type: cold clammy+JVP flat=hypovolemic, cold clammy+JVP up=cardiogenic, warm+JVP flat=distributive, JVP up+muffled=obstructive. Vasopressors if MAP <65 after fluids. Norepinephrine first-line. Treat underlying cause."
+        },
+        {
+          "severity": "refractory shock",
+          "criteria": "no response to fluids and initial vasopressors",
+          "treatment": "Add vasopressin or epinephrine. Invasive monitoring (arterial line, CVP, ScvO2). Evaluate for occult causes (tamponade, tension PTX, PE, adrenal crisis, anaphylaxis). ICU admission."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "decreased_oxygen_delivery",
+      "tissue_hypoperfusion",
+      "lactic_acidosis",
+      "cellular_energy_failure",
+      "systemic_inflammatory_response",
+      "end_organ_dysfunction",
+      "irreversible_cell_damage"
+    ],
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "ards",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["hypoxia", "bilateral_infiltrates"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["bleeding", "thrombocytopenia", "elevated_d_dimer"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["hypotension", "tachycardia", "altered_consciousness", "oliguria", "lactic_acidosis"],
+    "exclusionClues": ["normal_blood_pressure", "normal_lactate", "normal_consciousness"]
+  }
+}

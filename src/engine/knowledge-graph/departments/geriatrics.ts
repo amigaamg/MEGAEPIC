@@ -1,0 +1,77 @@
+import type { DepartmentDefinition } from './index';
+
+export const geriatrics: DepartmentDefinition = {
+  id: 'GERI',
+  name: 'Geriatric Medicine',
+  shortName: 'GERI',
+  description: 'Comprehensive medical care for older adults, focusing on frailty, multi-morbidity, functional assessment, cognitive impairment and rehabilitation.',
+  icon: '👴',
+  color: '#a16207',
+  sections: [
+    {
+      id: 'frailty',
+      name: 'Frailty & Comprehensive Geriatric Assessment',
+      description: 'Identification and management of frailty using CGA framework',
+      diseaseCategories: ['Frailty syndrome', 'Failure to thrive', 'Recurrent falls', 'Functional decline', 'Sarcopenia', 'Deconditioning', 'Immobility'],
+    },
+    {
+      id: 'cognitive',
+      name: 'Cognitive Disorders & Dementia',
+      description: 'Neurocognitive disorders in later life',
+      diseaseCategories: ['Alzheimer disease', 'Vascular dementia', 'Lewy body dementia', 'Frontotemporal dementia', 'Mild cognitive impairment', 'Delirium', 'Behavioural and psychological symptoms of dementia'],
+    },
+    {
+      id: 'falls',
+      name: 'Falls, Gait & Balance Disorders',
+      description: 'Assessment and prevention of falls, gait abnormalities',
+      diseaseCategories: ['Multiple falls', 'Gait disorder', 'Balance impairment', 'Fear of falling', 'Post-fall syndrome', 'Syncope in elderly', 'Orthostatic hypotension'],
+    },
+    {
+      id: 'osteoporosis-geri',
+      name: 'Osteoporosis & Bone Health',
+      description: 'Age-related bone loss and fracture prevention',
+      diseaseCategories: ['Age-related osteoporosis', 'Hip fracture', 'Vertebral fragility fracture', 'Wrist fracture', 'Osteomalacia', 'Vitamin D deficiency', 'Postmenopausal osteoporosis'],
+    },
+    {
+      id: 'polypharmacy',
+      name: 'Polypharmacy & Medication Optimisation',
+      description: 'Rationalisation of medications in multi-morbid older adults',
+      diseaseCategories: ['Polypharmacy review', 'Potentially inappropriate medications', 'Anticholinergic burden', 'Drug interactions in elderly', 'Renal dosing adjustment', 'Medication reconciliation'],
+    },
+    {
+      id: 'incontinence-geri',
+      name: 'Continence & Bladder Health',
+      description: 'Urinary and faecal incontinence in older adults',
+      diseaseCategories: ['Stress incontinence', 'Urge incontinence', 'Mixed incontinence', 'Functional incontinence', 'Overflow incontinence', 'Faecal impaction', 'Catheter care'],
+    },
+    {
+      id: 'palliative-geri',
+      name: 'Palliative & End-of-Life Care',
+      description: 'Symptom management and advance care planning',
+      diseaseCategories: ['Advance care planning', 'End-of-life symptom management', 'Pain management in elderly', 'Dyspnoea management', 'Terminal agitation', 'Last days of life care'],
+    },
+  ],
+  commonSymptoms: [
+    'falls', 'confusion_acute', 'cognitive_decline', 'memory_problems',
+    'dizziness', 'syncope', 'immobility', 'gait_disturbance',
+    'weakness', 'fatigue', 'weight_loss', 'anorexia',
+    'dehydration', 'incontinence_urine', 'incontinence_faecal',
+    'constipation', 'pressure_ulcer', 'infection_recurrent',
+    'pain_chronic', 'sleep_disturbance', 'agitation',
+    'wandering', 'depression_late_life', 'social_withdrawal',
+    'polypharmacy_issues', 'medication_side_effects',
+    'frailty_presentation', 'caregiver_stress', 'home_safety_concerns',
+  ],
+  commonInvestigations: [
+    'FBC', 'U&E', 'LFT', 'CRP', 'ESR', 'Blood glucose', 'HbA1c',
+    'Thyroid function', 'Vitamin B12', 'Folate', 'Vitamin D', 'Calcium',
+    'Ferritin', 'Iron studies', 'Coagulation screen',
+    'Urinalysis', 'Urine culture', 'ECG', 'Chest X-ray',
+    'CT head', 'MRI brain (cognitive decline)', 'MMSE/MoCA',
+    'Geriatric Depression Scale', 'Timed Up and Go test',
+    'Functional assessment (ADL/IADL)', 'Falls risk assessment',
+    'Orthostatic blood pressure measurement', 'Bone density DEXA',
+    'Medication reconciliation review', 'Nutritional screening (MUST)',
+    'Pressure ulcer risk assessment (Waterlow/Braden)',
+  ],
+};

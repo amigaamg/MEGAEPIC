@@ -1,0 +1,143 @@
+{
+  "disease": {
+    "id": "multiple_myeloma",
+    "name": "Multiple Myeloma",
+    "system": "ONCO",
+    "agePeak_months": [600, 960],
+    "note": "Clonal plasma cell disorder. End-organ damage: CRAB (hyperCalcemia, Renal failure, Anemia, Bone lesions). Incurable but highly treatable.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["hematologic_malignancy", "plasma_cell_dyscrasia", "bone_marrow_disorder"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "spinal_cord_compression", "weight": 10 },
+        { "sign": "hypercalcemic_crisis", "weight": 9 },
+        { "sign": "acute_renal_failure", "weight": 8 },
+        { "sign": "hyperviscosity_syndrome", "weight": 8 },
+        { "sign": "pathologic_fracture", "weight": 7 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "R-ISS Stage I-III. Active myeloma requires therapy; smoldering myeloma observed."
+    },
+    "historyFeatures": [
+      { "symptomId": "bone_pain_back_pain", "weight": 5 },
+      { "symptomId": "fatigue_weakness", "weight": 4 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "thirst_polyuria_polydipsia", "weight": 2, "note": "From hypercalcemia" },
+      { "symptomId": "nausea_constipation", "weight": 2 },
+      { "symptomId": "confusion_lethargy", "weight": 2 },
+      { "symptomId": "easy_bruising_bleeding", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "bone_tenderness", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "signs_of_hypercalcemia", "baseWeight": 2 },
+      { "signId": "neurological_deficit_spinal_cord", "baseWeight": 4 },
+      { "signId": "skin_pallor_purpura", "baseWeight": 2 },
+      { "signId": "macroglossia", "baseWeight": 1, "note": "Amyloidosis association" }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 3.0 },
+      { "id": "male_sex", "multiplier": 1.5 },
+      { "id": "african_descent", "multiplier": 2.0 },
+      { "id": "family_history_myeloma", "multiplier": 2.0 },
+      { "id": "monoclonal_gammopathy_of_undetermined_significance", "multiplier": 5.0 },
+      { "id": "obesity", "multiplier": 1.3 }
+    ],
+    "subtypes": [
+      {
+        "id": "igg_myeloma",
+        "name": "IgG Multiple Myeloma",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "igg_paraprotein_on_serum_elec", "weight": 5 },
+          { "feature": "m_spike_on_spep", "weight": 5 },
+          { "feature": "k_lambda_light_chain_ratio_abnormal", "weight": 4 }
+        ],
+        "management": "Induction: VRd (bortezomib, lenalidomide, dexamethasone) or Dara-VRd. Autologous SCT if fit. Maintenance: lenalidomide until progression."
+      },
+      {
+        "id": "light_chain_only_myeloma",
+        "name": "Light Chain Only (Bence Jones) Myeloma",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "no_m_spike_on_spep", "weight": 4 },
+          { "feature": "elevated_free_light_chains", "weight": 5 },
+          { "feature": "higher_incidence_renal_failure", "weight": 4 },
+          { "feature": "bence_jones_proteinuria", "weight": 4 }
+        ],
+        "management": "Same treatment as IgG/IgA. Higher vigilance for renal toxicity. Consider bortezomib-based (less renal toxic). Aggressive hydration and high-flux dialysis if needed."
+      },
+      {
+        "id": "plasma_cell_leukemia",
+        "name": "Plasma Cell Leukemia",
+        "prevalenceModifier": 0.02,
+        "keyFeatures": [
+          { "feature": "circulating_plasma_cells_20_percent", "weight": 5 },
+          { "feature": "very_high_ldh", "weight": 4 },
+          { "feature": "aggressive_course", "weight": 5 }
+        ],
+        "management": "Intensive multi-agent chemo (bortezomib + lenalidomide + dexamethasone). Allogeneic SCT consideration. Clinical trials."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "mgus", "discriminators": ["m_spike_under_30_g_l", "no_end_organ_damage", "bone_marrow_plasma_cells_under_10_percent"] },
+      { "diseaseId": "smoldering_myeloma", "discriminators": ["m_spike_over_30_or_bm_plasma_cells_10_60", "no_myeloma_defining_events", "requires_monitoring"] },
+      { "diseaseId": "waldenstrom_macroglobulinemia", "discriminators": ["lymphoplasmacytic_lymphoma", "igm_paraprotein", "cd20_positive", "lymphadenopathy_common"] },
+      { "diseaseId": "bone_metastases_from_solid_tumors", "discriminators": ["known_primary_tumor", "no_m_spike", "normal_free_light_chains"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum protein electrophoresis (SPEP) + immunofixation", "priority": "immediate", "yield": 0.95, "indication": "M-protein detection and quantification" },
+        { "name": "Serum free light chains (kappa/lambda ratio)", "priority": "high", "yield": 0.9, "indication": "sensitive marker, light chain disease" },
+        { "name": "24h urine protein + UPEP + immunofixation", "priority": "high", "yield": 0.8, "indication": "Bence Jones proteinuria" },
+        { "name": "FBC, calcium, creatinine, albumin, LDH, beta-2 microglobulin", "priority": "high", "yield": 0.7, "indication": "CRAB assessment, R-ISS staging" }
+      ],
+      "imaging": [
+        { "name": "Bone marrow aspiration + trephine biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "plasma cell percentage, cytogenetics (FISH)" },
+        { "name": "Whole body low-dose CT or PET-CT", "priority": "high", "yield": 0.9, "indication": "lytic bone lesions, extramedullary disease" },
+        { "name": "MRI whole spine", "priority": "medium", "yield": 0.85, "indication": "suspected cord compression, bone marrow infiltration" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IMWG/NCCN/ESMO Guidelines for Multiple Myeloma",
+      "pathways": [
+        {
+          "severity": "transplant-eligible newly diagnosed",
+          "criteria": "fit, age <70 or by physiological age",
+          "treatment": "Induction: Dara-VRd or VRd x 4 cycles. Stem cell mobilization + high-dose melphalan (200 mg/m2) + autologous SCT. Consolidation. Lenalidomide maintenance until progression."
+        },
+        {
+          "severity": "transplant-ineligible newly diagnosed",
+          "criteria": "older/frail, comorbidities",
+          "treatment": "Dara-Rd (daratumumab, lenalidomide, dexamethasone) or VRd-lite or MPV (melphalan, prednisone, bortezomib). Continuous therapy until progression. Dose adjustments for renal impairment."
+        },
+        {
+          "severity": "relapsed/refractory",
+          "criteria": "progression on or after prior therapy",
+          "treatment": "Depends on prior exposure and duration of response. Options: carfilzomib, pomalidomide, daratumumab, isatuximab, selinexor, CAR-T (idecabtagene vicleucel, ciltacabtagene autoleucel), bispecific T-cell engagers (teclistamab, elranatamab)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "plasma_cell_clonal_expansion",
+      "cytogenetic_abnormalities_hyperdiploidy_t_4_14_t_14_16_del_17p",
+      "paraprotein_production",
+      "osteoclast_activation_rankl_pathway",
+      "immunoparesis_hypogammaglobulinemia",
+      "renal_tubular_damage_light_chains",
+      "anemia_from_marrow_infiltration_hepcidin"
+    ],
+    "complications": [
+      { "diseaseId": "renal_failure_cast_nephropathy", "probability": 0.2, "severityBoost": 0.4, "clues": ["elevated_creatinine", "bence_jones_proteinuria", "light_chain_casts_on_biopsy"] },
+      { "diseaseId": "hypercalcemia", "probability": 0.2, "severityBoost": 0.3, "clues": ["elevated_calcium", "confusion", "polyuria", "constipation"] },
+      { "diseaseId": "spinal_cord_compression", "probability": 0.1, "severityBoost": 0.6, "clues": ["back_pain", "leg_weakness", "sensory_level", "myeloma_lesion_on_mri"] },
+      { "diseaseId": "pathologic_fracture", "probability": 0.15, "severityBoost": 0.3, "clues": ["lytic_lesion_on_imaging", "minimal_trauma", "acute_bone_pain"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["m_spike_on_spep", "lytic_bone_lesions", "hypercalcemia_renal_failure_anemia", "plasma_cell_in_marrow"],
+    "exclusionClues": ["normal_spep_ife_and_sflc", "no_end_organ_damage", "other_cause_of_lytic_lesions"]
+  }
+}

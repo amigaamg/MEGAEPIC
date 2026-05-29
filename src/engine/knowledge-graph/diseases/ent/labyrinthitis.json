@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "labyrinthitis",
+    "name": "Labyrinthitis / Vestibular Neuritis",
+    "system": "ent",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["acute_vestibular_syndrome", "vertigo", "hearing_loss"],
+    "mustNotMiss": true,
+    "emergencyPriority": "urgent",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "new_neurologic_deficit", "weight": 5, "description": "Cerebellar or brainstem signs suggest stroke" },
+        { "sign": "HINTS_exam_central_pattern", "weight": 5, "description": "Central HINTS indicates central cause" },
+        { "sign": "head_impulse_normal", "weight": 4, "description": "Normal head impulse with nystagmus suggests central" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_vertigo_unable_to_walk", "weight": 4 },
+          { "sign": "vomiting_with_dehydration", "weight": 3 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "acute-vestibular"
+    },
+    "historyFeatures": [
+      { "symptomId": "acute_onset_vertigo", "weight": 5, "condition": "continuous lasting days" },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "hearing_loss", "weight": 4, "note": "present in labyrinthitis, absent in pure vestibular neuritis" },
+      { "symptomId": "tinnitus", "weight": 3 },
+      { "symptomId": "recent_upper_respiratory_infection", "weight": 3 },
+      { "symptomId": "imbalance", "weight": 4 },
+    ],
+    "examFeatures": [
+      { "signId": "spontaneous_nystagmus", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "abnormal_head_impulse_test", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "positive_romberg", "baseWeight": 3 },
+      { "signId": "gait_ataxia", "baseWeight": 4 },
+      { "signId": "fever_ear", "baseWeight": 2 },
+      { "signId": "normal_cranial_nerves", "baseWeight": 3, "note": "absence of CNS signs favors peripheral cause" }
+    ],
+    "riskFactors": [
+      { "id": "recent_viral_illness", "multiplier": 2.0 },
+      { "id": "varicella_zoster_reactivation", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 1.5 },
+      { "id": "stress_or_fatigue", "multiplier": 1.3 }
+    ],
+    "diagnosticClues": [
+      "acute continuous vertigo for days",
+      "horizontal torsional nystagmus fast phase away from affected ear",
+      "abnormal head impulse test toward affected ear",
+      "hearing loss present in labyrinthitis",
+      "HINTS exam peripheral pattern"
+    ],
+    "exclusionClues": [
+      "HINTS exam central pattern (normal head impulse, skew deviation, direction-changing nystagmus)",
+      "focal neurologic deficits on exam",
+      "headache or neck pain suggesting vertebral dissection",
+      "vertigo lasting <1 minute or positional only"
+    ],
+    "subtypes": [
+      {
+        "id": "vestibular_neuritis",
+        "name": "Vestibular Neuritis (without hearing loss)",
+        "prevalenceModifier": 0.6,
+        "riskFactors": ["viral_illness", "stress"],
+        "keyFeatures": [
+          { "feature": "acute_vertigo_no_hearing_loss", "weight": 5 },
+          { "feature": "spontaneous_nystagmus", "weight": 4 },
+          { "feature": "abnormal_head_impulse", "weight": 5 }
+        ],
+        "management": {
+          "management": "Corticosteroids, vestibular rehabilitation, antiemetics"
+        }
+      },
+      {
+        "id": "labyrinthitis_with_hearing_loss",
+        "name": "Labyrinthitis (with hearing loss)",
+        "prevalenceModifier": 0.3,
+        "riskFactors": ["viral_illness", "bacterial_meningitis"],
+        "keyFeatures": [
+          { "feature": "acute_vertigo_with_hearing_loss", "weight": 5 },
+          { "feature": "tinnitus", "weight": 4 }
+        ],
+        "management": {
+          "management": "Corticosteroids, antivirals if VZV suspected, vestibular rehabilitation"
+        }
+      },
+      {
+        "id": "vzv_labyrinthitis",
+        "name": "Herpes Zoster Oticus (Ramsay Hunt)",
+        "prevalenceModifier": 0.1,
+        "riskFactors": ["immunosuppression", "age_over_60"],
+        "keyFeatures": [
+          { "feature": "vesicular_rash_ear_canal", "weight": 5 },
+          { "feature": "facial_nerve_palsy", "weight": 5 },
+          { "feature": "severe_ear_pain", "weight": 4 }
+        ],
+        "management": {
+          "management": "IV acyclovir 10 mg/kg TDS, corticosteroids, ophthalmology referral if corneal involvement"
+        }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "posterior_circulation_stroke", "discriminators": ["central HINTS", "focal neuro signs", "vascular risk factors", "MRI DWI positive"] },
+      { "diseaseId": "meniere_disease", "discriminators": ["episodic <12 hours", "fluctuating hearing", "aural fullness"] },
+      { "diseaseId": "multiple_sclerosis", "discriminators": ["young adult", "previous neurologic episodes", "MRI demyelinating lesions"] },
+      { "diseaseId": "cerebellar_hemorrhage", "discriminators": ["sudden onset", "headache", "altered consciousness", "CT positive"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "HINTS Examination", "priority": "first-line", "yield": 5, "indication": "differentiate peripheral vs central cause" },
+        { "name": "Dix-Hallpike Maneuver", "priority": "first-line", "yield": 2, "indication": "exclude BPPV" },
+        { "name": "Romberg Test", "priority": "bedside", "yield": 3, "indication": "assess vestibular function" }
+      ],
+      "laboratory": [
+        { "name": "Audiometry", "priority": "essential", "yield": 4, "indication": "document sensorineural hearing loss" },
+        { "name": "Caloric Testing", "priority": "essential", "yield": 4, "indication": "confirm reduced vestibular response" },
+        { "name": "VZV PCR", "priority": "if indicated", "yield": 4, "indication": "suspected Ramsay Hunt syndrome" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain + Internal Auditory Meatus with DWI", "priority": "essential", "yield": 4, "indication": "exclude stroke, demyelination, and acoustic neuroma" },
+        { "name": "CT Temporal Bone or MRA", "priority": "if indicated", "yield": 3, "indication": "exclude fracture or vertebral dissection" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Acute Vestibular Syndrome",
+      "pathways": [
+        {
+          "severity": "acute",
+          "criteria": "first 72 hours of severe vertigo",
+          "treatment": [
+            "IV fluids if dehydrated from vomiting",
+            "Ondansetron 4-8 mg IV/ODT for nausea",
+            "Diazepam 5-10 mg IV/PO PRN for vestibular suppression (short course only)",
+            "Prednisolone 1 mg/kg PO OD x 7-14 days if no contraindication",
+            "Avoid prolonged bed rest — encourage early mobilization"
+          ]
+        },
+        {
+          "severity": "subacute",
+          "criteria": "after 72 hours, improving but still imbalanced",
+          "treatment": [
+            "Taper corticosteroids over 1-2 weeks",
+            "Start vestibular rehabilitation exercises (Cawthorne-Cooksey)",
+            "Discontinue vestibular suppressants to allow central compensation",
+            "Acyclovir 800 mg PO 5x/day x 7 days if VZV confirmed",
+            "Fall prevention counseling"
+          ]
+        },
+        {
+          "severity": "recovery",
+          "criteria": "stable, persistent mild imbalance",
+          "treatment": [
+            "Continue vestibular rehabilitation physiotherapy",
+            "Return to driving and work when safe (often 4-6 weeks)",
+            "Consider ENT follow-up for chronic vestibular hypofunction"
+          ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Inflammation of vestibular nerve (vestibular neuritis) or labyrinth (labyrinthitis)",
+      "Most commonly viral — HSV-1 reactivation in vestibular ganglia",
+      "VZV reactivation causes Ramsay Hunt syndrome with geniculate ganglion involvement",
+      "Bacterial labyrinthitis can complicate meningitis or otitis media",
+      "Inflammation causes asymmetric vestibular input leading to acute vertigo and nystagmus"
+    ],
+    "complications": [
+      { "diseaseId": "chronic_vestibular_hypofunction", "probability": 0.3, "severityBoost": 0.3, "lagDays": [30, 90] },
+      { "diseaseId": "permanent_hearing_loss", "probability": 0.2, "severityBoost": 0.3, "lagDays": [1, 30] },
+      { "diseaseId": "bacterial_superinfection_meningitis", "probability": 0.05, "severityBoost": 0.7, "lagDays": [2, 7] },
+      { "diseaseId": "falls_injury", "probability": 0.25, "severityBoost": 0.2 },
+      { "diseaseId": "anxiety_panic_disorder", "probability": 0.2, "severityBoost": 0.1 }
+    ]
+  }
+}

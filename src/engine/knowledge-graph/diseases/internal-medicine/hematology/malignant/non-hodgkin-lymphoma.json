@@ -1,0 +1,161 @@
+{
+  "disease": {
+    "id": "non_hodgkin_lymphoma",
+    "name": "Non-Hodgkin Lymphoma",
+    "system": "hematology",
+    "agePeak_months": [600, 720, 960, 1080],
+    "note": "Heterogeneous group of lymphoid malignancies. Most are B-cell (85%), remainder T-cell or NK-cell. Wide spectrum from indolent (follicular) to aggressive (diffuse large B-cell lymphoma).",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["lymphoma", "lymphadenopathy", "b_symptoms"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "superior_vena_cava_syndrome", "weight": 10 },
+        { "sign": "tumor_lysis_syndrome", "weight": 9 },
+        { "sign": "spinal_cord_compression", "weight": 9 },
+        { "sign": "airway_compression", "weight": 10 },
+        { "sign": "intestinal_perforation", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "indolent_course": true
+      },
+      "severityLabel": "If compressive symptoms or TLS risk -> EMERGENCY; indolent -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "painless_lymphadenopathy", "weight": 5 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "night_sweats", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "extranodal_symptoms", "weight": 3, "note": "GI, skin, CNS, bone depending on site" },
+      { "symptomId": "abdominal_pain", "weight": 2 },
+      { "symptomId": "dyspnea", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "lymphadenopathy", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "splenomegaly", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "tonsillar_enlargement", "baseWeight": 2 },
+      { "signId": "skin_lesions", "baseWeight": 2 },
+      { "signId": "abdominal_mass", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "immunosuppression", "multiplier": 3.0 },
+      { "id": "hiv", "multiplier": 3.0 },
+      { "id": "ebv_infection", "multiplier": 2.0 },
+      { "id": "hcv_infection", "multiplier": 2.0 },
+      { "id": "h_pylori", "multiplier": 2.0, "note": "MALT lymphoma" },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "organ_transplant", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "diffuse_large_b_cell_lymphoma",
+        "name": "Diffuse Large B-Cell Lymphoma",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "aggressive_growth", "weight": 5 },
+          { "feature": "diffuse_large_b_cell_on_histology", "weight": 5 },
+          { "feature": "cd20_positive", "weight": 5 }
+        ],
+        "management": "R-CHOP x6 cycles. CNS prophylaxis if high risk. PET-2 adapted therapy."
+      },
+      {
+        "id": "follicular_lymphoma",
+        "name": "Follicular Lymphoma",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "indolent_course", "weight": 4 },
+          { "feature": "t_14_18_translocation", "weight": 4 },
+          { "feature": "cd20_bcl2_positive", "weight": 4 }
+        ],
+        "management": "Watch and wait if asymptomatic and low burden. Rituximab monotherapy or R-chemo if symptomatic. Maintenance rituximab."
+      },
+      {
+        "id": "mantle_cell_lymphoma",
+        "name": "Mantle Cell Lymphoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "t_11_14_cyclin_d1", "weight": 5 },
+          { "feature": "aggressive_course", "weight": 4 },
+          { "feature": "cd5_positive_cd23_negative", "weight": 4 }
+        ],
+        "management": "Intensive chemo (R-HyperCVAD). HSCT in first response. BTK inhibitors (ibrutinib) for relapsed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hodgkin_lymphoma",
+        "discriminators": ["reed_sternberg_cells", "cd30_cd15_positive", "contiguous_spread"]
+      },
+      {
+        "diseaseId": "infectious_mononucleosis",
+        "discriminators": ["self_limited", "atypical_lymphocytosis", "positive_ebv_serology"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Lymph node excisional biopsy", "priority": "immediate", "yield": 0.99, "indication": "Diagnosis and subtyping" },
+        { "name": "Immunohistochemistry", "priority": "immediate", "yield": 0.98, "indication": "CD20, CD3, CD10, BCL2, BCL6, Ki67, MUM1" },
+        { "name": "Flow cytometry", "priority": "high", "yield": 0.85, "indication": "Immunophenotyping" },
+        { "name": "FISH / Cytogenetics", "priority": "high", "yield": 0.7, "indication": "t(14;18), t(11;14), MYC rearrangements" },
+        { "name": "LDH, beta-2 microglobulin", "priority": "high", "yield": 0.6, "indication": "Prognostic markers" },
+        { "name": "Bone marrow biopsy", "priority": "medium", "yield": 0.5, "indication": "Staging - marrow involvement" }
+      ],
+      "imaging": [
+        { "name": "PET-CT scan", "priority": "immediate", "yield": 0.95, "indication": "Staging and response assessment" },
+        { "name": "CT neck/chest/abdomen/pelvis", "priority": "high", "yield": 0.85, "indication": "Anatomical staging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / ESMO Guidelines for NHL",
+      "pathways": [
+        {
+          "severity": "aggressive_nhl_dlbcl",
+          "criteria": "Newly diagnosed DLBCL",
+          "treatment": "R-CHOP (rituximab, cyclophosphamide, doxorubicin, vincristine, prednisone) x6 cycles. CNS prophylaxis if high risk."
+        },
+        {
+          "severity": "indolent_nhl",
+          "criteria": "Follicular lymphoma, asymptomatic low burden",
+          "treatment": "Watch and wait. Rituximab monotherapy if symptomatic. R-bendamustine or R-CHOP if high burden."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "genetic_translocations",
+      "oncogene_activation",
+      "tumor_suppressor_inactivation",
+      "b_cell_receptor_signaling",
+      "immune_evasion",
+      "microenvironmental_support"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_lysis_syndrome",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["high_ldh", "bulky_disease", "high_proliferative_index"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["lymphadenopathy", "excisional_biopsy_diagnosis", "pet_avid_nodes"],
+    "exclusionClues": ["reed_sternberg_cells", "self_limited_adenopathy", "negative_biopsy"]
+  }
+}

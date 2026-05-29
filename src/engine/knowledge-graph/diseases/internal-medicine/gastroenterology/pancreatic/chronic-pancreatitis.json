@@ -1,0 +1,170 @@
+﻿{
+  "disease": {
+    "id": "chronic_pancreatitis",
+    "name": "Chronic Pancreatitis",
+    "system": "gastroenterology",
+    "agePeak_months": [480, 720],
+    "note": "Progressive inflammatory disease of the pancreas characterized by irreversible structural damage, fibrosis, and loss of exocrine and endocrine function.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["pancreatic_insufficiency", "chronic_abdominal_pain", "malabsorption"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_acute_on_chronic_pain", "weight": 8 },
+        { "sign": "severe_malnutrition", "weight": 7 },
+        { "sign": "pancreatic_pseudocyst_rupture", "weight": 9 },
+        { "sign": "bile_duct_obstruction_jaundice", "weight": 7 },
+        { "sign": "pancreatic_ascites", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "chronic_pain_pattern": true
+      },
+      "severityLabel": "If acute complication (pseudocyst, obstruction) -> URGENT; chronic pain management -> OUTPATIENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "chronic_epigastric_pain", "weight": 5 },
+      { "symptomId": "pain_radiating_to_back", "weight": 4 },
+      { "symptomId": "pain_related_to_meals", "weight": 3 },
+      { "symptomId": "steatorrhea_greasy_bulky_stools", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "diarrhea", "weight": 3 },
+      { "symptomId": "chronic_alcohol_use", "weight": 4 },
+      { "symptomId": "recurrent_acute_pancreatitis", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "new_onset_diabetes", "weight": 3, "note": "Type 3c diabetes, brittle control" }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_tenderness", "baseWeight": 3 },
+      { "signId": "abdominal_distension", "baseWeight": 2 },
+      { "signId": "palpable_mass_pseudocyst", "baseWeight": 3 },
+      { "signId": "signs_of_malnutrition", "baseWeight": 3 },
+      { "signId": "jaundice", "baseWeight": 2, "note": "Bile duct stricture" },
+      { "signId": "xanthomas", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_alcohol_abuse", "multiplier": 6.0 },
+      { "id": "recurrent_acute_pancreatitis", "multiplier": 3.0 },
+      { "id": "cigarette_smoking", "multiplier": 2.5 },
+      { "id": "genetic_mutations_prss1_spink1_cftr", "multiplier": 4.0 },
+      { "id": "hypertriglyceridemia", "multiplier": 2.0 },
+      { "id": "hypercalcemia", "multiplier": 2.0 },
+      { "id": "autoimmune_pancreatitis", "multiplier": 2.0 },
+      { "id": "tropical_pancreatitis", "multiplier": 3.0 },
+      { "id": "pancreas_divisum", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["pain_relieved_by_antacids", "normal_fecal_elastase", "no_pancreatic_calcifications"]
+      },
+      {
+        "diseaseId": "pancreatic_cancer",
+        "discriminators": ["rapid_progression", "jaundice_as_early_sign", "weight_loss_rapid", "mass_on_imaging", "ca19_9_elevated"]
+      },
+      {
+        "diseaseId": "irritable_bowel_syndrome",
+        "discriminators": ["no_steatorrhea", "normal_fecal_elastase", "stress_correlation", "pain_relieved_by_defecation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Nutritional assessment", "priority": "high", "yield": 0.6, "indication": "assess fat-soluble vitamin deficiency" }
+      ],
+      "laboratory": [
+        { "name": "Fecal elastase-1", "priority": "high", "yield": 0.9, "indication": "gold standard for exocrine insufficiency; <200 ug/g stool" },
+        { "name": "72-hour fecal fat quantification", "priority": "medium", "yield": 0.8, "indication": "validation of steatorrhea" },
+        { "name": "Serum amylase/lipase", "priority": "medium", "yield": 0.3, "indication": "may be normal in advanced disease, elevated in flares" },
+        { "name": "LFTs with bilirubin", "priority": "high", "yield": 0.4, "indication": "bile duct stricture from pancreatic fibrosis" },
+        { "name": "Fasting glucose / HbA1c", "priority": "high", "yield": 0.5, "indication": "screen for diabetes" },
+        { "name": "Vitamins A, D, E, K levels", "priority": "medium", "yield": 0.5, "indication": "fat-soluble vitamin deficiency" }
+      ],
+      "imaging": [
+        { "name": "CT abdomen (pancreatic protocol)", "priority": "high", "yield": 0.9, "indication": "pancreatic calcifications (pathognomonic), ductal dilatation, atrophy" },
+        { "name": "MRCP", "priority": "high", "yield": 0.9, "indication": "ductal morphology, filling defects, side branch ectasia" },
+        { "name": "EUS (Endoscopic Ultrasound)", "priority": "high", "yield": 0.95, "indication": "early changes, parenchymal fibrosis, ductal changes" },
+        { "name": "Abdominal X-ray", "priority": "low", "yield": 0.5, "indication": "pancreatic calcifications visible in 30-70%" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACG Clinical Guideline: Chronic Pancreatitis",
+      "pathways": [
+        {
+          "severity": "pain_management",
+          "criteria": "Chronic epigastric pain, no complications",
+          "treatment": "Abstinence from alcohol and smoking. Analgesic ladder (acetaminophen -> NSAIDs -> TCAs/gabapentinoids -> opioids). PPI. Pancreatic enzyme replacement (PERT) may help pain by reducing CCK stimulation."
+        },
+        {
+          "severity": "exocrine_insufficiency",
+          "criteria": "Steatorrhea, low fecal elastase, weight loss",
+          "treatment": "Pancrelipase (PERT) with meals (25,000-50,000 units lipase/meal). Fat-soluble vitamin supplementation. Medium-chain triglyceride supplementation if severe."
+        },
+        {
+          "severity": "endocrine_insufficiency",
+          "criteria": "Diabetes mellitus (type 3c)",
+          "treatment": "Insulin therapy (low dose, careful monitoring due to hypoglycemia risk). Avoid metformin. Diabetes education."
+        },
+        {
+          "severity": "refractory_pain_complications",
+          "criteria": "Failure of medical therapy, ductal obstruction/hypertension",
+          "treatment": "ERCP with ductal drainage (stenting, stone extraction). EUS-guided celiac plexus block. Consider surgical options (Puestow procedure, distal pancreatectomy, Whipple)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "repeated_acinar_injury",
+      "stellate_cell_activation",
+      "progressive_fibrosis",
+      "pancreatic_parenchymal_atrophy",
+      "ductal_strictures_and_calcifications",
+      "protein_plugs_and_stones_in_ducts",
+      "loss_of_acinar_cells_exocrine_failure",
+      "loss_of_islet_cells_endocrine_failure",
+      "neuropathic_pain_mechanisms",
+      "necrosis_fibrosis_sequence"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pancreatic_pseudocyst",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["palpable_mass", "persistent_pain", "cyst_on_ct"]
+      },
+      {
+        "diseaseId": "pancreatic_cancer",
+        "probability": 0.04,
+        "severityBoost": 0.8,
+        "clues": ["rapid_worsening_symptoms", "new_jaundice", "ca19_9_elevated", "mass_on_imaging"]
+      },
+      {
+        "diseaseId": "common_bile_duct_stricture",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["jaundice", "elevated_bilirubin_alkaline_phosphatase", "dilated_bile_duct"]
+      },
+      {
+        "diseaseId": "splenic_vein_thrombosis",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "clues": ["isolated_gastric_varices", "splenomegaly"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low-moderate; acute exacerbations may require admission",
+    "diagnosticClues": ["chronic_epigastric_pain", "steatorrhea", "pancreatic_calcifications", "low_fecal_elastase", "alcohol_history"],
+    "exclusionClues": ["normal_fecal_elastase", "no_pancreatic_calcifications", "no_history_of_pancreatitis"]
+  }
+}

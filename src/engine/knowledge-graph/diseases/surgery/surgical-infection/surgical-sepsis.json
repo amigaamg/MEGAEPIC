@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "surgical_sepsis",
+    "name": "Surgical Sepsis",
+    "system": "surgical",
+    "agePeak_months": [360, 840],
+    "note": "Life-threatening organ dysfunction caused by dysregulated host response to infection in a surgical patient. Source control is paramount.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["sepsis", "surgical_infection", "organ_dysfunction"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "multi_organ_dysfunction", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "refractory_hypotension", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "qsofa_2_or_more", "weight": 8 },
+          { "sign": "lactate_greater_2", "weight": 7 },
+          { "sign": "organ_failure_respiratory_renal_coagulation", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Septic shock/organ failure -> SEVERE; sepsis without organ failure -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "known_or_suspected_infection", "weight": 5 },
+      { "symptomId": "recent_surgery_trauma", "weight": 4 },
+      { "symptomId": "fever_or_hypothermia", "weight": 4 },
+      { "symptomId": "confusion_altered_mental_status", "weight": 4 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "decreased_urine_output", "weight": 3 },
+      { "symptomId": "abdominal_pain_distension", "weight": 3 },
+      { "symptomId": "wound_discharge_or_dehiscence", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_or_hypothermia", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 5 },
+      { "signId": "tachypnea", "baseWeight": 5 },
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "altered_mental_state", "baseWeight": 4 },
+      { "signId": "wound_assessment_discharge", "baseWeight": 3 },
+      { "signId": "peritoneal_signs", "baseWeight": 3 },
+      { "signId": "mottled_skin_capillary_refill", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "emergency_surgery", "multiplier": 2.5 },
+      { "id": "contaminated_dirty_surgery", "multiplier": 3.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 2.0 },
+      { "id": "prolonged_operation", "multiplier": 2.0 },
+      { "id": "multiple_transfusions", "multiplier": 2.0 },
+      { "id": "age_over_65", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "sepsis_without_shock",
+        "name": "Sepsis without Shock",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "suspected_infection", "weight": 5 },
+          { "feature": "qsofa_2_or_more", "weight": 5 },
+          { "feature": "lactate_greater_2", "weight": 4 },
+          { "feature": "no_persistent_hypotension", "weight": 4 }
+        ],
+        "management": "IV broad-spectrum antibiotics within 1h. Source control (drainage, debridement). Fluid resuscitation (30mL/kg crystalloid). Lactate monitoring. Blood cultures. ICU admission."
+      },
+      {
+        "id": "septic_shock",
+        "name": "Septic Shock",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "persistent_hypotension_requiring_vasopressors", "weight": 5 },
+          { "feature": "lactate_greater_4", "weight": 5 },
+          { "feature": "multi_organ_dysfunction", "weight": 5 },
+          { "feature": "failed_fluid_resuscitation", "weight": 5 }
+        ],
+        "management": "ICU. IV broad-spectrum antibiotics within 1h. Source control. Fluid resuscitation. Vasopressors (Norepinephrine first line). Stress-dose steroids. Tight glucose control. Organ support (ventilation, RRT)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sirs_from_non_infectious_cause",
+        "discriminators": ["pancreatitis", "trauma_without_infection", "burns", "negative_cultures", "no_source"]
+      },
+      {
+        "diseaseId": "cardiogenic_shock",
+        "discriminators": ["no_source_of_infection", "elevated_troponin", "ecg_changes", "lung_edema"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "qSOFA Score", "priority": "immediate", "yield": 0.8, "indication": "identify sepsis in surgical patient" }
+      ],
+      "laboratory": [
+        { "name": "Lactate", "priority": "immediate", "yield": 0.9, "indication": "tissue hypoperfusion marker" },
+        { "name": "Blood cultures (2 sets)", "priority": "immediate", "yield": 0.5, "indication": "identify organism" },
+        { "name": "WBC count", "priority": "immediate", "yield": 0.6, "indication": "leukocytosis or leukopenia" },
+        { "name": "CRP, Procalcitonin", "priority": "high", "yield": 0.8, "indication": "infection markers" },
+        { "name": "Creatinine", "priority": "high", "yield": 0.6, "indication": "renal function" },
+        { "name": "LFTs", "priority": "high", "yield": 0.5, "indication": "hepatic dysfunction" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.5, "indication": "DIC assessment" },
+        { "name": "Blood gas", "priority": "immediate", "yield": 0.7, "indication": "acidosis, oxygenation" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen/Pelvis with IV contrast", "priority": "immediate", "yield": 0.85, "indication": "identify intra-abdominal source" },
+        { "name": "Chest X-Ray", "priority": "high", "yield": 0.5, "indication": "pneumonia source" },
+        { "name": "Ultrasound", "priority": "medium", "yield": 0.6, "indication": "abscess detection" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Surviving Sepsis Campaign Guidelines",
+      "pathways": [
+        {
+          "severity": "sepsis",
+          "criteria": "suspected infection, qSOFA >=2, lactate >2, no refractory hypotension",
+          "treatment": "IV antibiotics within 1h. Source control (drainage, debridement). 30mL/kg crystalloid. Lactate monitoring. ICU. Blood cultures before antibiotics if no delay."
+        },
+        {
+          "severity": "septic shock",
+          "criteria": "hypotension requiring vasopressors, lactate >2 after fluids, organ failure",
+          "treatment": "ICU. IV antibiotics within 1h. Source control. Aggressive fluids. Norepinephrine. Steroids (Hydrocortisone 200mg/day). Organ support. Tight glucose. DVT and stress ulcer prophylaxis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "surgical_site_or_source_infection",
+      "dysregulated_host_response",
+      "cytokine_storm",
+      "endothelial_injury",
+      "microvascular_thrombosis",
+      "tissue_hypoperfusion",
+      "organ_dysfunction",
+      "refractory_shock"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "multi_organ_dysfunction_syndrome",
+        "probability": 0.3,
+        "lagDays": [1, 7],
+        "severityBoost": 0.5,
+        "clues": ["persistent_lactate", "increasing_vasopressor_need", "organ_failure_progression"]
+      },
+      {
+        "diseaseId": "persistent_infection_source",
+        "probability": 0.15,
+        "lagDays": [2, 7],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "elevated_wbc_crp", "positive_cultures", "inadequate_drainage"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["suspected_surgical_infection", "qsofa_positive", "lactate_elevated", "organ_dysfunction"],
+    "exclusionClues": ["no_source_of_infection", "spontaneously_resolving", "normal_lactate_qsofa_0"]
+  }
+}

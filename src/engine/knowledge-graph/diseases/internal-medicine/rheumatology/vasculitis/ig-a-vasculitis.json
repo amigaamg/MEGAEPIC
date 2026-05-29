@@ -1,0 +1,155 @@
+{
+  "disease": {
+    "id": "ig_a_vasculitis",
+    "name": "IgA Vasculitis (Henoch-Schönlein Purpura)",
+    "system": "rheumatology",
+    "agePeak_months": [48, 120],
+    "note": "Small vessel vasculitis caused by IgA immune complex deposition. Classic tetrad: palpable purpura, arthritis, abdominal pain, and renal disease. Most common in children but can occur in adults.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["vasculitis", "small_vessel_vasculitis", "iga", "purpura", "pediatric"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "intussusception", "weight": 8 },
+        { "sign": "gastrointestinal_bleeding", "weight": 8 },
+        { "sign": "rapidly_progressive_glomerulonephritis", "weight": 9 },
+        { "sign": "renal_failure", "weight": 9 },
+        { "sign": "cerebral_vasculitis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If GI bleeding, intussusception, or renal involvement -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "palpable_purpura_lower_extremities", "weight": 5 },
+      { "symptomId": "arthritis_arthralgia", "weight": 4 },
+      { "symptomId": "abdominal_pain_colicky", "weight": 4 },
+      { "symptomId": "nausea_vomiting_gi_bleed", "weight": 3 },
+      { "symptomId": "recent_upper_respiratory_infection", "weight": 3 },
+      { "symptomId": "hematuria_proteinuria", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_purpura", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "lower_extremity_bullous_ulcerative_purpura", "baseWeight": 5 },
+      { "signId": "joint_swelling_ankle_knee", "baseWeight": 3 },
+      { "signId": "abdominal_tenderness_guarding", "baseWeight": 3 },
+      { "signId": "peripheral_edema_nephrotic", "baseWeight": 3 },
+      { "signId": "scrotal_edema_pain", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_4_15_years", "multiplier": 5.0 },
+      { "id": "recent_infection_strep_viral", "multiplier": 3.0 },
+      { "id": "vaccination_recent", "multiplier": 1.5 },
+      { "id": "adult_onset_worse_renal", "multiplier": 2.0 },
+      { "id": "male_sex", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "pediatric_hsp",
+        "name": "Pediatric IgA Vasculitis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "self_limiting_typically", "weight": 5 },
+          { "feature": "purpura_arthritis_abdomen", "weight": 5 },
+          { "feature": "excellent_prognosis", "weight": 4 }
+        ],
+        "management": "Supportive care. NSAIDs for arthritis. Corticosteroids for severe GI or renal disease."
+      },
+      {
+        "id": "adult_hsp",
+        "name": "Adult IgA Vasculitis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "more_severe_renal_disease", "weight": 5 },
+          { "feature": "less_gi_involvement", "weight": 3 },
+          { "feature": "more_chronic_course", "weight": 4 }
+        ],
+        "management": "Corticosteroids. Immunosuppression for severe nephritis (cyclophosphamide, mycophenolate)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "thrombocytopenic_purpura",
+        "discriminators": ["thrombocytopenia", "non_palpable_petechiae", "mucosal_bleeding", "normal_iga"]
+      },
+      {
+        "diseaseId": "granulomatosis_with_polyangiitis",
+        "discriminators": ["anti_pr3", "pulmonary_nodules", "sinusitis", "no_iga_deposits"]
+      },
+      {
+        "diseaseId": "hypersensitivity_vasculitis",
+        "discriminators": ["drug_exposure", "no_gi_renal", "self_limiting", "no_iga_deposits"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urinalysis", "priority": "immediate", "yield": 0.8, "indication": "hematuria, proteinuria, red cell casts" }
+      ],
+      "laboratory": [
+        { "name": "FBC and coagulation", "priority": "high", "yield": 0.4, "indication": "normal platelets (distinguish from ITP)" },
+        { "name": "Serum IgA", "priority": "medium", "yield": 0.5, "indication": "may be elevated" },
+        { "name": "Creatinine and eGFR", "priority": "high", "yield": 0.5, "indication": "renal function monitoring" },
+        { "name": "CRP", "priority": "medium", "yield": 0.5, "indication": "inflammatory marker" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.7, "indication": "intussusception, bowel wall thickening" },
+        { "name": "Skin biopsy", "priority": "high", "yield": 0.9, "indication": "leukocytoclastic vasculitis, IgA deposits" },
+        { "name": "Renal biopsy", "priority": "medium", "yield": 0.9, "indication": "mesangial IgA deposits, crescentic GN" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR/PRINTO/PRES HSP Nephritis Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "rash, arthritis, no GI or renal involvement",
+          "treatment": "Supportive. Hydration. NSAIDs for arthritis. Monitor for 6-12 weeks."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "abdominal pain, GI bleeding, mild proteinuria",
+          "treatment": "Prednisolone 1-2 mg/kg/day (max 80 mg). Monitor renal function closely."
+        },
+        {
+          "severity": "severe",
+          "criteria": "nephrotic syndrome, crescentic GN, renal impairment",
+          "treatment": "IV methylprednisolone. Oral steroids. Mycophenolate mofetil or cyclophosphamide. ACE inhibitor for proteinuria."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "iga_immune_complex_deposition",
+      "leukocytoclastic_vasculitis",
+      "galactose_deficient_iga1",
+      "complement_activation",
+      "mesangial_proliferation",
+      "crescent_formation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "iga_nephropathy_chronic",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["persistent_proteinuria", "hematuria", "hypertension", "reduced_gfr"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if GI or renal",
+    "diagnosticClues": ["palpable_purpura_lower_limbs", "abdominal_pain_arthralgia", "post_infectious", "iga_deposits"],
+    "exclusionClues": ["thrombocytopenia", "sepsis", "drug_induced", "negative_purpura_biopsy_for_iga"]
+  }
+}

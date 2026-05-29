@@ -1,0 +1,164 @@
+{
+  "disease": {
+    "id": "measles",
+    "name": "Measles (Rubeola)",
+    "system": "PAED",
+    "agePeak_months": [6, 60],
+    "note": "Highly contagious viral illness. Prodrome of fever, coryza, conjunctivitis, and Koplik spots followed by maculopapular rash. Complications include pneumonia and encephalitis.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["childhood_febrile_rash", "vaccine_preventable"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_pneumonia_respiratory_failure", "weight": 10 },
+        { "sign": "encephalitis", "weight": 10 },
+        { "sign": "croup_severe_obstructive", "weight": 9 },
+        { "sign": "severe_dehydration", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_fever_>40C", "weight": 7 },
+          { "sign": "complicated_measles_pneumonia", "weight": 7 },
+          { "sign": "malnutrition_underlying", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If pneumonia, encephalitis, or severe croup -> SEVERE (complicated measles); else -> NON-SEVERE (uncomplicated measles)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_prodrome_3_4_days", "weight": 5 },
+      { "symptomId": "coryza_runny_nose", "weight": 4 },
+      { "symptomId": "cough", "weight": 4 },
+      { "symptomId": "conjunctivitis_red_watery_eyes", "weight": 4 },
+      { "symptomId": "rash_that_starts_on_face", "weight": 5 },
+      { "symptomId": "no_measles_vaccination", "weight": 5 },
+      { "symptomId": "exposure_to_measles_case", "weight": 4 },
+      { "symptomId": "koplik_spots", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "maculopapular_rash_face_to_trunk", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "conjunctivitis", "baseWeight": 4 },
+      { "signId": "coryza", "baseWeight": 4 },
+      { "signId": "koplik_spots_buccal_mucosa", "baseWeight": 5 },
+      { "signId": "cough", "baseWeight": 4 },
+      { "signId": "lymphadenopathy", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "unvaccinated", "multiplier": 5.0 },
+      { "id": "age_<2_years", "multiplier": 2.5 },
+      { "id": "malnutrition_vitamin_a_deficiency", "multiplier": 3.0 },
+      { "id": "immunodeficiency", "multiplier": 4.0 },
+      { "id": "crowded_living_conditions", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_measles",
+        "name": "Uncomplicated Measles",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "classic_prodrome_fever_coryza_conjunctivitis", "weight": 5 },
+          { "feature": "koplik_spots", "weight": 5 },
+          { "feature": "rash_face_to_trunk_in_3_days", "weight": 5 },
+          { "feature": "no_complications", "weight": 4 }
+        ],
+        "management": "Supportive: antipyretics, hydration, vitamin A (200,000 IU x 2 days). Monitor for complications. Isolation for 4 days after rash onset."
+      },
+      {
+        "id": "complicated_measles",
+        "name": "Complicated Measles (Pneumonia/Encephalitis)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "tachypnea_hypoxia_pneumonia", "weight": 5 },
+          { "feature": "altered_consciousness_seizures", "weight": 5 },
+          { "feature": "diarrhea_severe_dehydration", "weight": 4 }
+        ],
+        "management": "Hospitalize. Oxygen for pneumonia. IV antibiotics for secondary bacterial pneumonia. Vitamin A high dose. Anticonvulsants for seizures. Isolate. Supportive care."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "rubella",
+        "discriminators": ["milder_illness", "post_auricular_occipital_lymphadenopathy", "rash_resolves_faster"]
+      },
+      {
+        "diseaseId": "roseola_infantum",
+        "discriminators": ["high_fever_that_subside_when_rash_appears", "rash_trunk_first", "age_6_24_months"]
+      },
+      {
+        "diseaseId": "dengue",
+        "discriminators": ["severe_myalgia", "thrombocytopenia", "no_koplik_spots", "no_conjunctivitis"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Measles IgM serology", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "Measles PCR (throat swab, urine)", "priority": "medium", "yield": 0.9, "indication": "confirm, genotype" },
+        { "name": "CBC", "priority": "low", "yield": 0.3, "indication": "leukopenia typical" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "if respiratory symptoms/suspected pneumonia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Measles Management Guidelines",
+      "pathways": [
+        {
+          "severity": "uncomplicated",
+          "criteria": "No pneumonia, no encephalitis, no severe dehydration, no malnutrition",
+          "treatment": "Vitamin A 200,000 IU (<6m: 50,000 IU; 6-11m: 100,000 IU) x 2 doses. Antipyretics. Adequate hydration. Nutrition. Isolate for 4 days after rash onset. Report to public health."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "Pneumonia, encephalitis, severe dehydration, croup, or severe malnutrition",
+          "treatment": "Hospitalize. Vitamin A as above. Oxygen if SpO2 <92%. IV antibiotics for bacterial superinfection. IV fluids for dehydration. Anticonvulsants for seizures. Corticosteroids for croup. Isolation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "paramyxovirus_infection", "respiratory_epithelial_infection", "viremia", "immune_suppression_post_infection", "giant_cell_formation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "measles_pneumonia",
+        "probability": 0.15,
+        "lagDays": [0, 7],
+        "severityBoost": 0.5,
+        "clues": ["tachypnea", "hypoxia", "new_chest_infiltrate"]
+      },
+      {
+        "diseaseId": "measles_encephalitis",
+        "probability": 0.01,
+        "lagDays": [3, 10],
+        "severityBoost": 0.7,
+        "clues": ["seizures", "altered_consciousness", "focal_signs"]
+      },
+      {
+        "diseaseId": "subacute_sclerosing_panencephalitis",
+        "probability": 0.001,
+        "lagDays": [3650, 10950],
+        "severityBoost": 0.8,
+        "clues": ["progressive_neurologic_decline", "myoclonus", "typical_eeg"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["fever_coryza_conjunctivitis", "koplik_spots", "rash_face_to_trunk", "unvaccinated"],
+    "exclusionClues": ["vaccinated", "atypical_rash_pattern", "negative_igm"]
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "disease": {
+    "id": "primary_hypertension",
+    "name": "Primary (Essential) Hypertension",
+    "system": "CARD",
+    "agePeak_months": [240, 1080],
+    "note": "Sustained elevated blood pressure without identifiable secondary cause. Major cardiovascular risk factor.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["cardiovascular_risk", "chronic_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypertensive_encephalopathy", "weight": 10 },
+        { "sign": "aortic_dissection", "weight": 10 },
+        { "sign": "acute_stroke", "weight": 9 },
+        { "sign": "acute_pulmonary_oedema", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If end-organ damage/hypertensive emergency -> URGENT; else -> NON-URGENT (chronic management)"
+    },
+    "historyFeatures": [
+      { "symptomId": "asymptomatic", "weight": 1, "note": "Often asymptomatic until complications" },
+      { "symptomId": "headache", "weight": 2 },
+      { "symptomId": "dizziness", "weight": 2 },
+      { "symptomId": "epistaxis", "weight": 1 },
+      { "symptomId": "visual_blurring", "weight": 2 },
+      { "symptomId": "nocturia", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "elevated_bp_sustained", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bmi_elevated", "baseWeight": 2 },
+      { "signId": "retinopathy_hypertensive", "baseWeight": 3 },
+      { "signId": "left_ventricular_heave", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "high_salt_diet", "multiplier": 1.5 },
+      { "id": "sedentary_lifestyle", "multiplier": 1.3 },
+      { "id": "alcohol_excess", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.3 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "age_over_65", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "stage_1_htn",
+        "name": "Stage 1 Hypertension (130-139/80-89)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [{ "feature": "bp_130_to_139_systolic", "weight": 5 }],
+        "management": "Lifestyle modification. If ASCVD risk >10%: start pharmacotherapy. Target <130/80."
+      },
+      {
+        "id": "stage_2_htn",
+        "name": "Stage 2 Hypertension (≥140/90)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [{ "feature": "bp_greater_140_systolic", "weight": 5 }],
+        "management": "Lifestyle + pharmacotherapy. First-line: thiazide, CCB, ACEi/ARB. Combination therapy often needed. Target <130/80."
+      },
+      {
+        "id": "resistant_htn",
+        "name": "Resistant Hypertension",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "on_3_or_more_antihypertensives", "weight": 5 },
+          { "feature": "bp_not_at_target", "weight": 5 }
+        ],
+        "management": "Confirm adherence. Add spironolactone. Rule out secondary causes. Specialist referral."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "white_coat_hypertension", "discriminators": ["elevated_in_clinic", "normal_home_bp", "normal_abpm"] },
+      { "diseaseId": "secondary_hypertension", "discriminators": ["young_age", "resistant", "specific_findings"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Ambulatory BP monitoring", "priority": "high", "yield": 0.9, "indication": "confirm diagnosis, exclude white coat" },
+        { "name": "Home BP monitoring", "priority": "high", "yield": 0.85, "indication": "treatment monitoring" }
+      ],
+      "laboratory": [
+        { "name": "U&E, creatinine, eGFR", "priority": "high", "yield": 0.4, "indication": "renal function, baseline before ACEi/ARB" },
+        { "name": "Fasting lipids and glucose", "priority": "high", "yield": 0.5, "indication": "CV risk assessment" },
+        { "name": "Urinalysis", "priority": "high", "yield": 0.3, "indication": "proteinuria, haematuria" },
+        { "name": "HbA1c", "priority": "medium", "yield": 0.3, "indication": "screen for diabetes" }
+      ],
+      "imaging": [
+        { "name": "ECG", "priority": "high", "yield": 0.4, "indication": "LVH strain pattern" },
+        { "name": "Echocardiography", "priority": "medium", "yield": 0.6, "indication": "LVH, diastolic function" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC/ESH Guidelines for Hypertension 2023",
+      "pathways": [
+        {
+          "severity": "stage 1, low risk",
+          "criteria": "BP 130-139/80-89, ASCVD risk <10%",
+          "treatment": "Lifestyle: DASH diet, salt <5g/day, exercise 150 min/week, weight loss, alcohol moderation. Recheck in 3-6 months."
+        },
+        {
+          "severity": "stage 1-2, moderate-high risk",
+          "criteria": "BP ≥140/90 or ASCVD risk ≥10%",
+          "treatment": "Lifestyle + medication. First-line: ACEi/ARB or CCB or thiazide. Add second agent if BP not at target. Target <130/80."
+        },
+        {
+          "severity": "resistant hypertension",
+          "criteria": "BP above target on 3 agents including diuretic",
+          "treatment": "Add spironolactone 25 mg. If not tolerated: bisoprolol, doxazosin, or clonidine. Rule out secondary causes. Consider renal denervation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "sodium_retention",
+      "renin_angiotensin_system_activation",
+      "sympathetic_overactivity",
+      "endothelial_dysfunction",
+      "vascular_remodeling",
+      "increased_peripheral_resistance"
+    ],
+    "complications": [
+      { "diseaseId": "heart_failure", "probability": 0.1, "severityBoost": 0.3, "clues": ["dyspnea", "lvh"] },
+      { "diseaseId": "ischemic_stroke", "probability": 0.08, "severityBoost": 0.4, "clues": ["sudden_neurological_deficit"] },
+      { "diseaseId": "myocardial_infarction", "probability": 0.05, "severityBoost": 0.4, "clues": ["chest_pain", "troponin_rise"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["persistently_elevated_bp", "multiple_readings", "exclude_secondary_causes"],
+    "exclusionClues": ["normal_bp_off_medication", "bp_abnormal_only_in_clinic"]
+  }
+}

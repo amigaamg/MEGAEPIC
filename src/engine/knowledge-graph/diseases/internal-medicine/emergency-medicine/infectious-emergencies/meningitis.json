@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "bacterial_meningitis",
+    "name": "Bacterial Meningitis",
+    "system": "emergency_medicine",
+    "agePeak_months": [0, 240],
+    "note": "Life-threatening infection of the meninges. Classic triad: fever, neck stiffness, altered mental status. Time-critical: IV antibiotics within 1 hour. Common pathogens: S. pneumoniae, N. meningitidis, H. influenzae, Group B Strep (neonates), L. monocytogenes.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["infection", "neurological_emergency", "meningitis", "cns_infection"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapidly_decreasing_gcs", "weight": 10 },
+        { "sign": "seizures", "weight": 9 },
+        { "sign": "signs_of_raised_icp", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "purpuric_rash", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "BACTERIAL MENINGITIS is a medical emergency. IV antibiotics within 1 hour of suspicion (do NOT wait for LP or CT)."
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_high", "weight": 5 },
+      { "symptomId": "headache_severe", "weight": 5 },
+      { "symptomId": "neck_stiffness", "weight": 5 },
+      { "symptomId": "vomiting", "weight": 4 },
+      { "symptomId": "photophobia", "weight": 3 },
+      { "symptomId": "altered_consciousness_confusion", "weight": 5 },
+      { "symptomId": "seizures", "weight": 3 },
+      { "symptomId": "rash_petechial_purpuric", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "neck_stiffness_meningism", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "altered_consciousness", "baseWeight": 5 },
+      { "signId": "kernig_sign_positive", "baseWeight": 4 },
+      { "signId": "brudzinski_sign_positive", "baseWeight": 4 },
+      { "signId": "photophobia", "baseWeight": 3 },
+      { "signId": "petechiae_or_purpura", "baseWeight": 5 },
+      { "signId": "focal_neurological_deficit", "baseWeight": 3 },
+      { "signId": "papilloedema", "baseWeight": 3 },
+      { "signId": "bulging_fontanelle_infants", "baseWeight": 4 },
+      { "signId": "irritability_inconsolable_crying", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_under_5_or_over_65", "multiplier": 3.0 },
+      { "id": "asplenia_splenectomy", "multiplier": 5.0 },
+      { "id": "immunosuppression", "multiplier": 4.0 },
+      { "id": "cochlear_implant", "multiplier": 3.0 },
+      { "id": "csf_leak_basal_skull_fracture", "multiplier": 4.0 },
+      { "id": "unvaccinated_status", "multiplier": 3.0 },
+      { "id": "close_contact_of_meningitis_case", "multiplier": 2.5 },
+      { "id": "pneumonia_otitis_media_sinusitis", "multiplier": 2.0 }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "viral_meningitis",
+        "discriminators": ["less_severe", "no_purpuric_rash", "csf_viral_pcr_positive", "lymphocytic_predominance"]
+      },
+      {
+        "diseaseId": "subarachnoid_haemorrhage",
+        "discriminators": ["thunderclap_headache", "blood_on_ct", "no_fever", "xanthochromia"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE assessment", "priority": "immediate", "yield": 1.0, "indication": "all suspected meningitis" },
+        { "name": "Rash glass test", "priority": "immediate", "yield": 0.8, "indication": "non-blanching = meningococcal" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.4, "indication": "hypoglycemia mimic" }
+      ],
+      "laboratory": [
+        { "name": "CSF analysis (Gram stain, culture, PCR, glucose, protein, cell count)", "priority": "high", "yield": 0.98, "indication": "definitive diagnosis" },
+        { "name": "Blood cultures x2 (BEFORE antibiotics if possible)", "priority": "high", "yield": 0.7, "indication": "identify pathogen" },
+        { "name": "FBC with differential", "priority": "high", "yield": 0.6, "indication": "leucocytosis or leucopenia" },
+        { "name": "CRP, procalcitonin", "priority": "high", "yield": 0.7, "indication": "infection severity, bacterial vs viral" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.5, "indication": "DIC screen" },
+        { "name": "U&E, Cr, LFTs", "priority": "high", "yield": 0.4, "indication": "organ function" },
+        { "name": "Blood and CSF PCR (meningococcal, pneumococcal)", "priority": "high", "yield": 0.9, "indication": "rapid pathogen ID" }
+      ],
+      "imaging": [
+        { "name": "CT head (before LP if risk factors)", "priority": "high", "yield": 0.4, "indication": "mass effect, raised ICP, before LP if indicated" },
+        { "name": "MRI brain with contrast", "priority": "medium", "yield": 0.8, "indication": "complications, alternative diagnosis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Meningitis Guidelines / IDSA Guidelines / WHO Guidelines",
+      "pathways": [
+        {
+          "severity": "suspected bacterial meningitis",
+          "criteria": "fever + meningism + altered mental status (or purpuric rash)",
+          "treatment": "ABCDE. IV antibiotics IMMEDIATELY (within 1h). Empirical: ceftriaxone 2g IV Q12H (or cefotaxime) + vancomycin if pneumococcal resistance concerns. Add ampicillin 2g IV Q4H if age <3mo, >55y, immunocompromised, or suspected Listeria. Dexamethasone 0.15mg/kg IV Q6H x 4 days (before or with first antibiotic, benefit in pneumococcal meningitis). IV fluids. Seizure control. ICU if GCS <=12 or unstable."
+        },
+        {
+          "severity": "complicated meningitis",
+          "criteria": "seizures, focal neurology, raised ICP, GCS <=8, shock",
+          "treatment": "ICU admission. Raised ICP management (HOB 30, mannitol/hypertonic saline, controlled ventilation). EEG monitoring. Seizure treatment. Vasopressors for shock. Repeat imaging if deteriorating. Neurosurgical consultation for complications (abscess, empyema, hydrocephalus)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "nasopharyngeal_colonization_or_bloodstream_invasion",
+      "bacteria_cross_blood_brain_barrier",
+      "subarachnoid_space_inflammation",
+      "bacterial_replication_in_csf",
+      "inflammatory_cascade",
+      "cerebral_oedema",
+      "increased_intracranial_pressure",
+      "impaired_cerebral_blood_flow",
+      "neuronal_damage",
+      "systemic_sepsis_responses"
+    ],
+    "complications": [
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "lactate_high", "multi_organ_dysfunction"]
+      },
+      {
+        "diseaseId": "subdural_empyema",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["worsening_focal_signs", "seizures", "mass_effect_on_imaging"]
+      },
+      {
+        "diseaseId": "hydrocephalus",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["worsening_gcs", "ventriculomegaly"]
+      },
+      {
+        "diseaseId": "hearing_loss_permanent",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["sensorineural_hearing_loss", "post_meningitic"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever", "neck_stiffness", "altered_mental_status", "photophobia", "petechial_rash", "positive_kernig_brudzinski", "csf_positive"],
+    "exclusionClues": ["normal_csf", "negative_cultures_and_pcr", "alternative_diagnosis_confirmed"]
+  }
+}

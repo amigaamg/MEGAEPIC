@@ -1,0 +1,181 @@
+{
+  "disease": {
+    "id": "skin_ulcer",
+    "name": "Chronic Skin Ulcer",
+    "system": "surgical",
+    "agePeak_months": [480, 960],
+    "note": "Full-thickness skin defect failing to heal. Venous, arterial, diabetic, or pressure etiology. Requires multidisciplinary wound care.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["leg_ulcer", "non_healing_wound", "skin_breakdown"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "necrotizing_infection", "weight": 10 },
+        { "sign": "sepsis_from_wound", "weight": 9 },
+        { "sign": "exposed_bone_tendon_deep_infection", "weight": 8 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "deep_tissue_involvement_osteomyelitis", "weight": 8 },
+          { "sign": "rapid_enlargement_gangrene", "weight": 7 },
+          { "sign": "critical_limb_ischemia", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Deep infection/osteomyelitis/ischemia -> SEVERE; superficial chronic -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "non_healing_wound_more_than_4_weeks", "weight": 5 },
+      { "symptomId": "leg_swelling_varicose_veins", "weight": 4, "note": "Venous ulcer features" },
+      { "symptomId": "intermittent_claudication_rest_pain", "weight": 4, "note": "Arterial ulcer features" },
+      { "symptomId": "diabetes_with_neuropathy", "weight": 5, "note": "Diabetic (neuropathic) ulcer" },
+      { "symptomId": "pressure_immobility_bedridden", "weight": 4, "note": "Pressure ulcer features" },
+      { "symptomId": "pain_worse_at_night_lower_leg", "weight": 3 },
+      { "symptomId": "wound_discharge_malodor", "weight": 2 },
+      { "symptomId": "previous_ulcer_or_amputation", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "full_thickness_skin_defect", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "assess_location_and_margins", "baseWeight": 3 },
+      { "signId": "wound_bed_characteristics", "baseWeight": 3 },
+      { "signId": "peripheral_pulses_assessment", "baseWeight": 4 },
+      { "signId": "venous_signs_pigmentation_edema", "baseWeight": 3 },
+      { "signId": "neuropathy_sensation_testing", "baseWeight": 3 },
+      { "signId": "signs_of_infection_cellulitis", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_venous_insufficiency", "multiplier": 3.0 },
+      { "id": "peripheral_arterial_disease", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 3.5 },
+      { "id": "immobility_pressure", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 2.5 },
+      { "id": "immunosuppression_steroids", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "venous_ulcer",
+        "name": "Venous Ulcer (Gaiter Area)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "medial_malleolus_location", "weight": 5 },
+          { "feature": "shallow_irregular_borders", "weight": 4 },
+          { "feature": "venous_pigmentation_edema", "weight": 5 },
+          { "feature": "present_pulses", "weight": 3 }
+        ],
+        "management": "Compression therapy (multi-layer bandaging). Leg elevation. Wound debridement and dressings. Endovenous ablation of incompetent veins. Skin grafting for large ulcers."
+      },
+      {
+        "id": "arterial_ulcer",
+        "name": "Arterial/Ischemic Ulcer",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "distal_tip_toes_webspace", "weight": 5 },
+          { "feature": "punched_out_circular", "weight": 4 },
+          { "feature": "absent_pulses_low_abi", "weight": 5 },
+          { "feature": "severe_pain_cold_limb", "weight": 4 }
+        ],
+        "management": "Revascularization (endovascular or bypass). No compression. Wound care. Analgesia. Amputation if unsalvageable."
+      },
+      {
+        "id": "diabetic_neuropathic_ulcer",
+        "name": "Diabetic (Neuropathic) Ulcer",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "plantar_foot_weight_bearing", "weight": 5 },
+          { "feature": "callus_surrounding_ulcer", "weight": 4 },
+          { "feature": "loss_of_sensation", "weight": 5 },
+          { "feature": "foot_deformity_charcot", "weight": 3 }
+        ],
+        "management": "Offloading (total contact cast). Sharp debridement of callus. Infection control (antibiotics). Revascularization if PAD. Blood glucose control. Multidisciplinary foot team."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "squamous_cell_carcinoma_marjolin",
+        "discriminators": ["chronic_non_healing_ulcer_with_rolled_everted_margins", "biopsy_shows_malignancy", "longstanding"]
+      },
+      {
+        "diseaseId": "pyoderma_gangrenosum",
+        "discriminators": ["rapid_onset_purple_edge", "associated_ibd", "pain_out_of_proportion", "pathergy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ABI measurement", "priority": "high", "yield": 0.8, "indication": "assess arterial supply" },
+        { "name": "Monofilament test", "priority": "high", "yield": 0.6, "indication": "assess neuropathy" }
+      ],
+      "laboratory": [
+        { "name": "HbA1c", "priority": "high", "yield": 0.5, "indication": "diabetes assessment" },
+        { "name": "CRP, WBC", "priority": "medium", "yield": 0.4, "indication": "infection assessment" },
+        { "name": "Albumin, prealbumin", "priority": "medium", "yield": 0.3, "indication": "nutritional status" },
+        { "name": "Wound swab culture", "priority": "medium", "yield": 0.5, "indication": "guide antibiotics" }
+      ],
+      "imaging": [
+        { "name": "Venous/Arterial Duplex", "priority": "high", "yield": 0.85, "indication": "assess underlying vascular pathology" },
+        { "name": "X-Ray foot/leg", "priority": "medium", "yield": 0.4, "indication": "osteomyelitis, Charcot" },
+        { "name": "MRI with contrast", "priority": "medium", "yield": 0.85, "indication": "if osteomyelitis suspected" },
+        { "name": "CT Angiography", "priority": "medium", "yield": 0.9, "indication": "if revascularization planned" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "European Wound Management Association Guidelines",
+      "pathways": [
+        {
+          "severity": "venous ulcer",
+          "criteria": "gaiter area, shallow, present pulses, venous disease",
+          "treatment": "Multi-layer compression bandaging. Leg elevation. Wound debridement. Dressings (hydrocolloid, foam). Endovenous ablation of incompetent veins."
+        },
+        {
+          "severity": "arterial / diabetic ulcer",
+          "criteria": "distal, absent pulses, low ABI, neuropathy",
+          "treatment": "Vascular assessment. Revascularization. Offloading (total contact cast). Debridement. Infection control. Blood glucose control. Wound care MDT."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "venous_hypertension_and_reflux",
+      "arterial_insufficiency",
+      "neuropathy_and_pressure",
+      "tissue_hypoxia",
+      "chronic_inflammation",
+      "failed_wound_healing",
+      "epithelialization_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cellulitis_wound_infection",
+        "probability": 0.2,
+        "lagDays": [3, 30],
+        "severityBoost": 0.2,
+        "clues": ["spreading_erythema", "pain", "purulent_discharge", "fever"]
+      },
+      {
+        "diseaseId": "osteomyelitis",
+        "probability": 0.1,
+        "lagDays": [14, 90],
+        "severityBoost": 0.3,
+        "clues": ["exposed_bone", "probe_to_bone", "elevated_crp", "mri_positive"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["non_healing_wound", "leg_location", "vascular_or_neuropathic_basis", "duration_more_4_weeks"],
+    "exclusionClues": ["healing_wound", "acute_traumatic_wound_healing_normally", "normal_vascular_sensation"]
+  }
+}

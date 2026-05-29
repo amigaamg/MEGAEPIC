@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "shock",
+    "name": "Shock (Pediatric ICU) - Undifferentiated",
+    "system": "PAED",
+    "agePeak_months": [0, 60],
+    "note": "Acute circulatory failure with inadequate tissue oxygen delivery. Categories: hypovolemic, distributive (septic), cardiogenic, obstructive. Early recognition and targeted treatment critical.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["circulatory_failure", "hypoperfusion"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypotension_age_adjusted", "weight": 10 },
+        { "sign": "cardiac_arrest_impending", "weight": 10 },
+        { "sign": "unconsciousness", "weight": 10 },
+        { "sign": "absent_pulses", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "lactate_>4", "weight": 8 },
+          { "sign": "cool_mottled_extremities", "weight": 7 },
+          { "sign": "capillary_refill_>3_seconds", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If lactate >2 mmol/L with poor perfusion -> hypoperfusion/shock; Severity based on lactate and BP"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "vomiting_diarrhea_decreased_po", "weight": 4, "note": "Hypovolemic" },
+      { "symptomId": "fever_infection_source", "weight": 4, "note": "Distributive/septic" },
+      { "symptomId": "known_cardiac_disease", "weight": 3, "note": "Cardiogenic" },
+      { "symptomId": "trauma_injury", "weight": 3, "note": "Hemorrhagic" },
+      { "symptomId": "lethargy_altered_consciousness", "weight": 4 },
+      { "symptomId": "oliguria_anuria", "weight": 4 },
+      { "symptomId": "difficulty_breathing", "weight": 3 },
+      { "symptomId": "rash_allergic_exposure", "weight": 2, "note": "Anaphylactic" }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 5 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 4 },
+      { "signId": "weak_or_boundy_pulses", "baseWeight": 4 },
+      { "signId": "mottled_cold_extremities", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "altered_mental_status", "baseWeight": 4 },
+      { "signId": "decreased_urine_output", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_<1_year", "multiplier": 3.0 },
+      { "id": "prematurity", "multiplier": 2.5 },
+      { "id": "malnutrition", "multiplier": 2.0 },
+      { "id": "immunodeficiency", "multiplier": 2.5 },
+      { "id": "congenital_heart_disease", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hypovolemic_shock",
+        "name": "Hypovolemic Shock",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "history_of_fluid_losses_vomiting_diarrhea", "weight": 5 },
+          { "feature": "dry_mucous_membranes", "weight": 4 },
+          { "feature": "cold_extremities", "weight": 4 },
+          { "feature": "responds_to_fluid_boluses", "weight": 5 }
+        ],
+        "management": "IV NS 20 mL/kg bolus, repeat PRN (up to 60 mL/kg). Identify and treat cause. Blood transfusion if hemorrhagic. Monitor urine output."
+      },
+      {
+        "id": "distributive_septic_shock",
+        "name": "Distributive (Septic) Shock",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "fever_or_hypothermia", "weight": 5 },
+          { "feature": "source_of_infection", "weight": 4 },
+          { "feature": "warm_or_cold_extremities", "weight": 3 }
+        ],
+        "management": "Fluids 20 mL/kg boluses. Antibiotics within 1h. Vasopressors (epinephrine for cold, norepinephrine for warm). Source control. Corticosteroids if catecholamine resistant."
+      },
+      {
+        "id": "cardiogenic_shock",
+        "name": "Cardiogenic Shock",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "murmur_gallop", "weight": 4 },
+          { "feature": "hepatomegaly", "weight": 4 },
+          { "feature": "pulmonary_edema", "weight": 4 },
+          { "feature": "poor_response_to_fluids", "weight": 4 }
+        ],
+        "management": "Cautious fluids (5-10 mL/kg if needed). Inotropes (milrinone, dobutamine, epinephrine). Diuretics for pulmonary edema. Treat arrhythmia. Mechanical support (ECMO) if refractory."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "adrenal_crisis",
+        "discriminators": ["hyponatremia", "hyperkalemia", "hypoglycemia", "hyperpigmentation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.5, "indication": "hypoglycemia" }
+      ],
+      "laboratory": [
+        { "name": "Lactate", "priority": "immediate", "yield": 0.85, "indication": "tissue hypoperfusion" },
+        { "name": "Blood gas", "priority": "immediate", "yield": 0.7, "indication": "acidosis" },
+        { "name": "CBC", "priority": "high", "yield": 0.4, "indication": "blood loss, infection" },
+        { "name": "Blood culture", "priority": "high", "yield": 0.3, "indication": "sepsis" },
+        { "name": "Electrolytes, renal function", "priority": "high", "yield": 0.5, "indication": "organ function" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.4, "indication": "pneumonia, cardiomegaly" },
+        { "name": "Echocardiogram", "priority": "high", "yield": 0.6, "indication": "cardiac function, effusion" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "PALS Shock Algorithm / Surviving Sepsis Campaign Pediatric",
+      "pathways": [
+        {
+          "severity": "compensated_shock",
+          "criteria": "Normal BP, but signs of poor perfusion (tachycardia, prolonged CRT, mild lactate elevation)",
+          "treatment": "IV/IO access. Fluid bolus 20 mL/kg. Identify type. Monitor BP, HR, CRT, lactate. Specific treatment per type. Reassess after each bolus."
+        },
+        {
+          "severity": "hypotensive_shock",
+          "criteria": "Hypotension for age, severe lactic acidosis, altered consciousness, or poor perfusion after fluids",
+          "treatment": "ABC. IV/IO fluids 20 mL/kg boluses (up to 60 mL/kg). Vasopressors (epinephrine/norepinephrine). Consider blood if hemorrhagic. Address etiology. ICU. Invasive monitoring. ECMO if refractory."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "reduced_circulating_volume_or_cardiac_output", "tissue_hypoperfusion", "anaerobic_metabolism", "lactic_acidosis", "multiorgan_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "lagDays": [0, 3],
+        "severityBoost": 0.4,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "acute_respiratory_distress_syndrome",
+        "probability": 0.2,
+        "lagDays": [0, 3],
+        "severityBoost": 0.4,
+        "clues": ["hypoxia", "bilateral_infiltrates"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.15,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["prolonged_coagulation", "thrombocytopenia", "bleeding"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["tachycardia", "poor_perfusion", "hypotension", "altered_consciousness", "lactate_elevated"],
+    "exclusionClues": ["normal_heart_rate", "normal_blood_pressure", "normal_perfusion", "normal_lactate"]
+  }
+}

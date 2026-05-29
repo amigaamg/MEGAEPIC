@@ -1,0 +1,106 @@
+{
+  "disease": {
+    "id": "massive_transfusion",
+    "name": "Massive Transfusion Protocol Activation",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Transfusion of >=10 units of PRBC in 24 hours (or 4 units in 1 hour). Systematic replacement of blood products to address hemorrhagic shock and trauma-induced coagulopathy.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["trauma", "hemorrhagic_shock", "critical_care", "transfusion_medicine"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest_from_exsanguination", "weight": 10 },
+        { "sign": "uncontrolled_hemorrhage", "weight": 10 },
+        { "sign": "coagulopathy_with_diffuse_bleeding", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Massive transfusion (10+ units) vs Super-massive transfusion (20+ units)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "massive_hemorrhage_active_bleeding", "weight": 5 },
+      { "symptomId": "trauma_major_or_surgery_vascular_obstetric", "weight": 5 },
+      { "symptomId": "anticoagulant_or_antiplatelet_use", "weight": 4 },
+      { "symptomId": "hypotension_unresponsive", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension_refractory", "baseWeight": 5 },
+      { "signId": "tachycardia_extreme", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 3 },
+      { "signId": "cool_clammy_extremities", "baseWeight": 3 },
+      { "signId": "diffuse_bleeding_from_wounds_and_lines", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "major_trauma_with_shock", "multiplier": 4.0 },
+      { "id": "ruptured_aaa", "multiplier": 4.0 },
+      { "id": "major_obstetric_hemorrhage", "multiplier": 3.0 },
+      { "id": "anticoagulation", "multiplier": 3.0 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "TEG/ROTEM", "priority": "high", "yield": 0.85, "indication": "goal-directed component therapy" },
+        { "name": "Shock index (HR/SBP)", "priority": "immediate", "yield": 0.8, "indication": ">1 predicts massive transfusion need" }
+      ],
+      "laboratory": [
+        { "name": "FBC, PT/aPTT, fibrinogen, ionized Ca", "priority": "immediate", "yield": 0.8, "indication": "guide component replacement" },
+        { "name": "Lactate, ABG", "priority": "immediate", "yield": 0.85, "indication": "shock severity, clearance" },
+        { "name": "Group and screen/cross-match", "priority": "immediate", "yield": 0.95, "indication": "blood product preparation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACS TQIP Massive Transfusion Guidelines / AABB Guidelines",
+      "pathways": [
+        {
+          "severity": "MTP activation",
+          "criteria": "hemorrhagic shock + ongoing bleeding + ABC score >=2 or clinician judgment",
+          "treatment": "Activate MTP. 1:1:1 ratio (PRBC:FFP:Platelets). TXA 1g IV. Limit crystalloid. Avoid hypothermia. Bedside calcium replacement (1-2g Ca gluconate per 4 units). Serial labs. Surgical/IR source control."
+        },
+        {
+          "severity": "ongoing MTP / goal-directed",
+          "criteria": "after initial delivery of blood products",
+          "treatment": "TEG/ROTEM-guided: FFP for prolonged R/ACT, cryo/fibrinogen for low angle, platelets for low MA. Target fibrinogen >150, platelets >50 (TBI >100), Ca >1.0, pH >7.2. Warm all fluids."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "acute_blood_loss",
+      "dilutional_and_consumptive_coagulopathy",
+      "hypocalcemia_from_citrate",
+      "hypothermia_from_cold_products",
+      "metabolic_acidosis",
+      "multiorgan_dysfunction_from_shock"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "transfusion_related_acute_lung_injury",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "clues": ["hypoxia_post_transfusion", "bilateral_infiltrates", "no_cardiac_edema"]
+      },
+      {
+        "diseaseId": "hyperkalemia_from_transfusion",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["ecg_changes", "high_k", "older_blood_products"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["active_hemorrhage_with_shock", "ongoing_transfusion_need", "coagulopathy"],
+    "exclusionClues": ["hemorrhage_controlled", "stable_hemodynamics", "no_active_transfusion"]
+  }
+}

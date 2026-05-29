@@ -1,0 +1,169 @@
+{
+  "disease": {
+    "id": "alcoholic_liver_disease",
+    "name": "Alcoholic Liver Disease",
+    "system": "gastroenterology",
+    "agePeak_months": [480, 840],
+    "note": "Spectrum from steatosis (reversible) to alcoholic hepatitis (acute inflammation) to cirrhosis (irreversible). Leading cause of liver disease in the West.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["liver", "alcohol", "steatosis", "hepatitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_alcoholic_hepatitis_severe", "weight": 9 },
+        { "sign": "hepatic_encephalopathy", "weight": 10 },
+        { "sign": "variceal_bleeding", "weight": 10 },
+        { "sign": "spontaneous_bacterial_peritonitis", "weight": 9 },
+        { "sign": "hepatorenal_syndrome", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "chronic_asymptomatic": true
+      },
+      "severityLabel": "If severe alcoholic hepatitis (Maddrey DF >=32) or decompensation -> EMERGENCY admission; early disease -> OUTPATIENT abstinence plan"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "heavy_chronic_alcohol_use", "weight": 5 },
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "jaundice", "weight": 4 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3 },
+      { "symptomId": "fever", "weight": 2, "note": "In alcoholic hepatitis" },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "anorexia", "weight": 3 },
+      { "symptomId": "abdominal_distension", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "easy_bruising_bleeding", "weight": 2 },
+      { "symptomId": "confusion", "weight": 3, "note": "Encephalopathy" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 4, "note": "Tender in alcoholic hepatitis" },
+      { "signId": "ascites", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "spider_angiomas", "baseWeight": 3 },
+      { "signId": "palmar_erythema", "baseWeight": 2 },
+      { "signId": "asterixis", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 2 },
+      { "signId": "parotid_enlargement", "baseWeight": 1 },
+      { "signId": "dupytrens_contracture", "baseWeight": 1 },
+      { "signId": "peripheral_neuropathy", "baseWeight": 1 },
+      { "signId": "muscle_wasting", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_heavy_alcohol_use", "multiplier": 8.0 },
+      { "id": "female_gender", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "viral_hepatitis_coinfection", "multiplier": 3.0 },
+      { "id": "genetic_polymorphisms_pnpla3", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "hemochromatosis", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "nonalcoholic_steatohepatitis_nash",
+        "discriminators": ["no_significant_alcohol_history", "metabolic_syndrome", "diabetes", "obesity"]
+      },
+      {
+        "diseaseId": "acute_viral_hepatitis",
+        "discriminators": ["positive_viral_serology", "no_alcohol_history", "ast_alt_ratio_less_than_1"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["temporal_drug_relation", "eosinophilia", "no_alcohol_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Alcohol history (AUDIT-C / CAGE)", "priority": "immediate", "yield": 0.9, "indication": "quantify alcohol use" }
+      ],
+      "laboratory": [
+        { "name": "LFTs (ALT, AST, GGT, ALP, bilirubin)", "priority": "immediate", "yield": 0.9, "indication": "AST/ALT >2 is characteristic" },
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.8, "indication": "synthetic function, Maddrey score" },
+        { "name": "GGT", "priority": "high", "yield": 0.8, "indication": "sensitive but non-specific marker of alcohol use" },
+        { "name": "FBC", "priority": "high", "yield": 0.6, "indication": "macrocytosis (MCV elevated)" },
+        { "name": "Serum albumin", "priority": "high", "yield": 0.7, "indication": "synthetic function" },
+        { "name": "Carbohydrate-deficient transferrin (CDT)", "priority": "medium", "yield": 0.7, "indication": "alcohol biomarker" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.7, "indication": "steatosis, hepatomegaly, cirrhosis, ascites, HCC screening" },
+        { "name": "CT abdomen with contrast", "priority": "medium", "yield": 0.8, "indication": "if US inadequate or suspected HCC" },
+        { "name": "Transient elastography (FibroScan)", "priority": "high", "yield": 0.9, "indication": "fibrosis assessment, steatosis quantification (CAP)" },
+        { "name": "Liver biopsy", "priority": "selected", "yield": 0.95, "indication": "if diagnosis uncertain, assess stage, coexisting disease" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EASL Clinical Practice Guidelines: Alcoholic Liver Disease",
+      "pathways": [
+        {
+          "severity": "alcoholic_steatosis",
+          "criteria": "Hepatomegaly, elevated AST/ALT <2x ULN, steatosis on US, no jaundice",
+          "treatment": "Complete alcohol abstinence. Nutritional support (high protein, vitamin B1/folate). Reversible in weeks to months with abstinence."
+        },
+        {
+          "severity": "mild_alcoholic_hepatitis",
+          "criteria": "Jaundice + elevated AST/ALT + Maddrey DF <32",
+          "treatment": "Abstinence. Nutritional therapy (35-40 kcal/kg, 1.5g/kg protein). Thiamine 100mg IV/PO. Multivitamins. Monitor for progression."
+        },
+        {
+          "severity": "severe_alcoholic_hepatitis",
+          "criteria": "Maddrey DF >=32, may have encephalopathy",
+          "treatment": "Admit ICU. Prednisolone 40mg PO daily for 28 days (if no contraindications). Consider pentoxifylline if steroids contraindicated. Evaluate for liver transplant (Lille score at day 7). NAC may be beneficial."
+        },
+        {
+          "severity": "alcoholic_cirrhosis",
+          "criteria": "Decompensated with ascites, varices, encephalopathy",
+          "treatment": "Abstinence. Manage complications (ascites, varices, encephalopathy, SBP). HCC surveillance. Evaluate for liver transplant if decompensated despite abstinence."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ethanol_metabolism_to_acetaldehyde",
+      "oxidative_stress_and_lipid_peroxidation",
+      "cyp2e1_induction",
+      "steatosis_from_increased_lipogenesis",
+      "mitochondrial_damage",
+      "kupffer_cell_activation",
+      "tnf_alpha_and_inflammasome_activation",
+      "hepatocyte_apoptosis",
+      "stellate_cell_activation_fibrosis",
+      "immune_dysregulation",
+      "malnutrition_exacerbates_injury"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cirrhosis",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["continued_alcohol_use", "signs_of_portal_hypertension", "low_albumin", "coagulopathy"]
+      },
+      {
+        "diseaseId": "acute_on_chronic_liver_failure",
+        "probability": 0.1,
+        "severityBoost": 0.8,
+        "clues": ["rapid_deterioration", "jaundice", "encephalopathy", "organ_failure"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "probability": 0.15,
+        "severityBoost": 0.7,
+        "clues": ["cirrhosis", "alcohol_history", "rising_afp", "liver_mass"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if severe alcoholic hepatitis or decompensated cirrhosis",
+    "diagnosticClues": ["heavy_alcohol_use_history", "ast_alt_ratio_greater_than_2", "elevated_ggt", "hepatomegaly", "macrocytosis"],
+    "exclusionClues": ["no_alcohol_history", "ast_alt_ratio_less_than_1", "positive_viral_serology"]
+  }
+}

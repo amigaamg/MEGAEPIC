@@ -1,0 +1,124 @@
+{
+  "disease": {
+    "id": "opioid_use_disorder",
+    "name": "Opioid Use Disorder",
+    "system": "PSYCH",
+    "agePeak_months": [240, 480],
+    "note": "Problematic opioid use leading to impairment. High overdose risk. Withdrawal unpleasant but not life-threatening. Medically assisted treatment available.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["substance_use_disorder", "addiction", "opioid"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_depression_bradypnea", "weight": 10 },
+        { "sign": "pinpoint_pupils_and_unresponsiveness", "weight": 10 },
+        { "sign": "overdose_suspected", "weight": 10 },
+        { "sign": "suicidal_intent", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If overdose signs -> EMERGENCY NALOXONE; else -> OUTPATIENT MAT"
+    },
+    "historyFeatures": [
+      { "symptomId": "opioid_use_longer_intended", "weight": 4 },
+      { "symptomId": "craving_opioid", "weight": 4 },
+      { "symptomId": "withdrawal_symptoms_opioid", "weight": 4 },
+      { "symptomId": "tolerance_to_opioids", "weight": 3 },
+      { "symptomId": "neglect_of_roles", "weight": 3 },
+      { "symptomId": "failed_attempts_to_quit", "weight": 3 },
+      { "symptomId": "continued_use_despite_harm", "weight": 3 },
+      { "symptomId": "overdose_history", "weight": 4, "note": "Strong predictor of future overdose" },
+      { "symptomId": "injection_drug_use", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "constricted_pupils_opioid_effect", "baseWeight": 4 },
+      { "signId": "sedation_or_somnolence", "baseWeight": 4 },
+      { "signId": "track_marks_injection_sites", "baseWeight": 4 },
+      { "signId": "withdrawal_signs_yawning_rhinorrhea", "baseWeight": 3 },
+      { "signId": "gooseflesh_piloerection", "baseWeight": 2 },
+      { "signId": "reduced_respiratory_rate", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "prescription_opioid_exposure", "multiplier": 4.0 },
+      { "id": "family_history_substance_use", "multiplier": 3.0 },
+      { "id": "chronic_pain_condition", "multiplier": 3.0 },
+      { "id": "personal_history_addiction", "multiplier": 3.0 },
+      { "id": "comorbid_psychiatric_disorder", "multiplier": 2.5 },
+      { "id": "lower_socioeconomic_status", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "opioid_dependence_mild_moderate",
+        "name": "Mild to Moderate Opioid Use Disorder",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "2_to_5_criteria_met", "weight": 4 },
+          { "feature": "oral_or_nasal_route", "weight": 3 },
+          { "feature": "minimal_withdrawal", "weight": 3 }
+        ],
+        "management": "Buprenorphine/naloxone (Suboxone) induction. Outpatient MAT. Counseling. Monitor for relapse. Naloxone kit provided."
+      },
+      {
+        "id": "opioid_dependence_severe",
+        "name": "Severe Opioid Use Disorder",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "6_or_more_criteria", "weight": 5 },
+          { "feature": "iv_drug_use", "weight": 4 },
+          { "feature": "overdose_history", "weight": 4 },
+          { "feature": "severe_withdrawal_on_cessation", "weight": 3 }
+        ],
+        "management": "Methadone maintenance or buprenorphine/naloxone. Supervised daily dispensing initially. Harm reduction: needle exchange, naloxone kit. Hepatitis C/HIV screening. Psychosocial support."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "chronic_pain_syndrome", "discriminators": ["no_craving_or_loss_of_control", "opioid_use_as_prescribed", "no_withdrawal_between_doses"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "COWS (Clinical Opiate Withdrawal Scale)", "priority": "serial", "yield": 0.9, "indication": "withdrawal monitoring" },
+        { "name": "Naloxone challenge test", "priority": "selective", "yield": 0.8, "indication": "before buprenorphine induction" }
+      ],
+      "laboratory": [
+        { "name": "Urine toxicology", "priority": "high", "yield": 0.9, "indication": "confirm opioid use, detect polysubstance" },
+        { "name": "Hepatitis C, HIV, HBV serology", "priority": "high", "yield": 0.3, "indication": "IV drug users, baseline screening" },
+        { "name": "FBC, LFT, U&E", "priority": "medium", "yield": 0.2, "indication": "baseline assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Opioid Dependence / ASAM Criteria",
+      "pathways": [
+        {
+          "severity": "overdose",
+          "criteria": "respiratory depression, unresponsiveness, pinpoint pupils",
+          "treatment": "NALOXONE 0.4-2 mg IV/IM/IN. Repeat Q2-3min PRN. Call 911. Airway support. Observe for renarcotization (naloxone half-life shorter than opioids)."
+        },
+        {
+          "severity": "withdrawal management",
+          "criteria": "COWS >12, seeking detox",
+          "treatment": "Methadone 20-30 mg daily (titrate) OR buprenorphine 4-16 mg SL daily. Alpha-2 agonists (clonidine 0.1-0.2 mg Q4-6h) for autonomic symptoms. Loperamide for diarrhea. Supportive care."
+        },
+        {
+          "severity": "maintenance",
+          "criteria": "clinically stable on MAT",
+          "treatment": "Methadone 60-120 mg daily (in clinic) or buprenorphine 8-24 mg SL daily (take-home). Regular toxicology. Psychotherapy. Relapse prevention. Naloxone kit. Peer support."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "mu_opioid_receptor_agonism",
+      "reward_pathway_dopamine_activation",
+      "tolerance_receptor_downregulation",
+      "withdrawal_noradrenergic_rebound",
+      "genetic_predisposition_ophrm1"
+    ],
+    "complications": [
+      { "diseaseId": "respiratory_arrest_overdose", "probability": 0.1, "severityBoost": 0.5, "clues": ["heroin_fentanyl_use", "reduced_tolerance", "alcohol_benzodiazepine_co_use"] },
+      { "diseaseId": "hepatitis_c", "probability": 0.4, "severityBoost": 0.2, "clues": ["iv_drug_use", "sharing_needles", "elevated_lft"] },
+      { "diseaseId": "infective_endocarditis", "probability": 0.05, "severityBoost": 0.3, "clues": ["iv_drug_use", "fever", "heart_murmur"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["opioid_use_tolerance_withdrawal", "craving_loss_of_control", "continued_despite_harm", "overdose_risk"],
+    "exclusionClues": ["prescribed_opioid_no_misuse", "no_craving", "no_withdrawal"]
+  }
+}

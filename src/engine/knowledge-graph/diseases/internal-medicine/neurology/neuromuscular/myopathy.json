@@ -1,0 +1,131 @@
+{
+  "disease": {
+    "id": "myopathy",
+    "name": "Myopathy",
+    "system": "NEURO",
+    "agePeak_months": [0, 960],
+    "note": "Disease of muscle tissue. Proximal symmetric weakness, normal sensation, elevated CK. Many acquired and genetic causes.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["neuromuscular", "muscle_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rhabdomyolysis_acute_kidney_injury", "weight": 9 },
+        { "sign": "myoglobinuria", "weight": 8 },
+        { "sign": "respiratory_muscle_weakness", "weight": 10 },
+        { "sign": "cardiac_arrhythmia_myotonic", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If rhabdo/respiratory/cardiac -> URGENT; else -> CHRONIC/MONITOR"
+    },
+    "historyFeatures": [
+      { "symptomId": "proximal_muscle_weakness", "weight": 5 },
+      { "symptomId": "difficulty_rising_from_chair", "weight": 4 },
+      { "symptomId": "difficulty_raising_arms", "weight": 4 },
+      { "symptomId": "myalgia", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "statin_therapy", "weight": 3 },
+      { "symptomId": "dark_urine_rhabdomyolysis", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "proximal_symmetric_weakness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "difficulty_getting_up_from_squat", "baseWeight": 4 },
+      { "signId": "normal_sensory_exam", "baseWeight": 3 },
+      { "signId": "normal_or_hyporeflexic_reflexes", "baseWeight": 2 },
+      { "signId": "muscle_tenderness", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "statin_use", "multiplier": 2.5 },
+      { "id": "corticosteroid_use", "multiplier": 2.5 },
+      { "id": "alcohol_excess", "multiplier": 2.0 },
+      { "id": "hypothyroidism", "multiplier": 2.0 },
+      { "id": "autoimmune_disease_lupus_dermatomyositis", "multiplier": 3.0 },
+      { "id": "familial_muscle_disease", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "inflammatory_myopathy",
+        "name": "Inflammatory Myopathy (Polymyositis/Dermatomyositis)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "subacute_onset", "weight": 5 },
+          { "feature": "elevated_ck_10_to_50_times", "weight": 5 },
+          { "feature": "mri_muscle_edema", "weight": 4 },
+          { "feature": "dermatomyositis_rash", "weight": 3 }
+        ],
+        "management": "Prednisolone 0.5-1 mg/kg/day. Methotrexate or azathioprine. IVIG if refractory. Screen for malignancy (especially dermatomyositis)."
+      },
+      {
+        "id": "drug_induced_myopathy",
+        "name": "Drug-Induced Myopathy (Statin, Steroid)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "temporal_relation_to_drug", "weight": 5 },
+          { "feature": "improvement_with_drug_withdrawal", "weight": 5 }
+        ],
+        "management": "Stop offending drug. CK monitoring. Symptoms resolve over weeks. Consider coenzyme Q10. Rechallenge cautiously."
+      },
+      {
+        "id": "metabolic_myopathy",
+        "name": "Metabolic Myopathy (Glycogen/Lipid Storage, Mitochondrial)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "exercise_intolerance", "weight": 5 },
+          { "feature": "second_wind_phenomenon", "weight": 3 },
+          { "feature": "myoglobinuria_with_exercise", "weight": 4 }
+        ],
+        "management": "Avoid triggers. High-protein diet (McArdle). Riboflavin, CoQ10 (mitochondrial). Genetic testing. Symptomatic management."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "motor_neuron_disease", "discriminators": ["fasciculations", "denervation_emg", "bulbar_signs_early"] },
+      { "diseaseId": "myasthenia_gravis", "discriminators": ["fatigability", "ocular_signs", "achr_antibody", "low_ck"] },
+      { "diseaseId": "polymyalgia_rheumatica", "discriminators": ["pain_dominant", "stiffness", "normal_ck", "age_over_50"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Creatine kinase (CK)", "priority": "immediate", "yield": 0.9, "indication": "elevated in most myopathies" },
+        { "name": "Aldolase, LDH, AST, ALT", "priority": "medium", "yield": 0.5, "indication": "muscle enzymes" },
+        { "name": "TSH, ESR, CRP, ANA, myositis antibodies", "priority": "high", "yield": 0.4, "indication": "cause identification" },
+        { "name": "Urine myoglobin", "priority": "if_rhabdomyolysis", "yield": 0.8, "indication": "rhabdomyolysis assessment" }
+      ],
+      "imaging": [
+        { "name": "Muscle MRI", "priority": "medium", "yield": 0.7, "indication": "edema, fatty infiltration, atrophy pattern" }
+      ],
+      "advanced": [
+        { "name": "EMG/NCS", "indication": "myopathic MUAPs, early recruitment, no denervation", "priority": "high" },
+        { "name": "Muscle biopsy", "indication": "definitive diagnosis (inflammatory, metabolic, structural)", "priority": "high" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Suspected Neuromuscular Disorders",
+      "pathways": [
+        {
+          "severity": "inflammatory myopathy",
+          "criteria": "biopsy-proven, elevated CK, myositis antibodies",
+          "treatment": "Prednisolone 1 mg/kg/day (max 80 mg) for 4-6 weeks, then taper. Methotrexate or azathioprine as steroid-sparing. IVIG if refractory. Malignancy screening."
+        },
+        {
+          "severity": "toxic/metabolic myopathy",
+          "criteria": "drug-induced or metabolic cause identified",
+          "treatment": "Remove offending agent. Correct metabolic abnormality. Hydration if rhabdomyolysis. Monitor CK. Symptomatic therapy for pain."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "muscle_fiber_injury",
+      "inflammatory_cell_infiltration",
+      "mitochondrial_dysfunction",
+      "glycogen_metabolism_defect",
+      "drug_toxicity",
+      "membrane_destabilization"
+    ],
+    "complications": [
+      { "diseaseId": "rhabdomyolysis", "probability": 0.1, "severityBoost": 0.4, "clues": ["dark_urine", "very_high_ck", "aki"] },
+      { "diseaseId": "respiratory_muscle_weakness", "probability": 0.05, "severityBoost": 0.4, "clues": ["dyspnea", "low_fvc"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["proximal_symmetric_weakness", "elevated_ck", "myopathic_emg", "normal_sensation"],
+    "exclusionClues": ["denervation_on_emg", "neuropathic_ncs", "sensory_loss"]
+  }
+}

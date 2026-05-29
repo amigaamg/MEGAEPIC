@@ -1,0 +1,129 @@
+{
+  "disease": {
+    "id": "mixed_connective_tissue_disease",
+    "name": "Mixed Connective Tissue Disease",
+    "system": "rheumatology",
+    "agePeak_months": [240, 480],
+    "note": "Overlap syndrome with clinical features of SLE, systemic sclerosis, polymyositis, and rheumatoid arthritis. Defined by the presence of anti-U1 RNP antibodies and typically absence of anti-dsDNA and anti-Sm.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["connective_tissue_disease", "overlap_syndrome", "autoimmune", "anti_rnp"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pulmonary_arterial_hypertension", "weight": 9 },
+        { "sign": "lupus_nephritis", "weight": 8 },
+        { "sign": "myositis_respiratory_weakness", "weight": 8 },
+        { "sign": "scleroderma_renal_crisis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If PAH, renal, or respiratory involvement -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "raynaud_phenomenon", "weight": 5 },
+      { "symptomId": "puffy_swollen_hands", "weight": 4 },
+      { "symptomId": "polyarthritis", "weight": 4 },
+      { "symptomId": "proximal_muscle_weakness", "weight": 3 },
+      { "symptomId": "fever_fatigue_malaise", "weight": 3 },
+      { "symptomId": "dyspnea_pah_symptom", "weight": 3 },
+      { "symptomId": "malar_rash_or_discoid", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "sclerodactyly", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "puffy_hands_edema", "baseWeight": 4 },
+      { "signId": "synovitis", "baseWeight": 3 },
+      { "signId": "proximal_muscle_weakness", "baseWeight": 3 },
+      { "signId": "malar_or_discoid_rash", "baseWeight": 2 },
+      { "signId": "telangiectasia", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 8.0 },
+      { "id": "hla_dr4", "multiplier": 2.0 },
+      { "id": "family_history_autoimmune", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "systemic_lupus_erythematosus",
+        "discriminators": ["anti_dsdna_positive", "anti_sm_positive", "low_complement", "renal_cns_dominant"]
+      },
+      {
+        "diseaseId": "systemic_sclerosis",
+        "discriminators": ["anti_scl70", "anti_centromere", "severe_skin_fibrosis", "no_overlap_features"]
+      },
+      {
+        "diseaseId": "polymyositis",
+        "discriminators": ["pure_myositis_no_scleroderma", "anti_srp", "anti_jo1", "no_raynaud"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Nailfold capillaroscopy", "priority": "high", "yield": 0.7, "indication": "scleroderma pattern" }
+      ],
+      "laboratory": [
+        { "name": "Anti-U1 RNP antibody", "priority": "high", "yield": 0.95, "indication": "defining serologic feature" },
+        { "name": "ANA", "priority": "high", "yield": 0.95, "indication": "speckled pattern" },
+        { "name": "Anti-dsDNA and Anti-Sm", "priority": "high", "yield": 0.2, "indication": "usually negative" },
+        { "name": "CK and muscle enzymes", "priority": "high", "yield": 0.5, "indication": "myositis component" },
+        { "name": "ESR and CRP", "priority": "medium", "yield": 0.6, "indication": "inflammatory activity" }
+      ],
+      "imaging": [
+        { "name": "PFTs with DLCO", "priority": "high", "yield": 0.7, "indication": "screen for PAH and ILD" },
+        { "name": "Echocardiography", "priority": "high", "yield": 0.6, "indication": "PAH screening" },
+        { "name": "MRI muscle (if myositis)", "priority": "medium", "yield": 0.8, "indication": "muscle edema" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "MCTD Treatment Recommendations",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "arthritis, Raynaud, fatigue, no organ involvement",
+          "treatment": "Hydroxychloroquine. NSAIDs. CCB for Raynaud. Sunscreen."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "myositis, serositis, moderate lung involvement",
+          "treatment": "Corticosteroids (prednisolone). Methotrexate or mycophenolate. IVIG for myositis."
+        },
+        {
+          "severity": "severe",
+          "criteria": "PAH, ILD, nephritis, severe myositis",
+          "treatment": "High-dose steroids. Cyclophosphamide. Targeted PAH therapy. Rituximab for refractory."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "anti_u1_rnp_autoimmunity",
+      "interferon_signature",
+      "overlap_immune_features",
+      "endothelial_activation",
+      "t_b_cell_dysregulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pulmonary_arterial_hypertension",
+        "probability": 0.25,
+        "severityBoost": 0.7,
+        "clues": ["dyspnea", "loud_p2", "right_heart_strain", "low_dlco"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low (except PAH/ILD)",
+    "diagnosticClues": ["raynaud_puffy_hands_arthritis_myositis", "high_titer_anti_rnp", "speckled_ana", "overlap_features"],
+    "exclusionClues": ["isolated_sle_specific_antibodies", "no_anti_rnp", "no_overlap_clinical_features"]
+  }
+}

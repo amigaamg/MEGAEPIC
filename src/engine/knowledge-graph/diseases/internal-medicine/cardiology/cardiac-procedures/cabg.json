@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "cabg",
+    "name": "Coronary Artery Bypass Grafting",
+    "system": "CARD",
+    "agePeak_months": [540, 960],
+    "note": "Surgical revascularization using arterial and venous conduits to bypass coronary stenoses. Preferred for multi-vessel/left main disease.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["coronary_revascularization", "cardiac_surgery"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "post_op_bleeding_tamponade", "weight": 10 },
+        { "sign": "perioperative_mi", "weight": 10 },
+        { "sign": "low_cardiac_output_syndrome", "weight": 9 },
+        { "sign": "stroke", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If tamponade/MI/low output/stroke -> POST-OP COMPLICATION; else -> RECOVERING"
+    },
+    "historyFeatures": [
+      { "symptomId": "chest_pain", "weight": 4 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "prior_mi", "weight": 4 },
+      { "symptomId": "multi_vessel_disease_known", "weight": 5 },
+      { "symptomId": "failed_pci", "weight": 2 },
+      { "symptomId": "surgical_history", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "median_sternotomy_wound", "baseWeight": 3 },
+      { "signId": "leg_wound_from_saphenous_vein", "baseWeight": 2 },
+      { "signId": "signs_of_low_output", "baseWeight": 4 },
+      { "signId": "signs_of_bleeding", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "multi_vessel_cad", "multiplier": 3.0 },
+      { "id": "left_main_coronary_stenosis", "multiplier": 3.5 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "lv_ef_less_40", "multiplier": 2.5 },
+      { "id": "age_over_75", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "on_pump_cabg",
+        "name": "On-Pump CABG (with CPB)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [{ "feature": "cardiopulmonary_bypass_used", "weight": 5 }],
+        "management": "Arrest heart with cardioplegia. Bypass grafts. Wean from CPB. Close sternum. ICU recovery. Post-op: protect grafts, control rhythm, prevent bleeding."
+      },
+      {
+        "id": "off_pump_cabg",
+        "name": "Off-Pump CABG (OPCAB)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [{ "feature": "beating_heart_procedure", "weight": 5 }],
+        "management": "Stabilizer device. Sequential grafting. Avoid CPB complications. Avoid manipulation of diseased aorta (no-touch technique)."
+      },
+      {
+        "id": "minimally_invasive_cabg",
+        "name": "Minimally Invasive CABG (MIDCAB/robotic)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [{ "feature": "lateral_thoracotomy_not_sternotomy", "weight": 5 }],
+        "management": "LIMA to LAD via small thoracotomy. Quicker recovery. Lower morbidity. Only for limited target vessel disease."
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.7, "indication": "ischemia, arrhythmia, pacing" }
+      ],
+      "laboratory": [
+        { "name": "Troponin", "priority": "post_op_serial", "yield": 0.8, "indication": "perioperative MI detection" },
+        { "name": "FBC, U&E, Cr, INR", "priority": "post_op", "yield": 0.5, "indication": "bleeding, renal function" },
+        { "name": "Chest X-ray", "priority": "post_op", "yield": 0.6, "indication": "pneumothorax, effusion, line position" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "post_op", "yield": 0.8, "indication": "LV function, effusion, tamponade" },
+        { "name": "CT coronary angiogram", "priority": "medium", "yield": 0.9, "indication": "graft patency assessment if symptoms" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC/EACTS Guidelines for Myocardial Revascularization",
+      "pathways": [
+        {
+          "severity": "pre-operative",
+          "criteria": "planned CABG",
+          "treatment": "Aspirin continued. Stop DAPT before surgery (ticagrelor/clopidogrel 5d pre-op). Statin. Beta-blocker. Pulmonary function tests. EuroSCORE calculation."
+        },
+        {
+          "severity": "post-operative recovery",
+          "criteria": "uncomplicated surgery, extubated, stable",
+          "treatment": "ICU 24-48h. Aspirin started 6h post-op if no bleeding. Beta-blocker + statin. Pain control. Wound care. Early mobilization. Cardiac rehab."
+        },
+        {
+          "severity": "complicated - low cardiac output",
+          "criteria": "inotropic requirement, IABP, prolonged ventilation",
+          "treatment": "Inotropes (dobutamine, epinephrine). Consider IABP. Echocardiography for graft function, LV function, tamponade. Repeat revascularization if graft occlusion."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "bypass_conduit_occlusion_risk",
+      "saphenous_vein_graft_disease",
+      "lima_graft_patency_superior",
+      "myocardial_stunning_post_cpb",
+      "systemic_inflammatory_response_cpb"
+    ],
+    "complications": [
+      { "diseaseId": "post_op_bleeding", "probability": 0.05, "severityBoost": 0.4, "clues": ["chest_tube_output", "hypotension", "falling_hb"] },
+      { "diseaseId": "perioperative_stroke", "probability": 0.02, "severityBoost": 0.5, "clues": ["focal_deficit", "delayed_awakening"] },
+      { "diseaseId": "graft_occlusion", "probability": 0.05, "severityBoost": 0.3, "clues": ["ecg_changes", "troponin_rise"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["significant_left_main_or_3vd", "diabetes_with_multi_vessel", "prior_pci_failed"],
+    "exclusionClues": ["single_vessel_disease", "non_obstructive_cad"]
+  }
+}

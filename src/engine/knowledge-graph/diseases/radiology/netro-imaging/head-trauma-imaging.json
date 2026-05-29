@@ -1,0 +1,193 @@
+{
+  "disease": {
+    "id": "head_trauma_imaging",
+    "name": "Head Trauma Imaging Assessment",
+    "system": "RAD",
+    "agePeak_months": [12, 480],
+    "note": "CT head is the first-line imaging for acute traumatic brain injury. Key findings: epidural hematoma, subdural hematoma, subarachnoid hemorrhage, contusion, diffuse axonal injury, and skull fractures.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["traumatic_brain_injury", "intracranial_hemorrhage", "skull_fracture"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "gcs_8_or_less", "weight": 10 },
+        { "sign": "pupillary_asymmetry", "weight": 10 },
+        { "sign": "herniation_syndrome", "weight": 10 },
+        { "sign": "open_depressed_skull_fracture", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "midline_shift_gt_5mm", "weight": 8 },
+          { "sign": "basal_cistern_effacement", "weight": 8 },
+          { "sign": "bilateral_or_multiple_hemorrhages", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If herniation/mass effect -> CRITICAL; else -> NON-CRITICAL"
+    },
+    "historyFeatures": [
+      { "symptomId": "loss_of_consciousness", "weight": 5, "modifiers": [
+          { "condition": "gt_5_minutes", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "head_trauma_mechanism_high_velocity", "weight": 4 },
+      { "symptomId": "anticoagulation_or_antiplatelet", "weight": 5 },
+      { "symptomId": "vomiting_gt_1_episode", "weight": 3 },
+      { "symptomId": "post_traumatic_seizure", "weight": 4 },
+      { "symptomId": "focal_neurologic_deficit", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "gcs_score", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pupillary_exam", "baseWeight": 5 },
+      { "signId": "scalp_hematoma_or_laceration", "baseWeight": 3 },
+      { "signId": "raccoon_eyes_or_battles_sign", "baseWeight": 4 },
+      { "signId": "otorrhea_or_rhinorrhea", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "age_under_2", "multiplier": 2.5 },
+      { "id": "anticoagulant_use", "multiplier": 3.0 },
+      { "id": "antiplatelet_use", "multiplier": 2.0 },
+      { "id": "previous_neurosurgery", "multiplier": 1.5 },
+      { "id": "intoxication", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "epidural_hematoma",
+        "name": "Epidural Hematoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "biconvex_lens_shaped", "weight": 5 },
+          { "feature": "does_not_cross_suture_lines", "weight": 5 },
+          { "feature": "temporal_bone_fracture_associated", "weight": 4 },
+          { "feature": "arterial_source_middle_meningeal", "weight": 4 },
+          { "feature": "lucid_interval_then_deterioration", "weight": 4 }
+        ],
+        "management": "Urgent neurosurgical evacuation if >30ml or >15mm thickness or midline shift. Small EDH may be observed if no mass effect."
+      },
+      {
+        "id": "subdural_hematoma",
+        "name": "Subdural Hematoma",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "crescentic_concave_shape", "weight": 5 },
+          { "feature": "crosses_sutures", "weight": 5 },
+          { "feature": "does_not_cross_dural_reflections", "weight": 4 },
+          { "feature": "mixed_density_suggests_acute_on_chronic", "weight": 4 },
+          { "feature": "venous_source_bridging_veins", "weight": 3 }
+        ],
+        "management": "Surgical evacuation if thickness >10mm or midline shift >5mm. Acute SDH in anticoagulated patient needs urgent reversal. Chronic SDH may be observed or burr hole drained."
+      },
+      {
+        "id": "diffuse_axonal_injury",
+        "name": "Diffuse Axonal Injury (DAI)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "hemorrhagic_shear_lesions_at_gray_white_junction", "weight": 5 },
+          { "feature": "corpus_callosum_involvement", "weight": 5 },
+          { "feature": "brainstem_involvement", "weight": 5 },
+          { "feature": "poor_correlation_with_ct_findings", "weight": 4 },
+          { "feature": "better_detected_on_mri_swi", "weight": 4 }
+        ],
+        "management": "ICU monitoring. ICP management. No surgical intervention for DAI itself. Prognosis depends on grade (I: lobar, II: callosal, III: brainstem)."
+      },
+      {
+        "id": "traumatic_subarachnoid_hemorrhage",
+        "name": "Traumatic SAH",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "hyperdensity_in_sulci_cisterns", "weight": 5 },
+          { "feature": "sylvian_fissure_location_common", "weight": 4 },
+          { "feature": "overlying_contusion_or_fracture", "weight": 3 },
+          { "feature": "no_aneurysm_on_cta", "weight": 4 }
+        ],
+        "management": "Supportive care. Seizure prophylaxis. Monitor for vasospasm if severe. CT angiography to rule out aneurysmal SAH if atypical."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "aneurysmal_sah",
+        "discriminators": ["no_trauma_history", "aneurysm_on_cta", "blood_in_basal_cisterns", "thunderclap_headache"]
+      },
+      {
+        "diseaseId": "spontaneous_ich",
+        "discriminators": ["hypertensive_history", "basal_ganglia_location", "no_trauma"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "GCS score", "priority": "immediate", "yield": 1.0, "indication": "all head trauma patients" },
+        { "name": "Pupillary exam", "priority": "immediate", "yield": 0.8, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "Coagulation panel (PT/PTT/INR)", "priority": "immediate", "yield": 0.5, "indication": "all patients, especially on anticoagulation" },
+        { "name": "Platelet count", "priority": "immediate", "yield": 0.4, "indication": "all patients" }
+      ],
+      "imaging": [
+        { "name": "CT Head (non-contrast)", "priority": "immediate", "yield": 0.95, "indication": "all moderate-severe head trauma; mild with risk factors" },
+        { "name": "CT Cervical Spine", "priority": "high", "yield": 0.5, "indication": "if high mechanism or neck pain" },
+        { "name": "CT Angiography Head/Neck", "priority": "medium", "yield": 0.3, "indication": "if suspect blunt cerebrovascular injury" },
+        { "name": "MRI Brain (SWI, GRE, DWI)", "priority": "medium", "yield": 0.4, "indication": "if CT negative but persistent neurologic deficits/suspect DAI" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Brain Trauma Foundation Guidelines for Severe TBI",
+      "pathways": [
+        {
+          "severity": "mild_tbi_gcs_13_15",
+          "criteria": "GCS 13-15, no risk factors per Canadian CT Head Rule",
+          "treatment": "Observation for 4-6 hours. CT only if risk factors present. Discharge with head injury precautions if CT negative."
+        },
+        {
+          "severity": "moderate_tbi_gcs_9_12",
+          "criteria": "GCS 9-12, or GCS 15 with positive CT findings",
+          "treatment": "Urgent CT head. Neurosurgery consultation. Admission for observation. Repeat CT if deterioration."
+        },
+        {
+          "severity": "severe_tbi_gcs_3_8",
+          "criteria": "GCS <9, need for airway protection",
+          "treatment": "Intubation and ventilation. Urgent CT. Neurosurgery consult. ICP monitoring. Decompressive craniectomy if refractory ICP. Avoid hypotension and hypoxia."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "primary_brain_injury_immediate",
+      "coup_countercoup_mechanism",
+      "axonal_shearing",
+      "intracranial_hemorrhage",
+      "cerebral_edema",
+      "increased_intracranial_pressure",
+      "secondary_injury_cascade"
+    ],
+    "complications": [
+      {
+        "diseaseId": "increased_icp",
+        "probability": 0.3,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["mass_lesion", "edema", "cistern_effacement"]
+      },
+      {
+        "diseaseId": "post_traumatic_seizures",
+        "probability": 0.1,
+        "lagDays": [1, 14],
+        "severityBoost": 0.3,
+        "clues": ["hemorrhagic_contusion", "depressed_fracture"]
+      },
+      {
+        "diseaseId": "chronic_subdural_hematoma",
+        "probability": 0.05,
+        "lagDays": [14, 60],
+        "severityBoost": 0.3,
+        "clues": ["elderly", "anticoagulation", "recurrent_headache"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["trauma_history", "gcs_less_than_15", "neurologic_deficit", "ct_positive"],
+    "exclusionClues": ["no_trauma_history", "spontaneous_onset", "negative_ct_with_normal_exam"]
+  }
+}

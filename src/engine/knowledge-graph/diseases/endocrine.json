@@ -1,0 +1,198 @@
+[
+  {
+    "id": "cushing_disease",
+    "name": "Cushing's Disease",
+    "system": "endocrine",
+    "alsoPresentIn": ["cns"],
+    "agePeak": [60, 216],
+    "prevalenceWeight": 0.2,
+    "historyFeatures": [
+      { "symptomId": "moon_face", "weight": 5 },
+      { "symptomId": "central_obesity", "weight": 5 },
+      { "symptomId": "easy_bruising", "weight": 4 },
+      { "symptomId": "purple_striae", "weight": 5 },
+      { "symptomId": "muscle_weakness_proximal", "weight": 4 },
+      { "symptomId": "osteoporosis", "weight": 3, "condition": "chronic" },
+      { "symptomId": "hyperglycaemia", "weight": 3 },
+      { "symptomId": "hypertension", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "headache", "weight": 2, "condition": "if pituitary mass" },
+      { "symptomId": "visual_disturbance", "weight": 2, "condition": "if chiasmal compression" },
+      { "symptomId": "weight_gain", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "moon_facies", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "buffalo_hump", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "central_obesity_with_thin_limbs", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "purple_striae", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "proximal_myopathy", "baseWeight": 4 },
+      { "signId": "hirsutism", "baseWeight": 3 },
+      { "signId": "hypertension", "baseWeight": 3 },
+      { "signId": "easy_bruising", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "pituitary_microadenoma", "multiplier": 3.0 },
+      { "id": "prolonged_corticosteroid_therapy", "multiplier": 2.0 },
+      { "id": "female_sex", "multiplier": 1.5 },
+      { "id": "age_20_to_50_years", "multiplier": 1.4 },
+      { "id": "multiple_endocrine_neoplasia_type_1", "multiplier": 1.5 }
+    ],
+    "complications": [
+      { "diseaseId": "cushing_psychosis", "probability": 0.3, "severityBoost": 0.3 },
+      { "diseaseId": "pathological_fracture", "probability": 0.25, "severityBoost": 0.3 },
+      { "diseaseId": "diabetes_mellitus", "probability": 0.3, "severityBoost": 0.3 },
+      { "diseaseId": "hypertension_crisis", "probability": 0.15, "severityBoost": 0.4 },
+      { "diseaseId": "pituitary_apoplexy", "probability": 0.02, "severityBoost": 0.7 }
+    ],
+    "syndromeTags": ["endocrine_disorder", "pituitary_disorder", "hypercortisolism"],
+    "mustNotMiss": true,
+    "diagnosticClues": ["central obesity + moon face + purple striae + proximal myopathy"],
+    "exclusionClues": ["normal cortisol and ACTH", "normal dexamethasone suppression test"],
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical phenotyping and photography", "priority": "routine", "yield": 0.7, "indication": "all suspected — document Cushingoid features" }
+      ],
+      "laboratory": [
+        { "name": "24-hour urinary free cortisol (UFC)", "priority": "first_line", "yield": 0.85, "indication": "screening — measure 2-3 collections" },
+        { "name": "1 mg overnight dexamethasone suppression test (ODST)", "priority": "first_line", "yield": 0.9, "indication": "screening — cortisol <1.8 mcg/dL suppresses in normal" },
+        { "name": "Late-night salivary cortisol", "priority": "screening", "yield": 0.85, "indication": "loss of circadian rhythm" },
+        { "name": "Plasma ACTH", "priority": "high", "yield": 0.8, "indication": "differentiates ACTH-dependent vs independent" },
+        { "name": "High-dose dexamethasone suppression test (HDDST)", "priority": "confirmatory", "yield": 0.8, "indication": "suppression >50% suggests pituitary origin" },
+        { "name": "Serum electrolytes", "priority": "routine", "yield": 0.4, "indication": "hypokalaemia suggests ACTH-dependent" },
+        { "name": "Fasting glucose and HbA1c", "priority": "routine", "yield": 0.5, "indication": "screen for secondary diabetes" },
+        { "name": "Bone profile and vitamin D", "priority": "routine", "yield": 0.3, "indication": "assess osteoporosis risk" },
+        { "name": "Lipid profile", "priority": "routine", "yield": 0.3, "indication": "dyslipidaemia screening" }
+      ],
+      "imaging": [
+        { "name": "Pituitary MRI (thin-slice, with gadolinium)", "priority": "high", "yield": 0.7, "indication": "identify pituitary microadenoma (may be negative in 30%)" },
+        { "name": "CRH stimulation test with bilateral inferior petrosal sinus sampling (BIPSS)", "priority": "if_MRI_negative", "yield": 0.9, "indication": "definitive differentiation pituitary vs ectopic ACTH" },
+        { "name": "CT chest/abdomen", "priority": "if_ectopic_suspected", "yield": 0.6, "indication": "search for ectopic ACTH source (small cell lung, carcinoid)" },
+        { "name": "DEXA scan (bone densitometry)", "priority": "to_assess_complications", "yield": 0.7, "indication": "assess osteoporosis severity" }
+      ],
+      "advanced": [
+        { "name": "Inferior petrosal sinus sampling (IPSS)", "indication": "gold standard for pituitary vs ectopic ACTH", "priority": "tertiary" },
+        { "name": "Genetic testing for MEN1", "indication": "if family history or other MEN features", "priority": "selective" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Endocrine Society Clinical Practice Guideline — Cushing's Syndrome, 2024",
+      "pathways": [
+        {
+          "severity": "mild_to_moderate",
+          "criteria": "UFC mild elevation, gradual onset, no severe complications",
+          "treatment": [
+            "First-line: Transsphenoidal adenomectomy (TSS) by experienced neurosurgeon",
+            "If TSS successful: monitor for secondary adrenal insufficiency (need steroid coverage)",
+            "If TSS fails or not possible: medical therapy",
+            "Steroidogenesis inhibitors: Ketoconazole 200 mg PO TID or Metapyrone 250-500 mg PO QID",
+            "Titrate based on cortisol levels and tolerance"
+          ],
+          "reassessment": "Reassess 24h UFC and clinical features every 4-8 weeks"
+        },
+        {
+          "severity": "severe_acute",
+          "criteria": "Severe hypercortisolism, significant complications (psychosis, fractures, hypertension crisis)",
+          "treatment": [
+            "Admit for urgent management",
+            "Ketoconazole + Metapyrone combination therapy for rapid cortisol reduction",
+            "Mifepristone (RU-486) 300-600 mg PO daily if severe symptomatic Cushing's",
+            "Treat complications: antihypertensives, insulin for diabetes, bisphosphonates for bone protection",
+            "If life-threatening: bilateral adrenalectomy as definitive treatment",
+            "Post-bilateral adrenalectomy: lifelong glucocorticoid and mineralocorticoid replacement"
+          ]
+        },
+        {
+          "severity": "post_operative",
+          "criteria": "After successful pituitary surgery",
+          "treatment": [
+            "Hydrocortisone 10-15 mg/m2/day PO in 2-3 divided doses (stress dosing for illness)",
+            "Taper hydrocortisone over 6-18 months as HPA axis recovers",
+            "Monitor morning cortisol periodically to assess recovery",
+            "Endocrinology follow-up every 3 months for first year"
+          ]
+        }
+      ],
+      "specialConsiderations": {
+        "wheeze_branch": "Not applicable",
+        "HIV_exposed": "Ketoconazole may interact with ARVs; check drug interactions",
+        "SAM": "Not applicable"
+      }
+    },
+    "treatmentResponseLogic": {
+      "triggers": [
+        {
+          "timePoint": "2 weeks post-TSS",
+          "ifNoImprovement": { "actions": ["Check morning cortisol and UFC", "If cortisol still elevated, check for residual adenoma", "Consider repeat MRI and/or medical therapy"] }
+        }
+      ]
+    },
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["weight_gain_pattern?", "easy_bruising?", "stretch_marks?", "muscle_weakness?", "steroid_use?"],
+      "branching": [
+        { "if": "weight_gain", "ask": ["central_vs_generalised?", "facial_fullness?", "increase_in_shoe_or_hat_size?"] },
+        { "if": "steroid_use", "ask": ["topical_vs_oral_vs_inhaled?", "duration?", "dose?"] },
+        { "if": "muscle_weakness", "ask": ["proximal_muscles?", "difficulty_climbing_stairs?", "duration?"] }
+      ]
+    },
+    "pathophysiology": [
+      "ACTH_secreting_pituitary_adenoma",
+      "adrenal_cortex_hyperstimulation",
+      "cortisol_excess",
+      "catabolic_state",
+      "central_adiposity",
+      "protein_wasting",
+      "osteoporosis",
+      "insulin_resistance",
+      "immunosuppression"
+    ],
+    "subtypes": [
+      {
+        "id": "pituitary_cushing",
+        "name": "Cushing's Disease (Pituitary ACTH-secreting)",
+        "prevalenceModifier": 0.7,
+        "agePeak": [72, 144],
+        "keyFeatures": [
+          { "feature": "female_predominance", "weight": 3 },
+          { "feature": "pituitary_microadenoma_on_MRI", "weight": 5 },
+          { "feature": "suppression_on_HDDST", "weight": 5 },
+          { "feature": "acth_elevated", "weight": 5 },
+          { "feature": "gradual_onset", "weight": 3 }
+        ],
+        "management": "Transsphenoidal surgery is first-line"
+      },
+      {
+        "id": "ectopic_acth_syndrome",
+        "name": "Ectopic ACTH Syndrome",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "male_predominance", "weight": 2 },
+          { "feature": "very_high_acth", "weight": 5 },
+          { "feature": "no_suppression_on_HDDST", "weight": 5 },
+          { "feature": "rapid_onset", "weight": 4 },
+          { "feature": "hypokalaemia_severe", "weight": 4 },
+          { "feature": "hyperpigmentation", "weight": 3 },
+          { "feature": "underlying_malignancy", "weight": 4 }
+        ],
+        "management": "Identify and treat primary tumour; steroidogenesis inhibitors for symptom control"
+      },
+      {
+        "id": "adrenal_cushing",
+        "name": "Adrenal Cushing's (Adrenal adenoma/carcinoma)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "suppressed_acth", "weight": 5 },
+          { "feature": "adrenal_mass_on_imaging", "weight": 5 },
+          { "feature": "no_suppression_on_HDDST", "weight": 5 },
+          { "feature": "gradual_onset", "weight": 3 },
+          { "feature": "hyperandrogenism", "weight": 3 }
+        ],
+        "management": "Adrenalectomy (laparoscopic for adenoma, open for carcinoma)"
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "obesity", "discriminators": ["generalised_obesity", "no_striae", "normal_cortisol_metabolism"], "negativeImpactOnParen": 3 },
+      { "diseaseId": "depression", "discriminators": ["mood_symptoms_primary", "no_physical_stigmata", "normal_cortisol_suppression"], "negativeImpactOnParen": 2 },
+      { "diseaseId": "polycystic_ovary_syndrome", "discriminators": ["hyperandrogenism", "normal_cortisol", "ovulatory_dysfunction"], "negativeImpactOnParen": 2 }
+    ]
+  }
+]

@@ -1,0 +1,150 @@
+{
+  "disease": {
+    "id": "otitis_media_with_effusion",
+    "name": "Otitis Media with Effusion",
+    "system": "ent",
+    "agePeak_months": [12, 72],
+    "note": "Middle ear effusion without acute inflammation. Often follows AOM. Also known as glue ear.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["hearing_loss", "middle_ear_effusion"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "meningism", "weight": 10 },
+        { "sign": "mastoid_tenderness_swelling", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_hearing_loss_bilateral", "weight": 7 },
+          { "sign": "speech_delay", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If speech delay/severe bilateral loss -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hearing_loss", "weight": 5 },
+      { "symptomId": "speech_delay", "weight": 4, "note": "Key concern in children <3 years" },
+      { "symptomId": "balance_problems", "weight": 2 },
+      { "symptomId": "inattention_at_school", "weight": 3 },
+      { "symptomId": "tinnitus", "weight": 1 },
+      { "symptomId": "recent_aom_history", "weight": 3 },
+      { "symptomId": "ear_fullness", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "dull_tympanic_membrane", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "air_fluid_level_TM", "baseWeight": 4 },
+      { "signId": "retracted_TM", "baseWeight": 3 },
+      { "signId": "decreased_mobility_tympanic_membrane", "baseWeight": 5 },
+      { "signId": "conductive_hearing_loss", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "daycare_attendance", "multiplier": 1.6 },
+      { "id": "cleft_palate", "multiplier": 3.0 },
+      { "id": "down_syndrome", "multiplier": 2.5 },
+      { "id": "parental_smoking", "multiplier": 1.4 },
+      { "id": "bottle_feeding", "multiplier": 1.3 },
+      { "id": "male_gender", "multiplier": 1.2 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_ome",
+        "name": "Acute OME (<3 months)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "recent_aom", "weight": 4 },
+          { "feature": "mild_hearing_loss", "weight": 3 }
+        ],
+        "management": "Watchful waiting for 3 months. Auto-inflation devices in older children. Reassess hearing at 3 months."
+      },
+      {
+        "id": "chronic_ome",
+        "name": "Chronic OME (>3 months)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "persistent_effusion", "weight": 5 },
+          { "feature": "hearing_loss_25db", "weight": 5 },
+          { "feature": "speech_delay", "weight": 4 }
+        ],
+        "management": "Tympanostomy tube insertion if bilateral >3 months with hearing loss. Adenoidectomy if nasal obstruction. Hearing aid if not surgical candidate."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "sensorineural_hearing_loss",
+        "discriminators": ["normal_tympanometry", "absent_otoacoustic_emissions", "abnormal_BERA", "no_effusion_on_otoscopy"]
+      },
+      {
+        "diseaseId": "acute_otitis_media",
+        "discriminators": ["acute_ear_pain", "fever", "erythematous_TM", "acute_onset"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pneumatic Otoscopy", "priority": "immediate", "yield": 0.85, "indication": "all cases - decreased TM mobility" },
+        { "name": "Tympanometry", "priority": "immediate", "yield": 0.95, "indication": "confirm effusion (type B tympanogram)" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Pure Tone Audiometry", "priority": "high", "yield": 0.9, "indication": "quantify hearing loss, age >3 years" },
+        { "name": "Otoacoustic Emissions", "priority": "high", "yield": 0.85, "indication": "screen cochlear function" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG233: Otitis Media with Effusion",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "unilateral, hearing loss <25 dB, no speech delay, duration <3 months",
+          "treatment": "Watchful waiting for 3 months. Advise against smoke exposure. Breastfeeding promotion. Reassess in 3 months."
+        },
+        {
+          "severity": "severe",
+          "criteria": "bilateral, hearing loss >25 dB, speech delay, duration >3 months, structural TM changes",
+          "treatment": "Tympanostomy tube insertion. Consider adenoidectomy if obstructive symptoms. Audiological follow-up."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "eustachian_tube_dysfunction",
+      "negative_middle_ear_pressure",
+      "transudate_effusion",
+      "mucous_gland_hyperplasia",
+      "mucoid_effusion"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "chronic_ome_cholesteatoma",
+        "probability": 0.01,
+        "lagDays": [365, 1095],
+        "severityBoost": 0.3,
+        "clues": ["persistent_effusion", "retraction_pocket", "keratin_debris"]
+      },
+      {
+        "diseaseId": "speech_language_delay",
+        "probability": 0.15,
+        "lagDays": [180, 730],
+        "severityBoost": 0.3,
+        "clues": ["bilateral_hearing_loss", "prolonged_effusion"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["asymptomatic_hearing_loss", "dull_TM", "type_B_tympanogram", "recent_AOM"],
+    "exclusionClues": ["acute_pain", "fever", "red_TM", "normal_TM_mobility"]
+  }
+}

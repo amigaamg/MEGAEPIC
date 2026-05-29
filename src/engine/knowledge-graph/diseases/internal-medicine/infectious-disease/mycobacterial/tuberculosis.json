@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "tuberculosis",
+    "name": "Pulmonary Tuberculosis",
+    "system": "infectious_disease",
+    "agePeak_months": [120, 540],
+    "note": "Chronic infection caused by Mycobacterium tuberculosis. Leading infectious cause of death worldwide.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["chronic_infection", "pulmonary_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hemoptysis", "weight": 10 },
+        { "sign": "meningeal_tb_signs", "weight": 10 },
+        { "sign": "severe_respiratory_distress", "weight": 9 },
+        { "sign": "miliary_tb_sepsis", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If hemoptysis/meningitis/miliary -> SEVERE; else -> STANDARD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "cough", "weight": 5, "modifiers": [
+          { "condition": "duration > 2 weeks", "suspectTB": true }
+        ]
+      },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "night_sweats", "weight": 4 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "hemoptysis", "weight": 4 },
+      { "symptomId": "chest_pain", "weight": 2 },
+      { "symptomId": "tb_contact_history", "weight": 4 },
+      { "symptomId": "hiv_positive", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "wasting", "baseWeight": 3 },
+      { "signId": "crackles_apical", "baseWeight": 3 },
+      { "signId": "dullness_to_percussion", "baseWeight": 2 },
+      { "signId": "cervical_lymphadenopathy", "baseWeight": 2 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "hiv_infection", "multiplier": 5.0 },
+      { "id": "close_tb_contact", "multiplier": 3.0 },
+      { "id": "malnutrition", "multiplier": 2.0 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "overcrowding", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "pulmonary_tb",
+        "name": "Pulmonary Tuberculosis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "chronic_cough", "weight": 5 },
+          { "feature": "upper_lobe_infiltrates", "weight": 4 },
+          { "feature": "cavitation", "weight": 5 },
+          { "feature": "positive_sputum", "weight": 5 }
+        ],
+        "management": "Standard 4-drug regimen (Rifampicin, Isoniazid, Pyrazinamide, Ethambutol) for 2 months, then Rifampicin + Isoniazid for 4 months."
+      },
+      {
+        "id": "miliary_tb",
+        "name": "Miliary (Disseminated) TB",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "miliary_pattern_on_cxr", "weight": 5 },
+          { "feature": "systemic_illness", "weight": 5 },
+          { "feature": "hiv_co_infection", "weight": 4 }
+        ],
+        "management": "Full course ATT. Corticosteroids if CNS or pericardial involvement. Treat HIV co-infection."
+      },
+      {
+        "id": "tb_lymphadenitis",
+        "name": "TB Lymphadenitis (Scrofula)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "matted_cervical_nodes", "weight": 5 },
+          { "feature": "cold_abscess", "weight": 4 },
+          { "feature": "sinus_tract_formation", "weight": 4 }
+        ],
+        "management": "Standard ATT. Surgical excision if large or for diagnosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "lung_cancer",
+        "discriminators": ["smoking_history", "no_response_to_att", "mass_on_ct"]
+      },
+      {
+        "diseaseId": "pneumonia",
+        "discriminators": ["acute_onset", "high_fever", "rapid_response_to_antibiotics"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Symptom screening (WHO 4-question)", "priority": "immediate", "yield": 0.7, "indication": "all suspected TB" }
+      ],
+      "laboratory": [
+        { "name": "Sputum GeneXpert MTB/RIF", "priority": "gold_standard", "yield": 0.9, "indication": "diagnosis and rifampicin resistance" },
+        { "name": "Sputum AFB smear microscopy", "priority": "high", "yield": 0.6, "indication": "initial screening" },
+        { "name": "Sputum culture (LJ or MGIT)", "priority": "high", "yield": 0.85, "indication": "definitive diagnosis, DST" },
+        { "name": "TST (Mantoux) or IGRA", "priority": "medium", "yield": 0.6, "indication": "latent TB screening" },
+        { "name": "HIV test", "priority": "routine", "yield": 0.5, "indication": "all TB patients" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.8, "indication": "upper lobe infiltrates, cavitation, lymphadenopathy" },
+        { "name": "CT Chest", "priority": "medium", "yield": 0.9, "indication": "better characterization, military pattern, lymph nodes" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Treatment of Drug-Susceptible TB",
+      "pathways": [
+        {
+          "severity": "drug-sensitive",
+          "criteria": "Rifampicin sensitive on GeneXpert",
+          "treatment": "2 months intensive phase: Rifampicin + Isoniazid + Pyrazinamide + Ethambutol. 4 months continuation: Rifampicin + Isoniazid. DOT (Directly Observed Therapy)."
+        },
+        {
+          "severity": "drug-resistant (RR/MDR)",
+          "criteria": "Rifampicin resistant on GeneXpert",
+          "treatment": "Refer to DR-TB center. Longer MDR-TB regimen (6-9 months all-oral regimen with bedaquiline, linezolid, levofloxacin, etc.)."
+        },
+        {
+          "severity": "severe TB",
+          "criteria": "miliary, meningitis, hemoptysis",
+          "treatment": "Standard ATT. Corticosteroids for TB meningitis and TB pericarditis. ICU support. Manage complications."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mycobacterium_tuberculosis_inhalation",
+      "alveolar_macrophage_infection",
+      "granuloma_formation",
+      "caseous_necrosis",
+      "cavitation",
+      "hematogenous_or_lymphatic_spread"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hemoptysis",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["chronic_cough", "cavitation", "aspergilloma"]
+      },
+      {
+        "diseaseId": "pleural_effusion",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["pleuritic_pain", "dullness"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["chronic_cough_2_weeks_plus", "weight_loss", "night_sweats", "tb_contact", "positive_gene_xpert"],
+    "exclusionClues": ["negative_sputum_x3", "cough_resolved_with_antibiotics"]
+  }
+}

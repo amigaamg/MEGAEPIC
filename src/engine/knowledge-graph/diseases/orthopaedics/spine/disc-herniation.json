@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "lumbar_disc_herniation",
+    "name": "Lumbar Disc Herniation",
+    "system": "orthopaedics",
+    "agePeak_months": [240, 540],
+    "note": "Most common at L4-L5 and L5-S1 levels. Can cause radiculopathy or cauda equina syndrome.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["back_pain", "radiculopathy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cauda_equina_syndrome", "weight": 10 },
+        { "sign": "progressive_motor_deficit", "weight": 9 },
+        { "sign": "saddle_anesthesia", "weight": 10 },
+        { "sign": "bowel_bladder_dysfunction", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If cauda equina/progressive motor deficit -> SURGICAL EMERGENCY; else -> CONSERVATIVE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "low_back_pain", "weight": 4 },
+      { "symptomId": "radicular_pain_leg", "weight": 5 },
+      { "symptomId": "paresthesia_numbness", "weight": 3 },
+      { "symptomId": "motor_weakness", "weight": 3 },
+      { "symptomId": "pain_worse_with_coughing", "weight": 3 },
+      { "symptomId": "prolonged_sitting_aggravates", "weight": 2 },
+      { "symptomId": "bowel_bladder_dysfunction", "weight": 5, "note": "Red flag for cauda equina" }
+    ],
+
+    "examFeatures": [
+      { "signId": "positive_straight_leg_raise", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "crossed_straight_leg_raise", "baseWeight": 4 },
+      { "signId": "motor_deficit_myotome", "baseWeight": 3 },
+      { "signId": "sensory_loss_dermatome", "baseWeight": 3 },
+      { "signId": "reduced_reflex", "baseWeight": 3 },
+      { "signId": "paraspinal_muscle_spasm", "baseWeight": 2 },
+      { "signId": "perineal_sensory_loss", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "heavy_lifting", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "sedentary_lifestyle", "multiplier": 1.3 },
+      { "id": "smoking", "multiplier": 1.4 },
+      { "id": "occupational_vibration", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "spinal_stenosis",
+        "discriminators": ["neurogenic_claudication", "relief_on_sitting", "bilateral_symptoms"]
+      },
+      {
+        "diseaseId": "hip_arthritis_referred",
+        "discriminators": ["groin_pain", "limited_hip_rom", "positive_hip_scour"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Straight Leg Raise test", "priority": "immediate", "yield": 0.85, "indication": "all suspected lumbar radiculopathy" },
+        { "name": "Neurological examination of lower limbs", "priority": "immediate", "yield": 0.9, "indication": "all patients" }
+      ],
+      "imaging": [
+        { "name": "MRI Lumbar Spine", "priority": "high", "yield": 0.95, "indication": "confirms diagnosis, shows level and extent" },
+        { "name": "CT Lumbar Spine", "priority": "medium", "yield": 0.7, "indication": "if MRI contraindicated" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Low Back Pain and Sciatica",
+      "pathways": [
+        {
+          "severity": "conservative",
+          "criteria": "no red flags, mild to moderate symptoms",
+          "treatment": "Education. Stay active. NSAIDs. Physiotherapy. Manual therapy. No routine imaging. Symptoms usually resolve in 4-6 weeks."
+        },
+        {
+          "severity": "surgical",
+          "criteria": "severe radicular pain >6-12 weeks, progressive motor deficit",
+          "treatment": "Microdiscectomy. Rapid recovery. Same-day or short-stay surgery."
+        },
+        {
+          "severity": "emergency (cauda equina)",
+          "criteria": "saddle anesthesia, bowel/bladder dysfunction, bilateral sciatica",
+          "treatment": "Emergency MRI. Urgent surgical decompression within 24-48 hours. Monitor post-op recovery."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "annular_tear",
+      "nucleus_pulposus_extrusion",
+      "nerve_root_compression",
+      "inflammatory_radiculopathy",
+      "neuropathic_pain"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cauda_equina_syndrome",
+        "probability": 0.02,
+        "severityBoost": 0.6,
+        "clues": ["saddle_anesthesia", "retention_incontinence", "bilateral_sciatica"]
+      },
+      {
+        "diseaseId": "chronic_radicular_pain",
+        "probability": 0.15,
+        "severityBoost": 0.2,
+        "clues": ["persistent_symptoms_after_3_months"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if cauda equina",
+    "diagnosticClues": ["unilateral_leg_pain_worse_than_back_pain", "positive_slr", "dermatomal_distribution"],
+    "exclusionClues": ["non_radicular_back_pain", "negative_slr", "symmetric_neurogenic_claudication"]
+  }
+}

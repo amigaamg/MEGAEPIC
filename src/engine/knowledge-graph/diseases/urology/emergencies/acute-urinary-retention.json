@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "acute_urinary_retention",
+    "name": "Acute Urinary Retention",
+    "system": "URO",
+    "agePeak_months": [540, 1080],
+    "note": "Sudden inability to void despite full bladder. Painful (common) or painless (slow onset, neurologic). Urological emergency requiring catheterization.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["urological_emergency", "voiding_dysfunction", "retention"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "obstructive_uropathy_bilateral_hydronephrosis", "weight": 9 },
+        { "sign": "severe_pain_with_autonomic_dysreflexia", "weight": 8 },
+        { "sign": "post_renal_aki", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Acute vs chronic retention. PVR >300 mL is significant."
+    },
+    "historyFeatures": [
+      { "symptomId": "inability_to_void_with_suprapubic_pain", "weight": 5 },
+      { "symptomId": "suprapubic_fullness_distension", "weight": 5 },
+      { "symptomId": "prior_luts_hesitancy_weak_stream", "weight": 4 },
+      { "symptomId": "bph_history", "weight": 4 },
+      { "symptomId": "precipitating_factor_surgery_anesthesia_medication", "weight": 4 },
+      { "symptomId": "constipation_impaction", "weight": 3 },
+      { "symptomId": "alcohol_consumption_recent", "weight": 2 },
+      { "symptomId": "neurological_history_spinal_cord_ms", "weight": 3 },
+      { "symptomId": "painless_gradual_retention", "weight": 3, "note": "Suggests chronic retention or neurogenic" }
+    ],
+    "examFeatures": [
+      { "signId": "palpable_distended_bladder", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "suprapubic_tenderness_percussion_dull", "baseWeight": 5 },
+      { "signId": "enlarged_prostate_on_dre", "baseWeight": 4 },
+      { "signId": "urethral_meatal_stenosis", "baseWeight": 2 },
+      { "signId": "neurological_exam_deficits", "baseWeight": 3 },
+      { "signId": "fecal_impaction_on_rectal", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "bph_male_over_50", "multiplier": 5.0 },
+      { "id": "prostate_cancer", "multiplier": 3.0 },
+      { "id": "urethral_stricture", "multiplier": 3.0 },
+      { "id": "post_operative_state_pelvic_surgery", "multiplier": 2.5 },
+      { "id": "anticholinergic_medications", "multiplier": 2.0 },
+      { "id": "spinal_cord_injury_cauda_equina", "multiplier": 5.0 },
+      { "id": "constipation_fecal_impaction", "multiplier": 2.0 },
+      { "id": "alcohol_binge", "multiplier": 2.0 },
+      { "id": "acute_uti_prostatitis", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_painful_retention",
+        "name": "Acute Painful Urinary Retention",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "sudden_onset_severe_suprapubic_pain", "weight": 5 },
+          { "feature": "strong_desire_to_void_unable", "weight": 5 },
+          { "feature": "often_preceded_by_luts", "weight": 3 },
+          { "feature": "bph_is_most_common_cause", "weight": 4 }
+        ],
+        "management": "Immediate urethral catheterization (14-16 Fr Foley). If unable: suprapubic catheterization (SPC). Drain 800-1000 mL initially then clamp for 1h to prevent hematuria. Alpha-blocker (tamsulosin 0.4 mg) started to facilitate voiding. Trial Without Catheter (TWOC) in 24-48h on alpha-blocker."
+      },
+      {
+        "id": "chronic_painless_retention",
+        "name": "Chronic Painless Urinary Retention",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "no_pain_gradual_onset", "weight": 4 },
+          { "feature": "high_pvr_over_1000_ml", "weight": 5 },
+          { "feature": "overflow_incontinence", "weight": 4 },
+          { "feature": "hydronephrosis_renal_impairment", "weight": 4 },
+          { "feature": "normal_desire_to_void_may_be_lost", "weight": 3 }
+        ],
+        "management": "Catheterization to drain bladder. Monitor for post-obstructive diuresis (replace 50-75% of urine output with 0.45% NS). Manage underlying: TURP for BPH, intermittent self-catheterization (ISC) for neurogenic/atonic bladder. Evaluate renal function. Long-term catheter or ISC."
+      },
+      {
+        "id": "post_operative_retention",
+        "name": "Post-Operative Urinary Retention (POUR)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "recent_surgery_pelvic_hip_colorectal", "weight": 5 },
+          { "feature": "spinal_anesthesia", "weight": 4 },
+          { "feature": "opioid_analgesics", "weight": 3 },
+          { "feature": "fluid_overload_bladder_overdistension", "weight": 3 }
+        ],
+        "management": "Bladder scan to confirm PVR >300 mL. Intermittent catheterization if can't void. Avoid overdistension (>500 mL). Alpha-blockers may reduce risk. Minimize opioids, encourage early ambulation. Limit IV fluids."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "anuria_from_aki", "discriminators": ["no_bladder_distension", "no_desire_to_void", "catheter_returns_little_urine", "elevated_creatinine"] },
+      { "diseaseId": "acute_abdomen", "discriminators": ["diffuse_abdominal_pain", "signs_of_peritonitis", "catheter_relieves"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Bladder scan (PVR measurement)", "priority": "immediate", "yield": 0.95, "indication": "confirm retention, volume estimation" }
+      ],
+      "laboratory": [
+        { "name": "Serum creatinine, eGFR, U&E", "priority": "high", "yield": 0.7, "indication": "renal function, hydronephrosis screen" },
+        { "name": "Urinalysis + culture", "priority": "high", "yield": 0.5, "indication": "UTI/prostatitis screening" },
+        { "name": "PSA (after recovery)", "priority": "medium", "yield": 0.5, "indication": "BPH vs prostate cancer (wait 4-6 weeks post-catheter)" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "if elevated creatinine", "yield": 0.6, "indication": "hydronephrosis, cortical thickness" },
+        { "name": "CT or MRI spine", "priority": "if neurogenic cause suspected", "yield": 0.8, "indication": "cauda equina, spinal stenosis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EAU Guidelines on Male LUTS / AUA BPH Guidelines",
+      "pathways": [
+        {
+          "severity": "acute retention - initial",
+          "criteria": "painful, <24h, BPH likely",
+          "treatment": "Immediate urethral catheterization (Foley 16-18 Fr). Drain 800 mL then clamp x 1h. Alpha-blocker (tamsulosin 0.4 mg). TWOC in 24-48h on alpha-blocker. If successful: continue alpha-blocker long-term. If failed: catheter + TURP."
+        },
+        {
+          "severity": "chronic retention - management",
+          "criteria": "PVR >1000, hydronephrosis, renal impairment",
+          "treatment": "Catheterization. Monitor post-obstructive diuresis (I/O, electrolytes). Long-term: TURP (if BPH), ISC (if atonic), indwelling catheter (if unfit). ACEi/ARB for renal protection."
+        },
+        {
+          "severity": "failed TWOC",
+          "criteria": "unable to void after 48h of alpha-blocker + catheter",
+          "treatment": "Re-catheterize. Continue alpha-blocker. Await TURP if BPH. Urodynamics to rule out detrusor underactivity. Consider ISC training."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "bladder_outlet_obstruction_from_prostate_stricture_clot",
+      "detrusor_muscle_overdistension_and_ischemia",
+      "impaired_detrusor_contractility",
+      "neurogenic_bladder_areflexia",
+      "pharmacological_anticholinergic_opioid_effects",
+      "vesicourethral_reflex_inhibition"
+    ],
+    "complications": [
+      { "diseaseId": "post_obstructive_diuresis", "probability": 0.2, "severityBoost": 0.3, "clues": ["high_urine_output_post_drainage", "electrolyte_imbalance", "hypotension"] },
+      { "diseaseId": "hematuria_post_drainage", "probability": 0.15, "severityBoost": 0.2, "clues": ["blood_in_urine_after_bladder_decompression", "usually_self_limiting"] },
+      { "diseaseId": "hydronephrosis_chronic_renal_failure", "probability": 0.1, "severityBoost": 0.4, "clues": ["dilated_collecting_system", "elevated_creatinine", "prolonged_retention"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["inability_to_void", "suprapubic_pain_and_distension", "palpable_bladder", "bph_history"],
+    "exclusionClues": ["anuria_from_aki_where_bladder_empty", "normal_voiding"]
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "disease": {
+    "id": "celiac_disease",
+    "name": "Celiac Disease",
+    "system": "gastroenterology",
+    "agePeak_months": [12, 120],
+    "note": "Autoimmune enteropathy triggered by gluten ingestion in genetically predisposed individuals (HLA-DQ2/DQ8).",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["malabsorption", "autoimmune", "chronic_diarrhea"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_dehydration", "weight": 8 },
+        { "sign": "failure_to_thrive", "weight": 8 },
+        { "sign": "severe_abdominal_distension", "weight": 6 },
+        { "sign": "hematemesis", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "chronic_symptoms": true
+      },
+      "severityLabel": "If severe dehydration or failure to thrive -> URGENT; else -> NON-URGENT workup and gluten-free diet"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "chronic_diarrhea", "weight": 5 },
+      { "symptomId": "steatorrhea", "weight": 4 },
+      { "symptomId": "bloating_distension", "weight": 4 },
+      { "symptomId": "weight_loss", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "failure_to_thrive_child", "weight": 4 },
+      { "symptomId": "iron_deficiency_anemia", "weight": 3 },
+      { "symptomId": "abdominal_pain", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "gluten_trigger_symptoms", "weight": 5 },
+      { "symptomId": "dermatitis_herpetiformis_rash", "weight": 3, "note": "Pruritic vesicular rash on elbows/knees/buttocks" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "wasting_cachexia", "baseWeight": 3 },
+      { "signId": "dermatitis_herpetiformis", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "aphthous_ulcers", "baseWeight": 2 },
+      { "signId": "short_stature_child", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_celiac", "multiplier": 5.0 },
+      { "id": "hla_dq2_or_dq8", "multiplier": 6.0 },
+      { "id": "type_1_diabetes", "multiplier": 3.0 },
+      { "id": "autoimmune_thyroid_disease", "multiplier": 2.5 },
+      { "id": "down_syndrome", "multiplier": 3.0 },
+      { "id": "iga_deficiency", "multiplier": 2.0 },
+      { "id": "early_gluten_introduction", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "irritable_bowel_syndrome",
+        "discriminators": ["no_steatorrhea", "normal_serology", "stress_correlation", "no_wasting"]
+      },
+      {
+        "diseaseId": "crohns_disease",
+        "discriminators": ["blood_in_stool", "fistula", "perianal_disease", "elevated_calprotectin", "ileocolonic_ulceration"]
+      },
+      {
+        "diseaseId": "tropical_sprue",
+        "discriminators": ["travel_to_tropics", "antibiotic_response", "no_gluten_dependence"]
+      },
+      {
+        "diseaseId": "pancreatic_insufficiency",
+        "discriminators": ["fecal_elastase_low", "normal_serology", "pancreatic_calcifications"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Dietary history", "priority": "high", "yield": 0.8, "indication": "identify gluten-dependence of symptoms" }
+      ],
+      "laboratory": [
+        { "name": "tTG IgA (tissue transglutaminase)", "priority": "immediate", "yield": 0.95, "indication": "first-line screening test" },
+        { "name": "Total IgA level", "priority": "immediate", "yield": 0.3, "indication": "rule out IgA deficiency causing false negative tTG" },
+        { "name": "EMA IgA (endomysial antibody)", "priority": "confirmatory", "yield": 0.98, "indication": "confirmatory if tTG equivocal" },
+        { "name": "Deamidated gliadin peptide IgG", "priority": "if_iga_deficient", "yield": 0.9, "indication": "when total IgA low" },
+        { "name": "HLA-DQ2/DQ8 typing", "priority": "medium", "yield": 0.99, "indication": "high negative predictive value; rule out disease" },
+        { "name": "Iron, B12, folate, vitamin D", "priority": "high", "yield": 0.6, "indication": "assess malabsorption" }
+      ],
+      "imaging": [
+        { "name": "Upper endoscopy with duodenal biopsy", "priority": "high", "yield": 0.97, "indication": "confirms diagnosis - villous atrophy, crypt hyperplasia, IELs" },
+        { "name": "Video capsule endoscopy", "priority": "low", "yield": 0.7, "indication": "suspected refractory celiac, evaluate extent" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACG Clinical Guidelines: Celiac Disease",
+      "pathways": [
+        {
+          "severity": "new_diagnosis",
+          "criteria": "Positive serology + biopsy-proven villous atrophy",
+          "treatment": "Strict lifelong gluten-free diet. Refer to dietitian. Monitor for nutritional deficiencies. Screen first-degree relatives."
+        },
+        {
+          "severity": "refractory_symptoms",
+          "criteria": "Persistent symptoms despite >6 months of gluten-free diet",
+          "treatment": "Re-evaluate dietary adherence (dietitian). Repeat serology + endoscopy. Consider type I (corticosteroid responsive) vs type II (aberrant T-cell, high risk of lymphoma)."
+        },
+        {
+          "severity": "nutritional_deficiency",
+          "criteria": "Iron, B12, folate, vitamin D, calcium deficiency",
+          "treatment": "Supplement specific deficiencies. Monitor bone density (DEXA scan) due to osteoporosis risk. Calcium + vitamin D supplementation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "gluten_ingestion_in_genetically_susceptible",
+      "tissue_transglutaminase_modifies_gluten_peptides",
+      "t_cell_mediated_immune_response",
+      "innate_immune_activation",
+      "small_intestinal_villous_atrophy",
+      "crypt_hyperplasia",
+      "intraepithelial_lymphocytosis",
+      "intestinal_permeability_increased",
+      "nutrient_malabsorption",
+      "extraintestinal_autoimmune_manifestations"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "osteoporosis",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["vitamin_d_deficiency", "chronic_malabsorption", "low_bone_density"]
+      },
+      {
+        "diseaseId": "enteropathy_associated_t_cell_lymphoma",
+        "probability": 0.01,
+        "severityBoost": 0.9,
+        "clues": ["refractory_celiac", "weight_loss", "abdominal_pain", "ulcerative_jejunitis"]
+      },
+      {
+        "diseaseId": "functional_hyposplenism",
+        "probability": 0.2,
+        "severityBoost": 0.1,
+        "clues": ["howell_jolly_bodies", "increased_risk_infection", "splenic_atrophy"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low; chronic management",
+    "diagnosticClues": ["chronic_diarrhea_with_malabsorption", "iron_deficiency_anemia_unexplained", "dermatitis_herpetiformis", "positive_ttg_iga", "villous_atrophy"],
+    "exclusionClues": ["negative_serology", "no_hla_dq2_or_dq8", "no_response_to_gluten_free_diet"]
+  }
+}

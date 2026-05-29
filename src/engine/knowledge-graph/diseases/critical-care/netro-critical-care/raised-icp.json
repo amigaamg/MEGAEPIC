@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "raised_intracranial_pressure",
+    "name": "Raised Intracranial Pressure (ICP)",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Elevated pressure within the skull. Causes: TBI, stroke, tumor, meningitis, hepatic encephalopathy. ICP >22 mmHg requires treatment. Cerebral perfusion pressure (CPP = MAP - ICP) target 60-70.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["neuro_critical_care", "intracranial_hypertension", "brain_injury"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cushing_reflex_bradycardia_hypertension", "weight": 10 },
+        { "sign": "unequal_or_fixed_dilated_pupils", "weight": 10 },
+        { "sign": "decerebrate_or_decorticate_posturing", "weight": 9 },
+        { "sign": "loss_of_brainstem_reflexes", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "ICP <22 -> mild-moderate; 22-30 -> severe; >30 with signs -> critical"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "headache_worsening", "weight": 4 },
+      { "symptomId": "nausea_vomiting_projectile", "weight": 3 },
+      { "symptomId": "decreased_consciousness", "weight": 5 },
+      { "symptomId": "blurred_double_vision_diplopia", "weight": 3 },
+      { "symptomId": "seizures", "weight": 3 },
+      { "symptomId": "traumatic_brain_injury_or_stroke_or_tumor", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "depressed_consciousness", "baseWeight": 5 },
+      { "signId": "papilledema", "baseWeight": 4 },
+      { "signId": "pupillary_abnormalities", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cushing_triad_hypertension_bradycardia_irregular_breathing", "baseWeight": 5 },
+      { "signId": "motor_posturing", "baseWeight": 4 },
+      { "signId": "sixth_nerve_palsy", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "traumatic_brain_injury", "multiplier": 3.0 },
+      { "id": "intracranial_hemorrhage", "multiplier": 3.0 },
+      { "id": "cerebral_edema_stroke_hypoxia", "multiplier": 2.5 },
+      { "id": "brain_tumor", "multiplier": 2.5 },
+      { "id": "cns_infection_meningitis_encephalitis", "multiplier": 2.0 },
+      { "id": "hepatic_encephalopathy", "multiplier": 2.0 },
+      { "id": "hydrocephalus", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "intracranial_hypertension_from_tbi",
+        "name": "Post-TBI Raised ICP",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "trauma_history", "weight": 5 },
+          { "feature": "ct_findings_edema_contusion_hematoma", "weight": 5 },
+          { "feature": "elevated_icp_on_monitoring", "weight": 5 }
+        ],
+        "management": "ICP monitoring (EVD or bolt). Elevate head 30 degrees. Sedation (propofol/midazolam). CSF drainage if EVD in situ. Osmotherapy (mannitol 0.5-1g/kg or hypertonic saline). Decompressive craniectomy if refractory."
+      },
+      {
+        "id": "raised_icp_from_fulminant_hepatic_failure",
+        "name": "Raised ICP from Fulminant Hepatic Failure",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "liver_failure_acute", "weight": 5 },
+          { "feature": "asterixis_encephalopathy", "weight": 4 },
+          { "feature": "elevated_ammonia", "weight": 4 }
+        ],
+        "management": "ICP monitoring. Mannitol/hypertonic saline. Barbiturate coma if refractory. Lactulose/rifaximin for ammonia. Liver transplant evaluation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "status_epilepticus",
+        "discriminators": ["ictal_activity_on_eeg", "responding_to_antiepileptics"]
+      },
+      {
+        "diseaseId": "locked_in_syndrome",
+        "discriminators": ["aware_but_paralyzed", "vertical_eye_movement_preserved"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ICP monitoring (EVD or parenchymal bolt)", "priority": "gold_standard", "yield": 0.95, "indication": "if GCS <=8 and risk of raised ICP" }
+      ],
+      "laboratory": [
+        { "name": "ABG (PaCO2 target 35-40)", "priority": "high", "yield": 0.7, "indication": "PaCO2 affects cerebral blood flow" },
+        { "name": "Serum Na and Osmolality", "priority": "high", "yield": 0.6, "indication": "guide hypertonic saline therapy" }
+      ],
+      "imaging": [
+        { "name": "CT Head (non-contrast)", "priority": "immediate", "yield": 0.85, "indication": "mass effect, midline shift, hemorrhage" },
+        { "name": "CT/MRI brain with contrast", "priority": "medium", "yield": 0.8, "indication": "tumor, infection, abscess" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Brain Trauma Foundation / Neurocritical Care Society Guidelines",
+      "pathways": [
+        {
+          "severity": "mild-moderate (ICP 22-30)",
+          "criteria": "ICP 22-30 mmHg, CPP >60, no herniation signs",
+          "treatment": "Elevate head 30 degrees. Sedation (propofol). CSF drainage if EVD. Osmotherapy (hypertonic saline 3% 30-60mL bolus). Maintain PaCO2 35-40. Normothermia."
+        },
+        {
+          "severity": "severe-refractory (ICP >30 or herniation)",
+          "criteria": "ICP >30, CPP <60, or herniation signs",
+          "treatment": "Increase sedation/paralysis. Bolus hypertonic saline 23.4%. Therapeutic hyperventilation (PaCO2 30-35) short-term. Barbiturate coma. Decompressive craniectomy. Targeted temperature management."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "monro_kellie_doctrine",
+      "intracranial_volume_increase",
+      "reduced_cerebral_perfusion_pressure",
+      "cerebral_ischemia",
+      "brain_herniation",
+      "secondary_brain_injury",
+      "autoregulation_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "brain_herniation",
+        "probability": 0.2,
+        "severityBoost": 0.7,
+        "clues": ["cushing_reflex", "pupillary_asymmetry", "posturing"]
+      },
+      {
+        "diseaseId": "diabetes_insipidus",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["polyuria_hypernatremia", "low_urine_osmolality"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["decreasing_gcs", "cushing_triad", "pupillary_changes", "papilledema"],
+    "exclusionClues": ["normal_ct_brain", "gcs_15", "no_risk_factors"]
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "polycythemia_vera",
+    "name": "Polycythemia Vera",
+    "system": "hematology",
+    "agePeak_months": [600, 720, 960],
+    "note": "Myeloproliferative neoplasm with JAK2 V617F mutation causing erythroid precursor hypersensitivity to erythropoietin. Leads to increased RBC mass with risk of thrombosis and hemorrhage. Can transform to MF or AML.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["myeloproliferative", "erythrocytosis", "thrombosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_thrombosis", "weight": 9 },
+        { "sign": "stroke", "weight": 9 },
+        { "sign": "myocardial_infarction", "weight": 9 },
+        { "sign": "splenic_infarction", "weight": 7 },
+        { "sign": "hemorrhage", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "controlled_hematocrit": true
+      },
+      "severityLabel": "If acute thrombosis or bleeding -> EMERGENCY; stable controlled PV -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "headache", "weight": 4 },
+      { "symptomId": "blurred_vision", "weight": 3 },
+      { "symptomId": "dizziness", "weight": 3 },
+      { "symptomId": "pruritus", "weight": 4, "note": "Especially after warm bath (aquagenic pruritus)" },
+      { "symptomId": "erythromelalgia", "weight": 3, "note": "Burning pain in extremities" },
+      { "symptomId": "hypertension", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "chest_or_abdominal_pain", "weight": 2 },
+      { "symptomId": "gout", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "plethora_face", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "conjunctival_erythema", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "hypertension", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "jak2_v617f_mutation", "multiplier": 5.0 },
+      { "id": "age_above_60", "multiplier": 2.0 },
+      { "id": "thrombosis_history", "multiplier": 3.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [],
+
+    "mimics": [
+      {
+        "diseaseId": "secondary_erythrocytosis",
+        "discriminators": ["jak2_negative", "high_erythropoietin", "underlying_hypoxia_or_tumor"]
+      },
+      {
+        "diseaseId": "essential_thrombocythemia",
+        "discriminators": ["isolated_thrombocytosis", "normal_hematocrit", "jak2_calr_mpl"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "High Hb, Hct, may have high WBC and platelets" }
+      ],
+      "laboratory": [
+        { "name": "JAK2 V617F mutation testing", "priority": "immediate", "yield": 0.97, "indication": "Positive in 95% of PV" },
+        { "name": "Serum erythropoietin level", "priority": "high", "yield": 0.7, "indication": "Low in PV" },
+        { "name": "Arterial blood gas", "priority": "high", "yield": 0.5, "indication": "Rule out secondary erythrocytosis from hypoxia" },
+        { "name": "Bone marrow aspirate", "priority": "medium", "yield": 0.7, "indication": "Panmyelosis, no JAK2 in marrow if blood negative" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "medium", "yield": 0.5, "indication": "Spleen size assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / ELN / BSH Guidelines for PV",
+      "pathways": [
+        {
+          "severity": "high_risk",
+          "criteria": "Age >60 or prior thrombosis",
+          "treatment": "Phlebotomy to target Hct <45%. Low-dose aspirin (75-100mg). Cytoreduction with hydroxyurea or interferon-alpha."
+        },
+        {
+          "severity": "low_risk",
+          "criteria": "Age <60, no prior thrombosis",
+          "treatment": "Phlebotomy to target Hct <45%. Low-dose aspirin. Avoid cytoreduction unless symptomatic or progressive."
+        },
+        {
+          "severity": "thrombotic_event",
+          "criteria": "Acute thrombosis while on therapy",
+          "treatment": "Manage acute thrombosis per standard protocols. Optimize cytoreduction. Consider switching to second-line (interferon, busulfan)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "jak2_v617f_mutation",
+      "constitutive_jak_stat_signaling",
+      "erythroid_hypersensitivity_to_epo",
+      "increased_rbc_mass",
+      "increased_blood_viscosity",
+      "thrombosis_risk",
+      "clonal_evolution"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "stroke_or_mi",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["uncontrolled_hct", "age_above_60", "prior_thrombosis"]
+      },
+      {
+        "diseaseId": "myelofibrosis",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["progressive_splenomegaly", "leukoerythroblastosis", "marrow_fibrosis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low unless thrombosis",
+    "diagnosticClues": ["high_hematocrit", "low_epo", "jak2_positive", "plethora", "splenomegaly"],
+    "exclusionClues": ["high_epo", "jak2_negative", "secondary_cause_found"]
+  }
+}

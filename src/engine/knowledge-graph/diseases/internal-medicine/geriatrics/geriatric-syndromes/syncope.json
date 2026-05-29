@@ -1,0 +1,137 @@
+{
+  "disease": {
+    "id": "syncope_elderly",
+    "name": "Syncope in the Elderly",
+    "system": "geriatrics",
+    "agePeak_months": [720, 1080],
+    "note": "Transient loss of consciousness due to cerebral hypoperfusion. Higher morbidity in older adults due to trauma and underlying causes.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["loss_of_consciousness", "falls", "geriatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_syncope_features", "weight": 9 },
+        { "sign": "head_trauma_from_syncope", "weight": 8 },
+        { "sign": "prolonged_loss_of_consciousness", "weight": 7 },
+        { "sign": "exertional_syncope", "weight": 8 },
+        { "sign": "suspected_arrythmia", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "vasovagal_features": true,
+        "no_cardiac_history": true,
+        "no_trauma": true
+      },
+      "severityLabel": "If cardiac features, trauma, or prolonged LOC -> EMERGENCY; vasovagal in healthy patient -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "transient_loss_of_consciousness", "weight": 5 },
+      { "symptomId": "prodromal_dizziness_or_nausea", "weight": 3 },
+      { "symptomId": "palpitations_before_event", "weight": 4 },
+      { "symptomId": "post_event_confusion_or_fatigue", "weight": 2 },
+      { "symptomId": "witnessed_collapse", "weight": 4 },
+      { "symptomId": "situational_triggers", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "orthostatic_hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "irregular_pulse", "baseWeight": 5 },
+      { "signId": "murmur_suggestive_aortic_stenosis", "baseWeight": 4 },
+      { "signId": "signs_of_heart_failure", "baseWeight": 3 },
+      { "signId": "carotid_bruit", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_70", "multiplier": 2.0 },
+      { "id": "cardiac_disease", "multiplier": 2.5 },
+      { "id": "orthostatic_hypotension", "multiplier": 2.0 },
+      { "id": "polypharmacy", "multiplier": 1.6 },
+      { "id": "dehydration", "multiplier": 1.5 },
+      { "id": "diabetes_with_autonomic_neuropathy", "multiplier": 1.8 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "seizure",
+        "discriminators": ["tonic_clonic_movements", "post_ictal_state", "tongue_biting", "cyanosis"]
+      },
+      {
+        "diseaseId": "recurrent_falls",
+        "discriminators": ["no_loc", "mechanical_trip", "remembered_event"]
+      },
+      {
+        "diseaseId": "transient_ischemic_attack",
+        "discriminators": ["focal_neurological_symptoms", "no_loc_typical", "hemiparesis"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.8, "indication": "arrhythmia, ischemia, QT interval" },
+        { "name": "Orthostatic BP (lying and standing)", "priority": "immediate", "yield": 0.85, "indication": "postural hypotension" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr, glucose", "priority": "high", "yield": 0.5, "indication": "anemia, electrolyte, hypoglycemia" },
+        { "name": "Troponin", "priority": "high", "yield": 0.4, "indication": "cardiac ischemia" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "high", "yield": 0.6, "indication": "structural heart disease, aortic stenosis" },
+        { "name": "CT head", "priority": "medium", "yield": 0.4, "indication": "if head trauma or focal neurology" },
+        { "name": "24-hour Holter or loop recorder", "priority": "high", "yield": 0.7, "indication": "arrhythmia detection" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESC Guidelines for Syncope",
+      "pathways": [
+        {
+          "severity": "cardiac_syncope",
+          "criteria": "arrhythmia, structural heart disease, exertional",
+          "treatment": "Treat underlying cause (pacemaker for bradyarrhythmia, ICD for ventricular arrhythmia). Correct electrolyte abnormalities. Medication adjustment."
+        },
+        {
+          "severity": "reflex_neuromediated",
+          "criteria": "vasovagal, situational, carotid sinus",
+          "treatment": "Lifestyle measures: adequate hydration, salt intake, compression stockings. Avoid triggers. Tilt training. Consider fludrocortisone or midodrine if refractory."
+        },
+        {
+          "severity": "orthostatic_hypotension",
+          "criteria": "postural drop >=20/10 mmHg",
+          "treatment": "Review antihypertensives. Increase fluid and salt intake. Compression hosiery. Elevate head of bed. Fludrocortisone or midodrine if persistent."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cerebral_hypoperfusion",
+      "impaired_autoregulation",
+      "baroreceptor_dysfunction",
+      "cardiac_output_failure",
+      "neurogenic_reflex_pathways",
+      "age_related_autonomic_decline"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hip_fracture",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["fall_during_syncope", "osteoporosis"]
+      },
+      {
+        "diseaseId": "subdural_hematoma",
+        "probability": 0.02,
+        "severityBoost": 0.8,
+        "clues": ["head_strike", "anticoagulation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high unless clearly vasovagal",
+    "diagnosticClues": ["transient_loc", "rapid_onset_offset", "postural_or_cardiac_triggers"],
+    "exclusionClues": ["prolonged_loc", "focal_neurological_signs", "tonic_clonic_movements"]
+  }
+}

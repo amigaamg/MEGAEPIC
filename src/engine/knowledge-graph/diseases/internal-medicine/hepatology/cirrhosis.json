@@ -1,0 +1,240 @@
+{
+  "disease": {
+    "id": "cirrhosis",
+    "name": "Liver Cirrhosis",
+    "system": "hepatology",
+    "agePeak_months": [480, 960],
+    "note": "End-stage liver disease characterized by diffuse fibrosis and nodular regeneration, leading to portal hypertension and hepatic synthetic dysfunction. Child-Pugh and MELD-Na scores guide prognosis and transplant prioritization.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["liver_failure", "portal_hypertension", "decompensation", "chronic_liver_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "variceal_hemorrhage_hematemesis_melena", "weight": 10 },
+        { "sign": "hepatic_encephalopathy_grade_3_4", "weight": 10 },
+        { "sign": "sepsis_spontaneous_bacterial_peritonitis", "weight": 9 },
+        { "sign": "hepatorenal_syndrome_aki", "weight": 9 },
+        { "sign": "acute_on_chronic_liver_failure", "weight": 10 },
+        { "sign": "rapidly_rising_bilirubin_coagulopathy", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "child_pugh_class_c": true,
+        "meld_na_greater_than_15": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "compensated_cirrhosis": true,
+        "child_pugh_class_a": true,
+        "meld_na_less_than_10": true
+      },
+      "severityLabel": "Decompensated (ascites, variceal bleed, encephalopathy, jaundice, SBP) -> EMERGENCY admission; Compensated Child-Pugh A -> OUTPATIENT surveillance"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "abdominal_swelling_distension", "weight": 5 },
+      { "symptomId": "jaundice", "weight": 4 },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "easy_bruising_bleeding", "weight": 3 },
+      { "symptomId": "weight_loss_muscle_wasting", "weight": 3 },
+      { "symptomId": "confusion_altered_behavior_somnolence", "weight": 5, "note": "Hepatic encephalopathy" },
+      { "symptomId": "hematemesis_melena_hematochezia", "weight": 5, "note": "Variceal or portal hypertensive bleeding" },
+      { "symptomId": "decreased_appetite", "weight": 2 },
+      { "symptomId": "lower_extremity_edema", "weight": 3 },
+      { "symptomId": "history_alcohol_abuse", "weight": 4 },
+      { "symptomId": "history_viral_hepatitis_b_or_c", "weight": 4 },
+      { "symptomId": "history_nash_metabolic_syndrome", "weight": 3 },
+      { "symptomId": "family_history_liver_disease", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "ascites", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 4 },
+      { "signId": "hepatomegaly_or_shrunken_liver", "baseWeight": 3 },
+      { "signId": "spider_angiomas", "baseWeight": 3 },
+      { "signId": "palmar_erythema", "baseWeight": 2 },
+      { "signId": "caput_medusae_abdominal_collaterals", "baseWeight": 3 },
+      { "signId": "testicular_atrophy_males", "baseWeight": 2 },
+      { "signId": "gynecomastia_males", "baseWeight": 2 },
+      { "signId": "asterixis", "baseWeight": 4, "note": "Hepatic encephalopathy" },
+      { "signId": "peripheral_edema_pitting", "baseWeight": 3 },
+      { "signId": "dupytrens_contracture", "baseWeight": 1 },
+      { "signId": "leukonychia", "baseWeight": 1 },
+      { "signId": "clubbing", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "alcohol_use_disorder", "multiplier": 4.0 },
+      { "id": "chronic_hepatitis_b", "multiplier": 4.0 },
+      { "id": "chronic_hepatitis_c", "multiplier": 4.0 },
+      { "id": "nonalcoholic_steatohepatitis_nash", "multiplier": 3.0 },
+      { "id": "hemochromatosis_hereditary", "multiplier": 3.0 },
+      { "id": "autoimmune_hepatitis", "multiplier": 2.5 },
+      { "id": "primary_biliary_cholangitis", "multiplier": 2.0 },
+      { "id": "primary_sclerosing_cholangitis", "multiplier": 2.0 },
+      { "id": "wilson_disease", "multiplier": 2.0 },
+      { "id": "alpha_1_antitrypsin_deficiency", "multiplier": 2.0 },
+      { "id": "non_alcoholic_fatty_liver_disease", "multiplier": 2.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_hepatitis",
+        "discriminators": ["acute_onset_days_to_weeks", "markedly_elevated_transaminases_alt_ast", "reversible_without_chronic_stigmata", "no_signs_of_chronic_liver_disease", "normal_liver_surface_on_imaging"]
+      },
+      {
+        "diseaseId": "budd_chiari_syndrome",
+        "discriminators": ["acute_or_subacute_abdominal_pain", "tender_hepatomegaly", "ascites_high_protein", "hepatic_vein_thrombosis_on_doppler_ultrasound"]
+      },
+      {
+        "diseaseId": "congestive_hepatopathy",
+        "discriminators": ["signs_of_right_heart_failure", "jugular_venous_distension", "hepatojugular_reflux", "pulsatile_liver", "cardiomegaly_on_chest_xray"]
+      },
+      {
+        "diseaseId": "hepatic_sinusoidal_obstruction_syndrome_veno_occlusive_disease",
+        "discriminators": ["history_of_hsct_or_toxin_exposure", "tender_hepatomegaly", "weight_gain_fluid_retention", "reverse_flow_in_portal_vein_on_doppler"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine output monitoring", "priority": "high", "yield": 0.6, "indication": "monitor for hepatorenal syndrome" },
+        { "name": "Abdominal ultrasound bedside for ascites", "priority": "high", "yield": 0.85, "indication": "detect and quantify ascites, assess liver surface nodularity" }
+      ],
+      "laboratory": [
+        { "name": "LFTs (ALT, AST, ALP, GGT, total and direct bilirubin)", "priority": "immediate", "yield": 0.8, "indication": "liver function assessment and pattern of injury" },
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.85, "indication": "synthetic function, prognostic factor for Child-Pugh and MELD" },
+        { "name": "Serum albumin", "priority": "high", "yield": 0.8, "indication": "synthetic function, Child-Pugh score component" },
+        { "name": "FBC with platelets", "priority": "high", "yield": 0.75, "indication": "thrombocytopenia from hypersplenism and reduced TPO" },
+        { "name": "Serum creatinine and electrolytes", "priority": "high", "yield": 0.7, "indication": "MELD-Na calculation, hepatorenal syndrome screening" },
+        { "name": "Serum sodium", "priority": "high", "yield": 0.6, "indication": "MELD-Na calculation, prognostic marker" },
+        { "name": "Hepatitis B (HBsAg, HBcAb) and C serology", "priority": "high", "yield": 0.5, "indication": "etiologic workup" },
+        { "name": "Serum ferritin and transferrin saturation", "priority": "medium", "yield": 0.4, "indication": "screen for hemochromatosis" },
+        { "name": "Alpha-fetoprotein (AFP)", "priority": "high", "yield": 0.5, "indication": "HCC surveillance, component of screening" },
+        { "name": "Ascitic fluid analysis (cell count, albumin, culture, total protein)", "priority": "high", "yield": 0.95, "indication": "SBP diagnosis, SAAG calculation" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound with Doppler", "priority": "high", "yield": 0.85, "indication": "liver nodularity/surface irregularity, portal vein patency/velocity, ascites, splenomegaly, HCC screening" },
+        { "name": "Upper endoscopy (EGD)", "priority": "high", "yield": 0.95, "indication": "variceal screening and banding; perform at diagnosis and q1-2 years" },
+        { "name": "Transient elastography (FibroScan)", "priority": "high", "yield": 0.9, "indication": "non-invasive fibrosis assessment, liver stiffness measurement for prognosis" },
+        { "name": "CT abdomen triphasic with contrast", "priority": "medium", "yield": 0.9, "indication": "HCC diagnosis and staging, portal venous system assessment" },
+        { "name": "MRI abdomen with contrast", "priority": "medium", "yield": 0.92, "indication": "characterization of liver nodules, HCC diagnosis if CT inconclusive" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines: Cirrhosis and Portal Hypertension; EASL Clinical Practice Guidelines: Decompensated Cirrhosis",
+      "pathways": [
+        {
+          "severity": "compensated_child_pugh_a",
+          "criteria": "Child-Pugh A (score 5-6), no ascites, no variceal bleed, no encephalopathy, no jaundice",
+          "treatment": "Treat underlying etiology (antivirals, alcohol cessation, weight loss, phlebotomy, immunosuppression). Vaccinate (HAV, HBV, pneumococcal, influenza, COVID-19). HCC surveillance (US + AFP q6 months). Screen for varices (EGD); if no varices, repeat in 2-3 years. Avoid NSAIDs, limit sodium intake <2g/day. Maintain adequate nutrition. Monitor LFTs, INR, creatinine, sodium, platelets q3-6 months."
+        },
+        {
+          "severity": "compensated_with_varices",
+          "criteria": "Child-Pugh A/B, esophageal varices present, no bleeding",
+          "treatment": "Primary prophylaxis: non-selective beta-blocker (propranolol or nadolol) or endoscopic variceal ligation (EVL) for high-risk varices (medium/large or red wale signs). Continue HCC surveillance. Repeat EGD q1-2 years."
+        },
+        {
+          "severity": "acute_variceal_hemorrhage",
+          "criteria": "Hematemesis/melena + known/suspected cirrhosis + varices on EGD",
+          "treatment": "Resuscitation (restrictive, target Hb 7-9). Antibiotics (ceftriaxone 1g IV daily x 5-7 days). Vasoactive agents (terlipressin 2mg IV q4h or octreotide 50mcg bolus + 50mcg/h infusion). Urgent EGD within 12h with EVL. If uncontrolled, consider balloon tamponade (Sengstaken-Blakemore) or TIPS as salvage. Secondary prophylaxis: beta-blocker + EVL, repeat EGD q2-4 weeks until obliteration."
+        },
+        {
+          "severity": "decompensated_ascites",
+          "criteria": "Child-Pugh B/C, grade 2-3 ascites",
+          "treatment": "Sodium restriction <2g/day. Diuretics: spironolactone 100mg PO daily (max 400mg) + furosemide 40mg PO daily (max 160mg), titrate to weight loss 0.5-1kg/day. Large volume paracentesis (>5L) with albumin infusion 8g/L removed. SBP prophylaxis: norfloxacin 400mg PO daily or ciprofloxacin 500mg PO daily if ascitic fluid protein <1.5g/dL + Child-Pugh C or prior SBP. TIPS for refractory ascites. Consider liver transplant evaluation."
+        },
+        {
+          "severity": "spontaneous_bacterial_peritonitis",
+          "criteria": "Ascitic fluid PMN >250 cells/uL, abdominal pain/fever or asymptomatic",
+          "treatment": "Empiric antibiotics: cefotaxime 2g IV q8h or ceftriaxone 2g IV q24h x 5-7 days. IV albumin 1.5g/kg on day 1 + 1g/kg on day 3 to prevent hepatorenal syndrome. SBP secondary prophylaxis: norfloxacin 400mg PO daily indefinitely or until transplant."
+        },
+        {
+          "severity": "hepatic_encephalopathy",
+          "criteria": "Altered mental status + asterixis + known cirrhosis, West Haven grade 1-4",
+          "treatment": "Identify and treat precipitant (GI bleeding, infection/SBP, electrolyte imbalance, constipation, sedatives, hypokalemia, hypovolemia, high protein load). Lactulose 30-45mL PO q6-8h titrated to 2-3 soft stools/day. Rifaximin 550mg PO BID added if lactulose inadequate or as secondary prophylaxis. For grade 3-4: ICU admission, consider endotracheal intubation, lactulose via NG tube, IV fluids. Low threshold for head imaging to rule out intracranial pathology."
+        },
+        {
+          "severity": "hepatorenal_syndrome_aki",
+          "criteria": "Cirrhosis + ascites + serum Cr >1.5mg/dL or increase >0.3mg/dL in <48h, no improvement after diuretic withdrawal + volume expansion with albumin, no shock/nephrotoxins/structural kidney disease",
+          "treatment": "Discontinue diuretics. Volume challenge with IV albumin 1g/kg/day x 2 days. If no response: vasoconstrictor therapy (terlipressin 0.5-2mg IV q4-6h or norepinephrine 0.5-3mg/h IV) + albumin. Consider TIPS in selected patients. Renal replacement therapy if indicated. Liver transplant evaluation urgently — HRS typically reverses only after transplant."
+        },
+        {
+          "severity": "end_stage_cirrhosis_transplant_candidate",
+          "criteria": "Child-Pugh C (score 10-15), MELD-Na >15, recurrent decompensation, HCC within Milan criteria",
+          "treatment": "Multidisciplinary transplant evaluation. Calculate MELD-Na score for transplant prioritization. Manage complications while on waitlist. Maintain HCC surveillance (delay in HCC detection may exclude from transplant). Maintain nutritional status. Vaccinations updated. Psychosocial and substance use assessment. Living donor evaluation if applicable."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_liver_injury_of_any_etiology",
+      "hepatic_stellate_cell_activation_by_tgf_beta_pdgf",
+      "transformation_to_myofibroblast_like_cells",
+      "excessive_extracellular_matrix_deposition_collagen_i_iii",
+      "progressive_fibrosis_bridging_fibrosis",
+      "parenchymal_nodular_regeneration",
+      "sinusoidal_capillarization_and_portal_hypertension",
+      "portosystemic_shunting_via_collaterals",
+      "progressive_hepatocellular_dysfunction",
+      "impaired_synthetic_function_albumin_coagulation_factors",
+      "impaired_metabolic_clearance_bilirubin_ammonia_bile_acids",
+      "portal_hypertension_complications_varices_ascites_splenomegaly",
+      "systemic_vascular_dilation_and_hyperdynamic_circulation",
+      "hepatorenal_and_hepatopulmonary_syndromes"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "esophageal_and_gastric_varices",
+        "probability": 0.5,
+        "severityBoost": 0.6,
+        "clues": ["portal_hypertension_splenomegaly", "endoscopic_varices", "low_platelet_count_less_than_150", "spider_angiomas"]
+      },
+      {
+        "diseaseId": "ascites_and_spontaneous_bacterial_peritonitis",
+        "probability": 0.4,
+        "severityBoost": 0.5,
+        "clues": ["abdominal_distension_flank_dullness", "abdominal_pain_fever", "pmn_greater_than_250_in_ascitic_fluid", "low_asciitic_protein"]
+      },
+      {
+        "diseaseId": "hepatic_encephalopathy",
+        "probability": 0.35,
+        "severityBoost": 0.5,
+        "clues": ["confusion_asterixis", "sleep_wake_reversal", "elevated_serum_ammonia", "precipitant_identified"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "probability": 0.2,
+        "severityBoost": 0.7,
+        "clues": ["rising_afp_serial", "liver_mass_on_surveillance_ultrasound", "arterial_hyperenhancement_on_ct_mri", "weight_loss_abdominal_pain"]
+      },
+      {
+        "diseaseId": "hepatorenal_syndrome",
+        "probability": 0.15,
+        "severityBoost": 0.8,
+        "clues": ["oliguria_anuria", "rising_creatinine", "no_response_to_volume_expansion", "normal_urine_sediment", "low_urine_sodium_less_than_10"]
+      },
+      {
+        "diseaseId": "hepatopulmonary_syndrome",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["platypnea_orthodeoxia", "digital_clubbing", "contrast_enhanced_echocardiography_shunt", "hypoxia_pao2_less_than_80"]
+      },
+      {
+        "diseaseId": "portal_hypertensive_gastropathy",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["chronic_anemia", "mosaic_snake_skin_pattern_on_egd", "portal_hypertension"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if decompensation; medium for compensated",
+    "diagnosticClues": ["stigmata_of_chronic_liver_disease", "ascites_peripheral_edema", "coagulopathy_elevated_inr", "thrombocytopenia", "liver_nodularity_on_imaging", "portal_hypertension_features"],
+    "exclusionClues": ["normal_lfts_inr", "normal_liver_morphology_on_imaging", "no_risk_factors", "no_portal_hypertension_stigmata"]
+  }
+}

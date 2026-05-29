@@ -1,0 +1,1073 @@
+function buildNoteText(note: NoteData, form: FormState, severity: SeverityResult | null): string {
+  const v = form.vitals || {} as VitalsData;
+  const lines: string[] = [];
+  const hpi = form.hpi || {} as HpiData;
+  const pmh = form.pmh || {} as PmhData;
+  const birth = form.birth || {} as BirthData;
+  const dev = form.development || {} as DevelopmentData;
+  const imm = form.immunization || {} as ImmunizationData;
+  const nut = form.nutrition || {} as NutritionData;
+  const fam = form.family || {} as FamilyData;
+  const ros = form.ros || {} as RosData;
+  const anc = form.anc || {} as AncData;
+  const examR = form.examResp || {} as ExamRespData;
+  const examC = form.examCVS || {} as ExamCVSData;
+  const examA = form.examAbd || {} as ExamAbdData;
+  const examN = form.examCNS || {} as ExamCNSData;
+  const mgmt = form.management || {} as ManagementData;
+
+  var c = form.complaints || [];
+  var ageMo = parseInt(form.ageMonths) || 0;
+  var yr = ageMo / 12;
+  var wt = parseFloat(v.weight) || 0;
+  var rrVal = parseFloat(v.rr) || 0;
+  var hrVal = parseFloat(v.hr) || 0;
+  var spo2Val = parseFloat(v.spo2) || 0;
+  var tempVal = parseFloat(v.temp) || 0;
+  var sbpVal = parseFloat(v.bpSystolic) || parseFloat(v.bp) || 0;
+
+  function isTachypneic(rr: number): boolean {
+    if (ageMo <= 1.9) { return rr > 60; }
+    if (ageMo <= 11.9) { return rr > 50; }
+    if (ageMo <= 59.9) { return rr > 40; }
+    return rr > 30;
+  }
+
+  // ── HEADER ──
+  lines.push('');
+  lines.push('================================================================================');
+  lines.push('  COMPREHENSIVE PAEDIATRIC RESPIRATORY CONSULTATION NOTE');
+  lines.push('  AMEXAN Clinical Decision Support System — Kenyan Paediatric Protocols');
+  lines.push('================================================================================');
+  lines.push('');
+  if (severity) {
+    lines.push('  OVERALL SEVERITY: ' + severity.level.toUpperCase());
+    lines.push('  ' + severity.msg);
+    lines.push('');
+  }
+  lines.push('  Date: ' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }));
+  lines.push('  Time: ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }));
+  lines.push('');
+  lines.push('================================================================================');
+  lines.push('');
+
+  // SECTION 1: IDENTIFICATION
+  lines.push('1.  PATIENT IDENTIFICATION AND DEMOGRAPHICS');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    Name:                     ' + (note.name || 'Not recorded'));
+  lines.push('    Age:                      ' + (note.ageStr || 'Not recorded'));
+  lines.push('    Sex:                      ' + (note.sex || 'Not recorded'));
+  lines.push('    Date of Birth:            ' + (form.dob || 'Not recorded'));
+  lines.push('    Residence:                ' + (form.residence || 'Not recorded'));
+  lines.push('    Informant:                ' + (form.informant || 'Not recorded') + ' (' + (form.informantRelation || 'Not recorded') + ')');
+  lines.push('    Reliability of History:   ' + (form.histReliability || 'Not recorded'));
+  lines.push('    Date of Admission:        ' + (form.dateOfAdmission || 'Not recorded'));
+  lines.push('    Source of Referral:       ' + (form.sourceOfReferral || 'Self-referred / Not recorded'));
+  lines.push('');
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 2: CHIEF COMPLAINTS
+  lines.push('2.  CHIEF COMPLAINTS');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  note.complaintLines.forEach(function(l, i) { lines.push('    ' + (i + 1) + '.  ' + l); });
+  if (!note.complaintLines.length) { lines.push('    None recorded.'); }
+  lines.push('');
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 3: HPI
+  lines.push('3.  HISTORY OF PRESENTING ILLNESS');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + note.hpiNarr);
+  lines.push('');
+
+  // SOCRATES
+  var socFields: string[] = [];
+  if (hpi.site) { socFields.push('Site: ' + hpi.site); }
+  if (hpi.onsetType) { socFields.push('Onset: ' + hpi.onsetType); }
+  if (hpi.character) { socFields.push('Character: ' + hpi.character); }
+  if (hpi.radiation) { socFields.push('Radiation: ' + hpi.radiation); }
+  if (hpi.associated) { socFields.push('Associated symptoms: ' + hpi.associated); }
+  if (hpi.timeCourse) { socFields.push('Time course: ' + hpi.timeCourse); }
+  if (hpi.exacerbating) { socFields.push('Exacerbating factors: ' + hpi.exacerbating); }
+  if (hpi.relieving) { socFields.push('Relieving factors: ' + hpi.relieving); }
+  if (hpi.severity) { socFields.push('Severity: ' + hpi.severity); }
+  if (hpi.progression) { socFields.push('Progression: ' + hpi.progression); }
+  if (socFields.length) {
+    lines.push('    SOCRATES Analysis:');
+    socFields.forEach(function(f) { lines.push('      - ' + f); });
+    lines.push('');
+  }
+
+  // Cough
+  if (c.some(function(x) { return x.indexOf('cough') !== -1; }) || hpi.coughChar) {
+    lines.push('    Cough Characterisation:');
+    if (hpi.coughChar) { lines.push('      - Character: ' + hpi.coughChar); }
+    if (hpi.coughDuration) { lines.push('      - Duration: ' + hpi.coughDuration); }
+    lines.push('      - Nocturnal: ' + (hpi.nocturnalCough ? 'Yes' : 'No'));
+    lines.push('      - Exercise-triggered: ' + (hpi.exerciseTriggered ? 'Yes' : 'No'));
+    lines.push('      - Allergen-triggered: ' + (hpi.allergenTrigger ? 'Yes' : 'No'));
+    lines.push('      - Post-tussive vomiting: ' + (hpi.postTussiveVomiting ? 'Yes' : 'No'));
+    lines.push('      - Cough with feeding: ' + (hpi.feedingCough ? 'Yes — consider aspiration/GERD/TEF' : 'No'));
+    lines.push('      - Pertussis contact: ' + (hpi.pertussisContact ? 'Yes — IMPORTANT' : 'No'));
+    lines.push('      - Cyanotic episodes: ' + (hpi.cyanoticEpisodes ? 'Yes — CRITICAL' : 'No'));
+    lines.push('');
+  }
+
+  // Fever
+  if (hpi.feverPattern || hpi.highFever) {
+    lines.push('    Fever Characterisation:');
+    if (hpi.feverPattern) { lines.push('      - Pattern: ' + hpi.feverPattern); }
+    if (hpi.feverOnset) { lines.push('      - Onset: ' + hpi.feverOnset); }
+    if (hpi.feverDuration) { lines.push('      - Duration: ' + hpi.feverDuration); }
+    lines.push('      - High-grade: ' + (hpi.highFever ? 'Yes' : 'No'));
+    if (hpi.nightSweats) { lines.push('      - Night sweats: Yes — consider TB, lymphoma, HIV'); }
+    if (hpi.weightLoss) { lines.push('      - Weight loss: Yes — consider TB, malignancy, HIV, malabsorption'); }
+    lines.push('');
+  }
+
+  // Danger signs
+  var dangerPresent: string[] = [];
+  var dangerAbsent: string[] = [];
+  if (hpi.feedingDiff || mgmt.nutritionSupport) { dangerPresent.push('Inability to feed / poor feeding'); }
+  if (v.avpu === 'drowsy' || v.avpu === 'comatose' || v.avpu === 'unresponsive') { dangerPresent.push('Altered consciousness / lethargy'); }
+  if (hpi.seizureHPI || ros.seizures) { dangerPresent.push('Convulsions'); }
+  if (v.examCyanosis || hpi.cyanoticEpisodes) { dangerPresent.push('Central cyanosis — CRITICAL'); }
+  if (hpi.chestIndrawing || v.examIndrawing) { dangerPresent.push('Severe chest indrawing'); }
+  if (hpi.stridor || v.examStridor) { dangerPresent.push('Stridor at rest — upper airway obstruction'); }
+  if (hpi.grunting || v.examGrunting) { dangerPresent.push('Expiratory grunting — impending exhaustion'); }
+  if (hpi.tripodPosition) { dangerPresent.push('Tripod positioning — severe respiratory distress'); }
+  if (hpi.drooling) { dangerPresent.push('Drooling — consider epiglottitis / foreign body'); }
+  if (hpi.cyanoticEpisodes) { dangerPresent.push('Cyanotic episodes during coughing paroxysms'); }
+
+  ['Central cyanosis', 'Unconsciousness', 'Convulsions', 'Severe respiratory distress', 'Inability to feed properly', 'Lethargy'].forEach(function(d) {
+    if (!dangerPresent.some(function(x) { return x.toLowerCase().indexOf(d.toLowerCase().slice(0, 8)) !== -1; })) {
+      dangerAbsent.push(d);
+    }
+  });
+
+  lines.push('    ---');
+  lines.push('    DANGER SIGNS (WHO/IMCI Framework)');
+  lines.push('    ---');
+  lines.push('');
+  if (dangerPresent.length) {
+    lines.push('    Present (requires immediate attention):');
+    dangerPresent.forEach(function(d) { lines.push('      !  ' + d); });
+    lines.push('');
+  }
+  lines.push('    Absent (reassuring):');
+  dangerAbsent.forEach(function(d) { lines.push('      - ' + d); });
+  lines.push('');
+
+  // Sepsis screening
+  var sirsCriteria: string[] = [];
+  if (tempVal > 38.5 || (tempVal > 0 && tempVal < 36)) { sirsCriteria.push('Temperature abnormality (' + v.temp + 'C)'); }
+  if ((ageMo < 12 && hrVal > 160) || (ageMo >= 12 && hrVal > 150) || (ageMo >= 60 && hrVal > 140)) { sirsCriteria.push('Tachycardia (' + v.hr + '/min for age)'); }
+  if (isTachypneic(rrVal)) { sirsCriteria.push('Tachypnoea (' + v.rr + '/min for age)'); }
+  if (sirsCriteria.length >= 2) {
+    lines.push('    Sepsis Screening (SIRS): ' + sirsCriteria.length + '/4 criteria met');
+    sirsCriteria.forEach(function(s) { lines.push('      - ' + s); });
+    if (sbpVal > 0) {
+      var bpThresh = 70 + 2 * Math.round(yr);
+      if (sbpVal < bpThresh) {
+        lines.push('      !  HYPOTENSION (SBP ' + sbpVal + ' < ' + bpThresh + ' mmHg for age) — SEPTIC SHOCK until proven otherwise');
+        lines.push('         Initiate sepsis protocol: IV access, blood culture, broad-spectrum antibiotics, fluids, inotropes.');
+        dangerPresent.push('Hypotension / septic shock');
+      }
+    }
+    if (spo2Val > 0 && spo2Val < 90) {
+      lines.push('      !  SEVERE HYPOXAEMIA (SpO2 ' + spo2Val + '%) — HIGH FLOW OXYGEN REQUIRED');
+    }
+    lines.push('');
+  }
+
+  // DDx discriminators
+  var ddxDiscriminators: string[] = [];
+  if (hpi.pertussisContact) { ddxDiscriminators.push('Pertussis contact reported — send NP swab for PCR'); }
+  if (hpi.postTussiveVomiting) { ddxDiscriminators.push('Post-tussive vomiting — classic for pertussis'); }
+  if (hpi.cyanoticEpisodes) { ddxDiscriminators.push('Cyanotic episodes — pertussis paroxysms / severe pneumonia / CHD'); }
+  if (hpi.allergenExposure) { ddxDiscriminators.push('Allergen exposure — consider anaphylaxis / allergic asthma'); }
+  if (hpi.urticaria) { ddxDiscriminators.push('Urticaria — consider allergic reaction'); }
+  if (hpi.angioedema) { ddxDiscriminators.push('Angioedema — anaphylaxis / angioneurotic oedema'); }
+  if (hpi.feedingCough) { ddxDiscriminators.push('Cough with feeding — aspiration / GERD / TEF'); }
+  if (hpi.heartburnRegurg) { ddxDiscriminators.push('Heartburn / regurgitation — GERD with respiratory symptoms'); }
+  if (hpi.sweatingFeeds) { ddxDiscriminators.push('Sweating during feeds — CHD with heart failure'); }
+  if (hpi.orthopnea) { ddxDiscriminators.push('Orthopnoea — pulmonary oedema / CHF / severe asthma'); }
+  if (hpi.pnd) { ddxDiscriminators.push('Paroxysmal nocturnal dyspnoea — CHF / severe asthma'); }
+  if (hpi.hoarseness) { ddxDiscriminators.push('Hoarseness — croup / recurrent laryngeal nerve palsy / GERD'); }
+  if (hpi.pleuriticPain) { ddxDiscriminators.push('Pleuritic pain — pneumonia / pleurisy / PE'); }
+  if (hpi.recentURTI) { ddxDiscriminators.push('Recent URTI — viral trigger for asthma / bronchiolitis / secondary bacterial pneumonia'); }
+  if (hpi.coryzaProdrome) { ddxDiscriminators.push('Coryza prodrome — viral URTI / bronchiolitis / measles'); }
+  if (ddxDiscriminators.length) {
+    lines.push('    Key DDx Discriminators Elicited:');
+    ddxDiscriminators.forEach(function(d) { lines.push('      -> ' + d); });
+    lines.push('');
+  }
+
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 4: SYSTEMATIC DDx DISCUSSION
+  lines.push('4.  SYSTEMATIC DIFFERENTIAL DIAGNOSIS DISCUSSION');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    The following differentials are systematically evaluated using Kenyan');
+  lines.push('    paediatric protocols, WHO/IMCI guidelines, and standard clinical');
+  lines.push('    reasoning. Each is assessed for supporting and refuting evidence.');
+  lines.push('');
+
+  function addScore(id: string): string {
+    var s = note.scores.find(function(x) { return x.id === id; });
+    return s ? s.pct + '%' : 'N/A';
+  }
+
+  // Pneumonia
+  lines.push('    ---');
+  lines.push('    4.1  PNEUMONIA (Community-Acquired)');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    Epidemiology: Leading cause of under-5 mortality in Kenya (WHO 2023).');
+  lines.push('    Risk factors: malnutrition, HIV, indoor air pollution, incomplete');
+  lines.push('    immunisation, low birth weight, lack of exclusive breastfeeding.');
+  lines.push('');
+  lines.push('    WHO IMCI Classification:');
+  var whoClass = 'No pneumonia (no tachypnoea or chest indrawing)';
+  if (isTachypneic(rrVal) && !v.examIndrawing && !hpi.chestIndrawing) { whoClass = 'Pneumonia (tachypnoea, no chest indrawing)'; }
+  if (v.examIndrawing || hpi.chestIndrawing) { whoClass = 'Severe pneumonia (chest indrawing present)'; }
+  if (dangerPresent.length > 0) { whoClass = 'Very severe disease (danger signs present)'; }
+  if (spo2Val > 0 && spo2Val < 90) { whoClass = 'Critical / life-threatening (severe hypoxaemia)'; }
+  lines.push('      Classification: ' + whoClass);
+  lines.push('');
+
+  var pnaS = [] as string[];
+  if (c.some(function(x) { return x.indexOf('cough') !== -1; })) { pnaS.push('Cough'); }
+  if (isTachypneic(rrVal)) { pnaS.push('Tachypnoea (RR ' + v.rr + '/min for age)'); }
+  if (v.examIndrawing || hpi.chestIndrawing) { pnaS.push('Chest indrawing'); }
+  if (hpi.feverPattern || hpi.highFever) { pnaS.push('Fever — acute bacterial aetiology'); }
+  if (spo2Val > 0 && spo2Val < 92) { pnaS.push('Hypoxaemia (SpO2 ' + spo2Val + '%)'); }
+  if (examR.percussion && examR.percussion.indexOf('dull') !== -1) { pnaS.push('Dull percussion note — consolidation'); }
+  if (examR.breathSounds && examR.breathSounds.indexOf('bronchial') !== -1) { pnaS.push('Bronchial breath sounds — consolidation'); }
+  if (examR.addedSounds && examR.addedSounds.indexOf('crackles') !== -1) { pnaS.push('Crackles on auscultation'); }
+  if (examR.airEntry && examR.airEntry.indexOf('reduced') !== -1) { pnaS.push('Reduced air entry on affected side'); }
+  lines.push('    Supporting features present (' + pnaS.length + '):');
+  pnaS.forEach(function(s) { lines.push('      + ' + s); });
+  lines.push('');
+  lines.push('    Likelihood Score: ' + addScore('pneumonia'));
+  lines.push('');
+
+  // Asthma
+  lines.push('    ---');
+  lines.push('    4.2  ASTHMA / REACTIVE AIRWAYS DISEASE');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    GINA criteria: recurrent wheeze, nocturnal cough, exercise-induced,');
+  lines.push('    personal/family atopy, response to bronchodilators.');
+  lines.push('    Triggers: URTI, allergens, exercise, cold air, smoke, emotions.');
+  lines.push('    Prevalence: 10-15% of Kenyan children (often underdiagnosed).');
+  lines.push('');
+  var astS = [] as string[];
+  if (hpi.wheeze) { astS.push('Reported wheeze'); }
+  if (hpi.nocturnalCough) { astS.push('Nocturnal cough'); }
+  if (hpi.exerciseTriggered) { astS.push('Exercise-triggered'); }
+  if (hpi.allergenTrigger) { astS.push('Allergen-triggered'); }
+  if (pmh.prevWheeze) { astS.push('Previous wheeze episodes'); }
+  if (pmh.asthmaDx) { astS.push('Known asthma diagnosis'); }
+  if (fam.asthmaFamily) { astS.push('Family history of asthma'); }
+  if (fam.atopyFamily || hpi.urticaria) { astS.push('Atopy history'); }
+  if (v.examWheeze) { astS.push('Wheeze on auscultation'); }
+  if (hpi.coryzaProdrome) { astS.push('Viral prodrome (common trigger)'); }
+  lines.push('    Supporting: ' + (astS.length ? astS.join('; ') : 'None documented'));
+  lines.push('    Refuting: ' + ((!pmh.prevWheeze && !pmh.asthmaDx ? 'First episode; ' : '') + (hpi.highFever || hpi.feverPattern ? 'Fever prominent (infection more likely); ' : '') + (examR.breathSounds && examR.breathSounds.indexOf('bronchial') !== -1 ? 'Bronchial breathing (consolidation); ' : '')).replace(/; $/, '') || 'None');
+  lines.push('    Severity (GINA): ' + (spo2Val < 90 || v.avpu !== 'alert' ? 'Life-threatening' : spo2Val < 92 || (v.examIndrawing || hpi.chestIndrawing) || rrVal >= 50 ? 'Severe' : spo2Val < 95 || rrVal >= 30 ? 'Moderate' : 'Mild'));
+  lines.push('    Likelihood Score: ' + addScore('asthma'));
+  lines.push('');
+
+  // TB
+  lines.push('    ---');
+  lines.push('    4.3  PULMONARY TUBERCULOSIS');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    Kenya TB incidence: ~426/100,000 (WHO 2022). Children <5 years at');
+  lines.push('    increased risk of disseminated disease. HIV co-infection common.');
+  lines.push('    Diagnosis: clinical features + GeneXpert/TST + CXR + TB contact.');
+  lines.push('');
+  var tbS = [] as string[];
+  if (hpi.tbContact) { tbS.push('TB contact reported — MAJOR'); }
+  if (hpi.nightSweats) { tbS.push('Night sweats'); }
+  if (hpi.weightLoss) { tbS.push('Weight loss'); }
+  if (pmh.hiv) { tbS.push('HIV positive — high risk'); }
+  if (nut.malnutritionSigns && nut.malnutritionSigns.length) { tbS.push('Malnutrition'); }
+  lines.push('    Supporting: ' + (tbS.length ? tbS.join('; ') : 'None documented'));
+  lines.push('    Refuting: Acute presentation without chronic symptoms');
+  lines.push('    Recommendation: ' + (hpi.tbContact || pmh.hiv || hpi.nightSweats ? 'Perform GeneXpert MTB/RIF + Mantoux + CXR. Consider empirical TB therapy if strong clinical suspicion.' : 'TB unlikely given acute presentation. Routine screening not indicated.'));
+  lines.push('    Likelihood Score: ' + addScore('tuberculosis'));
+  lines.push('');
+
+  // Bronchiolitis
+  lines.push('    ---');
+  lines.push('    4.4  BRONCHIOLITIS (RSV / Viral)');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    Most common LRTI in <2 years. Peak 2-6 months. RSV accounts for 60-80%.');
+  lines.push('    Seasonality: June-October in Kenya (rainy season). Treatment is supportive.');
+  lines.push('');
+  lines.push('    Supporting: ' + (ageMo <= 24 ? 'Age within range' : 'Age >2 yr — less typical') + (hpi.coryzaProdrome ? '; coryza prodrome' : '') + (hpi.wheeze || v.examWheeze ? '; wheeze' : '') + (v.examCrackles ? '; crackles' : ''));
+  lines.push('    Refuting: ' + (ageMo > 24 ? 'Age >2 years; ' : '') + (hpi.highFever && !hpi.coryzaProdrome ? 'High fever without viral prodrome — bacterial more likely; ' : '') + (examR.breathSounds && examR.breathSounds.indexOf('bronchial') !== -1 ? 'Bronchial breathing (consolidation); ' : '').replace(/; $/, '') || 'None');
+  lines.push('    Severity: ' + (spo2Val < 92 || hpi.feedingDiff || v.examGrunting ? 'Severe' : spo2Val < 95 || v.examIndrawing || v.examNasalFlaring ? 'Moderate' : 'Mild'));
+  lines.push('    Likelihood Score: ' + addScore('bronchiolitis'));
+  lines.push('');
+
+  // Foreign body
+  lines.push('    ---');
+  lines.push('    4.5  FOREIGN BODY ASPIRATION');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    Peak incidence 1-3 years. Common objects: nuts, seeds, beans, small toys.');
+  lines.push('    Clinical: sudden cough + wheeze + decreased breath sounds (classic triad).');
+  lines.push('    Right main bronchus most common site. Normal CXR does NOT exclude.');
+  lines.push('');
+  lines.push('    Supporting: ' + (hpi.suddenOnset ? 'Sudden onset' : 'None — gradual onset') + (examR.airEntry && (examR.airEntry.indexOf('reduced_left') !== -1 || examR.airEntry.indexOf('reduced_right') !== -1) ? '; unilateral reduced air entry' : ''));
+  lines.push('    Refuting: No witnessed choking event; gradual onset');
+  lines.push('    Management: ' + ((examR.airEntry && (examR.airEntry.indexOf('reduced_left') !== -1 || examR.airEntry.indexOf('reduced_right') !== -1)) ? 'High suspicion — inspiratory/expiratory CXR, consider rigid bronchoscopy' : 'Low suspicion based on available data'));
+  lines.push('    Likelihood Score: ' + addScore('foreign_body'));
+  lines.push('');
+
+  // Heart failure
+  lines.push('    ---');
+  lines.push('    4.6  CONGESTIVE HEART FAILURE / CONGENITAL HEART DISEASE');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    CHD affects ~8/1000 live births. Common acyanotic: VSD, ASD, PDA.');
+  lines.push('    Cyanotic: TOF, TGA. Heart failure in infancy: feeding difficulty,');
+  lines.push('    tachypnoea, FTT, sweating during feeds, recurrent chest infections.');
+  lines.push('');
+  var chfS = [] as string[];
+  if (hpi.sweatingFeeds) { chfS.push('Sweating during feeds'); }
+  if (hpi.orthopnea) { chfS.push('Orthopnoea'); }
+  if (hpi.pnd) { chfS.push('PND'); }
+  if (pmh.cardiacDisease) { chfS.push('Known CHD'); }
+  if (examC.heartSounds && examC.heartSounds.indexOf('murmur') !== -1) { chfS.push('Murmur'); }
+  lines.push('    Supporting: ' + (chfS.length ? chfS.join('; ') : 'None documented'));
+  lines.push('    Refuting: No murmur/gallop on exam; no known cardiac disease; fever prominent (infection more likely)');
+  lines.push('    Likelihood Score: ' + addScore('chf'));
+  lines.push('');
+
+  // Croup
+  lines.push('    ---');
+  lines.push('    4.7  CROUP (Laryngotracheobronchitis)');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    Age 6 mo-6 yr. Parainfluenza virus. Barking cough, inspiratory stridor,');
+  lines.push('    hoarse voice, worse at night. Westley Score for severity.');
+  lines.push('');
+  var crS = [] as string[];
+  if (hpi.hoarseness) { crS.push('Hoarseness'); }
+  if (hpi.stridor || v.examStridor) { crS.push('Stridor'); }
+  if (hpi.coryzaProdrome) { crS.push('URTI prodrome'); }
+  lines.push('    Supporting: ' + (crS.length ? crS.join('; ') : 'None'));
+  lines.push('    Refuting: ' + (!hpi.hoarseness ? 'No hoarseness; ' : '') + (hpi.highFever ? 'High fever (croup = low-grade); ' : '') + (examR.addedSounds && examR.addedSounds.indexOf('crackles') !== -1 ? 'Lower airway signs (crackles); ' : '').replace(/; $/, '') || 'None');
+  lines.push('    Likelihood Score: ' + addScore('croup'));
+  lines.push('');
+
+  // Pertussis
+  lines.push('    ---');
+  lines.push('    4.8  PERTUSSIS (Whooping Cough)');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    Resurgent globally despite EPI (waning immunity). Three stages:');
+  lines.push('    catarrhal (1-2 wk), paroxysmal (2-8 wk), convalescent (wk-mo).');
+  lines.push('');
+  var pertS = [] as string[];
+  if (hpi.pertussisContact) { pertS.push('Pertussis contact'); }
+  if (hpi.postTussiveVomiting) { pertS.push('Post-tussive vomiting'); }
+  if (hpi.cyanoticEpisodes) { pertS.push('Cyanotic episodes'); }
+  lines.push('    Supporting: ' + (pertS.length ? pertS.join('; ') : 'None — pertussis unlikely'));
+  lines.push('    Diagnosis: NP aspirate for PCR/culture. Treatment: Azithromycin 10 mg/kg stat then 5 mg/kg x4d.');
+  lines.push('    Likelihood Score: ' + addScore('pertussis'));
+  lines.push('');
+
+  // PCP
+  lines.push('    ---');
+  lines.push('    4.9  PNEUMOCYSTIS JIROVECII PNEUMONIA (PCP)');
+  lines.push('    ---');
+  lines.push('');
+  lines.push('    HIV-associated OI. Peak 3-6 mo in HIV-exposed infants. Prophylaxis');
+  lines.push('    with Cotrimoxazole from 6 wk has reduced incidence. Subacute onset,');
+  lines.push('    severe hypoxia, minimal auscultatory findings (classic dissociation).');
+  lines.push('');
+  lines.push('    ' + (pmh.hiv ? '!!! HIV POSITIVE — HIGH RISK. Send induced sputum/BAL for Pneumocystis immunofluorescence/PCR. Start Cotrimoxazole prophylaxis if not on. Treatment: high-dose Cotrimoxazole TMP 20 mg/kg/day + Prednisolone.' : 'No HIV history reported. PCP unlikely in immunocompetent child.'));
+  lines.push('    Likelihood Score: ' + addScore('pcp'));
+  lines.push('');
+
+  // Anaphylaxis
+  lines.push('    ---');
+  lines.push('    4.10 ANAPHYLAXIS / ALLERGIC REACTION');
+  lines.push('    ---');
+  lines.push('');
+  if (hpi.allergenExposure || hpi.urticaria || hpi.angioedema) {
+    lines.push('    Allergen exposure: ' + (hpi.allergenExposure ? 'Yes' : 'No'));
+    lines.push('    Urticaria: ' + (hpi.urticaria ? 'Yes' : 'No'));
+    lines.push('    Angioedema: ' + (hpi.angioedema ? 'Yes' : 'No'));
+    lines.push('    Management: IM Adrenaline 1:1000 0.01 mL/kg (max 0.5 mL),');
+    lines.push('    IV fluids, Chlorpheniramine 0.1 mg/kg, Hydrocortisone 5 mg/kg IV, bronchodilators.');
+  } else {
+    lines.push('    No features of anaphylaxis/allergic reaction identified.');
+  }
+  lines.push('');
+
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 5: PMH
+  lines.push('5.  PAST MEDICAL HISTORY');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + formatPMH(pmh));
+  lines.push('');
+  if (pmh.medications) { lines.push('    Current medications: ' + pmh.medications); lines.push(''); }
+  if (pmh.allergies) { lines.push('    Drug allergies: ' + pmh.allergies + ' — CRITICAL INFORMATION'); lines.push(''); }
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 6: BIRTH
+  lines.push('6.  BIRTH HISTORY');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + formatBirth(birth));
+  lines.push('');
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 7: DEVELOPMENT
+  lines.push('7.  DEVELOPMENTAL HISTORY');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + formatDev(dev));
+  lines.push('');
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 8: IMMUNISATION
+  lines.push('8.  IMMUNISATION HISTORY');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + formatImm(imm));
+  lines.push('');
+  lines.push('    KEPI Schedule Review:');
+  lines.push('      BCG: ' + (!imm.missedVaccines || !imm.missedVaccines.some(function(x) { return x.indexOf('BCG') !== -1; }) ? 'Likely given' : 'Check status'));
+  lines.push('      OPV/IPV: ' + (!imm.missedVaccines || !imm.missedVaccines.some(function(x) { return x.indexOf('OPV') !== -1 || x.indexOf('IPV') !== -1; }) ? 'Likely given' : 'Check status'));
+  lines.push('      Pentavalent (DPT-HepB-Hib): ' + (!imm.missedVaccines || !imm.missedVaccines.some(function(x) { return x.indexOf('Penta') !== -1; }) ? 'Likely given' : 'Check status'));
+  lines.push('      PCV-10 (pneumococcal): ' + (!imm.missedVaccines || !imm.missedVaccines.some(function(x) { return x.indexOf('PCV') !== -1; }) ? 'Likely given' : 'Check status — IMPORTANT for pneumonia prevention'));
+  lines.push('      Rotavirus: ' + (!imm.missedVaccines || !imm.missedVaccines.some(function(x) { return x.indexOf('Rota') !== -1; }) ? 'Likely given' : 'Check status'));
+  lines.push('      Measles-Rubella: ' + (!imm.missedVaccines || !imm.missedVaccines.some(function(x) { return x.indexOf('Measles') !== -1; }) ? 'Likely given' : 'Check status'));
+  if (ageMo >= 12 && (!imm.status || imm.status.indexOf('complete') === -1)) {
+    lines.push('      !!! Incomplete immunisation status — increased risk of vaccine-preventable diseases');
+  }
+  lines.push('');
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 9: NUTRITION
+  lines.push('9.  NUTRITIONAL HISTORY AND ASSESSMENT');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + formatNut(nut));
+  lines.push('');
+  lines.push('    WHO Growth Standards (reference):');
+  lines.push('      Expected weight for age: ' + calcWeight(ageMo));
+  lines.push('      Expected height for age: ' + calcHeight(ageMo));
+  if (wt > 0) {
+    lines.push('      Actual weight: ' + wt + ' kg');
+    var wtForAge50 = 0;
+    if (ageMo <= 0.9) { wtForAge50 = 3.3; } else if (ageMo <= 11.9) { wtForAge50 = 9; } else if (ageMo <= 35.9) { wtForAge50 = 13; } else if (ageMo <= 59.9) { wtForAge50 = 17; } else if (ageMo <= 143.9) { wtForAge50 = 30; } else { wtForAge50 = 55; }
+    var pctWt = Math.round(wt / wtForAge50 * 100);
+    lines.push('      Weight-for-age % median: ' + pctWt + '% (' + (pctWt < 60 ? 'Severe underweight' : pctWt < 80 ? 'Moderate underweight' : pctWt < 90 ? 'Mild underweight' : 'Normal') + ')');
+  }
+  if (nut.muac) {
+    var muacVal = parseFloat(nut.muac);
+    if (!isNaN(muacVal)) {
+      lines.push('      MUAC: ' + muacVal + ' cm — ' + shakirClass(muacVal));
+      if (muacVal < 11.5) { lines.push('      !!! SAM (MUAC <11.5 cm) — WHO management protocol required (see below)'); }
+      else if (muacVal < 12.5) { lines.push('      !!! MAM (MUAC 11.5-12.4 cm) — supplementary feeding programme indicated'); }
+    }
+  }
+  if (nut.malnutritionSigns && nut.malnutritionSigns.length) {
+    if (nut.malnutritionSigns.some(function(s) { return s.indexOf('oedema') !== -1 || s.indexOf('Oedema') !== -1; })) {
+      lines.push('      !!! Nutritional oedema — diagnostic of SAM irrespective of MUAC');
+    }
+  }
+  lines.push('');
+
+  // SAM/MAM management outline
+  if ((nut.muac && parseFloat(nut.muac) < 11.5) || (nut.malnutritionSigns && nut.malnutritionSigns.some(function(s) { return s.indexOf('oedema') !== -1; }))) {
+    lines.push('    SAM Management (WHO 10 Steps):');
+    lines.push('      1. Treat/prevent hypoglycaemia (blood sugar <54 mg/dL -> IV 10% dextrose 5 mL/kg)');
+    lines.push('      2. Treat/prevent hypothermia (maintain temp 36.5-37.5C, KMC for infants)');
+    lines.push('      3. Treat/prevent dehydration (ReSoMal rather than standard ORS; IV if shocked)');
+    lines.push('      4. Correct electrolyte imbalance (high K, low Na, high Mg — avoid high Na fluids)');
+    lines.push('      5. Treat infection (broad-spectrum antibiotics even without overt signs)');
+    lines.push('      6. Correct micronutrient deficiencies (vitamin A, folate, zinc, copper, iron after stabilization)');
+    lines.push('      7. Start cautious feeding (F-75: 80-100 mL/kg/day, 8-12 feeds)');
+    lines.push('      8. Catch-up growth (F-100 or Ready-to-Use Therapeutic Food — RUTF)');
+    lines.push('      9. Provide sensory stimulation and emotional support');
+    lines.push('      10. Prepare for follow-up after recovery');
+    lines.push('');
+  }
+
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 10: ANC
+  lines.push('10. ANTENATAL CARE HISTORY');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  if (anc.ancVisits || anc.ttStatus || anc.hivTesting) {
+    var ancP: string[] = [];
+    if (anc.ancVisits) { ancP.push('ANC visits: ' + anc.ancVisits); }
+    if (anc.ancMonth) { ancP.push('Booking month: ' + anc.ancMonth); }
+    if (anc.placeDelivery) { ancP.push('Place: ' + anc.placeDelivery); }
+    if (anc.ttStatus) { ancP.push('TT: ' + anc.ttStatus); }
+    if (anc.hivTesting) { ancP.push('HIV: ' + (anc.hivResult || 'done')); }
+    if (anc.pmtct) { ancP.push('PMTCT received'); }
+    if (anc.syphilisTest) { ancP.push('Syphilis: ' + (anc.syphilisResult || 'done')); }
+    if (anc.malariaProphylaxis) { ancP.push('IPTp-SP: ' + (anc.spDoses || 'doses N/S')); }
+    if (anc.ironFolate) { ancP.push('Iron/folate'); }
+    if (anc.preEclampsia) { ancP.push('Pre-eclampsia'); }
+    if (anc.gestationalDM) { ancP.push('GDM'); }
+    if (anc.antepartumHaemorrhage) { ancP.push('APH'); }
+    ancP.forEach(function(p) { lines.push('    * ' + p); });
+    var bc: string[] = [];
+    if (anc.cordProlapse) { bc.push('Cord prolapse'); }
+    if (anc.prolongedLabour) { bc.push('Prolonged labour'); }
+    if (anc.maternalFever) { bc.push('Maternal fever'); }
+    if (anc.meconiumStained) { bc.push('Meconium-stained liquor'); }
+    if (bc.length) { lines.push('    Perinatal complications: ' + bc.join(', ')); }
+    lines.push('');
+  } else {
+    lines.push('    Antenatal care history not documented.');
+    lines.push('');
+  }
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 11: FAMILY/SOCIAL
+  lines.push('11. FAMILY AND SOCIAL HISTORY');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + formatFam(fam));
+  lines.push('');
+  if (fam.housingConditions && fam.housingConditions.toLowerCase().indexOf('poor') !== -1) { lines.push('    !!! Poor housing — risk factor for pneumonia and TB transmission'); }
+  if (fam.smokingExposure) { lines.push('    !!! Passive smoking — significant respiratory risk factor'); }
+  if (fam.schoolAttendance) { lines.push('    School attendance: ' + fam.schoolAttendance + ' — increased pathogen exposure'); }
+  lines.push('');
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 12: ROS
+  lines.push('12. REVIEW OF SYSTEMS');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + note.rosHistory);
+  lines.push('');
+  var rosPos: string[] = [];
+  if (ros.seizures) { rosPos.push('Seizures — neurological evaluation indicated'); }
+  if (ros.lethargyRos) { rosPos.push('Lethargy'); }
+  if (ros.consciousness && ros.consciousness !== 'alert') { rosPos.push('Altered consciousness: ' + ros.consciousness); }
+  if (ros.cyanosisRos) { rosPos.push('Cyanosis — CRITICAL'); }
+  if (ros.peripheralEdema) { rosPos.push('Peripheral oedema'); }
+  if (ros.pallor) { rosPos.push('Pallor — check Hb'); }
+  if (ros.reducedUrine) { rosPos.push('Reduced urine output — assess for AKI/dehydration'); }
+  if (ros.vomiting || ros.diarrhea) { rosPos.push((ros.vomiting ? 'Vomiting ' : '') + (ros.diarrhea ? 'Diarrhoea' : '') + ' — fluid/electrolyte risk'); }
+  if (rosPos.length) {
+    lines.push('    Positive findings:');
+    rosPos.forEach(function(r) { lines.push('      - ' + r); });
+    lines.push('');
+  }
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 13: SUMMARY
+  lines.push('13. CLINICAL SUMMARY OF HISTORY');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    ' + note.clinicalSummary);
+  lines.push('');
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 14: PHYSICAL EXAMINATION
+  lines.push('14. PHYSICAL EXAMINATION');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+
+  // General
+  lines.push('    14.1 GENERAL EXAMINATION AND VITAL SIGNS');
+  lines.push('    ' + '-'.repeat(40));
+  lines.push('');
+  if (v.generalCondition) { lines.push('    General condition: ' + v.generalCondition.replace(/_/g, ' ')); }
+  if (v.avpu) { lines.push('    Consciousness (AVPU): ' + v.avpu); }
+  if (v.hydration) { lines.push('    Hydration: ' + v.hydration.replace(/_/g, ' ')); }
+  lines.push('');
+  lines.push('    Vital Signs:');
+  lines.push('    ' + '-'.repeat(40));
+  note.vRows.forEach(function(r) { lines.push('    ' + r[0] + ': ' + r[1]); });
+  lines.push('    ' + '-'.repeat(40));
+  lines.push('');
+  var ageBand = getAgeBand(ageMo);
+  lines.push('    Age-specific reference (' + ageBand.label + '): HR ' + ageBand.hrMin + '-' + ageBand.hrMax + ', RR ' + ageBand.rrMin + '-' + ageBand.rrMax + ', SBP ' + ageBand.sbpMin + '-' + ageBand.sbpMax);
+  lines.push('');
+
+  // Respiratory distress signs
+  if (v.examIndrawing || v.examNasalFlaring || v.examGrunting || v.examStridor) {
+    lines.push('    Respiratory Distress Signs:');
+    if (v.examIndrawing) { lines.push('      - Lower chest wall indrawing'); }
+    if (v.examNasalFlaring) { lines.push('      - Nasal flaring'); }
+    if (v.examGrunting) { lines.push('      - Expiratory grunting — sign of severe distress / impending exhaustion'); }
+    if (v.examStridor) { lines.push('      - Inspiratory stridor — upper airway obstruction'); }
+    lines.push('');
+  }
+
+  // Anthropometry
+  lines.push('    Anthropometry:');
+  if (v.weight) { lines.push('      Weight: ' + v.weight + ' kg'); }
+  if (v.height) { lines.push('      Height: ' + v.height + ' cm'); }
+  if (v.muac) { lines.push('      MUAC: ' + v.muac + ' cm'); }
+  if (v.hc) { lines.push('      HC: ' + v.hc + ' cm'); }
+  lines.push('');
+
+  // Hydration WHO
+  if (v.hydration) {
+    lines.push('    Hydration (WHO 2023):');
+    if (v.hydration === 'well_hydrated' || v.hydration === 'normal') { lines.push('      No signs of dehydration.'); }
+    else if (v.hydration.indexOf('some') !== -1 || v.hydration === 'mild') { lines.push('      Some dehydration — Plan B: ORS 75 mL/kg over 4 hours.'); }
+    else if (v.hydration.indexOf('severe') !== -1) { lines.push('      !!! SEVERE DEHYDRATION — Plan C: IV Ringer lactate/NS 30 mL/kg in 1st hr, then 70 mL/kg over 5 hr (infants) or 2.5 hr (older). Reassess q15-30min.'); }
+    lines.push('');
+  }
+
+  var skinF: string[] = [];
+  if (v.pallorExam) { skinF.push('Pallor'); }
+  if (v.jaundiceExam) { skinF.push('Jaundice'); }
+  if (v.cyanosisExam) { skinF.push('Central cyanosis'); }
+  if (v.clubbingExam) { skinF.push('Clubbing'); }
+  if (v.edemaExam) { skinF.push('Peripheral oedema'); }
+  if (skinF.length) { lines.push('    Skin findings: ' + skinF.join(', ')); lines.push(''); }
+
+  // Respiratory
+  lines.push('    14.2 RESPIRATORY SYSTEM');
+  lines.push('    ' + '-'.repeat(40));
+  lines.push('');
+  if (examR.chestShape) { lines.push('    Shape: ' + examR.chestShape.replace(/_/g, ' ')); }
+  if (examR.respEffort) { lines.push('    Effort: ' + examR.respEffort.replace(/_/g, ' ')); }
+  if (examR.retractions) { lines.push('    Retractions: ' + examR.retractions.replace(/_/g, ' ')); }
+  if (examR.trachea) { lines.push('    Trachea: ' + examR.trachea.replace(/_/g, ' ')); }
+  if (examR.percussion) { lines.push('    Percussion: ' + examR.percussion.replace(/_/g, ' ')); }
+  if (examR.airEntry) { lines.push('    Air entry: ' + examR.airEntry.replace(/_/g, ' ')); }
+  if (examR.breathSounds) { lines.push('    Breath sounds: ' + examR.breathSounds.replace(/_/g, ' ')); }
+  if (examR.addedSounds) { lines.push('    Added sounds: ' + examR.addedSounds.replace(/_/g, ' ')); }
+  if (examR.notes) { lines.push('    Additional: ' + examR.notes); }
+  lines.push('');
+
+  // CVS
+  lines.push('    14.3 CARDIOVASCULAR SYSTEM');
+  lines.push('    ' + '-'.repeat(40));
+  lines.push('');
+  if (examC.heartSounds) { lines.push('    Heart sounds: ' + examC.heartSounds.replace(/_/g, ' ')); }
+  if (examC.murmurDetails) { lines.push('    Murmur: ' + examC.murmurDetails); }
+  if (examC.jvp) { lines.push('    JVP: ' + examC.jvp.replace(/_/g, ' ')); }
+  if (examC.capRefill) { lines.push('    Cap refill: ' + examC.capRefill + ' sec' + (parseFloat(examC.capRefill) > 2 ? ' (prolonged)' : '')); }
+  if (examC.radiofemoralDelay) { lines.push('    Radiofemoral delay — consider coarctation'); }
+  if (examC.notes) { lines.push('    Additional: ' + examC.notes); }
+  lines.push('');
+
+  // Abdomen
+  lines.push('    14.4 ABDOMEN');
+  lines.push('    ' + '-'.repeat(40));
+  lines.push('');
+  if (examA.abdomenShape) { lines.push('    Shape: ' + examA.abdomenShape.replace(/_/g, ' ')); }
+  if (examA.tenderness) { lines.push('    Tenderness: ' + examA.tenderness.replace(/_/g, ' ')); }
+  if (examA.liverSpan) { lines.push('    Liver span: ' + examA.liverSpan + ' cm'); }
+  if (examA.spleenSpan) { lines.push('    Spleen span: ' + examA.spleenSpan + ' cm'); }
+  if (examA.notes) { lines.push('    Additional: ' + examA.notes); }
+  var abdSigns: string[] = [];
+  if (v.examAbdDistension) { abdSigns.push('Distension'); }
+  if (v.examHepatomegaly) { abdSigns.push('Hepatomegaly'); }
+  if (v.examSplenomegaly) { abdSigns.push('Splenomegaly'); }
+  if (abdSigns.length) { lines.push('    Additional: ' + abdSigns.join(', ')); }
+  lines.push('');
+
+  // CNS
+  lines.push('    14.5 CENTRAL NERVOUS SYSTEM');
+  lines.push('    ' + '-'.repeat(40));
+  lines.push('');
+  if (examN.consciousLevel) { lines.push('    Conscious level: ' + examN.consciousLevel.replace(/_/g, ' ')); }
+  if (examN.pupils) { lines.push('    Pupils: ' + examN.pupils.replace(/_/g, ' ')); }
+  if (examN.tone) { lines.push('    Tone: ' + examN.tone.replace(/_/g, ' ')); }
+  if (examN.power) { lines.push('    Power: ' + examN.power.replace(/_/g, ' ')); }
+  if (examN.reflexes) { lines.push('    Reflexes: ' + examN.reflexes.replace(/_/g, ' ')); }
+  if (examN.meningism) { lines.push('    Meningism: ' + examN.meningism.replace(/_/g, ' ')); }
+  if (examN.notes) { lines.push('    Additional: ' + examN.notes); }
+  lines.push('');
+
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 15: SEVERITY SCORING
+  lines.push('15. SEVERITY ASSESSMENT AND CLINICAL SCORING');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    WHO IMCI: ' + whoClass);
+  lines.push('');
+
+  // RISC
+  var risc = (spo2Val < 90 ? 4 : spo2Val < 95 ? 2 : 0) + (v.examIndrawing || hpi.chestIndrawing ? 2 : 0) + (hpi.feedingDiff ? 1 : 0) + (ageMo < 6 ? 1 : 0);
+  lines.push('    RISC Score: ' + risc + '/7 (' + (risc >= 4 ? 'High risk — ICU referral' : risc >= 2 ? 'Moderate — admit' : 'Low risk') + ')');
+
+  // PRESS
+  var press = 0;
+  if (rrVal > 50) { press += 3; } else if (rrVal > 40) { press += 2; } else if (rrVal > 30) { press += 1; }
+  if (spo2Val < 90) { press += 3; } else if (spo2Val < 94) { press += 2; }
+  if (v.examIndrawing) { press += 2; }
+  if (hpi.feedingDiff) { press += 1; }
+  lines.push('    PRESS Score: ' + press + '/9 (' + (press >= 6 ? 'Severe — ICU' : press >= 4 ? 'Moderate' : 'Mild-moderate') + ')');
+
+  // qSOFA
+  var qsofa = (isTachypneic(rrVal) ? 1 : 0) + (v.avpu && v.avpu !== 'alert' ? 1 : 0);
+  if (sbpVal > 0) { var bpThr = 70 + 2 * Math.round(yr); if (sbpVal <= bpThr) { qsofa += 1; } }
+  lines.push('    qSOFA: ' + qsofa + '/3' + (qsofa >= 2 ? ' — HIGH RISK SEPSIS, initiate protocol' : ''));
+  lines.push('');
+
+  // DDx scores bar chart
+  lines.push('    DDx Engine Scores:');
+  note.scores.forEach(function(s) {
+    var bar = '';
+    var pct = s.pct;
+    if (pct > 0) {
+      var n = Math.max(1, Math.round(pct / 5));
+      for (var bi = 0; bi < n; bi++) { bar += '█'; }
+    }
+    lines.push('      ' + s.name + ' ' + s.abbr + ': ' + pct + '% ' + bar);
+  });
+  lines.push('');
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 16: WORKING DIAGNOSIS
+  lines.push('16. WORKING DIAGNOSIS AND CLINICAL REASONING');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  var topDx = note.scores[0];
+  if (topDx) {
+    lines.push('    PRIMARY DIAGNOSIS: ' + topDx.name.toUpperCase() + ' (' + topDx.pct + '% probability)');
+    lines.push('    PRIMARY DIFFERENTIAL: ' + (note.scores[1] ? note.scores[1].name.toUpperCase() + ' (' + note.scores[1].pct + '%)' : 'Nil'));
+    lines.push('    SECOND DIFFERENTIAL: ' + (note.scores[2] ? note.scores[2].name.toUpperCase() + ' (' + note.scores[2].pct + '%)' : 'Nil'));
+    lines.push('');
+  }
+
+  // Comorbidities
+  var comorbidities: string[] = [];
+  if (nut.malnutritionSigns && nut.malnutritionSigns.length) { comorbidities.push('Malnutrition (risk factor for severe pneumonia and poor outcomes)'); }
+  if (pmh.hiv) { comorbidities.push('HIV infection (immunocompromised — modify antibiotic and investigate for OIs)'); }
+  if (pmh.sickleCellDisease) { comorbidities.push('Sickle cell disease (risk of acute chest syndrome, sepsis, stroke)'); }
+  if (pmh.cardiacDisease) { comorbidities.push('Congenital heart disease (complicates respiratory and fluid management)'); }
+  if (pmh.asthmaDx) { comorbidities.push('Asthma (concurrent exacerbation may overlap)'); }
+  if (pmh.epilepsyDx) { comorbidities.push('Epilepsy (aspiration risk, drug interactions)'); }
+  if (ros.pallor || v.pallorExam) { comorbidities.push('Anaemia (worsens hypoxia, may require transfusion)'); }
+  if (ros.vomiting || ros.diarrhea) { comorbidities.push('Gastroenteritis symptoms (fluid/electrolyte management complexity)'); }
+  if (comorbidities.length) {
+    lines.push('    Comorbidities / Contributing Factors:');
+    comorbidities.forEach(function(co) { lines.push('      - ' + co); });
+    lines.push('');
+  }
+
+  // Formulation
+  lines.push('    FORMULATION:');
+  lines.push('      ' + (note.name || 'This patient') + ' is a ' + (note.ageStr || 'child') + ' ' + (note.sex || 'unknown').toLowerCase());
+  lines.push('      presenting with an acute respiratory illness characterised by');
+  var featH = [] as string[];
+  if (c.some(function(x) { return x.indexOf('cough') !== -1; })) { featH.push('cough'); }
+  if (hpi.feverPattern || hpi.highFever) { featH.push('fever'); }
+  if (isTachypneic(rrVal)) { featH.push('tachypnoea'); }
+  if (v.examIndrawing || hpi.chestIndrawing) { featH.push('chest indrawing'); }
+  if (spo2Val > 0 && spo2Val < 92) { featH.push('hypoxaemia (SpO2 ' + spo2Val + '%)'); }
+  lines.push('      ' + featH.join(', ') + '.');
+  lines.push('      The pattern is most consistent with ' + (topDx ? topDx.name.toLowerCase() : 'a respiratory tract infection') + '.');
+  lines.push('      The absence of chronic symptoms, recurrent wheeze, cardiac findings,');
+  lines.push('      or TB risk factors makes alternative diagnoses less probable.');
+  lines.push('      Clinical correlation with laboratory and imaging results is essential.');
+  lines.push('');
+
+  // Malaria co-infection assessment
+  if (hpi.highFever || hpi.feverPattern) {
+    lines.push('    Malaria Assessment (Kenya endemic zone):');
+    lines.push('      Fever + respiratory distress can be severe malaria (cerebral malaria,');
+    lines.push('      malaria with pneumonia co-infection, or post-malaria pneumonitis).');
+    if (v.pallorExam || ros.pallor) { lines.push('      Pallor/anaemia present — supports malaria workup'); }
+    if (v.examHepatomegaly || v.examSplenomegaly) { lines.push('      Hepatosplenomegaly present — consider malaria, sickle cell, leukaemia'); }
+    lines.push('      Recommended: Malaria RDT / Blood smear — treat with Artesunate if positive.');
+    lines.push('      Severe malaria criteria (WHO): impaired consciousness, acidosis, hypoglycaemia,');
+    lines.push('      severe anaemia (Hb <5 g/dL), renal impairment, pulmonary oedema, convulsions,');
+    lines.push('      prostration, parasitaemia >10%, jaundice. Any one = severe malaria.');
+    lines.push('');
+  }
+
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 17: DDx TABLE
+  lines.push('17. DIFFERENTIAL DIAGNOSIS SUMMARY TABLE');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    Condition                | Prob  | Supports');
+  lines.push('    ' + '-'.repeat(72));
+  var ddxT: { n: string; p: string; s: string }[] = [
+    { n: 'Pneumonia', p: addScore('pneumonia'), s: 'Cough, fever, tachypnoea, chest indrawing, crackles, dull percussion' },
+    { n: 'Asthma', p: addScore('asthma'), s: hpi.wheeze ? 'Wheeze, nocturnal cough, atopy/triggers, FH' : 'No wheeze/recurrent history' },
+    { n: 'TB', p: addScore('tuberculosis'), s: hpi.tbContact ? 'TB contact, night sweats' : 'No chronic features' },
+    { n: 'Bronchiolitis', p: addScore('bronchiolitis'), s: hpi.coryzaProdrome ? 'Viral prodrome, <2yr' : 'Age >2yr, focal findings' },
+    { n: 'Foreign body', p: addScore('foreign_body'), s: hpi.suddenOnset ? 'Sudden onset' : 'No choking event' },
+    { n: 'CHF/CHD', p: addScore('chf'), s: hpi.sweatingFeeds ? 'Sweating feeds, cyanosis' : 'No cardiac findings' },
+    { n: 'Croup', p: addScore('croup'), s: hpi.hoarseness ? 'Hoarseness, stridor' : 'No barking cough' },
+    { n: 'Pertussis', p: addScore('pertussis'), s: hpi.postTussiveVomiting ? 'Post-tussive vomiting' : 'No pertussis features' },
+    { n: 'PCP', p: addScore('pcp'), s: pmh.hiv ? 'HIV+' : 'No HIV risk' },
+  ];
+  ddxT.forEach(function(r) { lines.push('    ' + (r.n + '                    ').slice(0, 23) + '| ' + (r.p + '     ').slice(0, 6) + '| ' + r.s); });
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+
+  // SECTION 18: INVESTIGATIONS
+  lines.push('18. INVESTIGATIONS PLAN');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  var invList = note.inv || [];
+  if (invList.length) {
+    lines.push('    Recommended investigations:');
+    invList.forEach(function(i) {
+      var r = '';
+      if (i.indexOf('FBC') !== -1 || i.indexOf('CBC') !== -1) { r = 'WBC differential for bacterial vs viral. Hb for anaemia. Platelets for thrombocytopenia (malaria, sepsis).'; }
+      else if (i.indexOf('CRP') !== -1 || i.indexOf('ESR') !== -1) { r = 'CRP >40 mg/L suggests bacterial. Serial levels monitor treatment response.'; }
+      else if (i.indexOf('Blood culture') !== -1) { r = 'Gold standard for aetiology. Collect BEFORE antibiotics. Volume: 1-3 mL (infants), 5-10 mL (children).'; }
+      else if (i.indexOf('Malaria') !== -1) { r = 'Kenya endemic. Fever + respiratory distress can be severe malaria co-infection.'; }
+      else if (i.indexOf('Chest X-ray') !== -1) { r = 'Confirm consolidation, assess for effusion, pneumothorax, TB pattern, foreign body.'; }
+      else if (i.indexOf('HIV') !== -1) { r = 'Kenya high prevalence. Test per national guidelines for all hospitalised children.'; }
+      else if (i.indexOf('Urea') !== -1 || i.indexOf('Creatinine') !== -1) { r = 'Baseline renal function. Monitor for AKI, SIADH, dehydration. Essential before gentamicin.'; }
+      else if (i.indexOf('LFT') !== -1) { r = 'Assess hepatic involvement. Baseline before hepatotoxic drugs (INH, rifampicin, paracetamol).'; }
+      else if (i.indexOf('Lactate') !== -1) { r = 'Tissue hypoperfusion. >2 mmol/L = shock; >4 mmol/L = severe sepsis/septic shock.'; }
+      else if (i.indexOf('GeneXpert') !== -1 || i.indexOf('Xpert') !== -1) { r = 'First-line TB test. Detects MTB + rifampicin resistance in 2 hours.'; }
+      else if (i.indexOf('Mantoux') !== -1 || i.indexOf('TST') !== -1) { r = 'TB screening. >=5mm (HIV+/SAM), >=10mm (others) positive.'; }
+      else if (i.indexOf('sputum') !== -1 || i.indexOf('AFB') !== -1) { r = 'AFB x 3 morning specimens. Sensitivity ~60-70% in children.'; }
+      else if (i.indexOf('Blood gas') !== -1 || i.indexOf('VBG') !== -1) { r = 'pH, pCO2, HCO3 assess for respiratory failure. Type 1 (hypoxaemic) vs Type 2 (hypercapnic).'; }
+      else if (i.indexOf('echocardiogram') !== -1 || i.indexOf('echo') !== -1) { r = 'Assess cardiac function if CHF/CHD suspected.'; }
+      else if (i.indexOf('LP') !== -1 || i.indexOf('CSF') !== -1) { r = 'If meningism or altered consciousness + fever.'; }
+      else if (i.indexOf('urinalysis') !== -1 || i.indexOf('Urine') !== -1) { r = 'UTI can present with fever, vomiting, and non-specific respiratory symptoms.'; }
+      else if (i.indexOf('Procalcitonin') !== -1) { r = 'Bacterial-specific. >0.5 ng/mL = bacterial infection. Guides antibiotic stewardship.'; }
+      else if (i.indexOf('RSV') !== -1 || i.indexOf('NPA') !== -1) { r = 'Viral aetiology (RSV, influenza). Infection control implications.'; }
+      else if (i.indexOf('Pleural') !== -1 || i.indexOf('pleural') !== -1) { r = 'Diagnostic tap: Gram stain, culture, LDH, protein, glucose, pH, cytology.'; }
+      else if (i.indexOf('Vitamin D') !== -1) { r = 'Deficiency associated with increased LRTI severity.'; }
+      lines.push('      -> ' + i);
+      if (r) { lines.push('         ' + r); }
+    });
+  } else {
+    lines.push('    Standard workup for suspected pneumonia:');
+    lines.push('      -> Pulse oximetry, FBC+diff, CRP, Blood culture x2, CXR (PA + lateral)');
+    lines.push('      -> HIV RDT, Malaria RDT/BS, U/E/Cr, Lactate, VBG, Procalcitonin');
+    lines.push('      -> Consider: GeneXpert, NP aspirate viral PCR, echocardiogram');
+  }
+  lines.push('');
+
+  // DDx-specific tests
+  lines.push('    DDx-specific investigations:');
+  if (note.scores.some(function(s) { return s.id === 'asthma' && s.pct > 10; })) { lines.push('      -> Asthma: Peak flow (>5yr), spirometry, allergy panel, FeNO'); }
+  if (note.scores.some(function(s) { return s.id === 'tuberculosis' && s.pct > 10; })) { lines.push('      -> TB: GeneXpert MTB/RIF, Mantoux, IGRA, CXR, gastric aspirate x3'); }
+  if (note.scores.some(function(s) { return s.id === 'chf' && s.pct > 10; })) { lines.push('      -> CHF: Echocardiogram, ECG, BNP/NT-proBNP'); }
+  if (note.scores.some(function(s) { return s.id === 'foreign_body' && s.pct > 10; })) { lines.push('      -> Foreign body: Insp/exp CXR, rigid bronchoscopy'); }
+  if (note.scores.some(function(s) { return s.id === 'pleural_effusion' || s.id === 'empyema'; })) { lines.push('      -> Empyema/Effusion: CXR, chest US, diagnostic tap, pleural fluid analysis'); }
+  if (pmh.hiv) { lines.push('      -> HIV+: CD4, viral load, PCP prophylaxis, induced sputum/BAL'); }
+  if (pmh.sickleCellDisease) { lines.push('      -> SCD: Hb electrophoresis, reticulocyte count, blood transfusion compatibility'); }
+  if (nut.malnutritionSigns && nut.malnutritionSigns.length) { lines.push('      -> Malnutrition: Albumin, prealbumin, vitamin A, zinc, TB screening'); }
+  lines.push('');
+
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 19: MANAGEMENT PLAN
+  lines.push('19. COMPREHENSIVE MANAGEMENT PLAN');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+
+  // Management from note object
+  if (note.mgmt && note.mgmt.length) {
+    note.mgmt.forEach(function(m) {
+      lines.push('    ' + m.heading);
+      lines.push('    ' + '-'.repeat(40));
+      m.text.split('\\n').forEach(function(t) { lines.push('    ' + t); });
+      lines.push('');
+    });
+  }
+
+  // Antibiotic detail
+  lines.push('    ANTIBIOTIC PLAN (Kenyan MoH/WHO Guidelines):');
+  lines.push('');
+  if (mgmt.antibiotics) {
+    lines.push('      Antibiotics prescribed per standard guidelines.');
+  } else {
+    lines.push('      Awaiting antibiotic documentation.');
+  }
+  lines.push('');
+  lines.push('      First-line Severe Pneumonia:');
+  if (wt > 0) {
+    var ampDose = (wt * 50).toFixed(0);
+    var gentDose = (wt * 7.5).toFixed(0);
+    var maint = '';
+    if (wt <= 10) { maint = (4 * wt).toFixed(0) + ' mL/hr'; }
+    else if (wt <= 20) { maint = (40 + 2 * (wt - 10)).toFixed(0) + ' mL/hr'; }
+    else { maint = (60 + 1 * (wt - 20)).toFixed(0) + ' mL/hr'; }
+    lines.push('        Ampicillin: 50 mg/kg IV q6h = ' + ampDose + ' mg IV q6h');
+    lines.push('        Gentamicin: 7.5 mg/kg IV/IM q24h = ' + gentDose + ' mg IV/IM daily');
+    lines.push('        Maintenance fluids: ' + maint + ' (isotonic, e.g. D5 1/2NS + 20 mmol KCl/L)');
+    if (mgmt.ivFluids) {
+      lines.push('        IV fluids: 10-20 mL/kg NS bolus if shock, then maintenance + deficit replacement.');
+      lines.push('        Shock protocol: 20 mL/kg NS/RL over 15-20 min. Reassess. Repeat x2 if no response.');
+      lines.push('        If shock persists after 40 mL/kg: consider blood transfusion, inotropes (Dopamine 5-20 mcg/kg/min).');
+    }
+  }
+  lines.push('');
+
+  // Malnutrition management
+  if ((nut.muac && parseFloat(nut.muac) < 11.5) || (nut.malnutritionSigns && nut.malnutritionSigns.some(function(s) { return s.indexOf('oedema') !== -1; }))) {
+    lines.push('    MALNUTRITION MANAGEMENT (WHO 10 Steps — summarised):');
+    lines.push('      Phase 1 (Stabilisation): F-75 formula 80-100 mL/kg/day in 8-12 feeds;');
+    lines.push('      broad-spectrum antibiotics (Ampicillin + Gentamicin); vitamin A day 1;');
+    lines.push('      manage dehydration with ReSoMal; avoid high-Na fluids; monitor for refeeding syndrome.');
+    lines.push('      Phase 2 (Rehabilitation): Transition to F-100 or RUTF; continue until');
+    lines.push('      weight-for-height Z-score >-2 and oedema resolved (typically 2-6 weeks).');
+    lines.push('');
+  }
+
+  // AKI assessment
+  lines.push('    RENAL ASSESSMENT AND AKI RISK:');
+  if (ros.reducedUrine || (v.hydration && v.hydration.indexOf('severe') !== -1) || mgmt.ivFluids) {
+    lines.push('      Risk factors for AKI: sepsis, dehydration, nephrotoxic drugs (gentamicin), hypotension.');
+    lines.push('      Monitor: urine output (target >1 mL/kg/hr), creatinine daily, U/E.');
+    lines.push('      AKI Staging (KDIGO):');
+    lines.push('        Stage 1: Cr 1.5-1.9x baseline or urine output <0.5 mL/kg/hr 6-12 hr');
+    lines.push('        Stage 2: Cr 2-2.9x baseline or urine output <0.5 mL/kg/hr >=12 hr');
+    lines.push('        Stage 3: Cr >=3x baseline or urine output <0.3 mL/kg/hr >=24 hr or anuria >=12 hr or RRT initiated');
+    lines.push('      Dialysis Indications (pRRT): anuria/oliguria despite optimisation, Cr >8x baseline,');
+    lines.push('      K >6.5 mmol/L, severe metabolic acidosis (pH <7.1), fluid overload unresponsive to diuretics,');
+    lines.push('      uraemic complications (encephalopathy, pericarditis).');
+  } else {
+    lines.push('      No AKI risk factors identified at present. Monitor urine output and creatinine as clinically indicated.');
+  }
+  lines.push('');
+
+  // Monitoring plan
+  lines.push('    MONITORING PLAN:');
+  lines.push('      Vital signs: HR, RR, SpO2, BP q1-2hr initially, then q4hr when stable');
+  lines.push('      Respiratory distress: Indrawing, nasal flaring, grunting, stridor q1-2hr');
+  lines.push('      Fluid balance: Strict I/O chart. Urine output target >1 mL/kg/hr');
+  lines.push('      Consciousness level (AVPU) q4hr');
+  lines.push('      Feeding tolerance — NG tube if unable to feed orally');
+  lines.push('      Complications: pleural effusion, empyema, sepsis, AKI, anaemia, refeeding syndrome');
+  lines.push('      Escalation criteria: SpO2 <90%, RR >60/min, HR >180/min, increasing distress, altered consciousness');
+  lines.push('');
+
+  // Discharge criteria
+  lines.push('    DISCHARGE CRITERIA:');
+  lines.push('      Afebrile for 24-48 hours without antipyretics');
+  lines.push('      SpO2 >=94% on room air');
+  lines.push('      RR within normal range for age');
+  lines.push('      No respiratory distress (no indrawing, nasal flaring, grunting)');
+  lines.push('      Feeding adequately (oral intake >=75% of requirement)');
+  lines.push('      Good urine output (>1 mL/kg/hr)');
+  lines.push('      Completed appropriate antibiotic course (5-7 days for uncomplicated, 7-14 days for severe)');
+  lines.push('      Follow-up appointment scheduled (2-7 days based on severity)');
+  lines.push('');
+
+  // Follow-up
+  if (mgmt.followUp) {
+    lines.push('    FOLLOW-UP PLAN:');
+    lines.push('      ' + mgmt.followUp);
+    lines.push('');
+  }
+  if (mgmt.healthEd) {
+    lines.push('    HEALTH EDUCATION:');
+    lines.push('      ' + mgmt.healthEd);
+    lines.push('');
+  }
+
+  lines.push('    ---');
+  lines.push('');
+
+  // SECTION 20: PEDIATRIC PEARLS
+  lines.push('20. IMPORTANT PEDIATRIC PEARLS AND GUIDELINES');
+  lines.push('    ' + '-'.repeat(72));
+  lines.push('');
+  lines.push('    WHO/IMCI Tachypnoea Thresholds:');
+  lines.push('      <2 months: >60/min    2-12 months: >50/min');
+  lines.push('      1-5 years: >40/min    >5 years: >30/min');
+  lines.push('');
+  lines.push('    Most Reliable Pneumonia Signs:');
+  lines.push('      Tachypnoea (sensitivity ~70%) | Chest indrawing (specificity ~80%)');
+  lines.push('      Hypoxia SpO2 <92% (specificity ~90%) | Focal crackles (specificity ~85%)');
+  lines.push('');
+  lines.push('    WHO Danger Signs (Any one = Very Severe Disease):');
+  lines.push('      Inability to feed | Lethargy/unconsciousness | Convulsions');
+  lines.push('      Central cyanosis | Severe respiratory distress | Grunting');
+  lines.push('');
+  lines.push('    Admission Criteria for Respiratory Distress:');
+  lines.push('      SpO2 <92% on room air | Severe chest indrawing | Inability to feed');
+  lines.push('      Grunting / impending exhaustion | Apnoea / gasping | Stridor at rest');
+  lines.push('      Any WHO danger sign | Social concerns for follow-up');
+  lines.push('');
+  lines.push('    Antibiotic Duration:');
+  lines.push('      Uncomplicated pneumonia: 5-7 days | Severe pneumonia: 7-14 days');
+  lines.push('      Empyema: 14-21 days (or longer based on clinical response)');
+  lines.push('      Complicated/necrotising pneumonia: 21-28 days');
+  lines.push('');
+  if (ageMo < 12) {
+    lines.push('    Infant-Specific Considerations:');
+    lines.push('      <3 months with fever + respiratory symptoms: admit for full sepsis workup');
+    lines.push('      (CBC, CRP, blood culture, LP, urine culture, CXR). Start IV antibiotics');
+    lines.push('      (Ampicillin + Cefotaxime/Ceftriaxone). Monitor for apnoea.');
+    lines.push('');
+  }
+  if (pmh.sickleCellDisease) {
+    lines.push('    Sickle Cell Disease Considerations:');
+    lines.push('      Acute chest syndrome: new infiltrate on CXR + fever + respiratory symptoms');
+    lines.push('      in SCD patient. Treatment: Ceftriaxone + Azithromycin, bronchodilators,');
+    lines.push('      incentive spirometry, simple/exchange transfusion for severe cases.');
+    lines.push('      Hydroxyurea for prevention if recurrent ACS.');
+    lines.push('');
+  }
+  if (pmh.hiv) {
+    lines.push('    HIV Considerations:');
+    lines.push('      Severe pneumonia: investigate for PCP, TB, bacterial, viral co-infections.');
+    lines.push('      Ensure ART and Cotrimoxazole prophylaxis are optimised.');
+    lines.push('      Treat with broader antibiotic coverage (ceftriaxone + macrolide).');
+    lines.push('');
+  }
+  lines.push('    ---');
+  lines.push('');
+
+  // FOOTER
+  lines.push('=== END OF CLINICAL NOTE ===');
+  lines.push('');
+  lines.push('Generated by AMEXAN Paediatric Respiratory System');
+  lines.push('Date: ' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }));
+  lines.push('Time: ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }));
+  lines.push('');
+  lines.push('This document is an AI-assisted clinical decision support output.');
+  lines.push('It must be reviewed, verified, and signed by a qualified clinician.');
+  lines.push('Diagnoses and management plans should be adapted to local guidelines,');
+  lines.push('drug availability, and individual patient circumstances.');
+  lines.push('');
+  lines.push('================================================================================');
+  lines.push('  AMEXAN Paediatric Respiratory System v2.0 — Kenyan Protocols');
+  lines.push('================================================================================');
+
+  return lines.join('\\n');
+}

@@ -1,0 +1,122 @@
+{
+  "disease": {
+    "id": "shoulder_dystocia",
+    "name": "Shoulder Dystocia",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Failure of delivery of the fetal shoulders after delivery of the head, requiring additional obstetric maneuvers. True obstetric emergency with risk of brachial plexus injury and fetal hypoxia.",
+    "prevalenceWeight": 0.007,
+    "syndromeTags": ["intrapartum_emergency", "obstetric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "turtle_head_sign", "weight": 10 },
+        { "sign": "failure_to_deliver_shoulders", "weight": 10 },
+        { "sign": "prolonged_head_to_body_delivery_interval", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tight_cord_around_neck", "weight": 6 },
+          { "sign": "fetal_bradycardia", "weight": 8 },
+          { "sign": "retraction_of_fetal_head_against_perineum", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "All cases of shoulder dystocia are SEVERE due to fetal risk"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prolonged_second_stage", "weight": 4 },
+      { "symptomId": "difficult_delivery_of_head", "weight": 3 },
+      { "symptomId": "heavy_baby_suspected", "weight": 4 },
+      { "symptomId": "previous_shoulder_dystocia", "weight": 5 },
+      { "symptomId": "excessive_maternal_weight_gain", "weight": 2 },
+      { "symptomId": "postterm_pregnancy", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "turtle_sign_retraction_of_head", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "failure_of_external_rotation", "baseWeight": 4 },
+      { "signId": "anterior_shoulder_impacted_on_symphysis", "baseWeight": 5 },
+      { "signId": "tight_cord_around_neck", "baseWeight": 3 },
+      { "signId": "fetal_head_born_but_chin_tight_against_perineum", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "fetal_macrosomia_over_4000g", "multiplier": 3.0 },
+      { "id": "maternal_diabetes", "multiplier": 3.5 },
+      { "id": "maternal_obesity", "multiplier": 2.5 },
+      { "id": "prolonged_second_stage", "multiplier": 2.0 },
+      { "id": "previous_shoulder_dystocia", "multiplier": 5.0 },
+      { "id": "operative_vaginal_delivery_forceps_vacuum", "multiplier": 3.0 },
+      { "id": "postterm_pregnancy", "multiplier": 1.5 },
+      { "id": "male_fetus", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [],
+    "mimics": [],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 42 - Shoulder Dystocia",
+      "pathways": [
+        {
+          "severity": "all_cases",
+          "criteria": "head delivered, anterior shoulder impacted",
+          "treatment": "HELPERR mnemonic: Help (call for assistance). Episiotomy (to provide space). Legs (McRoberts maneuver: hyperflexion of maternal thighs). Pressure (suprapubic pressure, NOT fundal). Enter (internal rotational maneuvers: Rubin II, Woods corkscrew, reverse Woods). Remove posterior arm (deliver posterior arm). Roll (Gaskin maneuver: all-fours position). If all fails: deliberate clavicle fracture, Zavanelli maneuver (cephalic replacement), symphysiotomy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "anterior_shoulder_impacted_on_symphysis_pubis",
+      "excessive_fetal_size",
+      "maternal_pelvic_anatomy"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "brachial_plexus_injury",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["arm_not_moving", "Erb_Duchenne_palsy", "Klumpke_palsy"]
+      },
+      {
+        "diseaseId": "clavicle_fracture",
+        "probability": 0.05,
+        "lagDays": [0, 1],
+        "severityBoost": 0.2,
+        "clues": ["crepitus_over_clavicle", "asymmetric_moro"]
+      },
+      {
+        "diseaseId": "hypoxic_ischemic_encephalopathy",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.8,
+        "clues": ["low_apgar", "seizures", "head_to_body_delivery_time_>_5_min"]
+      },
+      {
+        "diseaseId": "postpartum_hemorrhage",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["uterine_atony", "lacerations_from_maneuvers"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["turtle_head_sign", "retracted_head", "failed_external_rotation"],
+    "exclusionClues": ["spontaneous_delivery_of_shoulders", "normal_delivery"]
+  }
+}

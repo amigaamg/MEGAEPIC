@@ -1,0 +1,128 @@
+{
+  "disease": {
+    "id": "stress_incontinence",
+    "name": "Stress Urinary Incontinence",
+    "system": "URO",
+    "agePeak_months": [360, 840],
+    "note": "Involuntary leakage of urine on effort, exertion, sneezing, or coughing. Due to urethral hypermobility or intrinsic sphincter deficiency.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["urinary_incontinence", "pelvic_floor_dysfunction", "female_urology"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_leakage_affecting_all_activity", "weight": 6 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Mild (with strenuous activity), Moderate (with moderate activity), Severe (with minimal activity, even walking)"
+    },
+    "historyFeatures": [
+      { "symptomId": "leakage_with_cough_sneeze_laugh", "weight": 5 },
+      { "symptomId": "leakage_with_exercise_lifting", "weight": 4 },
+      { "symptomId": "leakage_small_volume_gush", "weight": 4 },
+      { "symptomId": "no_associated_urgency", "weight": 3 },
+      { "symptomId": "vaginal_delivery_history", "weight": 4 },
+      { "symptomId": "pelvic_surgery_history_hysterectomy", "weight": 3 },
+      { "symptomId": "obesity", "weight": 3 },
+      { "symptomId": "pad_use_for_leakage", "weight": 2 },
+      { "symptomId": "menopausal_status", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "positive_cough_stress_test", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "urethral_hypermobility_q_tip_test", "baseWeight": 3 },
+      { "signId": "pelvic_organ_prolapse_on_exam", "baseWeight": 3 },
+      { "signId": "pelvic_floor_muscle_strength_weak", "baseWeight": 2 },
+      { "signId": "post_void_residual_normal_or_low", "baseWeight": 1 }
+    ],
+    "riskFactors": [
+      { "id": "vaginal_delivery_multiparity", "multiplier": 3.0 },
+      { "id": "obesity_bmi_greater_30", "multiplier": 2.5 },
+      { "id": "age_over_50", "multiplier": 2.0 },
+      { "id": "pelvic_surgery_hysterectomy", "multiplier": 1.5 },
+      { "id": "menopause_estrogen_deficiency", "multiplier": 1.5 },
+      { "id": "chronic_copd_smoking_cough", "multiplier": 2.0 },
+      { "id": "constipation_chronic_straining", "multiplier": 1.5 },
+      { "id": "heavy_lifting_occupation", "multiplier": 1.5 },
+      { "id": "connective_tissue_disorder", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "urethral_hypermobility",
+        "name": "Stress Incontinence from Urethral Hypermobility",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "q_tip_test_greater_30_degrees", "weight": 4 },
+          { "feature": "good_urethral_closure", "weight": 3 },
+          { "feature": "responds_to_pelvic_floor_exercises", "weight": 4 }
+        ],
+        "management": "First-line: pelvic floor muscle training (PFMT) x 3-6 months. Lifestyle: weight loss, treat constipation, smoking cessation. Devices: vaginal pessaries, urethral inserts. Surgery: mid-urethral sling (retropubic or transobturator TVT/TOT) - gold standard. Colposuspension (Burch) if sling contraindicated."
+      },
+      {
+        "id": "intrinsic_sphincter_deficiency",
+        "name": "Stress Incontinence from Intrinsic Sphincter Deficiency (ISD)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "low_valsalva_leak_point_pressure", "weight": 5 },
+          { "feature": "severe_leakage_with_minimal_effort", "weight": 4 },
+          { "feature": "previous_failed_anti_incontinence_surgery", "weight": 3 },
+          { "feature": "urethral_hypomobility", "weight": 3 }
+        ],
+        "management": "Surgical: pubovaginal sling (autologous fascia), urethral bulking agents (collagen, carbon beads, Macroplastique). Adjustable continence therapy (ACT). Artificial urinary sphincter (AUS) - gold standard for severe ISD."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "urge_incontinence", "discriminators": ["preceded_by_urgency", "larger_volume", "no_trigger", "responds_to_anticholinergics"] },
+      { "diseaseId": "mixed_incontinence", "discriminators": ["both_stress_and_urge_components", "needs_treatment_of_both"] },
+      { "diseaseId": "overflow_incontinence", "discriminators": ["constant_dribbling", "high_pvr", "palpable_bladder"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Cough stress test (with full bladder)", "priority": "immediate", "yield": 0.8, "indication": "objective demonstration of SUI" },
+        { "name": "Q-tip test (urethral angle)", "priority": "medium", "yield": 0.7, "indication": "urethral hypermobility assessment" },
+        { "name": "Post-void residual (PVR)", "priority": "high", "yield": 0.5, "indication": "rule out overflow incontinence" }
+      ],
+      "laboratory": [
+        { "name": "Urinalysis + culture", "priority": "first-line", "yield": 0.4, "indication": "exclude UTI" }
+      ],
+      "imaging": [
+        { "name": "Urodynamics (filling cystometry + Valsalva leak point pressure)", "priority": "if surgery planned or mixed symptoms", "yield": 0.8, "indication": "confirm SUI, assess bladder function, rule out DO" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AUA/SUFU Guideline for Stress Urinary Incontinence / EAU Guidelines",
+      "pathways": [
+        {
+          "severity": "mild-moderate SUI",
+          "criteria": "leakage with moderate activity, PFMT naive, no prior surgery",
+          "treatment": "Pelvic floor muscle training (PFMT) - 3 sets of 8-12 contractions daily x 3-6 months. Lifestyle: weight loss (5-10% reduction improves SUI). Bladder training. Vaginal estrogen in postmenopausal women. TENS/Biofeedback."
+        },
+        {
+          "severity": "moderate-severe SUI after PFMT failure",
+          "criteria": "PFMT insufficient, bothersome symptoms",
+          "treatment": "Mid-urethral sling (retropubic TVT or transobturator TOT). Urethral bulking agents (if not surgical candidate or desire for less invasive). Adjustable sling if prior surgery."
+        },
+        {
+          "severity": "severe ISD/recurrent SUI",
+          "criteria": "ISD on urodynamics, prior failed sling",
+          "treatment": "Autologous pubovaginal sling (rectus fascia). Artificial urinary sphincter (AUS). Urethral bulking agents."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "loss_of_anatomical_support_pelvic_floor",
+      "urethral_hypermobility",
+      "inadequate_urethral_closure_intrinsic_sphincter_deficiency",
+      "poor_pressure_transmission_to_urethra",
+      "levator_ani_muscle_weakness",
+      "endopelvic_fascia_laxity",
+      "connective_tissue_weakness_from_estrogen_deficiency"
+    ],
+    "complications": [
+      { "diseaseId": "recurrent_uti_skin_maceration", "probability": 0.1, "severityBoost": 0.1, "clues": ["persistent_wetness", "perineal_irritation", "uti_symptoms"] },
+      { "diseaseId": "sling_complications_erosion_obstruction", "probability": 0.05, "severityBoost": 0.3, "clues": ["de_novo_urgency", "difficulty_voiding", "vaginal_exposure_of_sling"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["leakage_with_cough_sneeze_exercise", "positive_cough_stress_test", "no_urgency", "after_childbirth_or_pelvic_surgery"],
+    "exclusionClues": ["leakage_associated_only_with_urgency", "chronic_retention_with_overflow", "uti_resolved_incontinence"]
+  }
+}

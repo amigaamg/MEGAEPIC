@@ -1,0 +1,138 @@
+{
+  "disease": {
+    "id": "corneal_abrasion",
+    "name": "Corneal Abrasion",
+    "system": "OPHTH",
+    "agePeak_months": [12, 480],
+    "note": "Loss of corneal epithelium due to mechanical trauma (finger, paper, branch, contact lens). Typically very painful but heals rapidly with proper management. Risk of secondary infection.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["red_eye", "corneal_trauma", "eye_injury"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "corneal_ulcer_infiltrate", "weight": 8 },
+        { "sign": "hypopyon", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "central_abrasion_involving_visual_axis", "weight": 6 },
+          { "sign": "large_abrasion_over_5mm", "weight": 5 },
+          { "sign": "contact_lens_related", "weight": 6 },
+          { "sign": "organic_matter_injury", "weight": 5 },
+          { "sign": "recurrent_erosion_history", "weight": 4 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Contact lens-related, organic matter, or infected -> SEVERE; Simple small abrasion -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "pain_severe_immediate_after_trauma", "weight": 5 },
+      { "symptomId": "foreign_body_sensation", "weight": 5 },
+      { "symptomId": "lacrimation_excessive", "weight": 4 },
+      { "symptomId": "photophobia", "weight": 4 },
+      { "symptomId": "redness_eye", "weight": 4 },
+      { "symptomId": "blurred_vision", "weight": 3 },
+      { "symptomId": "blepharospasm", "weight": 3 },
+      { "symptomId": "trauma_history_finger_paper_tree_branch", "weight": 5 },
+      { "symptomId": "contact_lens_wear", "weight": 4 },
+      { "symptomId": "previous_recurrent_corneal_erosion", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fluorescein_uptake_positive_in_abraded_area", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "corneal_epithelial_defect_visible", "baseWeight": 5 },
+      { "signId": "conjunctival_injection", "baseWeight": 3 },
+      { "signId": "lid_edema_or_blepharospasm", "baseWeight": 2 },
+      { "signId": "blurred_vision_due_to_tearing", "baseWeight": 2 },
+      { "signId": "miosis_or_AC_reaction", "baseWeight": 2 },
+      { "signId": "anterior_chamber_cells_mild", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "contact_lens_wear", "multiplier": 3.0 },
+      { "id": "outdoor_occupation", "multiplier": 2.0 },
+      { "id": "recurrent_corneal_erosion_syndrome", "multiplier": 4.0 },
+      { "id": "dry_eye_syndrome", "multiplier": 2.0 },
+      { "id": "no_eye_protection_during_high_risk", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "corneal_ulcer",
+        "discriminators": ["infiltrate", "stromal_opacity", "worsening_pain"]
+      },
+      {
+        "diseaseId": "recurrent_corneal_erosion",
+        "discriminators": ["wakes_from_sleep", "history_of_abrasion", "spontaneous"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fluorescein staining with cobalt blue light", "priority": "immediate", "yield": 0.95, "indication": "diagnostic" },
+        { "name": "Slit lamp examination", "priority": "immediate", "yield": 0.95, "indication": "size, depth, location" },
+        { "name": "Visual acuity", "priority": "immediate", "yield": 0.7, "indication": "baseline" },
+        { "name": "Everted lid exam (rule out foreign body)", "priority": "immediate", "yield": 0.8, "indication": "exclude subtarsal FB" }
+      ],
+      "laboratory": [],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "AAO Basic Ophthalmology / Preferred Practice Pattern",
+      "pathways": [
+        {
+          "severity": "simple_small",
+          "criteria": "<5mm, non-contact lens, no organic matter, no infection",
+          "treatment": "Topical antibiotic (Chloramphenicol 0.5% qds or Ofloxacin 0.3% qds). Topical NSAID (Ketorolac 0.5% tds) for pain. Cycloplegic (Cyclopentolate 1%) if photophobia. DO NOT patch. Review in 24-48h."
+        },
+        {
+          "severity": "contact_lens_related",
+          "criteria": "any abrasion in contact lens wearer",
+          "treatment": "Topical broad-spectrum antibiotic (Ofloxacin 0.3% q2h or Moxifloxacin 0.5% q2h). NO STEROIDS. Do not patch. Stop contact lens wear. Review in 24h. Consider swab for culture if infiltrate."
+        },
+        {
+          "severity": "large_or_painful",
+          "criteria": ">5mm, severe pain, central location",
+          "treatment": "Topical antibiotic q1-2h. Cycloplegic. Oral analgesia (paracetamol, NSAID). Bandage contact lens for comfort (with antibiotic cover). Review in 24h. Do not patch (increases infection risk)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mechanical_epithelial_defect",
+      "basement_membrane_exposure",
+      "nerve_stimulation_pain",
+      "re_epithelialization_24_72_hours",
+      "hemidesmosome_reattachment"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "corneal_ulcer",
+        "probability": 0.02,
+        "lagDays": [1, 5],
+        "severityBoost": 0.6,
+        "clues": ["infiltrate", "hypopyon", "worsening"]
+      },
+      {
+        "diseaseId": "recurrent_corneal_erosion",
+        "probability": 0.1,
+        "lagDays": [7, 365],
+        "severityBoost": 0.3,
+        "clues": ["wakes_with_pain", "spontaneous_abrasion"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["trauma_history", "pain_photophobia", "fluorescein_positive_defect"],
+    "exclusionClues": ["no_epithelial_defect", "normal_fluorescein"]
+  }
+}

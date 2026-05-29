@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "hepatitis_b",
+    "name": "Hepatitis B Virus Infection",
+    "system": "infectious_disease",
+    "agePeak_months": [180, 480],
+    "note": "DNA virus causing acute and chronic hepatitis. Chronic carriers at risk for cirrhosis and HCC. Vaccine preventable.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["viral_hepatitis", "chronic_liver_disease", "sexually_transmitted"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure_encephalopathy", "weight": 10 },
+        { "sign": "coagulopathy_inr_greater_2", "weight": 9 },
+        { "sign": "massive_ascites", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Fulminant hepatitis (INR>2 + encephalopathy) -> SEVERE; acute uncomplicated -> MODERATE; chronic inactive -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 5 },
+      { "symptomId": "dark_urine_pale_stool", "weight": 4 },
+      { "symptomId": "fatigue_malaise", "weight": 4 },
+      { "symptomId": "nausea_vomiting_anorexia", "weight": 3 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3 },
+      { "symptomId": "exposure_blood_sex_perinatal", "weight": 5 },
+      { "symptomId": "incubation_period_1_to_6_months", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 3 },
+      { "signId": "spider_angiomas", "baseWeight": 2 },
+      { "signId": "ascites", "baseWeight": 2 },
+      { "signId": "asterixis", "baseWeight": 3, "note": "Liver failure" }
+    ],
+
+    "riskFactors": [
+      { "id": "born_in_endemic_area", "multiplier": 2.5 },
+      { "id": "unprotected_sex_multiple_partners", "multiplier": 2.0 },
+      { "id": "injection_drug_use", "multiplier": 3.0 },
+      { "id": "healthcare_occupation_needlestick", "multiplier": 2.0 },
+      { "id": "mother_hbsag_positive", "multiplier": 3.0 },
+      { "id": "hemodialysis", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_hepatitis_b",
+        "name": "Acute Hepatitis B",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "positive_hbsag_hbcore_igm", "weight": 5 },
+          { "feature": "elevated_alt_ast", "weight": 4 },
+          { "feature": "jaundice", "weight": 4 }
+        ],
+        "management": "Supportive care. Avoid alcohol. Monitor LFTs, INR. No antiviral therapy needed in most. Consider tenofovir if severe or prolonged."
+      },
+      {
+        "id": "chronic_hepatitis_b",
+        "name": "Chronic Hepatitis B",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "hbsag_positive_over_6_months", "weight": 5 },
+          { "feature": "hbv_dna_detectable", "weight": 4 },
+          { "feature": "elevated_alt_persistent", "weight": 3 }
+        ],
+        "management": "Antiviral therapy if HBV DNA >2000 IU/mL + ALT elevated. First-line: Tenofovir disoproxil fumarate or Entecavir. Monitor for HCC with US q6months."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatitis_c",
+        "discriminators": ["anti_hcv_positive", "hbsag_negative", "more_chronic"]
+      },
+      {
+        "diseaseId": "alcoholic_hepatitis",
+        "discriminators": ["heavy_alcohol_use", "gammaglutamyl_transferase_elevated", "no_serology"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "HBsAg", "priority": "immediate", "yield": 0.95, "indication": "screening and diagnosis" },
+        { "name": "HBsAb, HBcAb (total + IgM)", "priority": "high", "yield": 0.9, "indication": "immune status and phase" },
+        { "name": "HBeAg and HBeAb", "priority": "high", "yield": 0.7, "indication": "replication activity" },
+        { "name": "HBV DNA quantitative", "priority": "high", "yield": 0.95, "indication": "viral load monitoring" },
+        { "name": "LFTs (ALT, AST, Bilirubin, ALP)", "priority": "high", "yield": 0.8, "indication": "liver injury assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EASL/AASLD Guidelines for Hepatitis B",
+      "pathways": [
+        {
+          "severity": "acute hepatitis B",
+          "criteria": "HBsAg +, IgM core +, ALT elevated",
+          "treatment": "Supportive. Avoid alcohol/paracetamol. Monitor LFT and INR weekly. Antivirals only if severe or protracted course."
+        },
+        {
+          "severity": "chronic hepatitis B (active)",
+          "criteria": "HBsAg + >6mo, HBV DNA >2000, ALT elevated",
+          "treatment": "Tenofovir 300mg OD or Entecavir 0.5mg OD. Monitor viral load q3-6mo. HCC surveillance with US q6mo. Vaccinate household contacts."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hepatocyte_infection",
+      "immune_mediated_liver_injury",
+      "chronic_necrosis_inflammation",
+      "fibrosis_cirrhosis",
+      "hepatocellular_carcinoma"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cirrhosis",
+        "probability": 0.2,
+        "lagDays": [3650, 10950],
+        "severityBoost": 0.5,
+        "clues": ["portal_hypertension", "varices", "low_albumin"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "probability": 0.1,
+        "lagDays": [3650, 14600],
+        "severityBoost": 0.6,
+        "clues": ["AFP_elevated", "liver_mass_on_imaging"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["jaundice_alt_elevated", "positive_serology", "risk_factors"],
+    "exclusionClues": ["negative_serology", "hbsab_positive_due_to_vaccine"]
+  }
+}

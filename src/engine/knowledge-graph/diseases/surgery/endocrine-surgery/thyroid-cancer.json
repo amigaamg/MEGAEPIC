@@ -1,0 +1,198 @@
+{
+  "disease": {
+    "id": "thyroid_cancer",
+    "name": "Thyroid Cancer",
+    "system": "surgical",
+    "agePeak_months": [300, 600],
+    "note": "Most common endocrine malignancy. Papillary is most common and has excellent prognosis. Medullary and anaplastic have worse outcomes.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["thyroid_mass", "neck_lymphadenopathy", "thyroid_malignancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "airway_compression", "weight": 10 },
+        { "sign": "rapid_growth_anaplastic", "weight": 9 },
+        { "sign": "distant_metastases", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "recurrent_laryngeal_nerve_palsy", "weight": 7 },
+          { "sign": "extensive_lymph_node_involvement", "weight": 7 },
+          { "sign": "extra_thyroidal_extension", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Metastatic/anaplastic/airway compromise -> SEVERE; differentiated early stage -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "thyroid_mass_or_neck_lump", "weight": 5 },
+      { "symptomId": "neck_lymphadenopathy", "weight": 4 },
+      { "symptomId": "hoarseness_voice_change", "weight": 3, "note": "RLN invasion" },
+      { "symptomId": "dysphagia", "weight": 2 },
+      { "symptomId": "dyspnea", "weight": 2 },
+      { "symptomId": "neck_pain_radiation_to_ear", "weight": 2 },
+      { "symptomId": "family_history_of_thyroid_cancer", "weight": 3 },
+      { "symptomId": "neck_radiation_history", "weight": 4 },
+      { "symptomId": "rapid_growth", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_thyroid_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fixed_hard_mass", "baseWeight": 4 },
+      { "signId": "cervical_lymphadenopathy", "baseWeight": 4 },
+      { "signId": "vocal_cord_mobility_reduced", "baseWeight": 3 },
+      { "signId": "tracheal_deviation", "baseWeight": 2 },
+      { "signId": "signs_of_metastasis_lungs_bone", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "neck_radiation_exposure", "multiplier": 5.0 },
+      { "id": "family_history_of_medullary_thyroid_cancer", "multiplier": 6.0 },
+      { "id": "female_gender", "multiplier": 2.5 },
+      { "id": "age_under_20_or_over_60", "multiplier": 2.0 },
+      { "id": "iodine_deficiency", "multiplier": 1.5 },
+      { "id": "hashimoto_thyroiditis", "multiplier": 2.0 },
+      { "id": "ret_mutation_men2", "multiplier": 8.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "papillary_thyroid_cancer",
+        "name": "Papillary Thyroid Carcinoma (PTC)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "most_common", "weight": 5 },
+          { "feature": "psammoma_bodies", "weight": 4 },
+          { "feature": "lymph_node_metastasis_common", "weight": 4 },
+          { "feature": "excellent_prognosis", "weight": 4 }
+        ],
+        "management": "Total thyroidectomy (if bilateral, nodal mets, >4cm) or lobectomy (if <4cm, unilateral, no mets). Central neck dissection. Radioactive iodine (RAI) ablation for high-risk. TSH suppression therapy."
+      },
+      {
+        "id": "follicular_thyroid_cancer",
+        "name": "Follicular Thyroid Carcinoma (FTC)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "hematogenous_spread_bone_lung", "weight": 5 },
+          { "feature": "capsular_vascular_invasion", "weight": 5 },
+          { "feature": "no_psammoma_bodies", "weight": 3 },
+          { "feature": "difficult_to_diagnose_on_fna", "weight": 4 }
+        ],
+        "management": "Total thyroidectomy. RAI ablation for high-risk. TSH suppression. Surveillance with thyroglobulin."
+      },
+      {
+        "id": "medullary_thyroid_cancer",
+        "name": "Medullary Thyroid Carcinoma (MTC)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "elevated_calcitonin", "weight": 5 },
+          { "feature": "c_cell_origin", "weight": 5 },
+          { "feature": "ret_mutation_sporadic_or_familial", "weight": 5 },
+          { "feature": "may_be_part_of_men2", "weight": 4 }
+        ],
+        "management": "Total thyroidectomy + bilateral central and lateral neck dissection. Genetic testing for RET mutation. Screening for pheochromocytoma before surgery. TKIs (Vandetanib, Cabozantinib) for metastatic."
+      },
+      {
+        "id": "anaplastic_thyroid_cancer",
+        "name": "Anaplastic Thyroid Carcinoma (ATC)",
+        "prevalenceModifier": 0.02,
+        "keyFeatures": [
+          { "feature": "rapid_growth", "weight": 5 },
+          { "feature": "airway_compression", "weight": 5 },
+          { "feature": "age_over_60", "weight": 4 },
+          { "feature": "dismal_prognosis", "weight": 5 },
+          { "feature": "undifferentiated_cells", "weight": 5 }
+        ],
+        "management": "Multimodal: debulking surgery (if resectable), radiotherapy, chemotherapy (Taxol + Carboplatin or Doxorubicin). Tracheostomy for airway. Dabrafenib + Trametinib if BRAF V600E. Palliative care."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "benign_thyroid_nodule",
+        "discriminators": ["benign_fna", "no_lymph_nodes", "low_risk_us", "no_rapid_growth"]
+      },
+      {
+        "diseaseId": "lymphoma_of_thyroid",
+        "discriminators": ["rapid_growth_in_hashimotos", "b_symptoms", "responsive_to_steroids", "diffuse_large_cell"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Vocal cord assessment", "priority": "high", "yield": 0.4, "indication": "RLN function pre-op" }
+      ],
+      "laboratory": [
+        { "name": "TSH, free T4", "priority": "high", "yield": 0.4, "indication": "thyroid function" },
+        { "name": "Thyroglobulin", "priority": "medium", "yield": 0.5, "indication": "tumor marker for PTC/FTC" },
+        { "name": "Calcitonin", "priority": "high", "yield": 0.9, "indication": "elevated in MTC" },
+        { "name": "RET mutation testing", "priority": "medium", "yield": 0.8, "indication": "if MTC suspected" },
+        { "name": "CEA", "priority": "medium", "yield": 0.5, "indication": "elevated in MTC" }
+      ],
+      "imaging": [
+        { "name": "Thyroid US + FNA + Bethesda", "priority": "immediate", "yield": 0.9, "indication": "gold standard for diagnosis" },
+        { "name": "CT Neck with IV contrast", "priority": "high", "yield": 0.8, "indication": "assess extent, lymph nodes" },
+        { "name": "FDG-PET/CT", "priority": "medium", "yield": 0.7, "indication": "for metastatic disease" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATA Guidelines for Thyroid Cancer Management",
+      "pathways": [
+        {
+          "severity": "low-risk PTC",
+          "criteria": "T1-T2, N0, no extra-thyroidal extension, >18 years",
+          "treatment": "Thyroid lobectomy or total thyroidectomy. No RAI if unifocal <4cm. TSH suppression (0.5-2 mU/L)."
+        },
+        {
+          "severity": "intermediate-risk PTC/FTC",
+          "criteria": "T3, N1a, minimal ETE, vascular invasion",
+          "treatment": "Total thyroidectomy + central neck dissection. RAI ablation. TSH suppression (<0.1 mU/L)."
+        },
+        {
+          "severity": "high-risk / MTC / ATC",
+          "criteria": "T4, N1b, metastases, MTC, ATC",
+          "treatment": "Total thyroidectomy + lateral neck dissection. RAI. TKIs for MTC. Multimodal therapy for ATC. Palliation for advanced."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "oncogene_mutations",
+      "braf_ras_ret_mutations",
+      "follicular_or_c_cell_transformation",
+      "tumor_growth",
+      "lymphatic_spread",
+      "hematogenous_spread",
+      "invasive_growth"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrent_laryngeal_nerve_injury",
+        "probability": 0.02,
+        "lagDays": [0, 1],
+        "severityBoost": 0.2,
+        "clues": ["post_op_hoarseness", "breathy_voice", "vocal_cord_immobile"]
+      },
+      {
+        "diseaseId": "hypoparathyroidism",
+        "probability": 0.1,
+        "lagDays": [0, 7],
+        "severityBoost": 0.1,
+        "clues": ["perioral_numbness", "tingling", "positive_trousseau_chvostek", "low_calcium"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["thyroid_mass_with_lymph_nodes", "hoarseness", "rapid_growth", "elevated_calcitonin"],
+    "exclusionClues": ["benign_fna", "normal_calcitonin", "low_risk_us_features"]
+  }
+}

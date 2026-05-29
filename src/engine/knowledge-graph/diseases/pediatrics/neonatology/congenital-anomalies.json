@@ -1,0 +1,169 @@
+{
+  "disease": {
+    "id": "congenital-anomalies",
+    "name": "Congenital Anomalies (Birth Defects)",
+    "system": "PAED",
+    "agePeak_months": [0, 12],
+    "note": "Broad category of structural or functional anomalies present at birth. Includes cardiac, neural tube, gastrointestinal, and chromosomal defects.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["congenital_malformation", "neonatal_abnormality"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_distress_at_birth", "weight": 10 },
+        { "sign": "cyanosis_unresponsive_to_o2", "weight": 10 },
+        { "sign": "severe_hypotonia", "weight": 9 },
+        { "sign": "difficult_intubation", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "multiple_anomalies", "weight": 7 },
+          { "sign": "dysmorphic_features", "weight": 6 },
+          { "sign": "failure_to_pass_meconium", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If life-threatening structural anomaly detected -> SEVERE; else -> NON-SEVERE (minor anomaly)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prenatal_ultrasound_abnormality", "weight": 5 },
+      { "symptomId": "polyhydramnios", "weight": 4, "note": "Suggests GI obstruction" },
+      { "symptomId": "oligohydramnios", "weight": 4, "note": "Suggests renal anomaly" },
+      { "symptomId": "maternal_diabetes", "weight": 3 },
+      { "symptomId": "maternal_medication_exposure", "weight": 3 },
+      { "symptomId": "consanguinity", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "dysmorphic_facies", "baseWeight": 4 },
+      { "signId": "cleft_lip_palate", "baseWeight": 3 },
+      { "signId": "cardiac_murmur", "baseWeight": 4 },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "absent_meconium_passage", "baseWeight": 4 },
+      { "signId": "spinal_defect", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "limb_deformity", "baseWeight": 3 },
+      { "signId": "ambiguous_genitalia", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_maternal_age", "multiplier": 2.0 },
+      { "id": "maternal_diabetes", "multiplier": 2.5 },
+      { "id": "maternal_alcohol", "multiplier": 3.0 },
+      { "id": "maternal_teratogen_exposure", "multiplier": 2.5 },
+      { "id": "folate_deficiency", "multiplier": 2.0 },
+      { "id": "family_history_anomalies", "multiplier": 2.5 },
+      { "id": "consanguinity", "multiplier": 1.8 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "neural_tube_defect",
+        "name": "Neural Tube Defect",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "spina_bifida_aperta", "weight": 5 },
+          { "feature": "hydrocephalus", "weight": 4 },
+          { "feature": "lower_limb_weakness", "weight": 4 }
+        ],
+        "management": "Surgical closure within 24-48h. VP shunt for hydrocephalus. Multidisciplinary follow-up (neurosurgery, urology, physiotherapy)."
+      },
+      {
+        "id": "congenital_gi_obstruction",
+        "name": "Congenital GI Obstruction",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "bile_stained_vomiting", "weight": 5 },
+          { "feature": "abdominal_distension", "weight": 4 },
+          { "feature": "failure_to_pass_meconium", "weight": 5 }
+        ],
+        "management": "NG decompression. Surgical repair (duodenal atresia repair, Ladd procedure for malrotation, colostomy for imperforate anus)."
+      },
+      {
+        "id": "down_syndrome",
+        "name": "Down Syndrome (Trisomy 21)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "dysmorphic_facies", "weight": 5 },
+          { "feature": "hypotonia", "weight": 4 },
+          { "feature": "congenital_heart_disease", "weight": 4 }
+        ],
+        "management": "Echocardiogram to assess for CHD. Genetic counseling. Early intervention programs. Monitor for comorbidities (hypothyroidism, hearing loss)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "prematurity_complications",
+        "discriminators": ["gestational_age_less_than_37_weeks", "no_specific_anomaly_pattern", "symptoms_resolve_with_maturity"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Oxygen saturation monitoring", "priority": "immediate", "yield": 0.7, "indication": "screen for critical CHD" },
+        { "name": "Apgar score", "priority": "immediate", "yield": 0.5, "indication": "immediate neonatal assessment" }
+      ],
+      "laboratory": [
+        { "name": "Karyotype/chromosomal microarray", "priority": "high", "yield": 0.8, "indication": "suspected genetic syndrome" },
+        { "name": "Newborn screening tests", "priority": "immediate", "yield": 0.6, "indication": "mandatory screening" }
+      ],
+      "imaging": [
+        { "name": "Echocardiogram", "priority": "high", "yield": 0.95, "indication": "suspected congenital heart disease" },
+        { "name": "Abdominal X-ray", "priority": "high", "yield": 0.85, "indication": "suspected GI obstruction" },
+        { "name": "Head Ultrasound", "priority": "high", "yield": 0.8, "indication": "suspected hydrocephalus/neural tube defect" },
+        { "name": "Spinal Ultrasound/MRI", "priority": "high", "yield": 0.9, "indication": "suspected spinal dysraphism" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Congenital Anomaly Surveillance & Management",
+      "pathways": [
+        {
+          "severity": "minor",
+          "criteria": "Isolated minor anomaly, no functional impairment, stable vitals",
+          "treatment": "Reassurance, outpatient follow-up, referral to specialist as indicated. Genetic counseling if indicated."
+        },
+        {
+          "severity": "major",
+          "criteria": "Life-threatening structural anomaly, or multiple anomalies, or functional compromise",
+          "treatment": "NICU/Surgical ICU admission. Stabilization of ABCs. Surgical correction as indicated. Multidisciplinary team involvement. Parental counseling and support."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "genetic_mutation",
+      "chromosomal_aneuploidy",
+      "teratogen_exposure",
+      "multifactorial_inheritance",
+      "defective_embryogenesis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "congenital_heart_disease",
+        "probability": 0.3,
+        "lagDays": [0, 7],
+        "severityBoost": 0.4,
+        "clues": ["murmur", "cyanosis", "poor_feeding", "tachypnea"]
+      },
+      {
+        "diseaseId": "developmental_delay",
+        "probability": 0.4,
+        "lagDays": [180, 1095],
+        "severityBoost": 0.3,
+        "clues": ["genetic_syndrome", "neurologic_involvement"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prenatal_ultrasound_finding", "dysmorphic_features", "failure_to_pass_meconium", "cardiac_murmur"],
+    "exclusionClues": ["normal_prenatal_screening", "well_appearing_neonate", "normal_feeding_and_stool"]
+  }
+}

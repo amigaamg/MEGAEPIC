@@ -1,0 +1,188 @@
+{
+  "disease": {
+    "id": "antifungal_selection",
+    "name": "Antifungal Therapy Selection and Stewardship",
+    "system": "PHARM",
+    "agePeak_months": [120, 720],
+    "note": "Antifungal selection depends on host (immunosuppression, neutropenia, transplant), site of infection (disseminated, CNS, pulmonary, mucosal), and pathogen (Candida, Aspergillus, Mucorales, Cryptococcus, endemic fungi). Echinocandins are first-line for candidemia; voriconazole for invasive aspergillosis.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["antimicrobial_stewardship", "fungal_infection", "immunocompromised"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "candidemia_septic_shock", "weight": 10 },
+        { "sign": "pulmonary_aspergillosis_hemoptysis", "weight": 9 },
+        { "sign": "cryptococcal_meningitis_raised_icp", "weight": 9 },
+        { "sign": "mucormycosis_rhino_orbital_cerebral", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "neutropenic_fever_persistent_gt_96h", "weight": 7 },
+          { "sign": "disseminated_fungal_infection_gt_2_sites", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If candidemia/mucormycosis -> URGENT ANTIFUNGAL; if mucosal candidiasis -> NON-URGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "prolonged_neutropenia_anc_lt_500", "weight": 5, "modifiers": [
+          { "condition": "gt_7_days", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "stem_cell_or_solid_organ_transplant", "weight": 5 },
+      { "symptomId": "prolonged_icu_stay_on_broad_antibiotics", "weight": 4 },
+      { "symptomId": "hiv_with_low_cd4_count", "weight": 4 },
+      { "symptomId": "central_venous_catheter_parenteral_nutrition", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "host_factor_neutropenia_or_transplant", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "site_of_infection_blood_lung_cns", "baseWeight": 5 },
+      { "signId": "beta_d_glucan_or_galactomannan_positive", "baseWeight": 4 },
+      { "signId": "culture_and_species_identification", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "allogeneic_stem_cell_transplant", "multiplier": 5.0 },
+      { "id": "acute_leukemia_on_chemotherapy", "multiplier": 4.0 },
+      { "id": "solid_organ_transplant", "multiplier": 3.0 },
+      { "id": "prolonged_icu_stay", "multiplier": 2.5 },
+      { "id": "total_parenteral_nutrition", "multiplier": 2.0 },
+      { "id": "prior_azole_exposure", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "candidemia_invasive_candidiasis",
+        "name": "Candidemia / Invasive Candidiasis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "candida_albicans_most_common_but_non_albicans_rising", "weight": 4 },
+          { "feature": "blood_cultures_positive_or_sterile_site", "weight": 5 },
+          { "feature": "central_line_associated_common", "weight": 4 },
+          { "feature": "beta_d_glucan_elevated_gt_80", "weight": 3 }
+        ],
+        "management": "First-line: echinocandin (caspofungin 70mg load, 50mg daily; micafungin 100mg daily; anidulafungin 200mg load, 100mg daily). Step-down to fluconazole if C. albicans/parapsilosis and stable. Remove central line. Fundoscopic exam. Duration: 14 days after clearance."
+      },
+      {
+        "id": "invasive_aspergillosis",
+        "name": "Invasive Aspergillosis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "halo_sign_on_ct_at_early_stage", "weight": 5 },
+          { "feature": "air_crescent_sign_in_neutropenic_recovery", "weight": 4 },
+          { "feature": "galactomannan_positive_in_blood_or_bal", "weight": 5 },
+          { "feature": "neutropenic_patient_hematologic_malignancy", "weight": 5 }
+        ],
+        "management": "First-line: voriconazole (6mg/kg q12h x2, then 4mg/kg q12h IV; oral 200-300mg q12h). Alternative: isavuconazole, liposomal amphotericin B. TDM for voriconazole (trough 1-5.5). Duration: minimum 6-12 weeks. Surgical resection if isolated cavity/hemoptysis."
+      },
+      {
+        "id": "cryptococcal_meningitis",
+        "name": "Cryptococcal Meningitis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "hiv_with_cd4_lt_100_most_common", "weight": 5 },
+          { "feature": "india_ink_stain_positive_csf", "weight": 5 },
+          { "feature": "cryptococcal_antigen_positive_serum_csf", "weight": 5 },
+          { "feature": "headache_fever_meningismus", "weight": 4 },
+          { "feature": "elevated_csf_opening_pressure", "weight": 4 }
+        ],
+        "management": "Induction: liposomal AmB 3-4mg/kg/day + flucytosine 100mg/kg/day x2 weeks (or minimum 1 week). Consolidation: fluconazole 400-800mg/day x8 weeks. Maintenance: fluconazole 200mg/day. Therapeutic lumbar puncture for elevated ICP."
+      },
+      {
+        "id": "mucormycosis",
+        "name": "Mucormycosis (Rhizopus, Mucor)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "rhino_orbital_cerebral_diabetic_ketoacidosis", "weight": 5 },
+          { "feature": "pulmonary_hematologic_malignancy", "weight": 4 },
+          { "feature": "rapidly_progressive_necrotic_tissue", "weight": 5 },
+          { "feature": "reverse_halo_sign_on_ct_chest", "weight": 4 },
+          { "feature": "tissue_biopsy_with_broad_non_septate_hyphae", "weight": 5 }
+        ],
+        "management": "First-line: liposomal AmB 5-10mg/kg/day. Surgical debridement (mandatory, often multiple). Control underlying risk factors (correct ketoacidosis, reduce immunosuppression). Step-down to posaconazole or isavuconazole after improvement. Duration: until resolution."
+      },
+      {
+        "id": "prophylaxis_empiric",
+        "name": "Antifungal Prophylaxis and Empiric Therapy",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "high_risk_allo_sct_ami_l_induction", "weight": 5 },
+          { "feature": "empiric_antifungal_for_persistent_neutropenic_fever", "weight": 4 },
+          { "feature": "preemptive_based_on_biomarkers_galactomannan_bdg", "weight": 3 }
+        ],
+        "management": "Prophylaxis: posaconazole (preferred), voriconazole, or micafungin in high-risk patients. Empiric: caspofungin or liposomal AmB for neutropenic fever >96h on broad antibiotics. Preemptive: start when biomarkers positive + clinical/imaging findings."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "bacterial_pneumonia_or_sepsis",
+        "discriminators": ["negative_biomarkers", "responsive_to_antibiotics", "no_fungal_risk_factors"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Blood cultures (aerobic, fungal bottles)", "priority": "immediate", "yield": 0.5, "indication": "suspected candidemia" },
+        { "name": "Beta-D-Glucan (BDG) serum", "priority": "medium", "yield": 0.7, "indication": "pan-fungal screening" },
+        { "name": "Galactomannan (serum, BAL)", "priority": "medium", "yield": 0.7, "indication": "suspected aspergillosis" },
+        { "name": "Cryptococcal antigen (serum, CSF)", "priority": "high", "yield": 0.95, "indication": "suspected cryptococcosis" },
+        { "name": "Fungal culture and sensitivity", "priority": "high", "yield": 0.6, "indication": "identify species, echinocandin/azole resistance" },
+        { "name": "Histopathology of biopsy", "priority": "high", "yield": 0.95, "indication": "definitive diagnosis of invasive mold" },
+        { "name": "Therapeutic drug monitoring (voriconazole trough)", "priority": "medium", "yield": 0.6, "indication": "target 1-5.5 mcg/mL" }
+      ],
+      "imaging": [
+        { "name": "CT Chest (high resolution)", "priority": "high", "yield": 0.6, "indication": "suspected pulmonary fungal infection" },
+        { "name": "CT Sinus/Brain (for suspected rhinocerebral)", "priority": "high", "yield": 0.7, "indication": "mucormycosis risk" },
+        { "name": "Fundoscopic exam (retinal candidiasis)", "priority": "medium", "yield": 0.3, "indication": "disseminated candidiasis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IDSA Guidelines for Aspergillosis, Candidiasis, Cryptococcosis, ESCMID/ECMM Guidelines",
+      "pathways": [
+        {
+          "severity": "mucosal_only",
+          "criteria": "oropharyngeal/esophageal candidiasis, vaginitis, no neutropenia",
+          "treatment": "Fluconazole PO (or topical for mild). Avoid echinocandins/AmB unless refractory. Non-albicans species may need echinocandin."
+        },
+        {
+          "severity": "invasive_hemodynamically_stable",
+          "criteria": "candidemia, pulmonary aspergillosis, stable vitals",
+          "treatment": "Echinocandin for Candida. Voriconazole for Aspergillus. Step-down when stable and species known. Source control (line removal, drainage)."
+        },
+        {
+          "severity": "severe_invasive_life_threatening",
+          "criteria": "septic shock from Candida, mucormycosis, cryptococcal meningitis with ICP",
+          "treatment": "Aggressive therapy: liposomal AmB combination. Surgical debridement for mucormycosis. Therapeutic LP for cryptococcal meningitis. ICU support."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "fungal_translocation_gut_mucosal_barrier",
+      "neutropenia_lack_of_phagocytic_killing",
+      "t_cell_deficiency_cryptococcus",
+      "angioinvasion_aspergillus_mucor",
+      "biofilm_formation_on_catheters"
+    ],
+    "complications": [
+      {
+        "diseaseId": "hepatotoxicity_from_azoles",
+        "probability": 0.05,
+        "lagDays": [7, 30],
+        "severityBoost": 0.3,
+        "clues": ["elevated_transaminases", "voriconazole_trough_gt_5"]
+      },
+      {
+        "diseaseId": "nephrotoxicity_from_amphotericin_b",
+        "probability": 0.15,
+        "lagDays": [3, 14],
+        "severityBoost": 0.4,
+        "clues": ["rising_creatinine", "hypokalemia", "hypomagnesemia"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["immunocompromised_host", "persistent_fever_on_broad_antibiotics", "positive_fungal_biomarker", "characteristic_imaging"],
+    "exclusionClues": ["immunocompetent", "negative_biomarkers", "alternative_diagnosis_proven"]
+  }
+}

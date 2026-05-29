@@ -1,0 +1,1704 @@
+'use client';
+
+import { useState, useMemo, useCallback } from 'react';
+
+// ─── Inline Icon Component ──────────────────────────────────────────────────────
+
+const Icon = ({ name, size = 14, color }: { name: string; size?: number; color?: string }) => {
+  const svgProps = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: color || 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+  const icons: Record<string, JSX.Element> = {
+    check: <svg {...svgProps}><polyline points="20 6 9 17 4 12" /></svg>,
+    'info-circle': <svg {...svgProps}><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>,
+    'alert-triangle': <svg {...svgProps}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>,
+    user: <svg {...svgProps}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
+    list: <svg {...svgProps}><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>,
+    notes: <svg {...svgProps}><path d="M9 4h6l4 4v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /><polyline points="9 4 9 10 15 10 15 4" /></svg>,
+    clipboard: <svg {...svgProps}><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><rect x="8" y="2" width="8" height="4" rx="1" ry="1" /></svg>,
+    heart: <svg {...svgProps}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>,
+    'chart-bar': <svg {...svgProps}><line x1="12" y1="20" x2="12" y2="10" /><line x1="18" y1="20" x2="18" y2="4" /><line x1="6" y1="20" x2="6" y2="16" /></svg>,
+    shield: <svg {...svgProps}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>,
+    apple: <svg {...svgProps}><circle cx="12" cy="8" r="2" /><path d="M12 10v4" /><path d="M10 14h4" /></svg>,
+    users: <svg {...svgProps}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
+    search: <svg {...svgProps}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>,
+    activity: <svg {...svgProps}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>,
+    'file-text': <svg {...svgProps}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>,
+    copy: <svg {...svgProps}><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>,
+    'arrow-right': <svg {...svgProps}><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>,
+    lungs: <svg {...svgProps}><path d="M22 12c0-2.5-2-5-4-5s-4 2-4 4c0-2-2-4-4-4s-4 2-4 4c0-2-2-2.5-4-4s-4 2.5-4 5c0 6 8 10 12 10s12-4 12-10z" /></svg>,
+    brain: <svg {...svgProps}><path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 5.5V21l4-2 4 2v-6.5c1.5-1 3-3 3-5.5a7 7 0 0 0-7-7z" /></svg>,
+    eye: <svg {...svgProps}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>,
+    star: <svg {...svgProps}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
+    thermometer: <svg {...svgProps}><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" /></svg>,
+    droplet: <svg {...svgProps}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg>,
+  };
+  return icons[name] || <span />;
+};
+
+// ─── Types ───────────────────────────────────────────────────────────────────────
+
+interface HpiData {
+  onsetType: string; progression: string; severity: string;
+  site: string; character: string; radiation: string; associated: string; timeCourse: string; exacerbating: string; relieving: string;
+  coughChar: string; coughDuration: string; nocturnalCough: boolean; exerciseTriggered: boolean; allergenTrigger: boolean;
+  feverPattern: string; highFever: boolean; feverDuration: string; feverOnset: string;
+  wheeze: boolean; wheezePattern: string; unilateralWheeze: boolean;
+  stridor: boolean; stridorType: string;
+  chestIndrawing: boolean; grunting: boolean; nasalFlaring: boolean; headBobbing: boolean; feedingDiff: boolean;
+  nightSweats: boolean; weightLoss: boolean; tbContact: boolean; sickContact: boolean; sickContactDetail: string;
+  suddenOnset: boolean; drooling: boolean; tripodPosition: boolean; hepatomegalyReported: boolean;
+  prevTx: string; txResponse: string;
+  exposureCovid: boolean; exposureCovidDetail: string;
+  urineOutput: string; seizureHPI: boolean; vomitingHPI: boolean; diarrheaHPI: boolean; rashHPI: string;
+}
+
+interface PmhData {
+  prevAdmissions: boolean; prevAdmDetail: string; chronicIllnesses: string[];
+  allergies: string; medications: string; prevSurgeries: boolean; surgeryDetail: string;
+  prevWheeze: boolean; asthmaDx: boolean; recurrentChest: boolean; cardiacDisease: boolean;
+  hiv: boolean; sickleCellDisease: boolean; epilepsyDx: boolean; immunodeficiencyDx: boolean;
+  cysticFibrosisDx: boolean; diabetesDx: boolean; downSyndromeDx: boolean;
+}
+
+interface BirthData {
+  birthPlace: string; gestAge: string; gestAgeWeeks: string; deliveryMode: string;
+  birthWeight: string; apgar: string; neonatalComplications: string[]; neonatalDetail: string;
+  nicuAdmission: boolean; nicuDuration: string;
+}
+
+interface DevelopmentData {
+  grossMotor: string; grossMotorDetail: string;
+  fineMotor: string; fineMotorDetail: string;
+  speech: string; speechDetail: string;
+  social: string; socialDetail: string;
+  concerns: string;
+}
+
+interface ImmunizationData {
+  status: string; missedVaccines: string[]; adverseReactions: boolean; adverseDetail: string;
+}
+
+interface NutritionData {
+  breastfed: string; bfDuration: string; exclusiveDuration: string;
+  complementaryAge: string; dietaryDiversity: string;
+  appetite: string; muac: string; weightCentile: string; heightCentile: string;
+  malnutritionSigns: string[];
+}
+
+interface FamilyData {
+  tbHousehold: boolean; asthmaFamily: boolean; atopyFamily: boolean; sickleCellFamily: boolean;
+  epilepsyFamily: boolean; geneticDiseases: string; similarIllnessSiblings: boolean;
+  housingConditions: string; housingDetail: string;
+  waterSource: string; sanitation: string;
+  parentOccupation: string; smokingExposure: boolean; smokeDetail: string;
+  schoolAttendance: string; schoolLevel: string;
+}
+
+interface RosData {
+  seizures: boolean; headache: boolean; lethargyRos: boolean; consciousness: string;
+  dizziness: boolean; syncope: boolean;
+  cyanosisRos: boolean; peripheralEdema: boolean; fatigue: boolean; palpitations: boolean;
+  vomiting: boolean; diarrhea: boolean; abdominalPain: boolean; hepatomegaly: boolean; constipation: boolean;
+  reducedUrine: boolean; dysuria: boolean; hematuria: boolean;
+  rash: boolean; rashType: string; jaundice: boolean; pallor: boolean; clubbing: boolean; bruising: boolean; petechiae: boolean;
+  earPain: boolean; earDischarge: boolean; soreThroatRos: boolean; nasalDischargeRos: boolean; hearingLoss: boolean;
+}
+
+interface VitalsData {
+  temp: string; hr: string; rr: string; spo2: string; bp: string; bpSystolic: string; bpDiastolic: string;
+  weight: string; height: string; muac: string; hc: string;
+  hydration: string; generalCondition: string; avpu: string;
+  lymphNodes: string; lymphNodeSite: string;
+  pallorExam: boolean; jaundiceExam: boolean; cyanosisExam: boolean; clubbingExam: boolean; edemaExam: boolean;
+  examIndrawing: boolean; examNasalFlaring: boolean; examGrunting: boolean; examStridor: boolean;
+  examWheeze: boolean; examCrackles: boolean; examReducedBS: boolean; examBronchial: boolean;
+  examDullness: boolean; examHyperResonance: boolean; examTrachealDeviation: boolean;
+  examHeartSounds: string; examMurmur: string; examMurmurGrade: string;
+  examAbdDistension: boolean; examHepatomegaly: boolean; examSplenomegaly: boolean; examTenderness: string;
+  examCnsTone: string; examCnsReflexes: string; examFontanelle: string; examNeckStiffness: boolean;
+  examJointSwelling: boolean; examJointDeformity: boolean; examMuscleWasting: boolean;
+  examSkinRash: string; examSkinBruising: boolean; examSkinPetechiae: boolean;
+}
+
+interface FormState {
+  patientName: string; ageMonths: string; sex: string; dob: string; residence: string;
+  informant: string; informantRelation: string; histReliability: string;
+  dateOfAdmission: string; sourceOfReferral: string;
+  complaints: string[]; complaintDurations: Record<string, string>;
+  hpi: HpiData; pmh: PmhData; birth: BirthData; development: DevelopmentData;
+  immunization: ImmunizationData; nutrition: NutritionData; family: FamilyData;
+  ros: RosData; vitals: VitalsData;
+}
+
+interface DiseaseScore {
+  id: string; name: string; abbr: string; score: number; pct: number; color: string;
+}
+
+interface SeverityResult {
+  level: string; color: string; bg: string; border: string; msg: string;
+}
+
+interface PhaseConfig {
+  id: string; label: string; icon: string;
+}
+
+interface NoteData {
+  ageStr: string; sex: string; name: string; complaintLines: string[]; hpiNarr: string;
+  pmh: PmhData; birth: BirthData; dev: DevelopmentData; imm: ImmunizationData;
+  nut: NutritionData; fam: FamilyData; rosHistory: string;
+  vRows: string[][]; examText: string;
+  inv: string[]; mgmt: { heading: string; text: string }[];
+  ddxForNote: string; scores: DiseaseScore[]; clinicalSummary: string;
+  cvsExamText: string; abdExamText: string; cnsExamText: string; mskExamText: string; skinExamText: string;
+}
+
+// ─── Data Constants ──────────────────────────────────────────────────────────────
+
+const DISEASES = [
+  { id: 'pneumonia',       name: 'Pneumonia',              abbr: 'PNA'  },
+  { id: 'asthma',          name: 'Asthma',                 abbr: 'AST'  },
+  { id: 'bronchiolitis',   name: 'Bronchiolitis',          abbr: 'BRL'  },
+  { id: 'tuberculosis',    name: 'Tuberculosis',           abbr: 'TB'   },
+  { id: 'urti',            name: 'Viral URTI',             abbr: 'URI'  },
+  { id: 'croup',           name: 'Croup',                  abbr: 'CRP'  },
+  { id: 'foreign_body',    name: 'Foreign Body Asp.',      abbr: 'FBA'  },
+  { id: 'pleural_effusion',name: 'Pleural Effusion',       abbr: 'PLE'  },
+  { id: 'chf',             name: 'CHF / Cardiac',          abbr: 'CHF'  },
+  { id: 'epiglottitis',    name: 'Epiglottitis',           abbr: 'EPI'  },
+  { id: 'bronchiectasis',  name: 'Bronchiectasis',         abbr: 'BNX'  },
+  { id: 'empyema',         name: 'Empyema',                abbr: 'EMP'  },
+  { id: 'anaphylaxis',     name: 'Anaphylaxis',            abbr: 'ANA'  },
+  { id: 'retropharyngeal', name: 'Retropharyngeal Abscess',abbr: 'RPA'  },
+  { id: 'allergic_rhinitis',name: 'Allergic Rhinitis',     abbr: 'ALR'  },
+  { id: 'sinusitis',       name: 'Acute Sinusitis',        abbr: 'SIN'  },
+  { id: 'pneumothorax',    name: 'Pneumothorax',           abbr: 'PTX'  },
+];
+
+const DC = ['#ef4444','#3b82f6','#10b981','#f59e0b','#6b7280','#ec4899','#8b5cf6','#14b8a6','#f97316','#dc2626','#84cc16','#a855f7','#e11d48','#0ea5e9','#6366f1','#d946ef','#059669'];
+
+const ALL_SYMPTOMS = [
+  { id:'cough',              label:'Cough'              },
+  { id:'fever',              label:'Fever'              },
+  { id:'difficulty_breathing',label:'Difficulty Breathing'},
+  { id:'wheeze',             label:'Wheeze'             },
+  { id:'stridor',            label:'Stridor'            },
+  { id:'chest_pain',         label:'Chest Pain'         },
+  { id:'hemoptysis',         label:'Hemoptysis'         },
+  { id:'noisy_breathing',    label:'Noisy Breathing'    },
+  { id:'reduced_feeding',    label:'Reduced Feeding'    },
+  { id:'lethargy',           label:'Lethargy'           },
+  { id:'cyanosis',           label:'Cyanosis'           },
+  { id:'night_sweats',       label:'Night Sweats'       },
+  { id:'weight_loss',        label:'Weight Loss'        },
+  { id:'nasal_discharge',    label:'Nasal Discharge'    },
+  { id:'sore_throat',        label:'Sore Throat'        },
+  { id:'chest_tightness',    label:'Chest Tightness'    },
+  { id:'vomiting_symptom',   label:'Vomiting'           },
+  { id:'diarrhea_symptom',   label:'Diarrhea'           },
+  { id:'seizure_symptom',    label:'Seizures'           },
+  { id:'rash_symptom',       label:'Rash'               },
+  { id:'ear_pain',           label:'Ear Pain'           },
+  { id:'abdominal_pain',     label:'Abdominal Pain'     },
+];
+
+const PHASES: PhaseConfig[] = [
+  { id:'biodata',      label:'Biodata',              icon:'user'         },
+  { id:'complaints',   label:'Chief Complaints',     icon:'list'         },
+  { id:'hpi',          label:'HPI (SOCRATES)',       icon:'notes'        },
+  { id:'pmh',          label:'Past Medical History', icon:'clipboard'    },
+  { id:'birth_dev_imm',label:'Birth & Development',  icon:'heart'        },
+  { id:'nutrition',    label:'Nutritional History',  icon:'apple'        },
+  { id:'family_social',label:'Family & Social',      icon:'users'        },
+  { id:'ros',          label:'Review of Systems',    icon:'search'       },
+  { id:'exam_general', label:'General Examination',  icon:'eye'          },
+  { id:'exam_systemic',label:'Systemic Examination', icon:'activity'     },
+  { id:'summary_ddx',  label:'Summary & DDx',        icon:'star'         },
+  { id:'inv_mgmt',     label:'Investigations & Mgmt',icon:'file-text'    },
+  { id:'note',         label:'Clinical Note',        icon:'clipboard'    },
+];
+
+// ─── Scoring Engine ──────────────────────────────────────────────────────────────
+
+function computeScores(form: FormState): DiseaseScore[] {
+  const s: Record<string, number> = {};
+  DISEASES.forEach(d => s[d.id] = 0);
+
+  const age = parseInt(form.ageMonths) || 0;
+  const c   = form.complaints || [];
+  const hpi = form.hpi || {} as HpiData;
+  const pmh = form.pmh || {} as PmhData;
+  const fam = form.family || {} as FamilyData;
+  const v   = form.vitals || {} as VitalsData;
+  const ros = form.ros || {} as RosData;
+
+  if (c.includes('cough'))                { s.pneumonia+=2;s.tuberculosis+=2;s.asthma+=2;s.bronchiolitis+=1;s.urti+=2;s.bronchiectasis+=1;s.foreign_body+=1; }
+  if (c.includes('fever'))                { s.pneumonia+=3;s.urti+=2;s.epiglottitis+=2;s.tuberculosis+=1;s.empyema+=2;s.retropharyngeal+=2; }
+  if (c.includes('wheeze'))               { s.asthma+=4;s.bronchiolitis+=3;s.foreign_body+=1;s.chf+=1;s.anaphylaxis+=1; }
+  if (c.includes('stridor'))              { s.croup+=4;s.epiglottitis+=4;s.foreign_body+=3;s.anaphylaxis+=2;s.retropharyngeal+=2; }
+  if (c.includes('difficulty_breathing')) { s.pneumonia+=2;s.asthma+=2;s.bronchiolitis+=2;s.chf+=2;s.pleural_effusion+=1;s.pneumothorax+=2;s.anaphylaxis+=1; }
+  if (c.includes('hemoptysis'))           { s.tuberculosis+=4;s.bronchiectasis+=3;s.pleural_effusion+=1; }
+  if (c.includes('chest_pain'))           { s.pleural_effusion+=3;s.pneumonia+=1;s.pneumothorax+=3;s.chf+=1; }
+  if (c.includes('night_sweats'))         { s.tuberculosis+=5; }
+  if (c.includes('weight_loss'))          { s.tuberculosis+=5;s.bronchiectasis+=2; }
+  if (c.includes('cyanosis'))             { s.pneumonia+=2;s.asthma+=2;s.chf+=3;s.bronchiolitis+=2;s.pneumothorax+=2; }
+  if (c.includes('reduced_feeding') && age < 24) { s.bronchiolitis+=3;s.pneumonia+=2; }
+  if (c.includes('lethargy'))             { s.pneumonia+=2;s.tuberculosis+=1; }
+  if (c.includes('sore_throat'))          { s.urti+=4;s.epiglottitis+=2;s.retropharyngeal+=2; }
+  if (c.includes('nasal_discharge'))      { s.urti+=4;s.bronchiolitis+=1;s.allergic_rhinitis+=3;s.sinusitis+=2; }
+  if (c.includes('chest_tightness'))      { s.asthma+=3; }
+  if (c.includes('noisy_breathing'))      { s.croup+=2;s.foreign_body+=2;s.epiglottitis+=1; }
+  if (c.includes('vomiting_symptom'))     { s.pneumonia+=1;s.urti+=1; }
+  if (c.includes('diarrhea_symptom'))     { s.urti+=1; }
+  if (c.includes('seizure_symptom'))      { s.pneumonia+=1; }
+  if (c.includes('rash_symptom'))         { s.urti+=1;s.anaphylaxis+=2; }
+  if (c.includes('ear_pain'))             { s.urti+=2;s.retropharyngeal+=1; }
+  if (c.includes('abdominal_pain'))       { s.pneumonia+=1; }
+
+  if (hpi.coughChar === 'barking')         s.croup += 6;
+  if (hpi.coughChar === 'productive')     { s.pneumonia += 3; s.bronchiectasis += 3; s.empyema += 2; }
+  if (hpi.coughChar === 'whooping')        s.urti += 2;
+  if (hpi.coughChar === 'blood_stained')  { s.tuberculosis += 3; s.bronchiectasis += 3; }
+  if (hpi.coughChar === 'dry')            { s.asthma += 2; s.allergic_rhinitis += 1; }
+  if (hpi.coughDuration === 'chronic')    { s.tuberculosis += 4; s.bronchiectasis += 3; s.asthma += 2; }
+  if (hpi.coughDuration === 'acute')      { s.urti += 2; s.pneumonia += 1; }
+  if (hpi.coughDuration === 'subacute')   { s.pneumonia += 2; s.tuberculosis += 1; }
+  if (hpi.nocturnalCough)                 { s.asthma += 3; }
+  if (hpi.exerciseTriggered)              { s.asthma += 4; }
+  if (hpi.allergenTrigger)                { s.asthma += 3; s.allergic_rhinitis += 2; }
+  if (hpi.nightSweats)                    { s.tuberculosis += 5; }
+  if (hpi.weightLoss)                     { s.tuberculosis += 5; s.bronchiectasis += 2; }
+  if (hpi.tbContact)                      { s.tuberculosis += 6; }
+  if (hpi.sickContact)                    { s.pneumonia += 1; s.urti += 1; }
+  if (hpi.suddenOnset)                    { s.foreign_body += 5; s.anaphylaxis += 2; }
+  if (hpi.unilateralWheeze)               { s.foreign_body += 5; }
+  if (hpi.wheezePattern === 'recurrent')  { s.asthma += 5; }
+  if (hpi.wheezePattern === 'first' && age <= 24) { s.bronchiolitis += 4; }
+  if (hpi.drooling)                       { s.epiglottitis += 5; s.retropharyngeal += 3; }
+  if (hpi.tripodPosition)                 { s.epiglottitis += 4; }
+  if (hpi.highFever)                      { s.epiglottitis += 3; s.pneumonia += 2; s.empyema += 2; }
+  if (hpi.feedingDiff && age <= 12)       { s.bronchiolitis += 3; }
+  if (hpi.hepatomegalyReported)           { s.chf += 5; }
+  if (hpi.chestIndrawing)                 { s.pneumonia += 3; s.asthma += 2; }
+  if (hpi.grunting)                       { s.pneumonia += 4; }
+  if (hpi.nasalFlaring)                   { s.pneumonia += 2; s.bronchiolitis += 2; }
+  if (hpi.seizureHPI)                     { s.pneumonia += 1; }
+
+  if (pmh.asthmaDx)                       { s.asthma += 6; }
+  if (pmh.prevWheeze)                     { s.asthma += 3; }
+  if (pmh.recurrentChest)                 { s.bronchiectasis += 4; s.tuberculosis += 2; }
+  if (pmh.cardiacDisease)                 { s.chf += 5; }
+  if (pmh.hiv)                            { s.pneumonia += 2; s.tuberculosis += 3; }
+  if (pmh.sickleCellDisease)              { s.pneumonia += 2; }
+  if (pmh.immunodeficiencyDx)             { s.pneumonia += 2; s.tuberculosis += 2; }
+  if (pmh.cysticFibrosisDx)               { s.bronchiectasis += 5; s.pneumonia += 2; }
+
+  if (fam.tbHousehold)                    { s.tuberculosis += 5; }
+  if (fam.asthmaFamily)                   { s.asthma += 3; }
+  if (fam.atopyFamily)                    { s.asthma += 2; s.allergic_rhinitis += 2; }
+  if (fam.housingConditions === 'crowded') { s.tuberculosis += 2; s.urti += 1; }
+  if (fam.smokingExposure)                { s.asthma += 2; s.pneumonia += 1; }
+
+  if (age <= 24) s.bronchiolitis += 1;
+  if (age > 24)  s.bronchiolitis = Math.max(0, s.bronchiolitis - 2);
+  if (age < 60)  s.foreign_body += 1;
+  if (age >= 60) s.asthma += 1;
+
+  const spo2 = parseFloat(v.spo2), temp = parseFloat(v.temp), rr = parseFloat(v.rr);
+  if (!isNaN(spo2) && spo2 < 92) { s.pneumonia+=3;s.asthma+=2;s.bronchiolitis+=2;s.chf+=1;s.pneumothorax+=1; }
+  if (!isNaN(temp) && temp >= 38.5) { s.pneumonia+=2;s.urti+=1;s.empyema+=2; }
+  const highRR = !isNaN(rr) && ((age<12&&rr>=50)||(age<60&&rr>=40)||(age>=60&&rr>=30));
+  if (highRR) { s.pneumonia+=2;s.bronchiolitis+=1; }
+
+  if (v.examTrachealDeviation) { s.pneumothorax += 5; s.pleural_effusion += 2; }
+  if (v.examDullness) { s.pleural_effusion += 4; s.empyema += 3; }
+  if (v.examReducedBS) { s.pleural_effusion += 3; s.pneumothorax += 3; }
+
+  if (ros.peripheralEdema)               { s.chf += 3; }
+  if (ros.pallor)                        { s.tuberculosis += 1; }
+  if (ros.clubbing)                      { s.bronchiectasis += 3; s.tuberculosis += 1; s.chf += 1; }
+  if (ros.petechiae)                     { s.pneumonia += 1; }
+
+  const total = Math.max(Object.values(s).reduce((a,b)=>a+Math.max(b,0),0), 0.01);
+  return DISEASES.map((d,i)=>({
+    id:d.id, name:d.name, abbr:d.abbr,
+    score: Math.max(s[d.id],0),
+    pct: Math.round((Math.max(s[d.id],0)/total)*100),
+    color: DC[i],
+  })).sort((a,b)=>b.score-a.score).filter(d=>d.score>0).slice(0,7);
+}
+
+// ─── Severity Engine ─────────────────────────────────────────────────────────────
+
+function getSeverity(form: FormState): SeverityResult | null {
+  const c = form.complaints || [], hpi = form.hpi || {} as HpiData, v = form.vitals || {} as VitalsData;
+  const spo2 = parseFloat(v.spo2), temp = parseFloat(v.temp);
+  if (c.includes('cyanosis') || (!isNaN(spo2)&&spo2<85) || (hpi.drooling&&hpi.tripodPosition) || (hpi.suddenOnset&&c.includes('stridor')))
+    return { level:'CRITICAL', color:'#dc2626', bg:'#fef2f2', border:'#fca5a5', msg:'Immediate intervention required — stabilize airway and breathing urgently.' };
+  if ((!isNaN(spo2)&&spo2<92) || hpi.grunting || hpi.chestIndrawing || (!isNaN(temp)&&temp>=39.5))
+    return { level:'SEVERE', color:'#ea580c', bg:'#fff7ed', border:'#fdba74', msg:'Urgent assessment needed — consider escalation to higher level of care.' };
+  if ((!isNaN(spo2)&&spo2<=94) || c.includes('difficulty_breathing') || (!isNaN(temp)&&temp>=38.5))
+    return { level:'MODERATE', color:'#d97706', bg:'#fffbeb', border:'#fde68a', msg:'Close monitoring required — initiate targeted treatment.' };
+  if (c.length > 0)
+    return { level:'MILD', color:'#16a34a', bg:'#f0fdf4', border:'#86efac', msg:'Clinically manageable — may consider outpatient treatment if stable.' };
+  return null;
+}
+
+// ─── Helper: format age ─────────────────────────────────────────────────────────
+
+function formatAge(ageMonths: string): string {
+  const age = parseInt(ageMonths) || 0;
+  if (age < 12) { return age + '-month-old'; }
+  const years = Math.floor(age / 12);
+  const months = age % 12;
+  if (months > 0) { return years + '-year ' + months + '-month-old'; }
+  return years + '-year-old';
+}
+
+// ─── Clinical Note Generator ─────────────────────────────────────────────────────
+
+function buildNote(form: FormState, scores: DiseaseScore[]): NoteData {
+  const age = parseInt(form.ageMonths)||0;
+  const ageStr = formatAge(form.ageMonths);
+  const sex = form.sex||'child', name = form.patientName||'Patient';
+  const c=form.complaints||[], hpi=form.hpi||{} as HpiData;
+  const pmh=form.pmh||{} as PmhData, birth=form.birth||{} as BirthData;
+  const dev=form.development||{} as DevelopmentData, imm=form.immunization||{} as ImmunizationData;
+  const nut=form.nutrition||{} as NutritionData, fam=form.family||{} as FamilyData;
+  const ros=form.ros||{} as RosData, v=form.vitals||{} as VitalsData;
+
+  const complaintLines = c.map(function(s) {
+    const dur = form.complaintDurations?.[s];
+    return s.replace(/_/g,' ') + (dur ? ' x ' + dur : '');
+  });
+
+  // Build comprehensive HPI narrative
+  var hpiNarr = name + ' is a ' + ageStr + ' ' + sex.toLowerCase() + ', ';
+  hpiNarr += pmh.prevAdmissions ? 'with a history of previous admissions, ' : 'previously well, ';
+  hpiNarr += 'presenting with ';
+
+  if (hpi.onsetType === 'sudden') { hpiNarr += 'sudden onset of '; }
+  else if (hpi.onsetType === 'gradual') { hpiNarr += 'gradual onset of '; }
+  else { hpiNarr += 'a history of '; }
+
+  hpiNarr += (complaintLines.join(', ') || 'respiratory symptoms') + '. ';
+
+  // SOCRATES expansion
+  if (c.includes('cough')) {
+    hpiNarr += 'The cough is ' + (hpi.coughChar || 'present') + ' in character';
+    if (hpi.coughDuration) { hpiNarr += ', ' + hpi.coughDuration + ' in duration'; }
+    if (hpi.nocturnalCough) { hpiNarr += ', predominantly nocturnal'; }
+    if (hpi.exerciseTriggered) { hpiNarr += ', and exercise-triggered'; }
+    if (hpi.allergenTrigger) { hpiNarr += ', triggered by allergens'; }
+    hpiNarr += '. ';
+  }
+  if (c.includes('wheeze')) {
+    hpiNarr += 'Wheeze is ';
+    if (hpi.wheezePattern === 'first') { hpiNarr += 'a first episode (bronchiolitis pattern)'; }
+    else if (hpi.wheezePattern === 'recurrent') { hpiNarr += 'recurrent (asthma pattern)'; }
+    else { hpiNarr += 'present'; }
+    if (hpi.unilateralWheeze) { hpiNarr += ' — notably unilateral (foreign body must be excluded)'; }
+    hpiNarr += '. ';
+  }
+  if (c.includes('fever')) {
+    hpiNarr += 'Fever is ' + (hpi.feverPattern || 'present') + ' in pattern';
+    if (hpi.highFever) { hpiNarr += ', high-grade (>=39C)'; }
+    if (hpi.feverDuration) { hpiNarr += ', for ' + hpi.feverDuration; }
+    hpiNarr += '. ';
+  }
+  if (hpi.site) { hpiNarr += 'Site of symptoms: ' + hpi.site + '. '; }
+  if (hpi.character) { hpiNarr += 'Character: ' + hpi.character + '. '; }
+  if (hpi.radiation) { hpiNarr += 'Radiation: ' + hpi.radiation + '. '; }
+  if (hpi.associated) { hpiNarr += 'Associated symptoms: ' + hpi.associated + '. '; }
+  if (hpi.timeCourse) { hpiNarr += 'Time course: ' + hpi.timeCourse + '. '; }
+  if (hpi.exacerbating) { hpiNarr += 'Exacerbating factors: ' + hpi.exacerbating + '. '; }
+  if (hpi.relieving) { hpiNarr += 'Relieving factors: ' + hpi.relieving + '. '; }
+  if (hpi.nightSweats) hpiNarr += 'Night sweats are present. ';
+  if (hpi.weightLoss)  hpiNarr += 'Weight loss has been noted. ';
+  if (hpi.tbContact)   hpiNarr += 'There is a significant history of TB contact. ';
+  if (hpi.sickContact) hpiNarr += 'There is known sick contact exposure' + (hpi.sickContactDetail ? ' (' + hpi.sickContactDetail + ')' : '') + '. ';
+  if (hpi.suddenOnset) hpiNarr += 'Sudden onset raises concern for foreign body aspiration. ';
+  if (hpi.drooling)    hpiNarr += 'Drooling is present — epiglottitis must be urgently excluded. ';
+  if (hpi.chestIndrawing) hpiNarr += 'Chest indrawing is present indicating respiratory distress. ';
+  if (hpi.grunting)    hpiNarr += 'Expiratory grunting noted — suggests severe respiratory compromise. ';
+  if (hpi.nasalFlaring) hpiNarr += 'Nasal flaring is present. ';
+  if (hpi.headBobbing) hpiNarr += 'Head bobbing is present indicating severe respiratory distress. ';
+  if (hpi.feedingDiff) hpiNarr += 'Feeding difficulty is noted. ';
+  if (hpi.seizureHPI)  hpiNarr += 'Seizures have been observed in association with the illness. ';
+  if (hpi.vomitingHPI) hpiNarr += 'Vomiting has occurred. ';
+  if (hpi.diarrheaHPI) hpiNarr += 'Diarrhea has been present. ';
+  if (hpi.exposureCovid) hpiNarr += 'There is history of COVID/infectious exposure' + (hpi.exposureCovidDetail ? ' (' + hpi.exposureCovidDetail + ')' : '') + '. ';
+  if (hpi.prevTx)      hpiNarr += 'Has received ' + hpi.prevTx + ' prior to this presentation with ' + (hpi.txResponse || 'unspecified') + ' response. ';
+
+  // Vital signs rows
+  const vRows: string[][] = [
+    ['Temperature', v.temp ? v.temp + 'C' + (parseFloat(v.temp)>=38.5 ? ' FEVER' : '') : 'Not recorded'],
+    ['Heart Rate', v.hr ? v.hr + ' bpm' : 'Not recorded'],
+    ['Respiratory Rate', v.rr ? v.rr + ' breaths/min' : 'Not recorded'],
+    ['SpO2', v.spo2 ? v.spo2 + '%' + (parseFloat(v.spo2)<92 ? ' HYPOXIA' : '') : 'Not recorded'],
+    ['Blood Pressure', v.bp || (v.bpSystolic && v.bpDiastolic ? v.bpSystolic + '/' + v.bpDiastolic + ' mmHg' : 'Not recorded')],
+    ['Weight', v.weight ? v.weight + ' kg' : 'Not recorded'],
+    ['Height/Length', v.height ? v.height + ' cm' : 'Not recorded'],
+    ['MUAC', v.muac ? v.muac + ' cm' : 'Not recorded'],
+    ['Head Circumference', v.hc ? v.hc + ' cm' : 'Not recorded'],
+    ['Hydration Status', v.hydration || 'Not recorded'],
+    ['General Condition', v.generalCondition ? v.generalCondition.replace(/_/g,' ') : 'Not recorded'],
+    ['AVPU', v.avpu || 'Not recorded'],
+  ].filter(function(r) { return r[1] !== 'Not recorded'; });
+
+  // Examination text
+  var examText = '';
+  var respFindings = [
+    v.examIndrawing && 'chest indrawing',
+    v.examNasalFlaring && 'nasal flaring',
+    v.examGrunting && 'expiratory grunting',
+    v.examStridor && 'inspiratory stridor',
+    v.examWheeze && 'wheeze on auscultation',
+    v.examCrackles && 'crackles on auscultation',
+    v.examReducedBS && 'reduced breath sounds',
+    v.examBronchial && 'bronchial breath sounds',
+    v.examDullness && 'dullness on percussion',
+    v.examHyperResonance && 'hyper-resonance on percussion',
+    v.examTrachealDeviation && 'tracheal deviation',
+  ].filter(Boolean);
+  if (respFindings.length) { examText += 'Respiratory examination reveals: ' + respFindings.join(', ') + '. '; }
+  if (v.examCyanosis) { examText += 'Central cyanosis is present. '; }
+  if (v.examClubbing) { examText += 'Digital clubbing is noted. '; }
+
+  var cvsExamText = '';
+  if (v.examHeartSounds) { cvsExamText += 'Heart sounds: ' + v.examHeartSounds + '. '; }
+  if (v.examMurmur) { cvsExamText += 'Cardiac murmur detected: ' + v.examMurmur + (v.examMurmurGrade ? ' (Grade ' + v.examMurmurGrade + '/6)' : '') + '. '; }
+  if (v.peripheralEdema) { cvsExamText += 'Peripheral edema is present. '; }
+  if (!cvsExamText) { cvsExamText = 'Cardiovascular examination within normal limits.'; }
+
+  var abdExamText = '';
+  if (v.examAbdDistension) { abdExamText += 'Abdomen is distended. '; }
+  if (v.examHepatomegaly) { abdExamText += 'Hepatomegaly is present. '; }
+  if (v.examSplenomegaly) { abdExamText += 'Splenomegaly is present. '; }
+  if (v.examTenderness) { abdExamText += 'Abdominal tenderness: ' + v.examTenderness + '. '; }
+  if (!abdExamText) { abdExamText = 'Abdominal examination within normal limits.'; }
+
+  var cnsExamText = '';
+  if (v.examCnsTone) { cnsExamText += 'Tone: ' + v.examCnsTone + '. '; }
+  if (v.examCnsReflexes) { cnsExamText += 'Reflexes: ' + v.examCnsReflexes + '. '; }
+  if (v.examFontanelle) { cnsExamText += 'Fontanelle: ' + v.examFontanelle + '. '; }
+  if (v.examNeckStiffness) { cnsExamText += 'Neck stiffness is present. '; }
+  if (v.avpu && v.avpu !== 'alert') { cnsExamText += 'Consciousness level (AVPU): ' + v.avpu + '. '; }
+  if (!cnsExamText) { cnsExamText = 'Neurological examination within normal limits.'; }
+
+  var mskExamText = '';
+  if (v.examJointSwelling) { mskExamText += 'Joint swelling is present. '; }
+  if (v.examJointDeformity) { mskExamText += 'Joint deformities are noted. '; }
+  if (v.examMuscleWasting) { mskExamText += 'Muscle wasting is present. '; }
+  if (!mskExamText) { mskExamText = 'Musculoskeletal examination within normal limits.'; }
+
+  var skinExamText = '';
+  if (v.examSkinRash) { skinExamText += 'Rash: ' + v.examSkinRash + '. '; }
+  if (v.examSkinBruising) { skinExamText += 'Bruising is present. '; }
+  if (v.examSkinPetechiae) { skinExamText += 'Petechiae are present. '; }
+  if (v.pallorExam) { skinExamText += 'Pallor is noted. '; }
+  if (v.jaundiceExam) { skinExamText += 'Jaundice is present. '; }
+  if (!skinExamText) { skinExamText = 'Skin examination within normal limits.'; }
+
+  // Investigations
+  const inv = new Set<string>(['Full blood count + differential', 'CRP / ESR', 'Pulse oximetry']);
+  if (scores.some(function(s) { return s.id==='pneumonia'&&s.pct>10; }))    { inv.add('Chest X-ray (PA + lateral)'); inv.add('Blood culture x 2'); inv.add('Blood gases if severe'); }
+  if (scores.some(function(s) { return s.id==='tuberculosis'&&s.pct>10; }))  { inv.add('Mantoux test / IGRA'); inv.add('Sputum AFB x 3 (if able)'); inv.add('Chest X-ray'); inv.add('HIV test'); }
+  if (scores.some(function(s) { return s.id==='asthma'&&s.pct>10; }))        { inv.add('Peak flow measurement (if >5 years)'); inv.add('Spirometry (if >5 years)'); inv.add('Allergy panel (specific IgE)'); }
+  if (scores.some(function(s) { return s.id==='pleural_effusion'&&s.pct>10; })){ inv.add('Chest X-ray'); inv.add('Ultrasound chest'); inv.add('Pleural fluid: LDH, protein, glucose, culture, cytology'); }
+  if (scores.some(function(s) { return s.id==='empyema'&&s.pct>10; }))         { inv.add('Chest X-ray'); inv.add('Ultrasound chest'); inv.add('Pleural fluid culture + Gram stain'); }
+  if (scores.some(function(s) { return s.id==='chf'&&s.pct>10; }))           { inv.add('Echocardiogram'); inv.add('ECG'); inv.add('BNP / NT-proBNP'); inv.add('Chest X-ray'); }
+  if (scores.some(function(s) { return s.id==='foreign_body'&&s.pct>10; }))  { inv.add('Chest X-ray (inspiratory + expiratory)'); inv.add('Rigid bronchoscopy if high suspicion'); }
+  if (scores.some(function(s) { return s.id==='bronchiolitis'&&s.pct>10; })) { inv.add('RSV antigen test (if available)'); inv.add('Nasopharyngeal swab for viral PCR'); }
+  if (scores.some(function(s) { return s.id==='epiglottitis'&&s.pct>10; }))  { inv.add('Lateral neck X-ray (if stable)'); inv.add('Throat swab — DO NOT examine throat without airway team present'); }
+  if (scores.some(function(s) { return s.id==='pneumothorax'&&s.pct>10; }))  { inv.add('Chest X-ray (PA + lateral)'); inv.add('CT chest if unclear'); }
+  if (scores.some(function(s) { return s.id==='retropharyngeal'&&s.pct>10; })){ inv.add('Lateral neck X-ray'); inv.add('CT neck with contrast'); }
+
+  // Management plan
+  const mgmt: { heading: string; text: string }[] = [];
+  mgmt.push({ heading:'A — Airway', text:'Ensure airway patency. Position appropriately (upright/sniffing). Do NOT examine throat if epiglottitis suspected. Prepare suction equipment. Consider airway adjuncts if GCS <8.' });
+  const spo2v = parseFloat(v.spo2);
+  mgmt.push({ heading:'B — Breathing', text:'Supplemental oxygen if SpO2 <92% (target >=94%). Delivery: nasal prongs (low flow) to face mask to high-flow as needed. ' + (!isNaN(spo2v)&&spo2v<88 ? 'HIGH FLOW O2 URGENTLY INDICATED.' : '') + ' Monitor respiratory rate and effort closely.' });
+  mgmt.push({ heading:'C — Circulation', text:'Establish IV/IO access if moderate-severe illness. Correct dehydration: 10-20 mL/kg NS bolus if shocked. Monitor input/output. Consider inotropes if signs of shock persist after fluid resuscitation.' });
+
+  if (scores[0]?.id==='pneumonia'||scores.some(function(s) { return s.id==='pneumonia'&&s.pct>15; }))
+    mgmt.push({ heading:'Antibiotics (Pneumonia)', text:'Non-severe: Amoxicillin PO 40 mg/kg/day divided 3 doses x 5 days.\nSevere: Benzylpenicillin IV 50,000 IU/kg q6h + Gentamicin 7.5 mg/kg/day.\nAtypical coverage: add Azithromycin if Mycoplasma suspected.\nEmpyema: IV Ceftriaxone + Metronidazole + surgical consultation.' });
+  if (scores.some(function(s) { return s.id==='asthma'&&s.pct>15; }))
+    mgmt.push({ heading:'Acute Asthma', text:'Salbutamol 2.5-5 mg nebulized q20 min x 3 doses (or MDI 4-8 puffs with spacer).\nIpratropium 250 mcg neb q20 min x 3 (add for moderate-severe).\nPrednisolone PO 1-2 mg/kg/day x 3-5 days (max 40 mg).\nIV Magnesium sulphate 25-50 mg/kg over 20 min for life-threatening.\nConsider IV Aminophylline if poor response to above.' });
+  if (scores.some(function(s) { return s.id==='croup'&&s.pct>15; }))
+    mgmt.push({ heading:'Croup Management', text:'Mild-Moderate: Dexamethasone 0.15-0.6 mg/kg PO/IM single dose.\nSevere (stridor at rest): Nebulized Adrenaline 1:1000 0.5 mL/kg (max 5 mL) + Dexamethasone IV.\nObserve 2-4 hours post-nebulization. Admit if persistent stridor at rest.' });
+  if (scores.some(function(s) { return s.id==='tuberculosis'&&s.pct>15; }))
+    mgmt.push({ heading:'TB Workup & Management', text:'Full TB workup before initiating treatment. Refer to TB clinic.\nIf confirmed: RHZE x 2 months then RH x 4 months (weight-based dosing).\nContact tracing of household members essential.\nCheck LFTs before and during treatment.' });
+  if (scores.some(function(s) { return s.id==='bronchiolitis'&&s.pct>15; }))
+    mgmt.push({ heading:'Bronchiolitis', text:'Supportive care — no proven benefit from bronchodilators, steroids, or antibiotics in typical RSV bronchiolitis.\nOxygen to maintain SpO2 >=92%.\nNasogastric feeds or IV fluids if unable to feed adequately.\nHigh-flow nasal oxygen (HFNO) for moderate-severe cases.\nCPAP if escalating respiratory distress.' });
+  if (scores.some(function(s) { return s.id==='epiglottitis'&&s.pct>10; }))
+    mgmt.push({ heading:'EPIGLOTTITIS — EMERGENCY', text:'Do NOT examine oropharynx. Do NOT agitate child. Call ENT + Anaesthesiology IMMEDIATELY.\nPrepare for intubation in controlled environment (OR/ICU).\nGive IV Ceftriaxone 100 mg/kg/day after airway secured.\nDexamethasone 0.15 mg/kg IV to reduce airway edema.' });
+  if (scores.some(function(s) { return s.id==='pneumothorax'&&s.pct>15; }))
+    mgmt.push({ heading:'Pneumothorax', text:'If tension: immediate needle decompression (2nd ICS, midclavicular line).\nChest drain insertion (4th/5th ICS, anterior axillary line).\nConfirm with chest X-ray. Admit for observation.' });
+  if (scores.some(function(s) { return s.id==='chf'&&s.pct>15; }))
+    mgmt.push({ heading:'Heart Failure Management', text:'Furosemide 1 mg/kg IV/PO.\nOxygen to maintain SpO2 >=94%.\nRestrict fluids if appropriate.\nRefer to pediatric cardiology for echocardiogram.' });
+
+  mgmt.push({ heading:'Supportive Care', text:'Antipyretics: Paracetamol 15 mg/kg q6h PRN (max 60 mg/kg/day).\nAdequate nutrition support — NGT if oral intake severely compromised.\nFluid balance monitoring. Strict intake/output charting.\nMaintain IV fluids if NBM or dehydrated.' });
+  mgmt.push({ heading:'Monitoring', text:'Vitals 4-hourly minimum (1-2 hourly if severe). Continuous SpO2 monitoring. Daily weight. Strict fluid balance charting. Assess response to treatment every 24-48 hours.' });
+  mgmt.push({ heading:'Counseling & Discharge Planning', text:'Explain diagnosis, treatment plan, and expected course to caregivers in simple terms.\nDanger signs requiring immediate return: increased breathing difficulty, cyanosis, reduced consciousness, poor feeding, seizures.\nFollow-up: 3-5 days (mild-moderate) / 24-48 hours (severe).\nVaccination catch-up if applicable. Stop smoking exposure at home.' });
+
+  const ddxForNote = scores.slice(0,5).map(function(d,i) { return (i+1) + '. ' + d.name + ' ' + d.pct + '% probability'; }).join('\n');
+
+  // Build clinical summary
+  var summary = (form.patientName || 'Patient') + ' is a ' + ageStr + ' ' + sex.toLowerCase() + ' ';
+  const top = scores[0];
+  if (c.length > 0) {
+    summary += 'presenting with ' + c.slice(0,3).map(function(x) { return x.replace(/_/g,' '); }).join(', ') + ' ';
+  }
+  if (v.spo2) { summary += 'with SpO2 of ' + v.spo2 + '%' + (parseFloat(v.spo2)<92 ? ' (significant hypoxia)' : '') + '. '; }
+  if (v.rr) { summary += 'Respiratory rate is ' + v.rr + '/min' + '. '; }
+  if (v.examIndrawing) { summary += 'Chest indrawing observed. '; }
+  if (top) { summary += 'Clinical reasoning favours ' + top.name + ' as the primary diagnosis (' + top.pct + '% probability), '; }
+  if (scores[1]) { summary += 'with ' + scores[1].name + ' as the key differential. '; }
+  summary += 'Further investigations and clinical correlation are required to confirm the diagnosis and guide management.';
+
+  return {
+    ageStr, sex, name, complaintLines, hpiNarr, pmh, birth, dev, imm, nut, fam,
+    rosHistory: buildROSHistory(ros),
+    vRows, examText, inv: [...inv], mgmt, ddxForNote, scores, clinicalSummary: summary,
+    cvsExamText, abdExamText, cnsExamText, mskExamText, skinExamText,
+  };
+}
+
+function buildROSHistory(ros: RosData): string {
+  if (!ros) { return 'No significant findings on review of systems.'; }
+  const cns = [ros.seizures&&'seizures',ros.headache&&'headache',ros.lethargyRos&&'lethargy/decreased consciousness',ros.dizziness&&'dizziness',ros.syncope&&'syncope'].filter(Boolean);
+  const cvs = [ros.cyanosisRos&&'cyanosis',ros.peripheralEdema&&'peripheral oedema',ros.fatigue&&'easy fatigability',ros.palpitations&&'palpitations'].filter(Boolean);
+  const gi  = [ros.vomiting&&'vomiting',ros.diarrhea&&'diarrhoea',ros.abdominalPain&&'abdominal pain',ros.hepatomegaly&&'hepatomegaly',ros.constipation&&'constipation'].filter(Boolean);
+  const gu  = [ros.reducedUrine&&'reduced urine output',ros.dysuria&&'dysuria',ros.hematuria&&'hematuria'].filter(Boolean);
+  const skin= [ros.rash&&'rash ('+ros.rashType+')',ros.jaundice&&'jaundice',ros.pallor&&'pallor',ros.clubbing&&'digital clubbing',ros.bruising&&'easy bruising',ros.petechiae&&'petechiae'].filter(Boolean);
+  const ent = [ros.earPain&&'ear pain',ros.earDischarge&&'ear discharge',ros.soreThroatRos&&'sore throat',ros.nasalDischargeRos&&'nasal discharge',ros.hearingLoss&&'hearing loss'].filter(Boolean);
+  const systems: string[] = [];
+  if (cns.length)  { systems.push('CNS: ' + cns.join(', ')); }
+  if (cvs.length)  { systems.push('CVS: ' + cvs.join(', ')); }
+  if (gi.length)   { systems.push('GI: ' + gi.join(', ')); }
+  if (gu.length)   { systems.push('GU: ' + gu.join(', ')); }
+  if (skin.length) { systems.push('Skin: ' + skin.join(', ')); }
+  if (ent.length)  { systems.push('ENT: ' + ent.join(', ')); }
+  return systems.length ? systems.join('. ') + '.' : 'No significant findings on review of systems.';
+}
+
+// ─── Initial State ───────────────────────────────────────────────────────────────
+
+const INIT: FormState = {
+  patientName:'', ageMonths:'', sex:'', dob:'', residence:'', informant:'', informantRelation:'', histReliability:'',
+  dateOfAdmission:'', sourceOfReferral:'',
+  complaints:[], complaintDurations:{},
+  hpi:{
+    onsetType:'', progression:'', severity:'',
+    site:'', character:'', radiation:'', associated:'', timeCourse:'', exacerbating:'', relieving:'',
+    coughChar:'', coughDuration:'', nocturnalCough:false, exerciseTriggered:false, allergenTrigger:false,
+    feverPattern:'', highFever:false, feverDuration:'', feverOnset:'',
+    wheeze:false, wheezePattern:'', unilateralWheeze:false,
+    stridor:false, stridorType:'',
+    chestIndrawing:false, grunting:false, nasalFlaring:false, headBobbing:false, feedingDiff:false,
+    nightSweats:false, weightLoss:false, tbContact:false, sickContact:false, sickContactDetail:'',
+    suddenOnset:false, drooling:false, tripodPosition:false, hepatomegalyReported:false,
+    prevTx:'', txResponse:'',
+    exposureCovid:false, exposureCovidDetail:'',
+    urineOutput:'', seizureHPI:false, vomitingHPI:false, diarrheaHPI:false, rashHPI:'',
+  },
+  pmh:{ prevAdmissions:false, prevAdmDetail:'', chronicIllnesses:[], allergies:'', medications:'',
+    prevSurgeries:false, surgeryDetail:'', prevWheeze:false, asthmaDx:false, recurrentChest:false,
+    cardiacDisease:false, hiv:false, sickleCellDisease:false, epilepsyDx:false, immunodeficiencyDx:false,
+    cysticFibrosisDx:false, diabetesDx:false, downSyndromeDx:false },
+  birth:{ birthPlace:'', gestAge:'', gestAgeWeeks:'', deliveryMode:'', birthWeight:'', apgar:'',
+    neonatalComplications:[], neonatalDetail:'', nicuAdmission:false, nicuDuration:'' },
+  development:{ grossMotor:'', grossMotorDetail:'', fineMotor:'', fineMotorDetail:'', speech:'', speechDetail:'', social:'', socialDetail:'', concerns:'' },
+  immunization:{ status:'', missedVaccines:[], adverseReactions:false, adverseDetail:'' },
+  nutrition:{ breastfed:'', bfDuration:'', exclusiveDuration:'', complementaryAge:'', dietaryDiversity:'', appetite:'', muac:'', weightCentile:'', heightCentile:'', malnutritionSigns:[] },
+  family:{ tbHousehold:false, asthmaFamily:false, atopyFamily:false, sickleCellFamily:false,
+    epilepsyFamily:false, geneticDiseases:'', similarIllnessSiblings:false,
+    housingConditions:'', housingDetail:'', waterSource:'', sanitation:'',
+    parentOccupation:'', smokingExposure:false, smokeDetail:'', schoolAttendance:'', schoolLevel:'' },
+  ros:{ seizures:false, headache:false, lethargyRos:false, consciousness:'', dizziness:false, syncope:false,
+    cyanosisRos:false, peripheralEdema:false, fatigue:false, palpitations:false,
+    vomiting:false, diarrhea:false, abdominalPain:false, hepatomegaly:false, constipation:false,
+    reducedUrine:false, dysuria:false, hematuria:false,
+    rash:false, rashType:'', jaundice:false, pallor:false, clubbing:false, bruising:false, petechiae:false,
+    earPain:false, earDischarge:false, soreThroatRos:false, nasalDischargeRos:false, hearingLoss:false },
+  vitals:{ temp:'', hr:'', rr:'', spo2:'', bp:'', bpSystolic:'', bpDiastolic:'',
+    weight:'', height:'', muac:'', hc:'',
+    hydration:'', generalCondition:'', avpu:'',
+    lymphNodes:'', lymphNodeSite:'',
+    pallorExam:false, jaundiceExam:false, cyanosisExam:false, clubbingExam:false, edemaExam:false,
+    examIndrawing:false, examNasalFlaring:false, examGrunting:false, examStridor:false,
+    examWheeze:false, examCrackles:false, examReducedBS:false, examBronchial:false,
+    examDullness:false, examHyperResonance:false, examTrachealDeviation:false,
+    examHeartSounds:'', examMurmur:'', examMurmurGrade:'',
+    examAbdDistension:false, examHepatomegaly:false, examSplenomegaly:false, examTenderness:'',
+    examCnsTone:'', examCnsReflexes:'', examFontanelle:'', examNeckStiffness:false,
+    examJointSwelling:false, examJointDeformity:false, examMuscleWasting:false,
+    examSkinRash:'', examSkinBruising:false, examSkinPetechiae:false },
+};
+
+// ─── Plain Text Note Builder ─────────────────────────────────────────────────────
+
+function buildNoteText(note: NoteData, form: FormState, severity: SeverityResult | null): string {
+  const v = form.vitals || {} as VitalsData;
+  const lines: string[] = [];
+
+  lines.push('='.repeat(60));
+  lines.push('AMEXAN PEDIATRIC RESPIRATORY CLINICAL NOTE');
+  lines.push('='.repeat(60));
+  lines.push('Date: ' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }));
+  lines.push('');
+
+  if (severity) {
+    lines.push('SEVERITY: ' + severity.level);
+    lines.push(severity.msg);
+    lines.push('');
+  }
+
+  lines.push('-'.repeat(40));
+  lines.push('I. PATIENT BIODATA');
+  lines.push('-'.repeat(40));
+  lines.push('Name:        ' + note.name);
+  lines.push('Age:         ' + note.ageStr);
+  lines.push('Sex:         ' + note.sex);
+  lines.push('DOB:         ' + (form.dob || 'Not recorded'));
+  lines.push('Residence:   ' + (form.residence || 'Not recorded'));
+  lines.push('Informant:   ' + (form.informant || 'Not recorded') + ' (' + (form.informantRelation || 'Not recorded') + ')');
+  lines.push('Reliability: ' + (form.histReliability || 'Not recorded'));
+  lines.push('Admitted:    ' + (form.dateOfAdmission || 'Not recorded'));
+  lines.push('Referral:    ' + (form.sourceOfReferral || 'Not recorded'));
+  lines.push('');
+
+  lines.push('-'.repeat(40));
+  lines.push('II. CHIEF COMPLAINTS');
+  lines.push('-'.repeat(40));
+  note.complaintLines.forEach(function(l) { lines.push('  * ' + l); });
+  if (!note.complaintLines.length) { lines.push('  None recorded'); }
+  lines.push('');
+
+  lines.push('-'.repeat(40));
+  lines.push('III. HISTORY OF PRESENTING ILLNESS');
+  lines.push('-'.repeat(40));
+  lines.push(note.hpiNarr);
+  lines.push('');
+
+  // Past Medical History
+  lines.push('-'.repeat(40));
+  lines.push('IV. PAST MEDICAL HISTORY');
+  lines.push('-'.repeat(40));
+  lines.push(formatPMH(form.pmh));
+  lines.push('');
+
+  // Birth History
+  lines.push('-'.repeat(40));
+  lines.push('V. BIRTH HISTORY');
+  lines.push('-'.repeat(40));
+  lines.push(formatBirth(form.birth));
+  lines.push('');
+
+  // Developmental History
+  lines.push('-'.repeat(40));
+  lines.push('VI. DEVELOPMENTAL HISTORY');
+  lines.push('-'.repeat(40));
+  lines.push(formatDev(form.development));
+  lines.push('');
+
+  // Immunization History
+  lines.push('-'.repeat(40));
+  lines.push('VII. IMMUNIZATION HISTORY');
+  lines.push('-'.repeat(40));
+  lines.push(formatImm(form.immunization));
+  lines.push('');
+
+  // Nutritional History
+  lines.push('-'.repeat(40));
+  lines.push('VIII. NUTRITIONAL HISTORY');
+  lines.push('-'.repeat(40));
+  lines.push(formatNut(form.nutrition));
+  lines.push('');
+
+  // Family & Social History
+  lines.push('-'.repeat(40));
+  lines.push('IX. FAMILY & SOCIAL HISTORY');
+  lines.push('-'.repeat(40));
+  lines.push(formatFam(form.family));
+  lines.push('');
+
+  // Review of Systems
+  lines.push('-'.repeat(40));
+  lines.push('X. REVIEW OF SYSTEMS');
+  lines.push('-'.repeat(40));
+  lines.push(note.rosHistory);
+  lines.push('');
+
+  // General Examination
+  lines.push('-'.repeat(40));
+  lines.push('XI. GENERAL EXAMINATION');
+  lines.push('-'.repeat(40));
+  note.vRows.forEach(function(r) { lines.push('  ' + r[0] + ': ' + r[1]); });
+  if (formatGeneralExam(v)) {
+    lines.push('');
+    lines.push('  ' + formatGeneralExam(v));
+  }
+  lines.push('');
+
+  // Systemic Examination
+  lines.push('-'.repeat(40));
+  lines.push('XII. SYSTEMIC EXAMINATION');
+  lines.push('-'.repeat(40));
+  lines.push('  Respiratory: ' + note.examText);
+  lines.push('  Cardiovascular: ' + note.cvsExamText);
+  lines.push('  Abdominal: ' + note.abdExamText);
+  lines.push('  CNS: ' + note.cnsExamText);
+  lines.push('  Musculoskeletal: ' + note.mskExamText);
+  lines.push('  Skin: ' + note.skinExamText);
+  lines.push('');
+
+  // Clinical Summary
+  lines.push('-'.repeat(40));
+  lines.push('XIII. CLINICAL SUMMARY');
+  lines.push('-'.repeat(40));
+  lines.push(note.clinicalSummary);
+  lines.push('');
+
+  // Differential Diagnosis
+  lines.push('-'.repeat(40));
+  lines.push('XIV. DIFFERENTIAL DIAGNOSIS');
+  lines.push('-'.repeat(40));
+  lines.push(note.ddxForNote);
+  lines.push('  Differential framework:');
+  var ddxCategories: string[] = [];
+  var c = form.complaints || [];
+  if (c.includes('wheeze') || c.includes('wheeze')) { ddxCategories.push('Acute wheeze: Asthma, Bronchiolitis, Foreign body aspiration, Anaphylaxis, Pneumonia'); }
+  if (c.includes('cough') && !c.includes('fever')) { ddxCategories.push('Chronic cough: TB, Asthma, Bronchiectasis, Postnasal drip, GERD'); }
+  if (c.includes('fever') && c.includes('cough')) { ddxCategories.push('Fever + cough: Pneumonia, TB, Viral URTI, Empyema'); }
+  if (c.includes('stridor')) { ddxCategories.push('Stridor: Croup, Epiglottitis, Foreign body, Anaphylaxis, Retropharyngeal abscess'); }
+  if (c.includes('difficulty_breathing') || c.includes('cyanosis')) { ddxCategories.push('Respiratory distress: Pneumonia, Asthma, CHF, Bronchiolitis, Pneumothorax'); }
+  if (c.some(function(x) { return x==='chest_pain'||x==='hemoptysis'||x==='difficulty_breathing'; })) { ddxCategories.push('Unilateral breath sound reduction: Foreign body aspiration, Pneumothorax, Pleural effusion, Lung collapse'); }
+  ddxCategories.forEach(function(cat) { lines.push('  * ' + cat); });
+  lines.push('  Note: Probabilities based on clinical data entered. Clinical judgment must guide final diagnosis.');
+  lines.push('');
+
+  // Investigations
+  lines.push('-'.repeat(40));
+  lines.push('XV. SUGGESTED INVESTIGATIONS');
+  lines.push('-'.repeat(40));
+  note.inv.forEach(function(i) { lines.push('  -> ' + i); });
+  lines.push('');
+
+  // Management Plan
+  lines.push('-'.repeat(40));
+  lines.push('XVI. MANAGEMENT PLAN');
+  lines.push('-'.repeat(40));
+  note.mgmt.forEach(function(m) {
+    lines.push('  ' + m.heading);
+    m.text.split('\n').forEach(function(t) { lines.push('    ' + t); });
+    lines.push('');
+  });
+
+  // Follow-up
+  lines.push('-'.repeat(40));
+  lines.push('XVII. FOLLOW-UP PLAN');
+  lines.push('-'.repeat(40));
+  lines.push('  Review in 2-7 days depending on illness severity.');
+  lines.push('  Growth monitoring in chronic cases.');
+  lines.push('  Return immediately if: increased breathing difficulty, cyanosis, reduced consciousness, poor feeding, seizures.');
+  lines.push('');
+
+  lines.push('='.repeat(60));
+  lines.push('Generated by AMEXAN Pediatric Respiratory System');
+  lines.push('Must be reviewed and adapted to local guidelines before clinical use.');
+  lines.push('='.repeat(60));
+
+  return lines.join('\n');
+}
+
+// ─── Format Functions ────────────────────────────────────────────────────────────
+
+function formatPMH(pmh: PmhData): string {
+  if (!pmh) { return 'Not documented.'; }
+  const parts: string[] = [];
+  if (pmh.prevAdmissions) { parts.push('Previous hospital admissions: ' + (pmh.prevAdmDetail||'yes')); }
+  if (pmh.chronicIllnesses?.length) { parts.push('Chronic illnesses: ' + pmh.chronicIllnesses.join(', ')); }
+  if (pmh.allergies) { parts.push('Allergies: ' + pmh.allergies); }
+  if (pmh.medications) { parts.push('Current medications: ' + pmh.medications); }
+  if (pmh.prevSurgeries) { parts.push('Previous surgeries: ' + (pmh.surgeryDetail||'yes')); }
+  if (pmh.asthmaDx) { parts.push('Diagnosed asthma'); }
+  if (pmh.prevWheeze) { parts.push('Previous wheeze episodes'); }
+  if (pmh.recurrentChest) { parts.push('Recurrent chest infections'); }
+  if (pmh.cardiacDisease) { parts.push('Known cardiac disease'); }
+  if (pmh.hiv) { parts.push('HIV positive'); }
+  if (pmh.sickleCellDisease) { parts.push('Sickle cell disease'); }
+  if (pmh.epilepsyDx) { parts.push('Epilepsy'); }
+  if (pmh.immunodeficiencyDx) { parts.push('Immunodeficiency'); }
+  if (pmh.cysticFibrosisDx) { parts.push('Cystic fibrosis'); }
+  if (pmh.diabetesDx) { parts.push('Diabetes mellitus'); }
+  if (pmh.downSyndromeDx) { parts.push('Down syndrome'); }
+  if (parts.length) { return parts.join('. ') + '.'; }
+  return 'No significant past medical history documented.';
+}
+
+function formatBirth(birth: BirthData): string {
+  if (!birth || (!birth.birthPlace && !birth.gestAge && !birth.deliveryMode && !birth.birthWeight && !birth.neonatalDetail)) {
+    return 'Birth history not documented.';
+  }
+  const parts: string[] = [];
+  if (birth.birthPlace) { parts.push('Born at ' + birth.birthPlace); }
+  if (birth.gestAge) { parts.push(birth.gestAge + (birth.gestAgeWeeks ? ' at ' + birth.gestAgeWeeks + ' weeks' : '')); }
+  if (birth.deliveryMode) { parts.push('delivered by ' + birth.deliveryMode); }
+  if (birth.birthWeight) { parts.push('birth weight ' + birth.birthWeight + ' kg'); }
+  if (birth.apgar) { parts.push('APGAR: ' + birth.apgar); }
+  if (birth.neonatalComplications?.length && !birth.neonatalComplications.includes('None')) {
+    parts.push('Neonatal complications: ' + birth.neonatalComplications.join(', '));
+  }
+  if (birth.nicuAdmission) { parts.push('NICU admission' + (birth.nicuDuration ? ' for ' + birth.nicuDuration : '')); }
+  if (birth.neonatalDetail) { parts.push(birth.neonatalDetail); }
+  return parts.join(', ') + '.';
+}
+
+function formatDev(dev: DevelopmentData): string {
+  if (!dev || !dev.grossMotor) { return 'Developmental history not assessed.'; }
+  var result = 'Gross motor: ' + dev.grossMotor + (dev.grossMotorDetail ? ' (' + dev.grossMotorDetail + ')' : '');
+  result += '. Fine motor: ' + (dev.fineMotor || 'not assessed') + (dev.fineMotorDetail ? ' (' + dev.fineMotorDetail + ')' : '');
+  result += '. Speech/language: ' + (dev.speech || 'not assessed') + (dev.speechDetail ? ' (' + dev.speechDetail + ')' : '');
+  result += '. Social/emotional: ' + (dev.social || 'not assessed') + (dev.socialDetail ? ' (' + dev.socialDetail + ')' : '');
+  result += '.';
+  if (dev.concerns) { result += ' Concerns noted: ' + dev.concerns + '.'; }
+  return result;
+}
+
+function formatImm(imm: ImmunizationData): string {
+  if (!imm||!imm.status) { return 'Immunization history not documented.'; }
+  var t = 'Immunization status: ' + imm.status.replace(/_/g,' ') + '.';
+  if (imm.missedVaccines?.length) { t += ' Missed vaccines: ' + imm.missedVaccines.join(', ') + '.'; }
+  if (imm.adverseReactions) { t += ' History of adverse reaction: ' + (imm.adverseDetail||'yes') + '.'; }
+  return t;
+}
+
+function formatNut(nut: NutritionData): string {
+  if (!nut || (!nut.breastfed && !nut.dietaryDiversity && !nut.muac)) { return 'Nutritional history not documented.'; }
+  const parts: string[] = [];
+  if (nut.breastfed) { parts.push('Breastfeeding: ' + nut.breastfed + (nut.exclusiveDuration ? ' (exclusive for ' + nut.exclusiveDuration + ')' : '') + (nut.bfDuration ? ', total duration ' + nut.bfDuration : '')); }
+  if (nut.complementaryAge) { parts.push('Complementary foods introduced at ' + nut.complementaryAge); }
+  if (nut.dietaryDiversity) { parts.push('Dietary diversity: ' + nut.dietaryDiversity); }
+  if (nut.appetite) { parts.push('Appetite: ' + nut.appetite); }
+  if (nut.muac) { parts.push('MUAC: ' + nut.muac + ' cm'); }
+  if (nut.weightCentile) { parts.push('Weight centile: ' + nut.weightCentile); }
+  if (nut.heightCentile) { parts.push('Height centile: ' + nut.heightCentile); }
+  if (nut.malnutritionSigns?.length) { parts.push('Malnutrition signs: ' + nut.malnutritionSigns.join(', ')); }
+  return parts.join('. ') + '.';
+}
+
+function formatFam(fam: FamilyData): string {
+  if (!fam) { return 'Not documented.'; }
+  const parts: string[] = [];
+  if (fam.tbHousehold) { parts.push('TB contact in household'); }
+  if (fam.asthmaFamily) { parts.push('Family history of asthma'); }
+  if (fam.atopyFamily) { parts.push('Family history of atopy/eczema/allergic rhinitis'); }
+  if (fam.sickleCellFamily) { parts.push('Sickle cell disease in family'); }
+  if (fam.epilepsyFamily) { parts.push('Epilepsy in family'); }
+  if (fam.similarIllnessSiblings) { parts.push('Similar illness in siblings'); }
+  if (fam.geneticDiseases) { parts.push('Genetic conditions: ' + fam.geneticDiseases); }
+  if (fam.smokingExposure) { parts.push('Passive smoking exposure' + (fam.smokeDetail ? ' (' + fam.smokeDetail + ')' : '')); }
+  if (fam.housingConditions) { parts.push('Housing: ' + fam.housingConditions + (fam.housingDetail ? ' (' + fam.housingDetail + ')' : '')); }
+  if (fam.waterSource) { parts.push('Water source: ' + fam.waterSource); }
+  if (fam.sanitation) { parts.push('Sanitation: ' + fam.sanitation); }
+  if (fam.parentOccupation) { parts.push('Parental occupation: ' + fam.parentOccupation); }
+  if (fam.schoolAttendance) { parts.push('School attendance: ' + fam.schoolAttendance + (fam.schoolLevel ? ' (' + fam.schoolLevel + ')' : '')); }
+  return parts.length ? parts.join('. ') + '.' : 'No significant family or social history documented.';
+}
+
+function formatGeneralExam(v: VitalsData): string | null {
+  const parts: string[] = [];
+  if (v.generalCondition) { parts.push('General appearance: ' + v.generalCondition.replace(/_/g,' ')); }
+  if (v.avpu) { parts.push('AVPU: ' + v.avpu); }
+  if (v.hydration) { parts.push('Hydration: ' + v.hydration.replace(/_/g,' ')); }
+  if (v.lymphNodes && v.lymphNodes !== 'none') { parts.push('Lymphadenopathy: ' + v.lymphNodes + (v.lymphNodeSite ? ' at ' + v.lymphNodeSite : '')); }
+  if (v.pallorExam) { parts.push('Pallor present'); }
+  if (v.jaundiceExam) { parts.push('Jaundice present'); }
+  if (v.cyanosisExam) { parts.push('Cyanosis present'); }
+  if (v.clubbingExam) { parts.push('Digital clubbing present'); }
+  if (v.edemaExam) { parts.push('Peripheral edema present'); }
+  return parts.length ? parts.join('. ') + '.' : null;
+}
+
+// ─── CSS Variables ───────────────────────────────────────────────────────────────
+
+const CSS_VARS = '  :root {    --color-text-primary: #1e293b;    --color-text-secondary: #64748b;    --color-border-secondary: #cbd5e1;    --color-border-tertiary: #e2e8f0;    --color-background-primary: #ffffff;    --color-background-secondary: #f8fafc;    --color-background-tertiary: #f1f5f9;    --font-sans: system-ui, -apple-system, sans-serif;    --font-mono: ui-monospace, \'Cascadia Code\', monospace;  }';
+
+// ─── Main App Component ──────────────────────────────────────────────────────────
+
+export default function AmexanApp() {
+  const [phaseIdx, setPhaseIdx] = useState(0);
+  const [done, setDone]         = useState(new Set<string>());
+  const [form, setForm]         = useState<FormState>(INIT);
+  const [note, setNote]         = useState<NoteData | null>(null);
+  const [copied, setCopied]     = useState(false);
+
+  const scores   = useMemo(function() { return computeScores(form); }, [form]);
+  const severity = useMemo(function() { return getSeverity(form); }, [form]);
+  const phase    = PHASES[phaseIdx].id;
+
+  const set = useCallback(function(path: string, val: unknown) {
+    if (path.includes('.')) {
+      const [parent, key] = path.split('.');
+      setForm(function(p) {
+        return { ...p, [parent]: { ...(p[parent as keyof FormState] as Record<string, unknown>), [key]: val } } as FormState;
+      });
+    } else {
+      setForm(function(p) { return { ...p, [path]: val } as FormState; });
+    }
+  }, []);
+
+  const toggle = useCallback(function(path: string, item: string) {
+    if (path.includes('.')) {
+      const [parent, key] = path.split('.');
+      setForm(function(p) {
+        const parentObj = p[parent as keyof FormState] as Record<string, unknown>;
+        const arr = (parentObj[key] as string[]) || [];
+        const next = arr.includes(item) ? arr.filter(function(x) { return x !== item; }) : [...arr, item];
+        return { ...p, [parent]: { ...parentObj, [key]: next } } as FormState;
+      });
+    } else {
+      setForm(function(p) {
+        const arr = (p[path as keyof FormState] as string[]) || [];
+        const next = arr.includes(item) ? arr.filter(function(x) { return x !== item; }) : [...arr, item];
+        return { ...p, [path]: next } as FormState;
+      });
+    }
+  }, []);
+
+  const next = function() {
+    setDone(function(d) { return new Set([...d, PHASES[phaseIdx].id]); });
+    if (phaseIdx === PHASES.length - 2) { setNote(buildNote(form, scores)); }
+    setPhaseIdx(function(i) { return Math.min(i + 1, PHASES.length - 1); });
+    window.scrollTo(0, 0);
+  };
+
+  const goTo = function(i: number) {
+    if (i <= phaseIdx || done.has(PHASES[i].id)) {
+      if (PHASES[i].id === 'note') { setNote(buildNote(form, scores)); }
+      setPhaseIdx(i);
+    }
+  };
+
+  const reset = function() { setPhaseIdx(0); setDone(new Set()); setForm(INIT); setNote(null); };
+
+  const copyNote = function() {
+    if (!note) { return; }
+    const txt = buildNoteText(note, form, severity);
+    navigator.clipboard.writeText(txt).then(function() { setCopied(true); setTimeout(function() { setCopied(false); }, 2000); });
+  };
+
+  // UI Helpers
+
+  const s: Record<string, React.CSSProperties> = {
+    inp: { width: '100%', boxSizing: 'border-box' as const },
+  };
+
+  const Sect = function({ title, children }: { title: string; children: React.ReactNode }) {
+    return (
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10, paddingBottom: 6, borderBottom: '0.5px solid var(--color-border-tertiary)' }}>{title}</div>
+        {children}
+      </div>
+    );
+  };
+
+  const Row = function({ children, cols }: { children: React.ReactNode; cols?: number }) {
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(' + (cols || 2) + ',1fr)', gap: 10, marginBottom: 10 }}>{children}</div>
+    );
+  };
+
+  const Fld = function({ label, children, full }: { label: string; children: React.ReactNode; full?: boolean }) {
+    return (
+      <div style={full ? { marginBottom: 10, gridColumn: '1/-1' } : { marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 4, fontWeight: 500 }}>{label}</div>
+        {children}
+      </div>
+    );
+  };
+
+  const Pills = function({ options, value, onSelect, multi }: {
+    options: (string | { value: string; label: string })[];
+    value: string | string[];
+    onSelect: (v: string) => void;
+    multi?: boolean;
+  }) {
+    const vals = multi ? (value as string[] || []) : [value as string];
+    return (
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {options.map(function(o) {
+          const v = typeof o === 'string' ? o : o.value;
+          const l = typeof o === 'string' ? o : o.label;
+          const sel = multi ? vals.includes(v) : value === v;
+          return (
+            <button key={v} onClick={function() { onSelect(v); }}
+              style={{
+                padding: '5px 12px', borderRadius: 20,
+                border: '1px solid ' + (sel ? '#0d9488' : 'var(--color-border-secondary)'),
+                background: sel ? '#0d9488' : 'transparent',
+                color: sel ? 'white' : 'var(--color-text-primary)',
+                fontSize: 12, cursor: 'pointer', transition: 'all 0.12s'
+              }}
+            >
+              {l}
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const BoolPill = function({ label, value, onToggle, warn }: { label: string; value?: boolean; onToggle: (v: boolean) => void; warn?: boolean }) {
+    return (
+      <button onClick={function() { onToggle(!value); }}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 7, padding: '6px 12px', borderRadius: 8,
+          border: '1px solid ' + (value ? (warn ? '#dc2626' : '#0d9488') : 'var(--color-border-tertiary)'),
+          background: value ? (warn ? '#fef2f2' : 'rgba(13,148,136,0.08)') : 'transparent',
+          color: value ? (warn ? '#dc2626' : '#0d9488') : 'var(--color-text-secondary)',
+          fontSize: 13, cursor: 'pointer', transition: 'all 0.12s', whiteSpace: 'nowrap'
+        }}
+      >
+        <span style={{
+          width: 14, height: 14, borderRadius: 3,
+          border: '1.5px solid ' + (value ? (warn ? '#dc2626' : '#0d9488') : 'var(--color-border-secondary)'),
+          background: value ? (warn ? '#dc2626' : '#0d9488') : 'transparent',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+        }}>
+          {value && <Icon name="check" size={9} color="white" />}
+        </span>
+        {label}
+      </button>
+    );
+  };
+
+  const VitalFld = function({ label, unit, val, onChange, warn }: {
+    label: string; unit?: string; val: string;
+    onChange: (v: string) => void;
+    warn?: (v: number) => string | null;
+  }) {
+    const v = parseFloat(val);
+    const hasWarn = warn && !isNaN(v) && warn(v);
+    return (
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 4, fontWeight: 500 }}>
+          {label} {unit && <span style={{ fontWeight: 400, color: 'var(--color-text-secondary)' }}>({unit})</span>}
+        </div>
+        <input type="number" value={val} onChange={function(e) { onChange(e.target.value); }}
+          style={{ ...s.inp, borderColor: hasWarn ? '#f59e0b' : undefined }} />
+        {hasWarn && <div style={{ fontSize: 11, color: '#d97706', marginTop: 3 }}>* {hasWarn}</div>}
+      </div>
+    );
+  };
+
+  const Select = function({ value, onChange, options, placeholder }: {
+    value: string; onChange: (v: string) => void;
+    options: { value: string; label: string }[]; placeholder?: string;
+  }) {
+    return (
+      <select style={s.inp} value={value} onChange={function(e) { onChange(e.target.value); }}>
+        <option value="">{placeholder || 'Select...'}</option>
+        {options.map(function(o) { return <option key={o.value} value={o.value}>{o.label}</option>; })}
+      </select>
+    );
+  };
+
+  const TextArea = function({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
+    return (
+      <textarea style={{ ...s.inp, minHeight: 50, resize: 'vertical' }}
+        value={value} onChange={function(e) { onChange(e.target.value); }}
+        placeholder={placeholder} />
+    );
+  };
+
+  // ─── Phase Renderers ────────────────────────────────────────────────────────────
+
+  const PhaseHead = function({ title, sub }: { title: string; sub?: string }) {
+    return (
+      <div style={{ marginBottom: 16 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 500, margin: 0, color: 'var(--color-text-primary)' }}>{title}</h2>
+        {sub && <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', margin: '4px 0 0' }}>{sub}</p>}
+      </div>
+    );
+  };
+
+  const renderBiodata = function() {
+    return (
+      <>
+        <PhaseHead title="Patient Biodata" sub="Record basic demographics, informant details, and referral information" />
+        <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: 20 }}>
+          <Sect title="Patient Identification">
+            <Row>
+              <Fld label="Patient Name"><input style={s.inp} value={form.patientName} onChange={function(e) { set('patientName', e.target.value); }} placeholder="Full name" /></Fld>
+              <Fld label="Date of Birth"><input style={s.inp} type="date" value={form.dob} onChange={function(e) { set('dob', e.target.value); }} /></Fld>
+              <Fld label="Age in Months"><input style={s.inp} type="number" value={form.ageMonths} onChange={function(e) { set('ageMonths', e.target.value); }} placeholder="e.g. 18" min={0} max={216} /></Fld>
+              <Fld label="Sex"><Pills options={['Male', 'Female']} value={form.sex} onSelect={function(v) { set('sex', v); }} /></Fld>
+            </Row>
+            <Row>
+              <Fld label="Residence"><input style={s.inp} value={form.residence} onChange={function(e) { set('residence', e.target.value); }} placeholder="Town / Village" /></Fld>
+              <Fld label="Date of Admission"><input style={s.inp} type="date" value={form.dateOfAdmission} onChange={function(e) { set('dateOfAdmission', e.target.value); }} /></Fld>
+            </Row>
+            <Fld label="Source of Referral" full>
+              <Select value={form.sourceOfReferral} onChange={function(v) { set('sourceOfReferral', v); }} placeholder="Select referral source"
+                options={[
+                  { value: 'self', label: 'Self-referred / Walk-in' },
+                  { value: 'primary_care', label: 'Primary care clinic / Health centre' },
+                  { value: 'hospital', label: 'Another hospital / Emergency department' },
+                  { value: 'private_practice', label: 'Private practitioner' },
+                  { value: 'community', label: 'Community health worker / Outreach' },
+                  { value: 'other', label: 'Other' },
+                ]} />
+            </Fld>
+          </Sect>
+          <Sect title="Informant Details">
+            <Row>
+              <Fld label="Informant Name"><input style={s.inp} value={form.informant} onChange={function(e) { set('informant', e.target.value); }} placeholder="Mother / Father / Guardian" /></Fld>
+              <Fld label="Relationship to Child"><input style={s.inp} value={form.informantRelation} onChange={function(e) { set('informantRelation', e.target.value); }} placeholder="e.g. Mother" /></Fld>
+            </Row>
+            <Fld label="Reliability of History" full>
+              <Pills options={['Reliable', 'Partially Reliable', 'Unreliable', 'Unknown']}
+                value={form.histReliability} onSelect={function(v) { set('histReliability', v); }} />
+            </Fld>
+          </Sect>
+          {form.ageMonths && (
+            <div style={{ padding: '10px 14px', background: 'rgba(13,148,136,0.07)', borderRadius: 8, fontSize: 12, color: '#0d9488' }}>
+              <Icon name="info-circle" size={14} />{' '}
+              Age calculated: {formatAge(form.ageMonths)}
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+
+  const renderComplaints = function() {
+    return (
+      <>
+        <PhaseHead title="Chief Complaints" sub="List in order of duration — select all presenting symptoms and record durations" />
+        <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: 20 }}>
+          <Sect title="Presenting Complaints — select all that apply">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 16 }}>
+              {ALL_SYMPTOMS.map(function(s) {
+                const sel = form.complaints.includes(s.id);
+                return (
+                  <button key={s.id} onClick={function() { toggle('complaints', s.id); }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderRadius: 8,
+                      border: '1px solid ' + (sel ? '#0d9488' : 'var(--color-border-tertiary)'),
+                      background: sel ? 'rgba(13,148,136,0.08)' : 'transparent',
+                      color: sel ? '#0d9488' : 'var(--color-text-primary)',
+                      fontSize: 13, cursor: 'pointer', textAlign: 'left', transition: 'all 0.12s'
+                    }}
+                  >
+                    <span style={{
+                      width: 14, height: 14, borderRadius: 3,
+                      border: '1.5px solid ' + (sel ? '#0d9488' : 'var(--color-border-secondary)'),
+                      background: sel ? '#0d9488' : 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                    }}>
+                      {sel && <Icon name="check" size={9} color="white" />}
+                    </span>
+                    {s.label}
+                  </button>
+                );
+              })}
+            </div>
+          </Sect>
+          {form.complaints.length > 0 && (
+            <Sect title="Duration of Each Complaint">
+              {form.complaints.map(function(s) {
+                return (
+                  <Row key={s} cols={2}>
+                    <Fld label={s.replace(/_/g, ' ')}>
+                      <input style={s.inp} placeholder="e.g. 3 days / 2 weeks"
+                        value={form.complaintDurations[s] || ''}
+                        onChange={function(e) {
+                          setForm(function(p) {
+                            return { ...p, complaintDurations: { ...p.complaintDurations, [s]: e.target.value } };
+                          });
+                        }} />
+                    </Fld>
+                  </Row>
+                );
+              })}
+            </Sect>
+          )}
+          {form.complaints.length === 0 && (
+            <div style={{ textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: 13, padding: '20px 0' }}>Select at least one symptom above</div>
+          )}
+        </div>
+      </>
+    );
+  };
+
+  const renderHpi = function() {
+    return (
+      <>
+        <PhaseHead title="History of Presenting Illness" sub="SOCRATES: Site, Onset, Character, Radiation, Associated, Time course, Exacerbating, Severity — plus comprehensive pediatric expansion" />
+        <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: 20, display: 'flex', flexDirection: 'column', gap: 0 }}>
+          <Sect title="SOCRATES — Core Symptom Characterization">
+            <Row>
+              <Fld label="Site / Location of symptoms"><input style={s.inp} value={form.hpi.site} onChange={function(e) { set('hpi.site', e.target.value); }} placeholder="e.g. Chest, throat" /></Fld>
+              <Fld label="Character / Quality"><input style={s.inp} value={form.hpi.character} onChange={function(e) { set('hpi.character', e.target.value); }} placeholder="e.g. Sharp, dull, burning" /></Fld>
+            </Row>
+            <Row>
+              <Fld label="Onset Type" full>
+                <Pills options={[
+                  { value: 'sudden', label: 'Sudden / Acute' },
+                  { value: 'gradual', label: 'Gradual / Progressive' },
+                ]} value={form.hpi.onsetType} onSelect={function(v) { set('hpi.onsetType', v); }} />
+              </Fld>
+            </Row>
+            <Row>
+              <Fld label="Progression">
+                <Pills options={['Worsening', 'Improving', 'Fluctuating', 'Static'].map(function(v) { return { value: v.toLowerCase(), label: v }; })}
+                  value={form.hpi.progression} onSelect={function(v) { set('hpi.progression', v); }} />
+              </Fld>
+              <Fld label="Overall Severity">
+                <Pills options={['Mild', 'Moderate', 'Severe', 'Life-threatening'].map(function(v) { return { value: v.toLowerCase().replace('-', ''), label: v }; })}
+                  value={form.hpi.severity} onSelect={function(v) { set('hpi.severity', v); }} />
+              </Fld>
+            </Row>
+            <Row>
+              <Fld label="Radiation"><input style={s.inp} value={form.hpi.radiation} onChange={function(e) { set('hpi.radiation', e.target.value); }} placeholder="Does symptom radiate?" /></Fld>
+              <Fld label="Time Course / Duration Pattern"><input style={s.inp} value={form.hpi.timeCourse} onChange={function(e) { set('hpi.timeCourse', e.target.value); }} placeholder="Continuous, intermittent, nocturnal" /></Fld>
+            </Row>
+            <Row>
+              <Fld label="Exacerbating Factors"><input style={s.inp} value={form.hpi.exacerbating} onChange={function(e) { set('hpi.exacerbating', e.target.value); }} placeholder="e.g. Exercise, lying flat" /></Fld>
+              <Fld label="Relieving Factors"><input style={s.inp} value={form.hpi.relieving} onChange={function(e) { set('hpi.relieving', e.target.value); }} placeholder="e.g. Sitting up, medication" /></Fld>
+            </Row>
+            <Fld label="Associated Symptoms" full>
+              <input style={s.inp} value={form.hpi.associated} onChange={function(e) { set('hpi.associated', e.target.value); }} placeholder="List any associated symptoms" />
+            </Fld>
+          </Sect>
+          {form.complaints.includes('cough') && (
+            <Sect title="Cough Characterization (SOCRATES Expansion)">
+              <Fld label="Cough Character" full>
+                <Pills options={[
+                  { value: 'dry', label: 'Dry / Non-productive' },
+                  { value: 'productive', label: 'Productive / Wet' },
+                  { value: 'barking', label: 'Barking / Seal-like (croup)' },
+                  { value: 'whooping', label: 'Whooping / Paroxysmal (pertussis)' },
+                  { value: 'blood_stained', label: 'Blood-stained (hemoptysis)' },
+                ]} value={form.hpi.coughChar} onSelect={function(v) { set('hpi.coughChar', v); }} />
+              </Fld>
+              <Fld label="Duration Category" full>
+                <Pills options={[
+                  { value: 'acute', label: 'Acute (<2 weeks)' },
+                  { value: 'subacute', label: 'Subacute (2-4 weeks)' },
+                  { value: 'chronic', label: 'Chronic (>4 weeks)' },
+                ]} value={form.hpi.coughDuration} onSelect={function(v) { set('hpi.coughDuration', v); }} />
+              </Fld>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+                <BoolPill label="Nocturnal cough" value={form.hpi.nocturnalCough} onToggle={function(v) { set('hpi.nocturnalCough', v); }} />
+                <BoolPill label="Exercise-triggered" value={form.hpi.exerciseTriggered} onToggle={function(v) { set('hpi.exerciseTriggered', v); }} />
+                <BoolPill label="Allergen trigger" value={form.hpi.allergenTrigger} onToggle={function(v) { set('hpi.allergenTrigger', v); }} />
+              </div>
+            </Sect>
+          )}
+          {form.complaints.includes('fever') && (
+            <Sect title="Fever Pattern">
+              <Row>
+                <Fld label="Fever Type">
+                  <Pills options={[
+                    { value: 'continuous', label: 'Continuous' },
+                    { value: 'intermittent', label: 'Intermittent' },
+                    { value: 'remittent', label: 'Remittent' },
+                    { value: 'periodic', label: 'Periodic / Recurrent' },
+                  ]} value={form.hpi.feverPattern} onSelect={function(v) { set('hpi.feverPattern', v); }} />
+                </Fld>
+                <Fld label="Fever Onset">
+                  <Pills options={[
+                    { value: 'sudden', label: 'Sudden / Abrupt' },
+                    { value: 'gradual', label: 'Gradual / Insidious' },
+                  ]} value={form.hpi.feverOnset} onSelect={function(v) { set('hpi.feverOnset', v); }} />
+                </Fld>
+              </Row>
+              <Row>
+                <Fld label="Fever Duration"><input style={s.inp} value={form.hpi.feverDuration} onChange={function(e) { set('hpi.feverDuration', e.target.value); }} placeholder="e.g. 5 days" /></Fld>
+                <Fld label="High grade (>=39C)">
+                  <BoolPill label="High grade fever" value={form.hpi.highFever} onToggle={function(v) { set('hpi.highFever', v); }} />
+                </Fld>
+              </Row>
+            </Sect>
+          )}
+          {form.complaints.includes('wheeze') && (
+            <Sect title="Wheeze Details">
+              <Fld label="Episode Pattern" full>
+                <Pills options={[
+                  { value: 'first', label: 'First episode (bronchiolitis pattern <2yr)' },
+                  { value: 'recurrent', label: 'Recurrent episodes (asthma pattern)' },
+                  { value: 'persistent', label: 'Persistent / continuous' },
+                ]} value={form.hpi.wheezePattern} onSelect={function(v) { set('hpi.wheezePattern', v); }} />
+              </Fld>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <BoolPill label="Unilateral wheeze (suspect FB)" value={form.hpi.unilateralWheeze} onToggle={function(v) { set('hpi.unilateralWheeze', v); }} warn />
+              </div>
+            </Sect>
+          )}
+          {form.complaints.includes('stridor') && (
+            <Sect title="Stridor Details">
+              <Fld label="Type of Stridor" full>
+                <Pills options={[
+                  { value: 'inspiratory', label: 'Inspiratory (supraglottic)' },
+                  { value: 'biphasic', label: 'Biphasic (glottic/subglottic)' },
+                  { value: 'expiratory', label: 'Expiratory (intrathoracic)' },
+                ]} value={form.hpi.stridorType} onSelect={function(v) { set('hpi.stridorType', v); }} />
+              </Fld>
+            </Sect>
+          )}
+          <Sect title="Respiratory Signs & Severity Markers">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+              <BoolPill label="Chest indrawing" value={form.hpi.chestIndrawing} onToggle={function(v) { set('hpi.chestIndrawing', v); }} warn />
+              <BoolPill label="Nasal flaring" value={form.hpi.nasalFlaring} onToggle={function(v) { set('hpi.nasalFlaring', v); }} warn />
+              <BoolPill label="Expiratory grunting" value={form.hpi.grunting} onToggle={function(v) { set('hpi.grunting', v); }} warn />
+              <BoolPill label="Head-bobbing" value={form.hpi.headBobbing} onToggle={function(v) { set('hpi.headBobbing', v); }} warn />
+              <BoolPill label="Feeding difficulty" value={form.hpi.feedingDiff} onToggle={function(v) { set('hpi.feedingDiff', v); }} />
+              <BoolPill label="Reported hepatomegaly" value={form.hpi.hepatomegalyReported} onToggle={function(v) { set('hpi.hepatomegalyReported', v); }} />
+              <BoolPill label="Sudden choking episode" value={form.hpi.suddenOnset} onToggle={function(v) { set('hpi.suddenOnset', v); }} warn />
+              <BoolPill label="Drooling / Cannot swallow" value={form.hpi.drooling} onToggle={function(v) { set('hpi.drooling', v); }} warn />
+              <BoolPill label="Tripod / Sniffing position" value={form.hpi.tripodPosition} onToggle={function(v) { set('hpi.tripodPosition', v); }} warn />
+            </div>
+          </Sect>
+          <Sect title="Constitutional & Red Flag Symptoms">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+              <BoolPill label="Night sweats" value={form.hpi.nightSweats} onToggle={function(v) { set('hpi.nightSweats', v); }} />
+              <BoolPill label="Weight loss" value={form.hpi.weightLoss} onToggle={function(v) { set('hpi.weightLoss', v); }} />
+              <BoolPill label="TB contact history" value={form.hpi.tbContact} onToggle={function(v) { set('hpi.tbContact', v); }} warn />
+              <BoolPill label="Sick contact" value={form.hpi.sickContact} onToggle={function(v) { set('hpi.sickContact', v); }} />
+              <BoolPill label="COVID / infectious exposure" value={form.hpi.exposureCovid} onToggle={function(v) { set('hpi.exposureCovid', v); }} />
+              <BoolPill label="Seizures with illness" value={form.hpi.seizureHPI} onToggle={function(v) { set('hpi.seizureHPI', v); }} warn />
+              <BoolPill label="Vomiting" value={form.hpi.vomitingHPI} onToggle={function(v) { set('hpi.vomitingHPI', v); }} />
+              <BoolPill label="Diarrhea" value={form.hpi.diarrheaHPI} onToggle={function(v) { set('hpi.diarrheaHPI', v); }} />
+            </div>
+            {form.hpi.sickContact && (
+              <Fld label="Sick Contact Details" full>
+                <input style={s.inp} value={form.hpi.sickContactDetail} onChange={function(e) { set('hpi.sickContactDetail', e.target.value); }} placeholder="Describe contact, illness, timing" />
+              </Fld>
+            )}
+            {form.hpi.exposureCovid && (
+              <Fld label="Exposure Details" full>
+                <input style={s.inp} value={form.hpi.exposureCovidDetail} onChange={function(e) { set('hpi.exposureCovidDetail', e.target.value); }} placeholder="Describe exposure" />
+              </Fld>
+            )}
+            <Fld label="Rash Description (if present)" full>
+              <input style={s.inp} value={form.hpi.rashHPI} onChange={function(e) { set('hpi.rashHPI', e.target.value); }} placeholder="Type, distribution, onset" />
+            </Fld>
+            <Fld label="Urine Output" full>
+              <Pills options={[
+                { value: 'normal', label: 'Normal / Adequate' },
+                { value: 'reduced', label: 'Reduced / Oliguria' },
+                { value: 'absent', label: 'Anuria' },
+              ]} value={form.hpi.urineOutput} onSelect={function(v) { set('hpi.urineOutput', v); }} />
+            </Fld>
+          </Sect>
+          <Sect title="Prior Treatment & Response">
+            <Row>
+              <Fld label="Treatment Already Given"><input style={s.inp} value={form.hpi.prevTx} onChange={function(e) { set('hpi.prevTx', e.target.value); }} placeholder="e.g. Antibiotics, nebulization, analgesics" /></Fld>
+              <Fld label="Response to Treatment"><input style={s.inp} value={form.hpi.txResponse} onChange={function(e) { set('hpi.txResponse', e.target.value); }} placeholder="e.g. Improving, no change, worsening" /></Fld>
+            </Row>
+          </Sect>
+        </div>
+      </>
+    );
+  };
+
+  const renderPmh = function() {
+    return (
+      <>
+        <PhaseHead title="Past Medical History" sub="Previous illnesses, admissions, chronic conditions, and surgeries" />
+        <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: 20 }}>
+          <Sect title="Previous Admissions">
+            <BoolPill label="Previous hospital admissions" value={form.pmh.prevAdmissions} onToggle={function(v) { set('pmh.prevAdmissions', v); }} />
+            {form.pmh.prevAdmissions && (
+              <Fld label="Admission Details" full>
+                <TextArea value={form.pmh.prevAdmDetail} onChange={function(v) { set('pmh.prevAdmDetail', v); }} placeholder="Details of admissions: dates, diagnoses, duration, treatment, outcome..." />
+              </Fld>
+            )}
+          </Sect>
+          <Sect title="Chronic Illnesses — select all that apply">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+              {['Asthma', 'Sickle Cell Disease', 'Epilepsy', 'Congenital Heart Disease', 'HIV/AIDS',
+                'Cystic Fibrosis', 'Immunodeficiency', 'Diabetes Mellitus', 'Down Syndrome',
+                'Chronic Kidney Disease', 'Chronic Liver Disease', 'Cerebral Palsy'].map(function(ill) {
+                const sel = form.pmh.chronicIllnesses?.includes(ill);
+                return (
+                  <button key={ill} onClick={function() { toggle('pmh.chronicIllnesses', ill); }}
+                    style={{
+                      padding: '5px 12px', borderRadius: 20,
+                      border: '1px solid ' + (sel ? '#0d9488' : 'var(--color-border-secondary)'),
+                      background: sel ? '#0d9488' : 'transparent',
+                      color: sel ? 'white' : 'var(--color-text-primary)',
+                      fontSize: 12, cursor: 'pointer'
+                    }}
+                  >
+                    {ill}
+                  </button>
+                );
+              })}
+            </div>
+          </Sect>
+          <Sect title="Respiratory-Specific History">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+              <BoolPill label="Previous wheeze episodes" value={form.pmh.prevWheeze} onToggle={function(v) { set('pmh.prevWheeze', v); }} />
+              <BoolPill label="Diagnosed asthma" value={form.pmh.asthmaDx} onToggle={function(v) { set('pmh.asthmaDx', v); }} />
+              <BoolPill label="Recurrent chest infections" value={form.pmh.recurrentChest} onToggle={function(v) { set('pmh.recurrentChest', v); }} />
+              <BoolPill label="Known cardiac disease" value={form.pmh.cardiacDisease} onToggle={function(v) { set('pmh.cardiacDisease', v); }} />
+            </div>
+          </Sect>
+          <Sect title="Other Medical History">
+            <Row>
+              <Fld label="Known Allergies"><input style={s.inp} value={form.pmh.allergies} onChange={function(e) { set('pmh.allergies', e.target.value); }} placeholder="Drug / food / environmental allergies" /></Fld>
+              <Fld label="Current Medications"><input style={s.inp} value={form.pmh.medications} onChange={function(e) { set('pmh.medications', e.target.value); }} placeholder="List all current medications + doses" /></Fld>
+            </Row>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+              <BoolPill label="Previous surgeries" value={form.pmh.prevSurgeries} onToggle={function(v) { set('pmh.prevSurgeries', v); }} />
+            </div>
+            {form.pmh.prevSurgeries && (
+              <Fld label="Surgery Details" full>
+                <input style={s.inp} value={form.pmh.surgeryDetail} onChange={function(e) { set('pmh.surgeryDetail', e.target.value); }} placeholder="Type of surgery, date, indication, outcome" />
+              </Fld>
+            )}
+          </Sect>
+        </div>
+      </>
+    );
+  };
+
+  const renderBirthDevImm = function() {
+    return (
+      <>
+        <PhaseHead title="Birth History & Development" sub="Perinatal history, developmental milestones, and immunization status" />
+        <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: 20 }}>
+          <Sect title="Birth History — Delivery Details">
+            <Row>
+              <Fld label="Place of Birth"><input style={s.inp} value={form.birth.birthPlace} onChange={function(e) { set('birth.birthPlace', e.target.value); }} placeholder="Hospital / Home / TBA" /></Fld>
+              <Fld label="Gestational Age">
+                <Pills options={[
+                  { value: 'preterm', label: 'Preterm (<37 wk)' },
+                  { value: 'term', label: 'Term (37-42 wk)' },
+                  { value: 'post-term', label: 'Post-term (>42 wk)' },
+                ]} value={form.birth.gestAge} onSelect={function(v) { set('birth.gestAge', v); }} />
+              </Fld>
+            </Row>
+            <Row>
+              <Fld label="Gestation (weeks)"><input style={s.inp} type="number" value={form.birth.gestAgeWeeks} onChange={function(e) { set('birth.gestAgeWeeks', e.target.value); }} placeholder="e.g. 34" min={24} max={44} /></Fld>
+              <Fld label="Birth Weight (kg)"><input style={s.inp} type="number" step="0.01" value={form.birth.birthWeight} onChange={function(e) { set('birth.birthWeight', e.target.value); }} placeholder="e.g. 3.2" /></Fld>
+            </Row>
+            <Fld label="Mode of Delivery" full>
+              <Pills options={[
+                { value: 'SVD', label: 'SVD (Normal vaginal)' },
+                { value: 'CS', label: 'Caesarean Section' },
+                { value: 'ventouse', label: 'Ventouse (Vacuum)' },
+                { value: 'forceps', label: 'Forceps delivery' },
+                { value: 'breech', label: 'Breech delivery' },
+              ]} value={form.birth.deliveryMode} onSelect={function(v) { set('birth.deliveryMode', v); }} />
+            </Fld>
+            <Row>
+              <Fld label="APGAR Score"><input style={s.inp} value={form.birth.apgar} onChange={function(e) { set('birth.apgar', e.target.value); }} placeholder="e.g. 7/9 at 1/5 min" /></Fld>
+              <Fld label="NICU Admission">
+                <BoolPill label="Admitted to NICU" value={form.birth.nicuAdmission} onToggle={function(v) { set('birth.nicuAdmission', v); }} warn />
+              </Fld>
+            </Row>
+            {form.birth.nicuAdmission && (
+              <Fld label="NICU Duration" full>
+                <input style={s.inp} value={form.birth.nicuDuration} onChange={function(e) { set('birth.nicuDuration', e.target.value); }} placeholder="e.g. 5 days, 2 weeks" />
+              </Fld>
+            )}
+          </Sect>
+          <Sect title="Neonatal Complications — select all that apply">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+              {['Birth Asphyxia', 'Neonatal Jaundice', 'Neonatal Sepsis', 'Respiratory Distress',
+                'Hypoglycaemia', 'Neonatal Seizures', 'Feeding Difficulty', 'Congenital Anomaly', 'None'].map(function(comp) {
+                const sel = form.birth.neonatalComplications?.includes(comp);
+                return (
+                  <button key={comp} onClick={function() { toggle('birth.neonatalComplications', comp); }}
+                    style={{
+                      padding: '5px 12px', borderRadius: 20,
+                      border: '1px solid ' + (sel ? '#0d9488' : 'var(--color-border-secondary)'),
+                      background: sel ? '#0d9488' : 'transparent',
+                      color: sel ? 'white' : 'var(--color-text-primary)',
+                      fontSize: 12, cursor: 'pointer'
+                    }}
+                  >
+                    {comp}
+                  </button>
+                );
+              })}
+            </div>
+            <Fld label="Additional Neonatal Details" full>
+              <TextArea value={form.birth.neonatalDetail} onChange={function(v) { set('birth.neonatalDetail', v); }} placeholder="Any other relevant neonatal history..." />
+            </Fld>
+          </Sect>
+          <Sect title="Developmental History — Milestones">
+            {[
+              { key: 'grossMotor' as const, label: 'Gross Motor', detailKey: 'grossMotorDetail' as const, hint: 'Rolling, sitting unsupported, crawling, walking, running, jumping' },
+              { key: 'fineMotor' as const, label: 'Fine Motor', detailKey: 'fineMotorDetail' as const, hint: 'Pincer grasp, transferring objects, drawing, writing, using scissors' },
+              { key: 'speech' as const, label: 'Speech & Language', detailKey: 'speechDetail' as const, hint: 'Babbling, first words, phrases, sentences, vocabulary' },
+              { key: 'social' as const, label: 'Social & Emotional', detailKey: 'socialDetail' as const, hint: 'Eye contact, smiling, playing, interaction with peers' },
+            ].map(function(area) {
+              return (
+                <div key={area.key} style={{ marginBottom: 14 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+                    <div style={{ fontSize: 12, fontWeight: 500, minWidth: 130, color: 'var(--color-text-primary)' }}>{area.label}</div>
+                    <Pills options={[
+                      { value: 'normal', label: 'Age-appropriate' },
+                      { value: 'delayed', label: 'Delayed' },
+                      { value: 'regressed', label: 'Regressed' },
+                      { value: 'not_assessed', label: 'Not assessed' },
+                    ]} value={form.development[area.key]} onSelect={function(v) { set('development.' + area.key, v); }} />
+                  </div>
+                  <div style={{ fontSize: 10, color: 'var(--color-text-secondary)', marginBottom: 4 }}>{area.hint}</div>
+                  <input style={s.inp} value={form.development[area.detailKey]}
+                    onChange={function(e) { set('development.' + area.detailKey, e.target.value); }}
+                    placeholder="Describe specific milestones achieved..." />
+                </div>
+              );
+            })}
+            <Sect title="Developmental Concerns">
+              <TextArea value={form.development.concerns} onChange={function(v) { set('development.concerns', v); }}
+                placeholder="Detail any concerns about regression, delay, or loss of milestones..." />
+            </Sect>
+          </Sect>
+          <Sect title="Immunization History">
+            <Fld label="Overall Immunization Status" full>
+              <Pills options={[
+                { value: 'up_to_date', label: 'Up to date' },
+                { value: 'incomplete', label: 'Incomplete' },
+                { value: 'unknown', label: 'Unknown / Not documented' },
+                { value: 'unimmunized', label: 'Not immunized' },
+              ]} value={form.immunization.status} onSelect={function(v) { set('immunization.status', v); }} />
+            </Fld>
+            <Sect title="Missed Vaccines — select if applicable">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+                {['BCG', 'OPV', 'Pentavalent (DPT-HepB-Hib)', 'PCV', 'Rotavirus', 'Measles (MR)',
+                  'Yellow Fever', 'Meningococcal', 'HPV', 'COVID-19', 'Vitamin A', 'IPV'].map(function(v) {
+                  const sel = form.immunization.missedVaccines?.includes(v);
+                  return (
+                    <button key={v} onClick={function() { toggle('immunization.missedVaccines', v); }}
+                      style={{
+                        padding: '4px 10px', borderRadius: 20,
+                        border: '1px solid ' + (sel ? '#ea580c' : 'var(--color-border-secondary)'),
+                        background: sel ? 'rgba(234,88,12,0.1)' : 'transparent',
+                        color: sel ? '#ea580c' : 'var(--color-text-primary)', fontSize: 11, cursor: 'pointer'
+                      }}
+                    >
+                      {v}
+                    </button>
+                  );
+                })}
+              </div>
+            </Sect>
+            <Sect title="Adverse Reactions">
+              <BoolPill label="Any adverse reactions to vaccines" value={form.immunization.adverseReactions} onToggle={function(v) { set('immunization.adverseReactions', v); }} />
+              {form.immunization.adverseReactions && (
+                <Fld label="Reaction Details" full>
+                  <input style={s.inp} value={form.immunization.adverseDetail} onChange={function(e) { set('immunization.adverseDetail', e.target.value); }} placeholder="Describe reaction, vaccine involved, timing..." />
+                </Fld>
+              )}
+            </Sect>
+          </Sect>
+        </div>
+      </>
+    );
+  };
+
+  const renderNutrition = function() {
+    return (
+      <>
+        <PhaseHead title="Nutritional History" sub="Feeding patterns, dietary intake, anthropometric indicators, and signs of malnutrition" />
+        <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: 20 }}>
+          <Sect title="Breastfeeding History">
+            <Fld label="Breastfeeding Status" full>
+              <Pills options={[
+                { value: 'exclusive', label: 'Exclusive breastfeeding' },
+                { value: 'partial', label: 'Partial breastfeeding' },
+                { value: 'not_breastfed', label: 'Not breastfed' },
+                { value: 'weaned', label: 'Weaned' },
+              ]} value={form.nutrition.breastfed} onSelect={function(v) { set('nutrition.breastfed', v); }} />
+            </Fld>
+            <Row>
+              <Fld label="Duration Exclusive BF"><input style={s.inp} value={form.nutrition.exclusiveDuration} onChange={function(e) { set('nutrition.exclusiveDuration', e.target.value); }} placeholder="e.g. 6 months" /></Fld>
+              <Fld label="Total Breastfeeding Duration"><input style={s.inp} value={form.nutrition.bfDuration} onChange={function(e) { set('nutrition.bfDuration', e.target.value); }} placeholder="e.g. 18 months, ongoing" /></Fld>
+            </Row>
+            <Fld label="Age Complementary Foods Introduced" full>
+              <input style={s.inp} value={form.nutrition.complementaryAge} onChange={function(e) { set('nutrition.complementaryAge', e.target.value); }} placeholder="e.g. 6 months" />
+            </Fld>
+          </Sect>
+          <Sect title="Current Diet & Appetite">
+            <Row>
+              <Fld label="Dietary Diversity">
+                <Pills options={[
+                  { value: 'adequate', label: 'Adequate / Varied' },
+                  { value: 'poor', label: 'Poor / Limited' },
+                  { value: 'restricted', label: 'Severely restricted' },
+                ]} value={form.nutrition.dietaryDiversity} onSelect={function(v) { set('nutrition.dietaryDiversity', v); }} />
+              </Fld>
+              <Fld label="Current Appetite">
+                <Pills options={[
+                  { value: 'good', label: 'Good' },
+                  { value: 'reduced', label: 'Reduced' },
+                  { value: 'poor', label: 'Poor / Anorexic' },
+                ]} value={form.nutrition.appetite} onSelect={function(v) { set('nutrition.appetite', v); }} />
+              </Fld>
+            </Row>
+            <Row>
+              <Fld label="Weight Centile"><input style={s.inp} value={form.nutrition.weightCentile} onChange={function(e) { set('nutrition.weightCentile', e.target.value); }} placeholder="e.g. 5th, 50th, 95th" /></Fld>
+              <Fld label="Height/Length Centile"><input style={s.inp} value={form.nutrition.heightCentile} onChange={function(e) { set('nutrition.heightCentile', e.target.value); }} placeholder="e.g. 10th, 50th" /></Fld>
+            </Row>
+            <Fld label="MUAC (cm) if known" full>
+              <input style={s.inp} type="number" step="0.1" value={form.nutrition.muac} onChange={function(e) { set('nutrition.muac', e.target.value); }} placeholder="e.g. 12.5" />
+            </Fld>
+          </Sect>
+          <Sect title="Malnutrition Signs — select if present">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+              {['Wasting', 'Stunting', 'Underweight', 'Bilateral pitting oedema (kwashiorkor)',
+                'Muscle wasting', 'Hair changes (colour/texture)', 'Skin changes (dermatosis)',
+                'Moon face', 'Brittle nails'].map(function(sign) {
+                const sel = form.nutrition.malnutritionSigns?.includes(sign);
+                return (
+                  <button key={sign} onClick={function() { toggle('nutrition.malnutritionSigns', sign); }}
+                    style={{
+                      padding: '5px 12px', borderRadius: 20,
+                      border: '1px solid ' + (sel ? '#ea580c' : 'var(--color-border-secondary)'),
+                      background: sel ? 'rgba(234,88,12,0.1)' : 'transparent',
+                      color: sel ? '#ea580c' : 'var(--color-text-primary)', fontSize: 12, cursor: 'pointer'
+                    }}
+                  >
+                    {sign}
+                  </button>
+                );
+              })}
+            </div>
+          </Sect>
+        </div>
+      </>
+    );
+  };
+
+  const renderFamilySocial = function() {
+    return (
+      <>
+        <PhaseHead title="Family & Social History" sub="Hereditary conditions, household contacts, living conditions, and environmental factors" />
+        <div style={{ background: 'var(--color-background-primary)', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12, padding: 20 }}>
+          <Sect title="Family Medical History">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+              <BoolPill label="TB in household" value={form.family.tbHousehold} onToggle={function(v) { set('family.tbHousehold', v); }} warn />
+              <BoolPill label="Asthma in family" value={form.family.asthmaFamily} onToggle={function(v) { set('family.asthmaFamily', v); }} />
+              <BoolPill label="Atopy / eczema / allergic rhinitis" value={form.family.atopyFamily} onToggle={function(v) { set('family.atopyFamily', v); }} />
+              <BoolPill label="Sickle cell disease in family" value={form.family.sickleCellFamily} onToggle={function(v) { set('family.sickleCellFamily', v); }} />
+              <BoolPill label="Epilepsy in family" value={form.family.epilepsyFamily} onToggle={function(v) { set('family.epilepsyFamily', v); }} />
+              <BoolPill label="Sibling with similar illness" value={form.family.similarIllnessSiblings} onToggle={function(v) { set('family.similarIllnessSiblings', v); }} />
+            </div>
+            <Fld label="Genetic / Other Family Diseases" full>
+              <input style={s.inp} value={form.family.geneticDiseases} onChange={function(e) { set('family.geneticDiseases', e.target.value); }} placeholder="e.g. congenital anomalies, metabolic disease, chromosomal disorders" />
+            </Fld>
+          </Sect>
+          <Sect title="Social & Environmental History">
+            <Row>
+              <Fld label="Housing Conditions">
+                <Pills options={[
+                  { value: 'adequate', label: 'Adequate' },
+                  { value: 'crowded', label: 'Crowded (>3 per room)' },
+                  { value: 'poor', label: 'Poor / Dil.

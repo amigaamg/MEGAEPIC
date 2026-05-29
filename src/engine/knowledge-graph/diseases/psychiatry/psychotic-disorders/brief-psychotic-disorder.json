@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "brief_psychotic_disorder",
+    "name": "Brief Psychotic Disorder",
+    "system": "PSYCH",
+    "agePeak_months": [240, 480],
+    "note": "Sudden onset psychosis lasting 1 day to <1 month, often triggered by extreme stress. Full return to premorbid function.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["psychotic_disorder", "acute_psychosis", "stress_related"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_intent_or_plan", "weight": 10 },
+        { "sign": "violent_aggressive_behavior", "weight": 10 },
+        { "sign": "catatonia", "weight": 9 },
+        { "sign": "severe_self_neglect", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If danger signs or severe distress -> INPATIENT; else -> OUTPATIENT with close follow-up"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_onset_delusions", "weight": 5 },
+      { "symptomId": "sudden_onset_hallucinations", "weight": 5 },
+      { "symptomId": "disorganized_speech", "weight": 4 },
+      { "symptomId": "disorganized_behavior", "weight": 4 },
+      { "symptomId": "emotional_turmoil", "weight": 3 },
+      { "symptomId": "preceding_severe_stressor", "weight": 4, "note": "Often identifiable trigger" },
+      { "symptomId": "acute_onset_days", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "disorganized_or_catatonic_behavior", "baseWeight": 4 },
+      { "signId": "intense_anxiety_or_agitation", "baseWeight": 4 },
+      { "signId": "delusional_beliefs_bizarre", "baseWeight": 4 },
+      { "signId": "hallucinatory_behavior", "baseWeight": 3 },
+      { "signId": "poor_insight_acute", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "acute_severe_stressor", "multiplier": 5.0 },
+      { "id": "postpartum_period", "multiplier": 4.0 },
+      { "id": "personality_disorder_cluster_a", "multiplier": 3.0 },
+      { "id": "sleep_deprivation_extreme", "multiplier": 2.0 },
+      { "id": "recent_immigration_or_trauma", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "with_marked_stressor",
+        "name": "Brief Psychotic Disorder with Marked Stressor",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "clear_precipitating_events", "weight": 5 },
+          { "feature": "acute_onset", "weight": 4 }
+        ],
+        "management": "Low-dose antipsychotic (olanzapine 2.5-5 mg or risperidone 0.5-2 mg) for symptom control. Taper and discontinue after symptom resolution. Supportive psychotherapy."
+      },
+      {
+        "id": "without_marked_stressor",
+        "name": "Brief Psychotic Disorder without Marked Stressor",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "no_clear_trigger", "weight": 4 },
+          { "feature": "full_recovery", "weight": 5 }
+        ],
+        "management": "Same pharmacotherapy. Rule out organic causes. Monitor for future mood or psychotic episodes. Psychotherapy."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "schizophrenia", "discriminators": ["duration_over_1_month", "negative_symptoms", "functional_decline", "prodromal_period"] },
+      { "diseaseId": "substance_induced_psychosis", "discriminators": ["positive_tox", "temporal_relationship_with_use", "resolution_with_abstinence"] },
+      { "diseaseId": "acute_mania", "discriminators": ["elevated_mood", "decreased_sleep_need", "pressured_speech", "grandiosity"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Psychiatric interview with collateral", "priority": "immediate", "yield": 0.9, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "Urine toxicology", "priority": "immediate", "yield": 0.5, "indication": "exclude substance-induced psychosis" },
+        { "name": "TSH, FBC, U&E, LFT, glucose", "priority": "high", "yield": 0.3, "indication": "rule out medical causes" },
+        { "name": "Blood alcohol level", "priority": "medium", "yield": 0.3, "indication": "if alcohol use suspected" }
+      ],
+      "imaging": [
+        { "name": "CT/MRI Brain", "priority": "medium", "yield": 0.1, "indication": "if first episode, atypical features, neurological signs" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Psychosis and Schizophrenia",
+      "pathways": [
+        {
+          "severity": "acute with risk",
+          "criteria": "danger to self/others, severe disorganization, catatonia",
+          "treatment": "Inpatient admission. Antipsychotic: olanzapine 5-10 mg or haloperidol 2-5 mg IM if needed. Benzodiazepines for agitation. Safety plan."
+        },
+        {
+          "severity": "mild-moderate, low risk",
+          "criteria": "no danger signs, good social support",
+          "treatment": "Outpatient management. Low-dose antipsychotic (olanzapine 2.5-5 mg or risperidone 0.5-2 mg). Supportive psychotherapy. Close follow-up. Anticipate full recovery <1 month."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "acute_stress_response",
+      "cortisol_dysregulation",
+      "dopamine_hyperactivity",
+      "genetic_vulnerability",
+      "environmental_trigger"
+    ],
+    "complications": [
+      { "diseaseId": "suicide_attempt", "probability": 0.05, "severityBoost": 0.5, "clues": ["command_hallucinations", "hopelessness", "impulsivity"] },
+      { "diseaseId": "progression_to_schizophrenia", "probability": 0.2, "severityBoost": 0.3, "clues": ["symptoms_over_1_month", "negative_symptoms", "family_history"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if danger signs",
+    "diagnosticClues": ["acute_onset_psychosis_days", "preceding_stressor", "duration_under_1_month", "full_premorbid_function"],
+    "exclusionClues": ["symptoms_over_1_month", "negative_symptoms", "gradual_onset", "substance_use_temporally_related"]
+  }
+}

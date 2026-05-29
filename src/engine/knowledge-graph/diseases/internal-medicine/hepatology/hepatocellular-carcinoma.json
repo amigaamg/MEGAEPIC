@@ -1,0 +1,215 @@
+{
+  "disease": {
+    "id": "hepatocellular_carcinoma",
+    "name": "Hepatocellular Carcinoma",
+    "system": "hepatology",
+    "agePeak_months": [600, 900],
+    "note": "Primary liver cancer arising from hepatocytes. Sixth most common cancer worldwide, third leading cause of cancer death. Strongly associated with cirrhosis of any etiology. BCLC staging system guides treatment allocation. AFP, US, CT/MRI used for diagnosis and surveillance.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["liver", "malignancy", "cirrhosis_related", "hcc"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "tumor_rupture_hemoperitoneum", "weight": 10 },
+        { "sign": "variceal_hemorrhage_from_underlying_portal_hypertension", "weight": 9 },
+        { "sign": "acute_liver_decompensation_from_tumor_burden", "weight": 9 },
+        { "sign": "tumor_thrombosis_of_portal_vein_main_trunk", "weight": 8 },
+        { "sign": "hepatic_encephalopathy", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "bclc_stage_c_d": true,
+        "child_pugh_c": true,
+        "ecog_performance_status_2_4": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "bclc_stage_0_a_or_b_with_good_liver_function": true,
+        "early_stage_tumor_amenable_to_curative_therapy": true
+      },
+      "severityLabel": "BCLC C-D or decompensated -> URGENT palliative/transplant evaluation; BCLC 0-A-B -> URGENT curative therapy (resection, ablation, transplant, TACE)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_pain_right_upper_quadrant", "weight": 4 },
+      { "symptomId": "weight_loss_unintentional", "weight": 4 },
+      { "symptomId": "abdominal_fullness_mass", "weight": 3 },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "early_satiety", "weight": 2 },
+      { "symptomId": "anorexia", "weight": 2 },
+      { "symptomId": "fever_of_unknown_origin", "weight": 1, "note": "Tumor necrosis or paraneoplastic" },
+      { "symptomId": "known_cirrhosis_history", "weight": 5 },
+      { "symptomId": "known_chronic_hepatitis_b_or_c", "weight": 5 },
+      { "symptomId": "nonalcoholic_steatohepatitis_nash", "weight": 3 },
+      { "symptomId": "history_of_alcohol_abuse", "weight": 3 },
+      { "symptomId": "family_history_of_hcc", "weight": 2 },
+      { "symptomId": "hemochromatosis_history", "weight": 2 },
+      { "symptomId": "new_onset_ascites_in_known_cirrhosis", "weight": 3, "note": "Decompensation from tumor" }
+    ],
+
+    "examFeatures": [
+      { "signId": "hepatomegaly_nontender", "baseWeight": 4 },
+      { "signId": "palpable_liver_mass", "baseWeight": 4 },
+      { "signId": "ascites", "baseWeight": 3, "note": "New or worsening ascites" },
+      { "signId": "jaundice", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "stigmata_of_chronic_liver_disease", "baseWeight": 3 },
+      { "signId": "abdominal_bruit", "baseWeight": 1, "note": "Vascular tumor" },
+      { "signId": "cachexia_muscle_wasting", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "cirrhosis_of_any_etiology", "multiplier": 10.0 },
+      { "id": "chronic_hepatitis_b", "multiplier": 8.0 },
+      { "id": "chronic_hepatitis_c", "multiplier": 6.0 },
+      { "id": "alcohol_related_cirrhosis", "multiplier": 5.0 },
+      { "id": "nonalcoholic_steatohepatitis_nash", "multiplier": 3.0 },
+      { "id": "hemochromatosis", "multiplier": 4.0 },
+      { "id": "alpha_1_antitrypsin_deficiency", "multiplier": 2.5 },
+      { "id": "aflatoxin_exposure", "multiplier": 4.0 },
+      { "id": "male_gender", "multiplier": 3.0 },
+      { "id": "advanced_age_over_60", "multiplier": 2.0 },
+      { "id": "hiv_coinfection", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatic_hemangioma",
+        "discriminators": ["peripheral_nodular_enhancement_on_ct_mri", "delayed_fill_in_on_portal_venous_phase", "marked_t2_hyperintensity", "no_cirrhosis_background"]
+      },
+      {
+        "diseaseId": "hepatic_adenoma",
+        "discriminators": ["young_women_on_oral_contraceptives", "no_cirrhosis_background", "arterial_phase_hyperenhancement", "no_washout_on_delayed_imaging"]
+      },
+      {
+        "diseaseId": "focal_nodular_hyperplasia",
+        "discriminators": ["central_scar_on_mri", "brisk_arterial_enhancement", "isointense_on_delayed_phase", "no_risk_factors_for_hcc"]
+      },
+      {
+        "diseaseId": "metastatic_liver_tumor",
+        "discriminators": ["known_extrahepatic_primary", "multiple_bilateral_lesions", "rim_enhancement", "different_imaging_characteristics"]
+      },
+      {
+        "diseaseId": "intrahepatic_cholangiocarcinoma",
+        "discriminators": ["progressive_arterial_rim_enhancement", "biliary_dilation", "elevated_ca19_9", "non_cirrhotic_liver_possible"]
+      },
+      {
+        "diseaseId": "regenerative_or_dysplastic_nodule_in_cirrhosis",
+        "discriminators": ["no_arterial_hyperenhancement", "lacks_washout", "stable_over_time", "no_growth_on_surveillance"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECOG performance status assessment", "priority": "high", "yield": 0.8, "indication": "key component of BCLC staging; 0-2 appropriate for treatment" }
+      ],
+      "laboratory": [
+        { "name": "AFP (alpha-fetoprotein)", "priority": "immediate", "yield": 0.6, "indication": "elevated in 50-60% of HCC; >400 ng/mL highly suggestive in cirrhotic patient with mass; used for surveillance response" },
+        { "name": "Des-gamma-carboxy prothrombin (DCP/PIVKA-II)", "priority": "medium", "yield": 0.7, "indication": "alternative tumor marker; elevated in HCC; complement to AFP" },
+        { "name": "LFTs (ALT, AST, bilirubin, ALP, GGT)", "priority": "immediate", "yield": 0.7, "indication": "Child-Pugh score assessment; treatment eligibility" },
+        { "name": "Serum albumin and bilirubin", "priority": "immediate", "yield": 0.8, "indication": "Child-Pugh score components" },
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.7, "indication": "Child-Pugh score; synthetic function" },
+        { "name": "FBC with platelets", "priority": "high", "yield": 0.6, "indication": "thrombocytopenia suggests portal hypertension and cirrhosis" },
+        { "name": "Serum creatinine and sodium", "priority": "high", "yield": 0.5, "indication": "MELD score calculation" },
+        { "name": "HBsAg, anti-HBc, anti-HCV", "priority": "high", "yield": 0.4, "indication": "identify underlying etiologic liver disease" },
+        { "name": "CBC and metabolic panel", "priority": "high", "yield": 0.4, "indication": "pre-treatment assessment" }
+      ],
+      "imaging": [
+        { "name": "Triphasic CT abdomen (non-contrast, arterial, portal venous, delayed)", "priority": "immediate", "yield": 0.93, "indication": "arterial hyperenhancement + washout on portal venous/delayed = HCC by LI-RADS criteria" },
+        { "name": "Dynamic contrast-enhanced MRI abdomen with Eovist/Primovist", "priority": "high", "yield": 0.95, "indication": "superior characterization; hepatobiliary phase hypointensity for HCC; LI-RADS classification" },
+        { "name": "Abdominal ultrasound with contrast (CEUS)", "priority": "medium", "yield": 0.85, "indication": "arterial hyperenhancement + washout; useful when CT/MRI contraindicated" },
+        { "name": "Chest CT (staging)", "priority": "high", "yield": 0.2, "indication": "lung metastases are common extrahepatic site" },
+        { "name": "Bone scan or PET-CT (if symptoms or high risk)", "priority": "medium", "yield": 0.3, "indication": "bone metastases; PET-CT for extrahepatic disease" },
+        { "name": "Liver biopsy of the lesion", "priority": "selected", "yield": 0.97, "indication": "only if imaging is atypical (non-LI-RADS 5), inconclusive, or suspicion of alternative malignancy. Biopsy tract seeding risk <2%." }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines: Hepatocellular Carcinoma; EASL Clinical Practice Guidelines: Hepatocellular Carcinoma; BCLC Staging and Treatment Strategy",
+      "pathways": [
+        {
+          "severity": "bclc_stage_0_very_early",
+          "criteria": "Single nodule <2cm, Child-Pugh A, ECOG 0, no portal hypertension",
+          "treatment": "Curative intent. Option 1: Surgical resection (preferred if bilirubin normal, HVPG <10mmHg, remnant liver volume adequate). Option 2: Radiofrequency ablation (RFA) or microwave ablation (MWA) if not surgical candidate or unfavorable location. 5-year survival 60-80%."
+        },
+        {
+          "severity": "bclc_stage_a_early",
+          "criteria": "Single nodule or up to 3 nodules each ≤3cm, Child-Pugh A-B, ECOG 0, no PVT/metastases",
+          "treatment": "Curative options: Resection (single nodule with good liver function). Liver transplantation (within Milan criteria: 1 nodule ≤5cm or 2-3 nodules each ≤3cm, no extrahepatic spread, no macrovascular invasion). Ablation (RFA/MWA) for nodules 2-3cm or if not transplant candidate. Adjuvant: none established, but surveillance for recurrence is critical. 5-year survival 50-70%."
+        },
+        {
+          "severity": "bclc_stage_b_intermediate",
+          "criteria": "Multinodular, beyond Milan criteria but no PVT/metastases, Child-Pugh A-B, ECOG 0",
+          "treatment": "TACE (transarterial chemoembolization) with drug-eluting beads (DEB-TACE) or conventional TACE (Lipiodol + doxorubicin/cisplatin + embolization). Repeat on demand based on response (mRECIST criteria). TACE + sorafenib/lenvatinib may improve outcomes. DEB-TACE: doxorubicin 50-150mg loaded beads, infused selectively. If TACE failure/contraindication: sorafenib 400mg PO BID or lenvatinib 8-12mg PO daily (weight-based). Consider transplant if downstaged to Milan criteria."
+        },
+        {
+          "severity": "bclc_stage_c_advanced",
+          "criteria": "Macrovascular invasion (PVT) or extrahepatic spread, Child-Pugh A-B, ECOG 1-2",
+          "treatment": "Systemic therapy first-line: atezolizumab 1200mg IV q3w + bevacizumab 15mg/kg IV q3w (IMbrave150 regimen; improves OS vs sorafenib). Alternative: lenvatinib 8-12mg PO daily (if contraindication to IO). Alternative: sorafenib 400mg PO BID. Second-line: regorafenib 160mg PO daily (after sorafenib), cabozantinib 60mg PO daily, ramucirumab 8mg/kg IV q2w (if AFP ≥400 ng/mL). TACE not recommended for advanced stage unless PVT is segmental. Consider Y90 radioembolization (TARE) in selected patients (PVT, limited tumor)."
+        },
+        {
+          "severity": "bclc_stage_d_terminal",
+          "criteria": "Child-Pugh C (not transplant candidate), ECOG 3-4, or tumor burden too large",
+          "treatment": "Best supportive care / palliative. Symptom management (pain, ascites, encephalopathy, bleeding). Consider sorafenib in selected Child-Pugh C7 (limited benefit). No role for TACE/RFA/systemic therapy in terminal stage. Hospice/palliative care referral. Survival typically 3-6 months."
+        },
+        {
+          "severity": "liver_transplant_listing",
+          "criteria": "Within Milan criteria, no macrovascular invasion, no extrahepatic disease, Child-Pugh A-B, ECOG 0-1",
+          "treatment": "Refer to transplant center. Bridging therapy (TACE, ablation, SBRT) to prevent drop-out while on waitlist. Manage liver function and complications on waitlist. Decompensation events monitored. MELD-Na exception points for HCC within criteria. Post-transplant: surveillance for recurrence, immunosuppression management (mTOR-based regimens may reduce recurrence). 5-year survival 70-80% post-transplant."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_liver_injury_and_cirrhosis_background",
+      "hepatocyte_regeneration_under_inflammatory_stress",
+      "genetic_and_epigenetic_alterations_tp53_ctnnb1_tert",
+      "telomerase_reactivation_tert_promoter_mutations",
+      "chromosomal_instability_and_copy_number_alterations",
+      "activation_of_wnt_beta_catenin_pathway",
+      "angiogenic_switch_vegf_expression",
+      "arterial_vs_portal_blood_supply_transition",
+      "immune_evasion_pd_l1_upregulation",
+      "tumor_progression_and_macrovascular_invasion",
+      "metastatic_spread_extrahepatic"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_rupture_and_hemoperitoneum",
+        "probability": 0.05,
+        "severityBoost": 0.9,
+        "clues": ["acute_onset_abdominal_pain", "hypotension_tachycardia", "hemoperitoneum_on_imaging", "subcapsular_tumor_location"]
+      },
+      {
+        "diseaseId": "portal_vein_tumor_thrombosis",
+        "probability": 0.2,
+        "severityBoost": 0.7,
+        "clues": ["worsening_ascites", "variceal_bleeding", "splenomegaly_worsening", "portal_vein_filling_defect_with_enhancement_on_imaging"]
+      },
+      {
+        "diseaseId": "liver_decompensation",
+        "probability": 0.3,
+        "severityBoost": 0.6,
+        "clues": ["new_or_worsening_ascites", "jaundice", "encephalopathy", "elevated_bilirubin_inr"]
+      },
+      {
+        "diseaseId": "biliary_obstruction",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["jaundice", "dilated_bile_ducts", "tumor_near_hilum", "elevated_bilirubin_alp_ggt"]
+      },
+      {
+        "diseaseId": "paraneoplastic_syndromes",
+        "probability": 0.1,
+        "severityBoost": 0.2,
+        "clues": ["hypoglycemia", "erythrocytosis", "hypercalcemia", "diarrhea"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if symptomatic or complicated; medium if surveillance-detected early",
+    "diagnosticClues": ["chronic_liver_disease_cirrhosis_background", "liver_mass_on_surveillance_imaging", "arterial_hyperenhancement_with_washout", "rising_afp", "hepatitis_b_or_c"],
+    "exclusionClues": ["no_cirrhosis_or_chronic_liver_disease", "non_rim_arterial_phase_hyperenhancement", "no_washout", "benign_imaging_features", "normal_afp_without_risk_factors"]
+  }
+}

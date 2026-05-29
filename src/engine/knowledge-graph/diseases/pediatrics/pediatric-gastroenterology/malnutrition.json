@@ -1,0 +1,181 @@
+{
+  "disease": {
+    "id": "malnutrition",
+    "name": "Malnutrition / Severe Acute Malnutrition",
+    "system": "PAED",
+    "agePeak_months": [6, 60],
+    "note": "Deficiency of energy, protein, and micronutrients. SAM (severe acute malnutrition) is defined by severe wasting and/or edema. Major cause of child mortality.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["nutritional_deficiency", "failure_to_thrive"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypoglycemia", "weight": 10 },
+        { "sign": "hypothermia", "weight": 10 },
+        { "sign": "severe_dehydration_diagnosed", "weight": 9 },
+        { "sign": "shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "edema_both_feet", "weight": 8 },
+          { "sign": "muac_less_than_115_mm", "weight": 7 },
+          { "sign": "weight_for_height_z_score_less_than_minus_3", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If MUAC <115 mm or edema or medical complication -> SEVERE (SAM); else -> NON-SEVERE (MAM or at risk)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "poor_weight_gain", "weight": 5 },
+      { "symptomId": "inadequate_feeding_history", "weight": 5 },
+      { "symptomId": "frequent_infections", "weight": 4 },
+      { "symptomId": "diarrhea_chronic", "weight": 3 },
+      { "symptomId": "poor_appetite", "weight": 3 },
+      { "symptomId": "early_cessation_breastfeeding", "weight": 3 },
+      { "symptomId": "household_food_insecurity", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "wasting", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "edema", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "growth_faltering_on_chart", "baseWeight": 5 },
+      { "signId": "skin_changes_dermatitis", "baseWeight": 3 },
+      { "signId": "hair_color_change_thinning", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "signs_of_vitamin_deficiency", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "poverty", "multiplier": 3.0 },
+      { "id": "food_insecurity", "multiplier": 3.0 },
+      { "id": "poor_maternal_education", "multiplier": 2.5 },
+      { "id": "early_cessation_breastfeeding", "multiplier": 2.5 },
+      { "id": "recurrent_infections", "multiplier": 2.0 },
+      { "id": "hiv_exposure_infection", "multiplier": 3.0 },
+      { "id": "orphan_or_caregiver_illness", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "moderate_acute_malnutrition",
+        "name": "Moderate Acute Malnutrition (MAM)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "muac_115_to_125_mm", "weight": 5 },
+          { "feature": "weight_for_height_z_score_minus_2_to_minus_3", "weight": 5 },
+          { "feature": "no_edema", "weight": 3 }
+        ],
+        "management": "Supplementary feeding program. Ready-to-use therapeutic food (RUTF) supplementation. Treat underlying infections. Follow-up weekly."
+      },
+      {
+        "id": "severe_acute_malnutrition_marasmus",
+        "name": "Severe Acute Malnutrition - Marasmus",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "severe_wasting_muac_<115", "weight": 5 },
+          { "feature": "no_edema", "weight": 4 },
+          { "feature": "visible_ribs_and_bones", "weight": 5 }
+        ],
+        "management": "Stabilization phase: F-75 formula 130 mL/kg/day. Treat hypoglycemia/hypothermia. IV antibiotics. Refeed cautiously. Transition phase: F-100 formula. Rehabilitation phase: RUTF."
+      },
+      {
+        "id": "severe_acute_malnutrition_kwashiorkor",
+        "name": "Severe Acute Malnutrition - Kwashiorkor",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "edema_bilateral_pitting", "weight": 5 },
+          { "feature": "dermatitis", "weight": 4 },
+          { "feature": "hair_changes", "weight": 3 },
+          { "feature": "hepatomegaly", "weight": 3 }
+        ],
+        "management": "Hospitalize. Correct electrolyte imbalances. F-75 formula initially. Slow refeeding to avoid refeeding syndrome. Diuretics not indicated for edema. Vitamin A supplementation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "chronic_illness_malabsorption",
+        "discriminators": ["specific_disease_diagnosis", "normal_dietary_intake"]
+      },
+      {
+        "diseaseId": "malignancy",
+        "discriminators": ["mass_lesion", "fever", "night_sweats", "specific_tumor_markers"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Anthropometry (MUAC, weight, height, Z-score)", "priority": "immediate", "yield": 0.95, "indication": "all children, classification" },
+        { "name": "Blood glucose (glucometer)", "priority": "immediate", "yield": 0.6, "indication": "hypoglycemia screening" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.5, "indication": "anemia, infection" },
+        { "name": "HIV test", "priority": "high", "yield": 0.25, "indication": "routine testing in SAM" },
+        { "name": "Blood culture", "priority": "high", "yield": 0.3, "indication": "rule out sepsis" },
+        { "name": "Serum electrolytes", "priority": "high", "yield": 0.5, "indication": "metabolic assessment" },
+        { "name": "Serum albumin", "priority": "medium", "yield": 0.4, "indication": "protein status" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO Guideline for the Management of Severe Acute Malnutrition",
+      "pathways": [
+        {
+          "severity": "mam",
+          "criteria": "MUAC 115-125 mm, WHZ -2 to -3, no edema, no medical complications",
+          "treatment": "RUTF supplement 50-100 kcal/kg/day. Treat infections. Vitamin A, zinc, folic acid. Follow-up weekly until discharge (MUAC >125 mm)."
+        },
+        {
+          "severity": "sam",
+          "criteria": "MUAC <115 mm or WHZ <-3 or edema, ± medical complications",
+          "treatment": "Stabilization (1-2 days): F-75 130 mL/kg/day, prevent/treat hypoglycemia/hypothermia, broad-spectrum antibiotics, correct electrolytes. Transition (2-7 days): switch to F-100. Rehabilitation: RUTF, follow-up to discharge."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "inadequate_dietary_intake",
+      "recurrent_infections",
+      "gut_barrier_dysfunction",
+      "immune_impairment",
+      "metabolic_derangement",
+      "electrolyte_imbalance",
+      "multiorgan_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypoglycemia",
+        "probability": 0.2,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["lethargy", "hypothermia", "sweating"]
+      },
+      {
+        "diseaseId": "refeeding_syndrome",
+        "probability": 0.1,
+        "lagDays": [2, 5],
+        "severityBoost": 0.5,
+        "clues": ["edema", "hypophosphatemia", "cardiac_failure"]
+      },
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.2,
+        "lagDays": [0, 14],
+        "severityBoost": 0.5,
+        "clues": ["fever_hypothermia", "lethargy", "poor_feeding"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["low_muac", "edema", "wasting", "growth_faltering", "frequent_infections"],
+    "exclusionClues": ["normal_growth", "muac_>125_mm", "no_edema", "adequate_diet"]
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "disease": {
+    "id": "autoimmune_hepatitis",
+    "name": "Autoimmune Hepatitis",
+    "system": "rheumatology",
+    "agePeak_months": [120, 480],
+    "note": "Immune-mediated inflammatory liver disease characterized by elevated transaminases, autoantibodies, and interface hepatitis on biopsy. Associated with extrahepatic autoimmune syndromes.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["autoimmune", "hepatic", "hepatitis", "elevated_lfts"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure", "weight": 10 },
+        { "sign": "cirrhosis_decompensation", "weight": 9 },
+        { "sign": "variceal_bleeding", "weight": 9 },
+        { "sign": "severe_coagulopathy", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If acute liver failure or decompensated cirrhosis -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue_malaise", "weight": 5 },
+      { "symptomId": "jaundice", "weight": 4 },
+      { "symptomId": "abdominal_discomfort", "weight": 3 },
+      { "symptomId": "arthralgia_myalgia", "weight": 3 },
+      { "symptomId": "nausea_poor_appetite", "weight": 3 },
+      { "symptomId": "amenorrhea_irregular_menses", "weight": 2 },
+      { "symptomId": "associated_autoimmune_disease", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "spider_angiomas", "baseWeight": 2 },
+      { "signId": "palmar_erythema", "baseWeight": 2 },
+      { "signId": "ascites_edema", "baseWeight": 3 },
+      { "signId": "signs_of_chronic_liver_disease", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 4.0 },
+      { "id": "hla_drb1_0301_drb1_0401", "multiplier": 4.0 },
+      { "id": "other_autoimmune_disease", "multiplier": 3.0 },
+      { "id": "family_history_autoimmune", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "type_1_aih",
+        "name": "Type 1 Autoimmune Hepatitis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "positive_ana_and_or_asma", "weight": 5 },
+          { "feature": "adult_and_adolescent_onset", "weight": 4 },
+          { "feature": "associated_extrahepatic_autoimmune", "weight": 3 }
+        ],
+        "management": "Prednisolone + azathioprine. Mycophenolate if intolerant to azathioprine."
+      },
+      {
+        "id": "type_2_aih",
+        "name": "Type 2 Autoimmune Hepatitis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "positive_anti_lkm1_antibody", "weight": 5 },
+          { "feature": "children_young_adults", "weight": 5 },
+          { "feature": "more_severe_course", "weight": 4 }
+        ],
+        "management": "Corticosteroids + azathioprine. Higher relapse rate."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["drug_exposure_history", "no_autoantibodies", "normal_immunoglobulins", "histology_different"]
+      },
+      {
+        "diseaseId": "primary_biliary_cholangitis",
+        "discriminators": ["anti_mitochondrial_antibody", "elevated_alk_phosphatase", "granulomatous_histology"]
+      },
+      {
+        "diseaseId": "viral_hepatitis",
+        "discriminators": ["positive_serology", "acute_onset", "risk_factors", "no_autoantibodies"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "LFTs (ALT, AST, ALP, GGT, bilirubin)", "priority": "immediate", "yield": 0.9, "indication": "hepatocellular pattern (ALT >> ALP)" },
+        { "name": "ANA, ASMA, anti-LKM1, anti-LC1", "priority": "high", "yield": 0.8, "indication": "autoantibody profile" },
+        { "name": "Serum IgG", "priority": "high", "yield": 0.8, "indication": "polyclonal IgG elevation" },
+        { "name": "Viral hepatitis serology (A, B, C, E)", "priority": "high", "yield": 0.5, "indication": "exclusion of viral causes" },
+        { "name": "Ceruloplasmin, ferritin, alpha-1 antitrypsin", "priority": "medium", "yield": 0.3, "indication": "exclude Wilson, hemochromatosis, A1AT" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.5, "indication": "liver echotexture, exclude biliary obstruction" },
+        { "name": "Liver biopsy", "priority": "high", "yield": 0.9, "indication": "interface hepatitis, plasma cell infiltration, fibrosis stage" },
+        { "name": "FibroScan", "priority": "medium", "yield": 0.7, "indication": "liver stiffness measurement" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD/EASL AIH Guidelines",
+      "pathways": [
+        {
+          "severity": "induction",
+          "criteria": "active disease, elevated ALT, high IgG",
+          "treatment": "Prednisolone 30-60 mg/day taper + azathioprine 50-150 mg/day. Budesonide for mild disease."
+        },
+        {
+          "severity": "maintenance",
+          "criteria": "normal LFTs, on treatment",
+          "treatment": "Azathioprine monotherapy. Mycophenolate mofetil if azathioprine failure."
+        },
+        {
+          "severity": "refractory",
+          "criteria": "inadequate response, relapse, intolerance",
+          "treatment": "Mycophenolate mofetil. Tacrolimus. Rituximab. Consider liver transplantation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "loss_of_hepatic_self_tolerance",
+      "t_cell_mediated_hepatocyte_damage",
+      "autoantibody_production",
+      "interface_hepatitis",
+      "fibrosis_progression",
+      "cirrhosis_development"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cirrhosis_portal_hypertension",
+        "probability": 0.4,
+        "severityBoost": 0.5,
+        "clues": ["splenomegaly", "thrombocytopenia", "ascites", "varices", "coagulopathy"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if acute liver failure",
+    "diagnosticClues": ["elevated_alt_igg", "positive_autoantibodies", "interface_hepatitis", "young_woman"],
+    "exclusionClues": ["anti_mitochondrial_positive", "viral_hepatitis_positive", "normal_igg", "negative_autoantibodies"]
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "splenic_injury",
+    "name": "Splenic Injury",
+    "system": "surgical",
+    "agePeak_months": [120, 480],
+    "note": "Most commonly injured organ in blunt abdominal trauma. Left upper quadrant pain, Kehr's sign, hemorrhagic shock. Graded I-V.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["abdominal_trauma", "hemorrhagic_shock", "left_upper_quadrant_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemorrhagic_shock", "weight": 10 },
+        { "sign": "peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "hypotension_refractory", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "grade_iv_v_injury", "weight": 8 },
+          { "sign": "ongoing_hemorrhage", "weight": 8 },
+          { "sign": "active_bleeding_on_ct", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Hemodynamic instability/grade IV-V -> SEVERE; stable grade I-III -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "blunt_abdominal_trauma_high_energy", "weight": 5 },
+      { "symptomId": "left_upper_quadrant_pain", "weight": 5 },
+      { "symptomId": "referred_left_shoulder_pain", "weight": 4, "note": "Kehr's sign - irritation of diaphragm" },
+      { "symptomId": "dizziness_weakness_syncope", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "distracting_injuries", "weight": 3, "note": "May obscure abdominal pain" },
+      { "symptomId": "mva_fall_assault_sports", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "left_upper_quadrant_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "kehr_sign", "baseWeight": 4 },
+      { "signId": "signs_of_hypovolemic_shock", "baseWeight": 5 },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "peritoneal_signs", "baseWeight": 4 },
+      { "signId": "left_lower_rib_fractures", "baseWeight": 3 },
+      { "signId": "abdominal_bruising", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "high_energy_trauma", "multiplier": 2.5 },
+      { "id": "left_lower_rib_fractures", "multiplier": 3.0 },
+      { "id": "splenomegaly", "multiplier": 2.0 },
+      { "id": "anticoagulation", "multiplier": 3.0 },
+      { "id": "coagulopathy", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "low_grade_i_ii",
+        "name": "Low-Grade Splenic Injury (Grade I-II)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "subcapsular_hematoma_or_laceration_less_3cm", "weight": 5 },
+          { "feature": "hemodynamically_stable", "weight": 5 },
+          { "feature": "observation_appropriate", "weight": 5 }
+        ],
+        "management": "Non-operative management (NOM). ICU monitoring. Serial abdominal exams. Repeat CT in 24-48h. Angiography + embolization if active extravasation."
+      },
+      {
+        "id": "high_grade_iii_v",
+        "name": "High-Grade Splenic Injury (Grade III-V)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "laceration_greater_3cm_or_ruptured", "weight": 5 },
+          { "feature": "hemodynamic_instability", "weight": 5 },
+          { "feature": "active_bleeding_on_ct", "weight": 5 },
+          { "feature": "shattered_spleen_or_hilar_injury", "weight": 5 }
+        ],
+        "management": "If unstable: emergency laparotomy. Splenectomy. If stable: angiographic embolization. NOM with close monitoring. Vaccinate post-splenectomy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "liver_injury",
+        "discriminators": ["right_upper_quadrant_pain", "right_rib_fractures", "ruq_tenderness"]
+      },
+      {
+        "diseaseId": "left_kidney_injury",
+        "discriminators": ["flank_pain", "hematuria", "no_kehr_sign"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "FAST (Focused Abdominal Sonography in Trauma)", "priority": "immediate", "yield": 0.8, "indication": "detect free fluid in abdomen" },
+        { "name": "Serial vital signs", "priority": "immediate", "yield": 0.7, "indication": "hemodynamic monitoring" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.6, "indication": "falling hemoglobin" },
+        { "name": "Cross-match", "priority": "immediate", "yield": 0.5, "indication": "prepare for transfusion" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.4, "indication": "assess coagulopathy" },
+        { "name": "Lactate", "priority": "high", "yield": 0.6, "indication": "tissue hypoperfusion" }
+      ],
+      "imaging": [
+        { "name": "FAST Exam", "priority": "immediate", "yield": 0.8, "indication": "first-line at bedside" },
+        { "name": "CT Abdomen/Pelvis with IV contrast", "priority": "high", "yield": 0.98, "indication": "gold standard for stable patient" },
+        { "name": "Diagnostic peritoneal aspiration (DPA)", "priority": "medium", "yield": 0.9, "indication": "if FAST/CT unavailable and unstable" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Splenic Trauma",
+      "pathways": [
+        {
+          "severity": "stable low-grade",
+          "criteria": "hemodynamically stable, grade I-III, no active extravasation",
+          "treatment": "Non-operative management. ICU admission. Serial abdominal exams. Angiography + embolization if active bleeding on CT. Splenic salvage if possible."
+        },
+        {
+          "severity": "unstable or high-grade",
+          "criteria": "hemodynamic instability, grade IV-V, active extravasation",
+          "treatment": "Emergency laparotomy. Splenectomy. Damage control surgery if multiply injured. Post-op ICU. Vaccination (Pneumococcal, Meningococcal, H. influenzae) post-splenectomy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "blunt_force_trauma",
+      "splenic_parenchyma_fracture",
+      "subcapsular_or_capsular_rupture",
+      "hemorrhage",
+      "hemoperitoneum",
+      "hemorrhagic_shock"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "delayed_splenic_rupture",
+        "probability": 0.05,
+        "lagDays": [1, 14],
+        "severityBoost": 0.5,
+        "clues": ["sudden_deterioration", "hemodynamic_collapse", "increasing_abdominal_pain"]
+      },
+      {
+        "diseaseId": "overwhelming_post_splenectomy_infection",
+        "probability": 0.03,
+        "lagDays": [30, 720],
+        "severityBoost": 0.4,
+        "clues": ["fever", "rapid_deterioration", "sepsis_post_splenectomy"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["left_upper_quadrant_pain_after_trauma", "kehr_sign", "hemodynamic_instability", "rib_fractures_left"],
+    "exclusionClues": ["no_trauma", "right_sided_pain", "stable_hemodynamics_non_trauma"]
+  }
+}

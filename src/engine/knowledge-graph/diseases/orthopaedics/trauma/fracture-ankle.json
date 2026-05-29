@@ -1,0 +1,111 @@
+{
+  "disease": {
+    "id": "fracture-ankle",
+    "name": "Ankle Fracture",
+    "system": "ORTHO",
+    "agePeak_months": [240, 600],
+    "note": "Fracture of the distal tibia/fibula involving the ankle mortise. Weber classification based on fibula fracture level relative to syndesmosis.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["lower_limb_fracture", "ankle_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture", "weight": 10 },
+        { "sign": "fracture_dislocation_ankle", "weight": 9 },
+        { "sign": "vascular_compromise_foot", "weight": 9 },
+        { "sign": "compartment_syndrome_foot", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bimalleolar_or_trimalleolar", "weight": 7 },
+          { "sign": "syndesmotic_injury", "weight": 7 },
+          { "sign": "talar_shift", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If fracture-dislocation, open, or unstable mortise -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "twisting_injury_ankle", "weight": 5 },
+      { "symptomId": "fall_or_jump_from_height", "weight": 4 },
+      { "symptomId": "ankle_pain_swelling", "weight": 5 },
+      { "symptomId": "inability_to_weight_bear", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "ankle_swelling_deformity", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bony_tenderness_malleoli", "baseWeight": 5 },
+      { "signId": "open_wound_assessment", "baseWeight": 4 },
+      { "signId": "distal_neurovascular_foot", "baseWeight": 5 },
+      { "signId": "skin_blistering", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "osteoporosis", "multiplier": 2.0 },
+      { "id": "sports_activity", "multiplier": 2.5 },
+      { "id": "previous_ankle_fracture_sprain", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "weber_b",
+        "name": "Weber B (Transsyndesmotic)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "fibula_fracture_at_level_of_syndesmosis", "weight": 5 },
+          { "feature": "medial_malleolus_may_be_fractured", "weight": 3 }
+        ],
+        "management": "Isolated lateral: functional brace or walking boot. Bimalleolar: ORIF with plate and screws. Syndesmotic screw if unstable."
+      },
+      {
+        "id": "weber_c",
+        "name": "Weber C (Suprasyndesmotic)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "fibula_fracture_above_syndesmosis", "weight": 5 },
+          { "feature": "syndesmosis_disruption_always", "weight": 5 }
+        ],
+        "management": "ORIF of fibula (plate) + syndesmosis fixation (screw). Medial malleolus fixation if fractured. NWB 6-8 weeks."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "ankle_sprain",
+        "discriminators": ["negative_xray", "lateral_ligament_tenderness", "weight_bearing_possible"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Ankle AP, lateral, mortise X-ray", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "CT ankle", "priority": "medium", "yield": 0.8, "indication": "complex fracture patterns" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "OTA / AO Ankle Fracture Guidelines",
+      "pathways": [
+        {
+          "severity": "stable",
+          "criteria": "Weber A, isolated lateral non-displaced, no talar shift",
+          "treatment": "Functional brace or walking boot for 4-6 weeks. Weight bear as tolerated. X-ray at 2 and 6 weeks."
+        },
+        {
+          "severity": "unstable",
+          "criteria": "Bimalleolar/trimalleolar, Weber C, displaced, talar shift, open",
+          "treatment": "Urgent closed reduction if dislocated. ORIF fibula (plate) + medial malleolus (screws/tension band). Syndesmotic screw if needed. Post-op splint, NWB 6-8 weeks."
+        }
+      ]
+    },
+
+    "pathophysiology": ["rotational_force_ankle", "supination_adduction", "pronation_abduction"]
+  }
+}

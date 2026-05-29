@@ -1,0 +1,95 @@
+{
+  "disease": {
+    "id": "pericardial_effusion",
+    "name": "Pericardial Effusion",
+    "system": "CARD",
+    "agePeak_months": [240, 960],
+    "note": "Accumulation of fluid in the pericardial space. Can be transudative, exudative, hemorrhagic, or purulent.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["pericardial_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_tamponade", "weight": 10 },
+        { "sign": "pulsus_paradoxus", "weight": 9 },
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "large_rapidly_accumulating_effusion", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If tamponade/hypotension/pulsus paradoxus -> EMERGENCY; else -> STABLE"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "chest_discomfort_or_heaviness", "weight": 3 },
+      { "symptomId": "orthopnea", "weight": 2 },
+      { "symptomId": "dysphagia", "weight": 1, "note": "Rare, from esophageal compression" },
+      { "symptomId": "hoarseness", "weight": 1, "note": "Recurrent laryngeal nerve compression" }
+    ],
+    "examFeatures": [
+      { "signId": "muffled_heart_sounds", "baseWeight": 4 },
+      { "signId": "jvd_elevated", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "hypotension", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "pericarditis", "multiplier": 3.0 },
+      { "id": "malignancy", "multiplier": 2.5 },
+      { "id": "tuberculosis", "multiplier": 2.5 },
+      { "id": "renal_failure_uremia", "multiplier": 2.0 },
+      { "id": "cardiac_surgery", "multiplier": 2.0 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "hypothyroidism", "multiplier": 1.5 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "high", "yield": 0.5, "indication": "low voltage, electrical alternans if large" }
+      ],
+      "laboratory": [
+        { "name": "Full blood count, CRP", "priority": "high", "yield": 0.5, "indication": "infectious/inflammatory markers" },
+        { "name": "Urea, creatinine", "priority": "high", "yield": 0.4, "indication": "uremic pericarditis" },
+        { "name": "TSH", "priority": "medium", "yield": 0.2, "indication": "hypothyroidism" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "diagnosis, size assessment, tamponade signs" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "water-bottle heart if >300 mL" },
+        { "name": "CT chest", "priority": "medium", "yield": 0.9, "indication": "effusion characterization, loculation, pericardial thickness" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Pericardial Diseases",
+      "pathways": [
+        {
+          "severity": "small, no tamponade",
+          "criteria": "<10 mm echo-free space, no hemodynamic effect",
+          "treatment": "Treat underlying cause. Repeat echo in 1-4 weeks. NSAIDs if inflammatory. Monitor for progression."
+        },
+        {
+          "severity": "moderate-large, no tamponade",
+          "criteria": "10-20 mm echo-free space, no tamponade physiology",
+          "treatment": "Treat underlying cause. Pericardiocentesis if diagnostic uncertainty or symptomatic. Consider NSAIDs/colchicine if inflammatory."
+        },
+        {
+          "severity": "large with high-risk features",
+          "criteria": ">20 mm, signs of tamponade, rapidly accumulating",
+          "treatment": "Urgent pericardiocentesis. Hemodynamic monitoring. IV fluids if hypotensive. Treat underlying cause (TB, malignancy, uremia)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "impaired_diastolic_filling",
+      "increased_intrapericardial_pressure",
+      "reduced_cardiac_output",
+      "compensatory_tachycardia",
+      "pericardial_stretch",
+      "fluid_accumulation_compression"
+    ],
+    "complications": [
+      { "diseaseId": "cardiac_tamponade", "probability": 0.15, "severityBoost": 0.5, "clues": ["hypotension", "pulsus_paradoxus", "jvd"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["echocardiographic_effusion", "muffled_hearts", "low_voltage_ecg"],
+    "exclusionClues": ["no_effusion_on_echo", "normal_cardiac_silhouette"]
+  }
+}

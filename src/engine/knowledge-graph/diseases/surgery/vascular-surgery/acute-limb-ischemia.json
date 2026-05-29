@@ -1,0 +1,186 @@
+{
+  "disease": {
+    "id": "acute_limb_ischemia",
+    "name": "Acute Limb Ischemia",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Sudden decrease in limb perfusion threatening viability. The 6 Ps: Pain, Pallor, Pulselessness, Paresthesia, Paralysis, Poikilothermia.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["vascular_emergency", "limb_pain", "acute_ischemia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "irreversible_ischemia_gangrene", "weight": 10 },
+        { "sign": "compartment_syndrome", "weight": 10 },
+        { "sign": "rhabdomyolysis", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "motor_deficit_paralysis", "weight": 9 },
+          { "sign": "sensory_loss", "weight": 8 },
+          { "sign": "absent_doppler_signal_arterial", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Motor/sensory loss -> SEVERE (threatened limb); viable limb -> NON-SEVERE (Rutherford I)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_onset_leg_pain", "weight": 5 },
+      { "symptomId": "cold_leg", "weight": 4 },
+      { "symptomId": "numbness_tingling", "weight": 4 },
+      { "symptomId": "weakness_or_inability_to_move_limb", "weight": 4 },
+      { "symptomId": "atrial_fibrillation", "weight": 4, "note": "Embolic source" },
+      { "symptomId": "known_pad_or_claudication_history", "weight": 3, "note": "Thrombotic cause" },
+      { "symptomId": "recent_arterial_catheterization", "weight": 3, "note": "Iatrogenic cause" },
+      { "symptomId": "acute_aortic_dissection", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "absent_pulse_below_occlusion", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cold_limb_distal", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "sensory_deficit", "baseWeight": 4 },
+      { "signId": "motor_weakness_paralysis", "baseWeight": 4 },
+      { "signId": "muscle_tenderness_compartment", "baseWeight": 3 },
+      { "signId": "absent_doppler_signals", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "atrial_fibrillation", "multiplier": 3.0 },
+      { "id": "peripheral_arterial_disease", "multiplier": 2.5 },
+      { "id": "acute_myocardial_infarction", "multiplier": 2.0 },
+      { "id": "valvular_heart_disease", "multiplier": 2.0 },
+      { "id": "hypercoagulable_state", "multiplier": 2.0 },
+      { "id": "aortic_aneurysm", "multiplier": 2.0 },
+      { "id": "arterial_catheterization", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "viable_rutherford_i",
+        "name": "Viable Limb (Rutherford I)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "no_sensory_loss", "weight": 5 },
+          { "feature": "no_motor_loss", "weight": 5 },
+          { "feature": "audible_doppler_arterial_signal", "weight": 4 }
+        ],
+        "management": "Urgent anticoagulation (IV Heparin). Arterial Duplex/CTA. Embolectomy (Fogarty catheter) or thrombolysis. Treat underlying cause (AF, PAD)."
+      },
+      {
+        "id": "threatened_rutherford_ii",
+        "name": "Threatened Limb (Rutherford IIa/IIb)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "sensory_loss_present", "weight": 5 },
+          { "feature": "mild_motor_loss_or_absent", "weight": 5 },
+          { "feature": "absent_arterial_doppler", "weight": 4 }
+        ],
+        "management": "Emergency revascularization (within 6h). IV Heparin. Embolectomy or surgical bypass. Thrombolysis (catheter-directed) if Rutherford IIa. Fasciotomy after reperfusion."
+      },
+      {
+        "id": "irreversible_rutherford_iii",
+        "name": "Irreversible Limb (Rutherford III)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "complete_paralysis", "weight": 5 },
+          { "feature": "complete_anesthesia", "weight": 5 },
+          { "feature": "rigid_muscles_gangrene", "weight": 5 },
+          { "feature": "absent_doppler_venous_and_arterial", "weight": 5 }
+        ],
+        "management": "Primary amputation. Do not attempt revascularization (reperfusion syndrome would be fatal). "
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_dvt_phlegmasia",
+        "discriminators": ["swelling_more_than_pallor", "preserved_pulses", "venous_doppler_confirms"]
+      },
+      {
+        "diseaseId": "neuropathy_acute",
+        "discriminators": ["no_cold_limb", "preserved_pulses", "normal_doppler"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Handheld Doppler assessment", "priority": "immediate", "yield": 0.9, "indication": "arterial and venous signals" },
+        { "name": "ABI measurement", "priority": "immediate", "yield": 0.7, "indication": "if obtainable" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.4, "indication": "baseline" },
+        { "name": "Creatinine, CK, Myoglobin", "priority": "high", "yield": 0.6, "indication": "rhabdomyolysis assessment" },
+        { "name": "Lactate", "priority": "high", "yield": 0.6, "indication": "tissue ischemia" },
+        { "name": "Coagulation", "priority": "high", "yield": 0.4, "indication": "before heparinization" }
+      ],
+      "imaging": [
+        { "name": "Arterial Duplex Ultrasound", "priority": "immediate", "yield": 0.8, "indication": "locate occlusion" },
+        { "name": "CT Angiography (Runoff)", "priority": "immediate", "yield": 0.95, "indication": "definitive imaging, plan intervention" },
+        { "name": "Digital Subtraction Angiography", "priority": "medium", "yield": 0.98, "indication": "can be combined with intervention" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESVS Guidelines for Acute Limb Ischemia",
+      "pathways": [
+        {
+          "severity": "Rutherford I (viable)",
+          "criteria": "no sensory/motor loss, audible arterial Doppler",
+          "treatment": "IV Heparin. Urgent imaging (CTA). Embolectomy (Fogarty) for emboli. Catheter-directed thrombolysis for thrombotic occlusion."
+        },
+        {
+          "severity": "Rutherford IIa/IIb (threatened)",
+          "criteria": "sensory loss +/- mild motor loss, no arterial Doppler",
+          "treatment": "Emergency revascularization within 6h. Embolectomy/bypass. Fasciotomy after. IV Heparin. Reperfusion syndrome management."
+        },
+        {
+          "severity": "Rutherford III (irreversible)",
+          "criteria": "profound motor/sensory loss, rigor, gangrene",
+          "treatment": "Primary amputation. No revascularization (reperfusion would cause fatal systemic effects)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "acute_arterial_occlusion",
+      "embolism_or_thrombosis",
+      "tissue_ischemia",
+      "cellular_necrosis",
+      "nerve_damage",
+      "muscle_necrosis",
+      "compartment_syndrome",
+      "reperfusion_injury",
+      "rhabdomyolysis",
+      "renal_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "compartment_syndrome",
+        "probability": 0.2,
+        "lagDays": [0, 2],
+        "severityBoost": 0.4,
+        "clues": ["tense_swollen_limb", "pain_on_passive_stretch", "sensory_loss", "elevated_compartment_pressure"]
+      },
+      {
+        "diseaseId": "reperfusion_syndrome",
+        "probability": 0.15,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["hyperkalemia", "acidosis", "myoglobinuria", "renal_failure", "cardiac_arrhythmia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_leg_pain", "absent_pulse_cold_limb", "pallor", "sensory_motor_loss", "atrial_fibrillation"],
+    "exclusionClues": ["chronic_symptoms", "present_pulses", "normal_sensation_motor"]
+  }
+}

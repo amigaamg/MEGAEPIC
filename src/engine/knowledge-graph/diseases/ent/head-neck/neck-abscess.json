@@ -1,0 +1,236 @@
+{
+  "disease": {
+    "id": "neck_abscess",
+    "name": "Deep Neck Space Abscess",
+    "system": "ent",
+    "agePeak_months": [12, 72],
+    "note": "Potentially life-threatening infection in the deep neck spaces. Can rapidly compromise the airway and spread to mediastinum. Requires urgent diagnosis and surgical drainage.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["neck_swelling", "fever", "dysphagia", "airway_risk"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stridor", "weight": 10 },
+        { "sign": "respiratory_distress", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "chest_pain_mediastinitis", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "airway_compromise", "weight": 10 },
+          { "sign": "descending_infection_below_clavicle", "weight": 9 },
+          { "sign": "trismus_severe", "weight": 7 },
+          { "sign": "high_fever", "weight": 6 },
+          { "sign": "diabetes_immunosuppression", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If airway compromise/descending infection/sepsis -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "neck_swelling_painful", "weight": 5 },
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "dysphagia", "weight": 4, "note": "Suggests parapharyngeal or retropharyngeal space involvement" },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "trismus", "weight": 3 },
+      { "symptomId": "muffled_voice", "weight": 3 },
+      { "symptomId": "drooling", "weight": 3 },
+      { "symptomId": "neck_stiffness_torticollis", "weight": 3, "note": "Common in retropharyngeal abscess in children" },
+      { "symptomId": "recent_pharyngeal_infection", "weight": 3 },
+      { "symptomId": "dental_infection_history", "weight": 3, "note": "Dental infections can spread to submandibular space" }
+    ],
+
+    "examFeatures": [
+      { "signId": "neck_erythema_swelling", "baseWeight": 5 },
+      { "signId": "neck_mass_fluctuant", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "cervical_tenderness", "baseWeight": 4 },
+      { "signId": "trismus", "baseWeight": 4 },
+      { "signId": "pharyngeal_bulge", "baseWeight": 4, "note": "Medial bulging of pharyngeal wall in parapharyngeal/retropharyngeal abscess" },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "torticollis", "baseWeight": 3 },
+      { "signId": "submandibular_edema", "baseWeight": 3 },
+      { "signId": "crepitus", "baseWeight": 4, "note": "Suggests gas-forming infection (Ludwig angina, necrotizing fasciitis)" }
+    ],
+
+    "riskFactors": [
+      { "id": "recent_pharyngitis_tonsillitis", "multiplier": 3.0 },
+      { "id": "dental_infection", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 4.0 },
+      { "id": "immunosuppression", "multiplier": 3.5 },
+      { "id": "poor_dental_hygiene", "multiplier": 2.0 },
+      { "id": "iv_drug_use", "multiplier": 3.0 },
+      { "id": "young_age_retropharyngeal", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "retropharyngeal_abscess",
+        "name": "Retropharyngeal Abscess",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "children_under_5", "weight": 4 },
+          { "feature": "neck_extension_torticollis", "weight": 4 },
+          { "feature": "stridor", "weight": 3 },
+          { "feature": "pharyngeal_bulge_posterior_wall", "weight": 5 }
+        ],
+        "management": "IV antibiotics (Ceftriaxone + Clindamycin). Surgical drainage via transoral approach. Secure airway (awake FOI if compromised). Culture."
+      },
+      {
+        "id": "parapharyngeal_abscess",
+        "name": "Parapharyngeal Abscess",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "tonsillar_bulge_lateral", "weight": 4 },
+          { "feature": "trismus", "weight": 4 },
+          { "feature": "neck_swelling_below_angle_mandible", "weight": 4 },
+          { "feature": "CN_IX_X_XI_XII_palsies", "weight": 4 }
+        ],
+        "management": "IV antibiotics. External cervical drainage via transcervical approach. CT-guided drainage if discrete collection. Airway management."
+      },
+      {
+        "id": "submandibular_abscess_ludwig",
+        "name": "Ludwig Angina (Submandibular Space)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "bilateral_submandibular_swelling", "weight": 5 },
+          { "feature": "floor_of_mouth_elevation", "weight": 5 },
+          { "feature": "tongue_protrusion", "weight": 4 },
+          { "feature": "drooling", "weight": 4 },
+          { "feature": "rapid_airway_compromise", "weight": 5 }
+        ],
+        "management": "Emergency airway (awake FOI or tracheostomy). IV antibiotics (Penicillin + Metronidazole + Gentamicin or Carbapenem). Surgical decompression via transcervical approach. ICU."
+      },
+      {
+        "id": "peritonsillar_abscess",
+        "name": "Peritonsillar Abscess (see also separate disease)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "unilateral_tonsillar_bulge", "weight": 5 },
+          { "feature": "uvula_deviation", "weight": 4 },
+          { "feature": "trismus", "weight": 4 },
+          { "feature": "muffled_voice", "weight": 3 }
+        ],
+        "management": "Needle aspiration or I&D intraoral. IV antibiotics. Tonsillectomy if recurrent."
+      },
+      {
+        "id": "necrotizing_fasciitis_neck",
+        "name": "Cervical Necrotizing Fasciitis",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "rapid_progression", "weight": 5 },
+          { "feature": "crepitus", "weight": 5 },
+          { "feature": "skin_necrosis_bullae", "weight": 5 },
+          { "feature": "severe_sepsis", "weight": 5 },
+          { "feature": "diabetes", "weight": 4 }
+        ],
+        "management": "Emergency wide debridement. Broad-spectrum IV antibiotics (Carbapenem + Clindamycin + Vancomycin). ICU. Hyperbaric oxygen. Multiple surgical explorations."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "lymphadenitis",
+        "discriminators": ["multiple_nodes", "no_fluctuance", "response_to_abx", "normal_CT"]
+      },
+      {
+        "diseaseId": "branchial_cleft_cyst_infection",
+        "discriminators": ["recurrent", "known_cyst", "anterior_SCM_location"]
+      },
+      {
+        "diseaseId": "thyroglossal_duct_cyst_infection",
+        "discriminators": ["midline", "moves_with_tongue", "suprahyoid"]
+      },
+      {
+        "diseaseId": "carotid_body_tumor",
+        "discriminators": ["slow_growth", "pulsatile", "bruit", "no_fever", "transcervical_US"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Flexible Nasolaryngoscopy", "priority": "immediate", "yield": 0.7, "indication": "assess airway patency, pharyngeal bulge" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.8, "indication": "elevated, monitor treatment" },
+        { "name": "Blood Culture", "priority": "high", "yield": 0.3, "indication": "sepsis evaluation" },
+        { "name": "Lactate", "priority": "high", "yield": 0.5, "indication": "tissue hypoperfusion assessment" }
+      ],
+      "imaging": [
+        { "name": "CT Neck with Contrast", "priority": "immediate", "yield": 0.95, "indication": "gold standard - identify abscess, define extent, airway assessment, mediastinal extension" },
+        { "name": "X-ray Neck Lateral", "priority": "medium", "yield": 0.5, "indication": "screen for retropharyngeal widening >7mm at C2" },
+        { "name": "MRI Neck", "priority": "low", "yield": 0.9, "indication": "alternative if CT contraindicated, assess soft tissue planes" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Deep Neck Space Infections",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "small abscess <2cm, no airway compromise, no systemic sepsis",
+          "treatment": "IV antibiotics (Ampicillin-Sulbactam or Clindamycin + Ceftriaxone). CT-guided drainage if accessible. Monitor airway closely."
+        },
+        {
+          "severity": "severe",
+          "criteria": "large abscess, airway risk, descending infection, sepsis",
+          "treatment": "Secure airway (awake fiberoptic intubation or tracheostomy). Surgical drainage via transcervical approach. IV broad-spectrum antibiotics (Carbapenem or Piperacillin-Tazobactam + Vancomycin). ICU. Culture-directed therapy."
+        },
+        {
+          "severity": "necrotizing fasciitis",
+          "criteria": "gas on imaging, rapid progression, septic shock",
+          "treatment": "Emergency wide surgical debridement. Repeat explorations Q24-48h. IV broad-spectrum antibiotics. ICU. HVHBOT. Reconstructive surgery after infection control."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "odontogenic_or_oropharyngeal_infection",
+      "spread_along_fascial_planes",
+      "lymphatic_extension",
+      "purulent_collection",
+      "tissue_necrosis_and_edema"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "airway_obstruction",
+        "probability": 0.15,
+        "lagDays": [0, 2],
+        "severityBoost": 0.8,
+        "clues": ["stridor", "tachypnea", "retractions", "desaturation"]
+      },
+      {
+        "diseaseId": "descending_mediastinitis",
+        "probability": 0.08,
+        "lagDays": [1, 5],
+        "severityBoost": 0.7,
+        "clues": ["chest_pain", "dyspnea", "widened_mediastinum", "pleural_effusion"]
+      },
+      {
+        "diseaseId": "jugular_vein_thrombosis",
+        "probability": 0.03,
+        "lagDays": [2, 7],
+        "severityBoost": 0.5,
+        "clues": ["neck_pain", "tender_cord", "fever_high"]
+      },
+      {
+        "diseaseId": "sepsis",  
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.6,
+        "clues": ["hypotension", "tachycardia", "organ_dysfunction"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painful_neck_swelling", "fever", "dysphagia", "trismus", "airway_concern"],
+    "exclusionClues": ["superficial_infection", "no_systemic_symptoms", "normal_CT"]
+  }
+}

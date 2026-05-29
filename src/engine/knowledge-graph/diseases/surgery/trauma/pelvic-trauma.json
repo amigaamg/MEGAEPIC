@@ -1,0 +1,164 @@
+{
+  "disease": {
+    "id": "pelvic_trauma",
+    "name": "Pelvic Trauma / Pelvic Ring Injury",
+    "system": "surgical",
+    "agePeak_months": [120, 480],
+    "note": "High-energy injury with risk of life-threatening hemorrhage. Unstable pelvis requires emergent stabilization. Multidisciplinary management.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["polytrauma", "hemorrhagic_shock", "pelvic_fracture"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemorrhagic_shock", "weight": 10 },
+        { "sign": "open_pelvic_fracture", "weight": 10 },
+        { "sign": "major_lower_limb_ischemia", "weight": 9 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "unstable_pelvic_ring_tile_c", "weight": 8 },
+          { "sign": "ongoing_hemorrhage_unstable", "weight": 8 },
+          { "sign": "associated_genitourinary_injury", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Hemodynamic instability/open fracture -> SEVERE; stable pelvic ring injury -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "high_energy_trauma_mva_crush", "weight": 5 },
+      { "symptomId": "pelvic_pain_inability_to_ambulate", "weight": 5 },
+      { "symptomId": "bleeding_per_urethra_or_vagina", "weight": 4, "note": "Genitourinary injury" },
+      { "symptomId": "lower_limb_neurovascular_symptoms", "weight": 3 },
+      { "symptomId": "hypotension_dizziness", "weight": 4 },
+      { "symptomId": "distracting_injuries", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pelvic_compression_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "leg_length_discrepancy_or_rotation", "baseWeight": 4 },
+      { "signId": "perineal_ecchymosis_swelling", "baseWeight": 4 },
+      { "signId": "blood_at_urethral_meatus_vaginal_bleeding", "baseWeight": 4 },
+      { "signId": "signs_of_retroperitoneal_hematoma", "baseWeight": 3 },
+      { "signId": "distended_bladder_no_urine", "baseWeight": 2 },
+      { "signId": "neurologic_deficit_lower_extremity", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "mva_motor_vehicle_crash", "multiplier": 3.0 },
+      { "id": "fall_from_height", "multiplier": 2.5 },
+      { "id": "crush_injury", "multiplier": 3.0 },
+      { "id": "motorcycle_crash", "multiplier": 2.5 },
+      { "id": "pedestrian_struck", "multiplier": 2.0 },
+      { "id": "osteoporosis", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "stable_pelvic_ring_injury",
+        "name": "Stable Pelvic Ring Injury (Tile A)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "avulsion_or_nondisplaced_fracture", "weight": 5 },
+          { "feature": "intact_posterior_arch", "weight": 5 },
+          { "feature": "hemodynamically_stable", "weight": 5 }
+        ],
+        "management": "Orthopedic management. Protected weight bearing. Analgesia. CT to exclude associated injuries."
+      },
+      {
+        "id": "unstable_pelvic_ring_injury",
+        "name": "Unstable Pelvic Ring Injury (Tile B/C)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "disruption_of_posterior_arch", "weight": 5 },
+          { "feature": "open_book_or_vertical_shear", "weight": 5 },
+          { "feature": "hemodynamic_instability", "weight": 5 },
+          { "feature": "retroperitoneal_hemorrhage", "weight": 4 }
+        ],
+        "management": "ATLS protocol. Pelvic binder/sheet. Massive transfusion protocol. Angiography + embolization for arterial bleeding. Preperitoneal pelvic packing. External fixation. Definitive ORIF after stabilization."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hip_fracture_dislocation",
+        "discriminators": ["isolated_hip_injury", "no_pelvic_ring_disruption", "no_perineal_injury"]
+      },
+      {
+        "diseaseId": "lumbar_spine_fracture",
+        "discriminators": ["back_pain", "no_pelvic_compression_pain", "spinal_tenderness"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pelvic X-Ray (AP)", "priority": "immediate", "yield": 0.85, "indication": "first-line imaging in trauma" },
+        { "name": "FAST Exam", "priority": "immediate", "yield": 0.6, "indication": "exclude intra-abdominal hemorrhage" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.6, "indication": "hemoglobin, base deficit" },
+        { "name": "Cross-match", "priority": "immediate", "yield": 0.5, "indication": "prepare massive transfusion" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.4, "indication": "trauma-induced coagulopathy" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "shock assessment" },
+        { "name": "Urinalysis", "priority": "high", "yield": 0.3, "indication": "hematuria suggests GU injury" }
+      ],
+      "imaging": [
+        { "name": "Pelvic X-Ray", "priority": "immediate", "yield": 0.85, "indication": "assess fracture pattern" },
+        { "name": "CT Abdomen/Pelvis with IV contrast", "priority": "high", "yield": 0.98, "indication": "definitive assessment, active bleeding" },
+        { "name": "CT Angiography", "priority": "medium", "yield": 0.9, "indication": "detect arterial bleeding source" },
+        { "name": "Retrograde urethrogram", "priority": "medium", "yield": 0.8, "indication": "if blood at meatus or high-riding prostate" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATLS/WSES Guidelines for Pelvic Trauma",
+      "pathways": [
+        {
+          "severity": "stable",
+          "criteria": "hemodynamically stable, no active bleeding, stable ring injury",
+          "treatment": "Orthopedic consultation. Analgesia. CT. Protected weight bearing. Elective ORIF if needed."
+        },
+        {
+          "severity": "unstable + hemorrhage",
+          "criteria": "hemodynamic instability, unstable pelvic ring, positive CT blush",
+          "treatment": "Pelvic binder. ATLS resuscitation. Massive transfusion protocol. REBOA if exsanguinating. Angiography + embolization. Preperitoneal packing if ongoing. External fixation. ICU."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "high_energy_trauma",
+      "pelvic_ring_disruption",
+      "retroperitoneal_venous_and_arterial_bleeding",
+      "hemorrhagic_shock",
+      "associated_gu_neurovascular_injury"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "retroperitoneal_hematoma",
+        "probability": 0.4,
+        "lagDays": [0, 2],
+        "severityBoost": 0.4,
+        "clues": ["hypotension_non_responder", "pelvic_fracture_unstable", "no_intra_abdominal_source"]
+      },
+      {
+        "diseaseId": "urethral_injury",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.2,
+        "clues": ["blood_at_meatus", "inability_to_void", "high_riding_prostate"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["high_energy_trauma", "pelvic_pain_instability", "hypotension", "perineal_ecchymosis", "blood_at_urethra"],
+    "exclusionClues": ["low_energy_mechanism", "isolated_hip_injury", "stable_walking"]
+  }
+}

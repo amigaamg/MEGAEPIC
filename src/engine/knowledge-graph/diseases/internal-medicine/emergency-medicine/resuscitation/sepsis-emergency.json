@@ -1,0 +1,122 @@
+{
+  "disease": {
+    "id": "sepsis_septic_shock",
+    "name": "Sepsis / Septic Shock",
+    "system": "emergency_medicine",
+    "agePeak_months": [0, 960],
+    "note": "Life-threatening organ dysfunction caused by dysregulated host response to infection. Septic shock is a subset with profound circulatory and cellular/metabolic abnormalities.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["sepsis", "infection", "shock", "systemic_inflammation"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypotension_after_fluids", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 9 },
+        { "sign": "respiratory_failure", "weight": 9 },
+        { "sign": "lactate_greater_4", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Sepsis with organ dysfunction or hypotension = EMERGENCY. qSOFA >=2 triggers sepsis pathway."
+    },
+    "historyFeatures": [
+      { "symptomId": "fever_or_hypothermia", "weight": 4 },
+      { "symptomId": "rigors", "weight": 3 },
+      { "symptomId": "confusion_altered_mental_state", "weight": 4 },
+      { "symptomId": "shortness_of_breath", "weight": 3 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "source_symptoms_cough_dysuria_abdominal_pain", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "fever_temp_above_38", "baseWeight": 4 },
+      { "signId": "hypothermia_below_36", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "mottled_skin", "baseWeight": 3 },
+      { "signId": "prolonged_capillary_refill", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.5 },
+      { "id": "indwelling_catheters", "multiplier": 2.0 },
+      { "id": "recent_surgery", "multiplier": 1.8 },
+      { "id": "malignancy", "multiplier": 2.0 },
+      { "id": "chronic_organ_dysfunction", "multiplier": 1.5 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "qSOFA score", "priority": "immediate", "yield": 0.8, "indication": "rapid triage: RR>=22, AMS, SBP<=100" },
+        { "name": "Lactate (bedside)", "priority": "immediate", "yield": 0.9, "indication": "tissue hypoperfusion, prognostic marker" },
+        { "name": "POCUS", "priority": "high", "yield": 0.6, "indication": "source identification, volume status" },
+        { "name": "ECG", "priority": "medium", "yield": 0.3, "indication": "arrhythmia screen" }
+      ],
+      "laboratory": [
+        { "name": "Blood cultures (2 sets)", "priority": "high", "yield": 0.5, "indication": "identify pathogen BEFORE antibiotics" },
+        { "name": "FBC with differential", "priority": "high", "yield": 0.6, "indication": "WBC count, platelets" },
+        { "name": "CRP and Procalcitonin", "priority": "high", "yield": 0.7, "indication": "infection severity, bacterial vs viral" },
+        { "name": "U&E, Cr, LFTs", "priority": "high", "yield": 0.6, "indication": "organ function assessment" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.5, "indication": "DIC screen" },
+        { "name": "ABG/VBG", "priority": "high", "yield": 0.8, "indication": "lactate, pH, PaO2" },
+        { "name": "Urinalysis and culture", "priority": "medium", "yield": 0.5, "indication": "UTI source" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.6, "indication": "pneumonia, ARDS" },
+        { "name": "CT abdomen/pelvis", "priority": "medium", "yield": 0.7, "indication": "intra-abdominal source if suspected" }
+      ]
+    },
+    "management": {
+      "protocolReference": "Surviving Sepsis Campaign (SSC) 2024 / NICE NG51",
+      "pathways": [
+        {
+          "severity": "sepsis",
+          "criteria": "suspected infection + qSOFA >=2 or organ dysfunction (lactate >2, altered mental status, hypotension)",
+          "treatment": "IV fluids 30mL/kg crystalloid within 3 hours. Blood cultures before antibiotics. Broad-spectrum IV antibiotics within 1 hour. Source control. Measure lactate. Monitor urine output."
+        },
+        {
+          "severity": "septic shock",
+          "criteria": "persistent hypotension requiring vasopressors to maintain MAP >=65 + lactate >2",
+          "treatment": "All of the above. Norepinephrine as first-line vasopressor (target MAP 65). Add vasopressin if inadequate response. Consider IV hydrocortisone 50mg Q6H if refractory. ICU admission. Central line and arterial line."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "dysregulated_host_response",
+      "pathogen_associated_molecular_patterns",
+      "cytokine_storm",
+      "endothelial_dysfunction",
+      "increased_capillary_permeability",
+      "vasodilation",
+      "relative_and_absolute_hypovolemia",
+      "tissue_hypoxia",
+      "mitochondrial_dysfunction",
+      "multi_organ_dysfunction_syndrome"
+    ],
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.4,
+        "severityBoost": 0.4,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "ards",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["severe_hypoxia", "bilateral_pulmonary_infiltrates"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["thrombocytopenia", "prolonged_pt_ptt", "bleeding"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["suspected_infection", "hypotension", "altered_consciousness", "lactate_above_2", "tachypnea", "fever_or_hypothermia"],
+    "exclusionClues": ["normal_lactate", "no_organ_dysfunction", "no_source_of_infection"]
+  }
+}

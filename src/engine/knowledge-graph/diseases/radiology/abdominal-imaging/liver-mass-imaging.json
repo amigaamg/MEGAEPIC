@@ -1,0 +1,172 @@
+{
+  "disease": {
+    "id": "liver_mass_imaging",
+    "name": "Liver Mass Imaging Characterization",
+    "system": "RAD",
+    "agePeak_months": [360, 720],
+    "note": "Multiphase CT (triple-phase) or MRI with hepatobiliary contrast agents (Eovist/Primovist) for liver lesion characterization. Key sequences: T1 in/opposed phase, T2, DWI, dynamic post-contrast phases.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["liver_lesion", "hepatic_mass", "incidentaloma"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "ruptured_hepatocellular_carcinoma", "weight": 10 },
+        { "sign": "hemorrhagic_adenoma", "weight": 9 },
+        { "sign": "biliary_obstruction_from_mass", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "li_rads_5_category", "weight": 8 },
+          { "sign": "rapid_growth_on_surveillance", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If LI-RADS 5 or rupture -> MALIGNANT/CONCERN; if benign pattern -> NON-CONCERN"
+    },
+    "historyFeatures": [
+      { "symptomId": "incidental_ct_finding", "weight": 3, "modifiers": [
+          { "condition": "on_screening_ultrasound", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "hepatitis_or_cirrhosis_history", "weight": 5 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3 },
+      { "symptomId": "weight_loss_jaundice", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "arterial_phase_hyperenhancement", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "portal_venous_washout", "baseWeight": 5 },
+      { "signId": "capsular_pseudocapsule", "baseWeight": 4 },
+      { "signId": "t2_hyperintensity_degree", "baseWeight": 3 },
+      { "signId": "diffusion_restriction", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "cirrhosis", "multiplier": 5.0 },
+      { "id": "chronic_hepatitis_b_or_c", "multiplier": 4.0 },
+      { "id": "nonalcoholic_steatohepatitis", "multiplier": 2.5 },
+      { "id": "oral_contraceptive_use", "multiplier": 2.0 },
+      { "id": "anabolic_steroid_use", "multiplier": 3.0 },
+      { "id": "known_extrahepatic_malignancy", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "hepatocellular_carcinoma",
+        "name": "Hepatocellular Carcinoma (HCC)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "arterial_phase_hyperenhancement", "weight": 5 },
+          { "feature": "portal_venous_delayed_washout", "weight": 5 },
+          { "feature": "capsular_pseudocapsule_enhancement", "weight": 4 },
+          { "feature": "mosaic_architecture", "weight": 3 },
+          { "feature": "fat_containing_on_t1_ip_opp", "weight": 3 },
+          { "feature": "threshold_growth_on_surveillance", "weight": 5 }
+        ],
+        "management": "LI-RADS 5: diagnostic without biopsy in cirrhotic patients. BCLC staging for treatment: resection, ablation, TACE, systemic therapy (atezolizumab + bevacizumab)."
+      },
+      {
+        "id": "hemangioma",
+        "name": "Hepatic Hemangioma",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "peripheral_nodular_discontinuous_enhancement", "weight": 5 },
+          { "feature": "progressive_centripetal_fill_in", "weight": 5 },
+          { "feature": "marked_t2_hyperintensity_light_bulb", "weight": 5 },
+          { "feature": "no_washout", "weight": 4 },
+          { "feature": "no_diffusion_restriction", "weight": 3 }
+        ],
+        "management": "No intervention needed for classic appearance. Giant hemangioma (>5cm) may be followed. Resection only if complications (rupture, Kasabach-Merritt, pain)."
+      },
+      {
+        "id": "colorectal_liver_metastasis",
+        "name": "Colorectal Liver Metastasis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "peripheral_rim_enhancement", "weight": 5 },
+          { "feature": "hypovascular_center_necrosis", "weight": 4 },
+          { "feature": "t2_mildly_hyperintense", "weight": 3 },
+          { "feature": "diffusion_restriction", "weight": 4 },
+          { "feature": "eovist_non_hepatocellular_update", "weight": 5 },
+          { "feature": "multiple_lesions", "weight": 3 }
+        ],
+        "management": "Staging CT CAP. CEA monitoring. Resection if limited disease (up to 3 segments). Chemotherapy (FOLFOX + targeted). Ablation for small lesions. SIRT for bilobar."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "focal_nodular_hypeplasia",
+        "discriminators": ["central_scar_t2_hyper", "arterial_enhancement_no_washout", "eovist_hepatobiliary_update"]
+      },
+      {
+        "diseaseId": "hepatic_adenoma",
+        "discriminators": ["female_young", "steroid_history", "intralesional_fat_or_hemorrhage", "no_scar"]
+      },
+      {
+        "diseaseId": "abscess",
+        "discriminators": ["clinical_fever", "restricted_diffusion_thick_rim", "target_sign"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "AFP (alpha-fetoprotein)", "priority": "high", "yield": 0.5, "indication": "HCC surveillance and diagnosis" },
+        { "name": "Liver function tests", "priority": "medium", "yield": 0.3, "indication": "baseline liver function" },
+        { "name": "CEA, CA19-9", "priority": "medium", "yield": 0.3, "indication": "if metastasis suspected" }
+      ],
+      "imaging": [
+        { "name": "Multiphase CT (triple-phase: arterial, portal venous, delayed)", "priority": "high", "yield": 0.9, "indication": "first-line for liver mass characterization in cirrhotic patients" },
+        { "name": "MRI Liver with Eovist/Primovist", "priority": "high", "yield": 0.95, "indication": "problem-solving, non-cirrhotic, metastatic workup" },
+        { "name": "Ultrasound with contrast", "priority": "medium", "yield": 0.85, "indication": "real-time characterization, follow-up" },
+        { "name": "CT-guided biopsy", "priority": "medium", "yield": 0.9, "indication": "non-diagnostic imaging, need for tissue diagnosis" }
+      ]
+    },
+    "management": {
+      "protocolReference": "LI-RADS and AASLD HCC Practice Guidelines",
+      "pathways": [
+        {
+          "severity": "benign",
+          "criteria": "LI-RADS 1-2, classic benign features (hemangioma, cyst, FNH)",
+          "treatment": "No follow-up needed for classic benign. Incidental finding note. Reassure patient."
+        },
+        {
+          "severity": "indeterminate",
+          "criteria": "LI-RADS 3, atypical features",
+          "treatment": "Short interval follow-up at 3-6 months. Alternative imaging modality (MRI if CT done, or vice versa). Multidisciplinary discussion."
+        },
+        {
+          "severity": "malignant",
+          "criteria": "LI-RADS 4-5, biopsy-proven malignancy",
+          "treatment": "Staging workup. Tumor board. BCLC/AJCC staging. Treatment per stage: ablation, resection, TACE, transplantation, systemic therapy."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "hepatocarcinogenesis_in_cirrhosis",
+      "neovascularization",
+      "arterial_portal_shunting",
+      "venous_invasion",
+      "locoregional_metastasis"
+    ],
+    "complications": [
+      {
+        "diseaseId": "tumor_rupture_hemorrhage",
+        "probability": 0.05,
+        "lagDays": [1, 30],
+        "severityBoost": 0.5,
+        "clues": ["acute_pain", "hemoperitoneum", "hypotension"]
+      },
+      {
+        "diseaseId": "portal_vein_thrombosis",
+        "probability": 0.15,
+        "lagDays": [90, 365],
+        "severityBoost": 0.4,
+        "clues": ["portal_vein_expansion", "arterial_enhancing_thrombus", "worsening_liver_function"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["liver_mass_on_imaging", "cirrhosis_background", "arterial_enhancement", "washout"],
+    "exclusionClues": ["simple_cyst_imaging", "classic_hemangioma", "stable_over_2_years"]
+  }
+}

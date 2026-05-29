@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "seizure_disorder",
+    "name": "Seizure Disorder (First Afebrile Seizure / Epilepsy)",
+    "system": "pediatrics",
+    "agePeak_months": [0, 240],
+    "note": "Epilepsy defined as >=2 unprovoked seizures >24h apart or one seizure with high recurrence risk.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["neurologic_event", "seizure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "status_epilepticus", "weight": 10 },
+        { "sign": "prolonged_seizure_5_min", "weight": 9 },
+        { "sign": "post_ictal_depression_consciousness", "weight": 8 },
+        { "sign": "recurrent_seizures_without_recovery", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If status epilepticus -> EMERGENCY; else -> EVALUATE for underlying cause and recurrence risk"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "generalized_tonic_clonic_movements", "weight": 5 },
+      { "symptomId": "loss_of_consciousness", "weight": 5 },
+      { "symptomId": "staring_spells_absence", "weight": 3 },
+      { "symptomId": "incontinence", "weight": 2 },
+      { "symptomId": "tongue_bite", "weight": 2 },
+      { "symptomId": "post_ictal_confusion_fatigue", "weight": 3 },
+      { "symptomId": "fever_suggesting_febrile", "weight": 3 },
+      { "symptomId": "family_history_epilepsy", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "post_ictal_state", "baseWeight": 3 },
+      { "signId": "focal_neurological_signs", "baseWeight": 3 },
+      { "signId": "dysmorphic_features", "baseWeight": 2 },
+      { "signId": "neurocutaneous_stigmata", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "febrile_seizure_history", "multiplier": 1.5 },
+      { "id": "family_history_epilepsy", "multiplier": 2.0 },
+      { "id": "perinatal_hypoxia", "multiplier": 2.5 },
+      { "id": "cns_infection_history", "multiplier": 2.0 },
+      { "id": "head_injury", "multiplier": 1.8 },
+      { "id": "structural_brain_abnormality", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "generalized_tonic_clonic",
+        "name": "Generalized Tonic-Clonic Seizure",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "bilateral_symmetric_convulsions", "weight": 5 },
+          { "feature": "loss_of_consciousness", "weight": 5 },
+          { "feature": "tonic_then_clonic_phase", "weight": 4 }
+        ],
+        "management": "First-line: benzodiazepine (rectal diazepam or buccal midazolam) for acute seizure. Levetiracetam or valproic acid as maintenance."
+      },
+      {
+        "id": "focal_seizure",
+        "name": "Focal (Partial) Seizure",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "focal_motor_or_sensory", "weight": 5 },
+          { "feature": "consciousness_preserved_or_impaired", "weight": 3 },
+          { "feature": "secondary_generalization_possible", "weight": 3 }
+        ],
+        "management": "Carbamazepine or oxcarbazepine first-line. Surgical evaluation if refractory."
+      },
+      {
+        "id": "absence_seizure",
+        "name": "Absence Seizure (Childhood)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "brief_staring_spells", "weight": 5 },
+          { "feature": "no_post_ictal_confusion", "weight": 5 },
+          { "feature": "hyperventilation_activation", "weight": 4 }
+        ],
+        "management": "Ethosuximide first-line. Valproic acid alternative."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "febrile_seizure",
+        "discriminators": ["fever", "age_6_to_60_months", "no_underlying_epilepsy"]
+      },
+      {
+        "diseaseId": "breath_holding_spells",
+        "discriminators": ["triggered_by_crying", "cyanosis_pallor", "age_6_to_18_months"]
+      },
+      {
+        "diseaseId": "syncope",
+        "discriminators": ["precipitated_by_pain_or_fear", "rapid_recovery", "no_post_ictal"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Blood glucose (bedside)", "priority": "immediate", "yield": 0.8, "indication": "rule out hypoglycemia" }
+      ],
+      "laboratory": [
+        { "name": "Serum electrolytes, Ca, Mg, PO4", "priority": "high", "yield": 0.4, "indication": "metabolic causes" },
+        { "name": "FBC, CRP", "priority": "high", "yield": 0.3, "indication": "infection screen" }
+      ],
+      "imaging": [
+        { "name": "EEG (awake and sleep-deprived)", "priority": "high", "yield": 0.7, "indication": "confirm epilepsy, classify seizure type" },
+        { "name": "MRI Brain", "priority": "high", "yield": 0.6, "indication": "structural abnormalities, especially in focal epilepsy" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Epilepsies in Children and Young People",
+      "pathways": [
+        {
+          "severity": "status epilepticus",
+          "criteria": "seizure lasting >5 min or recurrent without recovery",
+          "treatment": "ABCDE. Buccal midazolam or rectal diazepam. IV lorazepam if IV access. Phenytoin or levetiracetam if refractory. ICU if persists."
+        },
+        {
+          "severity": "first afebrile seizure",
+          "criteria": "single unprovoked seizure",
+          "treatment": "EEG to assess recurrence risk. No treatment if low risk. Antiepileptic if high risk features (abnormal EEG, focal, structural lesion)."
+        },
+        {
+          "severity": "established epilepsy",
+          "criteria": "recurrent unprovoked seizures",
+          "treatment": "Maintenance AED based on seizure type (levetiracetam, valproate, carbamazepine). Avoid triggers. Regular follow-up. Rescue medication plan."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "abnormal_neuronal_discharge",
+      "excitation_inhibition_imbalance",
+      "glutamate_excess",
+      "gaba_deficiency",
+      "synchronized_firing",
+      "spread_through_cortex"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "status_epilepticus",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["prolonged_seizure", "recurrent_without_recovery"]
+      },
+      {
+        "diseaseId": "sudden_unexpected_death_in_epilepsy",
+        "probability": 0.001,
+        "severityBoost": 0.6,
+        "clues": ["nocturnal_seizures", "poor_adherence"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if status",
+    "diagnosticClues": ["convulsions_or_abnormal_movements", "loss_of_consciousness", "post_ictal_confusion"],
+    "exclusionClues": ["non_epileptic_event", "syncope", "breath_holding", "normal_eeg"]
+  }
+}

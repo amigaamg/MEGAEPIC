@@ -1,0 +1,116 @@
+{
+  "disease": {
+    "id": "generalized_epilepsy",
+    "name": "Generalized Epilepsy",
+    "system": "NEURO",
+    "agePeak_months": [0, 240],
+    "note": "Epilepsy with bilateral, synchronous epileptiform discharges. Includes absence, myoclonic, tonic-clonic, atonic seizures.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["seizure_disorder", "generalized_seizures"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "status_epilepticus", "weight": 10 },
+        { "sign": "recurrent_tonic_clonic_seizures", "weight": 9 },
+        { "sign": "post_ictal_coma", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If status/recurrent TC seizures/post-ictal coma -> EMERGENCY; else -> CHRONIC"
+    },
+    "historyFeatures": [
+      { "symptomId": "generalized_tonic_clonic_seizures", "weight": 5 },
+      { "symptomId": "absence_episodes_staring", "weight": 4, "note": "3 Hz spike-wave on EEG, childhood onset" },
+      { "symptomId": "myoclonic_jerks", "weight": 3 },
+      { "symptomId": "morning_predominance", "weight": 2 },
+      { "symptomId": "triggered_by_sleep_deprivation", "weight": 3 },
+      { "symptomId": "family_history", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "normal_interictal_exam", "baseWeight": 3 },
+      { "signId": "post_ictal_confusion", "baseWeight": 3 },
+      { "signId": "tongue_bite_or_injury", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_epilepsy", "multiplier": 3.0 },
+      { "id": "febrile_seizures_history", "multiplier": 1.5 },
+      { "id": "sleep_deprivation", "multiplier": 2.0 },
+      { "id": "genetic_syndrome", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "childhood_absence_epilepsy",
+        "name": "Childhood Absence Epilepsy",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "frequent_absence_seizures", "weight": 5 },
+          { "feature": "age_4_to_12", "weight": 5 },
+          { "feature": "no_cognitive_impairment", "weight": 3 }
+        ],
+        "management": "Ethosuximide first-line (best efficacy/benefit). Valproate alternative. Usually remits by adolescence."
+      },
+      {
+        "id": "juvenile_myoclonic_epilepsy",
+        "name": "Juvenile Myoclonic Epilepsy (JME)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "myoclonic_jerks_on_awakening", "weight": 5 },
+          { "feature": "generalized_tonic_clonic_seizures", "weight": 4 },
+          { "feature": "absence_seizures", "weight": 2 }
+        ],
+        "management": "Valproate first-line (effective for myoclonus). Levetiracetam alternative. Avoid carbamazepine (worsens myoclonus). Lifelong treatment."
+      },
+      {
+        "id": "generalized_tonic_clonic_epilepsy",
+        "name": "Generalized Tonic-Clonic Epilepsy Alone",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "tonic_clonic_seizures_only", "weight": 5 },
+          { "feature": "no_myoclonus_or_absence", "weight": 4 }
+        ],
+        "management": "Valproate, lamotrigine, or levetiracetam. First-line depends on age, sex, comorbidities."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "focal_epilepsy", "discriminators": ["focal_onset_features", "aura", "focal_eeg_discharges"] },
+      { "diseaseId": "syncope", "discriminators": ["provoked_by_standing", "pallor", "rapid_recovery", "no_tonic_clonic"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "EEG", "priority": "immediate", "yield": 0.85, "indication": "generalized spike-wave, polyspike-wave, 3 Hz in absence" },
+        { "name": "Sleep-deprived EEG", "priority": "medium", "yield": 0.7, "indication": "if routine EEG normal" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain", "priority": "first_seizure", "yield": 0.2, "indication": "rule out structural lesion (usually normal in generalized epilepsy)" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Epilepsy",
+      "pathways": [
+        {
+          "severity": "newly diagnosed",
+          "criteria": "first unprovoked generalized seizure or new diagnosis",
+          "treatment": "Start AED based on seizure type. Valproate (avoid in women of childbearing age). Lamotrigine or levetiracetam as alternatives. Counsel on SUDEP, driving restrictions."
+        },
+        {
+          "severity": "refractory",
+          "criteria": "failed 2 or more AED trials",
+          "treatment": "Epilepsy specialist referral. Consider combination therapy. Vagus nerve stimulation if refractory. Epilepsy surgery evaluation (rare in generalized epilepsy)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "abnormal_thalamocortical_rhythms",
+      "cortical_hyperexcitability",
+      "neuronal_synchronization",
+      "ion_channel_dysfunction",
+      "gabaergic_deficiency",
+      "genetic_mutations"
+    ],
+    "complications": [
+      { "diseaseId": "status_epilepticus", "probability": 0.05, "severityBoost": 0.5, "clues": ["prolonged_seizure_5_min", "recurrent_without_consciousness"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["generalized_seizures", "bilateral_eeg_discharges", "family_history", "normal_mri"],
+    "exclusionClues": ["focal_onset", "focal_eeg", "structural_lesion_mri"]
+  }
+}

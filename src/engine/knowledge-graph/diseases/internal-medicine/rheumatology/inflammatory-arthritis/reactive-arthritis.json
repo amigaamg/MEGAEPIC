@@ -1,0 +1,151 @@
+{
+  "disease": {
+    "id": "reactive_arthritis",
+    "name": "Reactive Arthritis",
+    "system": "rheumatology",
+    "agePeak_months": [240, 480],
+    "note": "Sterile inflammatory arthritis developing weeks after gastrointestinal or genitourinary infection. Classic triad: arthritis, conjunctivitis, urethritis. Part of spondyloarthritis family.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["inflammatory_arthritis", "spondyloarthritis", "post_infectious", "enthesitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_joint", "weight": 10 },
+        { "sign": "myocarditis", "weight": 7 },
+        { "sign": "severe_acute_uveitis", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If septic joint excluded -> NON-URGENT; uveitis requires ophthalmology referral"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "recent_diarrhea_or_uti", "weight": 5 },
+      { "symptomId": "acute_onset_oligoarthritis_knee", "weight": 5 },
+      { "symptomId": "conjunctivitis", "weight": 4 },
+      { "symptomId": "urethritis_dysuria", "weight": 4 },
+      { "symptomId": "enthesitis_heel", "weight": 3 },
+      { "symptomId": "mucocutaneous_lesions", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "asymmetric_oligoarthritis_knee_ankle", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "conjunctival_injection", "baseWeight": 4 },
+      { "signId": "dactylitis", "baseWeight": 3 },
+      { "signId": "enthesitis_achilles_plantar", "baseWeight": 4 },
+      { "signId": "circinate_balanitis", "baseWeight": 3 },
+      { "signId": "keratoderma_blennorrhagicum", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "hla_b27_positive", "multiplier": 5.0 },
+      { "id": "recent_sti_chlamydia", "multiplier": 3.0 },
+      { "id": "recent_gastroenteritis", "multiplier": 3.0 },
+      { "id": "shigella_salmonella_yersinia", "multiplier": 2.0 },
+      { "id": "young_adult_male", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "post_sti_reiter",
+        "name": "Post-STI Reactive Arthritis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "chlamydia_trachomatis_exposure", "weight": 5 },
+          { "feature": "urethritis_first_symptom", "weight": 4 },
+          { "feature": "male_predominance", "weight": 3 }
+        ],
+        "management": "Treat STI and contacts. NSAIDs. Intra-articular steroids. DMARD in chronic cases."
+      },
+      {
+        "id": "post_dysenteric_reiter",
+        "name": "Post-Dysenteric Reactive Arthritis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "recent_diarrhea", "weight": 5 },
+          { "feature": "equal_sex_distribution", "weight": 3 },
+          { "feature": "gastrointestinal_pathogens", "weight": 4 }
+        ],
+        "management": "Supportive. NSAIDs. Treat underlying infection if active."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "septic_arthritis",
+        "discriminators": ["single_joint", "toxic_appearance", "joint_fluid_positive_culture", "no_recent_infection_history"]
+      },
+      {
+        "diseaseId": "gout",
+        "discriminators": ["urate_crystals", "no_recent_infection", "response_to_colchicine", "hyperuricemia"]
+      },
+      {
+        "diseaseId": "psoriatic_arthritis",
+        "discriminators": ["chronic_course", "psoriasis_skin_nails", "no_infection_trigger", "family_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Joint aspiration", "priority": "immediate", "yield": 0.8, "indication": "exclude septic arthritis, crystal arthropathy" }
+      ],
+      "laboratory": [
+        { "name": "CRP and ESR", "priority": "high", "yield": 0.8, "indication": "elevated in acute phase" },
+        { "name": "HLA-B27", "priority": "high", "yield": 0.6, "indication": "prognostic marker" },
+        { "name": "Stool culture / PCR", "priority": "medium", "yield": 0.4, "indication": "identify enteric pathogen" },
+        { "name": "Chlamydia NAAT", "priority": "medium", "yield": 0.5, "indication": "urogenital screening" }
+      ],
+      "imaging": [
+        { "name": "Joint X-ray", "priority": "medium", "yield": 0.5, "indication": "soft tissue swelling, exclude other pathology" },
+        { "name": "MRI affected joints", "priority": "low", "yield": 0.7, "indication": "enthesitis, bone marrow edema" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR Recommendations for Reactive Arthritis",
+      "pathways": [
+        {
+          "severity": "acute",
+          "criteria": "recent onset, single joint, mild symptoms",
+          "treatment": "NSAIDs. Rest. Joint aspiration if tense effusion. Treat underlying infection."
+        },
+        {
+          "severity": "persistent",
+          "criteria": "symptoms > 6 weeks, polyarticular, severe enthesitis",
+          "treatment": "NSAIDs + sulfasalazine or methotrexate. Anti-TNF for refractory cases."
+        },
+        {
+          "severity": "chronic",
+          "criteria": "symptoms > 6 months, erosive disease",
+          "treatment": "DMARD therapy. Consider biologic (anti-TNF). Long-term rheumatology follow-up."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "molecular_mimicry",
+      "hla_b27_restricted_immune_response",
+      "persistent_bacterial_antigen",
+      "tnf_alpha_driven_inflammation",
+      "synovitis_enthesitis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "chronic_arthritis",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["symptoms_over_6_months", "hla_b27_positive", "severe_initial_presentation"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["arthritis_post_infection", "oligoarthritis_lower_limb", "conjunctivitis", "urethritis", "hla_b27_positive"],
+    "exclusionClues": ["septic_joint_culture_positive", "crystal_positive_fluid", "chronic_symmetric_polyarthritis"]
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "toxic_megacolon",
+    "name": "Toxic Megacolon",
+    "system": "surgical",
+    "agePeak_months": [240, 480],
+    "note": "Life-threatening colonic dilation >6cm with systemic toxicity. Complication of IBD, especially UC. Requires urgent colectomy.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["acute_abdomen", "sepsis", "colonic_dilation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "colonic_perforation", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "colonic_dilation_toxic", "weight": 9 },
+          { "sign": "systemic_toxicity_severe", "weight": 8 },
+          { "sign": "organ_dysfunction", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Any perforation/sepsis -> SEVERE; dilation without peritonitis -> still URGENT SURGICAL"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "known_ibd", "weight": 5, "note": "UC more than Crohn's" },
+      { "symptomId": "abdominal_distension", "weight": 5 },
+      { "symptomId": "severe_abdominal_pain", "weight": 4 },
+      { "symptomId": "bloody_diarrhea_or_decreased_output", "weight": 4, "note": "Diarrhea may decrease as dilation worsens" },
+      { "symptomId": "fever_rigors", "weight": 5 },
+      { "symptomId": "recent_withdrawal_of_steroids_or_5_asa", "weight": 3, "note": "Precipitating factor" },
+      { "symptomId": "recent_use_of_anticholinergics_or_opioids", "weight": 3, "note": "Can precipitate megacolon" }
+    ],
+
+    "examFeatures": [
+      { "signId": "massive_abdominal_distension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tympanic_percussion", "baseWeight": 4 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 4 },
+      { "signId": "guarding_rigidity", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 5 },
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "rebound_tenderness", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "ulcerative_colitis", "multiplier": 4.0 },
+      { "id": "fulminant_colitis", "multiplier": 3.0 },
+      { "id": "recent_colonoscopy_in_ibd", "multiplier": 2.0 },
+      { "id": "electrolyte_disturbance", "multiplier": 1.5 },
+      { "id": "opioid_anticholinergic_use", "multiplier": 2.0 },
+      { "id": "crohn_disease", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "ibd_related_megacolon",
+        "name": "Toxic Megacolon in IBD",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "history_of_ibd", "weight": 5 },
+          { "feature": "colonic_dilation_greater_than_6cm", "weight": 5 },
+          { "feature": "systemic_toxicity", "weight": 5 }
+        ],
+        "management": "Urgent colectomy. Total abdominal colectomy with end ileostomy. IV steroids. IV antibiotics. ICU care."
+      },
+      {
+        "id": "infectious_megacolon",
+        "name": "Infectious Toxic Megacolon",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "c_difficile_infection", "weight": 5 },
+          { "feature": "recent_antibiotic_use", "weight": 4 },
+          { "feature": "diarrhea_before_dilation", "weight": 4 }
+        ],
+        "management": "Antibiotics for C. difficile (Vancomycin + Metronidazole). Urgent colectomy if medical therapy fails. IV fluids. ICU."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "simple_colonic_dilation",
+        "discriminators": ["no_systemic_toxicity", "no_ibd_history", "resolves_with_conservative_management"]
+      },
+      {
+        "diseaseId": "bowel_obstruction",
+        "discriminators": ["colicky_pain", "vomiting_early", "high_pitched_bowel_sounds", "no_ibd_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Abdominal X-Ray supine + erect", "priority": "immediate", "yield": 0.85, "indication": "colonic diameter >6cm, thumbprinting" },
+        { "name": "qSOFA score", "priority": "immediate", "yield": 0.7, "indication": "assess sepsis severity" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "immediate", "yield": 0.8, "indication": "leukocytosis or leukopenia" },
+        { "name": "CRP", "priority": "immediate", "yield": 0.85, "indication": "markedly elevated" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "tissue hypoperfusion" },
+        { "name": "Electrolytes", "priority": "high", "yield": 0.6, "indication": "electrolyte imbalance" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.4, "indication": "guide antibiotics" },
+        { "name": "Stool C. diff toxin", "priority": "high", "yield": 0.5, "indication": "rule out C. diff" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-Ray", "priority": "immediate", "yield": 0.85, "indication": "monitor colonic diameter" },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.9, "indication": "assess for perforation, colonic wall status" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASCRS Guidelines for Toxic Megacolon",
+      "pathways": [
+        {
+          "severity": "fulminant without perforation",
+          "criteria": "colonic dilation >6cm, systemic toxicity, no peritonitis",
+          "treatment": "ICU admission. NBM, NG tube, rectal tube. IV fluids. IV steroids (Hydrocortisone 100mg QID). IV antibiotics. Close monitoring. If no improvement in 24-48h, urgent colectomy."
+        },
+        {
+          "severity": "perforation or peritonitis",
+          "criteria": "pneumoperitoneum, peritonitis, septic shock",
+          "treatment": "Emergency laparotomy. Total abdominal colectomy with end ileostomy. Peritoneal lavage. IV broad-spectrum antibiotics. ICU. Vasopressors."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "severe_colonic_inflammation",
+      "loss_of_colonic_motility",
+      "colonic_dilation",
+      "increased_intraluminal_pressure",
+      "compromised_colonic_blood_flow",
+      "mucosal_ischemia",
+      "bacterial_translocation",
+      "sepsis",
+      "perforation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "colonic_perforation",
+        "probability": 0.3,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["sudden_worsening_pain", "peritonitis", "free_air"]
+      },
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.25,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "organ_failure", "lactic_acidosis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["colonic_distension", "systemic_toxicity", "ibd_history", "fever_tachycardia", "absent_bowel_sounds"],
+    "exclusionClues": ["mild_distension_no_toxicity", "normal_vitals", "spontaneous_resolution"]
+  }
+}

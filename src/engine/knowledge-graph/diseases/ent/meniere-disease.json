@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "meniere_disease",
+    "name": "Meniere Disease",
+    "system": "ent",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["vestibular_disorder", "hearing_loss", "tinnitus"],
+    "mustNotMiss": false,
+    "emergencyPriority": "non-urgent",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sudden_profound_hearing_loss", "weight": 5, "description": "May indicate Meniere attack or alternative pathology" },
+        { "sign": "new_neurologic_deficit", "weight": 5, "description": "Warrants MRI to exclude acoustic neuroma or stroke" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "drop_attacks_otolithic_crisis", "weight": 4 },
+          { "sign": "intractable_vertigo_daily", "weight": 4 },
+          { "sign": "bilateral_hearing_loss", "weight": 3 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "episodic-vestibular"
+    },
+    "historyFeatures": [
+      { "symptomId": "episodic_vertigo", "weight": 5, "condition": "duration 20 minutes to 12 hours" },
+      { "symptomId": "fluctuating_hearing_loss", "weight": 5 },
+      { "symptomId": "tinnitus", "weight": 4, "condition": "often roaring quality" },
+      { "symptomId": "aural_fullness", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "photophobia", "weight": 2 },
+      { "symptomId": "imbalance", "weight": 2, "condition": "between attacks" },
+      { "symptomId": "falling", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "nystagmus", "baseWeight": 4, "condition": "during acute attack" },
+      { "signId": "sensorineural_hearing_loss", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "positive_romberg", "baseWeight": 2 },
+      { "signId": "ataxic_gait", "baseWeight": 2 },
+      { "signId": "normal_neuro_exam_between_attacks", "baseWeight": 1 }
+    ],
+    "riskFactors": [
+      { "id": "family_history", "multiplier": 1.5 },
+      { "id": "migraine_history", "multiplier": 1.3 },
+      { "id": "autoimmune_disease", "multiplier": 1.4 },
+      { "id": "viral_illness", "multiplier": 1.2, "note": "preceding infection may trigger" },
+      { "id": "high_sodium_diet", "multiplier": 1.3 }
+    ],
+    "diagnosticClues": [
+      "episodic vertigo 20 min to 12 hours",
+      "fluctuating sensorineural hearing loss",
+      "tinnitus and aural fullness",
+      "normal neurologic exam between attacks"
+    ],
+    "exclusionClues": [
+      "continuous vertigo lasting >24 hours",
+      "focal neurologic signs",
+      "MRI showing acoustic neuroma",
+      "migraine without hearing loss"
+    ],
+    "subtypes": [
+      {
+        "id": "meniere_definite",
+        "name": "Definite Meniere Disease",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "two_or_more_spontaneous_vertigo_attacks", "weight": 5 },
+          { "feature": "audiometrically_documented_hearing_loss", "weight": 5 },
+          { "feature": "tinnitus_or_aural_fullness", "weight": 4 }
+        ],
+        "management": {
+          "nonSevere": "salt restriction, diuretics, betahistine",
+          "severe": "intratympanic steroids, intratympanic gentamicin",
+          "management": "Stepwise escalation from conservative to ablative"
+        }
+      },
+      {
+        "id": "meniere_probable",
+        "name": "Probable Meniere Disease",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "one_definite_vertigo_attack", "weight": 3 },
+          { "feature": "hearing_loss_or_tinnitus_not_fully_documented", "weight": 3 }
+        ],
+        "management": {
+          "management": "Empiric therapy, audiometric monitoring, MRI to exclude other causes"
+        }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "benign_paroxysmal_positional_vertigo", "discriminators": ["positional nystagmus", "short episodes <1 minute", "no hearing loss", "Dix-Hallpike positive"] },
+      { "diseaseId": "vestibular_migraine", "discriminators": ["migraine headache", "photophobia", "no hearing loss", "motion sensitivity"] },
+      { "diseaseId": "acoustic_neuroma", "discriminators": ["progressive unilateral hearing loss", "MRI positive", "no episodic vertigo"] },
+      { "diseaseId": "transient_ischemic_attack", "discriminators": ["focal neurologic signs", "vascular risk factors", "MRI stroke protocol"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Dix-Hallpike Maneuver", "priority": "first-line", "yield": 2, "indication": "exclude BPPV" },
+        { "name": "Head Impulse Test", "priority": "first-line", "yield": 3, "indication": "assess vestibular function" },
+        { "name": "Fukuda Stepping Test", "priority": "second-line", "yield": 2, "indication": "detect vestibular asymmetry" }
+      ],
+      "laboratory": [
+        { "name": "Audiometry (pure tone + speech)", "priority": "essential", "yield": 5, "indication": "document sensorineural hearing loss" },
+        { "name": "Caloric Testing", "priority": "essential", "yield": 4, "indication": "assess lateral canal function" },
+        { "name": "Electrocochleography (ECoG)", "priority": "supportive", "yield": 3, "indication": "detect endolymphatic hydrops" },
+        { "name": "VEMP Testing", "priority": "supportive", "yield": 3, "indication": "assess otolith function" }
+      ],
+      "imaging": [
+        { "name": "MRI Internal Auditory Meatus with Gadolinium", "priority": "essential", "yield": 4, "indication": "exclude acoustic neuroma and retrocochlear pathology" },
+        { "name": "Delayed Gadolinium MRI (hydrops protocol)", "priority": "specialist", "yield": 4, "indication": "visualize endolymphatic hydrops" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Meniere Disease",
+      "pathways": [
+        {
+          "severity": "acute attack",
+          "criteria": "acute vertigo episode",
+          "treatment": [
+            "Promethazine 25 mg suppository or prochlorperazine 10 mg IM/IV",
+            "Diazepam 5-10 mg IV/PO for vestibular suppression",
+            "Ondansetron 4-8 mg IV for nausea",
+            "Lie still in darkened room, avoid head movement"
+          ]
+        },
+        {
+          "severity": "mild-moderate",
+          "criteria": "infrequent attacks without significant hearing loss",
+          "treatment": [
+            "Reduced salt diet (<2 g/day sodium)",
+            "Hydrochlorothiazide 25 mg PO OD or triamterene 37.5 mg PO OD",
+            "Betahistine 16-48 mg PO divided TDS",
+            "Avoid caffeine, alcohol, and tobacco"
+          ]
+        },
+        {
+          "severity": "severe-refractory",
+          "criteria": "frequent attacks or progressive hearing loss despite medical therapy",
+          "treatment": [
+            "Intratympanic dexamethasone (4 mg/mL) injection",
+            "Intratympanic gentamicin (40 mg/mL) titration for chemical ablation",
+            "Consider endolymphatic sac decompression surgery",
+            "Vestibular nerve section if intractable vertigo",
+            "Labyrinthectomy if non-serviceable hearing"
+          ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Endolymphatic hydrops — distention of endolymphatic compartment in membranous labyrinth",
+      "Impaired endolymph resorption at endolymphatic sac",
+      "Membrane ruptures cause potassium-rich endolymph to depolarize vestibular and cochlear hair cells",
+      "Genetic predisposition with variable penetrance",
+      "Autoimmune and vascular mechanisms proposed"
+    ],
+    "complications": [
+      { "diseaseId": "permanent_hearing_loss", "probability": 0.6, "severityBoost": 0.4, "lagDays": [365, 3650] },
+      { "diseaseId": "drop_attacks_otolithic_crisis", "probability": 0.15, "severityBoost": 0.3 },
+      { "diseaseId": "bilateral_meniere", "probability": 0.3, "severityBoost": 0.4, "lagDays": [365, 1825] },
+      { "diseaseId": "falls_and_fractures", "probability": 0.2, "severityBoost": 0.3 },
+      { "diseaseId": "anxiety_and_depression", "probability": 0.4, "severityBoost": 0.2 }
+    ]
+  }
+}

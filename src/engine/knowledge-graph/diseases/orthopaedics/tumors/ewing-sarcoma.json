@@ -1,0 +1,125 @@
+{
+  "disease": {
+    "id": "ewing-sarcoma",
+    "name": "Ewing Sarcoma",
+    "system": "ORTHO",
+    "agePeak_months": [120, 240],
+    "note": "Second most common malignant bone tumor in children. Arises from primitive neuroectodermal cells. Diaphyseal location. Strong association with EWSR1-FLI1 translocation.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["bone_malignancy", "pediatric_oncology_ortho"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pathologic_fracture", "weight": 9 },
+        { "sign": "pulmonary_metastasis", "weight": 10 },
+        { "sign": "spinal_cord_compression", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "metastatic_at_diagnosis", "weight": 8 },
+          { "sign": "tumor_volume_>200_ml", "weight": 7 },
+          { "sign": "pelvic_primary_site", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If metastatic or large pelvic primary -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "bone_pain_intermittent_to_persistent", "weight": 5 },
+      { "symptomId": "swelling_mass", "weight": 5 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "weight_loss_fatigue", "weight": 2 },
+      { "symptomId": "systemic_illness_feeling", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_tender_mass_over_bone", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever_systemic_signs", "baseWeight": 3 },
+      { "signId": "limited_motion_nearby_joint", "baseWeight": 3 },
+      { "signId": "signs_of_pathologic_fracture", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_10_to_20_years", "multiplier": 4.0 },
+      { "id": "male_gender", "multiplier": 1.5 },
+      { "id": "caucasian_ethnicity", "multiplier": 5.0 },
+      { "id": "previous_radiation", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "skeletal_ewing",
+        "name": "Skeletal Ewing Sarcoma",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "diaphyseal_lesion_long_bones", "weight": 5 },
+          { "feature": "onion_skin_periosteal_reaction", "weight": 4 },
+          { "feature": "cd99_and_fli1_positive", "weight": 5 }
+        ],
+        "management": "Neoadjuvant chemotherapy (VDC/IE: vincristine, doxorubicin, cyclophosphamide alternating with ifosfamide, etoposide). Wide surgical excision ± radiation. Adjuvant chemo."
+      },
+      {
+        "id": "extraosseous_ewing",
+        "name": "Extraosseous Ewing Sarcoma (PNET)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "soft_tissue_mass_adjacent_to_bone", "weight": 4 },
+          { "feature": "same_histology_and_translocation", "weight": 5 }
+        ],
+        "management": "Chemotherapy as for skeletal. Wide local excision. Radiation if positive margins."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "osteosarcoma",
+        "discriminators": ["metaphyseal", "osteoid_production", "sunburst_reaction"]
+      },
+      {
+        "diseaseId": "lymphoma_bone",
+        "discriminators": ["older_age", "multiple_sites", "lymphocytic_histology"]
+      },
+      {
+        "diseaseId": "osteomyelitis",
+        "discriminators": ["fever", "response_to_antibiotics", "negative_biopsy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Biopsy (core needle) for histology + IHC + molecular", "priority": "immediate", "yield": 1.0, "indication": "definitive diagnosis (CD99, FLI1, EWSR1 translocation)" },
+        { "name": "LDH", "priority": "high", "yield": 0.5, "indication": "tumor burden marker" }
+      ],
+      "imaging": [
+        { "name": "X-ray (AP, lateral)", "priority": "high", "yield": 0.75, "indication": "onion skin periosteal reaction, diaphyseal" },
+        { "name": "MRI with contrast (whole bone)", "priority": "high", "yield": 0.95, "indication": "extent, soft tissue component" },
+        { "name": "CT chest", "priority": "high", "yield": 0.9, "indication": "pulmonary metastases" },
+        { "name": "PET-CT or bone scan", "priority": "medium", "yield": 0.85, "indication": "staging and response" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "COG / Euro-EWING Protocol",
+      "pathways": [
+        {
+          "severity": "localized",
+          "criteria": "No metastases, small volume, good chemo response",
+          "treatment": "VDC/IE alternating chemotherapy. Wide surgical excision. Post-op radiation if close/positive margins. Total chemo duration ~9-12 months."
+        },
+        {
+          "severity": "metastatic",
+          "criteria": "Metastases at diagnosis, large pelvic primary, poor chemo response",
+          "treatment": "Intensive chemotherapy. Surgery of primary + metastases. Radiation to all sites. High-dose chemotherapy with stem cell rescue. 5-year OS 20-30%."
+        }
+      ]
+    },
+
+    "pathophysiology": ["ewsr1_fli1_translocation_t_11_22", "primitive_neuroectodermal_cell", "small_round_blue_cell_tumor"]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "delirium",
+    "name": "Delirium",
+    "system": "geriatrics",
+    "agePeak_months": [720, 1080],
+    "note": "Acute confusional state with fluctuating course. Medical emergency with high mortality. Often underrecognized.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["confusion", "acute_cognitive_change", "geriatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "agitation_risk_of_harm", "weight": 9 },
+        { "sign": "altered_consciousness_level", "weight": 9 },
+        { "sign": "hallucinations", "weight": 7 },
+        { "sign": "withdrawal_or_lethargy", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "mild_confusion": true,
+        "no_agitation": true,
+        "stable_observations": true
+      },
+      "severityLabel": "All delirium is a medical EMERGENCY until proven otherwise"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_onset_confusion_hours_to_days", "weight": 5 },
+      { "symptomId": "fluctuating_level_of_consciousness", "weight": 5 },
+      { "symptomId": "inattention", "weight": 4 },
+      { "symptomId": "visual_hallucinations", "weight": 3 },
+      { "symptomId": "sleep_wake_cycle_disturbance", "weight": 3 },
+      { "symptomId": "recent_surgery_or_illness", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "inattention_on_serial_sevens_or_spelling", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fluctuating_consciousness", "baseWeight": 5 },
+      { "signId": "disorganized_thinking", "baseWeight": 4 },
+      { "signId": "hyperactive_or_hypoactive_state", "baseWeight": 3 },
+      { "signId": "tremor_or_myoclonus", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "pre_existing_dementia", "multiplier": 3.0 },
+      { "id": "polypharmacy", "multiplier": 1.5 },
+      { "id": "anticholinergic_medications", "multiplier": 2.0 },
+      { "id": "dehydration", "multiplier": 1.8 },
+      { "id": "recent_surgery", "multiplier": 2.0 },
+      { "id": "infection", "multiplier": 2.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "dementia",
+        "discriminators": ["chronic_progressive_course", "no_fluctuation", "no_altered_consciousness"]
+      },
+      {
+        "diseaseId": "psychosis",
+        "discriminators": ["chronic_symptoms", "organized_delusions", "no_fluctuation", "normal_cognition_between_episodes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "4AT (4 A's Test) or CAM", "priority": "immediate", "yield": 0.95, "indication": "delirium screening" },
+        { "name": "Vital signs including O2 sats", "priority": "immediate", "yield": 0.8, "indication": "hypoxia, sepsis, shock" }
+      ],
+      "laboratory": [
+        { "name": "FBC, U&E, Cr, glucose, LFTs", "priority": "immediate", "yield": 0.8, "indication": "metabolic and infectious workup" },
+        { "name": "Blood and urine cultures", "priority": "high", "yield": 0.6, "indication": "infection" },
+        { "name": "Toxicology screen", "priority": "medium", "yield": 0.4, "indication": "substance or medication toxicity" }
+      ],
+      "imaging": [
+        { "name": "CT head", "priority": "high", "yield": 0.5, "indication": "intracranial pathology if focal signs or head trauma" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "pneumonia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG103 – Delirium prevention and management",
+      "pathways": [
+        {
+          "severity": "active_delirium",
+          "criteria": "CAM positive, acute confusion",
+          "treatment": "Identify and treat underlying cause. Non-pharmacological: reorientation, family presence, noise reduction, mobilization. Pharmacological: low-dose haloperidol or olanzapine only for severe agitation or risk of harm. Avoid benzodiazepines (except alcohol withdrawal)."
+        },
+        {
+          "severity": "prevention",
+          "criteria": "at-risk patient (elderly, surgery, ICU)",
+          "treatment": "Multicomponent interventions: orientation, therapeutic activities, early mobility, sleep hygiene, hearing/vision optimization, hydration and nutrition."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "neurotransmitter_imbalance_acetylcholine_dopamine",
+      "systemic_inflammation_cytokine_storm",
+      "cerebral_hypoperfusion",
+      "metabolic_disturbance",
+      "oxidative_stress"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "functional_decline",
+        "probability": 0.4,
+        "severityBoost": 0.5,
+        "clues": ["prolonged_hospitalization", "immobility"]
+      },
+      {
+        "diseaseId": "institutionalization",
+        "probability": 0.25,
+        "severityBoost": 0.6,
+        "clues": ["severe_delirium", "pre_existing_dementia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["acute_onset", "fluctuating_course", "inattention", "altered_consciousness"],
+    "exclusionClues": ["chronic_stable_cognitive_decline", "normal_attention", "no_fluctuation"]
+  }
+}

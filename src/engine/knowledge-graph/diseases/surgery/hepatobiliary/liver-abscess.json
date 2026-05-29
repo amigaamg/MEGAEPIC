@@ -1,0 +1,172 @@
+{
+  "disease": {
+    "id": "liver_abscess",
+    "name": "Liver Abscess",
+    "system": "surgical",
+    "agePeak_months": [240, 600],
+    "note": "Pus collection within the liver parenchyma. Amoebic (Entamoeba histolytica) or pyogenic (bacterial). Fever, RUQ pain, and malaise.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["fever", "right_upper_quadrant_pain", "hepatic_mass"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "abscess_rupture", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "empyema_pericardial_tamponade", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "multiple_abscesses", "weight": 6 },
+          { "sign": "size_greater_than_5cm", "weight": 5 },
+          { "sign": "immune_compromised", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Rupture/sepsis -> SEVERE; small uncomplicated abscess -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_rigors", "weight": 5 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 5 },
+      { "symptomId": "malaise_fatigue", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "amoebic_dysentery_history", "weight": 3, "note": "Amoebic abscess" },
+      { "symptomId": "biliary_tract_disease", "weight": 3, "note": "Pyogenic abscess from ascending cholangitis" },
+      { "symptomId": "recent_abdominal_surgery", "weight": 2 },
+      { "symptomId": "recent_travel_to_endemic_area", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "right_lower_chest_dullness", "baseWeight": 2, "note": "Reactive pleural effusion" },
+      { "signId": "jaundice", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "biliary_tract_disease", "multiplier": 2.5 },
+      { "id": "choledocholithiasis", "multiplier": 2.0 },
+      { "id": "amoebic_dysentery", "multiplier": 3.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "recent_biliary_surgery", "multiplier": 2.0 },
+      { "id": "liver_transplant", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "pyogenic_liver_abscess",
+        "name": "Pyogenic Liver Abscess",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "high_fever_rigors", "weight": 5 },
+          { "feature": "ruq_pain", "weight": 5 },
+          { "feature": "elevated_crp_wbc", "weight": 5 },
+          { "feature": "positive_blood_cultures", "weight": 4 }
+        ],
+        "management": "IV broad-spectrum antibiotics (Piperacillin-Tazobactam or Ceftriaxone + Metronidazole). US/CT-guided percutaneous drainage if >3-5cm. Surgical drainage if percutaneous fails."
+      },
+      {
+        "id": "amoebic_liver_abscess",
+        "name": "Amoebic Liver Abscess",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "amoebic_serology_positive", "weight": 5 },
+          { "feature": "right_upper_quadrant_pain_subacute", "weight": 4 },
+          { "feature": "history_of_dysentery", "weight": 4 },
+          { "feature": "anchovy_sauce_aspirate", "weight": 5 }
+        ],
+        "management": "Metronidazole (or Tinidazole) followed by luminal amoebicide (Paromomycin or Diloxanide furoate). US/CT-guided drainage if large (>5cm), impending rupture, or bacterial superinfection."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_cholecystitis",
+        "discriminators": ["murphy_sign", "gallstones_on_us", "no_liver_lesion"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "discriminators": ["afp_elevated", "hepatitis_history", "afebrile", "no_pus_on_aspiration"]
+      },
+      {
+        "diseaseId": "subphrenic_abscess",
+        "discriminators": ["recent_upper_abdominal_surgery", "extrahepatic_location_on_ct"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Temperature chart", "priority": "immediate", "yield": 0.5, "indication": "fever pattern" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "leukocytosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.85, "indication": "markedly elevated" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.5, "indication": "identify organism in pyogenic" },
+        { "name": "LFTs", "priority": "high", "yield": 0.6, "indication": "elevated ALP, GGT" },
+        { "name": "Amoebic serology (IHA, ELISA)", "priority": "high", "yield": 0.9, "indication": "positive in amoebic abscess" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.85, "indication": "first-line, shows cystic lesion" },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.95, "indication": "better characterization, detect complications" },
+        { "name": "MRI", "priority": "medium", "yield": 0.9, "indication": "problem-solving if US/CT inconclusive" },
+        { "name": "US/CT-guided aspiration", "priority": "high", "yield": 0.95, "indication": "diagnostic and therapeutic" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Liver Abscess",
+      "pathways": [
+        {
+          "severity": "small uncomplicated (<3cm)",
+          "criteria": "size <3cm, no sepsis, single abscess",
+          "treatment": "IV antibiotics alone (Ceftriaxone + Metronidazole for pyogenic; Metronidazole for amoebic). Monitor with repeat imaging."
+        },
+        {
+          "severity": "large or complicated",
+          "criteria": "size >3-5cm, multiple abscesses, sepsis, impending rupture",
+          "treatment": "IV antibiotics. US/CT-guided percutaneous drainage. Surgical drainage (laparoscopic or open) if percutaneous fails, inaccessible location, or ruptured abscess."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "portal_hematogenous_seeding",
+      "biliary_ascending_infection",
+      "direct_extension",
+      "liver_parenchyma_infection",
+      "necrosis_and_liquefaction",
+      "abscess_cavity_formation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "abscess_rupture",
+        "probability": 0.1,
+        "lagDays": [1, 14],
+        "severityBoost": 0.5,
+        "clues": ["sudden_worsening_pain", "peritonitis", "septic_shock"]
+      },
+      {
+        "diseaseId": "pleural_effusion_empyema",
+        "probability": 0.1,
+        "lagDays": [3, 14],
+        "severityBoost": 0.2,
+        "clues": ["cough", "pleuritic_pain", "effusion_on_cxr"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["fever_rigors", "ruq_pain", "hepatomegaly", "cystic_liver_lesion_on_imaging"],
+    "exclusionClues": ["solid_liver_mass", "no_fever", "normal_crp"]
+  }
+}

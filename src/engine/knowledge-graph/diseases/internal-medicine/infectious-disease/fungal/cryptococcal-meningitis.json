@@ -1,0 +1,129 @@
+{
+  "disease": {
+    "id": "cryptococcal_meningitis",
+    "name": "Cryptococcal Meningitis",
+    "system": "infectious_disease",
+    "agePeak_months": [240, 600],
+    "note": "Fungal meningitis caused by Cryptococcus neoformans. Major cause of death in HIV/AIDS (CD4 <100). Also occurs in transplant recipients.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["central_nervous_system_infection", "meningitis", "opportunistic_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "raised_icp_refractory", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 9 },
+        { "sign": "seizures", "weight": 8 },
+        { "sign": "focal_neurological_deficits", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "High ICP/neurologic signs -> SEVERE; headache alone -> MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "headache_insidious_subacute", "weight": 5 },
+      { "symptomId": "fever_low_grade", "weight": 3 },
+      { "symptomId": "malaise_fatigue", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "altered_consciousness", "weight": 4 },
+      { "symptomId": "visual_disturbances_blurring", "weight": 3 },
+      { "symptomId": "hiv_aids_known_or_suspected", "weight": 5 },
+      { "symptomId": "transplant_or_immunosuppression", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "neck_stiffness", "baseWeight": 3 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "papilledema", "baseWeight": 3 },
+      { "signId": "cranial_nerve_palsy", "baseWeight": 3 },
+      { "signId": "focal_neuro_deficit", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "hiv_aids_cd4_less_100", "multiplier": 5.0 },
+      { "id": "organ_transplant", "multiplier": 3.0 },
+      { "id": "long_term_corticosteroids", "multiplier": 2.5 },
+      { "id": "hematologic_malignancy", "multiplier": 2.0 },
+      { "id": "anti_cd20_therapy", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "tuberculous_meningitis",
+        "discriminators": ["lower_csf_cryptococcal_antigen", "positive_gene_xpert", "chest_xray_abnormal"]
+      },
+      {
+        "diseaseId": "toxoplasma_encephalitis",
+        "discriminators": ["ring_enhancing_lesions_on_ct", "positive_toxo_igg"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Lumbar puncture with opening pressure", "priority": "immediate", "yield": 0.95, "indication": "all suspected cases, measure ICP" }
+      ],
+      "laboratory": [
+        { "name": "CSF cryptococcal antigen (CrAg)", "priority": "immediate", "yield": 0.98, "indication": "highly sensitive and specific" },
+        { "name": "CSF India ink stain", "priority": "high", "yield": 0.7, "indication": "encapsulated yeast" },
+        { "name": "CSF fungal culture", "priority": "gold_standard", "yield": 0.95, "indication": "confirm and susceptibility" },
+        { "name": "Serum CrAg", "priority": "high", "yield": 0.9, "indication": "screening in HIV with low CD4" },
+        { "name": "HIV test (if status unknown)", "priority": "immediate", "yield": 0.99, "indication": "all patients" }
+      ],
+      "imaging": [
+        { "name": "CT Brain before LP", "priority": "high", "yield": 0.5, "indication": "if focal signs or ICP concerns" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / IDSA Guidelines for Cryptococcal Meningitis",
+      "pathways": [
+        {
+          "severity": "induction therapy",
+          "criteria": "positive CSF CrAg/culture",
+          "treatment": "Liposomal amphotericin B 3-4 mg/kg/day + Flucytosine 100mg/kg/day PO in 4 divided doses for 2 weeks. Then fluconazole 400-800mg/day for 8 weeks (consolidation)."
+        },
+        {
+          "severity": "raised ICP management",
+          "criteria": "opening pressure >25 cm H2O or symptoms of high ICP",
+          "treatment": "Therapeutic LP daily to reduce pressure. Repeat until opening pressure <20 or symptoms improve. Acetazolamide NOT recommended."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "inhalation_of_fungal_spores",
+      "pulmonary_infection",
+      "hematogenous_dissemination",
+      "cns_invasion",
+      "capsular_polysaccharide_immune_evasion",
+      "cerebral_edema_icp_elevation",
+      "meningoencephalitis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "raised_intracranial_pressure",
+        "probability": 0.6,
+        "severityBoost": 0.5,
+        "clues": ["headache_worsening", "vomiting", "papilledema", "high_opening_pressure"]
+      },
+      {
+        "diseaseId": "immune_reconstitution_inflammatory_syndrome",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["worsening_after_starting_art", "low_csf_sterilization"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["hiv_cd4_less_100", "subacute_meningitis", "positive_crag", "raised_icp"],
+    "exclusionClues": ["negative_csf_antigen", "alternative_cause_confirmed"]
+  }
+}

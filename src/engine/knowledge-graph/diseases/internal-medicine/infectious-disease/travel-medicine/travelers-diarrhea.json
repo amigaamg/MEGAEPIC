@@ -1,0 +1,139 @@
+{
+  "disease": {
+    "id": "travelers_diarrhea",
+    "name": "Travelers Diarrhea",
+    "system": "infectious_disease",
+    "agePeak_months": [60, 600],
+    "note": "Acute diarrheal illness in travelers to developing regions. Most common travel-related illness. ETEC, Campylobacter, Shigella, Salmonella, norovirus.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["travel_medicine", "acute_diarrhea", "foodborne_illness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_dehydration_hypovolemic_shock", "weight": 10 },
+        { "sign": "bloody_diarrhea_with_fever", "weight": 8 },
+        { "sign": "altered_consciousness", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Profuse dehydration/dysentery -> SEVERE; mild-moderate -> SELF-LIMITING"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_watery_diarrhea", "weight": 5 },
+      { "symptomId": "abdominal_cramping", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "urgency_tenesmus", "weight": 3 },
+      { "symptomId": "blood_in_stool", "weight": 3 },
+      { "symptomId": "travel_to_high_risk_area_latin_america_africa_south_asia", "weight": 5 },
+      { "symptomId": "contaminated_food_water_exposure", "weight": 4 },
+      { "symptomId": "onset_first_week_of_travel", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_tenderness_diffuse", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "dehydration_skin_turgor_dry_mucous_membranes", "baseWeight": 3 },
+      { "signId": "tachycardia_hypotension", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "travel_to_high_risk_region", "multiplier": 3.0 },
+      { "id": "street_food_unhygienic_preparation", "multiplier": 2.5 },
+      { "id": "hostel_hotel_common_dining", "multiplier": 1.5 },
+      { "id": "age_young_adult", "multiplier": 1.5 },
+      { "id": "immunosuppression_achlorhydria", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_moderate_td",
+        "name": "Mild-Moderate Travelers Diarrhea",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "watery_stools_less_6_per_day", "weight": 4 },
+          { "feature": "no_systemic_illness", "weight": 4 },
+          { "feature": "self_limiting", "weight": 3 }
+        ],
+        "management": "Oral rehydration solution (ORS). Loperamide for symptom relief (if no fever/dysentery). Azithromycin 1g single dose if moderate."
+      },
+      {
+        "id": "severe_dysenteric_td",
+        "name": "Severe/Dysenteric Travelers Diarrhea",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "bloody_mucoid_stools", "weight": 5 },
+          { "feature": "fever_and_systemic_symptoms", "weight": 4 },
+          { "feature": "more_than_6_stools_per_day", "weight": 4 }
+        ],
+        "management": "Azithromycin 1g PO single dose (or 500mg OD x 3 days). Avoid loperamide if dysentery. ORS. Medical evaluation for persistent symptoms."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "malaria",
+        "discriminators": ["fever_without_diarrhea", "periodic_pattern", "positive_smear"]
+      },
+      {
+        "diseaseId": "cholera",
+        "discriminators": ["profuse_rice_water_stool", "rapid_dehydration", "endemic_area"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Stool dipstick for fecal leukocytes", "priority": "medium", "yield": 0.6, "indication": "differentiate inflammatory" }
+      ],
+      "laboratory": [
+        { "name": "Stool culture + sensitivity", "priority": "high", "yield": 0.7, "indication": "if bloody, persisting, or severe" },
+        { "name": "Stool PCR panel (GI panel)", "priority": "high", "yield": 0.9, "indication": "comprehensive pathogen ID" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CDC Yellow Book / WHO Travelers Diarrhea Guidelines",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "<6 stools/day, no fever, no blood",
+          "treatment": "ORS. Loperamide 4mg then 2mg after each loose stool (max 8mg/day). Bismuth subsalicylate 30ml Q6H. Azithromycin 1g single dose if disruptive."
+        },
+        {
+          "severity": "severe/dysenteric",
+          "criteria": "bloody stool, fever, >6 stools/day, or dehydration",
+          "treatment": "Azithromycin 1g PO single dose or 500mg OD x 3 days. ORS aggressive. Avoid loperamide. Seek medical care if no improvement in 48h."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ingestion_of_fecal_contaminated_food_water",
+      "pathogen_colonization_of_gut",
+      "enterotoxin_production_or_invasion",
+      "increased_intestinal_secretion",
+      "inflammatory_response",
+      "dehydration_electrolyte_imbalance"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "reactive_arthritis",
+        "probability": 0.01,
+        "severityBoost": 0.2,
+        "clues": ["joint_pain_after_gi_illness", "campylobacter_common"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["acute_diarrhea_while_traveling", "high_risk_region", "contaminated_food_water"],
+    "exclusionClues": ["resolved_without_treatment", "alternative_etiology"]
+  }
+}

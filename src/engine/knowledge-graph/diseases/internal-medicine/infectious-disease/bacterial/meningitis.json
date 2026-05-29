@@ -1,0 +1,178 @@
+{
+  "disease": {
+    "id": "meningitis",
+    "name": "Bacterial Meningitis",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 120],
+    "note": "Life-threatening infection of the meninges. Classic triad: fever, neck stiffness, altered mental status. Medical emergency.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["central_nervous_system_infection", "meningeal_inflammation", "febrile_illness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "rapidly_deteriorating_consciousness", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "status_epilepticus", "weight": 10 },
+        { "sign": "petechial_rash_purpura", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Any danger sign or altered consciousness -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "headache_severe", "weight": 4 },
+      { "symptomId": "neck_stiffness", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "photophobia", "weight": 3 },
+      { "symptomId": "altered_consciousness", "weight": 4 },
+      { "symptomId": "seizures", "weight": 3 },
+      { "symptomId": "rash_petechial", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "neck_stiffness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "kernig_sign", "baseWeight": 4 },
+      { "signId": "brudzinski_sign", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "petechiae_purpura", "baseWeight": 4 },
+      { "signId": "focal_neurological_deficit", "baseWeight": 3 },
+      { "signId": "papilledema", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_under_5_or_over_60", "multiplier": 2.0 },
+      { "id": "asplenia", "multiplier": 3.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "cochlear_implant", "multiplier": 2.0 },
+      { "id": "csf_leak_basal_skull_fracture", "multiplier": 3.0 },
+      { "id": "close_contact_meningitis_case", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "meningococcal_meningitis",
+        "name": "Meningococcal Meningitis (N. meningitidis)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "petechial_rash", "weight": 5 },
+          { "feature": "rapid_onset", "weight": 4 },
+          { "feature": "septic_shock", "weight": 4 }
+        ],
+        "management": "IV Ceftriaxone 2g BD + Dexamethasone. ICU if shocked. Respiratory isolation first 24h. Chemoprophylaxis for close contacts."
+      },
+      {
+        "id": "pneumococcal_meningitis",
+        "name": "Pneumococcal Meningitis (S. pneumoniae)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "pneumonia_otitis_sinusitis_source", "weight": 4 },
+          { "feature": "focal_neurological_signs", "weight": 3 },
+          { "feature": "high_mortality", "weight": 4 }
+        ],
+        "management": "IV Ceftriaxone 2g BD + Vancomycin + Dexamethasone. CT brain before LP if indicated. ICU monitoring."
+      },
+      {
+        "id": "listeria_meningitis",
+        "name": "Listeria Meningitis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "age_over_50", "weight": 4 },
+          { "feature": "immunosuppression", "weight": 5 },
+          { "feature": "meningoencephalitis", "weight": 4 }
+        ],
+        "management": "IV Ampicillin + Gentamicin. Avoid cephalosporins (Listeria resistant). Treat for 21 days."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "viral_meningitis",
+        "discriminators": ["less_severe", "no_petechiae", "CSF_lymphocytosis", "self_limiting"]
+      },
+      {
+        "diseaseId": "subarachnoid_hemorrhage",
+        "discriminators": ["thunderclap_headache", "no_fever", "CT_positive"]
+      },
+      {
+        "diseaseId": "cerebral_malaria",
+        "discriminators": ["endemic_area", "positive_blood_smear", "splenomegaly"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Lumbar Puncture (LP)", "priority": "immediate", "yield": 0.95, "indication": "all suspected meningitis without contraindication" },
+        { "name": "CSF opening pressure", "priority": "high", "yield": 0.7, "indication": "all LPs" }
+      ],
+      "laboratory": [
+        { "name": "CSF gram stain and culture", "priority": "immediate", "yield": 0.85, "indication": "all cases" },
+        { "name": "CSF glucose, protein, cell count", "priority": "immediate", "yield": 0.9, "indication": "all cases" },
+        { "name": "Blood cultures x 2", "priority": "immediate", "yield": 0.5, "indication": "before antibiotics" },
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.6, "indication": "infection markers" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.4, "indication": "before LP if abnormal" }
+      ],
+      "imaging": [
+        { "name": "CT Brain before LP", "priority": "high", "yield": 0.6, "indication": "if focal neuro signs, papilledema, seizures, or altered consciousness" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IDSA/WHO Guidelines for Bacterial Meningitis",
+      "pathways": [
+        {
+          "severity": "empiric (community)",
+          "criteria": "suspected bacterial meningitis in community",
+          "treatment": "IV Dexamethasone 10 mg before/with antibiotics. IV Ceftriaxone 2g BD + Vancomycin. Add Ampicillin if >50y or immunocompromised (Listeria coverage)."
+        },
+        {
+          "severity": "severe / ICU",
+          "criteria": "any danger sign, deteriorating, or septic shock",
+          "treatment": "ICU admission. Empiric antibiotics as above. Seizure control. Raised ICP management. Vasopressors if shock. Notify public health if meningococcal."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "nasopharyngeal_colonization",
+      "hematogenous_spread",
+      "blood_brain_barrier_breach",
+      "meningeal_inflammation",
+      "cerebral_edema",
+      "neuronal_injury"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "septic_shock_waterhouse_friderichsen",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["petechiae", "hypotension", "adrenal_hemorrhage"]
+      },
+      {
+        "diseaseId": "raised_intracranial_pressure",
+        "probability": 0.25,
+        "severityBoost": 0.3,
+        "clues": ["papilledema", "bradycardia_hypertension", "abnormal_pupils"]
+      },
+      {
+        "diseaseId": "hearing_loss",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["pneumococcal", "severe_disease"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever_neck_stiffness_altered_consciousness", "petechial_rash", "CSF_purulent"],
+    "exclusionClues": ["CSF_clear_lymphocytosis", "negative_gram_stain", "viral_syndrome"]
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "disease": {
+    "id": "preterm_premature_rupture_of_membranes",
+    "name": "Preterm Premature Rupture of Membranes (PPROM)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Rupture of fetal membranes before the onset of labor at <37 weeks of gestation. Major cause of preterm delivery. Risk of chorioamnionitis, cord prolapse, and neonatal complications.",
+    "prevalenceWeight": 0.03,
+    "syndromeTags": ["preterm_birth", "high_risk_pregnancy", "membrane_rupture"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "chorioamnionitis", "weight": 9 },
+        { "sign": "cord_prolapse", "weight": 10 },
+        { "sign": "placental_abruption", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "maternal_fever_over_38", "weight": 7 },
+          { "sign": "fetal_tachycardia", "weight": 6 },
+          { "sign": "uterine_tenderness", "weight": 7 },
+          { "sign": "foul_smelling_discharge", "weight": 7 },
+          { "sign": "significant_oligohydramnios", "weight": 5 },
+          { "sign": "gestation_less_than_24_weeks", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Chorioamnionitis or <24 weeks -> SEVERE; Latent PPROM without infection -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_gush_of_fluid_per_vaginum", "weight": 5 },
+      { "symptomId": "constant_leakage_of_fluid", "weight": 5 },
+      { "symptomId": "wet_pads_underwear", "weight": 4 },
+      { "symptomId": "contractions_following_leak", "weight": 4 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "abdominal_pain", "weight": 3 },
+      { "symptomId": "foul_smelling_discharge", "weight": 3 },
+      { "symptomId": "reduced_fetal_movements", "weight": 2 },
+      { "symptomId": "history_of_PPROM", "weight": 3 },
+      { "symptomId": "previous_cervical_surgery", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pooling_of_fluid_in_vagina", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "positive_ferning_pattern_on_microscopy", "baseWeight": 5 },
+      { "signId": "positive_nitrazine_test", "baseWeight": 4 },
+      { "signId": "decreased_amniotic_fluid_on_ultrasound", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "uterine_tenderness", "baseWeight": 3 },
+      { "signId": "fetal_tachycardia", "baseWeight": 3 },
+      { "signId": "foul_vaginal_discharge", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_PPROM", "multiplier": 4.0 },
+      { "id": "short_cervix", "multiplier": 3.0 },
+      { "id": "intrauterine_infection", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "low_BMI", "multiplier": 1.5 },
+      { "id": "polyhydramnios", "multiplier": 2.0 },
+      { "id": "multiple_gestation", "multiplier": 3.0 },
+      { "id": "cervical_conization_or_cerclage", "multiplier": 2.0 },
+      { "id": "amniocentesis", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "latent_pprom",
+        "name": "Latent Phase PPROM (No Labor)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "no_contractions", "weight": 5 },
+          { "feature": "no_infection_signs", "weight": 5 },
+          { "feature": "adequate_amniotic_fluid_volume", "weight": 3 }
+        ],
+        "management": "Admit. Conservative management: antibiotics, steroids, monitor for infection and labor. Outpatient if stable and reliable."
+      },
+      {
+        "id": "pprom_with_labor",
+        "name": "PPROM with Established Labor",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "rupture_followed_by_regular_contractions", "weight": 5 },
+          { "feature": "cervical_change", "weight": 4 },
+          { "feature": "progressive_labor", "weight": 4 }
+        ],
+        "management": "If <34 weeks: tocolysis for steroid course + MgSO4. If >34 weeks: deliver. Antibiotics. Group B Strep prophylaxis."
+      },
+      {
+        "id": "pprom_less_24_weeks",
+        "name": "PPROM Before Viability (<24 weeks)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "very_early_gestation", "weight": 5 },
+          { "feature": "severe_oligohydramnios", "weight": 5 },
+          { "feature": "high_risk_of_pulmonary_hypoplasia", "weight": 5 },
+          { "feature": "high_risk_of_chorioamnionitis", "weight": 4 }
+        ],
+        "management": "Counselling: high risk of miscarriage, pulmonary hypoplasia, neonatal death. Options: expectant management (high infection risk) or induction of labor. Steroids may be considered >23 weeks. Antibiotics."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "vaginal_discharge_physiological",
+        "discriminators": ["no_pooling", "negative_amnisure", "no_oligohydramnios"]
+      },
+      {
+        "diseaseId": "urinary_incontinence",
+        "discriminators": ["leakage_associated_with_coughing_sneezing", "normal_fluid_volume"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Sterile speculum examination", "priority": "immediate", "yield": 0.9, "indication": "pooling, ferning, nitrazine test" },
+        { "name": "AmniSure or Actim PROM test", "priority": "high", "yield": 0.95, "indication": "detects PAMG-1; highly accurate" },
+        { "name": "Nitrazine test", "priority": "medium", "yield": 0.8, "indication": "amniotic fluid turns blue/green" },
+        { "name": "Ferning test (microscopy)", "priority": "medium", "yield": 0.8, "indication": "dried fluid shows fern pattern" }
+      ],
+      "laboratory": [
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "infection surveillance" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.6, "indication": "leukocytosis" },
+        { "name": "High vaginal swab / GBS swab", "priority": "high", "yield": 0.5, "indication": "screen for pathogens" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound: amniotic fluid index", "priority": "high", "yield": 0.8, "indication": "assess residual fluid volume" },
+        { "name": "Cervical length ultrasound", "priority": "medium", "yield": 0.6, "indication": "assess labor risk" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 44 - PPROM",
+      "pathways": [
+        {
+          "severity": "latent_24_to_34_weeks",
+          "criteria": "PPROM 24-34w, no infection, no labor",
+          "treatment": "Admit. IV antibiotics: Erythromycin 250mg QID + Amoxicillin 250mg TID or Co-amoxiclav (controversial) for 10 days. Betamethasone 12mg IM q24h x 2 doses. MgSO4 neuroprotection if <30w. Monitor vitals, CTG, CRP. Delay delivery to 37w if possible."
+        },
+        {
+          "severity": "latent_34_to_37_weeks",
+          "criteria": "PPROM 34-37w, no infection, no labor",
+          "treatment": "Deliver at 37 weeks. Conservative management until then. GBS prophylaxis (IV benzylpenicillin). Twice-weekly CTG. Avoid digital exams. Screen for infection."
+        },
+        {
+          "severity": "infection_suspected",
+          "criteria": "fever, fetal tachycardia, uterine tenderness, rising CRP",
+          "treatment": "Deliver (induction or C-section). IV broad-spectrum antibiotics. NICU team. Neonatal cultures and antibiotics. Do not delay delivery for steroid completion."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "membrane_weakness",
+      "intrauterine_inflammation",
+      "matrix_metalloproteinase_activation",
+      "collagen_degradation",
+      "ascending_infection"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "chorioamnionitis",
+        "probability": 0.3,
+        "lagDays": [2, 14],
+        "severityBoost": 0.5,
+        "clues": ["fever", "uterine_tenderness", "fetal_tachycardia", "foul_discharge"]
+      },
+      {
+        "diseaseId": "cord_prolapse",
+        "probability": 0.02,
+        "lagDays": [0, 3],
+        "severityBoost": 0.8,
+        "clues": ["variable_decelerations", "palpable_cord"]
+      },
+      {
+        "diseaseId": "neonatal_sepsis",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.6,
+        "clues": ["preterm", "maternal_infection", "low_apgar"]
+      },
+      {
+        "diseaseId": "pulmonary_hypoplasia",
+        "probability": 0.2,
+        "lagDays": [0, 0],
+        "severityBoost": 0.8,
+        "clues": ["PPROM_before_24_weeks", "severe_oligohydramnios"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["gush_or_leak_of_fluid", "pooling_on_exam", "positive_AmniSure", "oligohydramnios"],
+    "exclusionClues": ["no_fluid_leak", "negative_test", "normal_AFI"]
+  }
+}

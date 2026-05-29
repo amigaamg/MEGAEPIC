@@ -1,0 +1,227 @@
+{
+  "disease": {
+    "id": "miscarriage",
+    "name": "Miscarriage (Spontaneous Abortion)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Spontaneous pregnancy loss before 20 weeks gestation. Most common in first trimester. Types include threatened, inevitable, incomplete, complete, missed, and septic abortion.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["first_trimester_bleeding", "pregnancy_loss"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "heavy_vaginal_bleeding", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "fever_38_degrees", "weight": 7 },
+          { "sign": "foul_smelling_discharge", "weight": 7 },
+          { "sign": "severe_abdominal_pain", "weight": 6 },
+          { "sign": "tachycardia_hypotension", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Septic or hemorrhagic shock -> SEVERE; Threatened with stable vitals -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "vaginal_bleeding", "weight": 5 },
+      { "symptomId": "lower_abdominal_pain_cramping", "weight": 4 },
+      { "symptomId": "passage_of_tissue", "weight": 5, "modifiers": [
+          { "condition": "tissue_seen", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "back_pain", "weight": 3 },
+      { "symptomId": "loss_of_pregnancy_symptoms", "weight": 3 },
+      { "symptomId": "fever", "weight": 3, "note": "Suggests septic abortion" },
+      { "symptomId": "foul_vaginal_discharge", "weight": 3 },
+      { "symptomId": "amenorrhea_followed_by_bleeding", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "vaginal_bleeding_on_speculum", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cervical_os_open", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "uterine_tenderness", "baseWeight": 3 },
+      { "signId": "fever_tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "tissue_in_cervix_or_vagina", "baseWeight": 5 },
+      { "signId": "abdominal_guarding", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_maternal_age_over_35", "multiplier": 2.0 },
+      { "id": "previous_miscarriage", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "alcohol_use", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.3 },
+      { "id": "chromosomal_abnormalities", "multiplier": 3.0 },
+      { "id": "uterine_anomalies", "multiplier": 2.0 },
+      { "id": "antiphospholipid_syndrome", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "threatened_abortion",
+        "name": "Threatened Abortion",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "light_bleeding", "weight": 3 },
+          { "feature": "closed_cervical_os", "weight": 5 },
+          { "feature": "mild_cramping", "weight": 2 },
+          { "feature": "viable_pregnancy_on_ultrasound", "weight": 5 }
+        ],
+        "management": "Bed rest, pelvic rest, avoid intercourse. Reassurance. Follow-up ultrasound in 1-2 weeks."
+      },
+      {
+        "id": "inevitable_abortion",
+        "name": "Inevitable Abortion",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "moderate_to_heavy_bleeding", "weight": 4 },
+          { "feature": "open_cervical_os", "weight": 5 },
+          { "feature": "painful_contractions", "weight": 4 },
+          { "feature": "intact_membranes", "weight": 3 }
+        ],
+        "management": "Counsel regarding inevitable pregnancy loss. Options: expectant, medical (misoprostol), or surgical (D&C) management."
+      },
+      {
+        "id": "incomplete_abortion",
+        "name": "Incomplete Abortion",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "heavy_bleeding_with_clots", "weight": 5 },
+          { "feature": "open_cervical_os", "weight": 5 },
+          { "feature": "retained_tissue", "weight": 5 },
+          { "feature": "cramping", "weight": 3 }
+        ],
+        "management": "Surgical evacuation (D&C or MVA). Antibiotics if signs of infection. Rhogam if Rh-negative."
+      },
+      {
+        "id": "missed_abortion",
+        "name": "Missed Abortion",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "closed_cervical_os", "weight": 4 },
+          { "feature": "no_bleeding_or_minimal", "weight": 3 },
+          { "feature": "no_fetal_cardiac_activity", "weight": 5 },
+          { "feature": "gestational_sac_still_present", "weight": 4 }
+        ],
+        "management": "Expectant, medical (misoprostol), or surgical management. Monitor for DIC if prolonged retention."
+      },
+      {
+        "id": "septic_abortion",
+        "name": "Septic Abortion",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "fever", "weight": 5 },
+          { "feature": "foul_discharge", "weight": 5 },
+          { "feature": "uterine_tenderness", "weight": 5 },
+          { "feature": "leukocytosis", "weight": 4 }
+        ],
+        "management": "IV broad-spectrum antibiotics. Urgent surgical evacuation. ICU if septic shock. Monitor for DIC and renal failure."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "ectopic_pregnancy",
+        "discriminators": ["unilateral_pain", "adnexal_mass", "no_intrauterine_pregnancy_on_us"]
+      },
+      {
+        "diseaseId": "molar_pregnancy",
+        "discriminators": ["snowstorm_pattern_on_us", "very_high_hCG", "grape_like_tissue"]
+      },
+      {
+        "diseaseId": "implantation_bleeding",
+        "discriminators": ["light_spotting", "no_pain", "very_early_gestation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine pregnancy test", "priority": "immediate", "yield": 0.99, "indication": "confirm pregnancy" },
+        { "name": "Speculum examination", "priority": "immediate", "yield": 0.9, "indication": "assess bleeding, os status, products of conception" }
+      ],
+      "laboratory": [
+        { "name": "Serum beta-hCG", "priority": "immediate", "yield": 0.95, "indication": "quantitative, serial levels to assess viability" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.8, "indication": "assess blood loss, infection" },
+        { "name": "Blood group and Rh type", "priority": "high", "yield": 0.99, "indication": "Rhogam candidacy" },
+        { "name": "CRP", "priority": "medium", "yield": 0.6, "indication": "if infection suspected" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal Ultrasound", "priority": "immediate", "yield": 0.95, "indication": "assess gestational sac, fetal pole, cardiac activity" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG126 - Ectopic Pregnancy and Miscarriage",
+      "pathways": [
+        {
+          "severity": "threatened",
+          "criteria": "closed os, minimal bleeding, viable pregnancy",
+          "treatment": "Reassurance, pelvic rest. Rhogam if Rh-negative. Serial beta-hCG in 48 hours if uncertain viability."
+        },
+        {
+          "severity": "confirmed_miscarriage",
+          "criteria": "open os, incomplete/missed/inevitable abortion",
+          "treatment": "Surgical: D&C or MVA. Medical: Misoprostol 800mcg vaginally (single dose or repeat). Expectant: monitor for spontaneous passage. Rhogam for Rh-negative. Anti-D immunoglobulin."
+        },
+        {
+          "severity": "septic",
+          "criteria": "fever, foul discharge, uterine tenderness",
+          "treatment": "IV broad-spectrum antibiotics (e.g., Piperacillin-Tazobactam or Clindamycin + Gentamicin). Urgent surgical evacuation. ICU admission for shock. Monitor for DIC."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chromosomal_abnormalities",
+      "uterine_structural_abnormalities",
+      "immunological_factors",
+      "endocrine_dysfunction",
+      "infectious_causes"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hemorrhage",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["heavy_bleeding", "tachycardia", "hypotension"]
+      },
+      {
+        "diseaseId": "sepsis",
+        "probability": 0.03,
+        "lagDays": [1, 5],
+        "severityBoost": 0.6,
+        "clues": ["fever", "foul_discharge", "uterine_tenderness"]
+      },
+      {
+        "diseaseId": "retained_products_of_conception",
+        "probability": 0.1,
+        "lagDays": [3, 14],
+        "severityBoost": 0.3,
+        "clues": ["persistent_bleeding", "pain", "open_os"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.01,
+        "lagDays": [1, 3],
+        "severityBoost": 0.9,
+        "clues": ["prolonged_retention", "bleeding_from_multiple_sites", "abnormal_coagulation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["vaginal_bleeding_in_early_pregnancy", "cervical_os_change", "tissue_passage"],
+    "exclusionClues": ["ectopic_pregnancy_confirmed", "viable_pregnancy_with_bleeding_from_cervical_polyp"]
+  }
+}

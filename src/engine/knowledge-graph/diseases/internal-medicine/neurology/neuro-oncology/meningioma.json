@@ -1,0 +1,119 @@
+{
+  "disease": {
+    "id": "meningioma",
+    "name": "Meningioma",
+    "system": "NEURO",
+    "agePeak_months": [540, 960],
+    "note": "Most common primary brain tumor. Arises from meningothelial cells. Usually benign (WHO I) but can be atypical (II) or malignant (III).",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["brain_tumor", "extra_axial_mass"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "raised_icp_severe", "weight": 9 },
+        { "sign": "seizures_new_onset", "weight": 8 },
+        { "sign": "rapid_growth_malignant_signs", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If raised ICP/seizures/rapid growth -> URGENT; else -> ELECTIVE/INCIDENTALOMA"
+    },
+    "historyFeatures": [
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "seizures", "weight": 3 },
+      { "symptomId": "focal_neurological_deficit", "weight": 4 },
+      { "symptomId": "cognitive_or_personality_change", "weight": 2 },
+      { "symptomId": "incidental_finding", "weight": 3 },
+      { "symptomId": "vision_loss_visual_field_defect", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "papilloedema", "baseWeight": 2 },
+      { "signId": "focal_signs_depending_on_location", "baseWeight": 4 },
+      { "signId": "cranial_nerve_palsy", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 2.5 },
+      { "id": "ionizing_radiation_exposure", "multiplier": 4.0 },
+      { "id": "neurofibromatosis_type_2", "multiplier": 5.0 },
+      { "id": "age_increasing", "multiplier": 2.0 },
+      { "id": "breast_cancer_hormonal", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "benign_meningioma_wh1",
+        "name": "Benign Meningioma (WHO Grade I)",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "extra_axial_dura_based", "weight": 5 },
+          { "feature": "homogeneous_enhancement", "weight": 4 },
+          { "feature": "slow_growth", "weight": 4 }
+        ],
+        "management": "Asymptomatic: observe with serial MRI. Symptomatic or growing: surgical resection (Simpson grade). SRS (Gamma Knife) for residual/recurrent/inaccessible."
+      },
+      {
+        "id": "atypical_meningioma_wh2",
+        "name": "Atypical Meningioma (WHO Grade II)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "brain_invasion", "weight": 5 },
+          { "feature": "increased_mitotic_activity", "weight": 4 },
+          { "feature": "higher_recurrence", "weight": 4 }
+        ],
+        "management": "Maximal safe surgical resection. Adjuvant RT (50-54 Gy) for residual or recurrent. MRI surveillance Q6-12 months."
+      },
+      {
+        "id": "malignant_meningioma_wh3",
+        "name": "Malignant (Anaplastic) Meningioma (WHO Grade III)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "frank_anaplasia", "weight": 5 },
+          { "feature": "high_mitotic_rate", "weight": 5 },
+          { "feature": "aggressive_behavior", "weight": 5 }
+        ],
+        "management": "Aggressive surgical resection. Adjuvant RT 54-60 Gy. Consider chemotherapy (hydroxyurea, sunitinib, everolimus). Clinical trials."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "dural_metastasis", "discriminators": ["known_primary_cancer", "multiple_dural_lesions"] },
+      { "diseaseId": "schwannoma", "discriminators": ["cp_angle", "internal_auditory_canal", "no_dura_tail"] }
+    ],
+    "investigations": {
+      "imaging": [
+        { "name": "MRI Brain with contrast", "priority": "immediate", "yield": 0.98, "indication": "extra-axial, dural-based, enhancing, dural tail sign" },
+        { "name": "CT Head", "priority": "medium", "yield": 0.6, "indication": "calcification, hyperostosis, bone erosion" }
+      ],
+      "pathology": [
+        { "name": "Histopathology (WHO grade)", "priority": "definitive", "yield": 1.0, "indication": "grade assessment" },
+        { "name": "Immunohistochemistry (EMA, SSTR2A, Ki-67)", "priority": "high", "yield": 0.9, "indication": "confirm diagnosis, proliferation index" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EANO Guidelines for Meningioma",
+      "pathways": [
+        {
+          "severity": "incidental/small asymptomatic",
+          "criteria": "WHO I, small (<3 cm), no edema, no mass effect, no growth",
+          "treatment": "Conservative: serial MRI at 6, 12, 24 months then annually if stable. No surgical intervention. Reassurance."
+        },
+        {
+          "severity": "symptomatic or growing",
+          "criteria": "symptoms, significant mass effect, growth on serial imaging, or size >3 cm",
+          "treatment": "Surgical resection (Simpson I-III). SRS (Gamma Knife) for high-risk locations (cavernous sinus, skull base). RT for residual WHO II-III."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "meningothelial_cell_proliferation",
+      "nf2_gene_mutation_schwannomin_loss",
+      "progesterone_receptor_expression",
+      "angiogenesis",
+      "dural_attachment"
+    ],
+    "complications": [
+      { "diseaseId": "seizures", "probability": 0.2, "severityBoost": 0.2, "clues": ["cortical_compression", "edema"] },
+      { "diseaseId": "recurrence_after_resection", "probability": 0.1, "severityBoost": 0.2, "clues": ["wh2_wh3", "incomplete_resection"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["extra_axial_dural_based_enhancing_mass", "female_predominance", "incidental_common", "slow_growth"],
+    "exclusionClues": ["intra_axial_origin", "metastatic_pattern"]
+  }
+}

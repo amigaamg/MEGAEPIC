@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "anemia_in_pregnancy",
+    "name": "Anemia in Pregnancy",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Hemoglobin <11 g/dL in pregnancy. Most commonly iron deficiency anemia. Associated with preterm birth, low birth weight, and increased maternal morbidity.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["maternal_anemia", "high_risk_pregnancy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "heart_failure", "weight": 10 },
+        { "sign": "hypoxemia", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hemoglobin_below_7", "weight": 8 },
+          { "sign": "pallor_and_dyspnea_at_rest", "weight": 6 },
+          { "sign": "tachycardia_at_rest", "weight": 5 },
+          { "sign": "signs_of_heart_failure", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Hb <7 g/dL or signs of cardiac failure -> SEVERE; Hb 7-10.9 -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "pallor", "weight": 3 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 4 },
+      { "symptomId": "dizziness", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 3 },
+      { "symptomId": "headache", "weight": 2 },
+      { "symptomId": "pica", "weight": 2, "note": "Pagophagia (ice craving) or geophagia (clay)" },
+      { "symptomId": "restless_legs", "weight": 2 },
+      { "symptomId": "poor_appetite", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor_conjunctival", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "pallor_palmar", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "flow_murmur", "baseWeight": 2 },
+      { "signId": "brittle_nails_koilonychia", "baseWeight": 2 },
+      { "signId": "glossitis", "baseWeight": 2 },
+      { "signId": "angular_stomatitis", "baseWeight": 1 },
+      { "ignId": "edema_lower_limbs", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "short_interpregnancy_interval", "multiplier": 1.5 },
+      { "id": "multiple_gestation", "multiplier": 2.0 },
+      { "id": "poor_nutritional_intake", "multiplier": 2.0 },
+      { "id": "hyperemesis_gravidarum", "multiplier": 1.5 },
+      { "id": "malaria_endemic_area", "multiplier": 2.0 },
+      { "id": "hookworm_infestation", "multiplier": 1.5 },
+      { "id": "sickle_cell_trait_or_disease", "multiplier": 2.0 },
+      { "id": "adolescent_pregnancy", "multiplier": 1.5 },
+      { "id": "previous_anemia", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "iron_deficiency_anemia",
+        "name": "Iron Deficiency Anemia",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "low_MCV", "weight": 5 },
+          { "feature": "low_serum_ferritin", "weight": 5 },
+          { "feature": "low_transferrin_saturation", "weight": 4 },
+          { "feature": "pica", "weight": 3 }
+        ],
+        "management": "Oral iron supplementation (ferrous sulfate 200mg TID). IV iron sucrose if intolerant or severe. Monitor Hb after 2-4 weeks."
+      },
+      {
+        "id": "folate_deficiency_anemia",
+        "name": "Folate Deficiency Anemia",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "high_MCV", "weight": 5 },
+          { "feature": "low_serum_folate", "weight": 5 },
+          { "feature": "neural_tube_defect_history", "weight": 3 },
+          { "feature": "glossitis", "weight": 2 }
+        ],
+        "management": "Folic acid 5mg daily. Dietary advice (green leafy vegetables). Folic acid for all pregnant women 400mcg daily."
+      },
+      {
+        "id": "vitamin_b12_deficiency",
+        "name": "Vitamin B12 Deficiency Anemia",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "high_MCV", "weight": 5 },
+          { "feature": "low_vitamin_B12", "weight": 5 },
+          { "feature": "neurological_symptoms", "weight": 4 },
+          { "feature": "peripheral_neuropathy", "weight": 3 }
+        ],
+        "management": "Hydroxocobalamin IM injections. Dietary advice for vegans. Exclude pernicious anemia."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hemoglobinopathy",
+        "discriminators": ["hemoglobin_electrophoresis_abnormal", "family_history", "chronic_anemia"]
+      },
+      {
+        "diseaseId": "anemia_of_chronic_disease",
+        "discriminators": ["normal_ferritin", "low_TIBC", "chronic_inflammatory_condition"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Hemoglobin color scale", "priority": "immediate", "yield": 0.6, "indication": "bedside screening" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "immediate", "yield": 0.95, "indication": "Hb, MCV, MCH, RDW" },
+        { "name": "Peripheral blood smear", "priority": "high", "yield": 0.85, "indication": "cell morphology" },
+        { "name": "Serum ferritin", "priority": "high", "yield": 0.9, "indication": "gold standard for iron stores" },
+        { "name": "Serum folate and vitamin B12", "priority": "medium", "yield": 0.7, "indication": "if macrocytosis present" },
+        { "name": "Hemoglobin electrophoresis", "priority": "medium", "yield": 0.8, "indication": "if hemoglobinopathy suspected" },
+        { "name": "Stool for ova and parasites", "priority": "medium", "yield": 0.3, "indication": "if hookworm suspected" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Anemia in Pregnancy",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "Hb 9-10.9 g/dL",
+          "treatment": "Oral ferrous sulfate 200mg TID or ferrous fumarate. Folic acid 5mg daily. Dietary counseling. Recheck Hb in 4 weeks."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Hb <7 g/dL or symptomatic with Hb 7-8.9",
+          "treatment": "Hospital admission. IV iron sucrose (200mg IV on alternate days). Consider blood transfusion if Hb <6 or in third trimester. Monitor for heart failure. Packed RBC transfusion if fetal distress."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "dilutional_anemia_of_pregnancy",
+      "increased_iron_demands",
+      "inadequate_dietary_intake",
+      "impaired_absorption"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "preterm_labor",
+        "probability": 0.15,
+        "lagDays": [30, 180],
+        "severityBoost": 0.3,
+        "clues": ["uterine_contractions", "cervical_change"]
+      },
+      {
+        "diseaseId": "postpartum_hemorrhage",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["uterine_atony", "heavy_postpartum_bleeding"]
+      },
+      {
+        "diseaseId": "congestive_heart_failure",
+        "probability": 0.02,
+        "lagDays": [30, 90],
+        "severityBoost": 0.7,
+        "clues": ["dyspnea", "edema", "raised_JVP"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["pallor", "fatigue", "dyspnea", "low_MCV"],
+    "exclusionClues": ["hemoglobin_below_11_with_normal_indices", "polycythemia"]
+  }
+}

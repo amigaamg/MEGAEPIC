@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "femoral_hernia",
+    "name": "Femoral Hernia",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Herniation through the femoral canal, below the inguinal ligament. More common in women. HIGH risk of strangulation.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["groin_mass", "groin_pain", "hernia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "strangulation", "weight": 10 },
+        { "sign": "bowel_obstruction", "weight": 10 },
+        { "sign": "peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "incarceration", "weight": 8 },
+          { "sign": "painful_irreducible_mass", "weight": 7 },
+          { "sign": "overlying_skin_changes", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Strangulated/incarcerated -> SEVERE; reducible -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "groin_mass", "weight": 5, "note": "Below the inguinal ligament, in the femoral triangle" },
+      { "symptomId": "groin_pain", "weight": 4 },
+      { "symptomId": "mass_increases_with_straining", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3, "note": "Suggests obstruction" },
+      { "symptomId": "sudden_severe_pain_with_irreducible_mass", "weight": 5, "note": "Suggests strangulation" },
+      { "symptomId": "female_gender", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_mass_below_inguinal_ligament", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "mass_irreducible_or_tender", "baseWeight": 4 },
+      { "signId": "cough_impulse_may_be_absent", "baseWeight": 3 },
+      { "signId": "mass_lateral_to_tubercle", "baseWeight": 4 },
+      { "signId": "skin_changes_over_mass", "baseWeight": 3 },
+      { "signId": "signs_of_bowel_obstruction", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender", "multiplier": 3.0 },
+      { "id": "age_over_50", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 2.5 },
+      { "id": "increased_intra_abdominal_pressure", "multiplier": 1.5 },
+      { "id": "previous_hernia_repair", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "reducible_femoral_hernia",
+        "name": "Reducible Femoral Hernia",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "mass_reduces_with_manipulation", "weight": 5 },
+          { "feature": "cough_impulse_present", "weight": 4 },
+          { "feature": "no_pain", "weight": 4 }
+        ],
+        "management": "Elective repair (McVay or mesh repair). All femoral hernias should be repaired due to high strangulation risk."
+      },
+      {
+        "id": "incarcerated_femoral_hernia",
+        "name": "Incarcerated Femoral Hernia",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "irreducible_mass", "weight": 5 },
+          { "feature": "pain_increasing", "weight": 4 },
+          { "feature": "no_peritonitis", "weight": 4 }
+        ],
+        "management": "Emergency repair. Attempt gentle reduction under sedation. If fails, open or laparoscopic exploration with bowel viability assessment. Resection if non-viable."
+      },
+      {
+        "id": "strangulated_femoral_hernia",
+        "name": "Strangulated Femoral Hernia",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "irreducible_tender_mass", "weight": 5 },
+          { "feature": "signs_of_obstruction", "weight": 5 },
+          { "feature": "peritonitis", "weight": 5 },
+          { "feature": "lactic_acidosis", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy/laparoscopy. Bowel resection if non-viable. Hernia repair (primary or mesh depending on contamination)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "inguinal_hernia",
+        "discriminators": ["mass_above_inguinal_ligament", "cough_impulse_strong", "medial_to_tubercle"]
+      },
+      {
+        "diseaseId": "femoral_lymphadenopathy",
+        "discriminators": ["multiple_nodes", "no_cough_impulse", "signs_of_infection_in_leg"]
+      },
+      {
+        "diseaseId": "saphena_varix",
+        "discriminators": ["soft_compressible", "venous_hum", "disappears_on_lying_down"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Assessment of reduction", "priority": "immediate", "yield": 0.6, "indication": "determine reducibility" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.6, "indication": "leukocytosis suggests strangulation" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "elevated in strangulation" }
+      ],
+      "imaging": [
+        { "name": "Groin Ultrasound", "priority": "high", "yield": 0.85, "indication": "confirm diagnosis, contents, vascularity" },
+        { "name": "CT Abdomen/Pelvis", "priority": "medium", "yield": 0.9, "indication": "if diagnosis unclear or complicated" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "International Endohernia Society Guidelines for Femoral Hernia",
+      "pathways": [
+        {
+          "severity": "elective repair",
+          "criteria": "reducible femoral hernia, no obstruction",
+          "treatment": "Elective repair (open: McVay, mesh plug, or laparoscopic: TEP/TAPP). All femoral hernias should be repaired due to high strangulation risk."
+        },
+        {
+          "severity": "emergency",
+          "criteria": "incarceration, obstruction, strangulation",
+          "treatment": "Emergency surgery. Open or laparoscopic exploration. Assess bowel viability. Resection if non-viable. Repair with primary suturing if contaminated, mesh if clean."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "increased_intra_abdominal_pressure",
+      "weakness_of_femoral_canal",
+      "herniation_of_abdominal_contents",
+      "compression_at_femoral_ring",
+      "incarceration",
+      "strangulation",
+      "bowel_necrosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "strangulation",
+        "probability": 0.3,
+        "lagDays": [0, 30],
+        "severityBoost": 0.5,
+        "clues": ["irreducible_painful_mass", "obstruction", "lactic_acidosis"]
+      },
+      {
+        "diseaseId": "bowel_necrosis",
+        "probability": 0.15,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["peritonitis", "sepsis", "dark_fluid_on_sac_opening"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["groin_mass_below_inguinal_ligament", "female_patient_over_50", "high_strangulation_risk"],
+    "exclusionClues": ["mass_above_inguinal_ligament", "medial_to_tubercle", "strong_cough_impulse"]
+  }
+}

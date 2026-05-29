@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "anaphylaxis",
+    "name": "Anaphylaxis (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [6, 180],
+    "note": "Severe, life-threatening systemic hypersensitivity reaction. Rapid onset. Respiratory and cardiovascular compromise. Common triggers: foods, medications, insect stings.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["hypersensitivity_reaction", "pediatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_arrest", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "hypotension_severe", "weight": 10 },
+        { "sign": "laryngeal_edema_stridor", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "respiratory_distress_wheezing", "weight": 8 },
+          { "sign": "cyanosis", "weight": 8 },
+          { "sign": "hoarse_voice_dysphonia", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If respiratory compromise or hypotension -> SEVERE; else -> NON-SEVERE (mild reaction)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_onset_mins_to_hours", "weight": 5 },
+      { "symptomId": "urticaria_hives_itching", "weight": 4 },
+      { "symptomId": "swelling_lips_tongue_face", "weight": 5 },
+      { "symptomId": "difficulty_breathing_wheezing", "weight": 5 },
+      { "symptomId": "dizziness_fainting", "weight": 4 },
+      { "symptomId": "vomiting_abdominal_cramps", "weight": 3 },
+      { "symptomId": "known_allergy_trigger_exposure", "weight": 5 },
+      { "symptomId": "previous_allergic_reactions", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "urticaria_wheals", "baseWeight": 4 },
+      { "signId": "angioedema_lips_tongue_eyelids", "baseWeight": 5 },
+      { "signId": "stridor_wheeze", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "cyanosis", "baseWeight": 4 },
+      { "signId": "hoarse_voice", "baseWeight": 3 },
+      { "signId": "erythema_conjunctival_injection", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "known_food_allergy", "multiplier": 4.0 },
+      { "id": "asthma_comorbidity", "multiplier": 3.0 },
+      { "id": "previous_anaphylaxis", "multiplier": 5.0 },
+      { "id": "drug_allergy_history", "multiplier": 3.0 },
+      { "id": "insect_sting_allergy", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "anaphylaxis_respiratory_predominant",
+        "name": "Anaphylaxis with Respiratory Predominance",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "laryngeal_edema_stridor", "weight": 5 },
+          { "feature": "bronchospasm_wheezing", "weight": 5 },
+          { "feature": "dysphonia_hoarseness", "weight": 4 }
+        ],
+        "management": "IM Epinephrine (1:1000) 0.01 mg/kg (max 0.5 mg) anterolateral thigh. Repeat q5-15min PRN. Oxygen. Inhaled albuterol for bronchospasm. Consider IV epinephrine if refractory."
+      },
+      {
+        "id": "anaphylaxis_hypotension_predominant",
+        "name": "Anaphylaxis with Hypotension/CV Predominance",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "hypotension_lightheadedness", "weight": 5 },
+          { "feature": "syncope", "weight": 4 },
+          { "feature": "weak_thready_pulse", "weight": 4 }
+        ],
+        "management": "IM Epinephrine first line. IV NS 20 mL/kg bolus. IV epinephrine infusion if refractory 0.05-0.1 mcg/kg/min. Trendelenburg position. Monitor cardiac rhythm."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "asthma_exacerbation",
+        "discriminators": ["no_urticaria_or_angioedema", "no_allergen_exposure", "chronic_asthma"]
+      },
+      {
+        "diseaseId": "vasovagal_syncope",
+        "discriminators": ["bradycardia_not_tachycardia", "pallor_sweating", "no_urticaria", "no_respiratory_symptoms"]
+      },
+      {
+        "diseaseId": "angioedema_hereditary",
+        "discriminators": ["no_urticaria", "family_history", "no_response_to_epinephrine", "c1_esterase_inhibitor_deficiency"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Serum tryptase", "priority": "medium", "yield": 0.6, "indication": "elevated 1-6h after onset, confirm anaphylaxis" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "AAAAI/ACAAI Anaphylaxis Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "Urticaria, mild angioedema, no respiratory distress, no hypotension",
+          "treatment": "IM epinephrine 0.01 mg/kg (max 0.3 mg child, 0.5 mg adolescent). Oral antihistamine (cetirizine). Monitor for 4-6 hours for biphasic reaction. Prescribe epinephrine autoinjector."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Respiratory distress, stridor, wheeze, hypotension, or altered consciousness",
+          "treatment": "IM epinephrine immediately. ABC. Oxygen. IV NS 20 mL/kg bolus. Nebulized albuterol. H1 + H2 antihistamines (diphenhydramine + ranitidine). IV methylprednisolone 1-2 mg/kg. ICU admission. Epinephrine infusion if refractory. Observe 24h for biphasic."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ige_mediated_hypersensitivity",
+      "mast_cell_degranulation",
+      "histamine_release",
+      "bronchoconstriction",
+      "vasodilation",
+      "increased_vascular_permeability",
+      "laryngeal_edema"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "biphasic_anaphylaxis",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "clues": ["symptoms_recur_1_12h_after_resolution", "severe_initial_reaction"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_onset_urticaria_angioedema", "respiratory_distress", "hypotension", "trigger_exposure"],
+    "exclusionClues": ["slow_onset", "no_cutaneous_symptoms", "no_response_to_epinephrine"]
+  }
+}

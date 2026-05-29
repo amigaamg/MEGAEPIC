@@ -1,0 +1,195 @@
+{
+  "disease": {
+    "id": "globe_injury",
+    "name": "Open Globe Injury (Corneal/Scleral Rupture or Laceration)",
+    "system": "OPHTH",
+    "agePeak_months": [120, 480],
+    "note": "Full-thickness wound of the cornea and/or sclera. Ophthalmic emergency requiring urgent primary repair to prevent infection, hemorrhage, and irreversible vision loss. Classified by zone (I: cornea, II: limbus to 5mm, III: >5mm posterior).",
+    "prevalenceWeight": 0.002,
+    "syndromeTags": ["eye_trauma", "sight_threatening_emergency", "open_globe"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "expulsive_choroidal_hemorrhage", "weight": 10 },
+        { "sign": "endophthalmitis", "weight": 10 },
+        { "sign": "ruptured_globe_with_content_extrusion", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "relative_afferent_pupillary_defect", "weight": 8 },
+          { "sign": "hyphema", "weight": 6 },
+          { "sign": "vitreous_hemorrhage", "weight": 7 },
+          { "sign": "retinal_detachment_associated", "weight": 8 },
+          { "sign": "zone_II_or_III_injury", "weight": 7 },
+          { "sign": "intraocular_foreign_body", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "All open globe injuries are SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sharp_trauma_to_eye", "weight": 5 },
+      { "symptomId": "blunt_trauma_high_velocity", "weight": 5 },
+      { "symptomId": "sudden_vision_loss", "weight": 5 },
+      { "symptomId": "pain_severe", "weight": 4 },
+      { "symptomId": "something_hit_eye", "weight": 4 },
+      { "symptomId": "sensation_of_fluid_leaking", "weight": 4 },
+      { "symptomId": "hammering_or_grinding_metal_on_metal", "weight": 3, "note": "Suspected intraocular foreign body" },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "previous_eye_surgery_cataract_glaucoma", "weight": 2 },
+      { "symptomId": "high_risk_activity_no_protection", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "full_thickness_corneal_or_scleral_wound", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "shallow_or_flat_anterior_chamber", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "positive_Seidel_test_fluorescein_leak", "baseWeight": 5 },
+      { "signId": "iris_prolapse", "baseWeight": 5 },
+      { "signId": "irregular_pupil_peaked_toward_wound", "baseWeight": 4 },
+      { "signId": "hyphema", "baseWeight": 4 },
+      { "signId": "vitreous_hemorrhage", "baseWeight": 4 },
+      { "signId": "relative_afferent_pupillary_defect", "baseWeight": 5 },
+      { "signId": "low_intraocular_pressure", "baseWeight": 4 },
+      { "signId": "subconjunctival_hemorrhage_or_bulla", "baseWeight": 3 },
+      { "signId": "retinal_detachment", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "male_young_adult", "multiplier": 3.0 },
+      { "id": "occupation_construction_metalwork", "multiplier": 5.0 },
+      { "id": "no_eye_protection", "multiplier": 10.0 },
+      { "id": "prior_eye_surgery_corneal_or_cataract", "multiplier": 3.0 },
+      { "id": "assault_or_violence", "multiplier": 3.0 },
+      { "id": "sports_risk_activities", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "corneal_laceration",
+        "name": "Corneal Laceration (Zone I)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "Seidel_positive", "weight": 5 },
+          { "feature": "iris_prolapse", "weight": 4 },
+          { "feature": "shallow_AC", "weight": 5 },
+          { "feature": "irregular_pupil", "weight": 3 }
+        ],
+        "management": "Urgent primary repair: 10-0 nylon sutures. Antibiotics (IV + topical). Tetanus prophylaxis. Repair within 24h. Avoid pressure on globe."
+      },
+      {
+        "id": "scleral_rupture",
+        "name": "Scleral Rupture (Zone II/III)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "subconjunctival_hemorrhage_bulla", "weight": 5 },
+          { "feature": "vitreous_hemorrhage", "weight": 4 },
+          { "feature": "very_low_IOP", "weight": 4 },
+          { "feature": "eye_motility_restriction", "weight": 2 }
+        ],
+        "management": "Urgent exploration and repair. 8-0 nylon for sclera. Cryotherapy or laser around wound. Vitrectomy if needed. Posterior segment involvement: vitreoretinal consultation."
+      },
+      {
+        "id": "intraocular_foreign_body",
+        "name": "Intraocular Foreign Body (IOFB)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "hammering_metal_history", "weight": 5 },
+          { "feature": "entry_wound_small", "weight": 4 },
+          { "feature": "foreign_body_visible_on_CT_or_ultrasound", "weight": 5 },
+          { "feature": "endophthalmitis_risk", "weight": 4 }
+        ],
+        "management": "CT orbit (thin slices) to localize. IV antibiotics (Vancomycin + Ceftazidime). Surgical removal (magnets or vitrectomy). Repair wound. Prophylactic antibiotics for endophthalmitis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "corneal_abrasion",
+        "discriminators": ["no_full_thickness_wound", "fluorescein_uptake_without_leak", "Seidel_negative"]
+      },
+      {
+        "diseaseId": "subconjunctival_hemorrhage",
+        "discriminators": ["no_AC_shallowing", "normal_IOP", "no_wound"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Seidel test (fluorescein + cobalt blue)", "priority": "immediate", "yield": 0.95, "indication": "detect leak" },
+        { "name": "Visual acuity (if possible)", "priority": "immediate", "yield": 0.6, "indication": "baseline" },
+        { "name": "Pupillary exam (RAPD)", "priority": "immediate", "yield": 0.8, "indication": "prognostic" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "CT orbit (thin slices, axial + coronal)", "priority": "immediate", "yield": 0.85, "indication": "IOFB, orbital fracture, scleral rupture" },
+        { "name": "B-scan ultrasound (sterile, after wound closure)", "priority": "medium", "yield": 0.8, "indication": "posterior segment assessment" },
+        { "name": "X-ray orbit (if CT unavailable)", "priority": "low", "yield": 0.5, "indication": "radiopaque IOFB" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO / American Society of Ocular Trauma Guidelines",
+      "pathways": [
+        {
+          "severity": "all_open_globe",
+          "criteria": "confirmed full-thickness wound",
+          "treatment": "Eye shield (NO pressure). NPO. IV broad-spectrum antibiotics (Vancomycin 1g + Ceftazidime 1g or Moxifloxacin 400mg). Tetanus prophylaxis. Anti-emetics. Urgent primary repair (within 24h). Avoid Valsalva. Definitive repair: 10-0 nylon for cornea, 8-0 for sclera. Post-op: topical + systemic antibiotics. Vitreoretinal surgery for posterior segment involvement."
+        },
+        {
+          "severity": "post_repair",
+          "criteria": "wound closed, no endophthalmitis",
+          "treatment": "Topical antibiotics and steroids (after leak sealed). Systemic antibiotics 7 days. Monitor for endophthalmitis. Avoid eye rubbing. Follow-up: daily initially. Visual rehabilitation after healing (6-12 weeks). Secondary IOL if aphakic."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "full_thickness_wall_defect",
+      "intraocular_content_extrusion",
+      "hypotony",
+      "infection_risk",
+      "inflammation_and_scarring"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "endophthalmitis",
+        "probability": 0.05,
+        "lagDays": [1, 7],
+        "severityBoost": 1.0,
+        "clues": ["increasing_pain", "hypopyon", "vitritis"]
+      },
+      {
+        "diseaseId": "traumatic_cataract",
+        "probability": 0.3,
+        "lagDays": [1, 90],
+        "severityBoost": 0.3,
+        "clues": ["lens_opacity", "capsular_rupture"]
+      },
+      {
+        "diseaseId": "retinal_detachment",
+        "probability": 0.15,
+        "lagDays": [0, 90],
+        "severityBoost": 0.7,
+        "clues": ["vision_loss", "PVR"]
+      },
+      {
+        "diseaseId": "glaucoma_traumatic",
+        "probability": 0.1,
+        "lagDays": [30, 365],
+        "severityBoost": 0.4,
+        "clues": ["elevated_IOP", "angle_recession"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sharp_or_high_velocity_trauma", "vision_loss", "Seidel_positive", "shallow_AC"],
+    "exclusionClues": ["normal_globe_integrity", "Seidel_negative"]
+  }
+}

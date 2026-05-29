@@ -1,0 +1,100 @@
+{
+  "disease": {
+    "id": "arterial_line_insertion",
+    "name": "Arterial Line (A-Line) Insertion - ICU Procedure",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Invasive arterial catheter for continuous blood pressure monitoring and serial ABG sampling. Sites: radial, femoral, brachial, dorsalis pedis. Allen test before radial cannulation.",
+    "prevalenceWeight": 0.75,
+    "syndromeTags": ["icu_procedure", "hemodynamic_monitoring", "vascular_access"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "distal_ischemia_of_hand_foot", "weight": 10 },
+        { "sign": "retroperitoneal_hematoma_femoral", "weight": 9 },
+        { "sign": "pseudoaneurysm_formation", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Complication -> SEVERE; uncomplicated -> PROCEDURE COMPLETE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "need_for_continuous_bp_monitoring", "weight": 5 },
+      { "symptomId": "need_for_frequent_abg_sampling", "weight": 4 },
+      { "symptomId": "vasopressor_therapy", "weight": 4 },
+      { "symptomId": "poor_peripheral_circulation_or_prior_line", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "modified_allen_test_performed", "baseWeight": 4 },
+      { "signId": "radial_artery_palpable", "baseWeight": 3 },
+      { "signId": "skin_infection_or_breakdown_at_site", "baseWeight": 4 },
+      { "signId": "collateral_circulation_assessed", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "coagulopathy_inr_greater_1.5_platelets_less_50", "multiplier": 2.5 },
+      { "id": "peripheral_vascular_disease", "multiplier": 2.0 },
+      { "id": "vasopressor_therapy", "multiplier": 1.5 },
+      { "id": "prolonged_cannulation_more_5_days", "multiplier": 1.5 },
+      { "id": "high_dose_anticoagulation", "multiplier": 2.0 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Modified Allen test (radial)", "priority": "high", "yield": 0.8, "indication": "confirm ulnar collateral flow" },
+        { "name": "Ultrasound guidance (if difficult)", "priority": "high", "yield": 0.9, "indication": "non-palpable artery, obesity" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ICU Procedure Manual / Society of Critical Care Medicine Guidelines",
+      "pathways": [
+        {
+          "severity": "insertion",
+          "criteria": "indication for invasive monitoring",
+          "treatment": "Sterile technique. Skin prep with chlorhexidine. Arterial cannulation with catheter-over-needle (Seldinger or direct). Secure with suture + transparent dressing. Transducer zeroed at phlebostatic axis."
+        },
+        {
+          "severity": "maintenance and removal",
+          "criteria": "line no longer needed or complication",
+          "treatment": "Daily site inspection. Flush system with pressurized saline (300 mmHg). Square-wave test for damping. Remove if no longer needed, signs of infection, or distal ischemia. Apply pressure x 5 min after removal."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "arterial_catheterization",
+      "intra_arterial_pressure_monitoring",
+      "risk_of_thrombosis_embolism",
+      "risk_of_hematoma_pseudoaneurysm",
+      "risk_of_infection"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "distal_ischemia_hand",
+        "probability": 0.01,
+        "severityBoost": 0.5,
+        "clues": ["pale_cold_hand", "pain", "decreased_capillary_refill"]
+      },
+      {
+        "diseaseId": "arterial_line_associated_bloodstream_infection",
+        "probability": 0.005,
+        "severityBoost": 0.4,
+        "clues": ["site_erythema", "fever", "positive_culture_from_line"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["hemodynamic_instability_vasopressors", "need_for_frequent_abgs"],
+    "exclusionClues": ["non_invasive_bp_sufficient", "contraindication_positive_allen"]
+  }
+}

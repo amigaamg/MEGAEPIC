@@ -1,0 +1,143 @@
+{
+  "disease": {
+    "id": "myelodysplastic_syndrome",
+    "name": "Myelodysplastic Syndrome",
+    "system": "hematology",
+    "agePeak_months": [720, 960, 1080],
+    "note": "Clonal hematopoietic stem cell disorder with ineffective hematopoiesis, cytopenias, and risk of transformation to AML. Dysplasia in one or more myeloid lineages. IPSS-R used for risk stratification.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["mds", "cytopenia", "dysplasia", "bone_marrow_failure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sepsis", "weight": 9 },
+        { "sign": "severe_bleeding", "weight": 9 },
+        { "sign": "transformation_to_aml", "weight": 10 },
+        { "sign": "severe_anemia_hb_below_6", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "stable_counts": true
+      },
+      "severityLabel": "If severe cytopenia or AML transformation -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "pallor", "weight": 4 },
+      { "symptomId": "easy_bruising", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "petechiae", "baseWeight": 3 },
+      { "signId": "ecchymoses", "baseWeight": 2 },
+      { "signId": "fever", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_chemotherapy", "multiplier": 3.0 },
+      { "id": "radiation_exposure", "multiplier": 2.5 },
+      { "id": "benzene_exposure", "multiplier": 2.0 },
+      { "id": "older_age", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mds_sld",
+        "name": "MDS with Single Lineage Dysplasia",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "dysplasia_in_one_lineage", "weight": 5 },
+          { "feature": "blasts_less_than_5_percent", "weight": 4 },
+          { "feature": "low_ipss_r_risk", "weight": 3 }
+        ],
+        "management": "Supportive care. Growth factors (ESA). Monitor for progression."
+      },
+      {
+        "id": "mds_excess_blasts_2",
+        "name": "MDS with Excess Blasts-2 (High Risk)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "blasts_10_to_19_percent", "weight": 5 },
+          { "feature": "high_ipss_r_risk", "weight": 5 },
+          { "feature": "high_aml_transformation_risk", "weight": 4 }
+        ],
+        "management": "Hypomethylating agents (azacitidine). Consider HSCT if fit. Clinical trials."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "aplastic_anemia",
+        "discriminators": ["hypocellular_marrow", "no_dysplasia", "younger_age"]
+      },
+      {
+        "diseaseId": "vitamin_b12_folate_deficiency",
+        "discriminators": ["normal_b12_folate", "normal_mcv_unless_mds_with_high_mcv", "no_hypersegmented_neutrophils"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.9, "indication": "Cytopenias, macrocytosis" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.85, "indication": "Dysplastic features, blasts if present" }
+      ],
+      "laboratory": [
+        { "name": "Bone marrow aspirate and trephine", "priority": "immediate", "yield": 0.98, "indication": "Dysplasia, blast count, cellularity" },
+        { "name": "Cytogenetics / FISH", "priority": "immediate", "yield": 0.8, "indication": "5q-, 7q-, -7, +8, complex karyotype" },
+        { "name": "Iron stain (Prussian blue)", "priority": "high", "yield": 0.6, "indication": "Ring sideroblasts in MDS-RS" },
+        { "name": "Serum erythropoietin", "priority": "medium", "yield": 0.5, "indication": "Predicts ESA response" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "NCCN / ELN Guidelines for MDS",
+      "pathways": [
+        {
+          "severity": "low_risk_mds",
+          "criteria": "IPSS-R very low, low, or intermediate",
+          "treatment": "Supportive care. ESA if anemia and EPO <500. G-CSF if neutropenia and infections. Lenalidomide if 5q-."
+        },
+        {
+          "severity": "high_risk_mds",
+          "criteria": "IPSS-R high or very high, blasts >10%",
+          "treatment": "Azacitidine or decitabine. HSCT if eligible. Intensive chemotherapy if transplant candidate."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "clonal_hematopoietic_stem_cell_mutation",
+      "impaired_differentiation",
+      "apoptosis_of_marrow_precursors",
+      "cytopenias",
+      "genomic_instability",
+      "aml_transformation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_myeloid_leukemia",
+        "probability": 0.2,
+        "severityBoost": 0.7,
+        "clues": ["blasts_above_20_percent", "new_cytogenetic_abnormality", "falling_counts"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["cytopenia", "dysplasia_on_film", "blasts_less_than_20_percent", "older_age"],
+    "exclusionClues": ["blasts_above_20_percent", "normal_marrow", "aplastic_marrow"]
+  }
+}

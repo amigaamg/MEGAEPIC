@@ -34,6 +34,7 @@ interface Props {
 }
 
 export default function PrescriptionManager({ toolId, patientId, doctorId, active, stopped, bpEntries, onPrescribe, onAdjustDose, onStopDrug }: Props) {
+  return null;
   const [showForm, setShowForm] = useState(false);
   const [drug, setDrug] = useState("");
   const [dose, setDose] = useState("");

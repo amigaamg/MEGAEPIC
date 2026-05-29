@@ -1,0 +1,120 @@
+{
+  "disease": {
+    "id": "folate_deficiency",
+    "name": "Folate Deficiency",
+    "system": "hematology",
+    "agePeak_months": [12, 180, 300, 960],
+    "note": "Megaloblastic anemia without neurologic symptoms. Often nutritional, related to pregnancy, alcohol, or malabsorption.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["anemia", "megaloblastic", "macrocytic"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_anemia_hb_below_5", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 9 },
+        { "sign": "high_output_heart_failure", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "hb_above_7": true
+      },
+      "severityLabel": "If Hb <5 or decompensated -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "poor_diet", "weight": 4 },
+      { "symptomId": "alcohol_excess", "weight": 3 },
+      { "symptomId": "pregnancy", "weight": 3 },
+      { "symptomId": "glossitis", "weight": 2 },
+      { "symptomId": "diarrhea", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "glossitis", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "mild_jaundice", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "alcohol_use_disorder", "multiplier": 2.5 },
+      { "id": "pregnancy", "multiplier": 2.0 },
+      { "id": "poor_nutrition", "multiplier": 2.0 },
+      { "id": "malabsorption", "multiplier": 1.8 },
+      { "id": "hemolytic_anemia", "multiplier": 2.0 },
+      { "id": "anticonvulsant_use", "multiplier": 1.5 },
+      { "id": "methotrexate_use", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [],
+
+    "mimics": [
+      {
+        "diseaseId": "vitamin_b12_deficiency",
+        "discriminators": ["normal_b12", "low_folate", "no_neurologic_symptoms"]
+      },
+      {
+        "diseaseId": "myelodysplastic_syndrome",
+        "discriminators": ["normal_b12_folate", "dysplastic_film", "older_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "Macrocytic anemia" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.9, "indication": "Macro-ovalocytes, hypersegmented neutrophils" }
+      ],
+      "laboratory": [
+        { "name": "Serum folate", "priority": "immediate", "yield": 0.95, "indication": "Low in folate deficiency" },
+        { "name": "Red cell folate", "priority": "high", "yield": 0.9, "indication": "Reflects longer-term folate status" },
+        { "name": "Serum B12 level", "priority": "high", "yield": 0.8, "indication": "Rule out B12 deficiency" },
+        { "name": "Homocysteine", "priority": "medium", "yield": 0.8, "indication": "Elevated in folate deficiency" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "BSH Guidelines for Folate Deficiency",
+      "pathways": [
+        {
+          "severity": "severe",
+          "criteria": "Hb <7, symptomatic",
+          "treatment": "Folic acid 5mg PO daily. Consider PRBC transfusion if unstable. Treat underlying cause."
+        },
+        {
+          "severity": "mild",
+          "criteria": "Hb >7, asymptomatic",
+          "treatment": "Folic acid 5mg PO daily for 4 months. Dietary counseling. Avoid alcohol."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "folate_deficiency",
+      "impaired_dna_synthesis",
+      "megaloblastic_hematopoiesis",
+      "ineffective_erythropoiesis",
+      "macrocytic_anemia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "neural_tube_defect",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["pregnancy", "low_folate_first_trimester"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["macrocytic_anemia", "hypersegmented_neutrophils", "low_folate", "no_neuropathy"],
+    "exclusionClues": ["normal_folate", "neurologic_symptoms"]
+  }
+}

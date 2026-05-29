@@ -1,0 +1,150 @@
+{
+  "disease": {
+    "id": "sjogrens_syndrome",
+    "name": "Sjogren's Syndrome",
+    "system": "rheumatology",
+    "agePeak_months": [480, 720],
+    "note": "Chronic autoimmune exocrinopathy characterized by lymphocytic infiltration of salivary and lacrimal glands causing sicca symptoms (dry eyes, dry mouth). Can be primary or secondary to other autoimmune diseases.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["autoimmune", "connective_tissue_disease", "sicca", "exocrinopathy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "lymphoma", "weight": 9 },
+        { "sign": "severe_parotid_swelling", "weight": 6 },
+        { "sign": "cryoglobulinemic_vasculitis", "weight": 8 },
+        { "sign": "cns_involvement", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If lymphoma, vasculitis, or CNS -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dry_eyes_xerophthalmia", "weight": 5 },
+      { "symptomId": "dry_mouth_xerostomia", "weight": 5 },
+      { "symptomId": "gritty_sandy_eyes", "weight": 4 },
+      { "symptomId": "difficulty_swallowing_dry_food", "weight": 3 },
+      { "symptomId": "parotid_swelling", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "arthralgia", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "absent_salivary_pool", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "parotid_enlargement", "baseWeight": 4 },
+      { "signId": "dental_caries_xerostomia", "baseWeight": 3 },
+      { "signId": "dry_cracked_tongue", "baseWeight": 3 },
+      { "signId": "keratoconjunctivitis_sicca", "baseWeight": 4 },
+      { "signId": "angular_cheilitis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 9.0 },
+      { "id": "family_history_autoimmune", "multiplier": 2.0 },
+      { "id": "hla_drb1_dq", "multiplier": 2.0 },
+      { "id": "other_autoimmune_disease", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "primary_sjogrens",
+        "name": "Primary Sjogren's Syndrome",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "sicca_alone_or_predominant", "weight": 5 },
+          { "feature": "anti_ro_ssa_and_la_ssb", "weight": 5 },
+          { "feature": "no_other_autoimmune_disease", "weight": 4 }
+        ],
+        "management": "Symptomatic: artificial tears, saliva substitutes. Hydroxychloroquine for arthralgia. Treat systemic complications."
+      },
+      {
+        "id": "secondary_sjogrens",
+        "name": "Secondary Sjogren's Syndrome",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "associated_with_sle_ra_ssc", "weight": 5 },
+          { "feature": "sicca_symptoms_in_set_of_other_autoimmune", "weight": 5 },
+          { "feature": "treatment_directed_at_underlying", "weight": 3 }
+        ],
+        "management": "Treat underlying autoimmune disease. Symptomatic sicca management as above."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "drug_induced_xerostomia",
+        "discriminators": ["anticholinergic_drugs", "antidepressants", "antihistamines", "no_antibodies", "no_parotid_swelling"]
+      },
+      {
+        "diseaseId": "immunoglobulin_g4_disease",
+        "discriminators": ["elevated_igg4", "submandibular_predominance", "no_anti_ro_la", "fibroinflammatory_histology"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Schirmer test", "priority": "high", "yield": 0.7, "indication": "quantify tear production" },
+        { "name": "Rose Bengal or lissamine green staining", "priority": "high", "yield": 0.8, "indication": "corneal epithelial damage" }
+      ],
+      "laboratory": [
+        { "name": "Anti-Ro/SSA and Anti-La/SSB antibodies", "priority": "high", "yield": 0.7, "indication": "serological hallmark" },
+        { "name": "ANA", "priority": "high", "yield": 0.8, "indication": "positive in most patients" },
+        { "name": "Rheumatoid factor", "priority": "medium", "yield": 0.5, "indication": "often positive" },
+        { "name": "FBC and immunoglobulins", "priority": "medium", "yield": 0.4, "indication": "hypergammaglobulinemia, lymphoma risk" }
+      ],
+      "imaging": [
+        { "name": "Salivary gland ultrasound", "priority": "medium", "yield": 0.8, "indication": "parenchymal inhomogeneity, cysts" },
+        { "name": "Labial salivary gland biopsy", "priority": "medium", "yield": 0.9, "indication": "focus score >= 1 lymphocytic infiltrate" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR Sjogren's Syndrome Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "sicca symptoms only, no systemic involvement",
+          "treatment": "Artificial tears, gels. Saliva substitutes. Sugar-free candy. Pilocarpine or cevimeline if severe."
+        },
+        {
+          "severity": "systemic",
+          "criteria": "arthritis, parotitis, cutaneous, renal, or pulmonary involvement",
+          "treatment": "Hydroxychloroquine. Methotrexate for arthritis. Rituximab for severe refractory disease."
+        },
+        {
+          "severity": "complication",
+          "criteria": "lymphoma, vasculitis, severe cytopenia",
+          "treatment": "Rituximab. Chemotherapy for lymphoma. Immunosuppression for vasculitis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "lymphocytic_infiltration_exocrine_glands",
+      "anti_ro_la_autoantibodies",
+      "interferon_signature",
+      "b_cell_hyperactivity",
+      "germinal_center_formation",
+      "neuroglandular_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "non_hodgkin_lymphoma",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["persistent_parotid_swelling", "lymphadenopathy", "cryoglobulins", "low_c4"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low (unless lymphoma or vasculitis)",
+    "diagnosticClues": ["sicca_complex", "positive_ro_la", "parotid_swelling", "female_middle_age"],
+    "exclusionClues": ["drug_cause", "head_neck_radiation", "hepatitis_c", "normal_salivary_biopsy", "negative_ro_la"]
+  }
+}

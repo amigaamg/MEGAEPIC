@@ -1,0 +1,145 @@
+{
+  "disease": {
+    "id": "priapism",
+    "name": "Priapism",
+    "system": "URO",
+    "agePeak_months": [60, 480],
+    "note": "Prolonged erection >4 hours unrelated to sexual stimulation. Ischemic (low-flow, 95%) vs Non-ischemic (high-flow, 5%). Urological emergency.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["urological_emergency", "penile_disorder", "erection_disorder"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "erection_over_4_hours_corporal_ischemia", "weight": 10 },
+        { "sign": "erection_over_24_hours_infarction", "weight": 10 },
+        { "sign": "erection_over_48_hours_gangrene", "weight": 10 },
+        { "sign": "compartment_syndrome_corporal_necrosis", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Duration critical: <4h (no damage), 4-12h (tissue damage reversible with treatment), 12-24h (irreversible), >24h (fibrosis, ED)"
+    },
+    "historyFeatures": [
+      { "symptomId": "prolonged_painful_erection_4_hours", "weight": 5 },
+      { "symptomId": "erection_not_related_to_sexual_stimulation", "weight": 5 },
+      { "symptomId": "sickle_cell_disease_history", "weight": 4 },
+      { "symptomId": "intracavernosal_injection_therapy", "weight": 4 },
+      { "symptomId": "trazodone_antipsychotic_use", "weight": 3 },
+      { "symptomId": "cocaine_amphetamine_use", "weight": 3 },
+      { "symptomId": "pelvic_trauma_perineal_injury", "weight": 3, "note": "High-flow priapism" },
+      { "symptomId": "previous_episodes_of_priapism", "weight": 3 },
+      { "symptomId": "penile_pain_severe", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "rigid_painful_corpora_cavernosa", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "glans_and_corpus_spongiosum_soft", "baseWeight": 4, "note": "Ischemic priapism" },
+      { "signId": "penile_tenderness", "baseWeight": 3 },
+      { "signId": "perineal_trauma_signs", "baseWeight": 3, "note": "High-flow" },
+      { "signId": "non_rigid_semi_erect", "baseWeight": 4, "note": "High-flow priapism" },
+      { "signId": "signs_of_sickle_cell_crisis", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "sickle_cell_disease", "multiplier": 10.0 },
+      { "id": "intracavernosal_injection_alprostadil", "multiplier": 5.0 },
+      { "id": "anticoagulants_heparin_warfarin", "multiplier": 2.0 },
+      { "id": "psychiatric_medications_trazodone_antipsychotics", "multiplier": 2.0 },
+      { "id": "cocaine_marijuana_amphetamine", "multiplier": 2.0 },
+      { "id": "pelvic_trauma", "multiplier": 3.0 },
+      { "id": "multiple_myeloma_leukemia", "multiplier": 3.0 },
+      { "id": "fat_emulsion_tpn", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "ischemic_veno_occlusive_priapism",
+        "name": "Ischemic (Low-Flow) Priapism",
+        "prevalenceModifier": 0.95,
+        "keyFeatures": [
+          { "feature": "painful_rigid_erection", "weight": 5 },
+          { "feature": "cavernosal_blood_gas_acidotic_ph_under_7_25", "weight": 5 },
+          { "feature": "glans_soft", "weight": 3 },
+          { "feature": "absent_or_minimal_cavernosal_flow_on_doppler", "weight": 4 }
+        ],
+        "management": "Emergency treatment (stepwise): 1) Aspiration of corpora cavernosa (16-19G butterfly needle). 2) Irrigation with normal saline. 3) Intracavernosal injection of phenylephrine (100-500 mcg, repeat q3-5min, max 1000 mcg). 4) If fails: Winter shunt (corporoglanular), T-shunt, proximal shunt (Quackles). Treat underlying cause (sickle cell: O2, hydration, exchange transfusion)."
+      },
+      {
+        "id": "non_ischemic_high_flow_priapism",
+        "name": "Non-Ischemic (High-Flow) Priapism",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "semi_erect_not_painful", "weight": 5 },
+          { "feature": "blood_gas_arterial_ph_7_40_high_o2", "weight": 5 },
+          { "feature": "history_of_perineal_or_penile_trauma", "weight": 4 },
+          { "feature": "cavernosal_artery_flow_present_on_doppler", "weight": 4 }
+        ],
+        "management": "Not an emergency (no ischemia). Observation: may resolve spontaneously. Selective arterial embolization (superselective angioembolization) if persistent and bothersome. Surgical ligation of fistula if embolization fails. Avoid interventions for ischemic priapism."
+      },
+      {
+        "id": "stuttering_recurrent_priapism",
+        "name": "Stuttering (Recurrent) Priapism",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "recurrent_self_limiting_episodes", "weight": 5 },
+          { "feature": "often_nocturnal", "weight": 3 },
+          { "feature": "sickle_cell_disease_associated", "weight": 4 }
+        ],
+        "management": "Preventative: oral therapies (etilefrine, baclofen, digoxin, PDE5 inhibitors paradoxically). Self-injection of phenylephrine at home for prolonged episodes. Hydroxyurea for sickle cell. Androgen deprivation (GnRH agonist) for severe refractory cases (last resort)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "normal_nocturnal_erection", "discriminators": ["resolves_with_awakening_or_position_change", "under_4_hours", "no_pain"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Cavernosal blood gas (aspirate from corpus)", "priority": "immediate", "yield": 0.95, "indication": "low-flow: pH <7.25, pCO2 >60, pO2 <30; high-flow: pH 7.40, pO2 >90" },
+        { "name": "FBC, sickle cell screen", "priority": "high", "yield": 0.5, "indication": "anemia, sickle cell disease" },
+        { "name": "Coagulation profile, platelet count", "priority": "medium", "yield": 0.4, "indication": "bleeding diathesis screen" },
+        { "name": "Toxicology screen", "priority": "if suspected drug-induced", "yield": 0.3, "indication": "cocaine, amphetamines" }
+      ],
+      "imaging": [
+        { "name": "Penile Doppler ultrasound", "priority": "distinguish ischemic vs non-ischemic", "yield": 0.9, "indication": "flow velocity in cavernosal arteries" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EAU Guidelines on Male Sexual Dysfunction / AUA Priapism Guidelines",
+      "pathways": [
+        {
+          "severity": "ischemic priapism <4h",
+          "criteria": "painful rigid erection, <4h duration",
+          "treatment": "Corporal aspiration + irrigation with NS. Intracavernosal phenylephrine 100-200 mcg, repeat q3-5min as needed. Monitor BP/HR. If detumescence achieved: discharge with follow-up."
+        },
+        {
+          "severity": "ischemic priapism 4-24h",
+          "criteria": "prolonged, may have failed aspiration",
+          "treatment": "Repeat aspiration + irrigation + phenylephrine (higher doses 200-500 mcg). If persistent: surgical shunt (Winter or T-shunt). Urology referral. Sickle cell: O2, hydration, analgesia, exchange transfusion."
+        },
+        {
+          "severity": "ischemic >24h",
+          "criteria": "very prolonged, high risk of fibrosis",
+          "treatment": "Surgical shunting (proximal: Quackles, cavernosaphenous). Penile prosthesis (early insertion to prevent severe shortening/fibrosis). Consent for possible permanent ED."
+        },
+        {
+          "severity": "non-ischemic",
+          "criteria": "semi-erect, painless, post-trauma",
+          "treatment": "Observation. Ice. Compression. If persistent: selective angioembolization. Delayed intervention 6 months."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "veno_occlusion_leading_to_cavernosal_ischemia",
+      "trabecular_smooth_muscle_paralysis_from_hypoxia",
+      "decreased_nitric_oxide",
+      "compartment_syndrome_of_corpora",
+      "capillary_endothelial_damage",
+      "corporal_fibrosis_and_erectile_dysfunction",
+      "high_flow_from_arterial_fistula_trauma"
+    ],
+    "complications": [
+      { "diseaseId": "erectile_dysfunction_permanent", "probability": 0.3, "severityBoost": 0.6, "clues": ["duration_over_24h", "failed_detumescence", "corporal_fibrosis_on_follow_up"] },
+      { "diseaseId": "corporal_fibrosis_penile_deformity", "probability": 0.2, "severityBoost": 0.4, "clues": ["hardened_corpora", "penile_shortening", "curvature"] },
+      { "diseaseId": "recurrence", "probability": 0.3, "severityBoost": 0.2, "clues": ["sickle_cell_patient", "previous_episodes"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prolonged_painful_erection_over_4h", "rigid_corpora_soft_glans", "sickle_cell_or_injection_history", "cavernosal_blood_gas_acidotic"],
+    "exclusionClues": ["normal_morning_erection", "sexual_arousal_related", "painless_semi_erect_suggests_high_flow"]
+  }
+}

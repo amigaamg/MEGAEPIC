@@ -1,0 +1,123 @@
+{
+  "disease": {
+    "id": "gait_disorder",
+    "name": "Gait Disorder",
+    "system": "geriatrics",
+    "agePeak_months": [720, 1080],
+    "note": "Abnormal walking pattern in older adults. Strongly associated with falls, frailty, and functional decline.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["gait", "mobility", "falls"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "inability_to_stand", "weight": 9 },
+        { "sign": "new_neurological_deficit", "weight": 9 },
+        { "sign": "severe_ataxia", "weight": 8 },
+        { "sign": "acute_gait_deterioration", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "chronic_stable_gait_change": true,
+        "no_acute_neurology": true
+      },
+      "severityLabel": "If acute onset or neurological deficit -> EMERGENCY; chronic stable -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "slow_walking", "weight": 4 },
+      { "symptomId": "shuffling_gait", "weight": 3 },
+      { "symptomId": "unsteadiness", "weight": 4 },
+      { "symptomId": "difficulty_turning", "weight": 3 },
+      { "symptomId": "freezing_of_gait", "weight": 3 },
+      { "symptomId": "fear_of_falling", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abnormal_gait_pattern", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "positive_tandem_walk", "baseWeight": 4 },
+      { "signId": "impaired_balance_on_pull_test", "baseWeight": 4 },
+      { "signId": "rigidity_or_bradykinesia", "baseWeight": 3 },
+      { "signId": "foot_drop", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_age", "multiplier": 2.0 },
+      { "id": "parkinsonism", "multiplier": 2.5 },
+      { "id": "osteoarthritis_hips_or_knees", "multiplier": 1.6 },
+      { "id": "peripheral_neuropathy", "multiplier": 1.5 },
+      { "id": "previous_stroke", "multiplier": 1.8 },
+      { "id": "visual_impairment", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "normal_pressure_hydrocephalus",
+        "discriminators": ["magnetic_gait", "cognitive_decline", "urinary_incontinence"]
+      },
+      {
+        "diseaseId": "parkinson_disease",
+        "discriminators": ["resting_tremor", "rigidity", "bradykinesia", "asymmetric_onset"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Gait speed (4-meter walk)", "priority": "immediate", "yield": 0.9, "indication": "baseline and risk stratification" },
+        { "name": "Romberg test", "priority": "immediate", "yield": 0.7, "indication": "proprioceptive deficit" }
+      ],
+      "laboratory": [
+        { "name": "Vitamin B12 level", "priority": "high", "yield": 0.4, "indication": "subacute combined degeneration" },
+        { "name": "TSH", "priority": "medium", "yield": 0.3, "indication": "hypothyroidism" }
+      ],
+      "imaging": [
+        { "name": "MRI brain", "priority": "medium", "yield": 0.7, "indication": "vascular lesions, NPH, atrophy patterns" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AGS/BGS Clinical Practice Guideline for Prevention of Falls",
+      "pathways": [
+        {
+          "severity": "acute",
+          "criteria": "sudden onset gait impairment, neurological signs",
+          "treatment": "Neuroimaging. Stroke or TIA workup. Neurology consultation. Fall precautions."
+        },
+        {
+          "severity": "chronic",
+          "criteria": "gradual decline, stable exam",
+          "treatment": "Physiotherapy including gait and balance training. Assistive device (walker, cane). Strength training. Home safety evaluation."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "age_related_motor_decline",
+      "central_and_peripheral_neuropathy",
+      "vestibular_impairment",
+      "musculoskeletal_deconditioning",
+      "subcortical_white_matter_disease"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrent_falls",
+        "probability": 0.4,
+        "severityBoost": 0.5,
+        "clues": ["frequent_trips", "impaired_gait"]
+      },
+      {
+        "diseaseId": "hip_fracture",
+        "probability": 0.1,
+        "severityBoost": 0.7,
+        "clues": ["fall_from_standing", "osteoporosis"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if acute onset",
+    "diagnosticClues": ["abnormal_gait_pattern", "age_over_70", "impaired_balance"],
+    "exclusionClues": ["normal_gait_speed", "single_fall_non_gait_related"]
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "disease": {
+    "id": "mastoiditis",
+    "name": "Acute Mastoiditis",
+    "system": "ent",
+    "agePeak_months": [12, 48],
+    "note": "Acute inflammation of mastoid air cells, usually a complication of acute otitis media. Can lead to life-threatening intracranial spread.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["post_auricular_swelling", "ear_pain", "fever", "aom_complication"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "meningism", "weight": 10 },
+        { "sign": "brain_abscess_signs", "weight": 10 },
+        { "sign": "lateral_sinus_thrombosis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "subperiosteal_abscess", "weight": 8 },
+          { "sign": "facial_nerve_palsy", "weight": 9 },
+          { "sign": "high_fever_over_39", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If intracranial extension/subperiosteal abscess/facial palsy -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "ear_pain", "weight": 5 },
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "post_auricular_pain", "weight": 5 },
+      { "symptomId": "swelling_behind_ear", "weight": 4 },
+      { "symptomId": "hearing_loss", "weight": 3 },
+      { "symptomId": "otorrhea", "weight": 3, "note": "May have recent AOM with or without perforation" },
+      { "symptomId": "irritability", "weight": 3 },
+      { "symptomId": "headache", "weight": 2, "note": "Suggests intracranial involvement" }
+    ],
+
+    "examFeatures": [
+      { "signId": "post_auricular_swelling", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "protruding_auricle", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "post_auricular_tenderness", "baseWeight": 4 },
+      { "signId": "obliterated_post_auricular_sulcus", "baseWeight": 4 },
+      { "signId": "bulging_erythematous_TM", "baseWeight": 4 },
+      { "signId": "high_fever", "baseWeight": 4 },
+      { "signId": "mastoid_shagreen_sign", "baseWeight": 3 },
+      { "signId": "subperiosteal_fluctuance", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "recent_aom", "multiplier": 4.0 },
+      { "id": "delayed_treatment_aom", "multiplier": 2.5 },
+      { "id": "immunodeficiency", "multiplier": 2.0 },
+      { "id": "poor_pneumatization_mastoid", "multiplier": 1.5 },
+      { "id": "age_under_2", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_mastoiditis_wo_abscess",
+        "name": "Acute Mastoiditis without Abscess",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "post_auricular_tenderness", "weight": 4 },
+          { "feature": "fever", "weight": 4 },
+          { "feature": "no_fluctuance", "weight": 3 }
+        ],
+        "management": "IV antibiotics (Ceftriaxone + Metronidazole or Ampicillin-Sulbactam). Myringotomy with culture. Continue IV for 7-10 days then switch to oral. CT to exclude abscess."
+      },
+      {
+        "id": "acute_mastoiditis_with_abscess",
+        "name": "Acute Mastoiditis with Subperiosteal Abscess",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "post_auricular_fluctuant_swelling", "weight": 5 },
+          { "feature": "protruding_auricle", "weight": 5 },
+          { "feature": "high_fever", "weight": 5 }
+        ],
+        "management": "IV antibiotics. Cortical mastoidectomy with abscess drainage. Myringotomy with tube insertion. Culture-directed antibiotics for 7-14 days IV."
+      },
+      {
+        "id": "coalescent_mastoiditis",
+        "name": "Coalescent (Osteitic) Mastoiditis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "severe_pain", "weight": 5 },
+          { "feature": "bony_tenderness", "weight": 5 },
+          { "feature": "CT_bony_destruction", "weight": 5 }
+        ],
+        "management": "Emergency cortical mastoidectomy. IV antibiotics. CT venography if sigmoid sinus thrombosis suspected."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "post_auricular_lymphadenitis",
+        "discriminators": ["no_ear_abnormality", "normal_otoscopy", "no_fever_or_lower", "lymph_node_not_diffuse_swelling"]
+      },
+      {
+        "diseaseId": "mumps_parotitis",
+        "discriminators": ["parotid_swelling", "ear_lobe_raised", "trismus", "normal_otoscopy"]
+      },
+      {
+        "diseaseId": "auricular_cellulitis",
+        "discriminators": ["pinna_erythema", "ear_canal_normal", "no_TM_abnormality"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Otoscopy", "priority": "immediate", "yield": 0.8, "indication": "all cases - TM findings" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leucocytosis indicates infection" },
+        { "name": "CRP", "priority": "high", "yield": 0.8, "indication": "monitor treatment response" },
+        { "name": "Blood Culture", "priority": "high", "yield": 0.3, "indication": "febrile/septic patients" },
+        { "name": "Ear Swab Culture", "priority": "high", "yield": 0.7, "indication": "guide antibiotic selection" }
+      ],
+      "imaging": [
+        { "name": "CT Temporal Bone with Contrast", "priority": "high", "yield": 0.95, "indication": "gold standard - assess bony destruction, abscess, intracranial extension" },
+        { "name": "MRI with MRV", "priority": "medium", "yield": 0.9, "indication": "suspected intracranial complications, sigmoid sinus thrombosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Mastoiditis Management",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "no abscess, no intracranial signs, healthy child",
+          "treatment": "IV antibiotics (Ceftriaxone 50-100 mg/kg + Clindamycin 30-40 mg/kg). Myringotomy for culture. CT to confirm no abscess. Switch to oral after afebrile 48h. Total 3 weeks."
+        },
+        {
+          "severity": "abscess",
+          "criteria": "subperiosteal abscess on CT or exam",
+          "treatment": "Cortical mastoidectomy with incision and drainage of abscess. Myringotomy with tube. IV antibiotics 7-14 days (Ceftriaxone + Metronidazole). Culture-directed therapy."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "intracranial extension, sigmoid sinus thrombosis, facial palsy",
+          "treatment": "Emergency mastoidectomy. Neurosurgical consultation for intracranial abscess. IV antibiotics 4-6 weeks. Anticoagulation for sinus thrombosis. Facial nerve decompression if indicated."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "aom_extension",
+      "mastoid_cell_inflammation",
+      "purulent_exudate",
+      "bony_destruction_coalescence",
+      "subperiosteal_spread"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "subperiosteal_abscess",
+        "probability": 0.3,
+        "lagDays": [2, 7],
+        "severityBoost": 0.4,
+        "clues": ["fluctuant_swelling", "protruding_ear", "severe_pain"]
+      },
+      {
+        "diseaseId": "facial_nerve_palsy",
+        "probability": 0.05,
+        "lagDays": [2, 10],
+        "severityBoost": 0.5,
+        "clues": ["facial_asymmetry", "incomplete_eye_closure"]
+      },
+      {
+        "diseaseId": "meningitis",
+        "probability": 0.05,
+        "lagDays": [3, 14],
+        "severityBoost": 0.7,
+        "clues": ["neck_stiffness", "photophobia", "headache", "bulging_fontanelle"]
+      },
+      {
+        "diseaseId": "lateral_sinus_thrombosis",
+        "probability": 0.03,
+        "lagDays": [5, 14],
+        "severityBoost": 0.6,
+        "clues": ["pickaxe_fever", "headache", "papilledema", "positive_tobey_ayer_test"]
+      },
+      {
+        "diseaseId": "brain_abscess",
+        "probability": 0.02,
+        "lagDays": [7, 21],
+        "severityBoost": 0.7,
+        "clues": ["temporal_lobe_signs", "seizures", "altered_consciousness"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["post_auricular_swelling", "protruding_auricle", "recent_AOM", "fever"],
+    "exclusionClues": ["normal_post_auricular_area", "normal_otoscopy", "lymph_node_swelling_only"]
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "disease": {
+    "id": "colon_cancer",
+    "name": "Colorectal Cancer",
+    "system": "gastroenterology",
+    "agePeak_months": [600, 1080],
+    "note": "Adenocarcinoma of the colon or rectum; third most common cancer worldwide. Often arises from adenomatous polyps via the adenoma-carcinoma sequence.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["malignancy", "colorectal", "lower_gi_bleeding"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "bowel_obstruction", "weight": 10 },
+        { "sign": "massive_lower_gi_bleeding", "weight": 9 },
+        { "sign": "perforation", "weight": 10 },
+        { "sign": "severe_abdominal_distension", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "change_in_bowel_habits": true
+      },
+      "severityLabel": "If obstruction, perforation, severe bleeding -> EMERGENCY; abnormal screening or early symptoms -> URGENT colonoscopy"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "change_in_bowel_habits", "weight": 4 },
+      { "symptomId": "hematochezia", "weight": 5 },
+      { "symptomId": "occult_blood_in_stool", "weight": 4 },
+      { "symptomId": "unintentional_weight_loss", "weight": 4 },
+      { "symptomId": "abdominal_pain_cramping", "weight": 3 },
+      { "symptomId": "tenesmus", "weight": 3, "note": "Rectal cancer" },
+      { "symptomId": "incomplete_evacuation", "weight": 2 },
+      { "symptomId": "narrow_caliber_stool", "weight": 2, "note": "Left-sided lesions" },
+      { "symptomId": "iron_deficiency_anemia", "weight": 4, "note": "Right-sided colon cancer often presents with anemia" },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "abdominal_distension", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_mass_palpable", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly_nodular", "baseWeight": 3, "note": "Liver metastases" },
+      { "signId": "ascites", "baseWeight": 3 },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "cachexia", "baseWeight": 3 },
+      { "signId": "rectal_mass_on_dre", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "occult_blood_on_dre", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 5.0 },
+      { "id": "family_history_colon_cancer", "multiplier": 2.5 },
+      { "id": "hereditary_syndromes_fap_hnpcc", "multiplier": 5.0 },
+      { "id": "inflammatory_bowel_disease", "multiplier": 3.0 },
+      { "id": "personal_history_polyps", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "alcohol_abuse", "multiplier": 1.3 },
+      { "id": "red_processed_meat_diet", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "irritable_bowel_syndrome",
+        "discriminators": ["chronic_symptoms_over_years", "no_blood", "no_weight_loss", "no_anemia", "younger_age"]
+      },
+      {
+        "diseaseId": "diverticular_disease",
+        "discriminators": ["left_lower_quadrant_pain", "acute_onset", "fever", "alternating_bowel_habits"]
+      },
+      {
+        "diseaseId": "hemorrhoids",
+        "discriminators": ["bright_red_blood_per_rectum_on_defecation", "normal_stool_caliber", "visible_hemorrhoids", "no_weight_loss"]
+      },
+      {
+        "diseaseId": "inflammatory_bowel_disease",
+        "discriminators": ["younger_age", "chronic_relapsing", "extraintestinal_manifestations", "colitis_on_endoscopy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Digital rectal exam", "priority": "immediate", "yield": 0.3, "indication": "palpate rectal masses, assess stool occult blood" },
+        { "name": "Fecal occult blood test (FOBT/FIT)", "priority": "screening", "yield": 0.7, "indication": "screening, initial assessment" }
+      ],
+      "laboratory": [
+        { "name": "FBC", "priority": "high", "yield": 0.5, "indication": "iron deficiency anemia common (right-sided)" },
+        { "name": "CEA (carcinoembryonic antigen)", "priority": "high", "yield": 0.6, "indication": "baseline for monitoring, prognosis, not diagnostic" },
+        { "name": "LFTs", "priority": "high", "yield": 0.4, "indication": "liver metastases" },
+        { "name": "Iron studies", "priority": "high", "yield": 0.5, "indication": "confirm iron deficiency" }
+      ],
+      "imaging": [
+        { "name": "Colonoscopy with biopsy", "priority": "immediate", "yield": 0.98, "indication": "gold standard - entire colon visualized, tissue diagnosis" },
+        { "name": "CT colonography (virtual colonoscopy)", "priority": "medium", "yield": 0.9, "indication": "if incomplete colonoscopy, or patient unfit for colonoscopy" },
+        { "name": "CT abdomen/pelvis with contrast", "priority": "high", "yield": 0.85, "indication": "staging, local invasion, metastases" },
+        { "name": "PET-CT", "priority": "high", "yield": 0.85, "indication": "detect distant metastases if considering curative surgery" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines: Colon Cancer / Rectal Cancer",
+      "pathways": [
+        {
+          "severity": "localized_polyp_cancer",
+          "criteria": "T1, N0, M0, malignant polyp with favorable histology",
+          "treatment": "Complete polypectomy (EMR/ESD). If unfavorable features, segmental colectomy with lymphadenectomy."
+        },
+        {
+          "severity": "resectable_colon_cancer",
+          "criteria": "T2-T4, N+, M0",
+          "treatment": "Segmental colectomy with en bloc lymphadenectomy. Adjuvant chemotherapy (FOLFOX/CAPOX) for stage III and high-risk stage II."
+        },
+        {
+          "severity": "metastatic",
+          "criteria": "M1 (liver, lung, peritoneum, distant nodes)",
+          "treatment": "FOLFOX or FOLFIRI + bevacizumab or anti-EGFR (if RAS wild-type). Surgical resection of metastases if limited. Immunotherapy if MSI-H/dMMR."
+        },
+        {
+          "severity": "obstructing",
+          "criteria": "Complete or near-complete bowel obstruction",
+          "treatment": "Emergency decompression (colonic stent or surgical diversion). Staged resection after stabilization."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "adenoma_carcinoma_sequence",
+      "apc_mutation_early",
+      "kras_mutation",
+      "tp53_mutation_late",
+      "microsatellite_instability",
+      "cpg_island_methylator_phenotype",
+      "chromosomal_instability_pathway",
+      "serrated_pathway",
+      "lymphatic_and_hematogenous_spread",
+      "liver_metastasis_via_portal_vein"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bowel_obstruction",
+        "probability": 0.2,
+        "severityBoost": 0.7,
+        "clues": ["abdominal_distension", "constipation_obstipation", "vomiting", "obstructive_pattern_on_imaging"]
+      },
+      {
+        "diseaseId": "colonic_perforation",
+        "probability": 0.03,
+        "severityBoost": 0.9,
+        "clues": ["acute_severe_abdominal_pain", "peritonitis", "free_air"]
+      },
+      {
+        "diseaseId": "liver_metastases",
+        "probability": 0.4,
+        "severityBoost": 0.6,
+        "clues": ["hepatomegaly", "abnormal_lfts", "hypodense_liver_lesions_on_ct"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if obstruction/perforation; medium for new diagnosis",
+    "diagnosticClues": ["change_in_bowel_habits", "hematochezia_or_occult_blood", "iron_deficiency_anemia_in_men_or_postmenopausal_women", "abdominal_mass"],
+    "exclusionClues": ["normal_colonoscopy", "hemorrhoids_as_sole_finding", "negative_fit_test"]
+  }
+}

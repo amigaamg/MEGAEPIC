@@ -1,0 +1,156 @@
+{
+  "disease": {
+    "id": "gastritis",
+    "name": "Acute/Chronic Gastritis",
+    "system": "gastroenterology",
+    "agePeak_months": [180, 720],
+    "note": "Inflammation of gastric mucosa; acute (stress, NSAIDs, alcohol) vs chronic (H. pylori, autoimmune). Can be erosive or non-erosive.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["dyspepsia", "gastric", "inflammation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hematemesis", "weight": 9 },
+        { "sign": "melena", "weight": 8 },
+        { "sign": "severe_epigastric_pain", "weight": 6 },
+        { "sign": "coffee_ground_emesis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "dyspepsia_present": true
+      },
+      "severityLabel": "If bleeding (hematemesis, melena) -> URGENT endoscopy; else -> NON-URGENT workup and treatment"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain_burning", "weight": 4 },
+      { "symptomId": "nausea", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 4 },
+      { "symptomId": "post_prandial_fullness", "weight": 3 },
+      { "symptomId": "anorexia", "weight": 2 },
+      { "symptomId": "hematemesis_coffee_ground", "weight": 3, "note": "Erosive gastritis" },
+      { "symptomId": "melena", "weight": 3 },
+      { "symptomId": "bloating", "weight": 2 },
+      { "symptomId": "nsaid_use_history", "weight": 4 },
+      { "symptomId": "alcohol_use_history", "weight": 3 },
+      { "symptomId": "stress_illness_history", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_tenderness_mild", "baseWeight": 3 },
+      { "signId": "pallor", "baseWeight": 2, "note": "If chronic bleeding" },
+      { "signId": "fecal_occult_blood", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "nsaid_use", "multiplier": 4.0 },
+      { "id": "h_pylori_infection", "multiplier": 3.5 },
+      { "id": "alcohol_abuse", "multiplier": 2.5 },
+      { "id": "stress_illness_surgery", "multiplier": 3.0 },
+      { "id": "autoimmune_disease", "multiplier": 2.0 },
+      { "id": "bisphosphonate_use", "multiplier": 1.5 },
+      { "id": "corticosteroid_use", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["ulcer_on_endoscopy", "nocturnal_pain", "pain_relieved_by_food"]
+      },
+      {
+        "diseaseId": "gerd",
+        "discriminators": ["retrosternal_burning", "acid_regurgitation", "normal_endoscopy"]
+      },
+      {
+        "diseaseId": "gastric_cancer",
+        "discriminators": ["weight_loss", "early_satiety", "epigastric_mass", "age_over_50"]
+      },
+      {
+        "diseaseId": "functional_dyspepsia",
+        "discriminators": ["normal_endoscopy", "no_h_pylori", "symptoms_over_6_months", "stress_correlation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fecal occult blood", "priority": "high", "yield": 0.5, "indication": "detect erosive gastritis with bleeding" }
+      ],
+      "laboratory": [
+        { "name": "H. pylori test (stool antigen/ UBT)", "priority": "high", "yield": 0.95, "indication": "determine etiology" },
+        { "name": "FBC", "priority": "high", "yield": 0.4, "indication": "anemia from chronic/acute blood loss" },
+        { "name": "Serum gastrin", "priority": "low", "yield": 0.3, "indication": "if autoimmune gastritis suspected" },
+        { "name": "Anti-parietal cell antibody", "priority": "low", "yield": 0.3, "indication": "if autoimmune gastritis suspected" }
+      ],
+      "imaging": [
+        { "name": "Upper endoscopy with biopsy", "priority": "high", "yield": 0.95, "indication": "diagnosis confirmation, differentiate from ulcer/cancer, assess severity" },
+        { "name": "Upper GI series", "priority": "low", "yield": 0.4, "indication": "if endoscopy unavailable" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACG Clinical Guideline: Gastritis",
+      "pathways": [
+        {
+          "severity": "acute_hemorrhagic",
+          "criteria": "Hematemesis, melena, erosive on EGD",
+          "treatment": "IV PPI (pantoprazole 80mg bolus then 8mg/h infusion). Correct coagulopathy. Endoscopic hemostasis if active bleeding."
+        },
+        {
+          "severity": "h_pylori_gastritis",
+          "criteria": "H. pylori positive on biopsy or stool",
+          "treatment": "Triple therapy: PPI + clarithromycin + amoxicillin (or metronidazole) for 14 days. Confirm eradication after 4 weeks."
+        },
+        {
+          "severity": "nsaid_gastritis",
+          "criteria": "NSAID use + endoscopic gastritis",
+          "treatment": "Discontinue NSAID. PPI for 4-8 weeks. H. pylori test and treat if positive."
+        },
+        {
+          "severity": "autoimmune_gastritis",
+          "criteria": "Anti-parietal cell antibodies, atrophic gastritis, low B12",
+          "treatment": "Vitamin B12 supplementation. Endoscopic surveillance for gastric cancer. Monitor for iron deficiency."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mucosal_barrier_disruption",
+      "h_pylori_colonization_and_inflammation",
+      "nsaid_inhibit_cox1_reduce_protective_prostaglandins",
+      "alcohol_direct_mucosal_injury",
+      "stress_induced_ischemia",
+      "autoimmune_destruction_of_parietal_cells",
+      "chronic_inflammation_leads_to_atrophy",
+      "intestinal_metaplasia_risk"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "atrophic_gastritis",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["long_term_h_pylori", "autoimmune", "low_b12", "achlorhydria"]
+      },
+      {
+        "diseaseId": "gastric_cancer",
+        "probability": 0.01,
+        "severityBoost": 0.7,
+        "clues": ["intestinal_metaplasia", "dysplasia", "family_history"]
+      },
+      {
+        "diseaseId": "iron_deficiency_anemia",
+        "probability": 0.15,
+        "severityBoost": 0.1,
+        "clues": ["fatigue", "pallor", "low_ferritin", "chronic_blood_loss"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low unless active bleeding",
+    "diagnosticClues": ["epigastric_pain_with_nausea_vomiting", "nsaid_or_alcohol_history", "endoscopic_inflammation", "h_pylori_positive"],
+    "exclusionClues": ["ulcer_on_endoscopy", "retrosternal_burning", "pain_relieved_by_food"]
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "disease": {
+    "id": "major_depressive_disorder",
+    "name": "Major Depressive Disorder",
+    "system": "psychiatry",
+    "agePeak_months": [240, 480],
+    "note": "Characterized by persistent low mood and loss of interest. Leading cause of disability worldwide.",
+    "prevalenceWeight": 0.75,
+    "syndromeTags": ["mood_disorder", "depression"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_intent_or_plan", "weight": 10 },
+        { "sign": "psychotic_features", "weight": 9 },
+        { "sign": "catatonia", "weight": 9 },
+        { "sign": "severe_psychomotor_retardation", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If suicidal/psychotic/catatonic -> SEVERE requiring urgent psychiatric assessment; else -> MILD/MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "depressed_mood", "weight": 5 },
+      { "symptomId": "anhedonia", "weight": 5 },
+      { "symptomId": "fatigue_or_loss_of_energy", "weight": 4 },
+      { "symptomId": "sleep_disturbance", "weight": 3 },
+      { "symptomId": "appetite_change", "weight": 3 },
+      { "symptomId": "worthlessness_guilt", "weight": 3 },
+      { "symptomId": "poor_concentration", "weight": 3 },
+      { "symptomId": "psychomotor_change", "weight": 2 },
+      { "symptomId": "thoughts_of_death", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "depressed_appearance", "baseWeight": 4 },
+      { "signId": "psychomotor_retardation", "baseWeight": 3 },
+      { "signId": "poor_eye_contact", "baseWeight": 2 },
+      { "signId": "slowed_speech", "baseWeight": 3 },
+      { "signId": "tearfulness", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_depression", "multiplier": 2.0 },
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "childhood_trauma", "multiplier": 1.8 },
+      { "id": "chronic_medical_illness", "multiplier": 1.5 },
+      { "id": "previous_episode", "multiplier": 2.0 },
+      { "id": "postpartum_period", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_depression",
+        "name": "Mild Depressive Episode",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "fewer_than_5_symptoms", "weight": 4 },
+          { "feature": "still_functional", "weight": 4 }
+        ],
+        "management": "Psychotherapy (CBT, IPT). Consider SSRI if inadequate response to therapy."
+      },
+      {
+        "id": "moderate_depression",
+        "name": "Moderate Depressive Episode",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "five_or_more_symptoms", "weight": 5 },
+          { "feature": "impaired_function", "weight": 4 }
+        ],
+        "management": "SSRI (fluoxetine, sertraline) or SNRI. Combined with psychotherapy. Monitor for suicide risk."
+      },
+      {
+        "id": "severe_depression_with_psychosis",
+        "name": "Severe Depression with Psychotic Features",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "mood_congruent_delusions", "weight": 5 },
+          { "feature": "hallucinations", "weight": 4 },
+          { "feature": "severe_functional_impairment", "weight": 5 }
+        ],
+        "management": "Antidepressant + antipsychotic. Inpatient admission. ECT if treatment-resistant."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "bipolar_disorder_depressed",
+        "discriminators": ["history_of_mania_hypomania", "family_history_bipolar"]
+      },
+      {
+        "diseaseId": "hypothyroidism",
+        "discriminators": ["fatigue_weight_gain", "cold_intolerance", "abnormal_tsh"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "PHQ-9 questionnaire", "priority": "immediate", "yield": 0.9, "indication": "all suspected depression" },
+        { "name": "Suicide risk assessment", "priority": "immediate", "yield": 1.0, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "TSH", "priority": "medium", "yield": 0.3, "indication": "rule out hypothyroidism" },
+        { "name": "FBC, U&E, Vitamin B12, Folate", "priority": "medium", "yield": 0.2, "indication": "medical causes of depression" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guidelines for Depression in Adults",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "PHQ-9 5-9, functional but struggling",
+          "treatment": "Watchful waiting. Guided self-help. Computerized CBT. Exercise referral."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "PHQ-9 10-19, significant functional impairment",
+          "treatment": "High-intensity psychological therapy (CBT, IPT) or antidepressant (SSRI). Combined approach most effective."
+        },
+        {
+          "severity": "severe",
+          "criteria": "PHQ-9 20+, suicidal ideation, psychotic features",
+          "treatment": "Urgent psychiatric referral. Inpatient admission. Antidepressant + augmentation. ECT if indicated. Suicide precautions."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "monoamine_deficiency",
+      "hpa_axis_dysregulation",
+      "hippocampal_atrophy",
+      "neuroinflammation",
+      "genetic_predisposition"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "suicide_attempt",
+        "probability": 0.04,
+        "severityBoost": 0.6,
+        "clues": ["suicidal_ideation", "previous_attempts", "hopelessness"]
+      },
+      {
+        "diseaseId": "substance_abuse_comorbidity",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["alcohol_or_drug_use"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if suicidal",
+    "diagnosticClues": ["persistent_low_mood", "anhedonia", "sleep_appetite_disturbance", "phq9_elevated"],
+    "exclusionClues": ["symptoms_less_than_2_weeks", "hypomanic_episodes", "normal_tsh"]
+  }
+}

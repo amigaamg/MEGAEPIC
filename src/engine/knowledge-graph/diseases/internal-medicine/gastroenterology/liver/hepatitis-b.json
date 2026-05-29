@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "hepatitis_b",
+    "name": "Hepatitis B",
+    "system": "gastroenterology",
+    "agePeak_months": [240, 600],
+    "note": "Hepadnavirus causing acute and chronic liver infection. Chronic infection risk inversely related to age at acquisition.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["liver", "viral", "hepatitis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure_coagulopathy", "weight": 10 },
+        { "sign": "hepatic_encephalopathy", "weight": 10 },
+        { "sign": "jaundice_severe", "weight": 8 },
+        { "sign": "protracted_vomiting_inability_to_eat", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "hbv_surface_antigen_positive": true
+      },
+      "severityLabel": "If acute liver failure or severe jaundice -> EMERGENCY; chronic active hepatitis -> URGENT treatment decision; inactive carrier -> SURVEILLANCE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "jaundice", "weight": 4 },
+      { "symptomId": "dark_urine", "weight": 4 },
+      { "symptomId": "pale_stools", "weight": 3 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "anorexia", "weight": 3 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "arthralgia", "weight": 2, "note": "Prodromal serum sickness-like" },
+      { "symptomId": "history_needlestick_exposure", "weight": 3 },
+      { "symptomId": "history_blood_transfusion", "weight": 2 },
+      { "symptomId": "iv_drug_use", "weight": 3 },
+      { "symptomId": "birth_in_endemic_region", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly_tender", "baseWeight": 3 },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "rasters_of_chronic_liver_disease", "baseWeight": 3, "note": "If chronic" }
+    ],
+
+    "riskFactors": [
+      { "id": "born_in_high_prevalence_region", "multiplier": 4.0 },
+      { "id": "iv_drug_use", "multiplier": 3.0 },
+      { "id": "unprotected_sex_multiple_partners", "multiplier": 2.5 },
+      { "id": "healthcare_worker", "multiplier": 2.0 },
+      { "id": "baby_of_hbsag_positive_mother", "multiplier": 5.0 },
+      { "id": "hemodialysis", "multiplier": 2.0 },
+      { "id": "houshold_contact_with_hbv", "multiplier": 2.0 },
+      { "id": "hiv_coinfection", "multiplier": 2.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatitis_a",
+        "discriminators": ["acute_onset", "fecal_oral_transmission", "igm_anti_hav_positive", "self_limited", "no_chronic_carrier_state"]
+      },
+      {
+        "diseaseId": "hepatitis_c",
+        "discriminators": ["often_asymptomatic_acute", "anti_hcv_positive", "hcv_rna_positive", "bloodborne_transmission"]
+      },
+      {
+        "diseaseId": "alcoholic_hepatitis",
+        "discriminators": ["heavy_alcohol_use", "ast_alt_ratio_greater_than_2", "ggt_elevation", "no_viral_serology"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["temporal_relation_to_drug", "eosinophilia", "negative_viral_serology"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine dip for bilirubin", "priority": "high", "yield": 0.7, "indication": "detect conjugated hyperbilirubinemia" }
+      ],
+      "laboratory": [
+        { "name": "HBsAg (hepatitis B surface antigen)", "priority": "immediate", "yield": 0.99, "indication": "screening, diagnosis of active infection" },
+        { "name": "HBsAb (anti-HBs)", "priority": "immediate", "yield": 0.9, "indication": "immunity status (vaccination or resolved)" },
+        { "name": "HBcAb total and IgM (anti-HBc)", "priority": "immediate", "yield": 0.95, "indication": "IgM = acute/recent; IgG = past/resolved" },
+        { "name": "HBeAg and anti-HBe", "priority": "high", "yield": 0.8, "indication": "replication activity, treatment decision" },
+        { "name": "HBV DNA viral load", "priority": "high", "yield": 0.95, "indication": "quantification of viremia, treatment monitoring" },
+        { "name": "LFTs (ALT, AST, bilirubin, ALP)", "priority": "immediate", "yield": 0.8, "indication": "liver injury assessment" },
+        { "name": "Coagulation profile (INR)", "priority": "high", "yield": 0.6, "indication": "synthetic function, acute liver failure screening" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.5, "indication": "liver morphology, HCC screening in chronic HBV" },
+        { "name": "Transient elastography (FibroScan)", "priority": "high", "yield": 0.9, "indication": "fibrosis assessment in chronic HBV" },
+        { "name": "Liver biopsy (rarely needed)", "priority": "low", "yield": 0.9, "indication": "if non-invasive tests discordant or co-infections suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EASL Clinical Practice Guidelines: Hepatitis B",
+      "pathways": [
+        {
+          "severity": "acute_hepatitis_b",
+          "criteria": "Positive IgM anti-HBc, HBsAg+, elevated ALT, acute symptoms",
+          "treatment": "Supportive care. No antiviral therapy in most cases (90% of adults clear spontaneously). Monitor LFTs and serology for HBsAg seroconversion. Notify public health."
+        },
+        {
+          "severity": "chronic_active",
+          "criteria": "HBsAg+ >6 months, elevated ALT, HBV DNA >2000 IU/mL",
+          "treatment": "Antiviral therapy (tenofovir disoproxil fumarate, tenofovir alafenamide, or entecavir). Monitor ALT, HBV DNA, HBeAg seroconversion q3-6m. HCC surveillance."
+        },
+        {
+          "severity": "inactive_carrier",
+          "criteria": "HBsAg+, normal ALT, HBV DNA <2000 IU/mL, no HBeAg",
+          "treatment": "No antiviral therapy currently indicated. Monitor ALT and HBV DNA q6-12m. HCC surveillance (US + AFP q6m)."
+        },
+        {
+          "severity": "acute_liver_failure",
+          "criteria": "INR >1.5 + encephalopathy + acute HBV",
+          "treatment": "Urgent transplant evaluation. Entecavir or tenofovir if high viremia. Supportive care in ICU. NAC may be considered."
+        },
+        {
+          "severity": "pregnancy_prophylaxis",
+          "criteria": "Pregnant + HBsAg+ + HBV DNA >200,000 IU/mL",
+          "treatment": "Tenofovir disoproxil fumarate from 28-32 weeks. Infant: HBIG + HBV vaccine within 12h of birth."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hbv_entry_via_natp_receptor",
+      "hepatocyte_infection",
+      "immune_mediated_hepatocyte_injury",
+      "cd8_t_cell_response",
+      "acute_self_limited_vs_chronic_infection",
+      "neonatal_immunotolerance",
+      "immune_clearance_phase_alt_flares",
+      "integration_into_host_genome",
+      "ccc_dna_persistence",
+      "fibrosis_progression",
+      "hepatocarcinogenesis_hbx_protein"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cirrhosis",
+        "probability": 0.2,
+        "lagYears": [10, 30],
+        "severityBoost": 0.5,
+        "clues": ["chronic_hbsag_positive", "elevated_alt", "fibrosis_on_elastography"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "probability": 0.1,
+        "severityBoost": 0.8,
+        "clues": ["cirrhosis", "hbsag_positive", "rising_afp", "liver_mass"]
+      },
+      {
+        "diseaseId": "acute_liver_failure",
+        "probability": 0.01,
+        "severityBoost": 0.9,
+        "clues": ["coagulopathy", "encephalopathy", "rapidly_rising_bilirubin"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high in acute liver failure; medium for active chronic; low for inactive carrier",
+    "diagnosticClues": ["hbsag_positive", "elevated_transaminases", "risk_factors_for_exposure", "hbv_dna_positive"],
+    "exclusionClues": ["negative_hbsag", "anti_hbs_positive_vaccinated", "normal_lfts_with_negative_serology"]
+  }
+}

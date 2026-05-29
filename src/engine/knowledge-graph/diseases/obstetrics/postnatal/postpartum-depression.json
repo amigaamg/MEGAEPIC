@@ -1,0 +1,187 @@
+{
+  "disease": {
+    "id": "postpartum_depression",
+    "name": "Postpartum Depression",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Major depressive episode with onset in the postpartum period, typically within 4-6 weeks after delivery. Must be differentiated from postpartum blues (transient) and postpartum psychosis (emergency).",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["postpartum_mental_health", "maternal_depression"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_ideation_with_plan", "weight": 10 },
+        { "sign": "infanticidal_thoughts", "weight": 10 },
+        { "sign": "psychotic_symptoms", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "inability_to_care_for_baby", "weight": 8 },
+          { "sign": "weight_loss_significant", "weight": 5 },
+          { "sign": "sleep_disturbance_severe", "weight": 5 },
+          { "sign": "psychomotor_retardation_or_agitation", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Suicidal/infanticidal ideation or psychosis -> SEVERE (emergency referral); Depressive symptoms without danger -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "persistent_sadness", "weight": 5 },
+      { "symptomId": "loss_of_interest_or_pleasure", "weight": 5 },
+      { "symptomId": "excessive_fatigue_low_energy", "weight": 4 },
+      { "symptomId": "sleep_disturbance_not_due_to_baby", "weight": 4 },
+      { "symptomId": "appetite_changes", "weight": 3 },
+      { "symptomId": "feelings_of_guilt_or_worthlessness", "weight": 4 },
+      { "symptomId": "difficulty_bonding_with_baby", "weight": 4 },
+      { "symptomId": "anxiety_or_panic_attacks", "weight": 4 },
+      { "symptomId": "irritability", "weight": 3 },
+      { "symptomId": "poor_concentration", "weight": 3 },
+      { "symptomId": "thoughts_of_harm_to_self_or_baby", "weight": 5 },
+      { "symptomId": "excessive_crying", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "depressed_mood", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "flat_or_blunted_affect", "baseWeight": 4 },
+      { "signId": "psychomotor_retardation", "baseWeight": 3 },
+      { "signId": "tearfulness", "baseWeight": 3 },
+      { "signId": "poor_eye_contact", "baseWeight": 2 },
+      { "signId": "neglected_appearance", "baseWeight": 2 },
+      { "signId": "objective_weight_loss", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_postpartum_depression", "multiplier": 5.0 },
+      { "id": "history_of_major_depression", "multiplier": 3.0 },
+      { "id": "antenatal_depression_or_anxiety", "multiplier": 3.0 },
+      { "id": "lack_of_social_support", "multiplier": 2.5 },
+      { "id": "stressful_life_events", "multiplier": 2.0 },
+      { "id": "unplanned_or_unwanted_pregnancy", "multiplier": 2.0 },
+      { "id": "preterm_or_complicated_delivery", "multiplier": 1.5 },
+      { "id": "single_motherhood", "multiplier": 2.0 },
+      { "id": "breastfeeding_difficulties", "multiplier": 1.5 },
+      { "id": "infant_colic_or_medical_problems", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "postpartum_blues",
+        "name": "Postpartum Blues (Baby Blues)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "mild_depressive_symptoms", "weight": 3 },
+          { "feature": "onset_day_3_to_5", "weight": 5 },
+          { "feature": "self_limiting_2_weeks", "weight": 5 },
+          { "feature": "no_functional_impairment", "weight": 3 }
+        ],
+        "management": "Reassurance, rest, support. Self-care. Inform that it resolves spontaneously. No medication needed."
+      },
+      {
+        "id": "major_ppd",
+        "name": "Major Postpartum Depression",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "persistent_symptoms_over_2_weeks", "weight": 5 },
+          { "feature": "functional_impairment", "weight": 5 },
+          { "feature": "EPDS_score_over_13", "weight": 5 },
+          { "feature": "impaired_baby_care", "weight": 4 }
+        ],
+        "management": "Antidepressants (SSRI: sertraline, citalopram - safe in breastfeeding). Psychotherapy (CBT, IPT). Referral to perinatal mental health services. Social support."
+      },
+      {
+        "id": "postpartum_psychosis",
+        "name": "Postpartum Psychosis",
+        "prevalenceModifier": 0.001,
+        "keyFeatures": [
+          { "feature": "hallucinations", "weight": 5 },
+          { "feature": "delusions_about_baby", "weight": 5 },
+          { "feature": "agitation_or_catatonia", "weight": 5 },
+          { "feature": "sudden_onset_first_2_weeks", "weight": 5 },
+          { "feature": "bipolar_history", "weight": 4 }
+        ],
+        "management": "Emergency psychiatric admission. Antipsychotics. Mood stabilizers. Maternal-infant unit admission if available. Risk assessment for self and baby."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "postpartum_blues",
+        "discriminators": ["mild", "resolves_by_day_14", "no_psychosis", "no_suicidal_ideation"]
+      },
+      {
+        "diseaseId": "thyroiditis_postpartum",
+        "discriminators": ["fatigue_weight_changes", "thyroid_function_abnormal", "goiter"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Edinburgh Postnatal Depression Scale (EPDS)", "priority": "immediate", "yield": 0.85, "indication": "validated screening tool" },
+        { "name": "PHQ-9", "priority": "high", "yield": 0.8, "indication": "depression severity assessment" }
+      ],
+      "laboratory": [
+        { "name": "Thyroid function tests", "priority": "medium", "yield": 0.4, "indication": "rule out postpartum thyroiditis" },
+        { "name": "Vitamin B12 and folate", "priority": "low", "yield": 0.2, "indication": "nutritional assessment" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG225 - Postnatal Mental Health",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "EPDS 10-19, no suicidal or psychotic features, able to care for baby",
+          "treatment": "Psychotherapy (CBT, counseling). Self-help strategies. Peer support groups. Consider SSRI (sertraline 50mg daily) if psychotherapy ineffective or patient preference. Monitor closely."
+        },
+        {
+          "severity": "severe",
+          "criteria": "EPDS >19, suicidal ideation, psychosis, inability to care for baby",
+          "treatment": "Urgent mental health assessment. Psychiatric admission (preferably mother-baby unit). Antidepressants. Antipsychotics if psychotic. ECT if refractory. Safeguarding referral. Social work involvement."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "postpartum_hormonal_fluctuations",
+      "estrogen_progesterone_withdrawal",
+      "thyroid_dysfunction",
+      "psychosocial_stressors",
+      "neurotransmitter_dysregulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "infant_neglect",
+        "probability": 0.05,
+        "lagDays": [7, 90],
+        "severityBoost": 0.7,
+        "clues": ["failure_to_thrive_infant", "missed_appointments", "poor_baby_care"]
+      },
+      {
+        "diseaseId": "maternal_suicide",
+        "probability": 0.01,
+        "lagDays": [0, 365],
+        "severityBoost": 1.0,
+        "clues": ["suicidal_ideation", "hopelessness", "previous_attempts"]
+      },
+      {
+        "diseaseId": "infanticide",
+        "probability": 0.001,
+        "lagDays": [0, 30],
+        "severityBoost": 1.0,
+        "clues": ["psychosis", "delusions_about_baby", "command_hallucinations"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["persistent_low_mood_postpartum", "loss_of_interest", "sleep_appetite_disturbance", "EPDS_elevated"],
+    "exclusionClues": ["transient_mood_swings_resolving", "no_functional_impairment"]
+  }
+}

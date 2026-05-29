@@ -1,0 +1,166 @@
+{
+  "disease": {
+    "id": "acute_lymphoblastic_leukemia",
+    "name": "Acute Lymphoblastic Leukemia",
+    "system": "hematology",
+    "agePeak_months": [36, 120, 480, 720],
+    "note": "Malignancy of lymphoid progenitor cells. Most common childhood cancer. Biphasic age distribution with peak at 2-5 years and second peak over 50. High cure rate in children.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["leukemia", "lymphoblast", "pancytopenia", "childhood_cancer"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "leukostasis", "weight": 10 },
+        { "sign": "superior_mediastinal_syndrome", "weight": 9 },
+        { "sign": "spinal_cord_compression", "weight": 9 },
+        { "sign": "sepsis", "weight": 9 },
+        { "sign": "tumor_lysis_syndrome", "weight": 8 },
+        { "sign": "intracranial_bleed", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "stable_counts": true
+      },
+      "severityLabel": "If mediastinal mass, leukostasis, or TLS -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 5 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "bone_pain", "weight": 4, "note": "Often in legs, may cause limping" },
+      { "symptomId": "bruising", "weight": 4 },
+      { "symptomId": "pallor", "weight": 4 },
+      { "symptomId": "lymphadenopathy", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 2, "note": "Mediastinal mass" },
+      { "symptomId": "headache_or_vomiting", "weight": 2, "note": "CNS involvement" },
+      { "symptomId": "testicular_swelling", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "petechiae", "baseWeight": 4 },
+      { "signId": "lymphadenopathy", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "sternal_tenderness", "baseWeight": 2 },
+      { "signId": "mediastinal_mass_signs", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "down_syndrome", "multiplier": 3.0 },
+      { "id": "neurofibromatosis", "multiplier": 2.0 },
+      { "id": "ataxia_telangiectasia", "multiplier": 2.5 },
+      { "id": "previous_chemotherapy", "multiplier": 2.0 },
+      { "id": "ionizing_radiation", "multiplier": 2.0 },
+      { "id": "sibling_with_all", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "b_cell_all",
+        "name": "B-Cell ALL",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "cd19_cd10_cd22_positive", "weight": 5 },
+          { "feature": "pa_s_positive", "weight": 3 },
+          { "feature": "common_calla_positive", "weight": 4 }
+        ],
+        "management": "Pediatric-inspired multi-agent chemo. CNS prophylaxis with IT methotrexate. Tyrosine kinase inhibitors if Ph+."
+      },
+      {
+        "id": "t_cell_all",
+        "name": "T-Cell ALL",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "cd3_cd7_cd2_positive", "weight": 5 },
+          { "feature": "mediastinal_mass_common", "weight": 4 },
+          { "feature": "higher_wbc_at_presentation", "weight": 3 }
+        ],
+        "management": "Nelarabine-based regimens. Mediastinal radiation if bulky. CNS prophylaxis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_myeloid_leukemia",
+        "discriminators": ["mpo_positive", "cd13_cd33_positive", "auers_rods"]
+      },
+      {
+        "diseaseId": "lymphoma",
+        "discriminators": ["marrow_blasts_less_than_25_percent", "bulky_adenopathy", "tissue_biopsy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Full blood count", "priority": "immediate", "yield": 0.95, "indication": "Cytopenias, blasts, high WBC" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.95, "indication": "Lymphoblasts, PAS positive" }
+      ],
+      "laboratory": [
+        { "name": "Bone marrow aspirate", "priority": "immediate", "yield": 0.99, "indication": "Blasts >25%, immunophenotyping" },
+        { "name": "Flow cytometry", "priority": "immediate", "yield": 0.99, "indication": "CD19, CD10, CD3, TdT" },
+        { "name": "Cytogenetics", "priority": "high", "yield": 0.8, "indication": "t(9;22), t(12;21), hyperdiploidy" },
+        { "name": "Lumbar puncture", "priority": "high", "yield": 0.5, "indication": "CNS involvement assessment" },
+        { "name": "Uric acid, LDH, K, PO4, Ca", "priority": "high", "yield": 0.6, "indication": "Tumor lysis risk assessment" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray / CT", "priority": "high", "yield": 0.6, "indication": "Mediastinal mass evaluation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / COG / UKALL Guidelines for ALL",
+      "pathways": [
+        {
+          "severity": "induction",
+          "criteria": "Newly diagnosed ALL",
+          "treatment": "Multi-agent chemotherapy: vincristine, corticosteroid, anthracycline, L-asparaginase. CNS prophylaxis with IT methotrexate."
+        },
+        {
+          "severity": "ph_positive_all",
+          "criteria": "t(9;22) positive ALL",
+          "treatment": "Add tyrosine kinase inhibitor (imatinib or dasatinib) to chemo. Consider HSCT in first remission."
+        },
+        {
+          "severity": "relapsed",
+          "criteria": "Relapsed/refractory ALL",
+          "treatment": "Blinatumomab, inotuzumab ozogamicin, CAR-T therapy (tisagenlecleucel). HSCT if response achieved."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "lymphoid_progenitor_mutation",
+      "differentiation_arrest_at_lymphoblast_stage",
+      "clonal_expansion",
+      "marrow_replacement",
+      "cytopenias",
+      "extramedullary_infiltration"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_lysis_syndrome",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["high_ldh", "high_wbc", "bulky_disease"]
+      },
+      {
+        "diseaseId": "superior_vena_cava_syndrome",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["mediastinal_mass", "facial_swelling", "distended_veins"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["lymphoblasts", "pa_s_positive", "tdt_positive", "cd19_or_cd3_positive"],
+    "exclusionClues": ["mpo_positive", "myeloblasts", "auers_rods"]
+  }
+}

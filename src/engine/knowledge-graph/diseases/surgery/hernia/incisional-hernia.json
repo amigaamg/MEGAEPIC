@@ -1,0 +1,175 @@
+{
+  "disease": {
+    "id": "incisional_hernia",
+    "name": "Incisional Hernia",
+    "system": "surgical",
+    "agePeak_months": [360, 720],
+    "note": "Herniation through a previous surgical incision. Most common long-term complication of abdominal surgery. Risk of incarceration and strangulation.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["abdominal_wall_mass", "previous_surgery", "hernia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "strangulation", "weight": 10 },
+        { "sign": "bowel_obstruction", "weight": 10 },
+        { "sign": "peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "incarceration", "weight": 8 },
+          { "sign": "large_defect_with_domino_effect", "weight": 6 },
+          { "sign": "skin_ulceration_ischemia", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Incarcerated/strangulated -> SEVERE; reducible -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "lump_at_surgical_scar", "weight": 5 },
+      { "symptomId": "lump_increases_with_straining", "weight": 4 },
+      { "symptomId": "previous_abdominal_surgery", "weight": 5 },
+      { "symptomId": "dragging_discomfort", "weight": 3 },
+      { "symptomId": "pain_at_hernia_site", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3, "note": "Suggests incarceration" },
+      { "symptomId": "skin_irritation_over_mass", "weight": 2 },
+      { "symptomId": "progressive_enlargement", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_mass_adjacent_to_scar", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cough_impulse", "baseWeight": 4 },
+      { "signId": "defect_size_fascial_gap", "baseWeight": 4 },
+      { "signId": "reducibility", "baseWeight": 3 },
+      { "signId": "irreducibility_tenderness", "baseWeight": 4 },
+      { "signId": "overlying_skin_changes", "baseWeight": 2 },
+      { "signId": "signs_of_obstruction", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "wound_infection", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "emergency_surgery", "multiplier": 2.0 },
+      { "id": "midline_incision", "multiplier": 2.0 },
+      { "id": "multiple_previous_surgeries", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 1.5 },
+      { "id": "immunosuppression", "multiplier": 1.5 },
+      { "id": "chronic_cough_constipation", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "small_incisional_hernia",
+        "name": "Small Incisional Hernia (<4cm)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "defect_less_than_4cm", "weight": 5 },
+          { "feature": "reducible", "weight": 4 },
+          { "feature": "minimal_symptoms", "weight": 3 }
+        ],
+        "management": "Elective repair. Primary closure possible for very small defects. Mesh repair (onlay or sublay) recommended for all to reduce recurrence."
+      },
+      {
+        "id": "large_complex_incisional_hernia",
+        "name": "Large/Complex Incisional Hernia (>=4cm)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "defect_4cm_or_more", "weight": 5 },
+          { "feature": "may_contain_multiple_organs", "weight": 4 },
+          { "feature": "loss_of_domain", "weight": 5 },
+          { "feature": "chronic_pain_distension", "weight": 3 }
+        ],
+        "management": "Elective repair with mesh (sublay or underlay preferred). Component separation for large defects. Pre-operative optimization (weight loss, smoking cessation). Botulinum toxin or progressive pneumoperitoneum for loss of domain. Emergency surgery if complicated."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "rectus_diastasis",
+        "discriminators": ["midline_bulge_no_defect", "no_fascial_ring", "reduces_on_lying", "no_cough_impulse"]
+      },
+      {
+        "diseaseId": "post_surgical_seroma",
+        "discriminators": ["fluctuant", "no_cough_impulse", "history_of_recent_surgery", "ultrasound_confirms_fluid"]
+      },
+      {
+        "diseaseId": "suture_granuloma",
+        "discriminators": ["small_fixed_lump", "no_reduction", "no_cough_impulse", "local_inflammation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Assess fascial defect", "priority": "high", "yield": 0.6, "indication": "measure size and reducibility" }
+      ],
+      "laboratory": [
+        { "name": "WBC", "priority": "medium", "yield": 0.4, "indication": "if strangulation suspected" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.85, "indication": "defect size, contents, vascularity" },
+        { "name": "CT Abdomen/Pelvis", "priority": "high", "yield": 0.95, "indication": "gold standard for complex hernias, loss of domain assessment" },
+        { "name": "MRI", "priority": "medium", "yield": 0.8, "indication": "alternative if CT contraindicated" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "International Endohernia Society Guidelines for Incisional Hernia",
+      "pathways": [
+        {
+          "severity": "elective small-medium",
+          "criteria": "defect <10cm, no loss of domain, reducible",
+          "treatment": "Mesh repair (open sublay, onlay, or laparoscopic IPOM). Component separation if rectus cannot be approximated. Elective surgery after optimization."
+        },
+        {
+          "severity": "elective large/complex",
+          "criteria": "defect >=10cm, loss of domain, multiple recurrences",
+          "treatment": "Pre-operative optimization (weight loss, smoking cessation, diabetes control). Botulinum toxin A injections to abdominal wall muscles. Progressive pneumoperitoneum. Component separation with mesh reinforcement (sublay or TAR)."
+        },
+        {
+          "severity": "emergency",
+          "criteria": "incarceration, strangulation, obstruction",
+          "treatment": "Emergency surgery. Bowel resection if non-viable. Mesh repair if clean-contaminated; primary repair if contaminated. Damage control surgery if required."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "failed_fascial_healing",
+      "wound_dehiscence",
+      "fascial_margin_separation",
+      "increased_intra_abdominal_pressure",
+      "herniation_through_scar",
+      "progressive_enlargement",
+      "incarceration",
+      "strangulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "incarceration",
+        "probability": 0.1,
+        "lagDays": [0, 60],
+        "severityBoost": 0.3,
+        "clues": ["irreducible", "pain_increasing", "tenderness"]
+      },
+      {
+        "diseaseId": "recurrence",
+        "probability": 0.15,
+        "lagDays": [30, 720],
+        "severityBoost": 0.1,
+        "clues": ["reappearance_of_lump", "previous_repair_history"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["lump_at_surgical_scar", "cough_impulse", "reducible", "previous_abdominal_surgery"],
+    "exclusionClues": ["no_prior_surgery", "midline_bulge_without_defect", "solid_mass"]
+  }
+}

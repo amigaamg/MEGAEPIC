@@ -1,0 +1,167 @@
+{
+  "disease": {
+    "id": "leukemia",
+    "name": "Acute Lymphoblastic Leukemia (ALL)",
+    "system": "PAED",
+    "agePeak_months": [24, 60],
+    "note": "Most common childhood malignancy. Peak age 2-5 years. Presents with bone marrow failure signs: pallor, infection, bruising, bone pain.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["hematologic_malignancy", "bone_marrow_failure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "mediastinal_mass_with_airway_compression", "weight": 10 },
+        { "sign": "intracranial_hemorrhage_thrombocytopenia", "weight": 10 },
+        { "sign": "sepsis_neutropenia", "weight": 10 },
+        { "sign": "tumor_lysis_syndrome", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "wbc_>50_000", "weight": 8 },
+          { "sign": "cns_involvement", "weight": 7 },
+          { "sign": "platelets_<20_000", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If hyperleukocytosis, TLS, or CNS disease -> SEVERE (high risk); else -> NON-SEVERE (standard risk)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "pallor_fatigue", "weight": 5 },
+      { "symptomId": "fever_recurrent_infections", "weight": 4 },
+      { "symptomId": "easy_bruising_bleeding", "weight": 5 },
+      { "symptomId": "bone_pain_limping", "weight": 4 },
+      { "symptomId": "lymphadenopathy", "weight": 3 },
+      { "symptomId": "abdominal_distension", "weight": 3, "note": "Hepatosplenomegaly" },
+      { "symptomId": "loss_of_appetite_weight_loss", "weight": 3 },
+      { "symptomId": "recurrent_fever_night_sweats", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 5 },
+      { "signId": "petechiae_purpura", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatosplenomegaly", "baseWeight": 4 },
+      { "signId": "lymphadenopathy", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "bone_tenderness", "baseWeight": 3 },
+      { "signId": "gum_hypertrophy", "baseWeight": 2 },
+      { "signId": "signs_of_cns_involvement", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "down_syndrome", "multiplier": 10.0 },
+      { "id": "neurofibromatosis", "multiplier": 3.0 },
+      { "id": "ionizing_radiation_exposure", "multiplier": 3.0 },
+      { "id": "certain_genetic_syndromes", "multiplier": 4.0 },
+      { "id": "sibling_with_leukemia", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "b_cell_all",
+        "name": "B-Cell Precursor ALL (Common ALL)",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "cd10_cd19_positive", "weight": 5 },
+          { "feature": "age_2_to_5_years", "weight": 4 },
+          { "feature": "good_prognosis_subtypes", "weight": 3 }
+        ],
+        "management": "Multi-agent chemotherapy protocol (induction, consolidation, maintenance phases) over 2-2.5 years. Intrathecal chemotherapy for CNS prophylaxis. Risk stratification based on age, WBC, cytogenetics."
+      },
+      {
+        "id": "t_cell_all",
+        "name": "T-Cell ALL",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "cd3_cd7_positive", "weight": 5 },
+          { "feature": "older_age_male", "weight": 3 },
+          { "feature": "mediastinal_mass", "weight": 4 }
+        ],
+        "management": "High-risk protocol with intensified therapy. Cyclophosphamide, cytarabine, nelarabine. Mediastinal mass monitoring. Cranial irradiation if CNS disease."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "aplastic_anemia",
+        "discriminators": ["pancytopenia_no_blasts", "hypocellular_marrow", "no_lymphadenopathy_or_organomegaly"]
+      },
+      {
+        "diseaseId": "infectious_mononucleosis",
+        "discriminators": ["positive_monospot", "atypical_lymphocytes_on_film", "self_limiting"]
+      },
+      {
+        "diseaseId": "neuroblastoma",
+        "discriminators": ["abdominal_mass", "urinary_catecholamines", "bone_marrow_rosettes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "CBC with differential and blast count", "priority": "immediate", "yield": 0.95, "indication": "anemia, thrombocytopenia, blasts" },
+        { "name": "Bone marrow aspirate and biopsy", "priority": "immediate", "yield": 1.0, "indication": "definitive diagnosis, immunophenotyping" },
+        { "name": "Flow cytometry (CD markers)", "priority": "high", "yield": 1.0, "indication": "lineage classification" },
+        { "name": "Cytogenetics/FISH", "priority": "high", "yield": 0.8, "indication": "prognostic markers (ETV6-RUNX1, BCR-ABL, etc.)" },
+        { "name": "CSF analysis", "priority": "high", "yield": 0.6, "indication": "CNS involvement" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.5, "indication": "mediastinal mass" },
+        { "name": "Abdominal Ultrasound", "priority": "medium", "yield": 0.5, "indication": "hepatosplenomegaly" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "COG (Children's Oncology Group) / UKALL Protocols",
+      "pathways": [
+        {
+          "severity": "standard_risk",
+          "criteria": "Age 1-10y, WBC <50K, no CNS/testicular disease, favorable cytogenetics",
+          "treatment": "Induction (vincristine, dexamethasone, PEG-asparaginase, daunorubicin). Consolidation. Interim maintenance. Delayed intensification. Maintenance (oral 6-MP, MTX). Intrathecal chemotherapy. Total duration 2-2.5 years."
+        },
+        {
+          "severity": "high_risk",
+          "criteria": "Age <1y or >10y, WBC >50K, CNS disease, T-cell, poor cytogenetics",
+          "treatment": "Intensified induction. High-dose MTX. Additional agents (cytarabine, etoposide). Cranial RT if CNS+. Allogeneic HSCT for very high risk (BCR-ABL, induction failure)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "genetic_mutation", "clonal_expansion", "lymphoblast_proliferation", "bone_marrow_failure", "organ_infiltration", "immunosuppression"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tumor_lysis_syndrome",
+        "probability": 0.2,
+        "lagDays": [0, 5],
+        "severityBoost": 0.5,
+        "clues": ["high_wbc", "large_burden", "hyperuricemia", "hyperkalemia", "hyperphosphatemia"]
+      },
+      {
+        "diseaseId": "febrile_neutropenia",
+        "probability": 0.6,
+        "lagDays": [7, 365],
+        "severityBoost": 0.4,
+        "clues": ["anc_<500", "fever", "mucositis"]
+      },
+      {
+        "diseaseId": "relapse",
+        "probability": 0.15,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.6,
+        "clues": ["reappearance_of_blasts", "falling_counts_again"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pallor_bruising_fever_triad", "bone_pain", "hepatosplenomegaly", "blasts_on_film"],
+    "exclusionClues": ["normal_cbc", "no_blasts", "self_limiting_fever"]
+  }
+}

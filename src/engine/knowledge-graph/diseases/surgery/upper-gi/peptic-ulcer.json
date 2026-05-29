@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "peptic_ulcer",
+    "name": "Peptic Ulcer Disease",
+    "system": "surgical",
+    "agePeak_months": [360, 720],
+    "note": "Erosion of gastric or duodenal mucosa. Can be complicated by bleeding, perforation, or obstruction.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["epigastric_pain", "dyspepsia", "upper_gi_bleeding"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hematemesis_massive", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hemoglobin_below_7", "weight": 8 },
+          { "sign": "gi_bleeding_active", "weight": 7 },
+          { "sign": "perforation_signs", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Bleeding shock/perforation -> SEVERE; uncomplicated -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain", "weight": 5 },
+      { "symptomId": "pain_relieved_by_food", "weight": 4, "note": "Duodenal ulcer pain pattern" },
+      { "symptomId": "pain_worsened_by_food", "weight": 3, "note": "Gastric ulcer pain pattern" },
+      { "symptomId": "heartburn_acid_reflux", "weight": 3 },
+      { "symptomId": "nsaid_use", "weight": 4 },
+      { "symptomId": "smoking", "weight": 3 },
+      { "symptomId": "melena_or_hematemesis", "weight": 4, "note": "Indicates complicated ulcer" }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "guarding", "baseWeight": 2 },
+      { "signId": "pallor", "baseWeight": 3, "note": "If actively bleeding" },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "rectal_exam_with_melena", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "h_pylori_infection", "multiplier": 3.0 },
+      { "id": "nsaid_use", "multiplier": 2.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "alcohol_consumption", "multiplier": 1.3 },
+      { "id": "stress", "multiplier": 1.3 },
+      { "id": "family_history", "multiplier": 1.2 },
+      { "id": "zollinger_ellison_syndrome", "multiplier": 3.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "duodenal_ulcer",
+        "name": "Duodenal Ulcer",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "epigastric_pain_2_3h_after_meals", "weight": 5 },
+          { "feature": "night_pain", "weight": 4 },
+          { "feature": "pain_relieved_by_food", "weight": 4 },
+          { "feature": "h_pylori_positive", "weight": 4 }
+        ],
+        "management": "PPI triple therapy (PPI + Amoxicillin + Clarithromycin) for H. pylori. If NSAID-induced: PPI + stop NSAID. Surgical referral for complications."
+      },
+      {
+        "id": "gastric_ulcer",
+        "name": "Gastric Ulcer",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "epigastric_pain_worsened_by_food", "weight": 5 },
+          { "feature": "weight_loss", "weight": 3 },
+          { "feature": "nausea_early_satiety", "weight": 3 },
+          { "feature": "bleeding_common", "weight": 3 }
+        ],
+        "management": "PPI therapy. H. pylori eradication if positive. Endoscopic biopsy to rule out malignancy. Surgical referral for refractory cases or complications."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "gastric_cancer",
+        "discriminators": ["weight_loss_significant", "dysphagia", "early_satiety", "no_response_to_ppi", "age_over_50"]
+      },
+      {
+        "diseaseId": "cholelithiasis",
+        "discriminators": ["right_upper_quadrant_pain", "fatty_food_intolerance", "murphy_sign", "normal_upper_endoscopy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "NG tube aspirate", "priority": "immediate", "yield": 0.6, "indication": "if suspected upper GI bleed" }
+      ],
+      "laboratory": [
+        { "name": "H. pylori testing (stool Ag or breath test)", "priority": "high", "yield": 0.9, "indication": "detect H. pylori infection" },
+        { "name": "CBC", "priority": "high", "yield": 0.5, "indication": "assess anemia from chronic bleeding" },
+        { "name": "Hemoglobin", "priority": "high", "yield": 0.6, "indication": "acute bleeding assessment" }
+      ],
+      "imaging": [
+        { "name": "Upper GI Endoscopy (EGD)", "priority": "high", "yield": 0.95, "indication": "gold standard for diagnosis and biopsy" },
+        { "name": "Barium swallow/meal", "priority": "low", "yield": 0.6, "indication": "alternative when endoscopy unavailable" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACG Clinical Guideline for Peptic Ulcer Disease",
+      "pathways": [
+        {
+          "severity": "uncomplicated",
+          "criteria": "no bleeding, no perforation, no obstruction",
+          "treatment": "PPI therapy (Omeprazole 20mg daily for 4-8 weeks). H. pylori eradication therapy. Stop NSAIDs. Lifestyle modification."
+        },
+        {
+          "severity": "bleeding ulcer",
+          "criteria": "hematemesis, melena, hemoglobin drop, active bleeding on endoscopy",
+          "treatment": "Resuscitation. Urgent EGD with endoscopic hemostasis (clips, adrenaline injection, thermal). IV PPI (high dose). Surgical intervention if endoscopic control fails."
+        },
+        {
+          "severity": "perforated",
+          "criteria": "acute severe pain, peritonitis, pneumoperitoneum",
+          "treatment": "Emergency laparotomy. Omental patch repair (Graham patch). IV PPI. IV antibiotics."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mucosal_defense_breakdown",
+      "h_pylori_infection",
+      "nsaid_inhibition_of_prostaglandins",
+      "acid_pepsin_injury",
+      "mucosal_erosion",
+      "ulcer_formation",
+      "complications_bleeding_perforation_obstruction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "upper_gi_bleeding",
+        "probability": 0.15,
+        "lagDays": [0, 30],
+        "severityBoost": 0.4,
+        "clues": ["melena", "hematemesis", "hypotension", "drop_in_hemoglobin"]
+      },
+      {
+        "diseaseId": "perforated_peptic_ulcer",
+        "probability": 0.05,
+        "lagDays": [0, 14],
+        "severityBoost": 0.5,
+        "clues": ["sudden_severe_pain", "rigidity", "pneumoperitoneum"]
+      },
+      {
+        "diseaseId": "gastric_outlet_obstruction",
+        "probability": 0.03,
+        "lagDays": [30, 180],
+        "severityBoost": 0.2,
+        "clues": ["vomiting", "early_satiety", "weight_loss"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["epigastric_pain", "h_pylori_positive", "nsaid_history", "pain_pattern_related_to_meals"],
+    "exclusionClues": ["left_lower_quadrant_pain", "bloody_diarrhea", "back_pain_only"]
+  }
+}

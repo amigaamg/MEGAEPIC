@@ -1,0 +1,105 @@
+{
+  "disease": {
+    "id": "organophosphate_poisoning",
+    "name": "Organophosphate Poisoning",
+    "system": "emergency_medicine",
+    "agePeak_months": [240, 720],
+    "note": "Cholinergic crisis caused by irreversible acetylcholinesterase inhibition. Agricultural and chemical exposure. SLUDGE syndrome: Salivation, Lacrimation, Urination, Defecation, GIT upset, Emesis.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["toxicity", "cholinergic_crisis", "poisoning"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "severe_bradycardia", "weight": 9 },
+        { "sign": "seizures", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "unconsciousness", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "ORGANOPHOSPHATE POISONING is a medical emergency. Atropine and pralidoxime are life-saving."
+    },
+    "historyFeatures": [
+      { "symptomId": "exposure_to_pesticide_insecticide", "weight": 5 },
+      { "symptomId": "occupational_or_accidental_exposure", "weight": 4 },
+      { "symptomId": "salivation_lacrimation", "weight": 4 },
+      { "symptomId": "vomiting_diarrhea", "weight": 4 },
+      { "symptomId": "muscle_twitching_weakness", "weight": 4 },
+      { "symptomId": "blurred_vision", "weight": 3 },
+      { "symptomId": "headache_dizziness", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "pinpoint_pupils", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "excessive_salivation", "baseWeight": 5 },
+      { "signId": "excessive_lacrimation", "baseWeight": 4 },
+      { "signId": "bronchorrhoea_wheezing", "baseWeight": 5 },
+      { "signId": "muscle_fasciculations", "baseWeight": 4 },
+      { "signId": "bradycardia", "baseWeight": 4 },
+      { "signId": "hypotension_or_hypertension", "baseWeight": 3 },
+      { "signId": "confusion_seizures", "baseWeight": 4 },
+      { "signId": "flaccid_paralysis", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "agricultural_worker", "multiplier": 4.0 },
+      { "id": "suicide_attempt_with_pesticide", "multiplier": 5.0 },
+      { "id": "lack_of_ppe", "multiplier": 2.0 },
+      { "id": "storage_of_chemicals_in_home", "multiplier": 3.0 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE assessment", "priority": "immediate", "yield": 1.0, "indication": "all patients" },
+        { "name": "Pupil examination", "priority": "immediate", "yield": 0.9, "indication": "cholinergic crisis marker" },
+        { "name": "ECG monitoring", "priority": "high", "yield": 0.6, "indication": "bradyarrhythmia, QT prolongation" }
+      ],
+      "laboratory": [
+        { "name": "Plasma/RBC cholinesterase activity", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis, assess severity" },
+        { "name": "ABG/VBG", "priority": "high", "yield": 0.7, "indication": "respiratory failure assessment" },
+        { "name": "U&E, Cr, LFTs", "priority": "medium", "yield": 0.4, "indication": "baseline, end-organ function" },
+        { "name": "Serum amylase", "priority": "medium", "yield": 0.3, "indication": "pancreatitis complication" }
+      ]
+    },
+    "management": {
+      "protocolReference": "WHO Guidelines / NPIS Guidelines for Organophosphate Poisoning",
+      "pathways": [
+        {
+          "severity": "cholinergic crisis",
+          "criteria": "muscarinic symptoms (SLUDGE), nicotinic symptoms (fasciculations), CNS effects",
+          "treatment": "Remove contaminated clothing. Decontaminate skin with soap and water. Atropine 1-3mg IV every 5-10 min until drying of secretions (target: HR >80, clear chest, dry skin). Massive doses may be needed (hundreds of mg). Pralidoxime 1-2g IV over 30 min, then 500mg/hr infusion (if within 24-48h of exposure). Benzodiazepines for seizures. Intubation and ventilation for respiratory failure."
+        },
+        {
+          "severity": "respiratory failure",
+          "criteria": "RR <10, SpO2 <90%, excessive secretions, unable to protect airway",
+          "treatment": "Intubation and mechanical ventilation. Suction frequently. Continue atropine. ICU admission."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "acetylcholinesterase_inhibition",
+      "acetylcholine_accumulation",
+      "muscarinic_receptor_overstimulation",
+      "nicotinic_receptor_overstimulation",
+      "cns_effects",
+      "neuromuscular_junction_blockade",
+      "respiratory_muscle_paralysis",
+      "intermediate_syndrome"
+    ],
+    "complications": [
+      {
+        "diseaseId": "intermediate_syndrome",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["proximal_muscle_weakness", "neck_flexor_weakness", "respiratory_insufficiency_days_after"]
+      },
+      {
+        "diseaseId": "delayed_polyneuropathy",
+        "probability": 0.1,
+        "severityBoost": 0.2,
+        "clues": ["distal_weakness_weeks_later", "sensory_loss"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pesticide_exposure", "pinpoint_pupils", "excessive_secretions", "fasciculations", "bradycardia", "SLUDGE_syndrome"],
+    "exclusionClues": ["no_exposure_history", "normal_pupils", "no_secretions", "normal_cholinesterase"]
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "disease": {
+    "id": "strangulated_hernia",
+    "name": "Strangulated Hernia",
+    "system": "surgical",
+    "agePeak_months": [360, 840],
+    "note": "Hernia with compromised blood supply to contents. Surgical emergency. Irreducible, tender mass with signs of obstruction and ischemia.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["hernia_emergency", "bowel_obstruction", "acute_abdomen"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "bowel_necrosis", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "lactic_acidosis", "weight": 8 },
+          { "sign": "overlying_skin_erythema_gangrene", "weight": 8 },
+          { "sign": "complete_bowel_obstruction", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Necrosis/peritonitis/shock -> SEVERE; early strangulation with viable bowel -> STILL URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "known_hernia_with_acute_change", "weight": 5 },
+      { "symptomId": "sudden_severe_pain_at_hernia_site", "weight": 5 },
+      { "symptomId": "irreducible_mass", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "colicky_abdominal_pain", "weight": 4 },
+      { "symptomId": "absolute_constipation", "weight": 4 },
+      { "symptomId": "abdominal_distension", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "irreducible_tender_swelling", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "absent_cough_impulse", "baseWeight": 5 },
+      { "signId": "overlying_skin_erythema_edema", "baseWeight": 4 },
+      { "signId": "guarding_rigidity", "baseWeight": 4 },
+      { "signId": "signs_of_bowel_obstruction", "baseWeight": 4 },
+      { "signId": "fever_tachycardia", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "femoral_hernia", "multiplier": 3.0 },
+      { "id": "small_hernia_defect", "multiplier": 2.5 },
+      { "id": "incarceration_history", "multiplier": 2.0 },
+      { "id": "increased_intra_abdominal_pressure", "multiplier": 1.5 },
+      { "id": "age_over_60", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "strangulated_inguinal_hernia",
+        "name": "Strangulated Inguinal Hernia",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "inguinal_mass_irreducible_tender", "weight": 5 },
+          { "feature": "obstruction_symptoms", "weight": 4 },
+          { "feature": "overlying_skin_changes", "weight": 3 }
+        ],
+        "management": "Emergency inguinal exploration. Open approach. Examine contents viability. Resection of non-viable bowel. Hernia repair (primary tissue repair if contaminated, mesh if clean)."
+      },
+      {
+        "id": "strangulated_femoral_hernia",
+        "name": "Strangulated Femoral Hernia",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "femoral_mass_irreducible_tender", "weight": 5 },
+          { "feature": "obstruction_symptoms_early", "weight": 5 },
+          { "feature": "high_risk_of_necrosis", "weight": 5 }
+        ],
+        "management": "Emergency exploration (open low approach, preperitoneal, or laparoscopic). Bowel resection if non-viable. Repair with suture or mesh depending on contamination."
+      },
+      {
+        "id": "strangulated_incisional_umbilical",
+        "name": "Strangulated Incisional/Umbilical Hernia",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "abdominal_wall_mass_irreducible", "weight": 5 },
+          { "feature": "obstruction", "weight": 4 },
+          { "feature": "peritonitis", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy or laparoscopy. Bowel resection as needed. Repair with primary closure if contaminated. Consider vacuum-assisted closure and delayed repair."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "incarcerated_hernia",
+        "discriminators": ["no_severe_pain", "no_skin_changes", "no_sepsis", "viable_contents"]
+      },
+      {
+        "diseaseId": "testicular_torsion",
+        "discriminators": ["testicular_swelling", "high_riding_testis", "no_abdominal_distension"]
+      },
+      {
+        "diseaseId": "lymphadenitis",
+        "discriminators": ["no_cough_impulse_even_before", "fever_without_obstruction", "multiple_nodes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Reducibility test", "priority": "immediate", "yield": 0.7, "indication": "confirm irreducibility" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "immediate", "yield": 0.7, "indication": "leukocytosis" },
+        { "name": "Lactate", "priority": "immediate", "yield": 0.8, "indication": "elevated with ischemia" },
+        { "name": "Blood Gas", "priority": "high", "yield": 0.7, "indication": "metabolic acidosis" },
+        { "name": "Electrolytes", "priority": "high", "yield": 0.5, "indication": "dehydration assessment" }
+      ],
+      "imaging": [
+        { "name": "Groin/Abdominal Ultrasound", "priority": "high", "yield": 0.8, "indication": "assess contents and vascularity" },
+        { "name": "CT Abdomen", "priority": "high", "yield": 0.95, "indication": "definitive assessment, obstruction level" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "World Society of Emergency Surgery Guidelines for Strangulated Hernia",
+      "pathways": [
+        {
+          "severity": "strangulated without peritonitis",
+          "criteria": "irreducible tender mass, no generalized peritonitis, early presentation",
+          "treatment": "Emergency surgery. Attempt reduction. Assess bowel viability. Warm saline-soaked packs. If viable, repair with mesh. If non-viable, resect and primary tissue repair."
+        },
+        {
+          "severity": "strangulated with peritonitis/sepsis",
+          "criteria": "generalized peritonitis, septic shock, bowel obstruction with necrosis",
+          "treatment": "Emergency laparotomy. Resuscitation. Bowel resection. Primary anastomosis or stoma depending on contamination. No mesh. Abdominal wall closure with tension-free technique or VAC therapy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hernia_incarceration",
+      "venous_outflow_obstruction",
+      "edema_and_engorgement",
+      "arterial_compromise",
+      "ischemia",
+      "necrosis",
+      "perforation",
+      "peritonitis",
+      "sepsis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bowel_necrosis_and_perforation",
+        "probability": 0.25,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["peritonitis", "septic_shock", "lactic_acidosis", "dark_fluid_from_sac"]
+      },
+      {
+        "diseaseId": "wound_infection",
+        "probability": 0.2,
+        "lagDays": [3, 7],
+        "severityBoost": 0.1,
+        "clues": ["wound_erythema", "purulent_discharge", "fever"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["irreducible_tender_hernia", "absent_cough_impulse", "obstruction_symptoms", "skin_changes"],
+    "exclusionClues": ["reducible_hernia", "present_cough_impulse", "no_pain"]
+  }
+}

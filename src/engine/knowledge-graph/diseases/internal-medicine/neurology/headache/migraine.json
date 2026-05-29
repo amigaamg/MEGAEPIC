@@ -1,0 +1,138 @@
+{
+  "disease": {
+    "id": "migraine",
+    "name": "Migraine",
+    "system": "neurology",
+    "agePeak_months": [240, 600],
+    "note": "Recurrent headache disorder with characteristic features. Aura occurs in about one-third.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["headache_disorder", "primary_headache"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "worst_headache_of_life", "weight": 10 },
+        { "sign": "focal_neurological_deficit", "weight": 9 },
+        { "sign": "meningismus", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If thunderclap headache/meningismus -> EXCLUDE SECONDARY CAUSES; else -> PROBABLE MIGRAINE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "headache", "weight": 5, "modifiers": [
+          { "condition": "unilateral_pulsating", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "photophobia", "weight": 3 },
+      { "symptomId": "phonophobia", "weight": 3 },
+      { "symptomId": "visual_aura", "weight": 3 },
+      { "symptomId": "aggravation_by_routine_activity", "weight": 3 },
+      { "symptomId": "aura_symptoms", "weight": 2, "note": "Visual, sensory, or speech aura lasting 5-60 min" }
+    ],
+
+    "examFeatures": [
+      { "signId": "normal_neurological_exam", "baseWeight": 2, "note": "Typical in migraine between attacks" },
+      { "signId": "focal_signs", "baseWeight": 1, "negativePredictorForMigraine": true }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history", "multiplier": 2.0 },
+      { "id": "female_sex", "multiplier": 2.5 },
+      { "id": "hormonal_factors", "multiplier": 1.5 },
+      { "id": "stress", "multiplier": 1.4 },
+      { "id": "sleep_deprivation", "multiplier": 1.3 },
+      { "id": "specific_triggers", "multiplier": 1.2 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "migraine_without_aura",
+        "name": "Migraine Without Aura",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "unilateral_throbbing", "weight": 5 },
+          { "feature": "nausea_photophobia_phonophobia", "weight": 5 },
+          { "feature": "duration_4_to_72_hours", "weight": 4 }
+        ],
+        "management": "Acute: NSAIDs, triptans. Prevention: beta-blockers, amitriptyline, topiramate."
+      },
+      {
+        "id": "migraine_with_aura",
+        "name": "Migraine With Aura",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "visual_aura_before_headache", "weight": 5 },
+          { "feature": "aura_resolves_before_pain", "weight": 4 },
+          { "feature": "aura_duration_under_60_min", "weight": 4 }
+        ],
+        "management": "Same as without aura. Consider combined OCP contraindication."
+      },
+      {
+        "id": "chronic_migraine",
+        "name": "Chronic Migraine",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "headache_15_or_more_days_month", "weight": 5 },
+          { "feature": "migraine_features_on_eight_days", "weight": 4 }
+        ],
+        "management": "Preventive therapy. Avoid medication overuse. Botox, CGRP antagonists."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "tension_type_headache",
+        "discriminators": ["bilateral_pressing", "no_nausea", "no_photophobia", "mild_moderate"]
+      },
+      {
+        "diseaseId": "subarachnoid_hemorrhage",
+        "discriminators": ["thunderclap_onset", "worst_ever", "meningismus", "ct_positive"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Headache history and MIDAS score", "priority": "immediate", "yield": 0.9, "indication": "all headache patients" }
+      ],
+      "imaging": [
+        { "name": "CT Head", "priority": "high_if_red_flag", "yield": 0.3, "indication": "thunderclap, new onset after 50, focal signs, immunosuppressed" },
+        { "name": "MRI Brain", "priority": "medium", "yield": 0.2, "indication": "atypical presentation, progressive worsening" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "International Headache Society (IHS) Guidelines and NICE",
+      "pathways": [
+        {
+          "severity": "mild to moderate",
+          "criteria": "VAS 1-5, tolerable",
+          "treatment": "Simple analgesics (paracetamol, ibuprofen). Rest in dark quiet room. Hydration."
+        },
+        {
+          "severity": "moderate to severe",
+          "criteria": "VAS 6-10, disabling",
+          "treatment": "Triptan (sumatriptan 50-100 mg PO or SC). Anti-emetic (metoclopramide). Consider NSAIDs. Avoid opioids."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cortical_spreading_depression",
+      "trigeminovascular_activation",
+      "neuropeptide_release",
+      "vasodilation",
+      "central_sensitization"
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["recurrent_unilateral_pulsating_headache", "nausea_photophobia", "aura"],
+    "exclusionClues": ["thunderclap_onset", "focal_signs", "fever"]
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "esophageal_cancer",
+    "name": "Esophageal Cancer",
+    "system": "gastroenterology",
+    "agePeak_months": [600, 960],
+    "note": "Two main histologic types: squamous cell carcinoma (upper/mid esophagus) and adenocarcinoma (distal esophagus/GE junction).",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["malignancy", "esophageal", "dysphagia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "complete_esophageal_obstruction", "weight": 9 },
+        { "sign": "hematemesis", "weight": 8 },
+        { "sign": "severe_weight_loss", "weight": 7 },
+        { "sign": "tracheoesophageal_fistula", "weight": 10 },
+        { "sign": "aspiration_pneumonia", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "dysphagia_progressive": true
+      },
+      "severityLabel": "If dysphagia and weight loss -> URGENT workup; if obstruction/fistula -> EMERGENCY"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dysphagia_progressive", "weight": 5 },
+      { "symptomId": "odynophagia", "weight": 4 },
+      { "symptomId": "weight_loss_unintentional", "weight": 5 },
+      { "symptomId": "dysphonia", "weight": 3, "note": "Recurrent laryngeal nerve invasion" },
+      { "symptomId": "regurgitation", "weight": 3 },
+      { "symptomId": "hematemesis", "weight": 2 },
+      { "symptomId": "chronic_gerd_history", "weight": 3, "note": "Risk factor for adenocarcinoma" },
+      { "symptomId": "anorexia", "weight": 2 },
+      { "symptomId": "cough", "weight": 2, "note": "May indicate T-E fistula" }
+    ],
+
+    "examFeatures": [
+      { "signId": "cachexia", "baseWeight": 4 },
+      { "signId": "cervical_lymphadenopathy", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "hepatomegaly", "baseWeight": 2, "note": "Metastatic disease" },
+      { "signId": "supraclavicular_lymph_node", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "gerd_and_barretts", "multiplier": 4.0 },
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "alcohol_abuse", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "achalasia", "multiplier": 1.5 },
+      { "id": "caustic_esophageal_injury", "multiplier": 2.0 },
+      { "id": "plummer_vinson_syndrome", "multiplier": 2.0 },
+      { "id": "tylosis", "multiplier": 3.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "gerd",
+        "discriminators": ["symptom_response_to_ppi", "intermittent_dysphagia", "no_weight_loss", "younger_age"]
+      },
+      {
+        "diseaseId": "benign_esophageal_stricture",
+        "discriminators": ["long_standing_gerd", "caustic_ingestion", "smooth_narrowing_on_barium_swallow"]
+      },
+      {
+        "diseaseId": "achalasia",
+        "discriminators": ["intermittent_dysphagia_both_liquids_and_solids", "regurgitation_of_undigested_food", "bird_beak_sign"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Barium swallow", "priority": "high", "yield": 0.85, "indication": "first imaging if dysphagia, identifies location and extent" }
+      ],
+      "laboratory": [
+        { "name": "FBC", "priority": "high", "yield": 0.4, "indication": "anemia from chronic blood loss" },
+        { "name": "Liver function tests", "priority": "high", "yield": 0.3, "indication": "liver metastases" },
+        { "name": "Tumor markers (CEA, CA19-9)", "priority": "medium", "yield": 0.5, "indication": "monitoring, not diagnostic" }
+      ],
+      "imaging": [
+        { "name": "Upper endoscopy with biopsy", "priority": "immediate", "yield": 0.98, "indication": "gold standard, tissue diagnosis" },
+        { "name": "EUS (Endoscopic Ultrasound)", "priority": "high", "yield": 0.9, "indication": "TNM staging, depth of invasion, lymph node assessment" },
+        { "name": "CT chest/abdomen with contrast", "priority": "high", "yield": 0.85, "indication": "staging, metastatic workup" },
+        { "name": "PET-CT", "priority": "high", "yield": 0.9, "indication": "detect distant metastases, staging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines: Esophageal and Esophagogastric Junction Cancers",
+      "pathways": [
+        {
+          "severity": "localized",
+          "criteria": "T1-T2, N0, M0",
+          "treatment": "Endoscopic resection (T1a) or esophagectomy. For T2+, consider neoadjuvant chemoradiotherapy followed by surgery."
+        },
+        {
+          "severity": "locally_advanced",
+          "criteria": "T3-T4, N+",
+          "treatment": "Neoadjuvant chemoradiotherapy (CROSS regimen: carboplatin + paclitaxel + 41.4 Gy RT) followed by esophagectomy."
+        },
+        {
+          "severity": "metastatic",
+          "criteria": "M1",
+          "treatment": "Palliative chemotherapy (FLOT or FOLFOX based). Palliative RT for dysphagia. Stenting for obstruction. Immunotherapy for selected patients."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_inflammation",
+      "barretts_metaplasia_dysplasia_carcinoma_sequence",
+      "squamous_cell_transformation",
+      "submucosal_invasion",
+      "lymphatic_dissemination",
+      "hematogenous_metastasis",
+      "local_extension_to_adjacent_structures"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "esophageal_obstruction",
+        "probability": 0.5,
+        "severityBoost": 0.5,
+        "clues": ["complete_inability_to_swallow_saliva", "regurgitation"]
+      },
+      {
+        "diseaseId": "tracheoesophageal_fistula",
+        "probability": 0.1,
+        "severityBoost": 0.7,
+        "clues": ["cough_after_swallowing", "recurrent_aspiration_pneumonia"]
+      },
+      {
+        "diseaseId": "superior_vena_cava_syndrome",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["facial_swelling", "upper_extremity_edema", "distended_neck_veins"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if obstruction or fistula; medium for workup",
+    "diagnosticClues": ["progressive_dysphagia_solids_to_liquids", "unintentional_weight_loss", "age_over_50", "barretts_history"],
+    "exclusionClues": ["intermittent_dysphagia", "complete_response_to_ppi", "smooth_stricture_on_imaging"]
+  }
+}

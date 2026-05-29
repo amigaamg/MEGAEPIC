@@ -1,0 +1,170 @@
+{
+  "disease": {
+    "id": "molar_pregnancy",
+    "name": "Molar Pregnancy (Hydatidiform Mole)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Gestational trophoblastic disease with abnormal proliferation of trophoblast. Complete mole (46XX, all paternal) vs partial mole (69XXY, triploid). Risk of malignant transformation to choriocarcinoma.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["first_trimester_bleeding", "abnormal_pregnancy", "trophoblastic_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "heavy_vaginal_bleeding_with_shock", "weight": 10 },
+        { "sign": "eclamptic_seizure", "weight": 10 },
+        { "sign": "thyroid_storm", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "uterine_size_larger_than_dates", "weight": 6 },
+          { "sign": "theca_lutein_cysts", "weight": 5 },
+          { "sign": "preeclampsia_before_20_weeks", "weight": 7 },
+          { "sign": "hyperemesis_severe", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Heavy bleeding, preeclampsia <20 weeks, or hyperthyroidism -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "vaginal_bleeding", "weight": 5, "note": "Dark brown, prune-juice like discharge" },
+      { "symptomId": "severe_nausea_vomiting", "weight": 4 },
+      { "symptomId": "rapid_uterine_growth", "weight": 4 },
+      { "symptomId": "absence_of_fetal_movements", "weight": 3 },
+      { "symptomId": "passage_of_grape_like_vesicles", "weight": 5 },
+      { "symptomId": "abdominal_pain", "weight": 2 },
+      { "symptomId": "breathlessness", "weight": 2, "note": "May indicate high-output cardiac failure or thyrotoxicosis" },
+      { "symptomId": "palpitations", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "uterine_size_greater_than_gestational_age", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "vaginal_bleeding_with_vesicles", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bilateral_adnexal_masses", "baseWeight": 4 },
+      { "signId": "hypertension", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "goiter_or_thyroid_enlargement", "baseWeight": 2 },
+      { "signId": "pallor", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "maternal_age_under_20", "multiplier": 1.5 },
+      { "id": "maternal_age_over_40", "multiplier": 5.0 },
+      { "id": "previous_molar_pregnancy", "multiplier": 4.0 },
+      { "id": "history_of_spontaneous_abortion", "multiplier": 1.5 },
+      { "id": "asian_or_latin_american_ethnicity", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "complete_mole",
+        "name": "Complete Hydatidiform Mole",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "very_high_hCG", "weight": 5 },
+          { "feature": "snowstorm_pattern_on_ultrasound", "weight": 5 },
+          { "feature": "no_fetal_tissue", "weight": 5 },
+          { "feature": "theca_lutein_cysts", "weight": 4 }
+        ],
+        "management": "Suction evacuation under ultrasound guidance. Rhogam if Rh-negative. Serial beta-hCG follow-up. Avoid oxytocics until after evacuation."
+      },
+      {
+        "id": "partial_mole",
+        "name": "Partial Hydatidiform Mole",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "moderately_elevated_hCG", "weight": 3 },
+          { "feature": "focal_hydrops", "weight": 4 },
+          { "feature": "fetal_tissue_present", "weight": 3 },
+          { "feature": "triploid_karyotype", "weight": 5 }
+        ],
+        "management": "Suction evacuation. Histopathological confirmation. Serial beta-hCG follow-up."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "miscarriage",
+        "discriminators": ["falling_hCG", "no_vesicles", "normal_ultrasound_appearance"]
+      },
+      {
+        "diseaseId": "multiple_gestation",
+        "discriminators": ["two_or_more_sacs", "hCG_not_extremely_elevated", "fetal_cardiac_activity"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine pregnancy test", "priority": "immediate", "yield": 0.99, "indication": "confirm pregnancy" },
+        { "name": "Blood pressure measurement", "priority": "immediate", "yield": 0.8, "indication": "assess for preeclampsia" }
+      ],
+      "laboratory": [
+        { "name": "Serum beta-hCG", "priority": "immediate", "yield": 0.99, "indication": "usually very high >100,000 IU/L" },
+        { "name": "Thyroid function tests", "priority": "high", "yield": 0.6, "indication": "hCG cross-reacts with TSH receptor" },
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.5, "indication": "exclude lung metastases" },
+        { "name": "Complete blood count", "priority": "high", "yield": 0.7, "indication": "assess anemia from bleeding" },
+        { "name": "Liver and renal function", "priority": "medium", "yield": 0.4, "indication": "baseline before chemotherapy" }
+      ],
+      "imaging": [
+        { "name": "Pelvic Ultrasound", "priority": "immediate", "yield": 0.95, "indication": "snowstorm pattern, no fetus, theca lutein cysts" },
+        { "name": "CT chest/abdomen/pelvis", "priority": "medium", "yield": 0.6, "indication": "staging if malignant transformation suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "FIGO Staging for Gestational Trophoblastic Neoplasia",
+      "pathways": [
+        {
+          "severity": "benign_mole",
+          "criteria": "hCG falling, no metastases, FIGO score <7",
+          "treatment": "Suction evacuation. Weekly beta-hCG until undetectable, then monthly for 6 months. Contraception for 12 months. No methotrexate unless GTN develops."
+        },
+        {
+          "severity": "malignant_gtn",
+          "criteria": "FIGO score >=7, metastases, hCG plateau or rising",
+          "treatment": "Single-agent chemotherapy (Methotrexate or Actinomycin-D) for low-risk. Multi-agent (EMA-CO) for high-risk. Hysterectomy if no fertility desired. ICU for chemotherapy complications."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "androgenetic_conception",
+      "trophoblast_hyperplasia",
+      "abnormal_imprinting",
+      "hCG_overproduction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "gestational_trophoblastic_neoplasia",
+        "probability": 0.15,
+        "lagDays": [30, 365],
+        "severityBoost": 0.7,
+        "clues": ["persistent_elevated_hCG", "vaginal_metastases", "pulmonary_symptoms"]
+      },
+      {
+        "diseaseId": "choriocarcinoma",
+        "probability": 0.03,
+        "lagDays": [60, 730],
+        "severityBoost": 0.9,
+        "clues": ["very_high_hCG", "multiple_metastases", "hemoptysis"]
+      },
+      {
+        "diseaseId": "hemorrhage",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["heavy_bleeding", "tachycardia", "uterine_contractions"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["uterine_size_dates_discrepancy", "very_high_hCG", "snowstorm_ultrasound", "prune_juice_discharge"],
+    "exclusionClues": ["normal_intrauterine_pregnancy", "falling_hCG"]
+  }
+}

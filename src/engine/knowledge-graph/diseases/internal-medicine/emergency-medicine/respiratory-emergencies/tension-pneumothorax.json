@@ -1,0 +1,97 @@
+{
+  "disease": {
+    "id": "tension_pneumothorax",
+    "name": "Tension Pneumothorax",
+    "system": "emergency_medicine",
+    "agePeak_months": [0, 960],
+    "note": "Life-threatening condition. Air trapped in pleural space causes mediastinal shift and decreased cardiac output. Immediate needle decompression.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["respiratory_emergency", "shock"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "hypotension", "weight": 10 },
+        { "sign": "severe_hypoxia", "weight": 10 },
+        { "sign": "tracheal_deviation", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "TENSION PNEUMOTHORAX is always a CRITICAL EMERGENCY"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_chest_pain", "weight": 4 },
+      { "symptomId": "difficulty_breathing", "weight": 5 },
+      { "symptomId": "trauma_or_mechanical_ventilation", "weight": 4 },
+      { "symptomId": "distended_neck_veins", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tracheal_deviation_away", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "absent_breath_sounds_unilateral", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hyperresonance", "baseWeight": 4 },
+      { "signId": "distended_neck_veins", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "cyanosis", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "mechanical_ventilation", "multiplier": 3.0 },
+      { "id": "chest_trauma", "multiplier": 2.5 },
+      { "id": "cpr", "multiplier": 2.0 },
+      { "id": "copd_bullae", "multiplier": 1.5 },
+      { "id": "marfan_syndrome", "multiplier": 2.0 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical assessment", "priority": "immediate", "yield": 0.9, "indication": "Do not delay treatment for imaging if tension suspected" },
+        { "name": "Ultrasound (POCUS)", "priority": "immediate", "yield": 0.95, "indication": "absent lung sliding, lung point" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "immediate", "yield": 0.98, "indication": "if time permits without delaying decompression" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATLS Guidelines / ERC Guidelines",
+      "pathways": [
+        {
+          "severity": "tension",
+          "criteria": "respiratory distress, hypotension, absent breath sounds, tracheal deviation",
+          "treatment": "Immediate needle decompression (2nd intercostal space, midclavicular line). Large bore cannula. Follow with chest tube insertion (5th ICS, anterior axillary line) for definitive drainage."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "one_way_valve_mechanism",
+      "air_accumulation_in_pleural_space",
+      "mediastinal_shift",
+      "venous_return_impaired",
+      "decreased_cardiac_output",
+      "hypotension_shock"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "obstructive_shock",
+        "probability": 0.5,
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "jvd"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["tracheal_deviation", "absent_breath_sounds", "hyperresonance", "hypotension", "distended_neck_veins"],
+    "exclusionClues": ["normal_chest_xray", "equal_breath_sounds"]
+  }
+}

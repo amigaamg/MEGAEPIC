@@ -1,0 +1,166 @@
+{
+  "disease": {
+    "id": "vocal_cord_nodules",
+    "name": "Vocal Cord Nodules",
+    "system": "ent",
+    "agePeak_months": [48, 360],
+    "note": "Benign bilateral lesions at the junction of anterior and middle third of vocal cords. Caused by vocal abuse or phonotrauma. Known as singer's nodes or screamer's nodes.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["hoarseness", "vocal_fatigue", "breathy_voice"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stridor", "weight": 10 },
+        { "sign": "airway_obstruction", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bilateral_large_nodules", "weight": 6 },
+          { "sign": "complete_glottic_gap", "weight": 5 },
+          { "sign": "voice_professional_disability", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If airway compromise -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hoarseness", "weight": 5, "modifiers": [
+          { "condition": "worse_with_vocal_use", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "vocal_fatigue", "weight": 4 },
+      { "symptomId": "breathy_voice", "weight": 3 },
+      { "symptomId": "pitch_breaks", "weight": 2 },
+      { "symptomId": "vocal_strain_effort", "weight": 3 },
+      { "symptomId": "voice_loss", "weight": 2 },
+      { "symptomId": "vocal_abuse_history", "weight": 4, "note": "Excessive talking, shouting, singing, cheering" },
+      { "symptomId": "occupational_vocal_demand", "weight": 3 },
+      { "symptomId": "gastroesophageal_reflux", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bilateral_symmetric_nodules", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "anterior_middle_third_junction", "baseWeight": 5 },
+      { "signId": "nodules_sessile_or_pedunculated", "baseWeight": 3 },
+      { "signId": "incomplete_glottic_closure", "baseWeight": 4 },
+      { "signId": "increased_muscular_tension", "baseWeight": 2 },
+      { "signId": "mucosal_wave_reduction", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "vocal_abuse", "multiplier": 5.0 },
+      { "id": "teaching_profession", "multiplier": 3.0 },
+      { "id": "singing_profession", "multiplier": 3.5 },
+      { "id": "child_hyperactivity", "multiplier": 2.0 },
+      { "id": "chronic_cough", "multiplier": 1.8 },
+      { "id": "laryngopharyngeal_reflux", "multiplier": 2.0 },
+      { "id": "male_gender_children", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "early_nodules",
+        "name": "Early (Soft/Fluid-Filled) Nodules",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "duration_under_6_months", "weight": 4 },
+          { "feature": "soft_lesions", "weight": 3 },
+          { "feature": "symptoms_intermittent", "weight": 3 }
+        ],
+        "management": "Voice therapy first-line. Vocal hygiene education. Eliminate vocal abuse. Laryngeal massage. Treat LPR if present."
+      },
+      {
+        "id": "chronic_nodules",
+        "name": "Chronic (Hard/Fibrotic) Nodules",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "duration_over_6_months", "weight": 4 },
+          { "feature": "firm_lesions", "weight": 3 },
+          { "feature": "persistent_hoarseness", "weight": 4 }
+        ],
+        "management": "Voice therapy intensive program. If no response after 6-12 months: microlaryngoscopic excision. Post-op voice rest and therapy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "vocal_cord_polyp",
+        "discriminators": ["usually_unilateral", "more_vascular", "not_at_mid_membraneous_typical", "sudden_onset_after_phonotrauma"]
+      },
+      {
+        "diseaseId": "reinke_edema",
+        "discriminators": ["bilateral_diffuse_swelling", "smoking_history", "low_pitched_voice", "female_dominant"]
+      },
+      {
+        "diseaseId": "laryngeal_papillomatosis",
+        "discriminators": ["friable_warty_lesions", "multiple_or_diffuse", "progressive_worsening"]
+      },
+      {
+        "diseaseId": "sulcus_vocalis",
+        "discriminators": ["groove_on_membraneous_cord", "breathy_voice_severe", "no_history_abuse"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Perceptual Voice Assessment (GRBAS)", "priority": "high", "yield": 0.7, "indication": "all voice patients" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Videostroboscopy", "priority": "high", "yield": 0.95, "indication": "gold standard - assess mucosal wave, glottic closure, lesion characteristics" },
+        { "name": "Acoustic Analysis", "priority": "medium", "yield": 0.6, "indication": "objective voice quality measurement" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Hoarseness (Dysphonia)",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "small nodules, intermittent symptoms, no voice professional",
+          "treatment": "Voice therapy (8-12 sessions). Vocal hygiene education. Hydration. Treat LPR. Re-evaluate in 3 months."
+        },
+        {
+          "severity": "moderate-severe",
+          "criteria": "large nodules, persistent hoarseness, voice professional, failed therapy",
+          "treatment": "Voice therapy intensive (2x/week). If no improvement after 6-12 months: microlaryngoscopic excision with cold instruments or laser. Post-op voice rest (3-7 days). Post-op voice therapy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "repeated_phonotrauma",
+      "basement_membrane_disruption",
+      "microvascular_injury",
+      "edema_and_hemorrhage",
+      "fibrosis_and_thickening"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "vocal_cord_hemorrhage",
+        "probability": 0.02,
+        "lagDays": [0, 1],
+        "severityBoost": 0.3,
+        "clues": ["sudden_voice_loss_during_phonation", "vocal_strain_history"]
+      },
+      {
+        "diseaseId": "secondary_muscle_tension_dysphonia",
+        "probability": 0.2,
+        "lagDays": [30, 365],
+        "severityBoost": 0.15,
+        "clues": ["neck_tension", "jaw_tightness", "pain_with_phonation"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["bilateral_mid_membraneous_lesions", "voice_use_history", "hoarseness_worse_by_vocal_use"],
+    "exclusionClues": ["unilateral_lesion", "acute_onset", "pain", "fever"]
+  }
+}

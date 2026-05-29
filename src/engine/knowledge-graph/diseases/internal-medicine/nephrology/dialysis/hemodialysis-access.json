@@ -1,0 +1,155 @@
+{
+  "disease": {
+    "id": "hemodialysis_access",
+    "name": "Hemodialysis Access Complications",
+    "system": "RENAL",
+    "agePeak_months": [480, 960],
+    "note": "Vascular access is the lifeline for hemodialysis patients. Options: AVF (best), AVG, and tunneled dialysis catheter (TDC). Each has specific complications.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["renal_replacement_therapy", "dialysis_access", "vascular_complications"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "access_rupture_hemorrhage", "weight": 10 },
+        { "sign": "septic_shock_from_access_infection", "weight": 10 },
+        { "sign": "pseudoaneurysm_rupture", "weight": 9 },
+        { "sign": "central_vein_stenosis_with_svc_syndrome", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Access dysfunction: urgent if thrombosed/infected; elective if stenosis detected on surveillance."
+    },
+    "historyFeatures": [
+      { "symptomId": "decreased_thrill_or_bruit", "weight": 5 },
+      { "symptomId": "arm_swelling_edema", "weight": 4 },
+      { "symptomId": "pain_at_access_site", "weight": 3 },
+      { "symptomId": "prolonged_bleeding_after_dialysis", "weight": 3 },
+      { "symptomId": "difficult_cannulation", "weight": 4 },
+      { "symptomId": "fever_chills_redness_at_site", "weight": 4 },
+      { "symptomId": "pulsatile_mass_pseudoaneurysm", "weight": 3 },
+      { "symptomId": "hand_ischemia_cold_pain_numbness", "weight": 3 },
+      { "symptomId": "reduced_dialysis_adequacy", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "absent_or_weak_thrill", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "high_pitched_continuous_bruit", "baseWeight": 4, "note": "Suggests stenosis" },
+      { "signId": "arm_edema_venous_hypertension", "baseWeight": 4 },
+      { "signId": "erythema_pus_at_exit_site", "baseWeight": 4 },
+      { "signId": "pulsatile_swelling_pseudoaneurysm", "baseWeight": 3 },
+      { "signId": "hand_ischemia_cold_capillary_refill", "baseWeight": 3 },
+      { "signId": "aneurysm_dilatation_of_access", "baseWeight": 2 },
+      { "signId": "signs_of_central_vein_stenosis_collaterals", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "peripheral_vascular_disease", "multiplier": 2.5 },
+      { "id": "previous_central_line_catheter", "multiplier": 3.0 },
+      { "id": "hypotension_during_dialysis", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "hypercoagulable_state", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "av_fistula_stenosis",
+        "name": "AV Fistula Stenosis",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "decreased_thrill", "weight": 5 },
+          { "feature": "high_pitched_bruit", "weight": 4 },
+          { "feature": "prolonged_bleeding_after_needle_removal", "weight": 4 },
+          { "feature": "elevated_venous_pressure_during_dialysis", "weight": 4 }
+        ],
+        "management": "Fistulogram with PTA (balloon angioplasty) of stenotic segment. Stent graft if recurrent stenosis. Surgical revision if PTA fails. Most commonly at anastomotic or draining vein site."
+      },
+      {
+        "id": "av_fistula_thrombosis",
+        "name": "AV Fistula Thrombosis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "absent_thrill_bruit", "weight": 5 },
+          { "feature": "dialysis_cannot_proceed", "weight": 5 },
+          { "feature": "palpable_clot", "weight": 4 },
+          { "feature": "sudden_onset", "weight": 4 }
+        ],
+        "management": "Urgent intervention: surgical thrombectomy or percutaneous pharmacomechanical thrombolysis (within 24-48h). Identify and treat underlying stenosis. Temporary dialysis catheter if needed. Consider access salvage."
+      },
+      {
+        "id": "dialysis_catheter_related_infection",
+        "name": "Tunneled Dialysis Catheter Related Infection",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "fever_chills_during_hemodialysis", "weight": 5 },
+          { "feature": "erythema_pus_at_exit_site", "weight": 5 },
+          { "feature": "tunnel_tenderness", "weight": 4 },
+          { "feature": "positive_blood_cultures_same_organism_from_catheter", "weight": 5 }
+        ],
+        "management": "Blood cultures (peripheral and from catheter lumen). Empiric IV antibiotics covering Gram-pos (vancomycin) and Gram-neg (ceftazidime or gentamicin). Catheter removal if tunnel infection, persistent bacteremia, or septic shock. Catheter exchange over wire if exit site infection only. Antibiotic lock therapy."
+      },
+      {
+        "id": "steal_syndrome",
+        "name": "Dialysis Access Steal Syndrome",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "hand_pain_coldness_during_dialysis", "weight": 5 },
+          { "feature": "finger_ischemia_ulceration", "weight": 5 },
+          { "feature": "weak_or_absent_radial_ulnar_pulse", "weight": 4 },
+          { "feature": "motor_sensory_deficit", "weight": 3 }
+        ],
+        "management": "Distal revascularization interval ligation (DRIL) procedure. Banding of fistula to reduce flow. Fistula ligation if severe tissue loss. Hand surgery consultation. Monitor closely in high-risk patients (diabetes, PVD)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "pseudoaneurysm_vs_hematoma", "discriminators": ["pulsatile_mass_with_bruit", "ultrasound_confirms_flow", "history_of_needle_stick"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Physical exam: thrill, bruit, pulse", "priority": "immediate", "yield": 0.8, "indication": "access surveillance" },
+        { "name": "Access flow measurement (Transonic)", "priority": "high", "yield": 0.7, "indication": "flow <500 mL/min suggests stenosis" }
+      ],
+      "imaging": [
+        { "name": "Duplex ultrasound of access", "priority": "first-line", "yield": 0.9, "indication": "stenosis location, velocity, flow volume" },
+        { "name": "Fistulogram (angiography)", "priority": "gold_standard", "yield": 0.98, "indication": "definitive diagnosis, simultaneous PTA" },
+        { "name": "Central venogram", "priority": "high", "yield": 0.85, "indication": "if arm/chest swelling suggests central stenosis" }
+      ],
+      "laboratory": [
+        { "name": "Blood cultures (peripheral + catheter)", "priority": "high", "yield": 0.6, "indication": "suspected catheter-related infection" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDOQI / NKF Clinical Practice Guidelines for Vascular Access",
+      "pathways": [
+        {
+          "severity": "stenosis detected (flow <500 or clinical signs)",
+          "criteria": ">50% stenosis on duplex, elevated venous pressure, prolonged bleeding",
+          "treatment": "Elective fistulogram + PTA. Stent for elastic recoil or recurrent stenosis. Timely referral to interventional nephrology/vascular surgery."
+        },
+        {
+          "severity": "thrombosis",
+          "criteria": "absent thrill/bruit, unable to dialyze",
+          "treatment": "Urgent intervention (<48h). Percutaneous or surgical thrombectomy. Treat underlying stenosis. Temporary dialysis catheter. Consider tissue plasminogen activator (tPA) pharmacomechanical."
+        },
+        {
+          "severity": "catheter-related infection",
+          "criteria": "fever + positive cultures + catheter source",
+          "treatment": "Empiric vancomycin + ceftazidime. Remove catheter if tunnel infection or persistent bacteremia >48h. Antibiotic lock. Replace with new catheter at different site if still needed."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "intimal_hyperplasia_at_venous_anastomosis",
+      "neointimal_proliferation_from_turbulent_flow",
+      "low_flow_state_predisposing_to_thrombosis",
+      "biofilm_formation_on_catheter_surface",
+      "arterial_insufficiency_from_diversion",
+      "central_vein_stenosis_from_previous_catheters"
+    ],
+    "complications": [
+      { "diseaseId": "access_loss_permanent", "probability": 0.1, "severityBoost": 0.4, "clues": ["irreversible_thrombosis", "multiple_recurrences", "exhaustion_of_access_sites"] },
+      { "diseaseId": "central_vein_stenosis_occlusion", "probability": 0.2, "severityBoost": 0.3, "clues": ["arm_face_swelling", "collateral_veins_on_chest", "previous_central_catheter"] },
+      { "diseaseId": "high_output_cardiac_failure", "probability": 0.05, "severityBoost": 0.3, "clues": ["high_access_flow_greater_than_2_l_min", "dyspnea", "heart_failure_symptoms"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if thrombosed/infected",
+    "diagnosticClues": ["absent_thrill", "prolonged_bleeding", "elevated_venous_pressure", "fever_with_catheter"],
+    "exclusionClues": ["normal_thrill_bruit", "easy_cannulation", "adequate_dialysis"]
+  }
+}

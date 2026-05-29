@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "brain_tumor_imaging",
+    "name": "Brain Tumor Imaging Characterization",
+    "system": "RAD",
+    "agePeak_months": [360, 720],
+    "note": "MRI is the gold standard for brain tumor evaluation. Key sequences: T1 pre/post-contrast, T2, FLAIR, DWI, SWI, and perfusion. Tumor grading based on enhancement, necrosis, edema, and hemorrhage.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["intracranial_mass", "brain_neoplasm", "contrast_enhancing_lesion"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "brain_herniation_midline_shift_gt_10mm", "weight": 10 },
+        { "sign": "hydrocephalus_obstructive", "weight": 9 },
+        { "sign": "intratumoral_hemorrhage", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "massive_vasogenic_edema", "weight": 7 },
+          { "sign": "tumor_volume_gt_50cc", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If herniation/hydrocephalus -> CRITICAL; else -> NON-CRITICAL (characterize further)"
+    },
+    "historyFeatures": [
+      { "symptomId": "headache_worsening_morning", "weight": 4, "modifiers": [
+          { "condition": "with_vomiting", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "new_onset_seizure", "weight": 5 },
+      { "symptomId": "progressive_focal_neurologic_deficit", "weight": 5 },
+      { "symptomId": "personality_or_cognitive_changes", "weight": 3 },
+      { "symptomId": "papilledema_on_clinical_exam", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "intra_axial_vs_extra_axial_location", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "contrast_enhancement_pattern", "baseWeight": 5 },
+      { "signId": "t2_flair_hyperintensity_extent", "baseWeight": 4 },
+      { "signId": "diffusion_restriction", "baseWeight": 4 },
+      { "signId": "perfusion_rCBV_elevation", "baseWeight": 4 },
+      { "signId": "swi_susceptibility_signal", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "neurofibromatosis_type_1_or_2", "multiplier": 5.0 },
+      { "id": "tuberous_sclerosis", "multiplier": 4.0 },
+      { "id": "prior_cranial_radiation", "multiplier": 3.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "glioblastoma_multiforme",
+        "name": "Glioblastoma (WHO Grade IV)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "irregular_rim_enhancement", "weight": 5 },
+          { "feature": "central_necrosis", "weight": 5 },
+          { "feature": "extensive_vasogenic_edema", "weight": 4 },
+          { "feature": "hemorrhage_on_swi", "weight": 4 },
+          { "feature": "elevated_rCBV_on_perfusion", "weight": 5 }
+        ],
+        "management": "Maximal safe surgical resection. Stupp protocol (temozolomide + radiation). Tumor treating fields. IDH wildtype vs mutant testing."
+      },
+      {
+        "id": "meningioma",
+        "name": "Meningioma",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "extra_axial_location_dural_base", "weight": 5 },
+          { "feature": "intense_homogeneous_enhancement", "weight": 5 },
+          { "feature": "csf_cleft_sign", "weight": 4 },
+          { "feature": "dural_tail_sign", "weight": 4 },
+          { "feature": "calcification_on_ct", "weight": 3 }
+        ],
+        "management": "Observation if asymptomatic/incidental. Surgical resection if symptomatic or growing. SRS/SRT for residual/recurrent or surgically inaccessible."
+      },
+      {
+        "id": "brain_metastasis",
+        "name": "Brain Metastases",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "multiple_lesions_gray_white_junction", "weight": 5 },
+          { "feature": "ring_enhancement", "weight": 4 },
+          { "feature": "disproportionate_edema_relative_to_size", "weight": 4 },
+          { "feature": "known_primary_malignancy", "weight": 5 }
+        ],
+        "management": "Whole brain radiation vs SRS (limited disease). Surgical resection if solitary/accessible. Systemic therapy per primary tumor type."
+      },
+      {
+        "id": "pituitary_adenoma",
+        "name": "Pituitary Adenoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "sellar_suprasellar_mass", "weight": 5 },
+          { "feature": "pituitary_stalk_deviation", "weight": 4 },
+          { "feature": "cavernous_sinus_invasion", "weight": 4 },
+          { "feature": "delayed_enhancement_compared_to_normal_gland", "weight": 3 }
+        ],
+        "management": "Hormonal workup. Transsphenoidal resection if symptomatic or functioning. Medical management for prolactinomas (cabergoline)."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "cerebral_abscess",
+        "discriminators": ["restricted_diffusion_central", "thin_smooth_rim", "clinical_infection"]
+      },
+      {
+        "diseaseId": "demyelinating_lesion",
+        "discriminators": ["open_ring_enhancement", "incomplete_rim", "perivenular_distribution"]
+      },
+      {
+        "diseaseId": "subacute_infarct",
+        "discriminators": ["gyriform_enhancement", "vascular_territory", "dwi_matches_adc"]
+      }
+    ],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "MRI Brain with and without contrast (3T preferred)", "priority": "immediate", "yield": 0.95, "indication": "all suspected brain tumors" },
+        { "name": "MR Perfusion (DSC/DCE)", "priority": "high", "yield": 0.8, "indication": "differentiate tumor vs non-tumor, grade glioma" },
+        { "name": "MR Spectroscopy", "priority": "medium", "yield": 0.7, "indication": "elevated Cho/NAA ratio suggests tumor" },
+        { "name": "DWI/ADC", "priority": "high", "yield": 0.75, "indication": "cellularity assessment, abscess vs tumor" },
+        { "name": "SWI", "priority": "medium", "yield": 0.5, "indication": "detect hemorrhage, calcification" },
+        { "name": "CT head non-contrast", "priority": "medium", "yield": 0.5, "indication": "initial screening, calcification, bony changes" }
+      ]
+    },
+    "management": {
+      "protocolReference": "RANO Criteria and WHO Classification of CNS Tumors 2021",
+      "pathways": [
+        {
+          "severity": "incidental_lesion",
+          "criteria": "small, non-enhancing, no mass effect, no symptoms",
+          "treatment": "Surveillance MRI at 3, 6, 12 months then annually. Neurosurgery/neuro-oncology referral."
+        },
+        {
+          "severity": "symptomatic_resectable",
+          "criteria": "symptomatic, accessible lesion, no contraindications",
+          "treatment": "Neurosurgical consultation for resection or biopsy. Pre-op functional MRI and tractography if eloquent cortex involved."
+        },
+        {
+          "severity": "emergency",
+          "criteria": "herniation, severe mass effect, hydrocephalus",
+          "treatment": "Urgent neurosurgical decompression. IV dexamethasone. Mannitol/hypertonic saline. CTV/ICU monitoring."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "neoplastic_cell_proliferation",
+      "angiogenesis",
+      "blood_brain_barrier_disruption",
+      "vasogenic_edema",
+      "mass_effect",
+      "increased_intracranial_pressure"
+    ],
+    "complications": [
+      {
+        "diseaseId": "tumor_related_seizures",
+        "probability": 0.4,
+        "lagDays": [0, 30],
+        "severityBoost": 0.3,
+        "clues": ["cortical_involvement", "focal_seizures", "no_antiepileptic"]
+      },
+      {
+        "diseaseId": "radiation_necrosis",
+        "probability": 0.1,
+        "lagDays": [180, 730],
+        "severityBoost": 0.3,
+        "clues": ["increasing_enhancement", "decreasing_perfusion", "history_of_radiation"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["progressive_neurologic_deficit", "new_seizures_in_adult", "mass_on_imaging", "perilesional_edema"],
+    "exclusionClues": ["acute_onset_minutes_to_hours", "single_small_pm_lesion"]
+  }
+}

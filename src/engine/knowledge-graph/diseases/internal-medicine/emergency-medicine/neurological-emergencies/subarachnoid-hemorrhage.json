@@ -1,0 +1,137 @@
+{
+  "disease": {
+    "id": "subarachnoid_haemorrhage",
+    "name": "Subarachnoid Hemorrhage",
+    "system": "emergency_medicine",
+    "agePeak_months": [480, 720],
+    "note": "Bleeding into the subarachnoid space, most commonly from a ruptured cerebral aneurysm. Thunderclap headache is the hallmark presentation. Time-sensitive: rebleeding prevention is critical.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["neurological_emergency", "haemorrhage", "headache"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sudden_reduced_gcs", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "seizures", "weight": 9 },
+        { "sign": "posturing", "weight": 9 },
+        { "sign": "respiratory_depression", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "SAH is a NEUROSURGICAL EMERGENCY. Rebleeding risk highest in first 24h."
+    },
+    "historyFeatures": [
+      { "symptomId": "thunderclap_headache_sudden_worst_of_life", "weight": 5, "doubleWeight": true },
+      { "symptomId": "neck_stiffness", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 4 },
+      { "symptomId": "photophobia", "weight": 3 },
+      { "symptomId": "loss_of_consciousness_transient", "weight": 4 },
+      { "symptomId": "seizure", "weight": 3 },
+      { "symptomId": "focal_neurological_deficit", "weight": 3 },
+      { "symptomId": "sentinel_headache_days_before", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "neck_stiffness_meningism", "baseWeight": 5 },
+      { "signId": "gcs_less_than_15", "baseWeight": 4 },
+      { "signId": "focal_neurological_deficit", "baseWeight": 4 },
+      { "signId": "blood_pressure_elevated", "baseWeight": 3 },
+      { "signId": "bradycardia", "baseWeight": 2 },
+      { "signId": "retinal_haemorrhage", "baseWeight": 3 },
+      { "signId": "third_nerve_palsy", "baseWeight": 4 },
+      { "signId": "kernig_sign_positive", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "hypertension", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 3.0 },
+      { "id": "excessive_alcohol", "multiplier": 2.0 },
+      { "id": "family_history_aneurysm_or_sah", "multiplier": 3.0 },
+      { "id": "polycystic_kidney_disease", "multiplier": 4.0 },
+      { "id": "connective_tissue_disease", "multiplier": 3.0 },
+      { "id": "cocaine_use", "multiplier": 3.0 },
+      { "id": "female_sex", "multiplier": 1.5 }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "migraine",
+        "discriminators": ["gradual_onset", "prior_episodes", "no_meningism", "normal_ct"]
+      },
+      {
+        "diseaseId": "meningitis",
+        "discriminators": ["fever", "signs_of_infection", "cerebrospinal_fluid_analysis"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE assessment", "priority": "immediate", "yield": 1.0, "indication": "all patients" },
+        { "name": "Blood glucose", "priority": "immediate", "yield": 0.3, "indication": "hypoglycemia mimic" }
+      ],
+      "laboratory": [
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.5, "indication": "coagulopathy assessment" },
+        { "name": "FBC, U&E, Cr", "priority": "high", "yield": 0.4, "indication": "baseline" },
+        { "name": "Troponin", "priority": "medium", "yield": 0.5, "indication": "neurogenic stress cardiomyopathy" },
+        { "name": "ABG", "priority": "medium", "yield": 0.4, "indication": "oxygenation" }
+      ],
+      "imaging": [
+        { "name": "CT head (non-contrast)", "priority": "immediate", "yield": 0.98, "indication": "hyperdense SAH (best within 6h)" },
+        { "name": "CT angiography (CTA)", "priority": "high", "yield": 0.95, "indication": "identify aneurysm" },
+        { "name": "Lumbar puncture (if CT negative)", "priority": "high", "yield": 0.95, "indication": "xanthochromia (supernatant bilirubin)" },
+        { "name": "Digital subtraction angiography (DSA)", "priority": "medium", "yield": 0.99, "indication": "gold standard for aneurysm detection, may be deferred" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ASA Guidelines for SAH / NICE Guidelines",
+      "pathways": [
+        {
+          "severity": "confirmed SAH",
+          "criteria": "CT or LP confirms SAH",
+          "treatment": "Strict bed rest. Neurosurgical consultation. Aneurysm securement: endovascular coiling or surgical clipping. Nimodipine 60mg PO/NG Q4H x 21 days (prevent vasospasm). Blood pressure control: target SBP <160 (reduce rebleeding risk). Avoid hypotension. Pain control (paracetamol, avoid NSAIDs). Seizure prophylaxis (levetiracetam). IV fluids (euvolemia). Monitor for hyponatremia (SIADH, cerebral salt wasting)."
+        },
+        {
+          "severity": "WFNS grade IV-V (poor grade)",
+          "criteria": "GCS <12, hemiparesis, coma",
+          "treatment": "ICP monitoring. Ventricular drain if hydrocephalus. ICU admission. EVD for hydrocephalus. Aneurysm securement as soon as feasible. Consider decompressive craniectomy."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "aneurysm_rupture",
+      "blood_enters_subarachnoid_space",
+      "increased_intracranial_pressure",
+      "reduced_cerebral_perfusion_pressure",
+      "cerebral_vasospasm",
+      "delayed_cerebral_ischaemia",
+      "hydrocephalus",
+      "neurogenic_pulmonary_oedema",
+      "stress_cardiomyopathy"
+    ],
+    "complications": [
+      {
+        "diseaseId": "cerebral_vasospasm",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["neurological_deterioration_day_4_to_14", "new_focal_deficit", "tcd_velocity_increase"]
+      },
+      {
+        "diseaseId": "hydrocephalus",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["worsening_gcs", "ventriculomegaly_on_ct"]
+      },
+      {
+        "diseaseId": "rebleeding",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["sudden_deterioration", "fresh_blood_on_ct"]
+      },
+      {
+        "diseaseId": "neurogenic_stress_cardiomyopathy",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["elevated_troponin", "ecg_abnormalities", "regional_wall_motion_abnormality"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["thunderclap_headache", "neck_stiffness", "photophobia", "blood_on_ct", "xanthochromia"],
+    "exclusionClues": ["normal_ct_within_6h_and_negative_lp", "non_aneurysmal_cause_found", "different_headache_type"]
+  }
+}

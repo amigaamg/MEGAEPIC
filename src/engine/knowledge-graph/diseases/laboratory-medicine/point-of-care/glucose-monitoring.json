@@ -1,0 +1,171 @@
+{
+  "disease": {
+    "id": "glucose_monitoring",
+    "name": "Point-of-Care Glucose Monitoring",
+    "system": "LAB",
+    "agePeak_months": [12, 960],
+    "note": "POC glucose testing is critical for diabetes management. Capillary blood glucose (CBG) correlates well with venous plasma but may be inaccurate in shock, polycythemia, or anemia. Critical values: <54 mg/dL (severe hypoglycemia), >500 mg/dL (severe hyperglycemia with DKA/HHS risk).",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["diabetes_mellitus", "hypoglycemia", "hyperglycemia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "glucose_lt_40_mg_dl", "weight": 10 },
+        { "sign": "glucose_gt_600_mg_dl", "weight": 9 },
+        { "sign": "unconscious_or_seizure", "weight": 10 },
+        { "sign": "ketosis_positive", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "glucose_lt_54_mg_dl_severe_hypoglycemia", "weight": 8 },
+          { "sign": "glucose_gt_500_with_dka_or_hhs_signs", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If <54 or >500 with symptoms -> EMERGENT; else -> NON-EMERGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "hypoglycemia_symptoms_sweating_palpitations_hunger", "weight": 5, "modifiers": [
+          { "condition": "diabetic_on_medication", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "polyuria_polydipsia_weight_loss", "weight": 4 },
+      { "symptomId": "altered_mental_status_or_confusion", "weight": 5 },
+      { "symptomId": "nausea_vomiting_abdominal_pain_dka", "weight": 3 },
+      { "symptomId": "recent_insulin_dose_adjustment", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "poc_glucose_value_critical", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "capillary_vs_venous_difference", "baseWeight": 3 },
+      { "signId": "ketone_measurement_blood_or_urine", "baseWeight": 4 },
+      { "signId": "anion_gap_calculation", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "diabetes_type_1", "multiplier": 3.0 },
+      { "id": "intensive_insulin_therapy", "multiplier": 2.5 },
+      { "id": "renal_failure", "multiplier": 2.0 },
+      { "id": "malnutrition_or_sepsis", "multiplier": 1.5 },
+      { "id": "elderly_on_sulfonylurea", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "hypoglycemia",
+        "name": "Hypoglycemia (Whipple Triad)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "autonomic_symptoms_sweating_tremor", "weight": 4 },
+          { "feature": "neuroglycopenic_symptoms_confusion_seizure", "weight": 5 },
+          { "feature": "poc_glucose_lt_70_mg_dl", "weight": 5 },
+          { "feature": "symptoms_resolve_with_glucose_administration", "weight": 5 },
+          { "feature": "causes_insulin_sulfonylurea_excess", "weight": 3 }
+        ],
+        "management": "Rule of 15: give 15g fast-acting carbohydrate, recheck in 15 min. If unconscious: IM glucagon (1mg) or IV D50 (25g). Identify cause (medication adjustment, missed meals, excess insulin, alcohol). Severe/recurrent: endocrine consult."
+      },
+      {
+        "id": "diabetic_ketoacidosis",
+        "name": "Diabetic Ketoacidosis (DKA)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "hyperglycemia_gt_250_mg_dl", "weight": 5 },
+          { "feature": "ketonemia_positive_beta_hydroxybutyrate", "weight": 5 },
+          { "feature": "anion_gap_metabolic_acidosis", "weight": 5 },
+          { "feature": "type_1_diabetes_most_common", "weight": 4 },
+          { "feature": "precipitant_infection_missed_insulin", "weight": 3 }
+        ],
+        "management": "IV fluids (NS 1L bolus, then 250-500ml/h). IV insulin (0.1 U/kg bolus, then 0.1 U/kg/h infusion). Potassium replacement when K <5.3. Bicarbonate only if pH <7.0. Monitor glucose hourly, electrolytes q2-4h. Transition to SQ insulin when closed."
+      },
+      {
+        "id": "hyperosmolar_hyperglycemic_state",
+        "name": "Hyperosmolar Hyperglycemic State (HHS)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "glucose_gt_600_mg_dl_often_gt_1000", "weight": 5 },
+          { "feature": "no_or_minimal_ketosis", "weight": 5 },
+          { "feature": "no_significant_acidosis", "weight": 4 },
+          { "feature": "serum_osmolality_gt_320", "weight": 5 },
+          { "feature": "profound_dehydration_altered_mental_status", "weight": 5 }
+        ],
+        "management": "Aggressive IV fluids (1-2L NS bolus, then 0.45% NS at 250-500ml/h). Insulin lower dose than DKA. Recheck osmolality. K replacement. Identify and treat precipitant (infection, stroke, MI). ICU admission."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "pseudohypoglycemia",
+        "discriminators": ["leukocytosis_gt_50k", "polycythemia", "sample_delayed"]
+      },
+      {
+        "diseaseId": "pseudohyperglycemia",
+        "discriminators": ["peritoneal_dialysis", "maltose_icodextrin", "point_of_care_error"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "POC glucose using FDA-approved meter", "priority": "immediate", "yield": 0.95, "indication": "all patients with diabetes; any suspected dysglycemia" },
+        { "name": "Blood ketones (beta-hydroxybutyrate POC)", "priority": "high", "yield": 0.8, "indication": "suspected DKA" },
+        { "name": "Urine ketones", "priority": "medium", "yield": 0.6, "indication": "alternative to blood ketones" }
+      ],
+      "laboratory": [
+        { "name": "Venous plasma glucose (confirm POC)", "priority": "high", "yield": 0.95, "indication": "critical values, discordant results" },
+        { "name": "CMP (creatinine, sodium, potassium, bicarb, BUN)", "priority": "high", "yield": 0.8, "indication": "DKA/HHS monitoring, anion gap" },
+        { "name": "ABG/VBG (pH, bicarb)", "priority": "high", "yield": 0.7, "indication": "acidosis severity in DKA" },
+        { "name": "HbA1c", "priority": "medium", "yield": 0.9, "indication": "glycemic control assessment (not acute)" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "ADA Standards of Care in Diabetes, Joint British Diabetes Societies Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_hypoglycemia",
+          "criteria": "glucose 54-69 mg/dL, conscious, can swallow",
+          "treatment": "15g fast-acting CHO (glucose tabs, juice). Recheck in 15 min. If still <70, repeat. Once >70, give snack with protein if next meal >1h away."
+        },
+        {
+          "severity": "severe_hypoglycemia",
+          "criteria": "glucose <54 mg/dL or unconscious/seizure",
+          "treatment": "IM glucagon (1mg adult, 0.5mg child) or IV D50 (25g). Recheck glucose in 15 min. If no IV access, SQ glucagon. Admit if prolonged or unknown cause."
+        },
+        {
+          "severity": "dka",
+          "criteria": "glucose >250, ketosis, acidosis (pH <7.3, HCO3 <18)",
+          "treatment": "IV fluids, IV insulin, K+ replacement. ICU or stepdown. Hourly glucose, q2h electrolytes. Transition when glucose <200, HCO3 >18, pH >7.3."
+        },
+        {
+          "severity": "hhs",
+          "criteria": "glucose >600, osmolality >320, no significant ketosis",
+          "treatment": "Aggressive fluid resuscitation. Lower dose insulin. ICU for monitoring. Correct electrolyte imbalances. Treat precipitant."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "insulin_deficiency_or_excess",
+      "counter_regulatory_hormone_response",
+      "ketone_body_production",
+      "osmotic_diuresis",
+      "electrolyte_depletion"
+    ],
+    "complications": [
+      {
+        "diseaseId": "cerebral_edema_dka_in_children",
+        "probability": 0.01,
+        "lagDays": [1, 2],
+        "severityBoost": 0.7,
+        "clues": ["headache", "bradycardia", "hypertension", "altered_mental_status"]
+      },
+      {
+        "diseaseId": "hypokalemia_from_insulin_therapy",
+        "probability": 0.1,
+        "lagDays": [0, 2],
+        "severityBoost": 0.3,
+        "clues": ["k_lt_3_5", "ecg_u_waves", "arrhythmia"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["poc_glucose_abnormal", "symptoms_correlate", "ketones", "corrected_by_glucose"],
+    "exclusionClues": ["normal_glucose", "asymptomatic"]
+  }
+}

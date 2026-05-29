@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "rotator_cuff_disease",
+    "name": "Rotator Cuff Disease",
+    "system": "rheumatology",
+    "agePeak_months": [480, 840],
+    "note": "Spectrum of shoulder pathology including tendinopathy, partial-thickness tears, full-thickness tears, and cuff arthropathy. Most commonly affects the supraspinatus tendon.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["soft_tissue", "shoulder_pain", "tendinopathy", "musculoskeletal"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_traumatic_tear", "weight": 6 },
+        { "sign": "septic_arthritis_shoulder", "weight": 10 },
+        { "sign": "frozen_ shoulder_adhesive_capsulitis", "weight": 5 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If acute traumatic tear or infection suspected -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "shoulder_pain_deltoid_region", "weight": 5 },
+      { "symptomId": "painful_arc_abduction", "weight": 5 },
+      { "symptomId": "night_pain_unable_to_sleep", "weight": 4 },
+      { "symptomId": "weakness_abduction_external_rotation", "weight": 4 },
+      { "symptomId": "overhead_activity_aggravates", "weight": 4 },
+      { "symptomId": "trauma_or_repetitive_strain", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "painful_arc_60_120_degrees", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "drop_arm_sign", "baseWeight": 4 },
+      { "signId": "empty_can_test_positive", "baseWeight": 4 },
+      { "signId": "external_rotation_weakness_infraspinatus", "baseWeight": 3 },
+      { "signId": "impingement_signs_neer_hawkins", "baseWeight": 4 },
+      { "signId": "supraspinatus_tenderness_greater_tuberosity", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_40", "multiplier": 4.0 },
+      { "id": "overhead_occupation_sport", "multiplier": 3.0 },
+      { "id": "repetitive_strain", "multiplier": 2.5 },
+      { "id": "trauma_acute", "multiplier": 2.0 },
+      { "id": "smoking_impaired_healing", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "rotator_cuff_tendinopathy",
+        "name": "Rotator Cuff Tendinopathy",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "pain_without_weakness", "weight": 5 },
+          { "feature": "positive_impingement_tests", "weight": 4 },
+          { "feature": "intact_tendon_on_ultrasound", "weight": 5 }
+        ],
+        "management": "Physiotherapy. Subacromial steroid injection. Activity modification."
+      },
+      {
+        "id": "full_thickness_tear",
+        "name": "Full-Thickness Rotator Cuff Tear",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "weakness_abduction_external_rotation", "weight": 5 },
+          { "feature": "drop_arm_sign", "weight": 5 },
+          { "feature": "positive_ultrasound_mri", "weight": 5 }
+        ],
+        "management": "Refer orthopedics. Surgical repair if acute, symptomatic, and good function. Physiotherapy for chronic tears."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "adhesive_capsulitis",
+        "discriminators": ["restricted_passive_rom", "global_restriction", "no_impingement", "diabetes_association"]
+      },
+      {
+        "diseaseId": "glenohumeral_arthritis",
+        "discriminators": ["crepitus", "restricted_rom_all_planes", "xray_joint_space_narrowing"]
+      },
+      {
+        "diseaseId": "bicipital_tendinopathy",
+        "discriminators": ["bicipital_groove_tenderness", "speed_test_positive", "pain_anterior_shoulder"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Active and passive ROM assessment", "priority": "immediate", "yield": 0.8, "indication": "impingement, range, strength" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Shoulder ultrasound", "priority": "high", "yield": 0.9, "indication": "tendon thickness, tear size, retraction" },
+        { "name": "MRI shoulder", "priority": "high", "yield": 0.95, "indication": "full evaluation of tears, muscle atrophy" },
+        { "name": "Shoulder X-ray", "priority": "medium", "yield": 0.4, "indication": "cuff arthropathy, AC joint, calcification" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAOS/OTA Rotator Cuff Guidelines",
+      "pathways": [
+        {
+          "severity": "tendinopathy",
+          "criteria": "pain without weakness, intact tendon",
+          "treatment": "Physiotherapy (eccentric exercises). NSAIDs. Subacromial steroid injection. Activity modification."
+        },
+        {
+          "severity": "partial_tear",
+          "criteria": "partial thickness tear on imaging, some weakness",
+          "treatment": "Physiotherapy. Subacromial injection. Consider surgical debridement if refractory."
+        },
+        {
+          "severity": "full_tear",
+          "criteria": "full thickness tear, weakness, symptomatic",
+          "treatment": "Arthroscopic repair if acute. Open repair for large tears. Reverse shoulder arthroplasty for cuff arthropathy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "tendon_degeneration_tendinosis",
+      "hypovascular_zone_critical",
+      "mechanical_impingement_acromial",
+      "partial_thickness_tear_progression",
+      "full_thickness_tear",
+      "muscle_atrophy_fatty_infiltration"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "rotator_cuff_arthropathy",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["chronic_large_tear", "superior_migration_humeral_head", "glenohumeral_joint_destruction"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["painful_arc_abduction", "night_pain", "impingement_tests_positive", "weakness_abduction_external_rotation"],
+    "exclusionClues": ["cervical_radiculopathy", "global_rom_restriction", "normal_ultrasound_mri", "shoulder_instability"]
+  }
+}

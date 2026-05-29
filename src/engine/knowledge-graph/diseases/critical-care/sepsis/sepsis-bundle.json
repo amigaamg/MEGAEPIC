@@ -1,0 +1,107 @@
+{
+  "disease": {
+    "id": "sepsis_bundle_compliance",
+    "name": "Sepsis Bundle (Hour-1 / 3-Hour / 6-Hour Bundle)",
+    "system": "critical_care",
+    "agePeak_months": [0, 960],
+    "note": "Time-sensitive care bundle for sepsis management. Core elements: measure lactate, blood cultures, broad-spectrum antibiotics, crystalloid fluids, vasopressors. Reduced mortality with timely completion.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["sepsis", "quality_improvement", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "lactate_greater_4", "weight": 10 },
+        { "sign": "hypotension_refractory_to_fluids", "weight": 10 },
+        { "sign": "multi_organ_failure_rapid", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Sepsis (organ dysfunction) vs Septic Shock (lactate >2 + vasopressor need)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "suspected_or_confirmed_infection", "weight": 5 },
+      { "symptomId": "qsofa_greater_or_equal_2", "weight": 4 },
+      { "symptomId": "hypotension_sbp_less_100", "weight": 4 },
+      { "symptomId": "altered_consciousness", "weight": 3 },
+      { "symptomId": "tachypnea_rr_more_22", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "altered_mental_status", "baseWeight": 4 },
+      { "signId": "signs_of_hypoperfusion", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "chronic_organ_disease", "multiplier": 1.5 },
+      { "id": "indwelling_devices", "multiplier": 2.0 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Lactate (POC)", "priority": "immediate", "yield": 0.9, "indication": "tissue hypoperfusion marker, Hour-1 bundle element" },
+        { "name": "Blood cultures x 2 sets (before antibiotics)", "priority": "immediate", "yield": 0.5, "indication": "identify pathogen" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.6, "indication": "infection markers" },
+        { "name": "Lactate", "priority": "immediate", "yield": 0.9, "indication": "repeat if initially elevated (every 2-4h)" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Surviving Sepsis Campaign Hour-1 Bundle 2021",
+      "pathways": [
+        {
+          "severity": "hour-1 bundle",
+          "criteria": "suspected sepsis + qSOFA >=2 or lactate >2 or organ dysfunction",
+          "treatment": "1. Measure lactate (re-measure if >2). 2. Blood cultures before antibiotics. 3. Broad-spectrum antibiotics within 1 hour. 4. Start 30 mL/kg crystalloid for hypotension/lactate >=4. 5. Vasopressors if hypotensive during or after fluids (MAP target >=65)."
+        },
+        {
+          "severity": "septic shock (post-bundle)",
+          "criteria": "persistent hypotension despite fluids, lactate >2",
+          "treatment": "Norepinephrine first-line. Additional fluids guided by dynamic assessment. Central line. Consider hydrocortisone if vasopressor-dependent. ICU admission. Serial lactate clearance. Source control within 6-12 hours."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "host_response_to_infection",
+      "endothelial_dysfunction",
+      "microvascular_shunting",
+      "tissue_hypoperfusion",
+      "cellular_hypoxia",
+      "lactic_acidosis",
+      "organ_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "septic_shock_progression",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["persistent_hypotension", "lactate_not_clearing"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["suspected_infection_plus_organ_dysfunction", "qsofa_positive", "lactate_elevated"],
+    "exclusionClues": ["no_infection_source", "lactate_normal", "no_organ_dysfunction"]
+  }
+}

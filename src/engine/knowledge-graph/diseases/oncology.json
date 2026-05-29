@@ -1,0 +1,254 @@
+[
+  {
+    "id": "ovarian_cancer",
+    "name": "Ovarian Cancer",
+    "system": "oncology",
+    "agePeak": [360, 600],
+    "prevalenceWeight": 0.3,
+    "historyFeatures": [
+      { "symptomId": "abdominal_bloating", "weight": 5 },
+      { "symptomId": "pelvic_pain", "weight": 4 },
+      { "symptomId": "early_satiety", "weight": 4 },
+      { "symptomId": "abnormal_vaginal_bleeding", "weight": 3 },
+      { "symptomId": "urinary_frequency", "weight": 3 },
+      { "symptomId": "constipation", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "abdominal_pain", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "pelvic_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "ascites", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "lymph_node_pelvic", "baseWeight": 3 },
+      { "signId": "lymphoedema", "baseWeight": 2 },
+      { "signId": "pleural_effusion_sign", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_ovarian_cancer", "multiplier": 2.0 },
+      { "id": "brca1_mutation", "multiplier": 5.0 },
+      { "id": "brca2_mutation", "multiplier": 3.0 },
+      { "id": "lynch_syndrome", "multiplier": 2.5 },
+      { "id": "nulliparity", "multiplier": 1.5 },
+      { "id": "early_menarche", "multiplier": 1.2 },
+      { "id": "late_menopause", "multiplier": 1.3 },
+      { "id": "endometriosis", "multiplier": 1.3 },
+      { "id": "increasing_age", "multiplier": 1.4 },
+      { "id": "postmenopausal_status", "multiplier": 1.5 },
+      { "id": "hormone_replacement_therapy", "multiplier": 1.2 },
+      { "id": "talc_exposure", "multiplier": 1.2 }
+    ],
+    "protectiveFactors": [
+      { "id": "oral_contraceptive_use", "multiplier": 0.6 },
+      { "id": "tubal_ligation", "multiplier": 0.7 },
+      { "id": "bilateral_salpingo_oophorectomy", "multiplier": 0.05 },
+      { "id": "breastfeeding", "multiplier": 0.8 }
+    ],
+    "complications": [
+      { "diseaseId": "malignant_ascites", "probability": 0.4, "severityBoost": 0.3 },
+      { "diseaseId": "bowel_obstruction", "probability": 0.2, "severityBoost": 0.4 },
+      { "diseaseId": "pleural_effusion", "probability": 0.15, "severityBoost": 0.3 },
+      { "diseaseId": "venous_thromboembolism", "probability": 0.15, "severityBoost": 0.4 },
+      { "diseaseId": "tumour_rupture", "probability": 0.03, "severityBoost": 0.5 }
+    ],
+    "syndromeTags": ["gynaecological_malignancy", "pelvic_mass", "oncology_condition"],
+    "mustNotMiss": true,
+    "emergencyPriority": "If suspected ovarian torsion or rupture",
+    "diagnosticClues": ["persistent bloating + pelvic pain + early satiety in postmenopausal woman"],
+    "exclusionClues": ["normal imaging with normal CA125", "resolving symptoms with bowel management"],
+    "investigations": {
+      "bedside": [
+        { "name": "Bimanual pelvic examination", "priority": "immediate", "yield": 0.5, "indication": "all suspected — detect adnexal mass" },
+        { "name": "Abdominal examination for ascites", "priority": "immediate", "yield": 0.6, "indication": "all suspected" }
+      ],
+      "laboratory": [
+        { "name": "CA-125 (serum)", "priority": "first_line", "yield": 0.7, "indication": "all suspected — elevated in ~80% epithelial ovarian cancer", "note": "Can be normal in mucinous, borderline, and early-stage cancers" },
+        { "name": "HE4 (serum)", "priority": "adjunct", "yield": 0.75, "indication": "improves specificity over CA125 alone" },
+        { "name": "ROMA index (CA125 + HE4)", "priority": "risk_stratification", "yield": 0.85, "indication": "preoperative risk assessment" },
+        { "name": "Full blood count", "priority": "routine", "yield": 0.3, "indication": "anaemia of chronic disease" },
+        { "name": "Full tumour markers: CEA, AFP, hCG, LDH", "priority": "if_germ_cell_suspected", "yield": 0.7, "indication": "germ cell tumours in younger women" },
+        { "name": "Carcinoembryonic antigen (CEA)", "priority": "if_colonic_metastasis_suspected", "yield": 0.4, "indication": "differentiate from colon cancer" },
+        { "name": "Genetic testing (BRCA1/2)", "priority": "all_epithelial_ovarian_cancer", "yield": 0.9, "indication": "prognostic and therapeutic implications (PARP inhibitors)" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound (TVUS)", "priority": "first_line", "yield": 0.85, "indication": "characterise adnexal mass — size, complexity, solid components, vascularity", "note": "Use IOTA simple rules for risk stratification" },
+        { "name": "CT abdomen and pelvis (with IV and oral contrast)", "priority": "staging", "yield": 0.8, "indication": "preoperative staging — assess extent of disease, metastases, ascites" },
+        { "name": "MRI pelvis", "priority": "problem_solving", "yield": 0.85, "indication": "indeterminate mass on ultrasound, local staging" },
+        { "name": "PET-CT", "priority": "recurrence_surveillance", "yield": 0.8, "indication": "suspected recurrence with rising CA125 but normal CT" },
+        { "name": "Chest CT or CXR", "priority": "staging", "yield": 0.6, "indication": "assess for pleural metastases and effusion" }
+      ],
+      "advanced": [
+        { "name": "Diagnostic laparoscopy with biopsy", "indication": "tissue diagnosis when imaging inconclusive", "priority": "if_needed" },
+        { "name": "Pleural fluid cytology", "indication": "if pleural effusion present", "priority": "if_needed" },
+        { "name": "Ascitic fluid cytology", "indication": "if ascites present", "priority": "if_needed" }
+      ]
+    },
+    "management": {
+      "protocolReference": "FIGO Staging and NCCN Guidelines for Ovarian Cancer, 2024",
+      "pathways": [
+        {
+          "severity": "early_stage_FIGO1_2A",
+          "criteria": "Disease confined to ovaries/fallopian tubes, no ascites, good performance status",
+          "treatment": [
+            "Complete surgical staging: total abdominal hysterectomy + bilateral salpingo-oophorectomy + omentectomy + peritoneal biopsies + lymph node dissection",
+            "Fertility-sparing surgery (USO + staging) for stage IA germ cell/early invasive if childbearing desired",
+            "Adjuvant chemotherapy for high-risk early stage (stage IC, high grade, clear cell): Carboplatin AUC 5-6 + Paclitaxel 175 mg/m2 Q3W x 3-6 cycles",
+            "Observation for stage IA low-grade with complete staging"
+          ]
+        },
+        {
+          "severity": "advanced_FIGO_2B_4",
+          "criteria": "Disease beyond pelvis, peritoneal metastases, stage III-IV",
+          "treatment": [
+            "Neoadjuvant chemotherapy (NACT): Carboplatin AUC 5-6 + Paclitaxel 175 mg/m2 Q3W x 3 cycles",
+            "Interval debulking surgery (IDS): goal R0 (no residual disease)",
+            "Post-IDS: 3 additional cycles of Carboplatin + Paclitaxel (total 6 cycles)",
+            "If BRCA-mutated: Olaparib 300 mg PO BID maintenance after complete/partial response",
+            "Bevacizumab 15 mg/kg IV Q3W maintenance if high-risk (stage IV, suboptimal debulk)",
+            "Consider HIPEC (hyperthermic intraperitoneal chemotherapy) for select patients at tertiary centres"
+          ],
+          "reassessment": "CA125 monitoring Q3 weeks during chemo; CT reassessment after 3 cycles and at completion"
+        },
+        {
+          "severity": "recurrent",
+          "criteria": "Rising CA125 and/or imaging-confirmed recurrence after completion of primary therapy",
+          "treatment": [
+            "Platinum-sensitive (relapse >6 months): re-treatment with Carboplatin + Paclitaxel or Carboplatin + Gemcitabine",
+            "Platinum-resistant (relapse <6 months): single-agent therapy — Paclitaxel weekly, Topotecan, Pegylated liposomal doxorubicin, Gemcitabine",
+            "PARP inhibitor (Olaparib/Niraparib) if BRCA-mutated and platinum-sensitive",
+            "Bevacizumab added to chemotherapy for non-BRCA patients",
+            "Palliative surgery for bowel obstruction if appropriate",
+            "Consider palliative care consultation for symptom management"
+          ]
+        }
+      ],
+      "specialConsiderations": {
+        "wheeze_branch": "Not applicable",
+        "HIV_exposed": "No specific modification except standard precautions in immunosuppressed",
+        "SAM": "Nutritional support essential during chemotherapy"
+      }
+    },
+    "treatmentResponseLogic": {
+      "triggers": [
+        {
+          "timePoint": "after_3_cycles",
+          "ifNoImprovement": { "actions": ["Re-assess with CT scan", "Check CA125 trend", "Consider switching chemotherapy regimen", "Evaluate for clinical trial eligibility"] }
+        },
+        {
+          "timePoint": "completion_adjuvant",
+          "ifStillSick": { "actions": ["CT scan for residual disease", "Multi-disciplinary team review", "Discuss second-line therapy"] }
+        }
+      ]
+    },
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["age?", "menopausal_status?", "bloating?", "pelvic_pain?", "family_history_cancer?", "previous_malignancy?"],
+      "branching": [
+        { "if": "family_history", "ask": ["breast_cancer?", "ovarian_cancer?", "colorectal_cancer?", "brca_testing_done?", "age_at_diagnosis_relative"] },
+        { "if": "abnormal_bleeding", "ask": ["pattern?", "amount?", "postmenopausal?", "last_menstrual_period?"] },
+        { "if": "abdominal_bloating", "ask": ["duration?", "progressive?", "associated_weight_loss?", "ascites?"] }
+      ]
+    },
+    "pathophysiology": [
+      "malignant_transformation_of_ovarian_surface_epithelium",
+      "incessant_ovulation_hypothesis",
+      "fallopian_tube_epithelial_origin_for_high_grade_serous",
+      "peritoneal_dissemination",
+      "lymphatic_and_haematogenous_spread",
+      "BRCA_mediated_DNA_repair_deficiency_in_hereditary_cases"
+    ],
+    "subtypes": [
+      {
+        "id": "high_grade_serous",
+        "name": "High-Grade Serous Carcinoma",
+        "prevalenceModifier": 0.7,
+        "agePeak": [420, 600],
+        "keyFeatures": [
+          { "feature": "most_common_histotype", "weight": 5 },
+          { "feature": "p53_mutation", "weight": 5 },
+          { "feature": "presents_at_advanced_stage", "weight": 5 },
+          { "feature": "brca_associated", "weight": 4 },
+          { "feature": "rapid_progression", "weight": 4 }
+        ],
+        "imagingFeatures": ["complex_cystic_solid_adnexal_mass", "peritoneal_carcinomatosis"],
+        "management": "Carboplatin + Paclitaxel; PARP inhibitors if BRCA-mutant"
+      },
+      {
+        "id": "low_grade_serous",
+        "name": "Low-Grade Serous Carcinoma",
+        "prevalenceModifier": 0.05,
+        "agePeak": [300, 480],
+        "keyFeatures": [
+          { "feature": "younger_patients", "weight": 4 },
+          { "feature": "braf_or_kras_mutation", "weight": 4 },
+          { "feature": "indolent_course", "weight": 4 },
+          { "feature": "hormone_receptor_positive", "weight": 4 },
+          { "feature": "no_brca_association", "weight": 3 }
+        ],
+        "imagingFeatures": ["solid_adnexal_mass"],
+        "management": "Surgery; hormonal therapy (tamoxifen, aromatase inhibitors); chemotherapy less sensitive"
+      },
+      {
+        "id": "mucinous_carcinoma",
+        "name": "Mucinous Carcinoma",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "rare_bilateral", "weight": 4 },
+          { "feature": "large_cystic_mass", "weight": 5 },
+          { "feature": "increased_ca19_9", "weight": 4 },
+          { "feature": "ca125_normal_often", "weight": 3 },
+          { "feature": "chemoresistant", "weight": 4 }
+        ],
+        "imagingFeatures": ["large_multiloculated_cyst", "few_solid_components"],
+        "management": "Surgery primary; rule out GI metastasis (appendiceal/colonic); limited chemo sensitivity"
+      },
+      {
+        "id": "endometrioid_carcinoma",
+        "name": "Endometrioid Carcinoma",
+        "prevalenceModifier": 0.1,
+        "agePeak": [360, 540],
+        "keyFeatures": [
+          { "feature": "associated_endometriosis", "weight": 4 },
+          { "feature": "associated_endometrial_cancer", "weight": 4 },
+          { "feature": "better_prognosis", "weight": 3 },
+          { "feature": "early_presentation", "weight": 3 }
+        ],
+        "management": "Surgery; treat as endometrial cancer if synchronous"
+      },
+      {
+        "id": "clear_cell_carcinoma",
+        "name": "Clear Cell Carcinoma",
+        "prevalenceModifier": 0.05,
+        "agePeak": [360, 540],
+        "keyFeatures": [
+          { "feature": "endometriosis_associated", "weight": 5 },
+          { "feature": "chemoresistant", "weight": 5 },
+          { "feature": "hypercalcaemia_paraneoplastic", "weight": 3 },
+          { "feature": "thrombotic_complications", "weight": 4 },
+          { "feature": "worse_prognosis", "weight": 4 }
+        ],
+        "management": "Complete surgical staging; less platinum-sensitive; consider clinical trials"
+      },
+      {
+        "id": "germ_cell_tumour",
+        "name": "Malignant Germ Cell Tumour",
+        "prevalenceModifier": 0.03,
+        "agePeak": [120, 360],
+        "keyFeatures": [
+          { "feature": "young_patients_children", "weight": 5 },
+          { "feature": "rapid_growth", "weight": 5 },
+          { "feature": "increased_afp_or_hcg", "weight": 5 },
+          { "feature": "good_response_to_chemo", "weight": 4 }
+        ],
+        "management": "Fertility-sparing surgery + BEP chemotherapy (Bleomycin, Etoposide, Cisplatin)"
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "irritable_bowel_syndrome", "discriminators": ["chronic_relapsing_course", "normal_imaging", "no_ca125_elevation", "normal_ovaries_on_ultrasound"], "negativeImpactOnParen": 3 },
+      { "diseaseId": "benign_ovarian_cyst", "discriminators": ["simple_cyst_on_ultrasound", "normal_ca125", "premenopausal"], "negativeImpactOnParen": 2 },
+      { "diseaseId": "diverticulitis", "discriminators": ["fever", "left_lower_quadrant_pain", "leukocytosis", "colonic_wall_thickening_on_ct"], "negativeImpactOnParen": 2 },
+      { "diseaseId": "endometriosis", "discriminators": ["cyclic_pain", "infertility", "endometrioma_on_ultrasound", "young_age"], "negativeImpactOnParen": 2 },
+      { "diseaseId": "colorectal_cancer", "discriminators": ["rectal_bleeding", "change_in_bowel_habit", "colonoscopy_findings"], "negativeImpactOnParen": 2 },
+      { "diseaseId": "ovarian_torsion", "discriminators": ["acute_severe_pain", "nausea_vomiting", "emergency_presentation"], "negativeImpactOnParen": 1 }
+    ]
+  }
+]

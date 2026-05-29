@@ -1,0 +1,138 @@
+{
+  "disease": {
+    "id": "fetal_distress",
+    "name": "Fetal Distress (Non-Reassuring Fetal Status)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Fetal hypoxia and acidosis during labor or antepartum period. Detected by abnormal fetal heart rate patterns, meconium staining, and/or fetal scalp pH abnormalities.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["intrapartum_emergency", "non_reassuring_fetal_status"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "prolonged_fetal_bradycardia", "weight": 10 },
+        { "sign": "loss_of_fetal_heart_rate_audibility", "weight": 10 },
+        { "sign": "severe_variable_or_late_decelerations", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "fetal_scalp_pH_below_7_20", "weight": 8 },
+          { "sign": "meconium_stained_liquor_with_abnormal_fhr", "weight": 7 },
+          { "sign": "reduced_fetal_movements_with_abnormal_ctg", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Prolonged bradycardia, pH <7.20, or severe decelerations -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "reduced_fetal_movements", "weight": 5 },
+      { "symptomId": "prolonged_labor", "weight": 4 },
+      { "symptomId": "meconium_stained_liquor", "weight": 4 },
+      { "symptomId": "abdominal_pain_constant", "weight": 2, "note": "Suggests abruption" },
+      { "symptomId": "vaginal_bleeding", "weight": 3 },
+      { "symptomId": "fever", "weight": 3, "note": "Suggests chorioamnionitis" },
+      { "symptomId": "maternal_trauma", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fetal_tachycardia_over_160", "baseWeight": 4 },
+      { "signId": "fetal_bradycardia_below_110", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "late_decelerations_on_ctg", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "variable_decelerations_severe", "baseWeight": 4 },
+      { "signId": "reduced_variability_on_ctg", "baseWeight": 4 },
+      { "signId": "meconium_staining_on_speculum", "baseWeight": 4 },
+      { "signId": "sinusoidal_pattern_on_ctg", "baseWeight": 5 },
+      { "signId": "uterine_hyperstimulation", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "postterm_pregnancy", "multiplier": 2.0 },
+      { "id": "preeclampsia_eclampsia", "multiplier": 2.5 },
+      { "id": "prematurity", "multiplier": 1.5 },
+      { "id": "intrauterine_growth_restriction", "multiplier": 2.0 },
+      { "id": "meconium_stained_liquor", "multiplier": 2.0 },
+      { "id": "prolonged_labor", "multiplier": 1.8 },
+      { "id": "oligohydramnios", "multiplier": 1.5 },
+      { "id": "chorioamnionitis", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [],
+    "mimics": [],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Cardiotocography (CTG)", "priority": "immediate", "yield": 0.90, "indication": "fetal heart rate monitoring" },
+        { "name": "Fetal scalp stimulation", "priority": "immediate", "yield": 0.75, "indication": "assess fetal reactivity" },
+        { "name": "Fetal scalp blood sampling (pH)", "priority": "high", "yield": 0.85, "indication": "pH <7.25 borderline, <7.20 acidosis" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Obstetric ultrasound (biophysical profile)", "priority": "medium", "yield": 0.8, "indication": "antenatal fetal assessment" },
+        { "name": "Doppler ultrasound", "priority": "medium", "yield": 0.7, "indication": "umbilical artery Doppler if IUGR" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG229 - Fetal Monitoring in Labour",
+      "pathways": [
+        {
+          "severity": "suspicious_ctg",
+          "criteria": "CTG category II, no severe decelerations, no meconium",
+          "treatment": "Maternal repositioning (left lateral). IV fluids. Stop oxytocin if in use. Fetal scalp stimulation. Reassess CTG in 30 minutes. Consider fetal scalp pH."
+        },
+        {
+          "severity": "pathological_ctg",
+          "criteria": "CTG category III, severe decelerations, meconium, pH <7.20",
+          "treatment": "Urgent delivery. If in first stage: emergency C-section. If in second stage: instrumental delivery (vacuum/forceps). Prepare for neonatal resuscitation. Inform neonatologist. Cord blood gas analysis."
+        },
+        {
+          "severity": "agonal_fetal_status",
+          "criteria": "prolonged bradycardia <80bpm for >10 minutes, sinusoidal pattern",
+          "treatment": "Immediate delivery regardless of stage. Category 1 C-section (30-minute decision-to-delivery interval). Resuscitative measures. Neonatal ICU team present."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uteroplacental_insufficiency",
+      "cord_compression",
+      "reduced_placental_perfusion",
+      "fetal_hypoxia",
+      "metabolic_acidosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "meconium_aspiration_syndrome",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["thick_meconium", "low_apgar", "respiratory_distress"]
+      },
+      {
+        "diseaseId": "hypoxic_ischemic_encephalopathy",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.8,
+        "clues": ["low_apgar", "seizures", "abnormal_neurological_exam"]
+      },
+      {
+        "diseaseId": "cerebral_palsy",
+        "probability": 0.02,
+        "lagDays": [180, 730],
+        "severityBoost": 0.7,
+        "clues": ["developmental_delay", "spasticity", "abnormal_mri"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["abnormal_ctg_pattern", "meconium", "reduced_fetal_movements", "fetal_bradycardia"],
+    "exclusionClues": ["normal_ctg", "reactive_fetal_heart_rate"]
+  }
+}

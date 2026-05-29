@@ -1,0 +1,175 @@
+{
+  "disease": {
+    "id": "covid_19",
+    "name": "COVID-19 (SARS-CoV-2 Infection)",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 960],
+    "note": "Global pandemic coronavirus infection. Spectrum from asymptomatic to severe pneumonia/ARDS. Multisystem inflammatory syndrome in children (MIS-C).",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["viral_pneumonia", "respiratory_infection", "pandemic_illness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hypoxia_spo2_less_90", "weight": 10 },
+        { "sign": "respiratory_distress", "weight": 9 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "NIH: Mild, Moderate, Severe, Critical. WHO ordinal scale 1-8."
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "cough_dry", "weight": 5 },
+      { "symptomId": "shortness_of_breath", "weight": 4 },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "loss_of_taste_smell", "weight": 4 },
+      { "symptomId": "sore_throat_congestion", "weight": 3 },
+      { "symptomId": "myalgia_body_ache", "weight": 3 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "gi_symptoms_nausea_diarrhea", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "hypoxia_reduced_o2_sat", "baseWeight": 5 },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "crackles_lung_auscultation", "baseWeight": 3 },
+      { "signId": "accessory_muscle_use", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "conjunctivitis", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 3.0 },
+      { "id": "obesity_bmi_greater_30", "multiplier": 2.5 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "hypertension_cardiovascular_disease", "multiplier": 2.0 },
+      { "id": "chronic_lung_disease", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "pregnancy", "multiplier": 2.0 },
+      { "id": "close_contact_confirmed_case", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mild_covid",
+        "name": "Mild COVID-19",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "spo2_greater_94", "weight": 5 },
+          { "feature": "no_pneumonia", "weight": 4 },
+          { "feature": "symptoms_upper_respiratory", "weight": 3 }
+        ],
+        "management": "Symptom management: antipyretics, hydration, isolation. Monitor for worsening. Antiviral if high risk (Paxlovid)."
+      },
+      {
+        "id": "moderate_severe_covid",
+        "name": "Moderate-Severe COVID-19 (Pneumonia)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "spo2_90_to_94", "weight": 4 },
+          { "feature": "bilateral_infiltrates", "weight": 4 },
+          { "feature": "persistent_fever_cough", "weight": 3 }
+        ],
+        "management": "Supplemental O2. Dexamethasone 6mg OD for up to 10 days. Remdesivir if hypoxic. Anticoagulation prophylaxis. Proning."
+      },
+      {
+        "id": "critical_covid",
+        "name": "Critical COVID-19 (ARDS/Shock)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "spo2_less_90", "weight": 5 },
+          { "feature": "ards", "weight": 5 },
+          { "feature": "septic_shock", "weight": 5 }
+        ],
+        "management": "ICU. Lung protective ventilation. Dexamethasone. Tocilizumab or baricitinib if hyperinflammation. ECMO rescue. VTE prophylaxis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "influenza",
+        "discriminators": ["rapid_onset", "higher_fever", "myalgia_prominent", "less_loss_of_smell"]
+      },
+      {
+        "diseaseId": "bacterial_pneumonia",
+        "discriminators": ["productive_cough", "focal_consolidation", "procalcitonin_elevated"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.9, "indication": "all patients" },
+        { "name": "Respiratory rate", "priority": "immediate", "yield": 0.7, "indication": "severity monitoring" }
+      ],
+      "laboratory": [
+        { "name": "SARS-CoV-2 PCR (NP swab)", "priority": "immediate", "yield": 0.9, "indication": "diagnosis" },
+        { "name": "Rapid antigen test", "priority": "high", "yield": 0.8, "indication": "quick screening, high specificity" },
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.6, "indication": "inflammation markers" },
+        { "name": "D-dimer, Ferritin, LDH", "priority": "high", "yield": 0.6, "indication": "severity and hyperinflammation" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.7, "indication": "pneumonia assessment" },
+        { "name": "CT Chest (low dose)", "priority": "medium", "yield": 0.9, "indication": "if CXR equivocal, severity assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NIH COVID-19 Treatment Guidelines / WHO Living Guideline",
+      "pathways": [
+        {
+          "severity": "mild (no O2 needed)",
+          "criteria": "SpO2 >94%, no pneumonia",
+          "treatment": "Symptomatic care. Paxlovid (nirmatrelvir/ritonavir) if high risk and within 5 days. Isolation per local protocol."
+        },
+        {
+          "severity": "moderate-severe (O2 needed)",
+          "criteria": "SpO2 <=94% on room air, pneumonia",
+          "treatment": "Supplemental O2. Dexamethasone 6mg OD x 10 days. Remdesivir if hypoxic. Therapeutic anticoagulation if D-dimer elevated."
+        },
+        {
+          "severity": "critical (ICU)",
+          "criteria": "ARDS, shock, multiorgan failure",
+          "treatment": "ICU. LPVS (6 mL/kg). Dexamethasone. Tocilizumab or baricitinib if CRS. Prone positioning. ECMO if refractory."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "viral_entry_via_ace2",
+      "upper_and_lower_respiratory_infection",
+      "cytokine_storm_hyperinflammation",
+      "alveolar_damage",
+      "microvascular_thrombosis",
+      "multi_organ_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_respiratory_distress_syndrome",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["worsening_hypoxia", "bilateral_infiltrates", "PF_less_300"]
+      },
+      {
+        "diseaseId": "pulmonary_embolism",
+        "probability": 0.05,
+        "severityBoost": 0.4,
+        "clues": ["sudden_deterioration", "hemoptysis", "positive_ct_pa"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if hypoxic",
+    "diagnosticClues": ["fever_cough_hypoxia", "loss_of_smell_taste", "exposure_history", "bilateral_infiltrates"],
+    "exclusionClues": ["negative_per_x2", "alternative_diagnosis_made"]
+  }
+}

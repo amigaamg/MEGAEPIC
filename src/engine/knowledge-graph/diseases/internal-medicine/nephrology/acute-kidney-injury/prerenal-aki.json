@@ -1,0 +1,140 @@
+{
+  "disease": {
+    "id": "prerenal_aki",
+    "name": "Prerenal Acute Kidney Injury",
+    "system": "RENAL",
+    "agePeak_months": [480, 1080],
+    "note": "Most common form of AKI. Caused by decreased renal perfusion. Reversible if underlying cause corrected promptly. High risk in elderly, CKD, sepsis.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["acute_kidney_injury", "prerenal_failure", "azotemia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hypotension_shock", "weight": 10 },
+        { "sign": "sepsis_with_aki", "weight": 9 },
+        { "sign": "hepatorenal_syndrome", "weight": 9 },
+        { "sign": "anuria", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "AKI Stage 1 (creatinine 1.5-1.9x baseline) to Stage 3 (creatinine >3x baseline or RRT)"
+    },
+    "historyFeatures": [
+      { "symptomId": "dehydration_poor_oral_intake", "weight": 5 },
+      { "symptomId": "vomiting_diarrhea_gi_losses", "weight": 4 },
+      { "symptomId": "oliguria_decreased_urine_output", "weight": 4 },
+      { "symptomId": "dizziness_lightheadedness", "weight": 3 },
+      { "symptomId": "bleeding_history_gi_hemorrhage", "weight": 3 },
+      { "symptomId": "diuretic_overuse", "weight": 2 },
+      { "symptomId": "heart_failure_symptoms", "weight": 3 },
+      { "symptomId": "liver_disease_ascites", "weight": 3 },
+      { "symptomId": "nsaid_or_acei_arb_use", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "dry_mucous_membranes", "baseWeight": 3 },
+      { "signId": "decreased_skin_turgor", "baseWeight": 3 },
+      { "signId": "hypotension_orthostatic", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "flat_neck_veins_jvp", "baseWeight": 4 },
+      { "signId": "signs_of_sepsis_fever_hypothermia", "baseWeight": 3 },
+      { "signId": "ascites_peripheral_edema_hepatorenal", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.5 },
+      { "id": "pre_existing_ckd", "multiplier": 3.0 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "heart_failure_low_ef", "multiplier": 2.5 },
+      { "id": "cirrhosis_ascites", "multiplier": 2.5 },
+      { "id": "nsaid_use", "multiplier": 2.0 },
+      { "id": "contrast_exposure_recent", "multiplier": 1.8 },
+      { "id": "sepsis", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "hypovolemic_prerenal",
+        "name": "Hypovolemic Prerenal AKI",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "fluid_loss_history", "weight": 5 },
+          { "feature": "signs_of_volume_depletion", "weight": 5 },
+          { "feature": "fe_na_under_1_percent", "weight": 4 },
+          { "feature": "bun_creatinine_ratio_greater_than_20", "weight": 3 }
+        ],
+        "management": "IV fluid resuscitation (NS or balanced crystalloid). Correct underlying cause of volume loss. Monitor urine output and creatinine. Discontinue diuretics and ACEi/ARB. Reassess volume status frequently."
+      },
+      {
+        "id": "hepatorenal_syndrome",
+        "name": "Hepatorenal Syndrome (HRS-AKI)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "cirrhosis_and_ascites", "weight": 5 },
+          { "feature": "no_response_to_volume_expansion", "weight": 5 },
+          { "feature": "no_shock_or_nephrotoxins", "weight": 4 },
+          { "feature": "urine_sodium_under_10", "weight": 4 }
+        ],
+        "management": "Volume expansion with 5% albumin. Vasoconstrictors: terlipressin 1-2 mg IV q4-6h (or noradrenaline if terlipressin unavailable). Midodrine + octreotide + albumin. TIPS in selected patients. Liver transplant evaluation."
+      },
+      {
+        "id": "cardiorenal_syndrome",
+        "name": "Cardiorenal Syndrome (Type 1)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "acute_decompensated_heart_failure", "weight": 5 },
+          { "feature": "worsening_renal_function", "weight": 4 },
+          { "feature": "diuretic_resistance", "weight": 3 },
+          { "feature": "elevated_jvp", "weight": 4 }
+        ],
+        "management": "Optimize heart failure therapy. Diuretics (consider ultrafiltration if resistant). Avoid NSAIDs. ACEi/ARB continuation if tolerated. SGLT2i in stabilized patients. Vasodilators if hypertensive."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "acute_tubular_necrosis", "discriminators": ["renal_tubular_cells_on_urine_microscopy", "fe_na_greater_than_2", "muddy_brown_casts", "history_of_ischemia_or_nephrotoxin"] },
+      { "diseaseId": "acute_interstitial_nephritis", "discriminators": ["fever", "rash", "eosinophilia", "white_blood_cell_casts", "drug_history_antibiotics_nsaids_ppi"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, BUN, eGFR", "priority": "immediate", "yield": 0.95, "indication": "AKI diagnosis and staging" },
+        { "name": "U&E (Na, K, Cl, HCO3)", "priority": "immediate", "yield": 0.8, "indication": "electrolyte assessment" },
+        { "name": "Urine sodium, creatinine, osmolality", "priority": "high", "yield": 0.8, "indication": "FENa <1%, urine osmolality >500 suggests prerenal" },
+        { "name": "Urinalysis with microscopy", "priority": "high", "yield": 0.7, "indication": "normal or hyaline casts (prerenal) vs muddy brown casts (ATN)" },
+        { "name": "Fractional excretion of urea (FEUrea)", "priority": "medium", "yield": 0.7, "indication": "FENa <35% suggests prerenal, even if FENa unreliable on diuretics" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "high", "yield": 0.5, "indication": "rule out obstruction, assess kidney size and echogenicity" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO Clinical Practice Guideline for Acute Kidney Injury",
+      "pathways": [
+        {
+          "severity": "stage 1 (creatinine 1.5-1.9x baseline)",
+          "criteria": "mild AKI, likely prerenal based on history/urine indices",
+          "treatment": "IV fluid challenge (500-1000 mL NS). Discontinue nephrotoxins (ACEi, ARB, NSAIDs, diuretics). Correct underlying cause. Monitor creatinine, urine output q6-12h."
+        },
+        {
+          "severity": "stage 2-3 (creatinine >2x baseline)",
+          "criteria": "moderate-severe AKI, poor response to fluids",
+          "treatment": "ICU if hemodynamic instability. Central line for CVP/volume assessment. NaHCO3 if severe acidosis. Nephrology consult. Diuretics if fluid overload (furosemide 80-240 mg IV). Consider RRT if refractory hyperkalemia/acidosis/fluid overload."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "decreased_renal_blood_flow",
+      "reduced_glomerular_perfusion_pressure",
+      "intact_tubular_function_concentrating_ability",
+      "activation_of_renin_angiotensin_aldosterone_system",
+      "increased_urea_reabsorption",
+      "intact_gfr_recovery_with_restored_perfusion",
+      "if_prolonged_can_progress_to_atn"
+    ],
+    "complications": [
+      { "diseaseId": "acute_tubular_necrosis", "probability": 0.2, "severityBoost": 0.4, "clues": ["prolonged_hypotension", "no_response_to_fluids", "muddy_brown_casts", "fe_na_greater_than_2"] },
+      { "diseaseId": "volume_overload_pulmonary_edema", "probability": 0.1, "severityBoost": 0.3, "clues": ["oliguria", "dyspnea", "crackles", "peripheral_edema"] },
+      { "diseaseId": "hyperkalemia", "probability": 0.15, "severityBoost": 0.3, "clues": ["ecg_changes", "k_greater_than_5_5", "muscle_weakness"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["oliguria_with_volume_depletion_signs", "fe_na_under_1", "bun_creatinine_ratio_greater_than_20", "response_to_fluids"],
+    "exclusionClues": ["muddy_brown_casts_on_urine_microscopy", "fe_na_greater_than_2", "anuria_from_cortical_necrosis_or_obstruction"]
+  }
+}

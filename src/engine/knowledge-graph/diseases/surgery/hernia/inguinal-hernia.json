@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "inguinal_hernia",
+    "name": "Inguinal Hernia",
+    "system": "surgical",
+    "agePeak_months": [0, 12],
+    "agePeak_older": [360, 720],
+    "note": "Bimodal distribution: infants (congenital) and adults (acquired). Strangulation risk highest in infants.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["groin_mass", "abdominal_wall_defect"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "irreducible_mass_with_vomiting", "weight": 10 },
+        { "sign": "signs_of_obstruction", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If irreducible + vomiting/obstruction -> STRANGULATED; else -> REDUCIBLE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "groin_mass", "weight": 5 },
+      { "symptomId": "mass_increases_with_crying_or_straining", "weight": 4 },
+      { "symptomId": "groin_pain", "weight": 2 },
+      { "symptomId": "nausea_vomiting", "weight": 3, "note": "Suggests strangulation" },
+      { "symptomId": "constipation", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "reducible_groin_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "positive_cough_impulse", "baseWeight": 4 },
+      { "signId": "irreducible_tender_mass", "baseWeight": 5, "note": "Suggests incarceration" },
+      { "signId": "distended_abdomen", "baseWeight": 3, "note": "Suggests obstruction" }
+    ],
+
+    "riskFactors": [
+      { "id": "prematurity", "multiplier": 2.0 },
+      { "id": "male_sex", "multiplier": 3.0 },
+      { "id": "family_history", "multiplier": 1.5 },
+      { "id": "constipation_chronic", "multiplier": 1.3 },
+      { "id": "cough_chronic", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "reducible_inguinal_hernia",
+        "name": "Reducible Inguinal Hernia",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "mass_disappears_on_supine", "weight": 5 },
+          { "feature": "cough_impulse_positive", "weight": 5 },
+          { "feature": "no_tenderness", "weight": 4 }
+        ],
+        "management": "Elective herniotomy (infants) or herniorrhaphy (adults) during same admission or scheduled."
+      },
+      {
+        "id": "strangulated_inguinal_hernia",
+        "name": "Strangulated Inguinal Hernia",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "irreducible_mass", "weight": 5 },
+          { "feature": "tender_mass", "weight": 5 },
+          { "feature": "overlying_skin_erythema", "weight": 4 },
+          { "feature": "vomiting", "weight": 5 },
+          { "feature": "abdominal_distension", "weight": 4 }
+        ],
+        "management": "Emergency surgery. IV fluids. Broad-spectrum antibiotics. Resection of non-viable bowel if needed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hydrocele",
+        "discriminators": ["transilluminates", "no_cough_impulse", "non_reducible"]
+      },
+      {
+        "diseaseId": "femoral_hernia",
+        "discriminators": ["below_inguinal_ligament", "more_common_in_females", "smaller_mass"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Transillumination test", "priority": "immediate", "yield": 0.9, "indication": "to differentiate from hydrocele" },
+        { "name": "Cough impulse test", "priority": "immediate", "yield": 0.95, "indication": "all suspected hernias" }
+      ],
+      "imaging": [
+        { "name": "Groin Ultrasound", "priority": "medium", "yield": 0.9, "indication": "equivocal cases, occult hernia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "British Association of Paediatric Surgeons Guidelines - Inguinal Hernia",
+      "pathways": [
+        {
+          "severity": "reducible",
+          "criteria": "mass reduces spontaneously or with gentle pressure, no obstruction",
+          "treatment": "Elective herniotomy for all paediatric inguinal hernias during same admission. Repair before discharge to prevent strangulation."
+        },
+        {
+          "severity": "strangulated",
+          "criteria": "irreducible, tender, with vomiting/obstruction",
+          "treatment": "Emergency surgery. IV fluids resuscitation. Nasogastric tube. Broad-spectrum antibiotics. Resection of non-viable bowel. ICU if septic."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "patent_processus_vaginalis",
+      "abdominal_wall_defect",
+      "bowel_prolapse",
+      "vascular_compromise",
+      "strangulation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "incarceration",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["irreducible_mass"]
+      },
+      {
+        "diseaseId": "strangulation",
+        "probability": 0.1,
+        "lagDays": [0, 2],
+        "severityBoost": 0.5,
+        "clues": ["pain", "vomiting", "erythema"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if strangulated",
+    "diagnosticClues": ["reducible_groin_mass", "cough_impulse", "above_inguinal_ligament"],
+    "exclusionClues": ["transilluminates", "below_inguinal_ligament"]
+  }
+}

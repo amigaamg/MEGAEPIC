@@ -1,0 +1,158 @@
+{
+  "disease": {
+    "id": "necrotizing_fasciitis",
+    "name": "Necrotizing Fasciitis",
+    "system": "emergency_medicine",
+    "agePeak_months": [360, 960],
+    "note": "Rapidly progressive, life-threatening soft tissue infection with necrosis of fascia and subcutaneous tissue. Surgical emergency. High mortality if untreated. 'Pain out of proportion' is the classic clue.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["infection", "surgical_emergency", "skin_soft_tissue"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_sepsis_shock", "weight": 10 },
+        { "sign": "rapid_spread_of_infection", "weight": 9 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "skin_necrosis_bullae", "weight": 9 },
+        { "sign": "crepitus_gas_in_tissues", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "NECROTIZING FASCIITIS is a surgical emergency. Do not delay surgical debridement."
+    },
+    "historyFeatures": [
+      { "symptomId": "severe_pain_out_of_proportion", "weight": 5, "doubleWeight": true },
+      { "symptomId": "rapid_spreading_erythema_swelling", "weight": 5 },
+      { "symptomId": "fever_rigors", "weight": 4 },
+      { "symptomId": "trauma_wound_recent", "weight": 4 },
+      { "symptomId": "known_immunosuppression_diabetes", "weight": 4 },
+      { "symptomId": "skin_discolouration_bullae", "weight": 4 },
+      { "symptomId": "systemic_illness_malaise", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "pain_out_of_proportion_to_appearance", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "erythema_spreading_beyond_visible_border", "baseWeight": 4 },
+      { "signId": "oedema_and_induration", "baseWeight": 4 },
+      { "signId": "skin_bullae_haemorrhagic_or_tense", "baseWeight": 5 },
+      { "signId": "skin_necrosis_discolouration", "baseWeight": 5 },
+      { "signId": "crepitus_subcutaneous_gas", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "loss_of_sensation_over_affected_area", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "diabetes_mellitus", "multiplier": 4.0 },
+      { "id": "immunosuppression", "multiplier": 4.0 },
+      { "id": "chronic_renal_or_liver_disease", "multiplier": 2.5 },
+      { "id": "peripheral_vascular_disease", "multiplier": 3.0 },
+      { "id": "alcoholism", "multiplier": 2.0 },
+      { "id": "intravenous_drug_use", "multiplier": 3.0 },
+      { "id": "malignancy", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "recent_surgery_or_trauma", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "type_1_polymicrobial",
+        "name": "Type I (Polymicrobial, mixed anaerobes/aerobes)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "crepitus_gas", "weight": 5 },
+          { "feature": "trunk_perineal_abdomen_location", "weight": 4 },
+          { "feature": "immunocompromised_or_diabetes", "weight": 4 }
+        ],
+        "management": "Broad-spectrum antibiotics (e.g., piperacillin-tazobactam + clindamycin). Urgent surgical debridement."
+      },
+      {
+        "id": "type_2_group_a_strep",
+        "name": "Type II (GAS - Group A Streptococcus)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "rapid_progression_hours", "weight": 5 },
+          { "feature": "severe_pain_and_toxic_shock", "weight": 5 },
+          { "feature": "less_gas_in_tissues", "weight": 3 }
+        ],
+        "management": "IV antibiotics: penicillin + clindamycin. IVIG for streptococcal toxic shock. Urgent surgical debridement."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "cellulitis",
+        "discriminators": ["less_pain", "no_systemic_toxicity", "no_bullae", "responds_to_antibiotics"]
+      },
+      {
+        "diseaseId": "deep_vein_thrombosis",
+        "discriminators": ["no_fever", "no_systemic_illness", "doppler_confirms"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Clinical assessment (LRINEC score)", "priority": "immediate", "yield": 0.8, "indication": "risk stratification for NF" },
+        { "name": "Mark borders of erythema", "priority": "immediate", "yield": 0.7, "indication": "track progression" }
+      ],
+      "laboratory": [
+        { "name": "FBC with differential", "priority": "high", "yield": 0.7, "indication": "leucocytosis or leucopenia" },
+        { "name": "CRP (very high)", "priority": "high", "yield": 0.7, "indication": "severe inflammation" },
+        { "name": "U&E, Cr, glucose", "priority": "high", "yield": 0.5, "indication": "organ function, diabetes" },
+        { "name": "ABG with lactate", "priority": "high", "yield": 0.7, "indication": "metabolic acidosis, tissue hypoxia" },
+        { "name": "Blood cultures x2", "priority": "high", "yield": 0.4, "indication": "identify pathogen" },
+        { "name": "Wound cultures (deep tissue)", "priority": "high", "yield": 0.8, "indication": "intraoperative specimens" },
+        { "name": "CK", "priority": "high", "yield": 0.6, "indication": "muscle involvement" }
+      ],
+      "imaging": [
+        { "name": "CT or MRI (if clinically stable)", "priority": "high", "yield": 0.9, "indication": "gas in tissues, deep extent, surgical planning" },
+        { "name": "Plain X-ray", "priority": "fast", "yield": 0.4, "indication": "subcutaneous gas" },
+        { "name": "Ultrasound (POCUS)", "priority": "fast", "yield": 0.6, "indication": "gas, fluid collections" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IDSA Guidelines / NICE Soft Tissue Infection Guidelines",
+      "pathways": [
+        {
+          "severity": "suspected necrotizing fasciitis",
+          "criteria": "severe pain out of proportion, rapid spread, systemic toxicity, crepitus, bullae, or high LRINEC score",
+          "treatment": "IMMEDIATE surgical consultation. Do NOT wait for imaging. IV broad-spectrum antibiotics: piperacillin-tazobactam 4.5g Q6H + clindamycin 900mg Q8H (if GAS, add penicillin 2.4g Q4H). IVIG 1-2g/kg if streptococcal toxic shock. Aggressive fluid resuscitation. Vasopressors if shock. Urgent surgical exploration and debridement (fasciotomy, excision of necrotic tissue). Repeat debridement at 24h. ICU admission."
+        },
+        {
+          "severity": "post-debridement",
+          "criteria": "hemodynamically stabilizing, source controlled",
+          "treatment": "Continue antibiotics (7-14 days). Second-look surgery at 24-48h for further debridement. Wound management (NPWT). Reconstructive surgery later. Rehabilitation."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "bacterial_inoculation_through_skin_break",
+      "rapid_spread_along_fascial_planes",
+      "thrombosis_of_perforating_vessels",
+      "tissue_ischaemia",
+      "necrosis",
+      "subcutaneous_gas_production",
+      "systemic_toxic_shock",
+      "multi_organ_dysfunction"
+    ],
+    "complications": [
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.4,
+        "severityBoost": 0.6,
+        "clues": ["hypotension", "lactate_high", "multi_organ_dysfunction"]
+      },
+      {
+        "diseaseId": "toxic_shock_syndrome",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["fever", "diffuse_rash", "hypotension", "desquamation"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pain_out_of_proportion", "rapid_spread", "systemic_toxicity", "crepitus", "skin_bullae_necrosis", "gas_on_imaging"],
+    "exclusionClues": ["no_systemic_illness", "responding_to_antibiotics", "no_rapid_progression", "clear_diagnosis_of_cellulitis"]
+  }
+}

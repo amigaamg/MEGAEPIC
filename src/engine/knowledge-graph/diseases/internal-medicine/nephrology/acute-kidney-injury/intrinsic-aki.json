@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "intrinsic_aki",
+    "name": "Intrinsic Acute Kidney Injury",
+    "system": "RENAL",
+    "agePeak_months": [360, 960],
+    "note": "AKI from damage to renal parenchyma. Three main categories: Acute Tubular Necrosis (most common), Acute Interstitial Nephritis, and Glomerulonephritis.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["acute_kidney_injury", "renal_parenchymal_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anuria_refractory_to_treatment", "weight": 9 },
+        { "sign": "oliguric_aki_with_hyperkalemia", "weight": 9 },
+        { "sign": "rapidly_progressive_glomerulonephritis", "weight": 10 },
+        { "sign": "pulmonary_renal_syndrome", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "AKI Stage 1-3. Requires differentiation of ATN, AIN, or glomerular cause."
+    },
+    "historyFeatures": [
+      { "symptomId": "decreased_urine_output_oliguria", "weight": 5 },
+      { "symptomId": "recent_hypotension_ischemic_event", "weight": 4 },
+      { "symptomId": "nephrotoxin_exposure_aminoglycoside_contrast", "weight": 4 },
+      { "symptomId": "drug_history_antibiotics_nsaids_ppi", "weight": 4, "note": "Suspect AIN" },
+      { "symptomId": "rash_fever_arthralgia", "weight": 3, "note": "Classic AIN triad" },
+      { "symptomId": "hematuria_foamy_urine", "weight": 3 },
+      { "symptomId": "edema_peripheral_or_periorbital", "weight": 3 },
+      { "symptomId": "dyspnea_cough_hemoptysis", "weight": 3, "note": "Pulmonary involvement in vasculitis/Goodpasture" }
+    ],
+    "examFeatures": [
+      { "signId": "volume_overload_edema", "baseWeight": 3 },
+      { "signId": "rash_erythema_purpura", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "periorbital_edema", "baseWeight": 3 },
+      { "signId": "pulmonary_auscultation_crepitations", "baseWeight": 3 },
+      { "signId": "hypertension_severe", "baseWeight": 3 },
+      { "signId": "flank_pain_costovertebral_tenderness", "baseWeight": 2 },
+      { "signId": "signs_of_vascular_access_for_dialysis", "baseWeight": 1 }
+    ],
+    "riskFactors": [
+      { "id": "sepsis", "multiplier": 3.0 },
+      { "id": "major_surgery_cardiac_surgery", "multiplier": 2.5 },
+      { "id": "radiocontrast_administration", "multiplier": 2.0 },
+      { "id": "aminoglycoside_antibiotics", "multiplier": 3.0 },
+      { "id": "nsaids_in_volume_depletion", "multiplier": 4.0 },
+      { "id": "pre_existing_ckd", "multiplier": 3.0 },
+      { "id": "myeloma_multiple", "multiplier": 2.5 },
+      { "id": "rhabdomyolysis_crush_injury", "multiplier": 4.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "acute_tubular_necrosis",
+        "name": "Acute Tubular Necrosis (ATN)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "ischemic_or_nephrotoxic_insult", "weight": 5 },
+          { "feature": "muddy_brown_granular_casts_on_urine_microscopy", "weight": 5 },
+          { "feature": "fe_na_greater_than_2_percent", "weight": 4 },
+          { "feature": "renal_tubular_epithelial_cells", "weight": 4 },
+          { "feature": "oliguric_or_non_oliguric", "weight": 3 }
+        ],
+        "management": "Supportive care: Stop nephrotoxins. Optimize volume status (avoid both overload and depletion). Maintain urine output with diuretics if needed. Dose-adjust medications. Consider RRT for complications: severe hyperkalemia, acidosis, fluid overload, uremic symptoms. RRT: IHD or CRRT based on stability."
+      },
+      {
+        "id": "acute_interstitial_nephritis",
+        "name": "Acute Interstitial Nephritis (AIN)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "drug_induced_antibiotics_nsaids_ppis", "weight": 5 },
+          { "feature": "sterile_pyuria_wbc_casts", "weight": 5 },
+          { "feature": "fever_rash_eosinophilia_triad", "weight": 4 },
+          { "feature": "eosinophiluria", "weight": 3 }
+        ],
+        "management": "Discontinue offending drug. Corticosteroids (prednisolone 0.5-1 mg/kg/day x 2-4 weeks, then taper) if severe or no improvement after drug removal. Supportive care. Recovery over weeks to months."
+      },
+      {
+        "id": "rapidly_progressive_glomerulonephritis",
+        "name": "Rapidly Progressive Glomerulonephritis (RPGN)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "rapid_rise_in_creatinine_days_weeks", "weight": 5 },
+          { "feature": "active_urine_sediment_red_cell_casts", "weight": 5 },
+          { "feature": "proteinuria", "weight": 3 },
+          { "feature": "crescents_on_biopsy_more_than_50_percent", "weight": 5 }
+        ],
+        "management": "Urgent nephrology referral. Kidney biopsy for diagnosis. Pulse methylprednisolone 500-1000 mg IV x 3 days, then oral prednisolone. Cyclophosphamide or rituximab for ANCA vasculitis. Plasmapheresis for Goodpasture/ANCA with severe renal involvement. Treat hypertension. RRT if needed."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "prerenal_aki", "discriminators": ["fe_na_under_1", "hyaline_casts", "response_to_fluids", "bun_creat_ratio_greater_than_20"] },
+      { "diseaseId": "postrenal_aki", "discriminators": ["hydronephrosis_on_ultrasound", "empty_bladder_post_void", "intermittent_anuria_polyuria"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum creatinine, BUN, eGFR", "priority": "immediate", "yield": 0.95, "indication": "AKI diagnosis and trend" },
+        { "name": "U&E, bicarbonate, calcium, phosphate, uric acid", "priority": "immediate", "yield": 0.8, "indication": "electrolyte monitoring" },
+        { "name": "Urinalysis with microscopy", "priority": "high", "yield": 0.9, "indication": "muddy brown casts (ATN), WBC casts (AIN), RBC casts (GN)" },
+        { "name": "FENa / FEUrea", "priority": "high", "yield": 0.7, "indication": "differentiate prerenal from intrinsic" },
+        { "name": "Complement C3, C4, ANCA, anti-GBM, ANA, dsDNA", "priority": "high", "yield": 0.6, "indication": "RPGN workup" },
+        { "name": "CK (creatine kinase)", "priority": "medium", "yield": 0.5, "indication": "rhabdomyolysis screen" }
+      ],
+      "imaging": [
+        { "name": "Renal Ultrasound", "priority": "high", "yield": 0.6, "indication": "kidney size, echogenicity, rule out obstruction" },
+        { "name": "Renal biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "definitive diagnosis for AIN or RPGN" }
+      ]
+    },
+    "management": {
+      "protocolReference": "KDIGO AKI Guidelines / Renal Association Guidelines",
+      "pathways": [
+        {
+          "severity": "ATN - non-oliguric, mild",
+          "criteria": "creatinine <2x baseline, urine output >0.5 mL/kg/h",
+          "treatment": "Discontinue nephrotoxins. Optimize volume. Monitor electrolytes. Nutritional support. Avoid hyperglycemia. Recovery phase with polyuria."
+        },
+        {
+          "severity": "ATN - severe/oliguric",
+          "criteria": "oliguric, creatinine >3x, complications",
+          "treatment": "Nephrology consult. RRT indications: K >6.5, severe metabolic acidosis (pH <7.15), fluid overload refractory to diuretics, uremic symptoms. CRRT preferred if hemodynamically unstable in ICU. IHD if stable."
+        },
+        {
+          "severity": "AIN confirmed",
+          "criteria": "drug-induced, biopsy-proven",
+          "treatment": "Stop culprit drug. Prednisolone 0.5-1 mg/kg/day x 2-4 weeks, taper over 2-3 months. Recovery can take weeks. Consider MMF or rituximab if steroid-resistant."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "tubular_necrosis_from_ischemia_toxin",
+      "tubular_obstruction_by_cast_debris",
+      "back_leak_of_glomerular_filtrate",
+      "tubuloglomerular_feedback_vasoconstriction",
+      "interstitial_inflammation_and_edema_ain",
+      "glomerular_crescent_formation_rpgn",
+      "loss_of_renal_autoregulation"
+    ],
+    "complications": [
+      { "diseaseId": "volume_overload_pulmonary_edema", "probability": 0.2, "severityBoost": 0.3, "clues": ["oliguria", "dyspnea", "crackles", "weight_gain"] },
+      { "diseaseId": "hyperkalemia_life_threatening", "probability": 0.2, "severityBoost": 0.4, "clues": ["k_greater_than_6", "ecg_peaked_t", "muscle_weakness"] },
+      { "diseaseId": "chronic_kidney_disease", "probability": 0.2, "severityBoost": 0.3, "clues": ["failure_of_renal_recovery", "persistently_elevated_creatinine", "proteinuria"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["acute_rise_creatinine_with_tubular_casts", "drug_exposure_with_fevers_rash", "active_urine_sediment_with_rbc_casts", "refractory_to_fluid_resuscitation"],
+    "exclusionClues": ["fe_na_under_1_and_response_to_fluids", "hydronephrosis_on_uss", "normal_urine_microscopy"]
+  }
+}

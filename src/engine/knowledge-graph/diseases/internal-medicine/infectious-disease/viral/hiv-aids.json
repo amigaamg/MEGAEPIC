@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "hiv_aids",
+    "name": "HIV/AIDS",
+    "system": "infectious_disease",
+    "agePeak_months": [180, 480],
+    "note": "Chronic retroviral infection causing progressive immune deficiency. AIDS stage defined by CD4 <200 or AIDS-defining illness.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["chronic_viral_infection", "immunodeficiency", "sexually_transmitted"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_opportunistic_infection", "weight": 10 },
+        { "sign": "cd4_less_50", "weight": 9 },
+        { "sign": "respiratory_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "CDC Stage: A (asymptomatic/acute), B (symptomatic non-AIDS), C (AIDS-defining illness)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "unexplained_weight_loss", "weight": 4 },
+      { "symptomId": "persistent_fever", "weight": 3 },
+      { "symptomId": "night_sweats", "weight": 3 },
+      { "symptomId": "recurrent_infections", "weight": 4 },
+      { "symptomId": "lymphadenopathy_generalized", "weight": 3 },
+      { "symptomId": "diarrhea_chronic", "weight": 3 },
+      { "symptomId": "unprotected_sex_or_ivdu", "weight": 5 },
+      { "symptomId": "needle_stick_occupational", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "lymphadenopathy", "baseWeight": 4 },
+      { "signId": "oral_candidiasis_thrush", "baseWeight": 4 },
+      { "signId": "oral_hairy_leukoplakia", "baseWeight": 3 },
+      { "signId": "wasting", "baseWeight": 3 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 2 },
+      { "signId": "skin_lesions_ks", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "unprotected_anal_vaginal_sex", "multiplier": 3.0 },
+      { "id": "men_who_have_sex_with_men", "multiplier": 2.5 },
+      { "id": "injection_drug_use", "multiplier": 3.0 },
+      { "id": "blood_transfusion_pre_screening", "multiplier": 2.0 },
+      { "id": "needle_stick_injury", "multiplier": 2.0 },
+      { "id": "mother_to_child_no_arv_prophylaxis", "multiplier": 3.0 },
+      { "id": "sex_work", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_hiv_syndrome",
+        "name": "Acute HIV Infection (Seroconversion)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "mononucleosis_like_illness", "weight": 4 },
+          { "feature": "fever_rash_lymphadenopathy", "weight": 4 },
+          { "feature": "recent_exposure_2_to_6_weeks", "weight": 5 }
+        ],
+        "management": "Start ART immediately. Regimen: TDF/TAF + FTC/3TC + DTG. Manage seroconversion symptoms. Risk reduction counseling."
+      },
+      {
+        "id": "chronic_hiv",
+        "name": "Chronic HIV Infection",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "positive_hiv_antibody", "weight": 5 },
+          { "feature": "cd4_variable", "weight": 4 },
+          { "feature": "asymptomatic_or_mild_symptoms", "weight": 3 }
+        ],
+        "management": "ART for all regardless of CD4. Monitor viral load and CD4 q6months. Prophylaxis for OIs if CD4 <200."
+      },
+      {
+        "id": "aids",
+        "name": "AIDS (CD4 <200 or AIDS-defining illness)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "cd4_less_200", "weight": 5 },
+          { "feature": "opportunistic_infection", "weight": 5 },
+          { "feature": "wasting_syndrome", "weight": 3 }
+        ],
+        "management": "ART initiation. Treat OI first if TB/pneumonia/meningitis. Prophylaxis (TMP-SMX if CD4<200, Azithromycin if CD4<50)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "infectious_mononucleosis",
+        "discriminators": ["positive_monospot", "younger_age", "self_limiting"]
+      },
+      {
+        "diseaseId": "primary_immunodeficiency",
+        "discriminators": ["childhood_onset", "no_risk_factors", "negative_hiv_test"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Rapid HIV test (4th gen)", "priority": "immediate", "yield": 0.98, "indication": "screening" }
+      ],
+      "laboratory": [
+        { "name": "HIV ELISA (4th gen) + Western blot", "priority": "gold_standard", "yield": 0.99, "indication": "confirm diagnosis" },
+        { "name": "HIV RNA viral load", "priority": "high", "yield": 0.98, "indication": "disease monitoring, acute detection" },
+        { "name": "CD4 count and percentage", "priority": "high", "yield": 0.95, "indication": "immunosuppression staging" },
+        { "name": "Genotype resistance testing", "priority": "high", "yield": 0.9, "indication": "guide ART selection" },
+        { "name": "FBC, U&E, Cr, LFT", "priority": "high", "yield": 0.5, "indication": "baseline before ART" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / DHHS Guidelines for Antiretroviral Therapy",
+      "pathways": [
+        {
+          "severity": "all HIV-positive",
+          "criteria": "any CD4, any viral load",
+          "treatment": "ART for all. First-line: TAF/TDF + FTC/3TC + DTG (or BIC/FTC/TAF as single tablet). Monitor VL at 6 months, then yearly."
+        },
+        {
+          "severity": "AIDS / low CD4",
+          "criteria": "CD4 <200 or OI",
+          "treatment": "Start ART and OI prophylaxis. TMP-SMX if CD4<200. Azithromycin if CD4<50. Screen for TB. Treat OI before ART if indicated."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cd4_t_cell_infection",
+      "immune_system_depletion",
+      "chronic_inflammation",
+      "opportunistic_infections",
+      "viral_latency",
+      "immune_activation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "tuberculosis_pulmonary",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["cough", "cavitary_lesions", "positive_gene_xpert"]
+      },
+      {
+        "diseaseId": "pneumocystis_pneumonia",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["cd4_less_200", "cough_fever_hypoxia", "interstitial_infiltrates"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["risk_factors", "recurrent_infections", "wasting", "positive_hiv_test"],
+    "exclusionClues": ["negative_hiv_test_after_window_period", "no_risk_factors"]
+  }
+}

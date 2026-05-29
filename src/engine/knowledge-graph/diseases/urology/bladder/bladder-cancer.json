@@ -1,0 +1,142 @@
+{
+  "disease": {
+    "id": "bladder_cancer",
+    "name": "Bladder Cancer",
+    "system": "URO",
+    "agePeak_months": [600, 960],
+    "note": "Most common urothelial malignancy. Urothelial (transitional cell) carcinoma >90%. Hematuria is classic presentation. Smoking is strongest risk factor.",
+    "prevalenceWeight": 0.35,
+    "syndromeTags": ["urothelial_malignancy", "hematuria", "bladder_tumor"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "gross_hematuria_clot_retention", "weight": 8 },
+        { "sign": "hydronephrosis_renal_failure", "weight": 9 },
+        { "sign": "bilateral_hydronephrosis_post_renal_aki", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Non-muscle invasive (NMIBC: Ta, T1, CIS) vs Muscle-invasive (MIBC: T2+). Stage determines treatment."
+    },
+    "historyFeatures": [
+      { "symptomId": "painless_gross_hematuria", "weight": 5 },
+      { "symptomId": "dysuria_frequency_urgency", "weight": 3 },
+      { "symptomId": "microscopic_hematuria", "weight": 3 },
+      { "symptomId": "smoking_history", "weight": 5 },
+      { "symptomId": "flank_pain_hydronephrosis", "weight": 3 },
+      { "symptomId": "pelvic_pain_bone_pain_if_metastatic", "weight": 2 },
+      { "symptomId": "weight_loss_fatigue", "weight": 2 },
+      { "symptomId": "occupational_exposure_dyes_rubber", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "palpable_bladder_mass_bimanual", "baseWeight": 3 },
+      { "signId": "suprapubic_mass", "baseWeight": 3 },
+      { "signId": "hydronephrosis_palpable_kidney", "baseWeight": 2 },
+      { "signId": "signs_of_metastatic_disease_nodes_bones", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "smoking_cigarettes", "multiplier": 3.0 },
+      { "id": "occupational_aromatic_amines", "multiplier": 3.5 },
+      { "id": "age_over_55", "multiplier": 3.0 },
+      { "id": "male_sex", "multiplier": 3.0 },
+      { "id": "family_history_urothelial_cancer", "multiplier": 1.5 },
+      { "id": "chronic_uti_schistosoma_hematobium", "multiplier": 2.0 },
+      { "id": "prior_pelvic_radiation", "multiplier": 2.0 },
+      { "id": "cyclophosphamide_exposure", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "non_muscle_invasive_bladder_cancer",
+        "name": "Non-Muscle Invasive Bladder Cancer (NMIBC)",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "confined_to_mucosa_ta_or_lamina_propria_t1", "weight": 5 },
+          { "feature": "no_muscle_invasion", "weight": 5 },
+          { "feature": "high_recurrence_rate_low_progression_rate", "weight": 4 }
+        ],
+        "management": "TURBT (transurethral resection of bladder tumor) - diagnostic + therapeutic. Risk stratification: low (solitary Ta LG), intermediate, high (T1, HG, CIS, >3cm, multifocal). Intravesical therapy: mitomycin C (single post-op for low risk). BCG (Bacillus Calmette-Guerin) for intermediate/high risk. Cystectomy if BCG-refractory high risk."
+      },
+      {
+        "id": "muscle_invasive_bladder_cancer",
+        "name": "Muscle-Invasive Bladder Cancer (MIBC)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "invasion_into_detrusor_muscle_t2_plus", "weight": 5 },
+          { "feature": "high_grade_often", "weight": 4 },
+          { "feature": "metastatic_potential_significant", "weight": 4 }
+        ],
+        "management": "Neoadjuvant cisplatin-based chemotherapy (MVAC: methotrexate, vinblastine, doxorubicin, cisplatin or GC: gemcitabine + cisplatin) followed by radical cystectomy + extended PLND. Trimodality therapy in select patients (TURBT + RT + chemo). Adjuvant chemo if no neoadjuvant. Checkpoint inhibitors (pembrolizumab, atezolizumab) for cisplatin-ineligible or PD-L1+."
+      },
+      {
+        "id": "metastatic_urothelial_carcinoma",
+        "name": "Metastatic Urothelial Carcinoma",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "distant_metastases_nodes_bone_lung_liver", "weight": 5 },
+          { "feature": "cisplatin_eligible_or_not", "weight": 4 }
+        ],
+        "management": "First-line: cisplatin-based chemo (GC or MVAC) if eligible. Atezolizumab/pembrolizumab if cisplatin-ineligible with PD-L1+. Maintenance avelumab after chemo if no progression. Second-line: checkpoint inhibitor (pembrolizumab), enfortumab vedotin (Nectin-4 ADC), erdafitinib (FGFR altered). Palliative RT. Best supportive care."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "uti_cystitis", "discriminators": ["infection_symptoms", "negative_cystoscopy", "responds_to_antibiotics"] },
+      { "diseaseId": "benign_prostatic_hyperplasia", "discriminators": ["normal_imaging_and_cystoscopy", "smooth_prostate_dre"] },
+      { "diseaseId": "interstitial_cystitis", "discriminators": ["chronic_pain_filling", "negative_cytology", "glomerulations", "negative_biopsy"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Urinalysis", "priority": "immediate", "yield": 0.7, "indication": "hematuria detection" },
+        { "name": "Urine cytology", "priority": "high", "yield": 0.6, "indication": "malignant cells (high sensitivity for HG/CIS)" },
+        { "name": "FISH Urovysion or NMP22", "priority": "medium", "yield": 0.7, "indication": "adjunctive urine markers" }
+      ],
+      "imaging": [
+        { "name": "CT urogram (CT IVP)", "priority": "first-line", "yield": 0.8, "indication": "upper tract evaluation, bladder mass, extravesical extension" },
+        { "name": "Cystoscopy with biopsy/TURBT", "priority": "gold_standard", "yield": 0.98, "indication": "direct visualization, tissue diagnosis, staging" },
+        { "name": "MRI bladder", "priority": "medium", "yield": 0.8, "indication": "local staging if TURBT incomplete" },
+        { "name": "CT Chest/Abdomen/Pelvis", "priority": "high", "yield": 0.7, "indication": "metastatic workup for MIBC" }
+      ]
+    },
+    "management": {
+      "protocolReference": "EAU Guidelines for Non-Muscle Invasive / NCCN Guidelines for Bladder Cancer",
+      "pathways": [
+        {
+          "severity": "NMIBC low risk (Ta LG, single, <3cm)",
+          "criteria": "initial presentation, low risk features",
+          "treatment": "TURBT + single dose intravesical mitomycin C (40 mg in 40 mL NS) within 24h. Surveillance: cystoscopy at 3 months, then annually."
+        },
+        {
+          "severity": "NMIBC high risk (T1, HG, CIS, multifocal)",
+          "criteria": "high risk of recurrence and progression",
+          "treatment": "TURBT (ensure detrusor muscle in specimen). Re-resection if T1. Induction BCG (weekly x 6) + maintenance (weekly x 3 at 3, 6, 12, 18, 24, 30, 36 months). If BCG failure: radical cystectomy or clinical trials."
+        },
+        {
+          "severity": "MIBC (T2-T4a N0 M0)",
+          "criteria": "muscle invasion on TURBT, no metastases",
+          "treatment": "Neoadjuvant cisplatin-based chemo (GC or ddMVAC x 3-4 cycles) + radical cystectomy + extended PLND. Ileal conduit or neobladder. Trimodality in select: maximal TURBT + RT + radiosensitizing chemo."
+        },
+        {
+          "severity": "metastatic (M1)",
+          "criteria": "distant metastases or unresectable",
+          "treatment": "Cisplatin-based chemo if eligible. Enfortumab vedotin. Checkpoint inhibitors. Erdafitinib if FGFR3/2 mutation. Palliative RT for bone pain/hematuria."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "urothelial_cell_carcinoma_pathway",
+      "p53_mutation_in_cis_and_mibc",
+      "fgfr3_mutation_in_low_grade_ta",
+      "field_cancerization_effect",
+      "multistep_carcinogenesis_from_hyperplasia_to_invasive",
+      "lymphatic_spread_to_obturator_hypogastric_iliac_nodes",
+      "hematogenous_metastasis_to_liver_lung_bone"
+    ],
+    "complications": [
+      { "diseaseId": "hydronephrosis_renal_failure", "probability": 0.1, "severityBoost": 0.4, "clues": ["ureteric_orifice_obstruction_by_tumor", "flank_pain", "elevated_creatinine"] },
+      { "diseaseId": "gross_hematuria_clot_retention", "probability": 0.2, "severityBoost": 0.3, "clues": ["visible_blood", "clots", "retention"] },
+      { "diseaseId": "bcg_side_effects_sepsis", "probability": 0.02, "severityBoost": 0.5, "clues": ["fever_over_48h", "granulomatous_hepatitis_pneumonitis", "bcg_culture_positive"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["painless_hematuria", "smoking_history", "abnormal_cytology", "bladder_mass_on_cystoscopy"],
+    "exclusionClues": ["normal_cystoscopy", "uti_only_with_resolution", "benign_imaging"]
+  }
+}

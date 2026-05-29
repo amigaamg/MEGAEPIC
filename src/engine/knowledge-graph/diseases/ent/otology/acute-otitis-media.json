@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "acute_otitis_media",
+    "name": "Acute Otitis Media",
+    "system": "ent",
+    "agePeak_months": [6, 24],
+    "note": "Common pediatric infection. Eustachian tube dysfunction leads to middle ear effusion and bacterial superinfection.",
+    "prevalenceWeight": 0.85,
+    "syndromeTags": ["ear_pain", "fever", "hearing_loss"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "meningism", "weight": 10 },
+        { "sign": "mastoid_tenderness_swelling", "weight": 9 },
+        { "sign": "facial_nerve_palsy", "weight": 9 },
+        { "sign": "septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_fever_over_39", "weight": 6 },
+          { "sign": "severe_otalgia", "weight": 5 },
+          { "sign": "purulent_otorrhea", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If meningism/mastoiditis/facial palsy -> SEVERE (complicated); else -> NON-SEVERE (simple AOM)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "ear_pain", "weight": 5, "modifiers": [
+          { "condition": "pulling_tugging_ear_infant", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "hearing_loss", "weight": 3 },
+      { "symptomId": "irritability", "weight": 3, "note": "Common in infants and toddlers" },
+      { "symptomId": "rhinorrhea", "weight": 2, "note": "Preceding URI symptoms common" },
+      { "symptomId": "cough", "weight": 1 }
+    ],
+
+    "examFeatures": [
+      { "signId": "bulging_tympanic_membrane", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "erythematous_tympanic_membrane", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "decreased_mobility_tympanic_membrane", "baseWeight": 4 },
+      { "signId": "purulent_otorrhea", "baseWeight": 4, "note": "Suggests perforation of TM" },
+      { "signId": "fever_tachycardia", "baseWeight": 2 },
+      { "signId": "post_auricular_tenderness", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "daycare_attendance", "multiplier": 1.8 },
+      { "id": "bottle_feeding_supine", "multiplier": 1.5 },
+      { "id": "pacifier_use", "multiplier": 1.3 },
+      { "id": "parental_smoking", "multiplier": 1.4 },
+      { "id": "immunodeficiency", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "simple_aom",
+        "name": "Simple Acute Otitis Media",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "otalgia", "weight": 5 },
+          { "feature": "fever", "weight": 4 },
+          { "feature": "bulging_TM", "weight": 5 }
+        ],
+        "management": "Observation for 48-72h if mild/uncomplicated. First-line: Amoxicillin 80-90 mg/kg/day for 5-7 days. Alternatives: Amoxicillin-Clavulanate if recent antibiotic use."
+      },
+      {
+        "id": "perforated_aom",
+        "name": "AOM with Tympanic Membrane Perforation",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "purulent_otorrhea", "weight": 5 },
+          { "feature": "relief_of_pain_after_discharge", "weight": 4 },
+          { "feature": "fever", "weight": 3 }
+        ],
+        "management": "Oral antibiotics 7-10 days. Aural toilet. Keep ear dry. Refer to ENT if perforation persists >6 weeks."
+      },
+      {
+        "id": "recurrent_aom",
+        "name": "Recurrent Acute Otitis Media",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "three_episodes_in_6_months", "weight": 5 },
+          { "feature": "four_episodes_in_12_months", "weight": 5 }
+        ],
+        "management": "Consider tympanostomy tube insertion. Evaluate for immunodeficiency. Consider prophylactic antibiotics."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "otitis_externa",
+        "discriminators": ["tragal_tenderness", "ear_canal_edema", "pain_with_chewing", "no_URI_prodrome"]
+      },
+      {
+        "diseaseId": "mastoiditis",
+        "discriminators": ["post_auricular_swelling", "protruding_auricle", "high_fever", "severe_pain"]
+      },
+      {
+        "diseaseId": "teething",
+        "discriminators": ["gum_swelling", "drooling", "no_fever_or_low_grade", "biting_behavior"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Otoscopy", "priority": "immediate", "yield": 0.9, "indication": "all suspected cases" },
+        { "name": "Pneumatic Otoscopy", "priority": "immediate", "yield": 0.85, "indication": "confirm decreased TM mobility" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "medium", "yield": 0.4, "indication": "severe cases, failure of treatment" },
+        { "name": "CRP", "priority": "medium", "yield": 0.4, "indication": "assess severity" },
+        { "name": "Blood Culture", "priority": "low", "yield": 0.1, "indication": "toxic appearing or immunocompromised" }
+      ],
+      "imaging": [
+        { "name": "CT Temporal Bone", "priority": "low", "yield": 0.6, "indication": "suspected intracranial complication or mastoiditis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline for Acute Otitis Media",
+      "pathways": [
+        {
+          "severity": "non-severe",
+          "criteria": "mild symptoms, unilateral, age >6 months, no otorrhea",
+          "treatment": "Observation for 48-72 hours with analgesia (ibuprofen/acetaminophen). If no improvement, start Amoxicillin 80-90 mg/kg/day for 5-7 days."
+        },
+        {
+          "severity": "severe",
+          "criteria": "moderate-severe otalgia, fever >39C, bilateral in <2 years, otorrhea",
+          "treatment": "Amoxicillin 80-90 mg/kg/day for 10 days. If recent antibiotics: Amoxicillin-Clavulanate 90 mg/kg/day. Analgesia. Follow-up in 48-72h."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "suspected mastoiditis, intracranial extension, facial palsy",
+          "treatment": "IV antibiotics (Ceftriaxone + Metronidazole). CT Temporal Bone. ENT consultation. Possible myringotomy or cortical mastoidectomy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "eustachian_tube_dysfunction",
+      "negative_middle_ear_pressure",
+      "mucosal_edema",
+      "bacterial_superinfection",
+      "purulent_effusion"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_mastoiditis",
+        "probability": 0.03,
+        "lagDays": [3, 10],
+        "severityBoost": 0.4,
+        "clues": ["post_auricular_pain", "swelling", "protruding_ear"]
+      },
+      {
+        "diseaseId": "tm_perforation",
+        "probability": 0.07,
+        "lagDays": [1, 3],
+        "severityBoost": 0.2,
+        "clues": ["sudden_otorrhea", "pain_relief"]
+      },
+      {
+        "diseaseId": "intracranial_abscess",
+        "probability": 0.002,
+        "lagDays": [7, 21],
+        "severityBoost": 0.6,
+        "clues": ["persistent_fever", "headache", "neurological_deficits"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["acute_ear_pain", "bulging_TM", "URI_prodrome", "fever"],
+    "exclusionClues": ["tragal_tenderness", "clear_otorrhea", "normal_TM_mobility"]
+  }
+}

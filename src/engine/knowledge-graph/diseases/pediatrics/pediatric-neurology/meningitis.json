@@ -1,0 +1,194 @@
+{
+  "disease": {
+    "id": "meningitis",
+    "name": "Bacterial Meningitis (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [0, 24],
+    "note": "Medical emergency. Inflammation of meninges due to bacterial infection. Highest incidence in neonates and infants under 2 years.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["central_nervous_system_infection", "pediatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "altered_consciousness", "weight": 10 },
+        { "sign": "seizures", "weight": 10 },
+        { "sign": "signs_of_raised_icp", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bulging_fontanelle", "weight": 8 },
+          { "sign": "petechial_rash", "weight": 8, "note": "Suggests meningococcal" },
+          { "sign": "focal_neurologic_signs", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If altered consciousness, seizures, or shock -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "headache", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 4 },
+      { "symptomId": "neck_stiffness", "weight": 5 },
+      { "symptomId": "irritability", "weight": 4 },
+      { "symptomId": "poor_feeding", "weight": 4 },
+      { "symptomId": "high_pitched_cry", "weight": 3, "note": "In infants" },
+      { "symptomId": "seizures", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "neck_stiffness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "bulging_fontanelle", "baseWeight": 5 },
+      { "signId": "kernig_sign", "baseWeight": 4 },
+      { "signId": "brudzinski_sign", "baseWeight": 4 },
+      { "signId": "altered_consciousness", "baseWeight": 4 },
+      { "signId": "petechial_rash", "baseWeight": 5, "note": "Meningococcemia" },
+      { "signId": "photophobia", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_under_2_years", "multiplier": 3.0 },
+      { "id": "missing_vaccinations", "multiplier": 3.0 },
+      { "id": "asplenia", "multiplier": 4.0 },
+      { "id": "immunodeficiency", "multiplier": 3.0 },
+      { "id": "recent_upper_respiratory_infection", "multiplier": 1.5 },
+      { "id": "cochlear_implant", "multiplier": 2.0 },
+      { "id": "head_trauma_with_csf_leak", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "bacterial_meningitis",
+        "name": "Acute Bacterial Meningitis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "rapid_onset_less_than_24h", "weight": 4 },
+          { "feature": "fever_and_meningismus", "weight": 5 },
+          { "feature": "cloudy_csf", "weight": 5 }
+        ],
+        "management": "Empiric IV antibiotics: Ceftriaxone + Vancomycin (add Ampicillin for neonates <3 months). Dexamethasone 0.15 mg/kg q6h for 4 days (if Hib suspected). ICU for severe cases."
+      },
+      {
+        "id": "viral_meningitis",
+        "name": "Viral (Aseptic) Meningitis",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "gradual_onset", "weight": 4 },
+          { "feature": "milder_symptoms", "weight": 4 },
+          { "feature": "clear_csf_lymphocytic", "weight": 5 }
+        ],
+        "management": "Supportive care: hydration, antipyretics, analgesia. No antibiotics needed once bacterial meningitis excluded by CSF profile and culture."
+      },
+      {
+        "id": "neonatal_meningitis",
+        "name": "Neonatal Meningitis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "age_less_than_3_months", "weight": 5 },
+          { "feature": "bulging_fontanelle", "weight": 4 },
+          { "feature": "irritability_high_pitched_cry", "weight": 4 }
+        ],
+        "management": "IV Ampicillin + Gentamicin OR Cefotaxime. Add Acyclovir if HSV suspected. LP if stable. Monitor for ventriculitis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "febrile_seizure",
+        "discriminators": ["brief_seizure", "rapid_full_recovery", "no_meningismus", "clear_csf"]
+      },
+      {
+        "diseaseId": "acute_disseminated_encephalomyelitis",
+        "discriminators": ["vaccination_history", "multifocal_symptoms", "denyelination_on_mri"]
+      },
+      {
+        "diseaseId": "intracranial_abscess",
+        "discriminators": ["focal_neurologic_signs", "mass_on_brain_imaging"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "CSF analysis via LP", "priority": "immediate", "yield": 0.95, "indication": "cell count, glucose, protein, Gram stain, culture" },
+        { "name": "Blood glucose (compare with CSF glucose)", "priority": "immediate", "yield": 0.7, "indication": "CSF:serum glucose ratio" }
+      ],
+      "laboratory": [
+        { "name": "Blood culture", "priority": "immediate", "yield": 0.7, "indication": "identify pathogen" },
+        { "name": "CRP and Procalcitonin", "priority": "high", "yield": 0.8, "indication": "differentiate bacterial vs viral" },
+        { "name": "CSF PCR (enterovirus, HSV)", "priority": "high", "yield": 0.9, "indication": "viral meningitis confirmation" },
+        { "name": "CSF culture and sensitivity", "priority": "immediate", "yield": 0.8, "indication": "definitive diagnosis" }
+      ],
+      "imaging": [
+        { "name": "Brain CT before LP", "priority": "high", "yield": 0.4, "indication": "if focal signs, papilledema, or GCS <12 to rule out mass" },
+        { "name": "Brain MRI with contrast", "priority": "medium", "yield": 0.8, "indication": "suspected complications (abscess, venous sinus thrombosis)" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO/NICE Guidelines for Meningitis in Children",
+      "pathways": [
+        {
+          "severity": "non_severe",
+          "criteria": "Alert, no seizures, no focal signs, normal ICP",
+          "treatment": "IV antibiotics (Ceftriaxone 100 mg/kg/day). Dexamethasone if Hib suspected. Supportive care. Monitor GCS. Repeat LP if no improvement at 48h."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Altered consciousness, seizures, raised ICP, or shock",
+          "treatment": "ICU admission. IV Ceftriaxone + Vancomycin. Add Ampicillin for neonates. Dexamethasone. Manage raised ICP (head elevation, mannitol, hyperventilation). Antiepileptics. Inotropic support if shock. Contact precautions."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hematogenous_spread",
+      "bacterial_invasion_brain_barrier",
+      "meningeal_inflammation",
+      "cerebral_edema",
+      "raised_intracranial_pressure",
+      "neuronal_injury"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hearing_loss",
+        "probability": 0.2,
+        "lagDays": [7, 90],
+        "severityBoost": 0.3,
+        "clues": ["severe_disease", "pneumococcal_meningitis", "delayed_antibiotics"]
+      },
+      {
+        "diseaseId": "subdural_effusion",
+        "probability": 0.15,
+        "lagDays": [3, 14],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "irritability", "seizures"]
+      },
+      {
+        "diseaseId": "hydrocephalus",
+        "probability": 0.1,
+        "lagDays": [7, 30],
+        "severityBoost": 0.4,
+        "clues": ["increasing_head_circumference", "vomiting", "sunset_sign"]
+      },
+      {
+        "diseaseId": "neurologic_deficit",
+        "probability": 0.15,
+        "lagDays": [7, 90],
+        "severityBoost": 0.4,
+        "clues": ["focal_signs_acute_phase", "severe_onset"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever_and_neck_stiffness", "bulging_fontanelle", "irritability", "petechial_rash", "cloudy_csf"],
+    "exclusionClues": ["clear_csf_with_normal_cell_count", "negative_culture", "rapid_improvement_without_abx"]
+  }
+}

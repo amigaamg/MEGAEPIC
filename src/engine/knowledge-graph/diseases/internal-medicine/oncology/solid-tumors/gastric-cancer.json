@@ -1,0 +1,146 @@
+{
+  "disease": {
+    "id": "gastric_cancer",
+    "name": "Gastric Cancer",
+    "system": "ONCO",
+    "agePeak_months": [600, 960],
+    "note": "Often presents late. Intestinal and diffuse types (Lauren classification). High incidence in East Asia, Chile, Eastern Europe.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["gastrointestinal_malignancy", "upper_gi_tumor"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "gastric_outlet_obstruction", "weight": 8 },
+        { "sign": "upper_gi_bleed_massive", "weight": 9 },
+        { "sign": "perforation_peritonitis", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "TNM Stage I-IV. Early gastric cancer curable; advanced carries poor prognosis."
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspepsia", "weight": 3 },
+      { "symptomId": "early_satiety", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 5 },
+      { "symptomId": "epigastric_pain", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "dysphagia", "weight": 3, "note": "Suggests cardia/fundus involvement" },
+      { "symptomId": "hematemesis_melena", "weight": 4 },
+      { "symptomId": "anemia_fatigue", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "epigastric_mass", "baseWeight": 4 },
+      { "signId": "palpable_liver_nodules", "baseWeight": 3 },
+      { "signId": "ascites", "baseWeight": 3 },
+      { "signId": "left_supraclavicular_node_virchow", "baseWeight": 3 },
+      { "signId": "sister_mary_joseph_nodule", "baseWeight": 2 },
+      { "signId": "krukenberg_tumor", "baseWeight": 2 },
+      { "signId": "pallor", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "helicobacter_pylori_infection", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "family_history_gastric_cancer", "multiplier": 2.5 },
+      { "id": "pernicious_anemia", "multiplier": 2.0 },
+      { "id": "high_salt_diet_pickled_foods", "multiplier": 1.5 },
+      { "id": "epstein_barr_virus_infection", "multiplier": 1.5 },
+      { "id": "cdh1_mutation_hereditary_diffuse", "multiplier": 10.0 },
+      { "id": "prior_gastric_surgery", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "intestinal_type_gastric",
+        "name": "Intestinal-Type Gastric Cancer (Lauren)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "associated_with_h_pylori", "weight": 4 },
+          { "feature": "precursor_lesions_intestinal_metaplasia", "weight": 4 },
+          { "feature": "glandular_formation_on_histology", "weight": 4 },
+          { "feature": "older_age_male_predominance", "weight": 3 }
+        ],
+        "management": "Gastrectomy (subtotal or total) + D2 lymphadenectomy. Perioperative FLOT chemotherapy (docetaxel, oxaliplatin, 5-FU, leucovorin). Adjuvant chemoradiation if R1/R2."
+      },
+      {
+        "id": "diffuse_type_gastric",
+        "name": "Diffuse-Type Gastric Cancer (Lauren)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "signet_ring_cells", "weight": 5 },
+          { "feature": "no_gland_formation", "weight": 4 },
+          { "feature": "younger_age_female", "weight": 3 },
+          { "feature": "cdh1_mutation_familial", "weight": 4 },
+          { "feature": "linitis_plastica", "weight": 4 }
+        ],
+        "management": "Total gastrectomy + D2 lymphadenectomy. Poor response to chemo. FLOT perioperative. Consider hyperthermic IP chemotherapy. Prophylactic gastrectomy for CDH1 carriers."
+      },
+      {
+        "id": "gastroesophageal_junction",
+        "name": "Gastroesophageal Junction (Siewert I-III)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "dysphagia_presenting", "weight": 5 },
+          { "feature": "obesity_gerd_associated", "weight": 4 },
+          { "feature": "barrett_esophagus_history", "weight": 3 }
+        ],
+        "management": "Siewert I-II: esophagectomy + gastric pull-up. Siewert III: total gastrectomy. Perioperative FLOT. CROSS regimen if esophageal type."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "peptic_ulcer_disease", "discriminators": ["pain_relieved_by_antacids", "no_weight_loss", "heals_with_ppi", "benign_biopsy"] },
+      { "diseaseId": "gastric_lymphoma", "discriminators": ["malt_lymphoma_associated_h_pylori", "lymphohistiocytic_infiltrate", "responsive_to_h_pylori_eradication"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC", "priority": "high", "yield": 0.5, "indication": "anemia (iron deficiency from chronic blood loss)" },
+        { "name": "LFT, albumin", "priority": "high", "yield": 0.5, "indication": "liver metastases, nutritional status" },
+        { "name": "CEA, CA19-9, CA72-4", "priority": "medium", "yield": 0.5, "indication": "tumor markers for monitoring" }
+      ],
+      "imaging": [
+        { "name": "EGD (esophagogastroduodenoscopy) with biopsy", "priority": "gold_standard", "yield": 0.98, "indication": "diagnosis, tumor location, histology" },
+        { "name": "EUS (endoscopic ultrasound)", "priority": "high", "yield": 0.85, "indication": "T-staging, N-staging, biopsy of nodes" },
+        { "name": "CT Chest/Abdomen/Pelvis with contrast", "priority": "high", "yield": 0.85, "indication": "distant metastases, staging" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "metastatic workup, response assessment" },
+        { "name": "Diagnostic laparoscopy", "priority": "high", "yield": 0.9, "indication": "detect peritoneal metastases occult on imaging" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/ESMO Guidelines for Gastric Cancer",
+      "pathways": [
+        {
+          "severity": "early (T1-T2 N0)",
+          "criteria": "mucosal/submucosal, node negative",
+          "treatment": "Endoscopic mucosal resection (EMR/ESD) for T1a. Gastrectomy + D1 lymphadenectomy for T1b. No neoadjuvant therapy."
+        },
+        {
+          "severity": "locally advanced (T2-4 N+ or T3-4 any N)",
+          "criteria": "full thickness invasion or node positive",
+          "treatment": "Perioperative FLOT (4 cycles pre + 4 cycles post). Total/subtotal gastrectomy + D2 lymphadenectomy. Adjuvant chemoradiation if R1."
+        },
+        {
+          "severity": "metastatic (M1)",
+          "criteria": "distant metastases or peritoneal carcinomatosis",
+          "treatment": "Palliative chemotherapy: platinum + fluoropyrimidine ± trastuzumab (HER2+) or nivolumab (PD-L1+). Ramucirumab + paclitaxel second-line. Palliative RT/surgery for obstruction/bleeding."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "h_pylori_induced_chronic_gastritis",
+      "intestinal_metaplasia",
+      "dysplasia",
+      "carcinoma_in_situ",
+      "invasive_adenocarcinoma",
+      "cdh1_loss_in_diffuse_type",
+      "msi_and_ebv_molecular_subtypes",
+      "lymphatic_spread_d2_nodes",
+      "transcoelomic_peritoneal_spread"
+    ],
+    "complications": [
+      { "diseaseId": "gastric_outlet_obstruction", "probability": 0.1, "severityBoost": 0.3, "clues": ["intractable_vomiting", "no_passage_of_contrast", "dilated_stomach"] },
+      { "diseaseId": "upper_gi_bleeding", "probability": 0.15, "severityBoost": 0.3, "clues": ["hematemesis", "melena", "drop_in_hemoglobin"] },
+      { "diseaseId": "peritoneal_carcinomatosis", "probability": 0.3, "severityBoost": 0.5, "clues": ["ascites", "omental_nodules", "bowel_obstruction"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["dyspepsia_in_older_patient_red_flag", "weight_loss", "early_satiety", "h_pylori_history"],
+    "exclusionClues": ["benign_ulcer_endoscopy", "negative_biopsy", "symptom_resolution_with_ppi"]
+  }
+}

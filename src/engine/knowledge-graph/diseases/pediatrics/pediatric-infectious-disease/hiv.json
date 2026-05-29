@@ -1,0 +1,165 @@
+{
+  "disease": {
+    "id": "hiv",
+    "name": "Pediatric HIV/AIDS",
+    "system": "PAED",
+    "agePeak_months": [0, 60],
+    "note": "HIV infection acquired primarily via vertical transmission (MTCT). Also via blood products. Presents with recurrent infections, failure to thrive, and opportunistic infections.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["immunodeficiency", "vertical_transmission"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pneumocystis_pneumonia", "weight": 10 },
+        { "sign": "severe_bacterial_infection_sepsis", "weight": 10 },
+        { "sign": "cerebral_toxoplasmosis", "weight": 9 },
+        { "sign": "cryptococcal_meningitis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "cd4_<15_percent", "weight": 8 },
+          { "sign": "severe_wasting", "weight": 7 },
+          { "sign": "encephalopathy_hiv", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If CD4 <15% or WHO stage 3-4 condition -> SEVERE (AIDS); else -> NON-SEVERE (HIV infection)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "recurrent_infections", "weight": 5 },
+      { "symptomId": "failure_to_thrive_poor_weight_gain", "weight": 5 },
+      { "symptomId": "persistent_fever", "weight": 3 },
+      { "symptomId": "chronic_diarrhea", "weight": 3 },
+      { "symptomId": "lymphadenopathy_generalized", "weight": 3 },
+      { "symptomId": "developmental_delay_milestones", "weight": 3 },
+      { "symptomId": "known_hiv_exposure_maternal", "weight": 5 },
+      { "symptomId": "oral_thrush_persistent", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "failure_to_thrive", "baseWeight": 5 },
+      { "signId": "lymphadenopathy_generalized", "baseWeight": 4 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 3 },
+      { "signId": "oral_thrush", "baseWeight": 4 },
+      { "signId": "skin_rashes_seborrheic_dermatitis", "baseWeight": 3 },
+      { "signId": "parotid_swelling", "baseWeight": 3 },
+      { "signId": "clubbing", "baseWeight": 2 },
+      { "signId": "neurologic_signs_encephalopathy", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "mother_with_hiv_not_on_art", "multiplier": 5.0 },
+      { "id": "vertical_transmission_no_pmtct", "multiplier": 5.0 },
+      { "id": "prolonged_rupture_of_membranes", "multiplier": 2.0 },
+      { "id": "breastfeeding_by_hiv_positive_mother", "multiplier": 3.0 },
+      { "id": "blood_transfusion_in_endemic_area", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hiv_exposed_infant",
+        "name": "HIV-Exposed Infant (Seroreverter or Infected)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "known_maternal_hiv", "weight": 5 },
+          { "feature": "positive_pcr_at_6_weeks", "weight": 5 },
+          { "feature": "receiving_pmtct_prophylaxis", "weight": 4 }
+        ],
+        "management": "PCR testing at birth, 6 weeks, and 6 months. Prophylaxis with antiretroviral (AZT or NVP). Breastfeeding avoidance if safe alternatives. Confirm infection status at 18 months by HIV antibody."
+      },
+      {
+        "id": "hiv_infected_child",
+        "name": "HIV-Infected Child (Confirmed)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "positive_hiv_pcr_or_antibody_test", "weight": 5 },
+          { "feature": "cd4_percentage_depressed", "weight": 5 },
+          { "feature": "recurrent_opportunistic_infections", "weight": 4 }
+        ],
+        "management": "ART initiation (NNRTI or PI-based regimen). Co-trimoxazole prophylaxis. Immunizations (avoid live vaccines if severely immunosuppressed). Monitor viral load and CD4 q3-6 months. Manage OIs."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "severe_combined_immunodeficiency",
+        "discriminators": ["early_onset_<3_months", "severe_infections", "negative_hiv_test", "lymphopenia"]
+      },
+      {
+        "diseaseId": "malnutrition_sam",
+        "discriminators": ["negative_hiv_test", "nutritional_history", "response_to_nutritional_rehabilitation"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "HIV DNA PCR (for <18 months)", "priority": "immediate", "yield": 1.0, "indication": "definitive diagnosis in infants" },
+        { "name": "HIV antibody test (for >18 months)", "priority": "immediate", "yield": 1.0, "indication": "definitive diagnosis in older children" },
+        { "name": "CD4 count and percentage", "priority": "immediate", "yield": 0.9, "indication": "disease staging, treatment initiation" },
+        { "name": "HIV viral load", "priority": "high", "yield": 0.9, "indication": "treatment response monitoring" },
+        { "name": "CBC", "priority": "high", "yield": 0.4, "indication": "cytopenias" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO Consolidated Guidelines on HIV in Children / Pediatric ART Guidelines",
+      "pathways": [
+        {
+          "severity": "hiv_exposed_no_infection",
+          "criteria": "Negative PCR tests at 6 weeks and 6 months, or negative antibody at 18 months",
+          "treatment": "Discharge from HIV clinic. Ensure completed immunizations. Family counseling. Safe infant feeding practices."
+        },
+        {
+          "severity": "hiv_infected",
+          "criteria": "Positive HIV test at any age, any CD4 level",
+          "treatment": "Start ART: ABC + 3TC + LPV/r (or EFV if >3 years). Co-trimoxazole prophylaxis until CD4 stable. Immunizations per schedule (no BCG if HIV+, no MMR if severely immunocompromised). Monitor VL and CD4 q6 months."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hiv_vertical_transmission",
+      "cd4_t_lymphocyte_depletion",
+      "immune_deficiency",
+      "chronic_immune_activation",
+      "opportunistic_infections",
+      "growth_and_neurodevelopmental_impairment"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pneumocystis_pneumonia",
+        "probability": 0.2,
+        "lagDays": [90, 365],
+        "severityBoost": 0.6,
+        "clues": ["hypoxia", "bilateral_interstitial_pneumonia", "low_cd4", "not_on_cotrimoxazole"]
+      },
+      {
+        "diseaseId": "severe_bacterial_infections",
+        "probability": 0.3,
+        "lagDays": [30, 365],
+        "severityBoost": 0.4,
+        "clues": ["pneumonia", "sepsis", "meningitis"]
+      },
+      {
+        "diseaseId": "hiv_encephalopathy",
+        "probability": 0.15,
+        "lagDays": [180, 365],
+        "severityBoost": 0.5,
+        "clues": ["loss_of_milestones", "spasticity", "microcephaly"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["known_maternal_exposure", "recurrent_infections", "failure_to_thrive", "generalized_lymphadenopathy"],
+    "exclusionClues": ["negative_hiv_dna_pcr_x2", "negative_hiv_antibody_at_18_months"]
+  }
+}

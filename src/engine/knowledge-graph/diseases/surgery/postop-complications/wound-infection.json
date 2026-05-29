@@ -1,0 +1,192 @@
+{
+  "disease": {
+    "id": "wound_infection",
+    "name": "Surgical Site Infection (Wound Infection)",
+    "system": "surgical",
+    "agePeak_months": [],
+    "note": "SSI is the most common postoperative complication, typically presenting 5-7 days post-surgery. Classified as superficial incisional, deep incisional, or organ/space.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["postoperative_complication", "surgical_site_infection", "fever_postop"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "necrotizing_fasciitis", "weight": 10 },
+        { "sign": "wound_dehiscence_with_evisceration", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "wound_discharge_purulent", "weight": 7 },
+          { "sign": "systemic_sepsis", "weight": 8 },
+          { "sign": "crepitus", "weight": 9 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If sepsis/crepitus/wound dehiscence -> SEVERE (deep SSI or necrotizing); else -> NON-SEVERE (superficial SSI)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "postoperative_fever", "weight": 5 },
+      { "symptomId": "wound_pain_increasing", "weight": 5 },
+      { "symptomId": "wound_erythema", "weight": 4 },
+      { "symptomId": "warmth_over_wound", "weight": 3 },
+      { "symptomId": "purulent_discharge", "weight": 5 },
+      { "symptomId": "wound_swelling", "weight": 3 },
+      { "symptomId": "malaise", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "wound_erythema_surrounding", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "wound_induration", "baseWeight": 4 },
+      { "signId": "wound_discharge", "baseWeight": 5 },
+      { "signId": "wound_tenderness", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "wound_dehiscence", "baseWeight": 5, "note": "Suggests deep infection or technical failure" },
+      { "signId": "crepitus", "baseWeight": 5, "note": "Emergent — gas-forming organism" }
+    ],
+
+    "riskFactors": [
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus", "multiplier": 1.8 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "contaminated_wound_class", "multiplier": 2.5 },
+      { "id": "prolonged_surgery", "multiplier": 1.4 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "malnutrition", "multiplier": 1.6 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "superficial_ssi",
+        "name": "Superficial Incisional SSI",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "skin_subcutaneous_involvement", "weight": 5 },
+          { "feature": "purulent_discharge_incision", "weight": 5 },
+          { "feature": "erythema_limited_to_wound", "weight": 4 }
+        ],
+        "management": "Wound opening and drainage. Wound swab for culture. Daily packing with sterile dressing. Oral antibiotics if cellulitis (e.g., Flucloxacillin)."
+      },
+      {
+        "id": "deep_ssi",
+        "name": "Deep Incisional SSI",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "fascial_muscle_involvement", "weight": 5 },
+          { "feature": "purulent_discharge_from_depth", "weight": 5 },
+          { "feature": "wound_dehiscence", "weight": 5 },
+          { "feature": "high_fever", "weight": 4 }
+        ],
+        "management": "Urgent wound exploration in OR. Debridement of necrotic tissue. IV broad-spectrum antibiotics (e.g., Piperacillin-Tazobactam). Negative pressure wound therapy (NPWT) may be considered."
+      },
+      {
+        "id": "organ_space_ssi",
+        "name": "Organ/Space SSI",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "fever_persistent", "weight": 5 },
+          { "feature": "abdominal_pain_persistent", "weight": 5 },
+          { "feature": "ileus", "weight": 4 },
+          { "feature": "purulent_drainage_from_drain", "weight": 5 }
+        ],
+        "management": "CT imaging to identify collection. Percutaneous drainage or re-operation. IV antibiotics tailored to culture. Sepsis resuscitation if indicated."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "wound_hematoma",
+        "discriminators": ["early_onset_24h", "blue_discoloration", "afebrile", "no_purulent_discharge"]
+      },
+      {
+        "diseaseId": "wound_seroma",
+        "discriminators": ["clear_serous_fluid", "non_tender", "afebrile"]
+      },
+      {
+        "diseaseId": "necrotizing_fasciitis",
+        "discriminators": ["rapid_progression", "crepitus", "severe_systemic_toxicity", "blistering"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Wound swab for culture and sensitivity", "priority": "immediate", "yield": 0.9, "indication": "all suspected SSI" },
+        { "name": "Temperature", "priority": "immediate", "yield": 0.7, "indication": "all patients" },
+        { "name": "Wound inspection with probing", "priority": "immediate", "yield": 0.85, "indication": "assess depth of involvement" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leukocytosis supports infection" },
+        { "name": "CRP", "priority": "high", "yield": 0.75, "indication": "elevated in infection" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.4, "indication": "if systemic sepsis suspected" },
+        { "name": "Lactate", "priority": "high", "yield": 0.5, "indication": "if sepsis suspected" }
+      ],
+      "imaging": [
+        { "name": "Abdominal CT with IV contrast", "priority": "medium", "yield": 0.85, "indication": "suspected deep or organ/space SSI" },
+        { "name": "Ultrasound wound", "priority": "medium", "yield": 0.7, "indication": "assess fluid collection depth" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CDC/NHSN SSI Criteria; WSES Guidelines for Surgical Site Infections",
+      "pathways": [
+        {
+          "severity": "superficial",
+          "criteria": "localized erythema, purulent discharge, no systemic features",
+          "treatment": "Open wound, drain pus, pack daily. Wound swab. Oral antibiotics (Flucloxacillin 500 mg QDS or Clindamycin if allergic). Review in 48 hours."
+        },
+        {
+          "severity": "deep",
+          "criteria": "fascial involvement, wound dehiscence, fever, elevated WBC/CRP",
+          "treatment": "Urgent wound exploration in OR. Debridement. IV antibiotics (Piperacillin-Tazobactam 4.5 g QDS). NPWT consideration. ICU if septic."
+        },
+        {
+          "severity": "organ_space",
+          "criteria": "intra-abdominal collection on CT, persistent fever, ileus",
+          "treatment": "CT-guided percutaneous drainage or re-laparotomy. IV antibiotics tailored to culture. Source control essential."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bacterial_inoculation_during_surgery",
+      "wound_contamination",
+      "biofilm_formation",
+      "impaired_host_defense",
+      "tissue_ischemia",
+      "foreign_body_reaction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "necrotizing_fasciitis",
+        "probability": 0.02,
+        "lagDays": [1, 3],
+        "severityBoost": 0.5,
+        "clues": ["rapid_spreading_pain", "crepitus", "systemic_toxicity"]
+      },
+      {
+        "diseaseId": "wound_dehiscence",
+        "probability": 0.05,
+        "lagDays": [5, 10],
+        "severityBoost": 0.3,
+        "clues": ["wound_gaping", "serosanguinous_discharge", "coughing_sneeze_trigger"]
+      },
+      {
+        "diseaseId": "incisional_hernia",
+        "probability": 0.1,
+        "lagDays": [90, 365],
+        "severityBoost": 0.1,
+        "clues": ["bulge_at_wound", "reducible_mass"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["postoperative_fever_day_5_to_7", "wound_erythema_induration", "purulent_discharge"],
+    "exclusionClues": ["afebrile", "clean_dry_wound", "clear_serous_fluid"]
+  }
+}

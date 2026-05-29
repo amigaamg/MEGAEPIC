@@ -1,0 +1,195 @@
+{
+  "disease": {
+    "id": "rh_incompatibility",
+    "name": "Rh Incompatibility (Rhesus Disease of Pregnancy)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Condition where an Rh-negative mother has been sensitized to Rh-positive fetal blood cells, producing anti-D antibodies that cross the placenta and cause hemolytic disease of the fetus and newborn (HDFN).",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["high_risk_pregnancy", "alloimmunization", "fetal_anemia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "fetal_hydrops", "weight": 10 },
+        { "sign": "fetal_demise", "weight": 10 },
+        { "sign": "severe_neonatal_jaundice_kernicterus", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "anti_d_titers_above_1_16", "weight": 8 },
+          { "sign": "middle_cerebral_artery_PSV_over_1_5_MoM", "weight": 8 },
+          { "sign": "previous_affected_neonate", "weight": 7 },
+          { "sign": "hydrops_on_ultrasound", "weight": 9 },
+          { "sign": "anemia_on_cordocentesis", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Hydrops, high MCA PSV, or high antibody titers -> SEVERE; Low titers with no fetal anemia -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "no_direct_maternal_symptoms", "weight": 5 },
+      { "symptomId": "previous_neonate_with_jaundice_or_anemia", "weight": 4 },
+      { "symptomId": "previous_hydrops_or_stillbirth", "weight": 4 },
+      { "symptomId": "blood_transfusion_history", "weight": 3 },
+      { "symptomId": "known_rh_negative_blood_type", "weight": 5 },
+      { "symptomId": "previous_miscarriage_or_ectopic", "weight": 1 },
+      { "symptomId": "reduced_fetal_movements_in_current_pregnancy", "weight": 2 },
+      { "symptomId": "polyhydramnios_symptoms", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "no_direct_maternal_exam_findings_early", "baseWeight": 3 },
+      { "signId": "fundal_height_greater_than_dates_if_hydrops", "baseWeight": 3 },
+      { "signId": "fetal_ascites_or_hydrops_on_ultrasound", "baseWeight": 5 },
+      { "signId": "polyhydramnios", "baseWeight": 3 },
+      { "signId": "edema_if_hydrops", "baseWeight": 4 },
+      { "signId": "hepatomegaly_or_splenomegaly_on_ultrasound", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "Rh_negative_mother", "multiplier": 5.0 },
+      { "id": "Rh_positive_partner", "multiplier": 3.0 },
+      { "id": "previous_affected_pregnancy", "multiplier": 10.0 },
+      { "id": "lack_of_rhogam_prophylaxis", "multiplier": 5.0 },
+      { "id": "previous_blood_transfusion", "multiplier": 2.0 },
+      { "id": "previous_miscarriage_without_rhogam", "multiplier": 2.0 },
+      { "id": "amniocentesis_or_cv_sampling", "multiplier": 2.0 },
+      { "id": "antepartum_hemorrhage_previous_pregnancy", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "non_sensitized_rh_negative",
+        "name": "Non-Sensitized Rh-Negative Mother",
+        "prevalenceModifier": 0.85,
+        "keyFeatures": [
+          { "feature": "negative_antibody_screen", "weight": 5 },
+          { "feature": "Rh_negative_blood_type", "weight": 5 },
+          { "feature": "no_history_of_sensitization", "weight": 4 }
+        ],
+        "management": "Rhogam (Anti-D Ig) 300mcg IM at 28 weeks. Rhogam within 72h after delivery if baby Rh-positive. Also after miscarriage, termination, ectopic, invasive procedures, antepartum hemorrhage."
+      },
+      {
+        "id": "sensitized_low_titer",
+        "name": "Sensitized Mother with Low Antibody Titer",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "anti_D_titers_1_1_to_1_8", "weight": 5 },
+          { "feature": "no_hydrops", "weight": 4 },
+          { "feature": "normal_MCA_PSV", "weight": 4 }
+        ],
+        "management": "Monthly antibody titers. Monitor MCA PSV weekly from 24 weeks. If titers rise to critical level (>1:16), refer for fetal therapy."
+      },
+      {
+        "id": "sensitized_high_titer_with_anemia",
+        "name": "Sensitized Mother with Fetal Anemia",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "anti_D_titers_above_1_16", "weight": 5 },
+          { "feature": "MCA_PSV_over_1_5_MoM", "weight": 5 },
+          { "feature": "hydrops_on_ultrasound", "weight": 5 },
+          { "feature": "previous_affected_pregnancy", "weight": 4 }
+        ],
+        "management": "Referral to fetal medicine. Intrauterine transfusion (IUT) via cordocentesis. Serial IUTs every 2-4 weeks. Plan delivery at 34-37 weeks. NICU team. Phototherapy and exchange transfusion for neonate."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "parvovirus_B19_infection",
+        "discriminators": ["negative_antibody_screen", "rash", "fever", "parvovirus_serology_positive"]
+      },
+      {
+        "diseaseId": "alpha_thalassemia_major",
+        "discriminators": ["family_history", "hemoglobin_electrophoresis", "no_antibodies"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Maternal blood group and Rh type", "priority": "immediate", "yield": 0.99, "indication": "first prenatal visit" },
+        { "name": "Antibody screen (indirect Coombs)", "priority": "immediate", "yield": 0.95, "indication": "detect anti-D antibodies" },
+        { "name": "Paternal blood group and genotype", "priority": "high", "yield": 0.8, "indication": "determine fetal Rh status risk" },
+        { "name": "Fetal RhD genotyping from maternal blood (cfDNA)", "priority": "medium", "yield": 0.95, "indication": "non-invasive; if partner heterozygous" },
+        { "name": "Amniotic fluid bilirubin (Delta OD450)", "priority": "historical", "yield": 0.7, "indication": "Liley curve; replaced by MCA Doppler" }
+      ],
+      "imaging": [
+        { "name": "Middle cerebral artery Doppler PSV", "priority": "immediate", "yield": 0.9, "indication": "non-invasive assessment of fetal anemia" },
+        { "name": "Fetal ultrasound for hydrops", "priority": "high", "yield": 0.8, "indication": "ascites, scalp edema, pleural/pericardial effusion" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 22 - Haemolytic Disease of the Newborn",
+      "pathways": [
+        {
+          "severity": "non_sensitized",
+          "criteria": "Rh-negative, negative antibody screen",
+          "treatment": "Rhogam (Anti-D 300mcg IM) at 28 weeks. Postpartum: Administer within 72h if baby Rh-positive. Administer after any sensitizing event (miscarriage, termination, invasive procedure, APH)."
+        },
+        {
+          "severity": "sensitized_low_titer",
+          "criteria": "antibodies detected, titer <1:16, normal MCA PSV",
+          "treatment": "Monthly maternal antibody titers. Weekly MCA PSV from 24 weeks. If stable, allow spontaneous labor at term. Cord blood at delivery for Hb and bilirubin. Monitor neonate for jaundice."
+        },
+        {
+          "severity": "sensitized_severe",
+          "criteria": "titer >1:16, MCA PSV >1.5 MoM, hydrops, previous HDFN",
+          "treatment": "Fetal medicine referral. Cordocentesis for fetal Hb. Intrauterine transfusion (IUT) of O-negative, CMV-negative, irradiated packed RBC. Serial IUTs until 34-37 weeks. Delivery by induction or C-section. NICU for anemia and jaundice. Exchange transfusion if severe."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "fetomaternal_hemorrhage",
+      "maternal_anti_D_antibody_production",
+      "transplacental_passage_of_IgG",
+      "fetal_RBC_destruction",
+      "hemolytic_anemia",
+      "extramedullary_hematopoiesis",
+      "hydrops_fetalis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hydrops_fetalis",
+        "probability": 0.1,
+        "lagDays": [30, 90],
+        "severityBoost": 0.9,
+        "clues": ["ascites", "scalp_edema", "pleural_effusion", "high_MCA_PSV"]
+      },
+      {
+        "diseaseId": "fetal_demise",
+        "probability": 0.05,
+        "lagDays": [0, 30],
+        "severityBoost": 1.0,
+        "clues": ["hydrops", "severe_anemia", "absent_fetal_heart"]
+      },
+      {
+        "diseaseId": "kernicterus",
+        "probability": 0.02,
+        "lagDays": [1, 7],
+        "severityBoost": 0.8,
+        "clues": ["severe_neonatal_jaundice", "bilirubin_over_340", "neurological_symptoms"]
+      },
+      {
+        "diseaseId": "procedure_loss_from_IUT",
+        "probability": 0.02,
+        "lagDays": [0, 7],
+        "severityBoost": 0.8,
+        "clues": ["fetal_bradycardia_during_procedure", "cord_hematoma"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["Rh_negative_mother", "positive_antibody_screen", "previous_affected_neonate"],
+    "exclusionClues": ["Rh_positive_mother", "negative_antibody_screen"]
+  }
+}

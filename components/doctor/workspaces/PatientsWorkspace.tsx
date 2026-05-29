@@ -248,18 +248,9 @@ function PatientDetailInline({ patient, doctorId, doctorName, doctorSpecialty, a
       )}
 
       {tab === 'prescriptions' && (
-        <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-          {allRx.length === 0 ? <div style={{ padding:20, textAlign:'center', color:'var(--muted)' }}>No prescriptions yet.</div> :
-            allRx.map((rx:any,i) => (
-              <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 10px', background:'var(--bg)', borderRadius:8, gap:8 }}>
-                <div>
-                  <div style={{ fontSize:13, fontWeight:700 }}>💊 {rx.medication}</div>
-                  <div style={{ fontSize:11, color:'var(--muted)' }}>{rx.dosage} · {rx.frequency} · {rx.duration}</div>
-                </div>
-                <div style={{ fontSize:10, color:'var(--muted)', textAlign:'right' }}>{rx.addedAt ? new Date(rx.addedAt).toLocaleDateString() : '—'}</div>
-              </div>
-            ))
-          }
+        <div style={{ padding:20, textAlign:'center', color:'var(--muted)' }}>
+          <div style={{ fontSize: 32, marginBottom: 8 }}>💊</div>
+          <div style={{ fontWeight: 700, marginBottom: 4 }}>No prescriptions yet</div>
         </div>
       )}
 

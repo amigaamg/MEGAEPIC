@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "cervical_cancer",
+    "name": "Cervical Cancer",
+    "system": "ONCO",
+    "agePeak_months": [360, 600],
+    "note": "HPV-related cancer. Preventable through vaccination and screening. Squamous cell carcinoma most common type.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["gynecologic_malignancy", "hpv_related_cancer"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_vaginal_bleeding", "weight": 9 },
+        { "sign": "ureteric_obstruction_renal_failure", "weight": 8 },
+        { "sign": "vesicovaginal_fistula", "weight": 7 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "FIGO Stage I-IV determines treatment"
+    },
+    "historyFeatures": [
+      { "symptomId": "postcoital_bleeding", "weight": 5 },
+      { "symptomId": "intermenstrual_bleeding", "weight": 4 },
+      { "symptomId": "vaginal_discharge", "weight": 3 },
+      { "symptomId": "pelvic_pain", "weight": 3 },
+      { "symptomId": "dyspareunia", "weight": 2 },
+      { "symptomId": "leg_swelling", "weight": 2 },
+      { "symptomId": "abnormal_pap_smear_history", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "visible_cervical_lesion_on_speculum", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "friable_cervix_bleeds_on_touch", "baseWeight": 5 },
+      { "signId": "cervical_ulceration_or_mass", "baseWeight": 4 },
+      { "signId": "parametrial_involvement", "baseWeight": 4 },
+      { "signId": "inguinal_lymphadenopathy", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "hpv_16_18_infection", "multiplier": 10.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "immunosuppression_hiv", "multiplier": 3.0 },
+      { "id": "early_sexual_debut", "multiplier": 1.5 },
+      { "id": "multiple_sexual_partners", "multiplier": 1.5 },
+      { "id": "long_term_ocp_use", "multiplier": 1.5 },
+      { "id": "no_screening_history", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "squamous_cell_carcinoma_cervix",
+        "name": "Squamous Cell Carcinoma",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "hpv_16_18_positive", "weight": 5 },
+          { "feature": "ectocervical_origin", "weight": 3 },
+          { "feature": "keratinization_on_histology", "weight": 3 }
+        ],
+        "management": "Early stage: surgery (radical hysterectomy) or RT. Locally advanced: chemoradiation (cisplatin + EBRT + brachytherapy)."
+      },
+      {
+        "id": "adenocarcinoma_cervix",
+        "name": "Adenocarcinoma of Cervix",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "endocervical_origin", "weight": 4 },
+          { "feature": "hpv_18_common", "weight": 3 },
+          { "feature": "glandular_pattern", "weight": 4 }
+        ],
+        "management": "Similar staging and treatment to squamous. Higher risk of ovarian metastases. Consider ovarian transposition if RT planned."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "cervical_polyp", "discriminators": ["benign_appearance", "no_hpv", "negative_biopsy"] },
+      { "diseaseId": "cervicitis", "discriminators": ["infectious_symptoms", "treatable_with_antibiotics", "negative_pap_and_hpv"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Speculum examination", "priority": "immediate", "yield": 0.7, "indication": "visualize cervix, identify lesion" }
+      ],
+      "laboratory": [
+        { "name": "HPV DNA test (high-risk types)", "priority": "high", "yield": 0.9, "indication": "causative agent detection" },
+        { "name": "Cervical cytology (Pap smear)", "priority": "high", "yield": 0.7, "indication": "screening and surveillance" }
+      ],
+      "imaging": [
+        { "name": "Colposcopy with biopsy", "priority": "gold_standard", "yield": 0.95, "indication": "directed biopsy of suspicious lesions" },
+        { "name": "MRI Pelvis", "priority": "high", "yield": 0.9, "indication": "local staging, parametrial involvement, tumor size" },
+        { "name": "PET-CT", "priority": "high", "yield": 0.85, "indication": "lymph node and distant metastases" },
+        { "name": "CT Abdomen/Pelvis", "priority": "medium", "yield": 0.7, "indication": "hydronephrosis, nodal assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/ESGO/FIGO Guidelines for Cervical Cancer",
+      "pathways": [
+        {
+          "severity": "FIGO IA1-IB1 (early)",
+          "criteria": "microinvasive to ≤4 cm, confined to cervix",
+          "treatment": "IA1: conization or simple hysterectomy. IA2-IB1: radical hysterectomy + PLND or fertility-sparing trachelectomy. Sentinel node biopsy."
+        },
+        {
+          "severity": "FIGO IB2-IVA (locally advanced)",
+          "criteria": "bulky disease, parametrial involvement, adjacent spread",
+          "treatment": "Definitive chemoradiation: EBRT 45-50 Gy + concurrent cisplatin + brachytherapy boost. No role for surgery."
+        },
+        {
+          "severity": "FIGO IVB (metastatic)",
+          "criteria": "distant metastases",
+          "treatment": "Palliative chemotherapy (cisplatin + paclitaxel + bevacizumab). Pembrolizumab if PD-L1+. Palliative RT for symptoms."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "persistent_hpv_infection",
+      "e6_e7_oncoprotein_expression",
+      "p53_and_rb_inactivation",
+      "cervical_intraepithelial_neoplasia_cin",
+      "microinvasion",
+      "local_spread_parametria",
+      "lymphatic_metastasis_pelvic_para_aortic"
+    ],
+    "complications": [
+      { "diseaseId": "hydronephrosis_renal_failure", "probability": 0.1, "severityBoost": 0.4, "clues": ["flank_pain", "elevated_creatinine", "dilated_collecting_system"] },
+      { "diseaseId": "vesicovaginal_rectovaginal_fistula", "probability": 0.03, "severityBoost": 0.5, "clues": ["urinary_fecal_leakage_per_vaginam", "radiation_history"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["postcoital_bleeding", "abnormal_cervical_cytology", "visible_cervical_lesion", "hpv_16_18_positive"],
+    "exclusionClues": ["normal_colposcopy", "negative_hpv_test", "benign_cervical_histology"]
+  }
+}

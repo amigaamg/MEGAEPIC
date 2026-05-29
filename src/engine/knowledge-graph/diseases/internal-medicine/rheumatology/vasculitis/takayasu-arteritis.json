@@ -1,0 +1,152 @@
+{
+  "disease": {
+    "id": "takayasu_arteritis",
+    "name": "Takayasu Arteritis",
+    "system": "rheumatology",
+    "agePeak_months": [240, 480],
+    "note": "Granulomatous large vessel vasculitis affecting the aorta and its major branches. Predominantly affects young women. Leads to stenosis, occlusion, or aneurysm formation. Also known as pulseless disease.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["vasculitis", "large_vessel_vasculitis", "aortitis", "pulseless"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "stroke_ cerebral_ischemia", "weight": 9 },
+        { "sign": "aortic_dissection", "weight": 10 },
+        { "sign": "myocardial_infarction", "weight": 9 },
+        { "sign": "severe_hypertension_renal_artery", "weight": 8 },
+        { "sign": "critical_limb_ischemia", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If ischemic, hypertensive, or aortic complication -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "arm_claudication_exertion", "weight": 5 },
+      { "symptomId": "blood_pressure_difference_arms", "weight": 5 },
+      { "symptomId": "dizziness_syncope_subclavian_steal", "weight": 4 },
+      { "symptomId": "constitutional_symptoms", "weight": 4 },
+      { "symptomId": "carotidynia_neck_pain", "weight": 3 },
+      { "symptomId": "palpitations_chest_pain", "weight": 3 },
+      { "symptomId": "dyspnea_pulmonary_artery", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "absent_or_weak_radial_pulse", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "blood_pressure_differential_10_mmhg", "baseWeight": 5 },
+      { "signId": "vascular_bruit_carotid_subclavian", "baseWeight": 4 },
+      { "signId": "aortic_regurgitation_murmur", "baseWeight": 3 },
+      { "signId": "hypertension_upper_extremity", "baseWeight": 3 },
+      { "signId": "livedo_reticularis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 8.0 },
+      { "id": "age_20_40", "multiplier": 5.0 },
+      { "id": "asian_ethnicity", "multiplier": 3.0 },
+      { "id": "hla_drb1_b52", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "type_i_pulseless",
+        "name": "Type I: Aortic Arch and Branches",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "subclavian_carotid_involvement", "weight": 5 },
+          { "feature": "pulseless_arms", "weight": 5 },
+          { "feature": "carotid_bruit_neck_pain", "weight": 4 }
+        ],
+        "management": "Corticosteroids. Methotrexate or mycophenolate. Revascularization for critical stenosis."
+      },
+      {
+        "id": "type_v_extensive",
+        "name": "Type V: Extensive Aortic Involvement",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "aorta_and_all_branches", "weight": 5 },
+          { "feature": "multiple_aneurysms_stenoses", "weight": 5 },
+          { "feature": "most_severe_form", "weight": 4 }
+        ],
+        "management": "High-dose steroids. Cyclophosphamide for refractory. Surgical bypass or endovascular stenting."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "giant_cell_arteritis",
+        "discriminators": ["age_over_50", "temporal_artery_involvement", "no_subclavian_steal", "jaw_claudication"]
+      },
+      {
+        "diseaseId": "atherosclerotic_vascular_disease",
+        "discriminators": ["older_age", "cardiovascular_risk_factors", "no_constitutional_symptoms", "normal_esr"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Four-limb BP measurement", "priority": "immediate", "yield": 0.9, "indication": "detect BP differential" },
+        { "name": "Fundoscopy", "priority": "high", "yield": 0.4, "indication": "hypertensive retinopathy" }
+      ],
+      "laboratory": [
+        { "name": "ESR and CRP", "priority": "high", "yield": 0.8, "indication": "elevated in active disease" },
+        { "name": "FBC", "priority": "medium", "yield": 0.4, "indication": "anemia of chronic disease" }
+      ],
+      "imaging": [
+        { "name": "MR angiography (MRA)", "priority": "high", "yield": 0.9, "indication": "wall thickening, stenosis, aneurysm" },
+        { "name": "CT angiography", "priority": "high", "yield": 0.9, "indication": "vessel wall enhancement" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.85, "indication": "metabolic activity in vessel wall" },
+        { "name": "Digital subtraction angiography", "priority": "medium", "yield": 0.9, "indication": "stenosis grading, pre-intervention" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR Recommendations for Takayasu Arteritis",
+      "pathways": [
+        {
+          "severity": "active",
+          "criteria": "constitutional symptoms, elevated ESR, vessel inflammation on imaging",
+          "treatment": "Prednisolone 0.5-1 mg/kg/day. Methotrexate or azathioprine as steroid-sparing. Tocilizumab for refractory."
+        },
+        {
+          "severity": "severe_refractory",
+          "criteria": "progressive stenosis, aneurysms, despite steroids",
+          "treatment": "Cyclophosphamide. Anti-TNF (infliximab). Surgical bypass for critical stenoses."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "granulomatous_inflammation",
+      "adventitial_thickening",
+      "intimal_hyperplasia",
+      "vessel_stenosis_occlusion",
+      "aneurysm_formation",
+      "vasa_vasorum_inflammation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "aortic_regurgitation",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["diastolic_murmur", "wide_pulse_pressure", "aortic_root_dilatation"]
+      },
+      {
+        "diseaseId": "severe_hypertension_renovascular",
+        "probability": 0.25,
+        "severityBoost": 0.5,
+        "clues": ["refractory_hypertension", "renal_artery_stenosis", "abdominal_bruit"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if ischemic",
+    "diagnosticClues": ["young_woman", "pulseless_arms", "bp_differential", "aortic_bruit", "vessel_stenosis_imaging"],
+    "exclusionClues": ["age_over_50", "atherosclerosis", "normal_vessels_on_imaging", "no_constitutional_symptoms"]
+  }
+}

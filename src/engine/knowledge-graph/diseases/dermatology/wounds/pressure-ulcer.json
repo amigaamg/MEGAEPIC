@@ -1,0 +1,155 @@
+{
+  "disease": {
+    "id": "pressure_ulcer",
+    "name": "Pressure Ulcer (Bed Sore / Pressure Injury)",
+    "system": "dermatology",
+    "agePeak_months": [600, 960],
+    "note": "Localized tissue damage from prolonged pressure, typically over bony prominences. Staged I-IV + unstageable + deep tissue injury. Prevention is key. NPUAP/EPUAP classification.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["chronic_wound", "pressure_injury", "skin_failure"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "osteomyelitis_suspected", "weight": 9 },
+        { "sign": "sepsis_from_wound", "weight": 10 },
+        { "sign": "necrotizing_fasciitis", "weight": 10 },
+        { "sign": "deep_tissue_injury_with_rapid_worsening", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Stage III/IV/unstageable -> SEVERE; Stage I/II -> MILD-MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prolonged_bedrest_or_wheelchair_immobility", "weight": 5 },
+      { "symptomId": "non_healing_sore_over_bony_prominence", "weight": 5 },
+      { "symptomId": "position_sacrum_heels_hips_elbows", "weight": 4 },
+      { "symptomId": "incontinence_moisture", "weight": 3 },
+      { "symptomId": "malnutrition_low_albumin", "weight": 3 },
+      { "symptomId": "neurological_deficit_sensation_loss", "weight": 3 },
+      { "symptomId": "diabetes_or_vascular_disease", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "non_blanchable_erythema_stage_1", "baseWeight": 3 },
+      { "signId": "partial_thickness_skin_loss_stage_2", "baseWeight": 4 },
+      { "signId": "full_thickness_skin_loss_stage_3", "baseWeight": 5 },
+      { "signId": "full_thickness_tissue_loss_stage_4", "baseWeight": 5 },
+      { "signId": "eschar_or_slough_unstageable", "baseWeight": 4 },
+      { "signId": "over_sacrum_heels_trochanters", "baseWeight": 4 },
+      { "signId": "exudate_odor_signs_of_infection", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "immobility_bedrest_wheelchair", "multiplier": 4.0 },
+      { "id": "malnutrition_low_albumin", "multiplier": 3.0 },
+      { "id": "incontinence_urinary_fecal", "multiplier": 2.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "age_over_70", "multiplier": 2.0 },
+      { "id": "neurological_impairment_sensation", "multiplier": 2.5 },
+      { "id": "peripheral_vascular_disease", "multiplier": 2.0 },
+      { "id": "critical_illness_icu_admission", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "stage_1_pressure_ulcer",
+        "name": "Stage I Pressure Ulcer",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "non_blanchable_erythema", "weight": 5 },
+          { "feature": "intact_skin", "weight": 4 },
+          { "feature": "warmth_or_coolness_induration", "weight": 3 }
+        ],
+        "management": "Pressure relief (reposition q2h). Support surfaces (specialized mattress). Skin care. Moisturizer. Nutritional support. Preventive dressings."
+      },
+      {
+        "id": "stage_3_4_pressure_ulcer",
+        "name": "Stage III/IV Pressure Ulcer",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "full_thickness_skin_loss_stage_3", "weight": 4 },
+          { "feature": "muscle_bone_involvement_stage_4", "weight": 5 },
+          { "feature": "undermining_tunneling", "weight": 4 }
+        ],
+        "management": "Debridement (sharp, surgical, enzymatic). Wound care: appropriate dressings (foam, alginate, hydrofiber, NPWT). Infection management (swab, biopsy, antibiotics). Offloading. Nutrition. Surgical closure if needed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "venous_leg_ulcer",
+        "discriminators": ["gaiter_area", "varicose_veins", "edema_cvi_signs"]
+      },
+      {
+        "diseaseId": "diabetic_foot_ulcer",
+        "discriminators": ["plantar_foot", "neuropathy", "deformity"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Braden Scale risk assessment", "priority": "immediate", "yield": 0.85, "indication": "all at-risk patients" }
+      ],
+      "laboratory": [
+        { "name": "Wound swab culture (superficial, less reliable)", "priority": "medium", "yield": 0.5, "indication": "if signs of infection" },
+        { "name": "Deep tissue biopsy for culture (gold standard)", "priority": "high", "yield": 0.8, "indication": "if osteomyelitis or deep infection suspected" },
+        { "name": "CRP, ESR, WBC, albumin", "priority": "medium", "yield": 0.5, "indication": "systemic infection, nutrition" }
+      ],
+      "imaging": [
+        { "name": "MRI for suspected osteomyelitis", "priority": "high", "yield": 0.9, "indication": "if bone involved, suspected osteo" },
+        { "name": "X-ray to rule out osteomyelitis", "priority": "medium", "yield": 0.5, "indication": "initial bone assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NPUAP/EPUAP International Pressure Ulcer Guidelines / NICE",
+      "pathways": [
+        {
+          "severity": "all stages - prevention",
+          "criteria": "at-risk or Stage I",
+          "treatment": "Risk assessment (Braden). Repositioning q2h. Pressure redistribution surfaces. Skin inspection daily. Moisture management. Nutrition optimization. Preventative dressings."
+        },
+        {
+          "severity": "Stage III-IV / infection",
+          "criteria": "full thickness with necrotic tissue or infection",
+          "treatment": "Debridement (sharp/surgical). Wound culture. NPWT (negative pressure) for large wounds. Offloading. Antibiotics if cellulitis/osteomyelitis. Surgical closure (flap/graft) if indicated. Nutritional support (protein, vitamins)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "prolonged_pressure_exceeding_capillary_filling_pressure",
+      "tissue_ischemia",
+      "reperfusion_injury",
+      "lymphatic_impairment",
+      "cell_death_and_necrosis",
+      "inflammation_infection",
+      "tissue_loss_and_cavity_formation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "osteomyelitis",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["chronic_wound", "exposed_bone", "elevated_esr_crp", "positive_mri"]
+      },
+      {
+        "diseaseId": "cellulitis_crescendo_sepsis",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["spreading_erythema", "fever", "purulent_discharge"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["immobile_patient", "bony_prominence_location", "non_blanchable_erythema_or_open_wound"],
+    "exclusionClues": ["arterial_ulcer_location_toes", "venous_ulcer_gaiter", "acute_wound"]
+  }
+}

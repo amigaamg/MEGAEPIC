@@ -1,0 +1,130 @@
+{
+  "disease": {
+    "id": "fibromyalgia",
+    "name": "Fibromyalgia",
+    "system": "rheumatology",
+    "agePeak_months": [360, 600],
+    "note": "Chronic widespread pain syndrome associated with fatigue, sleep disturbance, mood changes, and cognitive dysfunction. Central sensitization disorder with no identifiable peripheral tissue pathology.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["soft_tissue", "chronic_pain", "central_sensitization", "widespread_pain", "fatigue"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_ideation", "weight": 9 },
+        { "sign": "severe_depression_psychosis", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If psychiatric emergency -> EMERGENCY; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "widespread_chronic_pain", "weight": 5 },
+      { "symptomId": "fatigue_unrefreshing_sleep", "weight": 5 },
+      { "symptomId": "sleep_disturbance_non_restorative", "weight": 4 },
+      { "symptomId": "cognitive_dysfunction_fibro_fog", "weight": 4 },
+      { "symptomId": "mood_disorder_anxiety_depression", "weight": 3 },
+      { "symptomId": "morning_stiffness", "weight": 3 },
+      { "symptomId": "allodynia_hyperalgesia", "weight": 4 },
+      { "symptomId": "irritable_bowel_bladder_syndrome", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "widespread_tender_points", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "normal_joint_exam_no_synovitis", "baseWeight": 3 },
+      { "signId": "temporal_mandibular_tenderness", "baseWeight": 2 },
+      { "signId": "muscle_tenderness_no_weakness", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_sex", "multiplier": 3.0 },
+      { "id": "family_history_fibromyalgia", "multiplier": 2.0 },
+      { "id": "physical_or_emotional_trauma", "multiplier": 2.5 },
+      { "id": "autoimmune_rheumatic_disease", "multiplier": 2.0 },
+      { "id": "stress_anxiety_depression", "multiplier": 3.0 },
+      { "id": "sleep_disorders", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "polymyalgia_rheumatica",
+        "discriminators": ["age_over_50", "elevated_crp_esr", "shoulder_hip_girdle_stiffness", "steroid_response"]
+      },
+      {
+        "diseaseId": "rheumatoid_arthritis",
+        "discriminators": ["synovitis", "elevated_crp_esr", "positive_rf_anti_ccp", "erosions_on_xray"]
+      },
+      {
+        "diseaseId": "chronic_fatigue_syndrome",
+        "discriminators": ["predominant_fatigue_over_pain", "post_exertional_malaise"]
+      },
+      {
+        "diseaseId": "hypothyroidism",
+        "discriminators": ["elevated_tsh", "low_t4", "weight_gain", "cold_intolerance"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Tender point examination (ACR criteria)", "priority": "high", "yield": 0.7, "indication": "at least 11 of 18 specific points" }
+      ],
+      "laboratory": [
+        { "name": "FBC, ESR, CRP", "priority": "high", "yield": 0.1, "indication": "normal (exclude inflammatory conditions)" },
+        { "name": "TSH, Vitamin D, Creatine kinase", "priority": "high", "yield": 0.2, "indication": "exclude other causes of pain/fatigue" },
+        { "name": "Celiac serology", "priority": "medium", "yield": 0.1, "indication": "if GI symptoms" }
+      ],
+      "imaging": [
+        { "name": "No imaging required for diagnosis", "priority": "none", "yield": 0.1, "indication": "for exclusion of other conditions" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR/ACR Fibromyalgia Management Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "recent onset, limited functional impact",
+          "treatment": "Education. Exercise (graded aerobic). CBT. Sleep hygiene. Pregabalin or duloxetine."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "persistent pain, fatigue, functional limitation",
+          "treatment": "Multidisciplinary approach. Pharmacotherapy (pregabalin, duloxetine, milnacipran). Amitriptyline for sleep."
+        },
+        {
+          "severity": "severe",
+          "criteria": "severe disability, psychiatric comorbidity, refractory",
+          "treatment": "Psychiatry referral. Pain management clinic. Opioids NOT recommended. Graded exercise therapy."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "central_sensitization",
+      "abnormal_pain_processing",
+      "altered_neurotransmitter_levels",
+      "reduced_grey_matter_volume",
+      "hpa_axis_dysfunction",
+      "autonomic_nervous_system_imbalance"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "disability_chronic",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["severe_symptoms", "poor_coping", "psychiatric_comorbidity"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["widespread_chronic_pain", "fatigue_sleep_cognitive", "tender_points", "normal_labs_imaging"],
+    "exclusionClues": ["synovitis", "elevated_crp", "positive_autoantibodies", "inflammatory_arthritis_signs"]
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "stevens_johnson_syndrome",
+    "name": "Stevens-Johnson Syndrome / Toxic Epidermal Necrolysis",
+    "system": "PHARM",
+    "agePeak_months": [60, 720],
+    "note": "Severe cutaneous adverse drug reactions (SCARs) characterized by epidermal detachment and mucosal involvement. SJS involves <10% body surface area, TEN >30%, and SJS/TEN overlap 10-30%. Common culprits: allopurinol, anticonvulsants, sulfonamides, NSAIDs, and lamotrigine.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["severe_cutaneous_adverse_reaction", "drug_hypersensitivity", "dermatologic_emergency"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "epidermal_detachment_gt_30_percent_t_en", "weight": 10 },
+        { "sign": "positive_nikolsky_sign_extensive", "weight": 9 },
+        { "sign": "respiratory_failure_from_bronchial_involvement", "weight": 10 },
+        { "sign": "sepsis_skin_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "scorten_score_gt_2", "weight": 8 },
+          { "sign": "mucosal_involvement_multiple_sites", "weight": 7 },
+          { "sign": "progressive_despite_causative_drug_removal", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If >10% BSA or positive Nikolsky -> SJS/TEN; if target lesions only -> erythema multiforme"
+    },
+    "historyFeatures": [
+      { "symptomId": "new_drug_started_1_4_weeks_ago", "weight": 5, "modifiers": [
+          { "condition": "high_risk_drug_allopurinol_anticonvulsant_sulfa", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "fever_prodrome_before_rash", "weight": 4 },
+      { "symptomId": "mucosal_lesions_mouth_eyes_genitals", "weight": 5 },
+      { "symptomId": "skin_pain_burning_before_blisters", "weight": 4 },
+      { "symptomId": "rapid_progression_hours_to_days", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "target_lesions_atypical_or_purpuric", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "bullae_and_epidermal_detachment", "baseWeight": 5 },
+      { "signId": "nikolsky_sign_positive", "baseWeight": 5 },
+      { "signId": "mucosal_erosions_oral_ocular_genital", "baseWeight": 5 },
+      { "signId": "percentage_of_bsa_detached", "baseWeight": 5 }
+    ],
+    "riskFactors": [
+      { "id": "hla_b_1502_allopurinol_sjs_in_han_chinese", "multiplier": 10.0 },
+      { "id": "hla_b_5801_carbamazepine_sjs_in_han_chinese", "multiplier": 10.0 },
+      { "id": "hiv_infection", "multiplier": 5.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "asian_ethnicity_for_certain_drugs", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "sjs_lt_10_percent",
+        "name": "Stevens-Johnson Syndrome (<10% BSA)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "epidermal_detachment_lt_10_percent", "weight": 5 },
+          { "feature": "mucosal_involvement_present", "weight": 5 },
+          { "feature": "widespread_purpuric_macules", "weight": 4 },
+          { "feature": "positive_nikolsky_sign", "weight": 4 }
+        ],
+        "management": "Immediately STOP all suspect drugs. ICU or burn unit admission. Supportive care: wound care, fluid resuscitation, nutritional support. No proven pharmacotherapy. Consider cyclosporine or systemic corticosteroids in acute phase. Ophthalmology consult."
+      },
+      {
+        "id": "ten_gt_30_percent",
+        "name": "Toxic Epidermal Necrolysis (>30% BSA)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "extensive_detachment_gt_30_percent", "weight": 5 },
+          { "feature": "positive_nikolsky_sign_widespread", "weight": 5 },
+          { "feature": "severe_mucosal_involvement_all_sites", "weight": 5 },
+          { "feature": "systemic_symptoms_sepsis_organ_failure", "weight": 4 }
+        ],
+        "management": "Burn ICU admission. Strict isolation. Wound care as burns (silver sulfadiazine only if sulfonamide not the culprit). IVIG 2g/kg over 3 days (controversial). Cyclosporine 3-5mg/kg/day. Consider TNF-alpha inhibitors (etanercept). Avoid corticosteroids if infection risk high."
+      },
+      {
+        "id": "drug_causes",
+        "name": "Common Drug Culprits",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "allopurinol_most_common_worldwide", "weight": 5 },
+          { "feature": "anticonvulsants_carbamazepine_phenytoin_phenobarbital", "weight": 5 },
+          { "feature": "sulfonamide_antibiotics_cotrimoxazole", "weight": 4 },
+          { "feature": "lamotrigine_especially_if_fast_titration", "weight": 4 },
+          { "feature": "nsaids_oxicam_type_piroxicam", "weight": 3 }
+        ],
+        "management": "Remove all suspect drugs. Do not rechallenge with same or cross-reacting drug. Avoid all drugs in same class. Pharmacogenetic testing for family members. Patient counseling and MedicAlert bracelet."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "erythema_multiforme_major",
+        "discriminators": ["typical_target_lesions", "acral_distribution", "less_extensive", "mucosal_mild"]
+      },
+      {
+        "diseaseId": "staphylococcal_scalded_skin_syndrome",
+        "discriminators": ["staph_aureus_infection", "superficial_splits_granular_layer", "no_mucosal_involvement", "age_children"]
+      },
+      {
+        "diseaseId": "acute_generalized_exanthematous_pustulosis",
+        "discriminators": ["pustules_on_erythema", "no_target_lesions", "acute_fever", "rapid_resolution"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Assessment of BSA involvement (rule of nines, palm = 1%)", "priority": "immediate", "yield": 0.9, "indication": "all patients" },
+        { "name": "Nikolsky sign (lateral pressure causes separation)", "priority": "immediate", "yield": 0.8, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "CBC with differential", "priority": "high", "yield": 0.5, "indication": "lymphopenia, eosinophilia, neutropenia" },
+        { "name": "CMP", "priority": "high", "yield": 0.5, "indication": "liver and renal function" },
+        { "name": "CRP, ESR", "priority": "medium", "yield": 0.4, "indication": "inflammation markers" },
+        { "name": "Skin biopsy for frozen section", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis: full thickness epidermal necrosis" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.3, "indication": "rule out sepsis" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.2, "indication": "bronchial involvement, ARDS" }
+      ]
+    },
+    "management": {
+      "protocolReference": "RegiSCAR Criteria, SCORTEN Score, European Guidelines",
+      "pathways": [
+        {
+          "severity": "suspected_drug_reaction",
+          "criteria": "rash with fever, mucosal involvement suspected",
+          "treatment": "Immediately discontinue all non-essential drugs. Urgent dermatology consult. Skin biopsy. Calculate SCORTEN. Transfer to burn unit/ICU if BSA >10%."
+        },
+        {
+          "severity": "confirmed_sjs_ten",
+          "criteria": "biopsy-confirmed, BSA >1% with mucosal involvement, Nikolsky positive",
+          "treatment": "Burn ICU. Supportive care (wound care, fluid, electrolyte, nutrition, pain). Ophthalmology within 24h. Consider specific therapy. Avoid prophylactic antibiotics. Monitor for sepsis."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "drug_specific_t_cell_mediated_cytotoxicity",
+      "cd8_t_cell_activation",
+      "granulysin_perforin_granzyme_release",
+      "massive_keratinocyte_apoptosis",
+      "full_thickness_epidermal_necrosis"
+    ],
+    "complications": [
+      {
+        "diseaseId": "sepsis_cutaneous",
+        "probability": 0.3,
+        "lagDays": [3, 14],
+        "severityBoost": 0.6,
+        "clues": ["fever", "hypotension", "positive_cultures"]
+      },
+      {
+        "diseaseId": "ocular_complications_chronic",
+        "probability": 0.4,
+        "lagDays": [7, 365],
+        "severityBoost": 0.2,
+        "clues": ["photophobia", "dry_eye", "symblepharon", "corneal_scarring"]
+      },
+      {
+        "diseaseId": "bronchiolitis_obliterans",
+        "probability": 0.1,
+        "lagDays": [30, 365],
+        "severityBoost": 0.4,
+        "clues": ["dyspnea", "cough", "airway_obstruction"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["recent_drug_exposure", "target_lesions_bullae", "mucosal_involvement", "positive_nikolsky", "skin_biopsy"],
+    "exclusionClues": ["acral_targets_no_mucosa", "no_drug_history", "pustular_rash"]
+  }
+}

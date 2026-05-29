@@ -1,0 +1,184 @@
+{
+  "disease": {
+    "id": "premature_ovarian_insufficiency",
+    "name": "Premature Ovarian Insufficiency (POI)",
+    "system": "GYN",
+    "agePeak_months": [180, 480],
+    "note": "Cessation of ovarian function before age 40 years, characterized by amenorrhea, elevated gonadotropins and low estradiol. Can be idiopathic, autoimmune, genetic or iatrogenic.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["amenorrhea", "infertility", "hormone_deficiency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "severeCriteria": {
+        "anyDangerSign": false,
+        "additionalCriteria": [
+          { "sign": "age_under_30_at_diagnosis", "weight": 6 },
+          { "sign": "associated_autoimmune_disease", "weight": 5 },
+          { "sign": "severe_symptoms_of_estrogen_deficiency", "weight": 4 },
+          { "sign": "bone_density_loss_osteopenia", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Age <30 or with autoimmune comorbidity -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "amenorrhea_secondary", "weight": 5 },
+      { "symptomId": "oligomenorrhea_progressing_to_amenorrhea", "weight": 4 },
+      { "symptomId": "hot_flashes", "weight": 5 },
+      { "symptomId": "night_sweats", "weight": 4 },
+      { "symptomId": "vaginal_dryness", "weight": 3 },
+      { "symptomId": "dyspareunia", "weight": 3 },
+      { "symptomId": "infertility", "weight": 4 },
+      { "symptomId": "mood_changes_irritability", "weight": 3 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "family_history_of_POI", "weight": 3 },
+      { "symptomId": "history_of_chemotherapy_or_radiotherapy", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "signs_of_estrogen_deficiency", "baseWeight": 3 },
+      { "signId": "vaginal_atrophy_on_exam", "baseWeight": 3 },
+      { "signId": "signs_of_autoimmune_conditions_vitiligo", "baseWeight": 2 },
+      { "signId": "thyroid_enlargement_if_autoimmune", "baseWeight": 1 },
+      { "signId": "low_BMI", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_of_POI", "multiplier": 4.0 },
+      { "id": "autoimmune_disease", "multiplier": 3.0 },
+      { "id": "chemotherapy_alkylating_agents", "multiplier": 5.0 },
+      { "id": "pelvic_radiotherapy", "multiplier": 5.0 },
+      { "id": "turner_syndrome_or_X_chromosome_abnormalities", "multiplier": 10.0 },
+      { "id": "ovarian_surgery", "multiplier": 3.0 },
+      { "id": "fragile_X_premutation", "multiplier": 5.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "idiopathic_poi",
+        "name": "Idiopathic Premature Ovarian Insufficiency",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "no_identifiable_cause", "weight": 5 },
+          { "feature": "elevated_FSH_over_40", "weight": 5 },
+          { "feature": "low_AMH", "weight": 5 },
+          { "feature": "estradiol_low", "weight": 4 }
+        ],
+        "management": "HRT (estrogen + progesterone) until average age of menopause. Fertility counseling: donor egg likely needed."
+      },
+      {
+        "id": "autoimmune_poi",
+        "name": "Autoimmune-Related POI",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "associated_autoimmune_condition", "weight": 5 },
+          { "feature": "positive_ovarian_antibodies", "weight": 3 },
+          { "feature": "may_have_intermittent_ovarian_function", "weight": 3 }
+        ],
+        "management": "HRT. Autoimmune screen (thyroid, adrenal, pernicious anemia). Endocrine referral. Monitor for other autoimmune conditions."
+      },
+      {
+        "id": "iatrogenic_poi",
+        "name": "Iatrogenic (Treatment-Induced) POI",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "history_of_chemo_radio_or_surgery", "weight": 5 },
+          { "feature": "abrupt_onset_of_amenorrhea", "weight": 4 },
+          { "feature": "complete_cessation_of_ovarian_function", "weight": 4 }
+        ],
+        "management": "HRT unless contraindicated (hormone-sensitive cancer). Fertility preservation counseling before treatment. Consider donor egg/surrogacy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hypothalamic_amenorrhea",
+        "discriminators": ["low_FSH", "low_LH", "low_estradiol", "stress_weight_loss_exercise"]
+      },
+      {
+        "diseaseId": "hyperprolactinemia",
+        "discriminators": ["elevated_prolactin", "galactorrhea"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "FSH (elevated >30 IU/L on two occasions)", "priority": "diagnostic", "yield": 0.95, "indication": "gold standard" },
+        { "name": "Estradiol (low)", "priority": "diagnostic", "yield": 0.8, "indication": "confirm estrogen deficiency" },
+        { "name": "Anti-Mullerian hormone (undetectable)", "priority": "high", "yield": 0.9, "indication": "confirms ovarian depletion" },
+        { "name": "Karyotype", "priority": "high", "yield": 0.3, "indication": "X chromosome abnormalities" },
+        { "name": "Fragile X premutation testing (FMR1)", "priority": "high", "yield": 0.2, "indication": "genetic cause" },
+        { "name": "Adrenal and ovarian antibodies", "priority": "medium", "yield": 0.3, "indication": "autoimmune workup" },
+        { "name": "Thyroid function and antibodies", "priority": "medium", "yield": 0.4, "indication": "autoimmune thyroid disease" },
+        { "name": "Bone density scan (DXA)", "priority": "high", "yield": 0.6, "indication": "assess osteoporosis risk" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound", "priority": "medium", "yield": 0.5, "indication": "small ovaries, no follicles" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESHRE Guideline on Premature Ovarian Insufficiency",
+      "pathways": [
+        {
+          "severity": "new_diagnosis",
+          "criteria": "confirmed POI, age <40",
+          "treatment": "HRT: Transdermal estradiol 50-100mcg daily + micronized progesterone 200mg 12 days/month (or Mirena IUS if appropriate). Continue until average menopause age (51). Calcium and vitamin D. Weight-bearing exercise."
+        },
+        {
+          "severity": "fertility_desired",
+          "criteria": "POI with fertility desire",
+          "treatment": "Immediate fertility counseling. Donor oocyte IVF with partner sperm. Adoption/surrogacy options. Spontaneous pregnancy possible but rare (5-10%). Do not delay referral."
+        },
+        {
+          "severity": "autoimmune_associated",
+          "criteria": "POI with autoimmune condition",
+          "treatment": "HRT as above. Autoimmune disease management. Screen for adrenal insufficiency (especially before surgery). Thyroid monitoring."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "follicular_depletion",
+      "follicular_dysfunction",
+      "autoimmune_oophoritis",
+      "gonadotoxin_exposure",
+      "genetic_abnormalities"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "osteoporosis_fracture",
+        "probability": 0.3,
+        "lagDays": [1825, 7300],
+        "severityBoost": 0.4,
+        "clues": ["prolonged_estrogen_deficiency", "low_BMD"]
+      },
+      {
+        "diseaseId": "cardiovascular_disease",
+        "probability": 0.15,
+        "lagDays": [3650, 10950],
+        "severityBoost": 0.3,
+        "clues": ["early_estrogen_loss"]
+      },
+      {
+        "diseaseId": "psychological_impact",
+        "probability": 0.5,
+        "lagDays": [0, 365],
+        "severityBoost": 0.2,
+        "clues": ["anxiety", "depression", "identity_distress"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["amenorrhea_under_40", "hot_flashes", "elevated_FSH"],
+    "exclusionClues": ["pregnancy", "hypothalamic_amenorrhea"]
+  }
+}

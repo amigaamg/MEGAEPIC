@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "acute-kidney-injury",
+    "name": "Acute Kidney Injury (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [0, 60],
+    "note": "Abrupt decline in kidney function with accumulation of waste products. Etiology: prerenal (dehydration), intrinsic (GN/HUS), postrenal (obstruction).",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["renal_failure", "oliguria"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "anuria_>24_hours", "weight": 10 },
+        { "sign": "hyperkalemia_>6.5", "weight": 10 },
+        { "sign": "pulmonary_edema", "weight": 10 },
+        { "sign": "seizures_uremic", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "oliguria_<1ml/kg/h", "weight": 8 },
+          { "sign": "creatinine_rise_>3x_baseline", "weight": 8 },
+          { "sign": "metabolic_acidosis_severe", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If life-threatening electrolyte or fluid imbalance -> SEVERE (AKI stage 3); else -> NON-SEVERE (AKI stage 1-2)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "decreased_urine_output", "weight": 5 },
+      { "symptomId": "vomiting_diarrhea_dehydration", "weight": 4 },
+      { "symptomId": "swelling_edema", "weight": 3 },
+      { "symptomId": "lethargy_confusion", "weight": 3 },
+      { "symptomId": "hematuria_cola_colored", "weight": 3 },
+      { "symptomId": "antimicrobial_exposure_nephrotoxic", "weight": 3 },
+      { "symptomId": "bloody_diarrhea_hus_history", "weight": 4, "note": "HUS presentation" },
+      { "symptomId": "oliguria_anuria", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "dehydration_signs", "baseWeight": 4 },
+      { "signId": "edema", "baseWeight": 4 },
+      { "signId": "oliguria_anuria", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hypertension", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "pulmonary_crackles", "baseWeight": 3 },
+      { "signId": "uremic_fetor", "baseWeight": 2 },
+      { "signId": "altered_consciousness", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "dehydration_severe", "multiplier": 3.0 },
+      { "id": "sepsis", "multiplier": 3.0 },
+      { "id": "nephrotoxic_drugs", "multiplier": 2.5 },
+      { "id": "hypotension_shock", "multiplier": 3.5 },
+      { "id": "congenital_heart_disease", "multiplier": 2.0 },
+      { "id": "post_cardiac_surgery", "multiplier": 3.0 },
+      { "id": "hemolytic_uremic_syndrome", "multiplier": 4.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "prerenal_aki",
+        "name": "Prerenal AKI (Dehydration/Hypovolemia)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "history_of_vomiting_diarrhea", "weight": 5 },
+          { "feature": "dehydration_signs", "weight": 5 },
+          { "feature": "bun_creatinine_ratio_>20", "weight": 4 },
+          { "feature": "fena_<1%", "weight": 4 }
+        ],
+        "management": "IV fluid resuscitation (20 mL/kg NS bolus, repeat PRN). Correct dehydration. Monitor urine output. Remove offending drugs. Usually reversible."
+      },
+      {
+        "id": "intrinsic_aki",
+        "name": "Intrinsic AKI (Glomerulonephritis/HUS/ATN)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "hematuria", "weight": 4 },
+          { "feature": "hypertension", "weight": 4 },
+          { "feature": "proteinuria", "weight": 4 },
+          { "feature": "fena_>2%", "weight": 4 }
+        ],
+        "management": "Fluid restriction (insensible losses + urine output). Treat underlying cause (steroids for GN, supportive for HUS). Dialysis if refractory (K>6.5, fluid overload, severe acidosis, uremic symptoms)."
+      },
+      {
+        "id": "postrenal_aki",
+        "name": "Postrenal AKI (Obstruction)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "anuria_sudden_onset", "weight": 5 },
+          { "feature": "palpable_bladder", "weight": 4 },
+          { "feature": "hydronephrosis_on_us", "weight": 5 }
+        ],
+        "management": "Relieve obstruction (catheter, nephrostomy). Correct electrolyte abnormalities. Monitor post-obstructive diuresis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "chronic_kidney_disease",
+        "discriminators": ["long_history", "growth_retardation", "anemia", "small_kidneys_on_us"]
+      },
+      {
+        "diseaseId": "adrenal_insufficiency",
+        "discriminators": ["hyponatremia", "hyperkalemia", "hypotension", "normal_urine_output"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Urine output monitoring (hourly)", "priority": "immediate", "yield": 0.9, "indication": "all AKI patients" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "hyperkalemia (peaked T waves)" }
+      ],
+      "laboratory": [
+        { "name": "Serum creatinine and BUN", "priority": "immediate", "yield": 0.95, "indication": "diagnosis and staging" },
+        { "name": "Serum electrolytes (K, Na, Ca, PO4)", "priority": "immediate", "yield": 0.9, "indication": "life-threatening imbalances" },
+        { "name": "Blood gas", "priority": "high", "yield": 0.7, "indication": "metabolic acidosis" },
+        { "name": "Urinalysis ± microscopy", "priority": "immediate", "yield": 0.7, "indication": "hematuria, casts, proteinuria" },
+        { "name": "Fractional excretion of Na (FENa)", "priority": "medium", "yield": 0.7, "indication": "differentiate prerenal vs intrinsic" }
+      ],
+      "imaging": [
+        { "name": "Renal Bladder Ultrasound", "priority": "immediate", "yield": 0.7, "indication": "hydronephrosis, size, stones" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "KDIGO Clinical Practice Guidelines for AKI",
+      "pathways": [
+        {
+          "severity": "stage_1_2",
+          "criteria": "Creatinine 1.5-3x baseline, urine output <0.5 mL/kg/h for >12h, no life-threatening complications",
+          "treatment": "Correct reversible causes (fluids for prerenal, stop nephrotoxins). Fluid balance monitoring. Electrolyte monitoring q6-12h. Dietary modification (K, PO4 restriction). Treat underlying cause."
+        },
+        {
+          "severity": "stage_3",
+          "criteria": "Creatinine >3x baseline or >4 mg/dL, anuria >12h, or life-threatening complications",
+          "treatment": "ICU admission. Strict I/O chart. Fluid restriction. Hyperkalemia management (calcium gluconate, insulin+glucose, albuterol, kayexalate). Dialysis indications: K>6.5 refractory, severe acidosis, fluid overload with pulmonary edema, uremic symptoms."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "reduced_renal_perfusion",
+      "tubular_necrosis",
+      "glomerular_inflammation",
+      "tubular_obstruction",
+      "loss_of_autoregulation",
+      "accumulation_of_waste_products"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hyperkalemia",
+        "probability": 0.4,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["ecg_changes", "muscle_weakness", "oliguria"]
+      },
+      {
+        "diseaseId": "pulmonary_edema",
+        "probability": 0.2,
+        "lagDays": [0, 5],
+        "severityBoost": 0.5,
+        "clues": ["dyspnea", "crackles", "weight_gain"]
+      },
+      {
+        "diseaseId": "uremic_encephalopathy",
+        "probability": 0.1,
+        "lagDays": [3, 14],
+        "severityBoost": 0.5,
+        "clues": ["altered_consciousness", "asterixis", "seizures"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["oliguria", "rising_creatinine", "hyperkalemia", "fluid_overload"],
+    "exclusionClues": ["normal_urine_output", "stable_creatinine", "normal_electrolytes"]
+  }
+}

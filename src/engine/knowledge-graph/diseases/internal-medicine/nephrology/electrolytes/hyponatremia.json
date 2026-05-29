@@ -1,0 +1,150 @@
+{
+  "disease": {
+    "id": "hyponatremia",
+    "name": "Hyponatremia",
+    "system": "RENAL",
+    "agePeak_months": [480, 1080],
+    "note": "Most common electrolyte disorder. Defined as serum Na <135 mmol/L. Severity and symptoms depend on rapidity and degree. Can be hypovolemic, euvolemic, or hypervolemic.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["electrolyte_disorder", "sodium_imbalance", "osmolality_disorder"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "seizures_hyponatremic_encephalopathy", "weight": 10 },
+        { "sign": "coma_decreased_consciousness", "weight": 10 },
+        { "sign": "brain_herniation_signs", "weight": 10 },
+        { "sign": "respiratory_arrest", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Mild (130-134), moderate (125-129), severe (<125). Symptomatic vs asymptomatic determines treatment urgency."
+    },
+    "historyFeatures": [
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "confusion_lethargy", "weight": 4 },
+      { "symptomId": "seizures", "weight": 5 },
+      { "symptomId": "muscle_cramps_weakness", "weight": 2 },
+      { "symptomId": "thirst_history", "weight": 2 },
+      { "symptomId": "medication_history_diuretics_ssris", "weight": 4 },
+      { "symptomId": "excessive_fluid_intake_polydipsia", "weight": 3 },
+      { "symptomId": "vomiting_diarrhea_losses", "weight": 3 },
+      { "symptomId": "heart_failure_cirrhosis_nephrosis_history", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "volume_status_hypovolemia_orthostasis", "baseWeight": 4 },
+      { "signId": "volume_status_hypervolemia_edema", "baseWeight": 4 },
+      { "signId": "neurological_status_gcs", "baseWeight": 4 },
+      { "signId": "seizure_activity", "baseWeight": 5 },
+      { "signId": "skin_turgor_mucous_membranes", "baseWeight": 3 },
+      { "signId": "jugular_venous_pressure", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "thiazide_diuretic_use", "multiplier": 3.0 },
+      { "id": "ssri_snri_antidepressants", "multiplier": 2.0 },
+      { "id": "heart_failure", "multiplier": 2.5 },
+      { "id": "cirrhosis", "multiplier": 2.5 },
+      { "id": "nephrotic_syndrome", "multiplier": 2.0 },
+      { "id": "hypothyroidism", "multiplier": 1.5 },
+      { "id": "adrenal_insufficiency", "multiplier": 2.0 },
+      { "id": "excessive_fluid_intake_polydipsia", "multiplier": 2.0 },
+      { "id": "postoperative_state", "multiplier": 2.0 },
+      { "id": "malignancy_small_cell_lung", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "hypovolemic_hyponatremia",
+        "name": "Hypovolemic Hyponatremia",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "signs_of_volume_depletion", "weight": 5 },
+          { "feature": "urine_na_under_20_if_extra_renal_loss", "weight": 4 },
+          { "feature": "vomiting_diarrhea_bleeding_history", "weight": 4 },
+          { "feature": "skin_turgor_decreased", "weight": 3 }
+        ],
+        "management": "IV 0.9% normal saline (isotonic) to restore volume. Correct underlying cause. Stop diuretics. Monitor Na rise (no more than 8-10 mmol/L per 24h). Once euvolemic, reassess Na."
+      },
+      {
+        "id": "euvolemic_hyponatremia_siadh",
+        "name": "Euvolemic Hyponatremia (SIADH)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "euvolemic_on_exam", "weight": 5 },
+          { "feature": "urine_na_greater_than_40", "weight": 4 },
+          { "feature": "urine_osmolality_greater_than_100", "weight": 4 },
+          { "feature": "low_serum_uric_acid", "weight": 3 },
+          { "feature": "normal_thyroid_adrenal", "weight": 3 }
+        ],
+        "management": "Fluid restriction (goal: fluid intake <500-1000 mL/day). Increase solute intake (urea, salt tablets). Demeclocycline (lithium alternative) if chronic refractory. Vasopressin receptor antagonists (vaptans: tolvaptan) for severe/persistent SIADH. Treat underlying cause (malignancy, lung disease, CNS disorder, drugs)."
+      },
+      {
+        "id": "hypervolemic_hyponatremia",
+        "name": "Hypervolemic Hyponatremia",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "edema_ascites_volume_expansion", "weight": 5 },
+          { "feature": "heart_failure_cirrhosis_nephrotic", "weight": 5 },
+          { "feature": "urine_na_under_20", "weight": 3 },
+          { "feature": "low_effective_arterial_volume", "weight": 3 }
+        ],
+        "management": "Salt and fluid restriction. Loop diuretics to achieve negative fluid balance. Treat underlying condition (optimize HF, cirrhosis, nephrotic syndrome). Vaptans (tolvaptan) if severe and refractory. Avoid hypertonic saline unless life-threatening symptoms."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "pseudohyponatremia_hyperlipidemia_hyperproteinemia", "discriminators": ["normal_osmolality", "normal_measured_na_with_ion_specific_electrode", "elevated_lipids_or_proteins"] },
+      { "diseaseId": "hyperglycemia_induced_hyponatremia", "discriminators": ["high_glucose", "corrected_na_using_formula", "history_of_diabetes"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Serum sodium, potassium, chloride, bicarbonate", "priority": "immediate", "yield": 0.98, "indication": "confirm hyponatremia" },
+        { "name": "Serum osmolality (measured)", "priority": "immediate", "yield": 0.95, "indication": "distinguish true vs pseudohyponatremia" },
+        { "name": "Urine osmolality", "priority": "high", "yield": 0.8, "indication": "<100 suggests primary polydipsia; >100 SIADH/other" },
+        { "name": "Urine sodium", "priority": "high", "yield": 0.7, "indication": "<20 hypovolemia or hypervolemia; >40 SIADH" },
+        { "name": "Thyroid function, cortisol/ACTH", "priority": "high", "yield": 0.5, "indication": "rule out hypothyroidism and adrenal insufficiency" },
+        { "name": "Uric acid", "priority": "medium", "yield": 0.5, "indication": "low in SIADH" }
+      ],
+      "imaging": [
+        { "name": "CT Chest (if SIADH suspected)", "priority": "medium", "yield": 0.5, "indication": "SCLC, lung disease" },
+        { "name": "CT Brain (if neuro symptoms or suspected CNS cause)", "priority": "as indicated", "yield": 0.4, "indication": "CNS pathology causing SIADH" }
+      ]
+    },
+    "management": {
+      "protocolReference": "European Clinical Practice Guidelines (Hyponatremia) 2024 / KDIGO",
+      "pathways": [
+        {
+          "severity": "severe symptomatic (<125 with seizures/coma)",
+          "criteria": "life-threatening neurological symptoms",
+          "treatment": "Hypertonic saline (3% NaCl) 100 mL IV bolus over 10 min x 1-2. Check Na after each bolus. Goal: 5 mmol/L increase in 1 hour. Stop when symptoms resolve. Limit rise to <10 mmol/L in first 24h (<8 in high-risk). Consider DDAVP to prevent overcorrection."
+        },
+        {
+          "severity": "moderate symptomatic (125-129 with confusion, nausea)",
+          "criteria": "neurological symptoms but no coma/seizures",
+          "treatment": "Prompt treatment to raise Na. Hypertonic saline (3% NaCl) infusion 15-30 mL/h. Goal 4-6 mmol/L increase in 24h. Monitor Na q2-4h. Identify and correct underlying cause."
+        },
+        {
+          "severity": "asymptomatic or mild (130-134)",
+          "criteria": "no or minimal symptoms",
+          "treatment": "Treat underlying cause. If SIADH: fluid restriction (800-1000 mL/day). Discontinue causative medications. If hypovolemic: 0.9% NS. If hypervolemic: fluid restriction + treat underlying condition."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "impaired_renal_water_excretion",
+      "inappropriate_adh_secretion_siadh",
+      "effective_circulating_volume_decrease_in_hypovolemia",
+      "low_cardiac_output_in_heart_failure",
+      "reduced_arterial_perfusion_in_cirrhosis",
+      "excessive_water_intake_exceeding_excretion",
+      "cerebral_edema_from_acute_hypoosmolality",
+      "osmoreceptor_adaptation_in_chronic_hyponatremia"
+    ],
+    "complications": [
+      { "diseaseId": "cerebral_edema_brain_herniation", "probability": 0.02, "severityBoost": 0.8, "clues": ["rapid_na_decline", "gcs_drop", "seizures", "pupil_changes", "cushing_response"] },
+      { "diseaseId": "osmotic_demyelination_syndrome_central_pontine_myelinolysis", "probability": 0.03, "severityBoost": 0.8, "clues": ["rapid_correction_over_12_mmol_day", "parkinsonism", "dysarthria", "dysphagia", "locked_in_syndrome"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["na_under_135", "neurological_symptoms_in_severe", "volume_status_key_to_etiology", "inappropriate_urine_osmolality"],
+    "exclusionClues": ["normal_osmolality_pseudohyponatremia", "hyperglycemia_corrected_na_normal"]
+  }
+}

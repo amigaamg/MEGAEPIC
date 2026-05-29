@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "congenital-hypothyroidism",
+    "name": "Congenital Hypothyroidism",
+    "system": "PAED",
+    "agePeak_months": [0, 3],
+    "note": "Thyroid hormone deficiency at birth. Most common preventable cause of intellectual disability. Detected by newborn screening. Early treatment crucial for neurodevelopment.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["neonatal_endocrine", "thyroid_deficiency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hypotonia", "weight": 8 },
+        { "sign": "respiratory_distress_from_macroglossia", "weight": 8 },
+        { "sign": "hypothermia_severe", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tsh_>100", "weight": 8 },
+          { "sign": "absence_of_thyroid_gland_on_imaging", "weight": 7 },
+          { "sign": "delayed_bone_age", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If severe hypothyroidism with TSH >100 or absent thyroid -> SEVERE; else -> NON-SEVERE (mild/moderate)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "poor_feeding_slow_feeder", "weight": 4 },
+      { "symptomId": "lethargy", "weight": 4 },
+      { "symptomId": "prolonged_jaundice", "weight": 4 },
+      { "symptomId": "constipation", "weight": 3 },
+      { "symptomId": "large_fontanelles", "weight": 3 },
+      { "symptomId": "umbilical_hernia", "weight": 2 },
+      { "symptomId": "cold_extremities", "weight": 2 },
+      { "symptomId": "positive_newborn_screening", "weight": 5, "note": "Usually presymptomatic" }
+    ],
+
+    "examFeatures": [
+      { "signId": "lethargy", "baseWeight": 4 },
+      { "signId": "poor_muscle_tone_hypotonia", "baseWeight": 4 },
+      { "signId": "macroglossia", "baseWeight": 4 },
+      { "signId": "large_posterior_fontanelle", "baseWeight": 3 },
+      { "signId": "umbilical_hernia", "baseWeight": 3 },
+      { "signId": "coarse_facial_features", "baseWeight": 3 },
+      { "signId": "dry_cold_skin", "baseWeight": 2 },
+      { "signId": "bradycardia", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender", "multiplier": 2.5 },
+      { "id": "family_history_thyroid_disease", "multiplier": 2.0 },
+      { "id": "maternal_autoimmune_thyroiditis", "multiplier": 2.0 },
+      { "id": "iodine_deficiency_region", "multiplier": 3.0 },
+      { "id": "down_syndrome", "multiplier": 5.0 },
+      { "id": "maternal_antithyroid_drugs", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "thyroid_dysgenesis",
+        "name": "Thyroid Dysgenesis (Agenesis/Hypoplasia/Ectopic)",
+        "prevalenceModifier": 0.75,
+        "keyFeatures": [
+          { "feature": "absent_or_ectopic_thyroid_on_imaging", "weight": 5 },
+          { "feature": "high_tsh_low_ft4", "weight": 5 },
+          { "feature": "sporadic_occurrence", "weight": 3 }
+        ],
+        "management": "Levothyroxine 10-15 mcg/kg/day (starting dose 50 mcg for term). Monitor TSH every 2-4 weeks until normalized. Lifelong therapy. Neurodevelopmental follow-up."
+      },
+      {
+        "id": "dyshormonogenesis",
+        "name": "Thyroid Dyshormonogenesis",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "goiter_present", "weight": 5 },
+          { "feature": "autosomal_recessive_inheritance", "weight": 4 },
+          { "feature": "high_radioactive_iodine_uptake", "weight": 4 }
+        ],
+        "management": "Levothyroxine therapy. Genetic counseling. Familial screening. May have more variable severity."
+      },
+      {
+        "id": "transient_congenital_hypothyroidism",
+        "name": "Transient Congenital Hypothyroidism",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "maternal_antibody_mediated", "weight": 4 },
+          { "feature": "iodine_exposure_deficiency", "weight": 4 },
+          { "feature": "normal_thyroid_imaging", "weight": 4 }
+        ],
+        "management": "Levothyroxine therapy. Re-evaluate at 2-3 years of age off therapy to determine if permanent."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "down_syndrome",
+        "discriminators": ["normal_tsh", "dysmorphic_features_distinct", "normal_bone_age"]
+      },
+      {
+        "diseaseId": "hypoxic_ischemic_encephalopathy",
+        "discriminators": ["history_of_perinatal_asphyxia", "normal_tsh", "abnormal_neuroimaging"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Newborn screening card review", "priority": "immediate", "yield": 0.9, "indication": "initial screening result" }
+      ],
+      "laboratory": [
+        { "name": "TSH and free T4", "priority": "immediate", "yield": 1.0, "indication": "confirm diagnosis" },
+        { "name": "Total T4", "priority": "high", "yield": 0.8, "indication": "confirm low T4" },
+        { "name": "Thyroglobulin", "priority": "medium", "yield": 0.5, "indication": "differentiate dysgenesis vs dyshormonogenesis" },
+        { "name": "Anti-TPO antibodies", "priority": "medium", "yield": 0.4, "indication": "maternal antibodies" }
+      ],
+      "imaging": [
+        { "name": "Thyroid Ultrasound", "priority": "high", "yield": 0.85, "indication": "thyroid gland location and size" },
+        { "name": "Thyroid scintigraphy (99mTc)", "priority": "medium", "yield": 0.8, "indication": "ectopic tissue, uptake" },
+        { "name": "Knee X-ray (bone age)", "priority": "medium", "yield": 0.6, "indication": "absent distal femoral epiphysis suggests intrauterine hypothyroidism" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAP / ESPE Guidelines for Congenital Hypothyroidism",
+      "pathways": [
+        {
+          "severity": "confirmed_ch",
+          "criteria": "Elevated TSH, low T4, confirmed on recall",
+          "treatment": "Levothyroxine 10-15 mcg/kg/day (round to nearest 6.25 mcg). Target TSH <5 mIU/L and T4 in upper normal range in 2-4 weeks. Recheck TSH and T4 q1-2 weeks until normal, then q1-3 months in first year."
+        },
+        {
+          "severity": "borderline_elevated_tsh",
+          "criteria": "TSH 20-40, normal T4, imaging shows gland present",
+          "treatment": "Start levothyroxine 10 mcg/kg/day. Re-evaluate at 2-3 years off medication to determine if transient. Delayed treatment may lead to mild neurocognitive deficits."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "thyroid_dysgenesis_or_dyshormonogenesis",
+      "deficient_thyroid_hormone_production",
+      "impaired_neurodevelopment",
+      "reduced_metabolic_rate",
+      "delayed_bone_maturation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intellectual_disability",
+        "probability": 0.3,
+        "lagDays": [180, 1825],
+        "severityBoost": 0.5,
+        "clues": ["late_initiation_of_treatment_>4_weeks", "severe_initial_hypothyroidism"]
+      },
+      {
+        "diseaseId": "growth_retardation",
+        "probability": 0.2,
+        "lagDays": [365, 3650],
+        "severityBoost": 0.3,
+        "clues": ["inadequate_treatment", "poor_compliance"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["abnormal_newborn_screen", "lethargy_poor_feeding", "prolonged_jaundice", "macroglossia", "umbilical_hernia"],
+    "exclusionClues": ["normal_newborn_screen", "normal_tsh_t4"]
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "disease": {
+    "id": "leptospirosis",
+    "name": "Leptospirosis (Weil Disease)",
+    "system": "infectious_disease",
+    "agePeak_months": [120, 600],
+    "note": "Zoonotic spirochetal infection transmitted via water/soil contaminated with rodent urine. Biphasic illness. Severe form = Weil disease.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["febrile_illness", "zoonotic_infection", "jaundice_fever"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "jaundice_with_renal_failure", "weight": 10 },
+        { "sign": "pulmonary_hemorrhage", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "arrhythmia_myocarditis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Weil disease (jaundice+renal failure+hemorrhage) -> SEVERE; anicteric -> MILD-MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_sudden_onset", "weight": 5 },
+      { "symptomId": "headache_severe_frontal", "weight": 4 },
+      { "symptomId": "myalgia_calf_lumbar", "weight": 4 },
+      { "symptomId": "conjunctival_suffusion", "weight": 4 },
+      { "symptomId": "nausea_vomiting_diarrhea", "weight": 3 },
+      { "symptomId": "jaundice_dark_urine", "weight": 3 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "exposure_contaminated_water_rodents", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_high", "baseWeight": 5 },
+      { "signId": "conjunctival_suffusion", "baseWeight": 4, "note": "Red eyes without purulent discharge" },
+      { "signId": "jaundice", "baseWeight": 4 },
+      { "signId": "calf_muscle_tenderness", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "rash_maculopapular", "baseWeight": 2 },
+      { "signId": "pulmonary_crepitations", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "flood_water_exposure", "multiplier": 3.0 },
+      { "id": "occupational_farming_sewage", "multiplier": 2.5 },
+      { "id": "recreational_water_sports", "multiplier": 2.0 },
+      { "id": "rodent_infestation_home", "multiplier": 2.0 },
+      { "id": "travel_to_tropical_region_during_rains", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "anicteric_leptospirosis",
+        "name": "Anicteric Leptospirosis (Mild)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "fever_headache_myalgia", "weight": 5 },
+          { "feature": "conjunctival_suffusion", "weight": 4 },
+          { "feature": "no_jaundice_or_organ_failure", "weight": 5 }
+        ],
+        "management": "Oral Doxycycline 100mg BD for 7 days. Or Azithromycin 500mg OD. Supportive care. Paracetamol for fever."
+      },
+      {
+        "id": "weil_disease",
+        "name": "Weil Disease (Severe Leptospirosis)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "jaundice_bilirubin_high", "weight": 5 },
+          { "feature": "acute_kidney_injury", "weight": 5 },
+          { "feature": "pulmonary_hemorrhage", "weight": 4 },
+          { "feature": "thrombocytopenia", "weight": 3 }
+        ],
+        "management": "IV Ceftriaxone 2g OD or IV Penicillin G 1.5 million U Q6H x 7 days. Renal replacement therapy if needed. Ventilatory support. ICU."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "dengue_fever",
+        "discriminators": ["retro_orbital_pain", "severe_myalgia", "no_conjunctival_suffusion"]
+      },
+      {
+        "diseaseId": "acute_hepatitis",
+        "discriminators": ["transaminitis_high", "anorexia_prodrome", "no_muscle_tenderness"]
+      },
+      {
+        "diseaseId": "malaria",
+        "discriminators": ["splenomegaly", "positive_smear", "periodic_fever"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "Leptospira IgM ELISA", "priority": "high", "yield": 0.85, "indication": "screening serology" },
+        { "name": "MAT (Microscopic Agglutination Test)", "priority": "gold_standard", "yield": 0.95, "indication": "confirmatory, paired sera" },
+        { "name": "Blood culture (special media)", "priority": "medium", "yield": 0.5, "indication": "first week only" },
+        { "name": "FBC", "priority": "high", "yield": 0.6, "indication": "leukocytosis, thrombocytopenia" },
+        { "name": "U&E, Cr, LFT, Bilirubin", "priority": "high", "yield": 0.7, "indication": "organ involvement" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Leptospirosis / International Leptospirosis Society",
+      "pathways": [
+        {
+          "severity": "mild (anicteric)",
+          "criteria": "no jaundice, no organ dysfunction",
+          "treatment": "Doxycycline 100mg PO BD x 7 days. Alternative: Azithromycin 500mg OD x 3-5 days. Hydration. Symptom relief."
+        },
+        {
+          "severity": "severe (Weil disease)",
+          "criteria": "jaundice, AKI, hemorrhage, or respiratory failure",
+          "treatment": "IV Ceftriaxone 2g OD or IV Penicillin G 1.5MU Q6H x 7-10 days. ICU. Dialysis for AKI. Ventilator for pulmonary hemorrhage. Platelet transfusions."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "skin_mucosa_penetration",
+      "hematogenous_spread",
+      "endothelial_damage",
+      "capillary_leak",
+      "organ_dysfunction_liver_kidney_lung",
+      "immune_phase_uveitis_meningitis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["oliguria", "rising_creatinine", "hyperkalemia"]
+      },
+      {
+        "diseaseId": "pulmonary_hemorrhage",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["hemoptysis", "respiratory_distress", "diffuse_alveolar_infiltrates"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "high if Weil",
+    "diagnosticClues": ["flood_water_exposure", "conjunctival_suffusion", "calf_pain", "jaundice_renal_failure"],
+    "exclusionClues": ["no_exposure", "negative_serology", "no_conjunctival_injection"]
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "disease": {
+    "id": "urinary_incontinence_geriatric",
+    "name": "Urinary Incontinence",
+    "system": "geriatrics",
+    "agePeak_months": [660, 1080],
+    "note": "Involuntary loss of urine. Common and distressing geriatric syndrome. Not a normal part of aging.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["incontinence", "geriatric_giant", "functional_decline"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_retention_with_overflow", "weight": 8 },
+        { "sign": "hematuria_with_clots", "weight": 6 },
+        { "sign": "severe_perineal_rash_or_ulceration", "weight": 6 },
+        { "sign": "associated_acute_confusion", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "chronic_stable_leakage": true,
+        "no_acute_cause": true
+      },
+      "severityLabel": "If acute retention, hematuria, or severe skin breakdown -> URGENT; chronic incontinence -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "urine_leakage_with_cough_or_sneeze", "weight": 4 },
+      { "symptomId": "sudden_strong_urge_to_urinate", "weight": 4 },
+      { "symptomId": "leakage_on_way_to_toilet", "weight": 4 },
+      { "symptomId": "frequent_urination_day_and_night", "weight": 3 },
+      { "symptomId": "hesitancy_or_weak_stream", "weight": 3 },
+      { "symptomId": "sensation_of_incomplete_emptying", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "cough_stress_test_positive", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "palpable_bladder_after_void", "baseWeight": 4 },
+      { "signId": "pelvic_organ_prolapse", "baseWeight": 3 },
+      { "signId": "enlarged_prostate_on_dre", "baseWeight": 3 },
+      { "signId": "impaired_mobility_to_toilet", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "female_sex", "multiplier": 2.5 },
+      { "id": "multiple_vaginal_deliveries", "multiplier": 1.8 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "prostate_enlargement", "multiplier": 2.0 },
+      { "id": "diabetes", "multiplier": 1.4 },
+      { "id": "mobility_impairment", "multiplier": 1.6 },
+      { "id": "medications_diuretics_sedatives", "multiplier": 1.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "urinary_tract_infection",
+        "discriminators": ["dysuria", "fever", "positive_urine_culture", "acute_onset"]
+      },
+      {
+        "diseaseId": "polyuria_from_diabetes",
+        "discriminators": ["high_volume_urine", "polydipsia", "high_hba1c"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Bladder diary (frequency-volume chart)", "priority": "high", "yield": 0.9, "indication": "pattern assessment" },
+        { "name": "Post-void residual ultrasound", "priority": "high", "yield": 0.85, "indication": "retention assessment" }
+      ],
+      "laboratory": [
+        { "name": "Urinalysis and culture", "priority": "high", "yield": 0.5, "indication": "exclude UTI, hematuria" },
+        { "name": "U&E, Cr, glucose", "priority": "medium", "yield": 0.3, "indication": "renal function, diabetes" }
+      ],
+      "imaging": [
+        { "name": "Renal and bladder ultrasound", "priority": "medium", "yield": 0.6, "indication": "upper tract assessment" },
+        { "name": "Urodynamic studies", "priority": "low", "yield": 0.8, "indication": "complex or refractory cases" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline NG123 – Urinary incontinence in women / NICE Guideline CG97 – Lower urinary tract symptoms in men",
+      "pathways": [
+        {
+          "severity": "stress_incontinence",
+          "criteria": "leakage with cough, sneeze, exercise",
+          "treatment": "Pelvic floor muscle training (PFMT). Lifestyle modifications (weight loss, fluid management). Consider duloxetine or surgery if refractory."
+        },
+        {
+          "severity": "urge_incontinence",
+          "criteria": "leakage with urgency, frequency, nocturia",
+          "treatment": "Bladder retraining. Anticholinergics or mirabegron (caution in elderly). Review medications. Treat constipation."
+        },
+        {
+          "severity": "overflow_incontinence",
+          "criteria": "hesitancy, weak stream, incomplete emptying",
+          "treatment": "Alpha-blockers (tamsulosin) for BPH. Consider catheterization if retention. Avoid anticholinergics."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "weakened_pelvic_floor_muscles",
+      "detrusor_overactivity",
+      "urethral_hypermobility",
+      "impaired_bladder_contractility",
+      "functional_and_mobility_barriers",
+      "prostatic_obstruction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pressure_ulcer",
+        "probability": 0.15,
+        "severityBoost": 0.4,
+        "clues": ["immobility", "constant_moisture", "poor_skin_care"]
+      },
+      {
+        "diseaseId": "recurrent_uti",
+        "probability": 0.25,
+        "severityBoost": 0.3,
+        "clues": ["incomplete_emptying", "catheter_use"]
+      },
+      {
+        "diseaseId": "falls",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["rushing_to_toilet", "nocturia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "low unless acute retention or severe skin breakdown",
+    "diagnosticClues": ["involuntary_leakage", "urgency_or_stress_pattern", "age_over_60"],
+    "exclusionClues": ["voluntary_voiding", "no_leakage", "normal_bladder_function"]
+  }
+}

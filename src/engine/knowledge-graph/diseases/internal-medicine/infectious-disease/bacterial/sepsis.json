@@ -1,0 +1,121 @@
+{
+  "disease": {
+    "id": "sepsis",
+    "name": "Sepsis",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 960],
+    "note": "Life-threatening organ dysfunction caused by dysregulated host response to infection. Time-critical emergency.",
+    "prevalenceWeight": 0.75,
+    "syndromeTags": ["systemic_infection", "organ_dysfunction", "critical_illness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypotension_refractory", "weight": 10 },
+        { "sign": "lactate_greater_4", "weight": 9 },
+        { "sign": "multi_organ_failure", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Sepsis (organ dysfunction) vs Septic Shock (hypotension despite fluids + lactate >2)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_or_hypothermia", "weight": 4 },
+      { "symptomId": "known_or_suspected_infection", "weight": 5 },
+      { "symptomId": "confusion_altered_consciousness", "weight": 3 },
+      { "symptomId": "tachypnea", "weight": 3 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "malaise_myalgia", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever_or_hypothermia", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "altered_mental_status", "baseWeight": 4 },
+      { "signId": "signs_of_perfusion_deficit", "baseWeight": 4 },
+      { "signId": "source_of_infection", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_65_or_under_1", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.5 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "malignancy", "multiplier": 2.0 },
+      { "id": "chronic_organ_disease", "multiplier": 1.5 },
+      { "id": "indwelling_devices", "multiplier": 1.5 },
+      { "id": "recent_surgery_or_trauma", "multiplier": 1.5 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "qSOFA (RR, mentation, SBP)", "priority": "immediate", "yield": 0.7, "indication": "bedside sepsis screening" },
+        { "name": "Lactate (POC)", "priority": "immediate", "yield": 0.85, "indication": "tissue hypoperfusion" },
+        { "name": "MAP monitoring", "priority": "immediate", "yield": 0.8, "indication": "hemodynamic status" }
+      ],
+      "laboratory": [
+        { "name": "Blood cultures x 2 sets", "priority": "immediate", "yield": 0.5, "indication": "before antibiotics" },
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.7, "indication": "infection markers" },
+        { "name": "U&E, Cr, LFT, Coagulation, ABG", "priority": "high", "yield": 0.7, "indication": "organ function assessment" },
+        { "name": "Lactate", "priority": "immediate", "yield": 0.85, "indication": "tissue hypoxia" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "pneumonia as source" },
+        { "name": "CT / Ultrasound as indicated", "priority": "medium", "yield": 0.6, "indication": "source identification" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Surviving Sepsis Campaign 2021",
+      "pathways": [
+        {
+          "severity": "sepsis (no shock)",
+          "criteria": "infection + organ dysfunction, MAP >=65, lactate <2 or normalizing",
+          "treatment": "Blood cultures. Broad-spectrum antibiotics within 1 hour. IV crystalloid 30 mL/kg. Source control. Monitor lactate and urine output."
+        },
+        {
+          "severity": "septic shock",
+          "criteria": "hypotension requiring vasopressors, lactate >2",
+          "treatment": "Vasopressors (norepinephrine). Additional fluids guided by dynamic assessment. Central line. Consider hydrocortisone. ICU admission."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "pathogen_recognition",
+      "dysregulated_inflammatory_response",
+      "endothelial_injury",
+      "coagulation_activation",
+      "microvascular_dysfunction",
+      "tissue_hypoxia",
+      "multi_organ_failure"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["hypotension", "lactate_elevated"]
+      },
+      {
+        "diseaseId": "acute_respiratory_distress_syndrome",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["severe_hypoxia", "bilateral_infiltrates"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["suspected_infection", "organ_dysfunction", "altered_consciousness", "tachypnea_tachycardia"],
+    "exclusionClues": ["no_source_of_infection", "normal_lactate", "no_organ_dysfunction"]
+  }
+}

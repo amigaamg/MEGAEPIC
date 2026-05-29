@@ -56,12 +56,12 @@ type ClinicalAction =
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'RESET' };
 
-const defaultExam: ExamFindings = {
+const defaultExam = {
   chestIndrawing: false, nasalFlaring: false, grunting: false, headNodding: false,
   wheeze: false, crackles: false, stridor: false, cyanosis: false,
   lymphadenopathy: false, abdominalDistension: false, hepatomegaly: false,
   splenomegaly: false, pallor: false, oedema: false, rash: false, meningism: false,
-};
+} as ExamFindings;
 
 const initialState: ClinicalState = {
   patientName: '', ageMonths: 24, sex: 'unknown', symptoms: [], answers: {},

@@ -1,0 +1,172 @@
+{
+  "disease": {
+    "id": "necrotizing-enterocolitis",
+    "name": "Necrotizing Enterocolitis",
+    "system": "PAED",
+    "agePeak_months": [0, 2],
+    "note": "Devastating gastrointestinal emergency in preterm neonates. Ischemia and inflammation lead to bowel necrosis.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["neonatal_intestinal_emergency", "prematurity"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pneumoperitoneum", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "peritonitis", "weight": 10 },
+        { "sign": "abdominal_wall_erythema_neonatal", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "portal_venous_gas", "weight": 8 },
+          { "sign": "thrombocytopenia", "weight": 7 },
+          { "sign": "metabolic_acidosis", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If pneumoperitoneum, shock, or perforation -> SEVERE (Bell stage 3); else -> NON-SEVERE (Bell stage 1-2)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prematurity", "weight": 5, "note": "Strongest risk factor" },
+      { "symptomId": "formula_feeding", "weight": 3 },
+      { "symptomId": "abdominal_distension", "weight": 5 },
+      { "symptomId": "bloody_stools", "weight": 4 },
+      { "symptomId": "feeding_intolerance", "weight": 4 },
+      { "symptomId": "apnea_bradycardia", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_distension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "abdominal_tenderness", "baseWeight": 4 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 4 },
+      { "signId": "abdominal_wall_erythema", "baseWeight": 5, "note": "Late sign, surgical abdomen" },
+      { "signId": "palpable_abdominal_mass", "baseWeight": 3 },
+      { "signId": "fever_hypothermia", "baseWeight": 3 },
+      { "signId": "lethargy", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "prematurity_less_than_32_weeks", "multiplier": 4.0 },
+      { "id": "very_low_birth_weight", "multiplier": 3.5 },
+      { "id": "formula_feeding", "multiplier": 2.0 },
+      { "id": "umbilical_catheter", "multiplier": 1.8 },
+      { "id": "congenital_heart_disease", "multiplier": 2.0 },
+      { "id": "exchange_transfusion", "multiplier": 2.0 },
+      { "id": "maternal_cocaine", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "medical_nec",
+        "name": "Medical NEC (Bell Stage 1-2)",
+        "prevalenceModifier": 0.65,
+        "keyFeatures": [
+          { "feature": "abdominal_distension_mild", "weight": 4 },
+          { "feature": "bloody_stools", "weight": 4 },
+          { "feature": "no_pneumoperitoneum", "weight": 5 },
+          { "feature": "pneumatosis_intestinalis", "weight": 5 }
+        ],
+        "management": "NPO, nasogastric decompression, IV broad-spectrum antibiotics (ampicillin, gentamicin, metronidazole), IV fluids, serial abdominal X-rays q6-12h."
+      },
+      {
+        "id": "surgical_nec",
+        "name": "Surgical NEC (Bell Stage 3)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "pneumoperitoneum", "weight": 5 },
+          { "feature": "septic_shock", "weight": 5 },
+          { "feature": "abdominal_wall_erythema", "weight": 5 },
+          { "feature": "thrombocytopenia", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy. Resection of necrotic bowel with enterostomy. Peritoneal drainage if unstable. ICU with ventilatory and inotropic support."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "neonatal_sepsis",
+        "discriminators": ["positive_blood_culture", "no_pneumatosis_on_xray", "respiratory_symptoms_predominate"]
+      },
+      {
+        "diseaseId": "spontaneous_intestinal_perforation",
+        "discriminators": ["no_pneumatosis", "no_bloody_stools", "early_onset_first_week", "no_erythema"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Serial abdominal girth measurement", "priority": "immediate", "yield": 0.5, "indication": "monitor progression" },
+        { "name": "Gastric aspirate assessment", "priority": "immediate", "yield": 0.4, "indication": "assess feeding tolerance" }
+      ],
+      "laboratory": [
+        { "name": "CBC with platelets", "priority": "immediate", "yield": 0.7, "indication": "thrombocytopenia suggests severe disease" },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "elevated in NEC" },
+        { "name": "Blood gas", "priority": "high", "yield": 0.6, "indication": "metabolic acidosis suggests ischemia" },
+        { "name": "Blood culture", "priority": "immediate", "yield": 0.3, "indication": "rule out sepsis" },
+        { "name": "Serum electrolytes", "priority": "high", "yield": 0.4, "indication": "electrolyte imbalances" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-ray (supine + left lateral decubitus)", "priority": "immediate", "yield": 0.9, "indication": "pneumatosis, portal venous gas, pneumoperitoneum" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NEC Management Guidelines - Vermont Oxford Network",
+      "pathways": [
+        {
+          "severity": "medical",
+          "criteria": "Bell stage 1-2, no perforation, stable vitals",
+          "treatment": "NPO, OG tube for decompression, IV broad-spectrum antibiotics (ampicillin + gentamicin + metronidazole) for 10-14 days, IV fluids, parenteral nutrition, serial abdominal X-rays."
+        },
+        {
+          "severity": "surgical",
+          "criteria": "Bell stage 3, pneumoperitoneum, or clinical deterioration despite medical therapy",
+          "treatment": "Emergency laparotomy or peritoneal drain. Resection of gangrenous bowel. Stoma formation. ICU support. Inotropes. Ventilator. Blood product support. Antibiotics 14-21 days."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "intestinal_ischemia",
+      "immature_gut_barrier",
+      "bacterial_translocation",
+      "inflammation_cytokine_release",
+      "pneumatosis_intestinalis",
+      "necrosis",
+      "perforation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "intestinal_perforation",
+        "probability": 0.3,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "clues": ["sudden_deterioration", "pneumoperitoneum", "sepsis"]
+      },
+      {
+        "diseaseId": "short_bowel_syndrome",
+        "probability": 0.2,
+        "lagDays": [14, 90],
+        "severityBoost": 0.4,
+        "clues": ["extensive_bowel_resection", "prolonged_npo", "malabsorption"]
+      },
+      {
+        "diseaseId": "intestinal_stricture",
+        "probability": 0.1,
+        "lagDays": [30, 180],
+        "severityBoost": 0.3,
+        "clues": ["feeding_intolerance_post_nec", "obstructive_symptoms"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prematurity", "abdominal_distension", "bloody_stools", "pneumatosis_on_xray"],
+    "exclusionClues": ["normal_abdominal_xray", "well_tolerated_feeds", "no_erythema"]
+  }
+}

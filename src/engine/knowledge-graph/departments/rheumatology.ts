@@ -1,0 +1,71 @@
+import type { DepartmentDefinition } from './index';
+
+export const rheumatology: DepartmentDefinition = {
+  id: 'RHEUM',
+  name: 'Rheumatology',
+  shortName: 'RHEUM',
+  description: 'Diagnosis and medical management of autoimmune and inflammatory diseases of the joints, muscles, bones and connective tissues.',
+  icon: '🦴',
+  color: '#e11d48',
+  sections: [
+    {
+      id: 'inflammatory-arthritis',
+      name: 'Inflammatory Arthritis',
+      description: 'Autoimmune and inflammatory joint diseases',
+      diseaseCategories: ['Rheumatoid arthritis', 'Ankylosing spondylitis', 'Psoriatic arthritis', 'Reactive arthritis', 'Septic arthritis (ID overlap)', 'Juvenile idiopathic arthritis', 'Crystal arthropathy'],
+    },
+    {
+      id: 'connective-tissue',
+      name: 'Connective Tissue Disease',
+      description: 'Systemic autoimmune diseases affecting multiple organs',
+      diseaseCategories: ['Systemic lupus erythematosus', 'Systemic sclerosis (scleroderma)', 'Sjogren syndrome', 'Mixed connective tissue disease', 'Undifferentiated connective tissue disease'],
+    },
+    {
+      id: 'vasculitis',
+      name: 'Vasculitis',
+      description: 'Inflammation of blood vessels by size and type',
+      diseaseCategories: ['Giant cell arteritis', 'Takayasu arteritis', 'ANCA-associated vasculitis', 'Polyarteritis nodosa', 'IgA vasculitis (Henoch-Schonlein)', 'Behcet disease', 'Cryoglobulinaemic vasculitis'],
+    },
+    {
+      id: 'crystal-arthropathy',
+      name: 'Crystal Arthropathy',
+      description: 'Joint diseases caused by crystal deposition',
+      diseaseCategories: ['Gout', 'Pseudogout (CPPD disease)', 'Basic calcium phosphate crystal disease'],
+    },
+    {
+      id: 'degenerative-joint',
+      name: 'Degenerative & Mechanical Joint Disease',
+      description: 'Non-inflammatory joint and soft tissue disorders',
+      diseaseCategories: ['Osteoarthritis', 'Polymyalgia rheumatica', 'Fibromyalgia', 'Tendinopathy', 'Bursitis', 'Plantar fasciitis'],
+    },
+    {
+      id: 'autoimmune-systemic',
+      name: 'Autoinflammatory & Metabolic Bone',
+      description: 'Other systemic autoimmune and metabolic bone conditions',
+      diseaseCategories: ['Sarcoidosis', 'Ehlers-Danlos syndrome', 'Marfan syndrome', 'Osteogenesis imperfecta', 'Haemochromatosis arthropathy'],
+    },
+  ],
+  commonSymptoms: [
+    'joint_pain', 'joint_swelling', 'morning_stiffness',
+    'joint_warmth', 'joint_erythema', 'symmetrical_joint_involvement',
+    'asymmetrical_joint_involvement', 'small_joint_pain',
+    'large_joint_pain', 'axial_back_pain', 'inflammatory_back_pain',
+    'buttock_pain', 'enthesitis', 'dactylitis', 'tenosynovitis',
+    'fatigue', 'fever', 'weight_loss', 'malaise',
+    'rash', 'photosensitivity', 'malar_rash', 'discoid_rash',
+    'alopecia', 'oral_ulcers', 'genital_ulcers', 'Raynaud_phenomenon',
+    'sclerodactyly', 'calcinosis', 'dry_eyes', 'dry_mouth',
+    'proximal_muscle_weakness', 'myalgia', 'tendonitis',
+  ],
+  commonInvestigations: [
+    'FBC', 'CRP', 'ESR', 'Rheumatoid factor', 'Anti-CCP',
+    'ANA', 'Anti-dsDNA', 'Anti-Smith', 'Anti-Ro/La',
+    'Anti-Scl-70', 'Anti-centromere', 'ANCA (c-ANCA, p-ANCA)',
+    'Anti-cardiolipin antibodies', 'Lupus anticoagulant',
+    'Beta-2 glycoprotein I', 'C3/C4 complement',
+    'Uric acid', 'HLA-B27', 'Synovial fluid analysis',
+    'Joint ultrasound', 'X-ray hands/feet/pelvis',
+    'MRI affected joint', 'DEXA scan', 'Nailfold capillaroscopy',
+    'Muscle biopsy', 'Salivary gland biopsy',
+  ],
+};

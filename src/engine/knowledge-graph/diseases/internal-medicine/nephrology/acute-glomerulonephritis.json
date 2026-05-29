@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "acute_glomerulonephritis",
+    "name": "Acute Glomerulonephritis",
+    "system": "nephrology",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["nephritic_syndrome", "hematuria", "acute_kidney_injury"],
+    "mustNotMiss": true,
+    "emergencyPriority": "urgent",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "oliguria_anuria", "weight": 5, "description": "Rapidly progressive renal failure" },
+        { "sign": "pulmonary_hemorrhage", "weight": 5, "description": "Suggests anti-GBM or ANCA vasculitis" },
+        { "sign": "hypertensive_emergency", "weight": 5, "description": "Severe HTN with encephalopathy" },
+        { "sign": "hyperkalemia", "weight": 4, "description": "Life-threatening electrolyte disturbance" }
+      ],
+      "severeCriteria": { "anyDangerSign": true, "additionalCriteria": [ { "sign": "rapidly_rising_creatinine", "weight": 4 }, { "sign": "crescents_on_biopsy", "weight": 5 } ] },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "nephritic-syndrome"
+    },
+    "historyFeatures": [
+      { "symptomId": "hematuria", "weight": 5, "condition": "cola-colored urine" },
+      { "symptomId": "decreased_urine_output", "weight": 4 },
+      { "symptomId": "periorbital_edema", "weight": 4 },
+      { "symptomId": "lower_limb_edema", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "recent_sore_throat_impetigo", "weight": 4, "note": "1-3 weeks prior suggests post-streptococcal GN" },
+      { "symptomId": "hemoptysis", "weight": 4, "note": "suggests anti-GBM or ANCA vasculitis" }
+    ],
+    "examFeatures": [
+      { "signId": "hypertension", "baseWeight": 4, "severityIndicator": true },
+      { "signId": "periorbital_edema", "baseWeight": 4 },
+      { "signId": "pedal_edema", "baseWeight": 3 },
+      { "signId": "pulmonary_edema_crackles", "baseWeight": 4, "severityIndicator": true },
+      { "signId": "oliguria_on_io_chart", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "recent_group_a_streptococcal_infection", "multiplier": 3.0 },
+      { "id": "known_ANCA_vasculitis_or_lupus", "multiplier": 4.0 },
+      { "id": "hepatitis_b_or_c_infection", "multiplier": 2.0 }
+    ],
+    "diagnosticClues": [
+      "acute hematuria, hypertension, edema, and oliguria",
+      "cola-colored urine with red blood cell casts",
+      "recent streptococcal infection 1-3 weeks prior",
+      "pulmonary-renal syndrome"
+    ],
+    "exclusionClues": [
+      "normal urinalysis with no hematuria or proteinuria",
+      "negative serology for anti-GBM, ANCA, and ANA",
+      "renal biopsy showing minimal change disease"
+    ],
+    "subtypes": [
+      {
+        "id": "post_streptococcal_gn", "name": "Post-Streptococcal GN",
+        "prevalenceModifier": 0.3, "agePeak": [2, 12],
+        "keyFeatures": [ { "feature": "recent_strep_infection", "weight": 5 }, { "feature": "low_complement_C3", "weight": 4 } ],
+        "management": { "management": "Supportive care, BP control, penicillin if active infection" }
+      },
+      {
+        "id": "rapidly_progressive_gn_crescentic", "name": "Rapidly Progressive (Crescentic) GN",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [ { "feature": "rapidly_rising_creatinine_over_days_to_weeks", "weight": 5 }, { "feature": "crescents_on_biopsy", "weight": 5 } ],
+        "negativePredictors": [ { "feature": "normal_renal_function_>3_months", "weightReduction": 3 } ],
+        "management": { "management": "Pulse IV methylprednisolone, cyclophosphamide, plasmapheresis if anti-GBM or severe ANCA" }
+      },
+      {
+        "id": "iga_nephropathy", "name": "IgA Nephropathy (Berger Disease)",
+        "prevalenceModifier": 0.25, "agePeak": [15, 35],
+        "keyFeatures": [ { "feature": "sympharyngitic_hematuria", "weight": 5 }, { "feature": "normal_complement", "weight": 3 } ],
+        "management": { "management": "ACE inhibitors for proteinuria, corticosteroids if progressive" }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "acute_tubulointerstitial_nephritis", "discriminators": ["drug exposure", "WBC casts", "eosinophiluria"] },
+      { "diseaseId": "thrombotic_thrombocytopenic_purpura", "discriminators": ["thrombocytopenia", "microangiopathic hemolytic anemia", "fever"] },
+      { "diseaseId": "malignant_hypertension", "discriminators": ["very high BP", "hypertensive retinopathy", "no RBC casts"] }
+    ],
+    "investigations": {
+      "bedside": [ { "name": "Urinalysis with Microscopy", "priority": "first-line", "yield": 5, "indication": "RBC casts, dysmorphic RBCs, proteinuria" } ],
+      "laboratory": [
+        { "name": "Serum Creatinine/BUN", "priority": "essential", "yield": 5, "indication": "renal function" },
+        { "name": "Complement C3 and C4", "priority": "essential", "yield": 4, "indication": "low C3 suggests post-strep or lupus" },
+        { "name": "ASOT / Anti-DNase B", "priority": "if indicated", "yield": 4, "indication": "recent streptococcal infection" },
+        { "name": "ANCA, Anti-GBM, ANA Serology", "priority": "essential", "yield": 5, "indication": "crescentic GN workup" }
+      ],
+      "imaging": [ { "name": "Renal Ultrasound", "priority": "essential", "yield": 3, "indication": "kidney size, echogenicity, exclude obstruction" }, { "name": "Chest X-ray", "priority": "if indicated", "yield": 3, "indication": "pulmonary hemorrhage or edema" } ]
+    },
+    "management": {
+      "protocolReference": "KDIGO 2021 Guideline for Glomerular Diseases",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "preserved urine output, creatinine <3 mg/dL, no danger signs",
+          "treatment": [ "Salt/fluid restriction, loop diuretics, ACE inhibitor", "Penicillin if active strep infection" ]
+        },
+        {
+          "severity": "severe-crescentic",
+          "criteria": "rapidly rising creatinine, crescents on biopsy, or pulmonary-renal syndrome",
+          "treatment": [
+            "IV methylprednisolone 500-1000 mg/day x 3 days pulse",
+            "Cyclophosphamide or rituximab; plasmapheresis if anti-GBM",
+            "Hemodialysis if refractory; nephrology consultation for urgent biopsy"
+          ]
+        },
+        {
+          "severity": "supportive-aki",
+          "criteria": "dialysis-dependent AKI or hyperkalemia, pulmonary edema",
+          "treatment": [ "Emergency hemodialysis, strict fluid balance", "Treat hyperkalemia: calcium gluconate, insulin+dextrose" ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Immune complex deposition in glomerular basement membrane and mesangium",
+      "Post-streptococcal: subepithelial deposits (lumpy-bumpy); Anti-GBM: linear IgG along GBM",
+      "ANCA vasculitis: pauci-immune necrotizing crescentic GN with no immune deposits",
+      "Crescent formation: fibrin and cellular proliferation in Bowman space from severe GBM injury"
+    ],
+    "complications": [
+      { "diseaseId": "chronic_kidney_disease", "probability": 0.3, "severityBoost": 0.5, "lagDays": [365, 1825] },
+      { "diseaseId": "end_stage_renal_disease", "probability": 0.15, "severityBoost": 0.8, "lagDays": [365, 3650] },
+      { "diseaseId": "pulmonary_hemorrhage", "probability": 0.1, "severityBoost": 0.7 },
+      { "diseaseId": "hyperkalemic_cardiac_arrest", "probability": 0.05, "severityBoost": 1.0 }
+    ]
+  }
+}

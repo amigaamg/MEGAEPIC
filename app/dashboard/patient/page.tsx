@@ -2170,9 +2170,9 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
         .main { flex: 1; overflow-y: auto; min-height: 100vh; display: flex; flex-direction: column; }
         .hamburger-btn { background: none; border: none; color: var(--text); font-size: 20px; cursor: pointer; padding: 6px 10px; border-radius: 6px; transition: background 0.15s; line-height: 1; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
         .hamburger-btn:hover { background: var(--surface2); }
-        .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 49; }
-        .sidebar-backdrop.visible { display: block; }
-        @media (min-width: 769px) { .sidebar-backdrop { display: none !important; } }
+        .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 49; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+        .sidebar-backdrop.visible { opacity: 1; pointer-events: auto; }
+        @media (min-width: 769px) { .sidebar-backdrop { display: none !important; opacity: 0 !important; pointer-events: none !important; } }
 
         /* ── SIDEBAR ─────────────────────────────────────────────────────── */
         .sb-brand { padding: 20px 18px 14px; border-bottom: 1px solid var(--border); }
@@ -2608,7 +2608,8 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           .overview-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 768px) {
-          .sidebar { display: flex; position: fixed; top: 0; left: 0; height: 100vh; z-index: 50; }
+          .sidebar { display: flex; position: fixed; top: 0; left: 0; height: 100vh; z-index: 50; transition: transform 0.25s ease; transform: translateX(-100%); }
+          .sidebar.sidebar-open { transform: translateX(0); }
           .hamburger-btn { position: fixed; top: 12px; left: 12px; z-index: 100; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 8px 12px; border-radius: 8px; }
           .th-left { padding-left: 44px; }
           .content { padding: 14px 14px 80px; }
@@ -2644,7 +2645,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
 
       <div className="shell">
         {/* ─── SIDEBAR ─────────────────────────────────────────────────── */}
-        <aside className="sidebar" style={{ width: sidebarOpen ? 228 : 0, borderRight: sidebarOpen ? '1px solid var(--border)' : 'none' }}>
+        <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`} style={{ width: sidebarOpen ? 228 : 0, borderRight: sidebarOpen ? '1px solid var(--border)' : 'none' }}>
           <div className="sb-brand">
             <div className="sb-logo">
               <div className="sb-logo-glyph">⚕️</div>
@@ -3448,31 +3449,11 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
             </div>
             <button className="btn-sm-accent" onClick={() => setActiveTab('prescriptions')}>View All</button>
           </div>
-
-          {allPrescriptions.length === 0 ? (
-            <div className="ov-empty">
-              <div style={{ fontSize: 32, marginBottom: 8 }}>💊</div>
-              <div style={{ fontWeight: 700, marginBottom: 4 }}>No prescriptions yet</div>
-              <div>Medications will appear after consultations.</div>
-            </div>
-          ) : allPrescriptions.slice(0, 4).map((rx: any, i: number) => (
-            <div key={i} className="ov-rx">
-              <div className="ov-rx-top">
-                <div>
-                  <div className="ov-rx-name">{rx.medication}</div>
-                  <div className="ov-rx-dr">Prescribed by Dr. {rx.doctorName}</div>
-                </div>
-                <span className="ov-rx-pill">Active</span>
-              </div>
-              <div className="ov-rx-meta">
-                <span>💉 {rx.dosage}</span>
-                <span>·</span>
-                <span>🕐 {rx.frequency}</span>
-                <span>·</span>
-                <span>📆 {rx.duration}</span>
-              </div>
-            </div>
-          ))}
+          <div className="ov-empty">
+            <div style={{ fontSize: 32, marginBottom: 8 }}>💊</div>
+            <div style={{ fontWeight: 700, marginBottom: 4 }}>No prescriptions yet</div>
+            <div>Medications will appear after consultations.</div>
+          </div>
         </div>
 
         {/* RECENT APPOINTMENTS — full width */}
@@ -3747,10 +3728,11 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
 
             {/* ── PRESCRIPTIONS TAB ── */}
             {activeTab === 'prescriptions' && (
-  <PatientRxCenter
-    patientId={patient.uid}
-    patientName={patient.name}
-  />
+  <div className="ov-empty" style={{ padding: 40, textAlign: 'center' }}>
+    <div style={{ fontSize: 48, marginBottom: 12 }}>💊</div>
+    <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 6 }}>Prescriptions</div>
+    <div style={{ color: '#6b7280' }}>No prescription data available.</div>
+  </div>
 )}
 
             {/* ── LABS TAB ── */}
@@ -3777,7 +3759,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
     />
 
     {/* ── Prescription History ── */}
-    {allPrescriptions.length > 0 && (
+    {false && allPrescriptions.length > 0 && (
       <div className="rx-history-section">
         <div className="rxh-hd">
           <span className="rxh-title">💊 Prescription History</span>

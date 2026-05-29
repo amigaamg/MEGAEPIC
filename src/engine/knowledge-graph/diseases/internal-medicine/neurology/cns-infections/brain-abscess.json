@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "brain_abscess",
+    "name": "Brain Abscess",
+    "system": "NEURO",
+    "agePeak_months": [240, 720],
+    "note": "Focal suppurative infection within brain parenchyma. Triad: headache, fever, focal deficit. Sources: contiguous (ear, sinus), hematogenous, post-traumatic.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["cns_infection", "intracranial_mass"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "decreased_consciousness", "weight": 10 },
+        { "sign": "raised_icp_with_herniation", "weight": 10 },
+        { "sign": "seizures", "weight": 8 },
+        { "sign": "sepsis", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If coma/herniation/sepsis -> EMERGENCY; else -> URGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "headache", "weight": 5 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "focal_neurological_deficit", "weight": 4 },
+      { "symptomId": "seizures", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "ear_sinus_infection_source", "weight": 3 },
+      { "symptomId": "dental_infection", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "focal_neurological_signs", "baseWeight": 4 },
+      { "signId": "papilloedema", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "signs_of_raised_icp", "baseWeight": 4 },
+      { "signId": "seizures", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "otitis_mastoiditis", "multiplier": 2.5 },
+      { "id": "sinusitis_frontal_ethmoid", "multiplier": 2.5 },
+      { "id": "dental_abscess", "multiplier": 2.0 },
+      { "id": "congenital_heart_disease_right_to_left", "multiplier": 3.0 },
+      { "id": "immunocompromise", "multiplier": 3.0 },
+      { "id": "penetrating_head_trauma", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "otogenic_abscess",
+        "name": "Otogenic Brain Abscess (temporal lobe/cerebellum)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "chronic_otitis_mastoiditis", "weight": 5 },
+          { "feature": "temporal_or_cerebellar_location", "weight": 5 }
+        ],
+        "management": "IV antibiotics (ceftriaxone + metronidazole). Surgical drainage via craniotomy or stereotactic aspiration. Treat ear source."
+      },
+      {
+        "id": "hematogenous_abscess",
+        "name": "Hematogenous Brain Abscess (multiple, frontal-parietal)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "multiple_abscesses", "weight": 5 },
+          { "feature": "gray_white_junction_location", "weight": 4 },
+          { "feature": "source_endocarditis_lung", "weight": 4 }
+        ],
+        "management": "IV antibiotics (ceftriaxone + metronidazole). Treat source (endocarditis, lung abscess). Aspirate largest lesion for culture."
+      },
+      {
+        "id": "post_traumatic_abscess",
+        "name": "Post-Traumatic/Post-Surgical Abscess",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "penetrating_injury_or_surgery", "weight": 5 },
+          { "feature": "staph_aureus_or_epidermidis", "weight": 4 }
+        ],
+        "management": "Vancomycin + ceftazidime/cefepime. Debridement and drainage. Remove foreign material. Treat osteomyelitis."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "brain_tumor_glioma", "discriminators": ["afebrile", "gradual_onset", "no_ring_enhancement_typical"] },
+      { "diseaseId": "cerebral_metastasis", "discriminators": ["known_primary", "multiple", "vasogenic_edema"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC, CRP, ESR", "priority": "high", "yield": 0.5, "indication": "inflammatory markers" },
+        { "name": "Blood cultures x 2", "priority": "high", "yield": 0.4, "indication": "identify organism" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain with contrast (DWI, ADC)", "priority": "immediate", "yield": 0.98, "indication": "ring-enhancing lesion with restricted diffusion (pus)" },
+        { "name": "CT Head with contrast", "priority": "emergency", "yield": 0.8, "indication": "ring-enhancing mass, edema, mass effect" },
+        { "name": "CT sinuses and temporal bones", "priority": "medium", "yield": 0.5, "indication": "identify contiguous source" }
+      ]
+    },
+    "management": {
+      "protocolReference": "IDSA Guidelines for Brain Abscess",
+      "pathways": [
+        {
+          "severity": "medical (small <2.5 cm or multiple)",
+          "criteria": "abscess <2.5 cm, no significant mass effect, good clinical status",
+          "treatment": "IV antibiotics for 6-8 weeks. Empiric: ceftriaxone 2 g BD + metronidazole 500 mg TDS. If post-traumatic/surgical: vancomycin + cefepime. Serial imaging."
+        },
+        {
+          "severity": "surgical (large, mass effect)",
+          "criteria": "abscess >2.5 cm, significant mass effect, impending herniation, or failed medical treatment",
+          "treatment": "Stereotactic aspiration or craniotomy for excision. IV antibiotics 6-8 weeks. Send pus culture (aerobic, anaerobic, fungal, TB). ICP monitoring if needed."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "direct_spread_from_contiguous_focus",
+      "hematogenous_dissemination",
+      "focal_encephalitis_stage",
+      "capsule_formation",
+      "mass_effect",
+      "cerebral_edema",
+      "increased_icp"
+    ],
+    "complications": [
+      { "diseaseId": "intracranial_hypertension", "probability": 0.2, "severityBoost": 0.4, "clues": ["decreased_gcs", "papilloedema", "hypertensive_cushing"] },
+      { "diseaseId": "rupture_into_ventricle", "probability": 0.05, "severityBoost": 0.7, "clues": ["sudden_deterioration", "ventriculitis", "high_fever"] },
+      { "diseaseId": "status_epilepticus", "probability": 0.15, "severityBoost": 0.3, "clues": ["seizures"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["ring_enhancing_lesion_restricted_diffusion", "fever_headache_focal_deficit", "source_ear_sinus_lung_heart"],
+    "exclusionClues": ["non_enhancing_lesion", "tumor_characteristics", "no_restricted_diffusion"]
+  }
+}

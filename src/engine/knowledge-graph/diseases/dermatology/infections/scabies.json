@@ -1,0 +1,142 @@
+{
+  "disease": {
+    "id": "scabies",
+    "name": "Scabies",
+    "system": "dermatology",
+    "agePeak_months": [0, 480],
+    "note": "Contagious skin infestation by Sarcoptes scabiei mite. Intense nocturnal pruritus, burrows in web spaces, flexures. Can cause crusted (Norwegian) scabies in immunocompromised.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["skin_infestation", "parasitic_dermatosis", "contagious"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "crusted_norwegian_scabies", "weight": 9 },
+        { "sign": "secondary_sepsis_cellulitis", "weight": 7 },
+        { "sign": "post_scabies_eczema_severe", "weight": 5 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Crusted scabies -> SEVERE; typical -> MODERATE; mild -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "intense_itching_worse_at_night", "weight": 5 },
+      { "symptomId": "household_contacts_with_same_symptoms", "weight": 5 },
+      { "symptomId": "burrows_in_web_spaces", "weight": 4 },
+      { "symptomId": "rash_on_wrist_elbow_axilla_waist", "weight": 4 },
+      { "symptomId": "institutional_living_nursing_home", "weight": 3 },
+      { "symptomId": "persistent_despite_other_creams", "weight": 3 },
+      { "symptomId": "immunosuppression_hiv", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "burrows_linear_s_shape_web_spaces", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "intense_excoriations", "baseWeight": 3 },
+      { "signId": "nodular_scabetic_lesions", "baseWeight": 3 },
+      { "signId": "distribution_wrist_elbow_axillary_periumbilical", "baseWeight": 4 },
+      { "signId": "sparing_of_head_and_neck_except_infants", "baseWeight": 2 },
+      { "signId": "crusted_thick_hyperkeratotic_scales", "baseWeight": 4, "note": "Crusted scabies" }
+    ],
+
+    "riskFactors": [
+      { "id": "close_contact_scabies_case", "multiplier": 4.0 },
+      { "id": "institutional_living", "multiplier": 3.0 },
+      { "id": "overcrowding", "multiplier": 2.5 },
+      { "id": "immunosuppression_hiv", "multiplier": 3.0 },
+      { "id": "sexual_contact", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "classic_scabies",
+        "name": "Classic Scabies",
+        "prevalenceModifier": 0.95,
+        "keyFeatures": [
+          { "feature": "nocturnal_pruritus", "weight": 5 },
+          { "feature": "burrows_and_excoriations", "weight": 4 },
+          { "feature": "contact_history", "weight": 5 }
+        ],
+        "management": "Permethrin 5% cream applied head-to-toe (include scalp in elderly/infants) overnight x 8-12 hours, repeat in 7 days. Treat all household contacts. Wash bedding and clothing at 60C."
+      },
+      {
+        "id": "crusted_norwegian_scabies",
+        "name": "Crusted (Norwegian) Scabies",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "hyperkeratotic_crusted_skin", "weight": 5 },
+          { "feature": "high_mite_burden_thousands", "weight": 5 },
+          { "feature": "immunocompromised_or_intellectual_disability", "weight": 5 }
+        ],
+        "management": "Ivermectin 200mcg/kg PO on days 1, 2, 8, 9, 15 (multiple doses). PLUS permethrin 5% cream daily x 7 days, then 2x/week. Keratolytic lotion (salicylic acid). Isolation. Treat aggressively to prevent outbreaks."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "eczema",
+        "discriminators": ["no_contact_history", "flexural_only", "no_burrows", "less_nocturnal"]
+      },
+      {
+        "diseaseId": "papular_urticaria",
+        "discriminators": ["insect_bites", "no_burrows", "no_contact_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Dermoscopy (burrow sign: delta wing jet)", "priority": "high", "yield": 0.9, "indication": "rapid bedside diagnosis" }
+      ],
+      "laboratory": [
+        { "name": "Skin scraping (burrow) for microscopy", "priority": "gold_standard", "yield": 0.8, "indication": "mites, eggs, scybala" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CDC / WHO / IACS Guidelines for Scabies",
+      "pathways": [
+        {
+          "severity": "classic scabies",
+          "criteria": "pruritus + burrows + contact history",
+          "treatment": "Permethrin 5% cream (apply neck to toes, wash off after 8-12h). Repeat in 7 days. Treat contacts simultaneously. Launder clothes and bedding on high heat. Ivermectin 200mcg/kg PO if fails."
+        },
+        {
+          "severity": "crusted scabies",
+          "criteria": "thick crusts, high mite burden, immunocompromised",
+          "treatment": "Ivermectin 200mcg/kg PO days 1, 2, 8, 9, 15 + Permethrin 5% cream daily x 7d then 2x/week. Keratolytics. Isolation. Monitor for secondary sepsis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "female_mite_burrows_into_stratum_corneum",
+      "mite_lays_eggs_in_burrow",
+      "hypersensitivity_reaction_to_mite_products",
+      "pruritus_from_delayed_type_hypersensitivity",
+      "scratch_damage_and_secondary_infection"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "secondary_impetigo_cellulitis",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["honey_crusts", "pain", "purulence"]
+      },
+      {
+        "diseaseId": "post_scabies_pruritus",
+        "probability": 0.3,
+        "severityBoost": 0.1,
+        "clues": ["itching_persists_after_treatment", "no_new_lesions"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "diagnosticClues": ["intense_nocturnal_pruritus", "household_contacts_affected", "burrows_in_web_spaces"],
+    "exclusionClues": ["no_contact_history", "burrows_not_found", "no_response_to_permetrina"]
+  }
+}

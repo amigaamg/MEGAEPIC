@@ -1,0 +1,106 @@
+{
+  "disease": {
+    "id": "renal_biopsy_complications",
+    "name": "Renal Biopsy Complications",
+    "system": "nephrology",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["procedural_complication", "bleeding", "vascular_injury"],
+    "mustNotMiss": true,
+    "emergencyPriority": "urgent",
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemodynamic_instability_hypotension", "weight": 5, "description": "Active hemorrhage" },
+        { "sign": "expanding_flank_mass", "weight": 5, "description": "Large perinephric hematoma" },
+        { "sign": "gross_hematuria_with_clots", "weight": 4, "description": "Significant bleeding" },
+        { "sign": "hematocrit_drop_>6%", "weight": 4, "description": "Clinically significant blood loss" }
+      ],
+      "severeCriteria": { "anyDangerSign": true, "additionalCriteria": [ { "sign": "transfusion_requirement", "weight": 4 }, { "sign": "need_for_embolization", "weight": 5 } ] },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "post-procedural-monitoring"
+    },
+    "historyFeatures": [
+      { "symptomId": "flank_or_abdominal_pain", "weight": 4, "condition": "after renal biopsy" },
+      { "symptomId": "gross_hematuria", "weight": 5 },
+      { "symptomId": "dizziness_lightheadedness", "weight": 3 },
+      { "symptomId": "decreased_urine_output", "weight": 3 },
+      { "symptomId": "recent_renal_biopsy", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "flank_tenderness", "baseWeight": 4 },
+      { "signId": "flank_mass_or_ecchymosis", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "hypotension", "baseWeight": 5, "severityIndicator": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "uncorrected_bleeding_diathesis", "multiplier": 4.0, "note": "INR >1.5, platelets <50K" },
+      { "id": "antiplatelet_or_anticoagulant_therapy", "multiplier": 3.5 },
+      { "id": "uncontrolled_hypertension_at_biopsy", "multiplier": 3.0 },
+      { "id": "multiple_biopsy_passes", "multiplier": 2.0 },
+      { "id": "uremia_platelet_dysfunction", "multiplier": 2.5 }
+    ],
+    "diagnosticClues": [ "flank pain + gross hematuria within 24h of renal biopsy", "falling Hct with hemodynamic instability", "Doppler US showing perinephric hematoma or AV fistula" ],
+    "exclusionClues": [ "normal vitals, no flank tenderness", "clear urine, normal post-biopsy US" ],
+    "subtypes": [
+      {
+        "id": "perinephric_hematoma", "name": "Perinephric Hematoma",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [ { "feature": "flank_pain_and_mass", "weight": 5 }, { "feature": "hematocrit_drop", "weight": 4 } ],
+        "management": { "management": "Bed rest, volume resuscitation, transfusion, embolization if expanding" }
+      },
+      {
+        "id": "arteriovenous_fistula", "name": "Arteriovenous Fistula",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [ { "feature": "audible_bruit_over_kidney", "weight": 5 }, { "feature": "persistent_hematuria", "weight": 4 } ],
+        "management": { "management": "Observation if small; selective embolization if persistent" }
+      },
+      {
+        "id": "gross_hematuria_clot_colic", "name": "Gross Hematuria with Clot Colic",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [ { "feature": "visible_blood_in_urine", "weight": 5 }, { "feature": "clot_retention", "weight": 4 } ],
+        "management": { "management": "Bladder irrigation, catheter drainage, ureteroscopy if refractory" }
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "renal_colic_nephrolithiasis", "discriminators": ["prior stones", "no recent biopsy", "CT visible stones"] },
+      { "diseaseId": "acute_pyelonephritis", "discriminators": ["fever >38.5", "positive culture", "no Hct drop"] }
+    ],
+    "investigations": {
+      "bedside": [ { "name": "Continuous Vitals and Urine Dipstick", "priority": "essential", "yield": 5, "indication": "detect hemorrhage early" } ],
+      "laboratory": [ { "name": "Serial CBC (Hct trend)", "priority": "Q6H", "yield": 5, "indication": "assess blood loss" }, { "name": "Serum Creatinine", "priority": "daily", "yield": 4, "indication": "post-biopsy renal function" }, { "name": "PT/INR, PTT", "priority": "pre-biopsy", "yield": 5, "indication": "bleeding risk" } ],
+      "imaging": [ { "name": "Renal Ultrasound with Doppler", "priority": "first-line", "yield": 5, "indication": "hematoma, AV fistula, hydronephrosis" }, { "name": "CT Angiogram", "priority": "if active bleeding", "yield": 5, "indication": "locate extravasation for embolization" } ]
+    },
+    "management": {
+      "protocolReference": "KDIGO 2021; Renal Biopsy Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "microscopic hematuria, mild flank pain, stable vitals",
+          "treatment": [ "Bed rest supine 6-12h, oral fluids", "Monitor vitals Q15min x1h, Q30min x2h, Q1h x4h" ]
+        },
+        {
+          "severity": "moderate",
+          "criteria": "gross hematuria, flank pain, Hct drop 3-6%, stable vitals",
+          "treatment": [ "Admit for observation, IV fluids, serial CBC Q6H", "Renal US with Doppler, type and crossmatch, transfuse if Hb <7" ]
+        },
+        {
+          "severity": "severe",
+          "criteria": "hemodynamic instability, expanding hematoma, active bleeding",
+          "treatment": [ "ICU, IV access x2, NS bolus, transfuse PRBCs", "Reverse anticoagulation; DDAVP if uremic platelet dysfunction", "CT angiogram → IR embolization; surgical exploration if fails" ]
+        }
+      ]
+    },
+    "pathophysiology": [
+      "Needle trauma to renal parenchyma causes vascular injury",
+      "Perinephric hematoma from bleeding into subcapsular/perinephric space",
+      "Artery-vein laceration creates AV fistula with high-flow shunt",
+      "Collecting system injury leads to gross hematuria and ureteral clot obstruction"
+    ],
+    "complications": [
+      { "diseaseId": "hemorrhagic_shock", "probability": 0.02, "severityBoost": 1.0 },
+      { "diseaseId": "acute_kidney_injury_from_hypovolemia", "probability": 0.05, "severityBoost": 0.5 },
+      { "diseaseId": "nephrectomy_requirement", "probability": 0.005, "severityBoost": 0.8 },
+      { "diseaseId": "hypertension_from_page_kidney", "probability": 0.02, "severityBoost": 0.3, "lagDays": [30, 365] }
+    ]
+  }
+}

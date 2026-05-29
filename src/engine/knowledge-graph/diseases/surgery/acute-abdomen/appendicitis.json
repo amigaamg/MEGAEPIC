@@ -1,0 +1,158 @@
+{
+  "disease": {
+    "id": "appendicitis",
+    "name": "Acute Appendicitis",
+    "system": "surgical",
+    "agePeak_months": [120, 360],
+    "note": "Classic presentation of periumbilical pain migrating to RLQ. Atypical in young children and elderly.",
+    "prevalenceWeight": 0.75,
+    "syndromeTags": ["acute_abdomen", "right_lower_quadrant_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "rebound_tenderness", "weight": 7 },
+          { "sign": "rigidity", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If generalized peritonitis/shock -> SEVERE (perforated); else -> NON-SEVERE (simple appendicitis)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_pain", "weight": 5, "modifiers": [
+          { "condition": "migration_to_rlq", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "anorexia", "weight": 3 },
+      { "symptomId": "pain_before_vomiting", "weight": 4, "note": "Pain precedes vomiting in appendicitis" },
+      { "symptomId": "diarrhea", "weight": 1, "note": "May occur with retrocecal appendix" }
+    ],
+
+    "examFeatures": [
+      { "signId": "rlq_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "rebound_tenderness", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "guarding", "baseWeight": 3 },
+      { "signId": "roving_sign", "baseWeight": 3 },
+      { "signId": "psoas_sign", "baseWeight": 3, "note": "Suggests retrocecal appendicitis" },
+      { "signId": "obturator_sign", "baseWeight": 2 },
+      { "signId": "fever_tachycardia", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_10_to_20", "multiplier": 1.5 },
+      { "id": "family_history", "multiplier": 1.3 },
+      { "id": "low_fiber_diet", "multiplier": 1.2 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "simple_appendicitis",
+        "name": "Simple (Non-Perforated) Appendicitis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "rlq_pain", "weight": 5 },
+          { "feature": "fever_low_grade", "weight": 3 },
+          { "feature": "localized_tenderness", "weight": 5 }
+        ],
+        "management": "Emergency appendicectomy (open or laparoscopic). IV antibiotics pre-op."
+      },
+      {
+        "id": "perforated_appendicitis",
+        "name": "Perforated Appendicitis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "generalized_abdominal_pain", "weight": 5 },
+          { "feature": "high_fever", "weight": 5 },
+          { "feature": "rigidity", "weight": 5 },
+          { "feature": "prolonged_symptoms_48h", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy/laparoscopy + peritoneal lavage. IV antibiotics (e.g., Ceftriaxone + Metronidazole). ICU if septic."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "mesenteric_adenitis",
+        "discriminators": ["viral_prodrome", "generalized_lymphadenopathy", "pain_less_localized"]
+      },
+      {
+        "diseaseId": "ovarian_torsion",
+        "discriminators": ["sudden_severe_pain", "adnexal_tenderness", "nausea"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Alvarado Score", "priority": "immediate", "yield": 0.85, "indication": "all suspected appendicitis" },
+        { "name": "Temperature", "priority": "immediate", "yield": 0.7, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "WBC count", "priority": "high", "yield": 0.75, "indication": "leukocytosis supports diagnosis" },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "elevated in inflammation" },
+        { "name": "Urinalysis", "priority": "medium", "yield": 0.3, "indication": "rule out UTI/pyelonephritis" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.85, "indication": "first-line imaging in children and young adults" },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.95, "indication": "equivocal cases, suspected perforation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Jerusalem Guidelines for Acute Appendicitis",
+      "pathways": [
+        {
+          "severity": "non-perforated",
+          "criteria": "localized RLQ pain, no peritonitis, Alvarado 4-6",
+          "treatment": "Emergency appendicectomy. Pre-op single-dose antibiotics (e.g., Cefoxitin or Ceftriaxone + Metronidazole)."
+        },
+        {
+          "severity": "perforated",
+          "criteria": "generalized peritonitis, rigidity, septic features, Alvarado 7-10",
+          "treatment": "Emergency laparotomy/laparoscopy. IV fluids resuscitation. IV antibiotics (Ceftriaxone + Metronidazole + Gentamicin). ICU admission. Post-op antibiotics for 5-7 days."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "luminal_obstruction",
+      "bacterial_overgrowth",
+      "ischemia",
+      "inflammation",
+      "perforation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "perforated_appendicitis",
+        "probability": 0.2,
+        "lagDays": [2, 5],
+        "severityBoost": 0.4,
+        "clues": ["worsening_pain", "rigidity", "sepsis"]
+      },
+      {
+        "diseaseId": "intra_abdominal_abscess",
+        "probability": 0.05,
+        "lagDays": [5, 10],
+        "severityBoost": 0.3,
+        "clues": ["persistent_fever", "ileus"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["periumbilical_to_rlq_migration", "anorexia", "rlq_tenderness"],
+    "exclusionClues": ["left_sided_pain", "bloody_diarrhea", "pain_before_vomiting_absent"]
+  }
+}

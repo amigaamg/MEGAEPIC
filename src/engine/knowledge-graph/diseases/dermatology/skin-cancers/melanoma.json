@@ -1,0 +1,129 @@
+{
+  "disease": {
+    "id": "melanoma",
+    "name": "Malignant Melanoma",
+    "system": "dermatology",
+    "agePeak_months": [480, 840],
+    "note": "Most dangerous form of skin cancer. ABCDE criteria for detection. Early diagnosis critical.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["skin_malignancy", "pigmented_lesion"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "metastatic_disease", "weight": 10 },
+        { "sign": "bleeding_ulcerating_lesion", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Breslow thickness and stage determine severity"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "changing_mole", "weight": 5 },
+      { "symptomId": "new_pigmented_lesion", "weight": 4 },
+      { "symptomId": "irregular_border", "weight": 4 },
+      { "symptomId": "multiple_colors", "weight": 4 },
+      { "symptomId": "diameter_over_6mm", "weight": 3 },
+      { "symptomId": "itching_bleeding_lesion", "weight": 3 },
+      { "symptomId": "family_history_melanoma", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "asymmetric_lesion", "baseWeight": 5 },
+      { "signId": "irregular_border", "baseWeight": 5 },
+      { "signId": "color_variegation", "baseWeight": 5 },
+      { "signId": "diameter_over_6mm", "baseWeight": 4 },
+      { "signId": "evolution_on_serial_exam", "baseWeight": 5 },
+      { "signId": "ulceration", "baseWeight": 4 },
+      { "signId": "satellite_lesions", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "sun_exposure_uv", "multiplier": 2.5 },
+      { "id": "sunburns_childhood", "multiplier": 2.0 },
+      { "id": "fair_skin_freckles", "multiplier": 2.0 },
+      { "id": "multiple_naevi", "multiplier": 1.8 },
+      { "id": "atypical_moles", "multiplier": 2.5 },
+      { "id": "family_history_melanoma", "multiplier": 3.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "superficial_spreading_melanoma",
+        "name": "Superficial Spreading Melanoma",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "radial_growth_phase", "weight": 5 },
+          { "feature": "irregular_border_colors", "weight": 5 }
+        ],
+        "management": "Wide local excision with 1-2 cm margins. Sentinel lymph node biopsy if >1 mm. Staging imaging."
+      },
+      {
+        "id": "nodular_melanoma",
+        "name": "Nodular Melanoma",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "rapid_growth", "weight": 5 },
+          { "feature": "raised_nodular", "weight": 5 },
+          { "feature": "vertical_growth", "weight": 4 }
+        ],
+        "management": "Wide local excision. Sentinel node biopsy. Targeted therapy or immunotherapy if metastatic."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "seborrheic_keratosis",
+        "discriminators": ["stuck_on_appearance", "waxy", "horn_cysts"]
+      },
+      {
+        "diseaseId": "benign_nevus",
+        "discriminators": ["symmetrical", "regular_border", "uniform_color", "stable"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ABCDE rule assessment", "priority": "immediate", "yield": 0.85, "indication": "all pigmented lesions" },
+        { "name": "Dermatoscopy", "priority": "high", "yield": 0.9, "indication": "enhanced visualization" }
+      ],
+      "imaging": [
+        { "name": "Excisional biopsy with 2 mm margin", "priority": "high", "yield": 0.98, "indication": "definitive diagnosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines for Melanoma",
+      "pathways": [
+        {
+          "severity": "localized (stage 0-II)",
+          "criteria": "no evidence of metastasis",
+          "treatment": "Wide local excision. Sentinel lymph node biopsy if Breslow >1 mm or adverse features. Regular surveillance."
+        },
+        {
+          "severity": "metastatic (stage III-IV)",
+          "criteria": "regional or distant metastasis",
+          "treatment": "Immunotherapy (PD-1 inhibitors, CTLA-4 inhibitors). Targeted therapy if BRAF mutated. Surgical resection if limited. CNS surveillance."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "uv_induced_dna_damage",
+      "braf_mutation",
+      "melanocyte_transformation",
+      "local_invasion",
+      "lymphatic_hematogenous_spread"
+    ],
+
+    "mustNotMiss": true,
+    "diagnosticClues": ["asymmetry_irregular_border_color_change_diameter_evolution", "new_changing_mole"],
+    "exclusionClues": ["stable_lesion", "uniform_color", "small_diameter", "waxy_appearance"]
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "disease": {
+    "id": "intussusception",
+    "name": "Intussusception",
+    "system": "pediatrics",
+    "agePeak_months": [3, 36],
+    "note": "Telescoping of one bowel segment into another. Most common cause of intestinal obstruction in infants.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["acute_abdomen", "intestinal_obstruction"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "peritonitis_signs", "weight": 10 },
+        { "sign": "shock_hypovolemic", "weight": 10 },
+        { "sign": "severe_dehydration", "weight": 9 },
+        { "sign": "red_currant_jelly_stool", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If peritonitis/shock/red currant jelly -> COMPLICATED; else -> EARLY/SUSPECTED"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "paroxysmal_abdominal_pain", "weight": 5 },
+      { "symptomId": "vomiting", "weight": 4 },
+      { "symptomId": "red_currant_jelly_stool", "weight": 5 },
+      { "symptomId": "lethargy", "weight": 3 },
+      { "symptomId": "drawing_up_of_legs", "weight": 4 },
+      { "symptomId": "pallor_during_episodes", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "sausage_shaped_mass_abdomen", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "guarding_or_peritonitis", "baseWeight": 4 },
+      { "signId": "empty_rlq_dance_sign", "baseWeight": 3 },
+      { "signId": "blood_on_digital_rectal_exam", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_3_to_36_months", "multiplier": 4.0 },
+      { "id": "recent_rotavirus_infection", "multiplier": 1.5 },
+      { "id": "rotavirus_vaccine", "multiplier": 1.2 },
+      { "id": "meckels_diverticulum", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "colic",
+        "discriminators": ["no_vomiting", "no_blood_in_stool", "normal_feeding_between"]
+      },
+      {
+        "diseaseId": "strangulated_hernia",
+        "discriminators": ["groin_mass", "irreducible"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Abdominal examination for mass", "priority": "immediate", "yield": 0.7, "indication": "all suspected intussusception" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "gold_standard", "yield": 0.95, "indication": "target/doughnut sign, pseudokidney sign" },
+        { "name": "Plain Abdominal X-ray", "priority": "medium", "yield": 0.6, "indication": "absence of gas in RLQ, soft tissue mass" },
+        { "name": "Air Enema (therapeutic and diagnostic)", "priority": "therapeutic", "yield": 0.9, "indication": "confirmed intussusception on ultrasound" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "British Society of Paediatric Radiology / NICE Guidelines",
+      "pathways": [
+        {
+          "severity": "uncomplicated (early)",
+          "criteria": "symptoms <24h, no peritonitis, no shock",
+          "treatment": "Air enema reduction under fluoroscopic or ultrasound guidance. Success rate >80%. Observe for 24h after reduction for recurrence."
+        },
+        {
+          "severity": "complicated (failed reduction or peritonitis)",
+          "criteria": "failed air enema, peritonitis, shock, symptoms >48h",
+          "treatment": "Surgical reduction. Laparotomy with manual reduction or bowel resection if non-viable segment. IV fluids. IV antibiotics."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "bowel_telescoping",
+      "mesenteric_compression",
+      "venous_obstruction",
+      "bowel_wall_edema",
+      "ischemia",
+      "obstruction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bowel_necrosis",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["peritonitis", "shock", "failed_reduction"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["paroxysmal_crying_pain", "sausage_mass", "red_currant_jelly_stool", "age_3_to_36_months"],
+    "exclusionClues": ["normal_ultrasound", "no_blood_in_stool", "colicky_but_thriving"]
+  }
+}

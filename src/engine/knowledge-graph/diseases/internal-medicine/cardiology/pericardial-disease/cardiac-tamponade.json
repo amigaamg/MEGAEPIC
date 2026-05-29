@@ -1,0 +1,86 @@
+{
+  "disease": {
+    "id": "cardiac_tamponade",
+    "name": "Cardiac Tamponade",
+    "system": "CARD",
+    "agePeak_months": [240, 960],
+    "note": "Life-threatening compression of the heart by pericardial fluid. Beck triad: JVD, hypotension, muffled heart sounds.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["pericardial_disease", "cardiac_emergency", "shock"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "obstructive_shock", "weight": 10 },
+        { "sign": "pulseless_electrical_activity", "weight": 10 },
+        { "sign": "profound_hypotension", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "ALL cardiac tamponade is SEVERE - emergency pericardiocentesis"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 5 },
+      { "symptomId": "chest_discomfort_or_fullness", "weight": 3 },
+      { "symptomId": "orthopnea", "weight": 3 },
+      { "symptomId": "syncope_near_syncope", "weight": 3 },
+      { "symptomId": "precipitating_cause", "weight": 3, "note": "Cardiac surgery, trauma, pericarditis, malignancy, TB" }
+    ],
+    "examFeatures": [
+      { "signId": "beck_triad_jvd_hypotension_muffled_sounds", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "pulsus_paradoxus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 3 },
+      { "signId": "kussmaul_sign", "baseWeight": 3 },
+      { "signId": "hepatomegaly_ascites", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "large_pericardial_effusion", "multiplier": 4.0 },
+      { "id": "rapid_fluid_accumulation", "multiplier": 3.0 },
+      { "id": "pericarditis", "multiplier": 2.0 },
+      { "id": "cardiac_surgery_recent", "multiplier": 3.0 },
+      { "id": "trauma_penetrating", "multiplier": 3.0 },
+      { "id": "tb_in_endemic_area", "multiplier": 2.5 },
+      { "id": "malignancy", "multiplier": 2.5 }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Echocardiography", "priority": "immediate", "yield": 0.98, "indication": "confirm effusion, RA/RV collapse, IVC plethora" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "electrical alternans, low voltage, sinus tachycardia" },
+        { "name": "Pulsus paradoxus measurement", "priority": "immediate", "yield": 0.85, "indication": "fall >10 mmHg during inspiration" }
+      ],
+      "laboratory": [
+        { "name": "ABG", "priority": "high", "yield": 0.6, "indication": "hypoxia, acidosis" },
+        { "name": "U&E, Cr", "priority": "high", "yield": 0.4, "indication": "renal function" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "bedside", "yield": 0.5, "indication": "water-bottle heart, widened cardiac silhouette" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Pericardial Diseases - Tamponade Management",
+      "pathways": [
+        {
+          "severity": "all patients",
+          "criteria": "confirmed tamponade on echo with hemodynamic compromise",
+          "treatment": "Urgent pericardiocentesis (subxiphoid or apical approach). Echo-guided preferred. IV fluids 500 mL bolus as temporizing measure. Inotropes if needed. Drain fluid, send for analysis (culture, cytology, TB, biochemistry)."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "equalization_diastolic_pressures",
+      "impaired_ventricular_filling",
+      "decreased_cardiac_output",
+      "compensatory_tachycardia",
+      "pulsus_paradoxus_inspiratory_fall",
+      "obstructive_shock"
+    ],
+    "complications": [
+      { "diseaseId": "obstructive_shock", "probability": 0.6, "severityBoost": 0.5, "clues": ["hypotension", "jvd", "muffled_sounds"] },
+      { "diseaseId": "cardiac_arrest_pea", "probability": 0.05, "severityBoost": 0.8, "clues": ["pulseless", "pea_rhythm"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["beck_triad", "pulsus_paradoxus", "echo_confirmed", "effusion_plus_hemodynamic_compromise"],
+    "exclusionClues": ["no_effusion_on_echo", "no_hemodynamic_compromise"]
+  }
+}

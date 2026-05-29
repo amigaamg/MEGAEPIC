@@ -271,20 +271,207 @@ export const PANEL_DEFINITIONS: Record<string, PanelDefinition> = {
       'Bleeding risk assessment for procedure?',
     ],
   },
+  'Arterial Blood Gas (ABG)': {
+    name: 'Arterial Blood Gas (ABG)',
+    purpose: 'Acid-base status, oxygenation, ventilation, metabolic/respiratory disorders',
+    sections: [
+      { label: 'Acid-Base Status', icon: '⚗️', analytes: [
+        { name: 'pH', unit: '', refRange: '7.35-7.45', lowLabel: 'Acidaemia (respiratory/metabolic acidosis)', highLabel: 'Alkalaemia (respiratory/metabolic alkalosis)', criticalLow: 7.2, criticalHigh: 7.6 },
+        { name: 'pCO2', unit: 'mmHg', refRange: '35-45', lowLabel: 'Respiratory alkalosis (hyperventilation/PE/liver)', highLabel: 'Respiratory acidosis (hypoventilation/COPD/sedation)', criticalHigh: 60 },
+        { name: 'HCO3', unit: 'mmol/L', refRange: '22-29', lowLabel: 'Metabolic acidosis (DKA/renal/diarrhoea/lactic)', highLabel: 'Metabolic alkalosis (vomiting/diuretics/contraction)' },
+        { name: 'Base Excess', unit: 'mmol/L', refRange: '-2 to +2', lowLabel: 'Metabolic acidosis (base deficit)', highLabel: 'Metabolic alkalosis (base excess)' },
+      ]},
+      { label: 'Oxygenation', icon: '🫁', analytes: [
+        { name: 'pO2', unit: 'mmHg', refRange: '80-100', lowLabel: 'Hypoxaemia (shunt/VQ mismatch/hypoventilation)', highLabel: 'Hyperoxaemia (supplemental O2)', criticalLow: 60 },
+        { name: 'O2 Saturation', unit: '%', refRange: '95-100', lowLabel: 'Hypoxaemia', highLabel: '—', criticalLow: 90 },
+        { name: 'FiO2', unit: '%', refRange: '21-100', lowLabel: '—', highLabel: '—' },
+        { name: 'P/F Ratio', unit: '', refRange: '>300', lowLabel: 'ARDS (<200)/severe (<100)', highLabel: '—' },
+      ]},
+      { label: 'Tissue Perfusion', icon: '🔥', analytes: [
+        { name: 'Lactate', unit: 'mmol/L', refRange: '0.5-2.0', lowLabel: '—', highLabel: 'Tissue hypoperfusion/ischaemia/sepsis/seizures', criticalHigh: 4 },
+      ]},
+    ],
+    interpretationQuestions: [
+      'Respiratory vs metabolic acidosis/alkalosis? (Winters formula, delta ratio)',
+      'Compensation appropriate? (acute vs chronic)',
+      'Hypoxaemia present? A-a gradient calculated?',
+      'Lactate elevated → hypoperfusion/ischaemia?',
+      'Clinical context? (DKA/COPD/PE/sepsis/renal failure)',
+    ],
+  },
+  'Iron Studies': {
+    name: 'Iron Studies',
+    purpose: 'Iron deficiency vs overload, anaemia workup, haemochromatosis screening',
+    sections: [
+      { label: 'Iron Status', icon: '🔩', analytes: [
+        { name: 'Serum Iron', unit: 'umol/L', refRange: '11-28', lowLabel: 'Iron deficiency', highLabel: 'Iron overload/haemolysis/transfusion' },
+        { name: 'Serum Ferritin', unit: 'ug/L', refRange: '20-300', lowLabel: 'Iron deficiency (absolute)', highLabel: 'Iron overload/inflammation/malignancy/liver disease' },
+        { name: 'TIBC', unit: 'umol/L', refRange: '45-75', lowLabel: 'Iron overload/chronic disease', highLabel: 'Iron deficiency' },
+        { name: 'Transferrin Saturation', unit: '%', refRange: '15-45', lowLabel: 'Iron deficiency', highLabel: 'Iron overload/haemochromatosis' },
+        { name: 'UIBC', unit: 'umol/L', refRange: '25-50', lowLabel: 'Iron overload', highLabel: 'Iron deficiency' },
+      ]},
+    ],
+    interpretationQuestions: [
+      'Iron deficiency pattern? (low ferritin, low iron, high TIBC, low sat)',
+      'Iron overload pattern? (high ferritin, high sat, low TIBC)',
+      'Ferritin confounded by inflammation? (acute phase reactant)',
+      'Anaemia of chronic disease? (normal/high ferritin, low iron)',
+      'Need for further workup? (haemochromatosis genes, bone marrow)',
+    ],
+  },
+  'Urinalysis + Microscopy': {
+    name: 'Urinalysis + Microscopy',
+    purpose: 'UTI, haematuria, proteinuria, renal disease, metabolic screening',
+    sections: [
+      { label: 'Physical & Chemical', icon: '💧', analytes: [
+        { name: 'Color', unit: '', refRange: 'Yellow/Amber', lowLabel: '—', highLabel: 'Dark/deep (dehydration/haematuria/hepatitis)' },
+        { name: 'Appearance', unit: '', refRange: 'Clear', lowLabel: '—', highLabel: 'Turbid (UTI/pus/crystals/phosphates)' },
+        { name: 'Specific Gravity', unit: '', refRange: '1.005-1.030', lowLabel: 'Low (<1.005) DI/overhydration', highLabel: 'High (>1.030) dehydration/contrast' },
+        { name: 'pH', unit: '', refRange: '5-8', lowLabel: 'Acidic (metabolic acidosis/DKA)', highLabel: 'Alkaline (UTI/renal tubular acidosis/stones)' },
+        { name: 'Protein', unit: 'g/L', refRange: 'Neg', lowLabel: '—', highLabel: 'Proteinuria (glomerular/tubular/overflow)' },
+        { name: 'Glucose', unit: '', refRange: 'Neg', lowLabel: '—', highLabel: 'Glycosuria (diabetes/renal threshold)' },
+        { name: 'Ketones', unit: '', refRange: 'Neg', lowLabel: '—', highLabel: 'Ketosis (DKA/starvation/alcohol)' },
+        { name: 'Blood', unit: '', refRange: 'Neg', lowLabel: '—', highLabel: 'Haematuria (UTI/stone/trauma/glomerular)' },
+        { name: 'Leukocytes', unit: '', refRange: 'Neg', lowLabel: '—', highLabel: 'Leukocyturia (UTI/inflammation)' },
+        { name: 'Nitrites', unit: '', refRange: 'Neg', lowLabel: '—', highLabel: 'Nitrite positive (enteric bacteria/UTI)' },
+        { name: 'Urobilinogen', unit: '', refRange: 'Normal', lowLabel: '—', highLabel: 'Haemolysis/liver disease' },
+        { name: 'Bilirubin', unit: '', refRange: 'Neg', lowLabel: '—', highLabel: 'Obstructive jaundice/hepatocellular disease' },
+      ]},
+      { label: 'Microscopy Sediment', icon: '🔬', analytes: [
+        { name: 'Casts', unit: '/hpf', refRange: '0-2', lowLabel: '—', highLabel: 'RBC casts (glomerulonephritis), WBC casts (pyelonephritis), granular (ATN)' },
+        { name: 'Crystals', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'CaOx (ethylene glycol/hyperoxaluria), uric acid, triple phosphate' },
+        { name: 'Bacteria', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Bacteriuria (UTI/contamination)' },
+        { name: 'Epithelial Cells', unit: '/hpf', refRange: '0-5', lowLabel: '—', highLabel: 'Squamous (contamination), transitional/renal (pathological)' },
+        { name: 'RBC', unit: '/hpf', refRange: '0-3', lowLabel: '—', highLabel: 'Haematuria (dysmorphic → glomerular)' },
+        { name: 'WBC', unit: '/hpf', refRange: '0-5', lowLabel: '—', highLabel: 'Pyuria (UTI/inflammation/TB)' },
+        { name: 'Yeast Cells', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Candida (UTI/contamination/diabetes)' },
+        { name: 'Trichomonas', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Trichomoniasis (STI)' },
+      ]},
+    ],
+    interpretationQuestions: [
+      'UTI pattern? (nitrites, leukocytes, bacteria, WBCs)',
+      'Haematuria workup? (RBC casts suggest glomerular)',
+      'Proteinuria significant? (glomerular vs tubular vs overflow)',
+      'Casts present? (RBC → GN, WBC → pyelo, granular → ATN)',
+      'Crystalluria? (stone risk, ethylene glycol, uric acid)',
+    ],
+  },
+  'Blood Film': {
+    name: 'Blood Film (Peripheral Blood Smear)',
+    purpose: 'RBC/WBC/platelet morphology assessment, parasite detection, leukaemia/lymphoma screening',
+    sections: [
+      { label: 'RBC Morphology', icon: '🔴', analytes: [
+        { name: 'RBC Morphology', unit: '', refRange: 'Normocytic, normochromic', lowLabel: '—', highLabel: 'See description' },
+        { name: 'Anisocytosis', unit: '', refRange: 'Minimal', lowLabel: '—', highLabel: 'IDA/B12/folate/myelodysplasia' },
+        { name: 'Poikilocytosis', unit: '', refRange: 'Minimal', lowLabel: '—', highLabel: 'Sickle/thal/MAHA/myelofibrosis' },
+        { name: 'Hypochromasia', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Iron deficiency/thalassaemia' },
+        { name: 'Polychromasia', unit: '', refRange: 'Minimal', lowLabel: '—', highLabel: 'Haemolysis/reticulocytosis' },
+        { name: 'Nucleated RBCs', unit: '/100WBC', refRange: '0', lowLabel: '—', highLabel: 'Marrow infiltration/haemolysis/severe hypoxia' },
+        { name: 'RBC Inclusions', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Howell-Jolly (hyposplenism), Basophilic stippling (lead/thal), Pappenheimer (sideroblastic)' },
+        { name: 'Parasites Seen', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Malaria (P.falciparum/vivax/ovale/malariae), Babesia' },
+      ]},
+      { label: 'WBC Morphology', icon: '⚪', analytes: [
+        { name: 'WBC Morphology', unit: '', refRange: 'Normal maturation', lowLabel: '—', highLabel: 'See description' },
+        { name: 'Blast Cells', unit: '%', refRange: '0', lowLabel: '—', highLabel: 'Acute leukaemia (AML/ALL)' },
+        { name: 'Band Forms', unit: '%', refRange: '0-5', lowLabel: '—', highLabel: 'Left shift (infection/inflammation)' },
+        { name: 'Atypical Lymphocytes', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'EBV/CMV/viral infection' },
+        { name: 'Dohle Bodies', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Infection/inflammation/sepsis' },
+        { name: 'Toxic Granulation', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Bacterial infection/sepsis' },
+      ]},
+      { label: 'Platelet Morphology', icon: '🩸', analytes: [
+        { name: 'Platelet Estimate', unit: '/uL', refRange: '150-400', lowLabel: 'Thrombocytopenia (ITP/TTP/DIC/marrow)', highLabel: 'Thrombocytosis (reactive/myeloproliferative)' },
+        { name: 'Clumps', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'EDTA-dependent pseudothrombocytopenia' },
+        { name: 'Giant Platelets', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Immune destruction/BM recovery/BSS' },
+      ]},
+    ],
+    interpretationQuestions: [
+      'RBC abnormalities? (haemolysis/IDA/thalassaemia/sickle)',
+      'White cell abnormality? (leukaemia/left shift/atypical)',
+      'Platelet count and morphology?',
+      'Malaria or other parasites seen?',
+      'Blast cells present → acute leukaemia?',
+    ],
+  },
+  'Chest X-Ray (PA/AP)': {
+    name: 'Chest X-Ray (PA/AP)',
+    purpose: 'Chest radiograph interpretation for cardiopulmonary pathology',
+    sections: [
+      { label: 'Technique & Quality', icon: '📐', analytes: [
+        { name: 'Projection', unit: '', refRange: 'PA/AP/Lateral', lowLabel: '—', highLabel: '—' },
+        { name: 'Rotation', unit: '', refRange: 'None/minimal', lowLabel: '—', highLabel: 'Significant (limits assessment)' },
+        { name: 'Inspiration', unit: '', refRange: 'Adequate', lowLabel: '—', highLabel: 'Poor (crowding, pseudo-cardiomegaly)' },
+        { name: 'Penetration', unit: '', refRange: 'Adequate', lowLabel: 'Over-penetrated', highLabel: 'Under-penetrated' },
+      ]},
+      { label: 'Airways & Lungs', icon: '🫁', analytes: [
+        { name: 'Trachea', unit: '', refRange: 'Central', lowLabel: '—', highLabel: 'Deviated (tension PTX/thyroid/mass)' },
+        { name: 'Lung Fields', unit: '', refRange: 'Clearly aerated', lowLabel: '—', highLabel: 'Consolidation/effusion/mass/nodule/cavity' },
+        { name: 'Bronchovascular Markings', unit: '', refRange: 'Normal', lowLabel: '—', highLabel: 'Prominent (pulmonary oedema/fibrosis)' },
+        { name: 'Pleura', unit: '', refRange: 'Clear', lowLabel: '—', highLabel: 'Effusion/pneumothorax/pleural thickening' },
+      ]},
+      { label: 'Cardiomediastinum', icon: '❤️', analytes: [
+        { name: 'Cardiac Silhouette', unit: '', refRange: 'Normal size/shape', lowLabel: '—', highLabel: 'Cardiomegaly/pericardial effusion' },
+        { name: 'Mediastinal Width', unit: '', refRange: 'Normal', lowLabel: '—', highLabel: 'Wide (aortic dissection/lymphadenopathy/mass)' },
+        { name: 'Aorta', unit: '', refRange: 'Normal calibre', lowLabel: '—', highLabel: 'Tortuous/aneurysmal/calcified' },
+        { name: 'Hilar Regions', unit: '', refRange: 'Normal', lowLabel: '—', highLabel: 'Prominent (lymphadenopathy/PA hypertension/mass)' },
+      ]},
+      { label: 'Bones & Soft Tissues', icon: '🦴', analytes: [
+        { name: 'Ribs', unit: '', refRange: 'Intact', lowLabel: '—', highLabel: 'Fracture/lytic lesion/notching' },
+        { name: 'Thoracic Spine', unit: '', refRange: 'Normal alignment', lowLabel: '—', highLabel: 'Fracture/osteoporosis/scoliosis' },
+        { name: 'Clavicles', unit: '', refRange: 'Intact', lowLabel: '—', highLabel: 'Fracture/erosion' },
+        { name: 'Soft Tissues', unit: '', refRange: 'Normal', lowLabel: '—', highLabel: 'Subcutaneous emphysema/surgical emphysema' },
+      ]},
+    ],
+    interpretationQuestions: [
+      'Normal study? Abnormalities identified?',
+      'Consolidation → pneumonia? (lobar/broncho/interstitial)',
+      'Pleural effusion? Pneumothorax?',
+      'Cardiomegaly? Pulmonary oedema? (heart failure)',
+      'Mass/nodule/cavity → neoplasm/TB?',
+    ],
+  },
+  '12-Lead ECG': {
+    name: '12-Lead ECG',
+    purpose: 'Cardiac rhythm, ischaemia, conduction abnormalities, chamber enlargement',
+    sections: [
+      { label: 'Rhythm & Rate', icon: '📈', analytes: [
+        { name: 'Rhythm', unit: '', refRange: 'Normal sinus rhythm', lowLabel: '—', highLabel: 'AF/flutter/sinus tach/brady/paced/junctional/VT' },
+        { name: 'Ventricular Rate', unit: 'bpm', refRange: '60-100', lowLabel: 'Bradycardia (sinus/block/fib), symptomatic?', highLabel: 'Tachycardia (sinus/arrhythmia), symptomatic?', criticalLow: 40, criticalHigh: 150 },
+        { name: 'PR Interval', unit: 'ms', refRange: '120-200', lowLabel: 'Pre-excitation (WPW)', highLabel: '1st-degree AV block' },
+        { name: 'QRS Duration', unit: 'ms', refRange: '80-120', lowLabel: '—', highLabel: 'BBB/IVCD/ventricular rhythm/paced' },
+        { name: 'QT Interval', unit: 'ms', refRange: '<440', lowLabel: '—', highLabel: 'Long QT (drugs/electrolytes/genetic)' },
+        { name: 'QTc (Bazett)', unit: 'ms', refRange: '<450 (M), <460 (F)', lowLabel: '—', highLabel: 'Long QT (torsade risk)', criticalHigh: 500 },
+      ]},
+      { label: 'Axis & Morphology', icon: '🧭', analytes: [
+        { name: 'P Wave Morphology', unit: '', refRange: 'Normal', lowLabel: '—', highLabel: 'P mitrale (LAE), P pulmonale (RAE)' },
+        { name: 'R Axis', unit: 'deg', refRange: '-30 to +90', lowLabel: 'Left axis (LAFB/inferior MI/COPD)', highLabel: 'Right axis (RVH/PE/lateral MI)' },
+        { name: 'T Wave Morphology', unit: '', refRange: 'Normal upright', lowLabel: '—', highLabel: 'Inversion (ischaemia/strain/BBB/PE)' },
+        { name: 'ST Segment', unit: '', refRange: 'Isoelectric', lowLabel: '—', highLabel: 'Elevation (STEMI/pericarditis/BER) or depression (ischaemia/strain/digoxin)' },
+        { name: 'Pathological Q Waves', unit: '', refRange: 'None', lowLabel: '—', highLabel: 'Prior MI/hypertrophic cardiomyopathy' },
+      ]},
+      { label: 'Chamber Enlargement', icon: '❤️', analytes: [
+        { name: 'Left Ventricular Hypertrophy', unit: '', refRange: 'No (Sokolow-Lyon <35)', lowLabel: '—', highLabel: 'LVH (hypertension/aortic stenosis/HCM)' },
+        { name: 'Right Ventricular Hypertrophy', unit: '', refRange: 'No', lowLabel: '—', highLabel: 'RVH (PA hypertension/PE/valvular)' },
+        { name: 'Left Atrial Enlargement', unit: '', refRange: 'No', lowLabel: '—', highLabel: 'LAE (mitral valve/HFpEF/AF)' },
+        { name: 'Right Atrial Enlargement', unit: '', refRange: 'No', lowLabel: '—', highLabel: 'RAE (tricuspid/PA hypertension/PE)' },
+      ]},
+    ],
+    interpretationQuestions: [
+      'Normal sinus rhythm? Arrhythmia identified?',
+      'ST changes → ischaemia/infarct? (STEMI vs NSTEMI vs old)',
+      'Conduction abnormality? (BBB/AV block/fascicular)',
+      'QT prolongation → torsade risk?',
+      'Chamber enlargement/hypertrophy?',
+    ],
+  },
 };
-
 /** Map of panel names → their individual component analytes (computed from definitions) */
 export const PANEL_COMPONENTS: Record<string, string[]> = {};
 for (const [name, def] of Object.entries(PANEL_DEFINITIONS)) {
   PANEL_COMPONENTS[name] = def.sections.flatMap(s => s.analytes.map(a => a.name));
 }
 
-/** Additional panels not in PANEL_DEFINITIONS (legacy/test-only panels) */
-PANEL_COMPONENTS['Arterial Blood Gas (ABG)'] = ['pH', 'pCO2', 'pO2', 'HCO3', 'Base Excess', 'Lactate', 'O2 Saturation'];
-PANEL_COMPONENTS['Iron Studies'] = ['Serum Ferritin', 'Serum Iron', 'TIBC', 'Transferrin Saturation', 'UIBC'];
+/** Additional panels not in PANEL_DEFINITIONS (legacy/test-only panels — Calcium & Phosphate is not a full panel yet) */
 PANEL_COMPONENTS['Calcium & Phosphate'] = ['Calcium', 'Phosphate', 'Corrected Calcium'];
-PANEL_COMPONENTS['Urinalysis + Microscopy'] = ['Color', 'Appearance', 'Specific Gravity', 'pH', 'Protein', 'Glucose', 'Ketones', 'Blood', 'Leukocytes', 'Nitrites', 'Urobilinogen', 'Bilirubin', 'Casts', 'Crystals', 'Bacteria', 'Epithelial Cells'];
-PANEL_COMPONENTS['Blood Film'] = ['RBC Morphology', 'WBC Morphology', 'Platelet Estimate', 'Parasites Seen'];
 
 /** Known panels (keys of PANEL_COMPONENTS) */
 export const PANEL_NAMES = Object.keys(PANEL_COMPONENTS);

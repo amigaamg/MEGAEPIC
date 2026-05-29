@@ -1,0 +1,75 @@
+import type { DepartmentDefinition } from './index';
+
+export const criticalCare: DepartmentDefinition = {
+  id: 'ICU',
+  name: 'Critical Care / Intensive Care',
+  shortName: 'ICU',
+  description: 'Management of critically ill patients with life-threatening organ dysfunction requiring intensive monitoring, organ support and advanced interventions.',
+  icon: '💓',
+  color: '#e11d48',
+  sections: [
+    {
+      id: 'respiratory-support',
+      name: 'Respiratory Support',
+      description: 'Invasive and non-invasive mechanical ventilation, oxygenation strategies',
+      diseaseCategories: ['ARDS', 'Mechanical ventilation', 'Non-invasive ventilation', 'Prone positioning', 'ECMO', 'Tracheostomy management', 'Weaning from ventilation'],
+    },
+    {
+      id: 'haemodynamic',
+      name: 'Haemodynamic Monitoring & Support',
+      description: 'Circulatory support and haemodynamic optimisation',
+      diseaseCategories: ['Septic shock', 'Cardiogenic shock', 'Hypovolaemic shock', 'Distributive shock', 'Vasopressor therapy', 'Inotrope therapy', 'Goal-directed therapy', 'Pulmonary artery catheterisation'],
+    },
+    {
+      id: 'neurological-icu',
+      name: 'Neurological Intensive Care',
+      description: 'Neurocritical care including raised ICP and post-neurosurgical care',
+      diseaseCategories: ['Traumatic brain injury', 'Intracranial hypertension', 'Subarachnoid haemorrhage', 'Status epilepticus', 'Post-neurosurgical monitoring', 'Neuroprotective strategies'],
+    },
+    {
+      id: 'renal-icu',
+      name: 'Renal Critical Care',
+      description: 'Acute kidney injury management and renal replacement in ICU',
+      diseaseCategories: ['AKI in critical illness', 'Continuous renal replacement therapy', 'Sustained low-efficiency dialysis', 'Fluid overload management', 'Electrolyte derangements'],
+    },
+    {
+      id: 'infectious-icu',
+      name: 'Infectious Disease in Critical Care',
+      description: 'Severe infections and sepsis management in ICU',
+      diseaseCategories: ['Severe sepsis', 'Septic shock', 'Ventilator-associated pneumonia', 'Catheter-related bloodstream infection', 'Invasive fungal infection', 'Multi-drug resistant organisms'],
+    },
+    {
+      id: 'metabolic-nutrition',
+      name: 'Metabolic & Nutrition Support',
+      description: 'Metabolic derangements and nutritional support in critical illness',
+      diseaseCategories: ['Enteral nutrition', 'Parenteral nutrition', 'Stress hyperglycaemia', 'Adrenal insufficiency in critical illness', 'Electrolyte repletion', 'Acid-base disorders'],
+    },
+    {
+      id: 'post-operative-icu',
+      name: 'Post-Operative Intensive Care',
+      description: 'High-risk surgical patients requiring ICU admission',
+      diseaseCategories: ['Post-cardiac surgery ICU', 'Post-thoracic surgery ICU', 'Post-major abdominal surgery', 'Post-transplant ICU', 'Post-trauma ICU'],
+    },
+  ],
+  commonSymptoms: [
+    'respiratory_failure', 'hypoxia', 'hypercapnia', 'shock',
+    'hypotension_vasopressor_dependent', 'tachycardia', 'bradycardia',
+    'altered_mental_status', 'coma', 'GCS_low', 'seizures_ICU',
+    'oliguria', 'anuria', 'anuria_aki', 'hyperkalaemia',
+    'metabolic_acidosis', 'lactic_acidosis', 'fever_sepsis',
+    'hypothermia_sepsis', 'coagulopathy', 'bleeding_icu',
+    'delirium', 'agitation', 'ventilator_dyssynchrony',
+    'difficult_weaning', 'fluid_overload', 'pulmonary_oedema',
+    'cardiac_arrhythmia_icu', 'multi_organ_dysfunction',
+  ],
+  commonInvestigations: [
+    'Arterial blood gas', 'Lactate', 'FBC', 'CRP', 'PCT',
+    'Blood culture', 'U&E', 'Creatinine', 'LFT', 'Magnesium',
+    'Phosphate', 'Calcium', 'Coagulation screen', 'TEG/ROTEM',
+    'Troponin', 'BNP', 'Blood glucose', 'Cortisol',
+    'Chest X-ray daily', 'CT head', 'Echocardiogram',
+    'Central venous pressure', 'Pulse contour analysis',
+    'ScvO2', 'Pulmonary artery catheter parameters',
+    'Bronchoalveolar lavage', 'Urine electrolytes',
+  ],
+};

@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "rectal_prolapse",
+    "name": "Rectal Prolapse",
+    "system": "surgical",
+    "agePeak_months": [480, 960],
+    "note": "Intussusception of the rectal wall through the anal orifice. More common in elderly women. Complete vs mucosal prolapse.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["prolapse", "fecal_incontinence", "constipation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "incarcerated_prolapse", "weight": 8 },
+        { "sign": "strangulated_prolapse", "weight": 9 },
+        { "sign": "gangrene_of_prolapsed_bowel", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "full_thickness_prolapse_reducible", "weight": 5 },
+          { "sign": "ulceration_ischemia", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Incarcerated/strangulated -> SEVERE; reducible prolapse -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "mass_protruding_from_anus", "weight": 5, "note": "Initially with defecation, later with walking or standing" },
+      { "symptomId": "fecal_incontinence", "weight": 4 },
+      { "symptomId": "mucous_discharge", "weight": 3 },
+      { "symptomId": "constipation", "weight": 3 },
+      { "symptomId": "rectal_bleeding", "weight": 2 },
+      { "symptomId": "tenesmus", "weight": 2 },
+      { "symptomId": "sensation_of_incomplete_evacuation", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "full_thickness_rectal_prolapse_on_straining", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "mucosal_prolapse", "baseWeight": 3 },
+      { "signId": "patulous_anus", "baseWeight": 3 },
+      { "signId": "sphincter_tone_decreased", "baseWeight": 3 },
+      { "signId": "concentric_rings_of_mucosa", "baseWeight": 4, "note": "Full thickness prolapse has concentric rings" },
+      { "signId": "ulceration_of_prolapsed_mucosa", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 3.0 },
+      { "id": "female_gender", "multiplier": 5.0 },
+      { "id": "multiparity", "multiplier": 3.0 },
+      { "id": "chronic_constipation", "multiplier": 2.0 },
+      { "id": "previous_pelvic_surgery", "multiplier": 1.5 },
+      { "id": "cystocele_enterocele", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mucosal_prolapse",
+        "name": "Mucosal Prolapse",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "protruding_mucosa_only", "weight": 5 },
+          { "feature": "no_muscular_layer", "weight": 5 },
+          { "feature": "radial_lines_on_surface", "weight": 3 }
+        ],
+        "management": "High fiber diet. Stool softeners. Injection sclerotherapy. Mucosal banding. Mucosal hemorrhoidectomy (Delorme procedure for short segment)."
+      },
+      {
+        "id": "full_thickness_prolapse",
+        "name": "Full-Thickness Rectal Prolapse",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "all_rectal_layers_protruding", "weight": 5 },
+          { "feature": "concentric_rings_of_mucosa", "weight": 5 },
+          { "feature": "prolapse_segment_more_than_3cm", "weight": 4 }
+        ],
+        "management": "Perineal approaches (for elderly/frail): Delorme procedure, Altemeier perineal rectosigmoidectomy. Abdominal approaches (for fit patients): Laparoscopic ventral rectopexy, Resection rectopexy (Frykman-Goldberg), Sacral colpopexy if combined prolapse."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "prolapsing_hemorrhoids",
+        "discriminators": ["cushion_like_appearance", "multiple_lumps", "bleeding_more_common", "no_concentric_rings"]
+      },
+      {
+        "diseaseId": "rectal_polyp_prolapse",
+        "discriminators": ["solitary_polypoid_lesion", "pedunculated", "single_mass_not_circumferential"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Straining examination", "priority": "immediate", "yield": 0.9, "indication": "ask patient to strain as if defecating" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "low", "yield": 0.1, "indication": "rarely indicated" }
+      ],
+      "imaging": [
+        { "name": "Defecating Proctogram", "priority": "high", "yield": 0.85, "indication": "dynamic assessment of pelvic floor and prolapse" },
+        { "name": "Pelvic MRI", "priority": "medium", "yield": 0.8, "indication": "assess pelvic floor anatomy" },
+        { "name": "Colonoscopy", "priority": "high", "yield": 0.5, "indication": "rule out colonic pathology, assess for solitary rectal ulcer" },
+        { "name": "Anorectal Manometry", "priority": "medium", "yield": 0.6, "indication": "assess sphincter function" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASCRS Practice Parameters for Rectal Prolapse",
+      "pathways": [
+        {
+          "severity": "mucosal prolapse",
+          "criteria": "limited mucosal protrusion, no full thickness",
+          "treatment": "Delorme procedure. Injection sclerotherapy. Sitz baths. Stool softeners."
+        },
+        {
+          "severity": "full-thickness (fit patient)",
+          "criteria": "full thickness prolapse, medically fit for abdominal surgery",
+          "treatment": "Laparoscopic ventral rectopexy (LVR). Resection rectopexy (Frykman-Goldberg). Sacral colpopexy if concomitant vaginal prolapse."
+        },
+        {
+          "severity": "full-thickness (frail patient)",
+          "criteria": "full thickness prolapse, elderly, multiple comorbidities",
+          "treatment": "Altemeier perineal rectosigmoidectomy. Delorme procedure."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "pelvic_floor_weakness",
+      "levator_ani_diastasis",
+      "loss_of_normal_rectal_attachment",
+      "deep_pouch_of_douglas",
+      "intussusception_of_rectal_wall",
+      "full_thickness_protrusion"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "incarcerated_prolapse",
+        "probability": 0.1,
+        "lagDays": [0, 30],
+        "severityBoost": 0.4,
+        "clues": ["irreducible_painful_mass", "edematous_mucosa", "ischemic_changes"]
+      },
+      {
+        "diseaseId": "strangulated_prolapse",
+        "probability": 0.03,
+        "lagDays": [0, 5],
+        "severityBoost": 0.5,
+        "clues": ["black_dusky_mucosa", "severe_pain", "gangrene", "sepsis"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["mass_protruding_from_anus", "concentric_mucosal_rings", "worse_with_straining", "reduces_manually"],
+    "exclusionClues": ["solitary_lump", "bleeding_primary", "hemorrhoidal_cushions"]
+  }
+}

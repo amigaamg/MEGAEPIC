@@ -1,0 +1,133 @@
+{
+  "disease": {
+    "id": "cancer_pain_management",
+    "name": "Cancer Pain Management",
+    "system": "ONCO",
+    "agePeak_months": [360, 960],
+    "note": "Multidimensional pain in cancer patients. WHO analgesic ladder guides stepped approach. 70-90% of patients can achieve adequate relief.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["palliative_care", "symptom_management", "pain"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "uncontrolled_severe_pain_emergency", "weight": 10 },
+        { "sign": "opioid_toxicity_respiratory_depression", "weight": 10 },
+        { "sign": "opioid_induced_neurotoxicity_myoclonus", "weight": 8 },
+        { "sign": "spinal_cord_compression", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "NRS 1-3 mild, 4-6 moderate, 7-10 severe."
+    },
+    "historyFeatures": [
+      { "symptomId": "pain_location_quality_severity", "weight": 5 },
+      { "symptomId": "pain_timing_constant_breakthrough", "weight": 4 },
+      { "symptomId": "pain_worsening_factors", "weight": 3 },
+      { "symptomId": "pain_relieving_factors", "weight": 3 },
+      { "symptomId": "prior_analgesic_history", "weight": 4 },
+      { "symptomId": "side_effects_constipation_nausea", "weight": 3 },
+      { "symptomId": "impact_on_sleep_function_quality_of_life", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "facial_expression_of_pain", "baseWeight": 3 },
+      { "signId": "guarding_splinting", "baseWeight": 2 },
+      { "signId": "tenderness_localized", "baseWeight": 3 },
+      { "signId": "neurological_exam_for_neuropathic_pain", "baseWeight": 3 },
+      { "signId": "signs_of_opioid_toxicity_pinpoint_pupils", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "advanced_cancer_stage", "multiplier": 3.0 },
+      { "id": "bone_metastases", "multiplier": 2.5 },
+      { "id": "nerve_involvement_plexopathy", "multiplier": 2.0 },
+      { "id": "prior_opioid_tolerance", "multiplier": 1.5 },
+      { "id": "substance_abuse_history", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "nociceptive_somatic_pain",
+        "name": "Nociceptive Somatic Pain",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "well_localized", "weight": 4 },
+          { "feature": "aching_boring_pressure", "weight": 4 },
+          { "feature": "responds_to_nsaids_opioids", "weight": 5 }
+        ],
+        "management": "NSAIDs + non-opioid analgesics (WHO Step 1). Weak opioids (codeine, tramadol) (Step 2). Strong opioids (morphine, oxycodone) (Step 3). Adjuvant therapies (bisphosphonates for bone pain, RT)."
+      },
+      {
+        "id": "nociceptive_visceral_pain",
+        "name": "Nociceptive Visceral Pain",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "poorly_localized", "weight": 4 },
+          { "feature": "cramping_gnawing_pressure", "weight": 3 },
+          { "feature": "referred_pain_patterns", "weight": 3 },
+          { "feature": "nausea_sweating_associated", "weight": 3 }
+        ],
+        "management": "Opioids (morphine, oxycodone, hydromorphone). Consider celiac plexus block for pancreatic cancer. Palliative RT. Corticosteroids for inflammatory component."
+      },
+      {
+        "id": "neuropathic_pain",
+        "name": "Neuropathic Cancer Pain",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "burning_shooting_electric", "weight": 5 },
+          { "feature": "allodynia_hyperalgesia", "weight": 4 },
+          { "feature": "numbness_tingling", "weight": 3 },
+          { "feature": "nerve_compression_or_infiltration", "weight": 4 }
+        ],
+        "management": "Adjuvant analgesics: gabapentinoids (gabapentin, pregabalin), tricyclic antidepressants (amitriptyline), SNRIs (duloxetine). Opioids often needed. Nerve blocks. Palliative RT. Ketamine infusion for refractory cases."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "opioid_induced_hyperalgesia", "discriminators": ["worsening_pain_with_increasing_opioids", "diffuse_pain_unrelated_to_tumor", "hyperalgesia_allodynia"] },
+      { "diseaseId": "medication_overuse_headache", "discriminators": ["primary_headache_history", "temporal_relationship_to_analgesic_dosing", "withdrawal_improvement"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pain assessment (NRS/VAS scale)", "priority": "immediate", "yield": 0.95, "indication": "severity quantification" },
+        { "name": "Pain diary", "priority": "high", "yield": 0.8, "indication": "baseline and breakthrough patterns" },
+        { "name": "ESAS (Edmonton Symptom Assessment System)", "priority": "high", "yield": 0.85, "indication": "multidimensional symptom screening" }
+      ],
+      "imaging": [
+        { "name": "Targeted imaging (CT/MRI) to identify cause", "priority": "as_clinically_indicated", "yield": 0.7, "indication": "identify cause of pain (fracture, compression, infiltration)" }
+      ]
+    },
+    "management": {
+      "protocolReference": "WHO Analgesic Ladder / NCCN Adult Cancer Pain Guidelines",
+      "pathways": [
+        {
+          "severity": "mild pain (NRS 1-3)",
+          "criteria": "pain does not interfere with function",
+          "treatment": "Non-opioid analgesics (acetaminophen, NSAIDs). Consider adjuvants. Reassess regularly."
+        },
+        {
+          "severity": "moderate pain (NRS 4-6)",
+          "criteria": "pain interferes with function",
+          "treatment": "Weak opioids (tramadol, codeine) or low-dose strong opioids. Continue non-opioids. Add adjuvants if neuropathic. Manage constipation (senna, docusate)."
+        },
+        {
+          "severity": "severe pain (NRS 7-10)",
+          "criteria": "pain severely limits function",
+          "treatment": "Strong opioids (morphine, oxycodone, hydromorphone, fentanyl). Immediate-release for titration. Extended-release for baseline. Breakthrough doses at 1/6 of daily dose. Antiemetics. Laxatives. Adjuvants. Interventional procedures if inadequate."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "tumor_invasion_of_tissue",
+      "nerve_compression_infiltration",
+      "inflammatory_mediators_from_tumor",
+      "bone_destruction_by_osteoclasts",
+      "visceral_distention_obstruction",
+      "central_and_peripheral_sensitization"
+    ],
+    "complications": [
+      { "diseaseId": "opioid_induced_constipation", "probability": 0.6, "severityBoost": 0.1, "clues": ["no_stool_more_than_3_days", "straining", "hard_stool"] },
+      { "diseaseId": "opioid_induced_nausea_vomiting", "probability": 0.3, "severityBoost": 0.1, "clues": ["nausea_starting_after_opioid_initiation", "peaked_at_day_3_to_5"] },
+      { "diseaseId": "opioid_induced_respiratory_depression", "probability": 0.05, "severityBoost": 0.6, "clues": ["respiratory_rate_under_8", "somnolence", "pinpoint_pupils"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["cancer_diagnosis_with_pain", "need_for_structured_analgesic_approach", "breakthrough_pain_patterns", "impact_on_quality_of_life"],
+    "exclusionClues": ["non_cancer_pain as sole issue", "acute_pain_from_treatable_cause (e.g. fracture requiring fixation)"]
+  }
+}

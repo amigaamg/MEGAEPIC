@@ -1,0 +1,135 @@
+{
+  "disease": {
+    "id": "als",
+    "name": "Amyotrophic Lateral Sclerosis",
+    "system": "NEURO",
+    "agePeak_months": [540, 840],
+    "note": "Progressive neurodegenerative disease affecting both upper and lower motor neurons. Fatal within 2-5 years typically.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["motor_neuron_disease", "neurodegenerative"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "severe_dysphagia_aspiration", "weight": 9 },
+        { "sign": "acute_decompensation", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If respiratory failure/aspiration -> EMERGENCY; else -> PROGRESSIVE"
+    },
+    "historyFeatures": [
+      { "symptomId": "progressive_muscle_weakness", "weight": 5 },
+      { "symptomId": "muscle_atrophy_wasting", "weight": 4 },
+      { "symptomId": "fasciculations", "weight": 4 },
+      { "symptomId": "cramps", "weight": 3 },
+      { "symptomId": "dysarthria_slurred_speech", "weight": 3 },
+      { "symptomId": "dysphagia", "weight": 3 },
+      { "symptomId": "respiratory_insufficiency", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "upper_motor_neuron_signs", "baseWeight": 5, "note": "Hyperreflexia, spasticity, Babinski, clonus" },
+      { "signId": "lower_motor_neuron_signs", "baseWeight": 5, "note": "Atrophy, fasciculations, weakness, hyporeflexia in same limb" },
+      { "signId": "bulbar_signs", "baseWeight": 4 },
+      { "signId": "respiratory_muscle_weakness", "baseWeight": 4 },
+      { "signId": "preserved_eye_movements_and_sphincters", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "age_40_to_70", "multiplier": 2.0 },
+      { "id": "family_history_als", "multiplier": 5.0 },
+      { "id": "c9orf72_mutation", "multiplier": 5.0 },
+      { "id": "male_sex", "multiplier": 1.5 },
+      { "id": "military_service_exposure", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.3 }
+    ],
+    "subtypes": [
+      {
+        "id": "spinal_onset_als",
+        "name": "Spinal (Limb) Onset ALS",
+        "prevalenceModifier": 0.65,
+        "keyFeatures": [
+          { "feature": "limb_weakness_as_first_symptom", "weight": 5 },
+          { "feature": "spreads_to_other_regions", "weight": 4 }
+        ],
+        "management": "Riluzole 50 mg BD (prolongs survival 2-3 months). Multidisciplinary care. Supportive: PT, OT, speech, respiratory. NIPPV when FVC <80%."
+      },
+      {
+        "id": "bulbar_onset_als",
+        "name": "Bulbar Onset ALS",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "dysarthria_and_dysphagia_first", "weight": 5 },
+          { "feature": "pseudobulbar_affect", "weight": 4 }
+        ],
+        "management": "Riluzole. Speech therapy, AAC devices. PEG tube when dysphagia significant. NIPPV. Poorer prognosis than limb onset."
+      },
+      {
+        "id": "primary_lateral_sclerosis",
+        "name": "Primary Lateral Sclerosis (UMN-predominant)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "pure_umn_signs", "weight": 5 },
+          { "feature": "slower_progression", "weight": 4 }
+        ],
+        "management": "Riluzole (may benefit). Symptomatic: baclofen or tizanidine for spasticity. Supportive care."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "multifocal_motor_neuropathy", "discriminators": ["pure_lmn", "conduction_block", "anti_gm1_antibodies", "ivig_response"] },
+      { "diseaseId": "cervical_myelopathy", "discriminators": ["sensory_symptoms", "neck_pain", "cervical_stenosis_mri", "no_bulbar"] },
+      { "diseaseId": "myasthenia_gravis", "discriminators": ["fluctuating_weakness", "fatigability", "ocular_diplopia_ptosis", "edrophonium_test"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Pulmonary function tests (FVC, FEV1)", "priority": "baseline_and_serial", "yield": 0.8, "indication": "respiratory status monitoring" }
+      ],
+      "laboratory": [
+        { "name": "CK level", "priority": "medium", "yield": 0.4, "indication": "mildly elevated in ALS, excludes myopathy" },
+        { "name": "Genetic testing (C9orf72, SOD1, TARDBP, FUS)", "priority": "medium", "yield": 0.2, "indication": "familial ALS" }
+      ],
+      "imaging": [
+        { "name": "MRI Brain and Spine", "priority": "high", "yield": 0.3, "indication": "exclude structural lesions, myelopathy" }
+      ],
+      "advanced": [
+        { "name": "EMG/NCS", "indication": "gold standard: active denervation, reinnervation, normal SNAPs", "priority": "high" },
+        { "name": "Muscle biopsy", "indication": "only in atypical cases", "priority": "low" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Motor Neurone Disease",
+      "pathways": [
+        {
+          "severity": "early",
+          "criteria": "mild weakness, independent, FVC >80%",
+          "treatment": "Riluzole 50 mg BD. Multidisciplinary referral (neurologist, PT, OT, speech therapist, dietitian, respiratory physician). Advance care planning. Symptom management."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "progressive weakness, some dependence, FVC 50-80%",
+          "treatment": "NIPPV (bilevel) initiation. PEG tube insertion if dysphagia/weight loss. Symptom management: sialorrhea (glycopyrrolate, botox), spasticity (baclofen, tizanidine), cramps (quinine, magnesium)."
+        },
+        {
+          "severity": "advanced",
+          "criteria": "severe weakness, full dependence in ADLs, FVC <50%, dysphagia",
+          "treatment": "Full-time NIPPV (consider tracheostomy ventilation if appropriate). PEG feeding. Palliative care. Opioids for dyspnea. Terminal care plan. Anticipatory medications."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "motor_neuron_degeneration",
+      "tdp_43_aggregation",
+      "glutamate_excitotoxicity",
+      "oxidative_stress",
+      "mitochondrial_dysfunction",
+      "neuroinflammation",
+      "axonal_transport_deficit"
+    ],
+    "complications": [
+      { "diseaseId": "respiratory_failure", "probability": 0.8, "severityBoost": 0.5, "clues": ["orthopnea", "nocturnal_hypoventilation", "morning_headache"] },
+      { "diseaseId": "aspiration_pneumonia", "probability": 0.3, "severityBoost": 0.3, "clues": ["coughing_during_meals", "fever", "consolidation"] },
+      { "diseaseId": "malnutrition", "probability": 0.2, "severityBoost": 0.2, "clues": ["weight_loss", "dysphagia"] }
+    ],
+    "mustNotMiss": false,
+    "diagnosticClues": ["combined_umn_and_lmn_signs", "progressive_course", "emg_denervation", "excluded_mimics"],
+    "exclusionClues": ["pure_lmn_syndrome_with_conduction_block", "sensory_signs", "mg_fluctuations"]
+  }
+}

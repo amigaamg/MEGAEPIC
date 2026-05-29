@@ -1,0 +1,163 @@
+{
+  "disease": {
+    "id": "antibiotic_drug_interactions",
+    "name": "Antibiotic Drug-Drug Interactions",
+    "system": "PHARM",
+    "agePeak_months": [12, 960],
+    "note": "Antibiotics commonly interact with warfarin (INR elevation), oral contraceptives (failure risk), anticonvulsants, immunosuppressants, and antiarrhythmics. Macrolides and fluoroquinolones prolong QTc. Rifampin induces CYP450 causing widespread subtherapeutic levels of many drugs.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["drug_drug_interaction", "antibiotic_management", "CYP_metabolism"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "torsades_de_pointes", "weight": 10 },
+        { "sign": "serotonin_syndrome_maoi_linezolid", "weight": 9 },
+        { "sign": "warfarin_inr_gt_6_with_bleeding", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "qtc_gt_500_ms_on_qtc_prolonging_antibiotics", "weight": 8 },
+          { "sign": "immunosuppressant_level_trough_significantly_altered", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If torsades/INR >6 -> CRITICAL; if interaction requiring monitoring -> NON-EMERGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "warfarin_therapy_plus_antibiotic_started", "weight": 5, "modifiers": [
+          { "condition": "broad_spectrum_or_azole_antifungal", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "qtc_prolonging_antibiotics_macrolide_fq", "weight": 4 },
+      { "symptomId": "transplant_on_calcineurin_inhibitor", "weight": 5 },
+      { "symptomId": "maoi_or_ssri_plus_linezolid", "weight": 5 }
+    ],
+    "examFeatures": [
+      { "signId": "inr_elevation_post_antibiotic", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "qtc_prolongation_ecg", "baseWeight": 4 },
+      { "signId": "drug_level_subtherapeutic_or_supratherapeutic", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_65", "multiplier": 2.0 },
+      { "id": "renal_or_hepatic_impairment", "multiplier": 2.5 },
+      { "id": "polypharmacy_gt_5", "multiplier": 2.0 },
+      { "id": "known_cyp2c9_polymorphism", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "warfarin_antibiotic",
+        "name": "Warfarin + Antibiotic Interaction",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "broad_spectrum_antibiotics_reduce_gi_flora_vitamin_k", "weight": 5 },
+          { "feature": "azole_antifungals_inhibit_cyp2c9", "weight": 5 },
+          { "feature": "cephalosporins_macrolides_fluoroquinolones_affect_inr", "weight": 4 },
+          { "feature": "rifampin_decreases_warfarin_level", "weight": 4 },
+          { "feature": "inr_monitoring_within_3_days", "weight": 4 }
+        ],
+        "management": "Check INR within 2-3 days of starting antibiotic. Reduce warfarin dose by 10-20% for most antibiotics (except rifampin which requires increase). Increase monitoring frequency during treatment."
+      },
+      {
+        "id": "qtc_prolonging_antibiotics",
+        "name": "QTc Prolongation with Antibiotics",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "macrolides_azithromycin_clarithromycin", "weight": 5 },
+          { "feature": "fluoroquinolones_levofloxacin_moxifloxacin", "weight": 5 },
+          { "feature": "azole_antifungals_ketoconazole", "weight": 4 },
+          { "feature": "concomitant_qtc_prolonging_drugs", "weight": 4 },
+          { "feature": "hypokalemia_or_hypomagnesemia_worsens", "weight": 3 }
+        ],
+        "management": "ECG before and during therapy if risk factors. Avoid combination of multiple QTc prolonging drugs. Correct K+ and Mg2+. Prefer azithromycin (less QTc effect) over erythromycin. Discontinue if QTc >500ms."
+      },
+      {
+        "id": "rifampin_interactions",
+        "name": "Rifampin (Potent CYP Inducer)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "induces_cyp3a4_2c9_2c19_1a2", "weight": 5 },
+          { "feature": "decreases_oral_contraceptive_efficacy", "weight": 5 },
+          { "feature": "decreases_calcineurin_inhibitor_levels", "weight": 5 },
+          { "feature": "decreases_anticoagulant_effect_warfarin", "weight": 4 },
+          { "feature": "decreases_hiv_arv_pi_levels", "weight": 4 }
+        ],
+        "management": "Adjust concomitant drug doses (increase often needed by 50-200%). Use alternative rifabutin if fewer interactions. Oral contraceptives require backup method. Monitor drug levels for tacrolimus/cyclosporine."
+      },
+      {
+        "id": "linezolid_serotonin_syndrome",
+        "name": "Linezolid + Serotonergic Drugs (Serotonin Syndrome)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "maoi_activity_of_linezolid", "weight": 5 },
+          { "feature": "sSRI_sNRI_maoi_triptan_interaction", "weight": 5 },
+          { "feature": "symptoms_agitation_hyperthermia_clonus", "weight": 5 },
+          { "feature": "onset_hours_to_days", "weight": 4 }
+        ],
+        "management": "Linezolid is contraindicated with MAOIs, SSRIs, SNRIs, TCAs, and triptans unless urgent/alternatives not available. If coadministration unavoidable: lowest linezolid dose, monitor for serotonin toxicity q4h, hold serotonergic drug if symptoms develop."
+      }
+    ],
+    "mimics": [],
+    "investigations": {
+      "bedside": [
+        { "name": "ECG for QTc assessment", "priority": "high", "yield": 0.6, "indication": "if on QTc-prolonging antibiotics with risk factors" }
+      ],
+      "laboratory": [
+        { "name": "INR", "priority": "immediate", "yield": 0.8, "indication": "warfarin + antibiotic" },
+        { "name": "Serum creatinine/eGFR", "priority": "high", "yield": 0.5, "indication": "renal function for antibiotic dosing" },
+        { "name": "Electrolytes (K, Mg)", "priority": "high", "yield": 0.5, "indication": "QTc risk assessment" },
+        { "name": "Drug levels (tacrolimus, cyclosporine)", "priority": "high", "yield": 0.7, "indication": "rifampin coadministration" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "Stockley's Drug Interactions, Lexicomp Drug Interactions Database",
+      "pathways": [
+        {
+          "severity": "contraindicated",
+          "criteria": "linezolid+MAOI, cisapride+m acrolide, pimozide+macrolide",
+          "treatment": "Do not use combination. Select alternative antibiotic. If unavoidable, monitor closely in hospital setting."
+        },
+        {
+          "severity": "dose_adjustment_needed",
+          "criteria": "warfarin+antibiotic, rifampin+immunosuppressant",
+          "treatment": "Adjust dose of affected drug. Increase monitoring frequency. Plan for re-adjustment when antibiotic stopped."
+        },
+        {
+          "severity": "monitor_only",
+          "criteria": "minor interaction, known and manageable",
+          "treatment": "Continue current doses. Monitor for clinical effect or toxicity. Educate patient on what to watch for."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "cyp450_inhibition_or_induction",
+      "gut_flora_suppression_vitamin_k",
+      "qtc_prolongation_ion_channel_blockade",
+      "maoi_activity",
+      "transport_protein_inhibition"
+    ],
+    "complications": [
+      {
+        "diseaseId": "hemorrhage_warfarin_overdose",
+        "probability": 0.03,
+        "lagDays": [3, 10],
+        "severityBoost": 0.5,
+        "clues": ["inr_gt_5", "anticoagulant_antibiotic_combo"]
+      },
+      {
+        "diseaseId": "transplant_rejection_immunosuppressant_subtherapeutic",
+        "probability": 0.05,
+        "lagDays": [7, 30],
+        "severityBoost": 0.5,
+        "clues": ["rifampin_started", "low_trough_levels"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["antibiotic_initiation_or_change", "concomitant_chronic_medication", "known_interaction_profile"],
+    "exclusionClues": ["no_concomitant_medications", "never_hepatic_metabolized"]
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "disease": {
+    "id": "hemorrhagic_stroke",
+    "name": "Hemorrhagic Stroke (Intracerebral Hemorrhage)",
+    "system": "NEURO",
+    "agePeak_months": [540, 960],
+    "note": "Bleeding into brain parenchyma. High mortality. Hypertension most common cause. Anticoagulation worsens prognosis.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["focal_neurological_deficit", "cerebrovascular_event", "intracranial_hemorrhage"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "decreased_consciousness", "weight": 10 },
+        { "sign": "signs_of_herniation", "weight": 10 },
+        { "sign": "seizures", "weight": 9 },
+        { "sign": "vomiting", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If decreased consciousness/herniation/seizures -> SEVERE; else -> MODERATE"
+    },
+    "historyFeatures": [
+      { "symptomId": "sudden_severe_headache", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "decreased_level_of_consciousness", "weight": 4 },
+      { "symptomId": "focal_neurological_deficit", "weight": 5 },
+      { "symptomId": "hypertension_history", "weight": 4 },
+      { "symptomId": "anticoagulation_therapy", "weight": 4 },
+      { "symptomId": "seizure_at_onset", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "decreased_gcs", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hemiparesis", "baseWeight": 4 },
+      { "signId": "hypertension_sbp_greater_180", "baseWeight": 4 },
+      { "signId": "signs_of_raised_icp", "baseWeight": 4 },
+      { "signId": "focal_signs_consistent_with_bleed_location", "baseWeight": 4 },
+      { "signId": "seizure_activity", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "chronic_hypertension", "multiplier": 3.0 },
+      { "id": "anticoagulation_warfarin_direct", "multiplier": 4.0 },
+      { "id": "cerebral_amyloid_angiopathy", "multiplier": 3.0 },
+      { "id": "advanced_age", "multiplier": 2.0 },
+      { "id": "excessive_alcohol", "multiplier": 2.0 },
+      { "id": "cocaine_use", "multiplier": 3.0 },
+      { "id": "vascular_malformation", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "hypertensive_ich",
+        "name": "Hypertensive Intracerebral Hemorrhage",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "basal_ganglia_thalamus_location", "weight": 5 },
+          { "feature": "chronic_htn", "weight": 5 }
+        ],
+        "management": "BP control (SBP target 140-160). Reverse anticoagulation. Neurosurgery if cerebellar >3 cm or superficial lobar. Supportive care."
+      },
+      {
+        "id": "lobar_ich_amyloid",
+        "name": "Lobar ICH (Cerebral Amyloid Angiopathy)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "peripheral_lobar_location", "weight": 5 },
+          { "feature": "elderly_greater_70", "weight": 4 },
+          { "feature": "multiple_microbleeds_mri", "weight": 4 }
+        ],
+        "management": "BP control. Avoid anticoagulation if possible. Consider surgical evacuation if superficial and large. Recurrence risk high."
+      },
+      {
+        "id": "cerebellar_ich",
+        "name": "Cerebellar Hemorrhage",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "ataxia_vertigo", "weight": 5 },
+          { "feature": "headache_nausea", "weight": 5 },
+          { "feature": "brainstem_compression", "weight": 5 }
+        ],
+        "management": "Urgent neurosurgical evaluation. Surgical evacuation if >3 cm or brainstem compression. External ventricular drain if hydrocephalus."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "ischemic_stroke", "discriminators": ["no_severe_headache", "gradual_onset", "ct_negative_for_blood"] },
+      { "diseaseId": "subarachnoid_hemorrhage", "discriminators": ["thunderclap_headache", "blood_in_cisterns_on_ct", "aneurysm"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Non-contrast CT Head", "priority": "immediate", "yield": 0.98, "indication": "hyperacute blood detection, location, volume" }
+      ],
+      "laboratory": [
+        { "name": "INR, PTT", "priority": "immediate", "yield": 0.8, "indication": "coagulopathy assessment" },
+        { "name": "FBC, platelets", "priority": "immediate", "yield": 0.5, "indication": "thrombocytopenia" },
+        { "name": "Toxicology screen", "priority": "medium", "yield": 0.3, "indication": "cocaine/amphetamine" }
+      ],
+      "imaging": [
+        { "name": "CT Angiography", "priority": "high", "yield": 0.85, "indication": "spot sign (active bleeding), vascular malformation" },
+        { "name": "MRI Brain (GRE/SWI)", "priority": "medium", "yield": 0.95, "indication": "microbleeds, underlying lesion" }
+      ]
+    },
+    "management": {
+      "protocolReference": "AHA/ASA Guidelines for Intracerebral Hemorrhage",
+      "pathways": [
+        {
+          "severity": "all patients",
+          "criteria": "ICH confirmed on CT",
+          "treatment": "ICU admission. BP control: SBP 140-160 (IV labetalol or nicardipine). Reverse anticoagulation (vitamin K + PCC if warfarin; idarucizumab if dabigatran; andexanet if factor Xa). Seizure prophylaxis. ICP monitoring."
+        },
+        {
+          "severity": "surgical candidate",
+          "criteria": "cerebellar >3 cm, superficial lobar >30 mL with GCS 9-12, or brainstem compression",
+          "treatment": "Neurosurgical evacuation. External ventricular drain if intraventricular extension. Decompressive hemicraniectomy if malignant edema."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "arterial_rupture",
+      "hematoma_formation",
+      "mass_effect",
+      "perihematomal_edema",
+      "intracranial_hypertension",
+      "secondary_brain_injury"
+    ],
+    "complications": [
+      { "diseaseId": "intraventricular_extension", "probability": 0.35, "severityBoost": 0.3, "clues": ["blood_in_ventricles_ct", "hydrocephalus"] },
+      { "diseaseId": "herniation", "probability": 0.1, "severityBoost": 0.6, "clues": ["decreased_gcs", "pupillary_asymmetry"] },
+      { "diseaseId": "hematoma_expansion", "probability": 0.2, "severityBoost": 0.4, "clues": ["spot_sign_cta", "worsening_symptoms"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_severe_headache_plus_focal_deficit", "hypertension", "blood_on_ct"],
+    "exclusionClues": ["no_blood_on_ct", "ischemic_pattern"]
+  }
+}

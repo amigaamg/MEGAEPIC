@@ -1,0 +1,172 @@
+{
+  "disease": {
+    "id": "poisoning",
+    "name": "Acute Poisoning / Toxic Ingestion (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [12, 60],
+    "note": "Accidental ingestion common in toddlers. Adolescents - intentional overdose. Commonly implicated: paracetamol, iron, organophosphates, kerosene, cleaning agents.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["toxicology", "pediatric_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrhythmia", "weight": 10 },
+        { "sign": "seizures_status", "weight": 10 },
+        { "sign": "coma_gcs_<8", "weight": 10 },
+        { "sign": "respiratory_depression", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hypotensive_shock", "weight": 8 },
+          { "sign": "severe_metabolic_acidosis", "weight": 7 },
+          { "sign": "hypoxia_refractory", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If coma, seizures, arrhythmia, or respiratory failure -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "known_or_suspected_ingestion", "weight": 5 },
+      { "symptomId": "empty_container_found", "weight": 5 },
+      { "symptomId": "sudden_onset_of_symptoms", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 3 },
+      { "symptomId": "altered_behavior_drowsiness", "weight": 4 },
+      { "symptomId": "abdominal_pain", "weight": 2 },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "age_toddler_or_adolescent", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "altered_consciousness_coma", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "respiratory_depression", "baseWeight": 5 },
+      { "signId": "miosis_or_mydriasis", "baseWeight": 4 },
+      { "signId": "tachycardia_or_bradycardia", "baseWeight": 4 },
+      { "signId": "seizures", "baseWeight": 4 },
+      { "signId": "hypotension_or_hypertension", "baseWeight": 3 },
+      { "signId": "hypothermia", "baseWeight": 3 },
+      { "signId": "chemical_burns_mouth", "baseWeight": 3 },
+      { "signId": "odor_on_breath", "baseWeight": 3, "note": "Kerosene, alcohol, organophosphates" }
+    ],
+
+    "riskFactors": [
+      { "id": "age_1_to_5_years", "multiplier": 4.0 },
+      { "id": "adolescent_15_to_19_years", "multiplier": 2.5 },
+      { "id": "access_to_medications_chemicals", "multiplier": 3.0 },
+      { "id": "depression_suicidal_ideation", "multiplier": 3.0 },
+      { "id": "previous_attempt", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "paracetamol_overdose",
+        "name": "Paracetamol (Acetaminophen) Overdose",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "ingestion_>150_mg_kg", "weight": 5 },
+          { "feature": "nausea_vomiting_initial", "weight": 3 },
+          { "feature": "asymptomatic_latent_period_24h", "weight": 3 },
+          { "feature": "elevated_ast_alt_after_24h", "weight": 5 }
+        ],
+        "management": "Activated charcoal within 1h. N-acetylcysteine (NAC) IV 150 mg/kg over 1h, then 50 mg/kg over 4h, then 100 mg/kg over 16h if toxic level. Monitor LFTs, INR."
+      },
+      {
+        "id": "organophosphate_poisoning",
+        "name": "Organophosphate Poisoning",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "excessive_secretions_salivation_lacrimation", "weight": 5 },
+          { "feature": "miosis", "weight": 5 },
+          { "feature": "muscle_fasciculations_weakness", "weight": 5 },
+          { "feature": "exposure_to_insecticide", "weight": 5 }
+        ],
+        "management": "Atropine 0.05 mg/kg IV q5-15min until secretions dry. Pralidoxime 25-50 mg/kg IV over 30 min. Decontamination. Respiratory support."
+      },
+      {
+        "id": "kerosene_hydrocarbon_ingestion",
+        "name": "Kerosene/Hydrocarbon Ingestion",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "coughing_choking_gagging", "weight": 5 },
+          { "feature": "chemical_pneumonitis", "weight": 5 },
+          { "feature": "kerosene_odor_on_breath", "weight": 4 },
+          { "feature": "vomiting", "weight": 3 }
+        ],
+        "management": "Do NOT induce vomiting (aspiration risk). Oxygen. Observe for 6-12h for pneumonitis. Chest X-ray. Supportive care. Steroids not recommended."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "meningitis_encephalitis",
+        "discriminators": ["fever", "neck_stiffness", "csf_pleocytosis"]
+      },
+      {
+        "diseaseId": "hypoglycemia",
+        "discriminators": ["altered_consciousness", "glucose_<40", "responds_to_dextrose"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECG", "priority": "immediate", "yield": 0.5, "indication": "arrhythmia, QRS/QTc prolongation" }
+      ],
+      "laboratory": [
+        { "name": "Paracetamol level (if suspected)", "priority": "immediate", "yield": 0.9, "indication": "Rumack-Matthew nomogram (4h+ post ingestion)" },
+        { "name": "Blood gas", "priority": "immediate", "yield": 0.6, "indication": "metabolic acidosis" },
+        { "name": "Serum electrolytes", "priority": "high", "yield": 0.4, "indication": "anion gap, electrolyte imbalance" },
+        { "name": "Urine toxicology screen", "priority": "medium", "yield": 0.5, "indication": "identify unknown substance" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "hydrocarbon pneumonitis" },
+        { "name": "Abdominal X-ray", "priority": "medium", "yield": 0.4, "indication": "iron tablets, button batteries (radio-opaque)" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO / AACT Management of Poisoning Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_moderate",
+          "criteria": "Awake, no seizures, no respiratory compromise, stable vitals",
+          "treatment": "Identify substance. Activated charcoal 1 g/kg PO if within 1h of ingestion and no contraindication. Observe. Specific antidote if available. Poison control consultation."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Coma, seizures, arrhythmia, respiratory failure, or specific toxin",
+          "treatment": "ICU admission. Airway management (intubation). ABC stabilization. Specific antidotes (NAC for paracetamol, naloxone for opioids, flumazenil for benzodiazepines, atropine+pralidoxime for OPs). Seizure management. Hemodialysis if toxin dialyzable."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "toxin_absorption", "metabolism_to_toxic_metabolite", "organ_specific_damage", "cns_depression", "respiratory_depression", "metabolic_derangement"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_liver_failure_paracetamol",
+        "probability": 0.1,
+        "lagDays": [2, 5],
+        "severityBoost": 0.6,
+        "clues": ["rising_lfts", "coagulopathy", "hypoglycemia"]
+      },
+      {
+        "diseaseId": "aspiration_pneumonitis",
+        "probability": 0.15,
+        "lagDays": [0, 2],
+        "severityBoost": 0.4,
+        "clues": ["hydrocarbon", "vomiting", "tachypnea_hypoxia"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["sudden_onset_symptoms", "known_or_suspected_ingestion", "altered_consciousness", "empty_container_found"],
+    "exclusionClues": ["normal_consciousness", "no_history_of_ingestion", "alternative_diagnosis"]
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "disease": {
+    "id": "cancer_survivorship_follow_up",
+    "name": "Cancer Survivorship Follow-Up",
+    "system": "ONCO",
+    "agePeak_months": [240, 960],
+    "note": "Structured long-term care after curative cancer treatment. Focus on recurrence surveillance, late effects management, health promotion, and psychosocial support.",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["survivorship", "follow_up_care", "cancer_surveillance"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suspected_recurrence_with_obstruction_compression", "weight": 9 },
+        { "sign": "suspected_second_primary_malignancy", "weight": 8 },
+        { "sign": "severe_late_effect_organ_failure", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Risk-adapted surveillance based on cancer type, stage, and treatment received."
+    },
+    "historyFeatures": [
+      { "symptomId": "new_persistent_symptoms_pain", "weight": 5, "note": "May indicate recurrence" },
+      { "symptomId": "fatigue_persistent", "weight": 3 },
+      { "symptomId": "weight_changes", "weight": 3 },
+      { "symptomId": "bowel_bladder_habit_changes", "weight": 3 },
+      { "symptomId": "unexplained_fever_night_sweats", "weight": 3 },
+      { "symptomId": "psychological_distress_anxiety_depression", "weight": 3 },
+      { "symptomId": "lymphedema_symptoms", "weight": 2 },
+      { "symptomId": "treatment_late_effects_heart_lung_kidney", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "lymphadenopathy_new", "baseWeight": 5 },
+      { "signId": "palpable_mass", "baseWeight": 5 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "skin_changes_new_lesions", "baseWeight": 3 },
+      { "signId": "lymphedema_assessment", "baseWeight": 2 },
+      { "signId": "signs_of_treatment_toxicity_cardiac_pulmonary", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "advanced_stage_at_diagnosis", "multiplier": 3.0 },
+      { "id": "residual_disease_after_treatment", "multiplier": 4.0 },
+      { "id": "aggressive_histology_high_grade", "multiplier": 2.5 },
+      { "id": "incomplete_resection_positive_margins", "multiplier": 3.0 },
+      { "id": "genetic_predisposition_brca_lynch", "multiplier": 3.0 },
+      { "id": "younger_age_at_diagnosis", "multiplier": 1.5 },
+      { "id": "smoking_obesity_risk_factors_persist", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "breast_cancer_survivorship",
+        "name": "Breast Cancer Survivorship",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "recurrence_risk_peaks_first_2_3_years", "weight": 4 },
+          { "feature": "contralateral_breast_risk", "weight": 3 },
+          { "feature": "endocrine_therapy_adherence_critical", "weight": 4 },
+          { "feature": "late_effects_lymphedema_cardiac_bone", "weight": 3 }
+        ],
+        "management": "Clinical exam q3-6 months x 3 years, then q6-12 months x 2 years, then annually. Mammogram annually. Consider breast MRI for high-risk. Bone density for AI users. Lipid and cardiac monitoring. Adherence to endocrine therapy."
+      },
+      {
+        "id": "colorectal_survivorship",
+        "name": "Colorectal Cancer Survivorship",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "colonoscopy_at_1_year_post_op", "weight": 5 },
+          { "feature": "cea_monitoring_q3_6m_x_3_years", "weight": 4 },
+          { "feature": "ct_chest_abdomen_annually_x_3_5_years", "weight": 4 },
+          { "feature": "metachronous_polyp_risk", "weight": 3 }
+        ],
+        "management": "History + physical + CEA q3-6 months x 3 years, then q6-12 months x 2 years. CT chest/abdomen annually x 3-5 years. Colonoscopy at 1 year, then q3-5 years. Stoma care if applicable. Diet and exercise counseling."
+      },
+      {
+        "id": "lymphoma_survivorship",
+        "name": "Lymphoma Survivorship",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "late_relapse_possible_years_later", "weight": 3 },
+          { "feature": "treatment_related_cardiotoxicity_anthracycline", "weight": 4 },
+          { "feature": "second_malignancy_risk_rt_related", "weight": 3 },
+          { "feature": "hypothyroidism_after_mediastinal_rt", "weight": 3 }
+        ],
+        "management": "PET-CT at end of treatment (Deauville score). Clinical surveillance q3-6 months initially, then annually. Thyroid function yearly if neck RT. Cardiac echo at 1 year post-anthracycline, then q5 years. Breast cancer screening (MRI + mammo) for female chest RT. Lipid profile. Immunizations (post-chemo)."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "somatic_symptoms_from_anxiety", "discriminators": ["normal_imaging_bloods", "symptoms_not_progressive", "history_of_anxiety", "distress_screening_elevated"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "CBC, CMP, tumor markers as indicated", "priority": "high", "yield": 0.5, "indication": "recurrence surveillance per protocol" },
+        { "name": "Thyroid function (if neck RT)", "priority": "high", "yield": 0.4, "indication": "radiation-induced hypothyroidism" },
+        { "name": "Lipid profile, glucose, HbA1c", "priority": "medium", "yield": 0.4, "indication": "metabolic syndrome after cancer treatment" }
+      ],
+      "imaging": [
+        { "name": "Surveillance imaging per protocol", "priority": "high", "yield": 0.6, "indication": "site-specific (mammo, CT, MRI, PET-CT)" },
+        { "name": "Bone density (DXA)", "priority": "medium", "yield": 0.5, "indication": "aromatase inhibitor or prolonged steroid use" },
+        { "name": "Echocardiogram", "priority": "medium", "yield": 0.5, "indication": "anthracycline exposure, chest RT" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NCCN/ASCO Survivorship Care Guidelines",
+      "pathways": [
+        {
+          "severity": "active surveillance period (years 1-3)",
+          "criteria": "high-risk period for recurrence for most cancers",
+          "treatment": "Regular surveillance visits with history, physical, and protocol-driven investigations. Prompt evaluation of new symptoms. Manage treatment side effects. Psychosocial screening. Lifestyle interventions (diet, exercise, smoking cessation)."
+        },
+        {
+          "severity": "extended surveillance (years 4-5+)",
+          "criteria": "decreasing risk of recurrence, late effects emerge",
+          "treatment": "Annual visits. Continued surveillance of late effects (cardiac, metabolic, bone, second cancers). HPV vaccination if eligible. Age-appropriate cancer screening. Survivorship care plan updated."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "minimal_residual_disease_dormancy",
+      "immune_surveillance_and_escape",
+      "treatment_related_late_effects",
+      "psychosocial_adaptation_challenges",
+      "health_behavior_modification_opportunity"
+    ],
+    "complications": [
+      { "diseaseId": "disease_recurrence", "probability": 0.2, "severityBoost": 0.6, "clues": ["new_symptoms", "rising_tumor_markers", "new_lesions_on_imaging"] },
+      { "diseaseId": "second_primary_malignancy", "probability": 0.03, "severityBoost": 0.6, "clues": ["new_cancer_in_different_site", "treatment_related_leukemia", "rt_field_cancers"] },
+      { "diseaseId": "treatment_late_effects", "probability": 0.3, "severityBoost": 0.2, "clues": ["cardiac_dysfunction", "secondary_hypothyroidism", "cognitive_decline", "fatigue"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["cancer_history_treated_with_curative_intent", "regular_follow_up_needed", "surveillance_for_recurrence_and_late_effects"],
+    "exclusionClues": ["palliative_intent_active_treatment", "hospice_care"]
+  }
+}

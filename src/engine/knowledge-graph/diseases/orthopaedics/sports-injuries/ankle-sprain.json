@@ -1,0 +1,131 @@
+{
+  "disease": {
+    "id": "ankle-sprain",
+    "name": "Ankle Sprain (Lateral Ligament Injury)",
+    "system": "ORTHO",
+    "agePeak_months": [180, 480],
+    "note": "Most common sports injury. Inversion injury causing ATFL tear. Graded I-III. Proper rehabilitation essential to prevent chronic instability.",
+    "prevalenceWeight": 0.9,
+    "syndromeTags": ["ligament_injury", "ankle_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "gross_instability_mortise", "weight": 8 },
+        { "sign": "severe_swelling_with_bruising", "weight": 6 },
+        { "sign": "fracture_dislocation_ruled_out", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "anterior_drawer_positive", "weight": 6 },
+          { "sign": "inability_to_weight_bear_>4_weeks", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If gross instability or recurrent sprains -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "inversion_twisting_injury", "weight": 5 },
+      { "symptomId": "pop_or_tear_sensation", "weight": 3 },
+      { "symptomId": "immediate_pain_and_swelling", "weight": 5 },
+      { "symptomId": "difficulty_weight_bearing", "weight": 4 },
+      { "symptomId": "recurrent_sprains", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "lateral_ankle_swelling", "baseWeight": 5 },
+      { "signId": "tenderness_over_atfl_cf", "baseWeight": 5 },
+      { "signId": "ecchymosis", "baseWeight": 3 },
+      { "signId": "anterior_drawer_test_positive", "baseWeight": 4 },
+      { "signId": "talar_tilt_test_positive", "baseWeight": 4 },
+      { "signId": "weight_bearing_status", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_ankle_sprain", "multiplier": 3.0 },
+      { "id": "contact_sports", "multiplier": 2.5 },
+      { "id": "tight_achilles_calf", "multiplier": 1.5 },
+      { "id": "poor_proprioception", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "grade_1_mild",
+        "name": "Grade I (ATFL Stretch)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "mild_swelling", "weight": 3 },
+          { "feature": "full_weight_bearing_possible", "weight": 3 },
+          { "feature": "no_instability", "weight": 4 }
+        ],
+        "management": "RICE protocol. Functional rehabilitation. Return to sport in 1-2 weeks."
+      },
+      {
+        "id": "grade_2_moderate",
+        "name": "Grade II (ATFL Partial Tear ± CFL)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "moderate_swelling_bruising", "weight": 4 },
+          { "feature": "some_instability_on_testing", "weight": 4 },
+          { "feature": "difficulty_weight_bearing", "weight": 3 }
+        ],
+        "management": "RICE, walking boot or ankle brace, early protected weight bearing, PT for proprioception and strength. Return to sport in 3-6 weeks."
+      },
+      {
+        "id": "grade_3_severe",
+        "name": "Grade III (Complete ATFL+CFL ± PTFL Tear)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "severe_swelling_bruising", "weight": 5 },
+          { "feature": "gross_instability_positive_drawer", "weight": 5 },
+          { "feature": "unable_to_weight_bear", "weight": 4 }
+        ],
+        "management": "RICE, walking boot/cast NWB for 2 weeks, then progressive WB in boot. PT for range of motion, strength, proprioception. Surgery if recurrent instability after rehab."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "ankle_fracture",
+        "discriminators": ["bony_tenderness", "positive_xray", "cannot_weight_bear_at_all"]
+      },
+      {
+        "diseaseId": "peroneal_tendon_dislocation",
+        "discriminators": ["retromalleolar_pain", "snapping_sensation", "tendon_subluxation_test"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Ottawa ankle rules", "priority": "immediate", "yield": 0.85, "indication": "determine need for X-ray" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Ankle X-ray (if Ottawa positive)", "priority": "high", "yield": 0.6, "indication": "rule out fracture" },
+        { "name": "MRI ankle", "priority": "low", "yield": 0.9, "indication": "refractory cases, suspected osteochondral injury" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Ottawa Ankle Rules / AAOS Ankle Sprain Guidelines",
+      "pathways": [
+        {
+          "severity": "acute_phase",
+          "criteria": "<48 hours from injury, regardless of grade",
+          "treatment": "RICE: Rest, Ice (15 min q2-3h), Compression (ACE bandage), Elevation. NSAIDs. Protected weight bearing based on pain. Crutches if needed."
+        },
+        {
+          "severity": "rehabilitation_phase",
+          "criteria": "After acute phase (>48h-72h), pain controlled",
+          "treatment": "Range of motion exercises (alphabet, towel curls). Proprioceptive training (single leg stance, wobble board). Peroneal strengthening. Return to sport when full ROM and strength achieved."
+        }
+      ]
+    },
+
+    "pathophysiology": ["inversion_and_plantarflexion", "atfl_rupture_first", "cf_then_ptfl", "hemarthrosis_and_edema"]
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "congenital_anomalies",
+    "name": "Congenital Fetal Anomalies",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Structural or functional abnormalities present at birth, detected prenatally by ultrasound screening. Range from minor (single umbilical artery) to major, lethal anomalies (anencephaly).",
+    "prevalenceWeight": 0.03,
+    "syndromeTags": ["fetal_abnormality", "prenatal_diagnosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "lethal_anomaly", "weight": 10 },
+        { "sign": "hydrops_fetalis", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "major_cardiac_defect", "weight": 8 },
+          { "sign": "open_neural_tube_defect", "weight": 8 },
+          { "sign": "diaphragmatic_hernia_with_liver_herniation", "weight": 7 },
+          { "sign": "gastroschisis_or_omphalocele", "weight": 6 },
+          { "sign": "multiple_major_anomalies", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Lethal anomaly or life-threatening defect -> SEVERE; Minor isolated anomaly -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "no_direct_maternal_symptoms", "weight": 4 },
+      { "symptomId": "abnormal_screening_test_result", "weight": 5 },
+      { "symptomId": "polyhydramnios_symptoms", "weight": 3, "note": "Esophageal atresia, neural tube defects" },
+      { "symptomId": "oligohydramnios_symptoms", "weight": 3, "note": "Renal agenesis, obstructive uropathy" },
+      { "symptomId": "reduced_fetal_movements", "weight": 2 },
+      { "symptomId": "family_history_of_congenital_anomalies", "weight": 3 },
+      { "symptomId": "maternal_diabetes", "weight": 2 },
+      { "symptomId": "maternal_medication_use_teratogen", "weight": 3 },
+      { "symptomId": "advanced_maternal_age", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "uterine_size_dates_discrepancy", "baseWeight": 3 },
+      { "signId": "polyhydramnios_or_oligohydramnios", "baseWeight": 3 },
+      { "signId": "fetal_abnormality_on_ultrasound_scan", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "abnormal_fetal_heart_rate_pattern", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_maternal_age_over_35", "multiplier": 2.5 },
+      { "id": "pregestational_diabetes", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "teratogen_exposure", "multiplier": 5.0 },
+      { "id": "family_history_of_anomalies", "multiplier": 3.0 },
+      { "id": "previous_child_with_anomaly", "multiplier": 3.0 },
+      { "id": "maternal_infection_early_pregnancy", "multiplier": 2.0 },
+      { "id": "consanguinity", "multiplier": 2.0 },
+      { "id": "folic_acid_deficiency", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "neural_tube_defect",
+        "name": "Neural Tube Defect (Spina Bifida / Anencephaly)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "elevated_MSAFP", "weight": 5 },
+          { "feature": "lemon_or_banana_sign_on_ultrasound", "weight": 5 },
+          { "feature": "open_lesion_vs_closed", "weight": 4 }
+        ],
+        "management": "Fetal medicine referral. Folic acid 5mg for prevention in subsequent pregnancies. Offer termination. If continuing: planned C-section, NICU, postnatal surgery."
+      },
+      {
+        "id": "cardiac_defect",
+        "name": "Congenital Heart Disease",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "abnormal_four_chamber_view", "weight": 5 },
+          { "feature": "abnormal_outflow_tracts", "weight": 5 },
+          { "feature": "associated_with_aneuploidy", "weight": 3 }
+        ],
+        "management": "Fetal echocardiography. Pediatric cardiology consult. Plan delivery at tertiary center. Prostaglandin infusion if duct-dependent lesion."
+      },
+      {
+        "id": "abdominal_wall_defect",
+        "name": "Gastroschisis / Omphalocele",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "herniation_of_abdominal_contents", "weight": 5 },
+          { "feature": "increased_MSAFP", "weight": 4 },
+          { "feature": "serial_ultrasound_monitoring", "weight": 3 }
+        ],
+        "management": "Serial ultrasound for bowel dilation. Vaginal delivery if no complications. NICU. Surgical repair after delivery."
+      }
+    ],
+
+    "mimics": [],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Maternal serum alpha-fetoprotein (MSAFP)", "priority": "screening", "yield": 0.7, "indication": "neural tube defect, abdominal wall defect" },
+        { "name": "NIPT (cfDNA)", "priority": "screening", "yield": 0.95, "indication": "trisomy 21, 18, 13 screening" },
+        { "name": "Chorionic villus sampling or amniocentesis", "priority": "diagnostic", "yield": 0.98, "indication": "karyotype / microarray for diagnosis" },
+        { "name": "TORCH screen", "priority": "medium", "yield": 0.3, "indication": "if infection suspected" }
+      ],
+      "imaging": [
+        { "name": "Detailed anatomy scan (18-22 weeks)", "priority": "immediate", "yield": 0.9, "indication": "standard anomaly scan" },
+        { "name": "Fetal echocardiography", "priority": "high", "yield": 0.85, "indication": "if cardiac defect suspected" },
+        { "name": "Fetal MRI", "priority": "medium", "yield": 0.8, "indication": "further delineation of CNS anomalies" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline - Antenatal Care for Congenital Anomalies",
+      "pathways": [
+        {
+          "severity": "minor_anomaly",
+          "criteria": "isolated minor defect (e.g., single umbilical artery, choroid plexus cyst)",
+          "treatment": "Counseling and reassurance. Follow-up scan in 4 weeks. No additional intervention required."
+        },
+        {
+          "severity": "major_non_lethal",
+          "criteria": "major defect compatible with life (e.g., spina bifida, CHD, diaphragmatic hernia)",
+          "treatment": "Fetal medicine referral. Multidisciplinary meeting (obstetrics, neonatology, pediatric surgery, cardiology). Plan delivery at tertiary center with appropriate NICU. Offer termination if appropriate (within legal limits)."
+        },
+        {
+          "severity": "lethal_anomaly",
+          "criteria": "incompatible with life (e.g., anencephaly, bilateral renal agenesis, lethal skeletal dysplasia)",
+          "treatment": "Counselling: offer termination of pregnancy. If continuing: perinatal palliative care plan. Comfort care at delivery. Avoid C-section. Bereavement support."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chromosomal_abnormalities",
+      "single_gene_disorders",
+      "teratogen_exposure",
+      "multifactorial_inheritance",
+      "vascular_disruption"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "polyhydramnios",
+        "probability": 0.1,
+        "lagDays": [0, 90],
+        "severityBoost": 0.3,
+        "clues": ["impaired_swallowing", "esophageal_atresia", "neurological_impairment"]
+      },
+      {
+        "diseaseId": "fetal_demise",
+        "probability": 0.1,
+        "lagDays": [0, 90],
+        "severityBoost": 0.8,
+        "clues": ["lethal_anomaly", "hydrops"]
+      },
+      {
+        "diseaseId": "preterm_delivery",
+        "probability": 0.15,
+        "lagDays": [0, 30],
+        "severityBoost": 0.4,
+        "clues": ["polyhydramnios", "fetal_intervention"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["abnormal_ultrasound_findings", "elevated_MSAFP", "polyhydramnios_or_oligohydramnios"],
+    "exclusionClues": ["normal_anatomy_scan", "low_MSAFP"]
+  }
+}

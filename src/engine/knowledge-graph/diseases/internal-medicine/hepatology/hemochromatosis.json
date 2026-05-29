@@ -1,0 +1,195 @@
+{
+  "disease": {
+    "id": "hemochromatosis",
+    "name": "Hereditary Hemochromatosis",
+    "system": "hepatology",
+    "agePeak_months": [480, 720],
+    "note": "Autosomal recessive disorder of iron metabolism caused by HFE gene mutation (C282Y). Excessive iron absorption leads to deposition in liver, heart, pancreas, joints, skin, and pituitary. One of the most common genetic disorders in populations of Northern European descent.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["iron_overload", "liver", "metabolic", "genetic"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrhythmia_heart_failure_from_cardiomyopathy", "weight": 9 },
+        { "sign": "hepatic_decompensation_ascites_encephalopathy", "weight": 8 },
+        { "sign": "hepatocellular_carcinoma", "weight": 8 },
+        { "sign": "diabetic_ketoacidosis_severe_hyperglycemia", "weight": 6 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "cirrhosis_present": true,
+        "serum_ferritin_greater_than_1000": true,
+        "cardiac_involvement": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "elevated_transferrin_saturation_and_ferritin": true,
+        "no_organ_damage": true
+      },
+      "severityLabel": "If cardiac involvement or liver decompensation -> EMERGENCY; high ferritin/TSAT -> URGENT phlebotomy; early stage -> OUTPATIENT management"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue_lethargy", "weight": 4 },
+      { "symptomId": "joint_pain_arthralgia_mcp_pip", "weight": 4, "note": "Second and third MCP joints classic 'iron fist'; PIP, knees, hips also affected" },
+      { "symptomId": "abdominal_pain", "weight": 3 },
+      { "symptomId": "loss_of_libido_impotence", "weight": 3, "note": "Pituitary iron deposition -> hypogonadotropic hypogonadism" },
+      { "symptomId": "diabetes_mellitus_new_onset", "weight": 3, "note": "Pancreatic iron deposition -> 'bronze diabetes'" },
+      { "symptomId": "skin_bronze_or_gray_discoloration", "weight": 3 },
+      { "symptomId": "palpitations_dyspnea_on_exertion", "weight": 2, "note": "Cardiomyopathy (dilated or restrictive)" },
+      { "symptomId": "family_history_of_hemochromatosis", "weight": 5 },
+      { "symptomId": "loss_of_body_hair", "weight": 2 },
+      { "symptomId": "osteoporosis_fragility_fractures", "weight": 1, "note": "Hypogonadism-related" }
+    ],
+
+    "examFeatures": [
+      { "signId": "bronze_or_gray_skin_pigmentation", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 4 },
+      { "signId": "signs_of_cirrhosis", "baseWeight": 3, "note": "Spider angiomas, palmar erythema, caput medusae" },
+      { "signId": "arthropathy_mcp_pip_joints", "baseWeight": 3 },
+      { "signId": "testicular_atrophy", "baseWeight": 2 },
+      { "signId": "loss_of_axillary_pubic_hair", "baseWeight": 2 },
+      { "signId": "cardiac_enlargement_heart_failure_signs", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2, "note": "If portal hypertension" }
+    ],
+
+    "riskFactors": [
+      { "id": "c282y_homozygosity", "multiplier": 10.0 },
+      { "id": "c282y_h63d_compound_heterozygote", "multiplier": 3.0 },
+      { "id": "family_history_first_degree_relative", "multiplier": 5.0 },
+      { "id": "northern_european_celtic_ancestry", "multiplier": 2.5 },
+      { "id": "male_gender", "multiplier": 2.5, "note": "Males express disease 2-3x more due to menstrual iron loss in women" },
+      { "id": "alcohol_consumption_excess", "multiplier": 2.0 },
+      { "id": "high_iron_diet_or_iron_supplements", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "alcoholic_liver_disease",
+        "discriminators": ["significant_alcohol_history", "no_high_transferrin_saturation", "mild_ferritin_elevation_secondary", "ast_alt_ratio_greater_than_2"]
+      },
+      {
+        "diseaseId": "chronic_hepatitis_c",
+        "discriminators": ["positive_anti_hcv_hcv_rna", "mildly_elevated_ferritin", "normal_transferrin_saturation_mild_hyperferritinemia"]
+      },
+      {
+        "diseaseId": "non_alcoholic_steatohepatitis_nash",
+        "discriminators": ["metabolic_syndrome", "mildly_elevated_ferritin", "normal_transferrin_saturation", "steatosis_on_imaging"]
+      },
+      {
+        "diseaseId": "rheumatoid_arthritis",
+        "discriminators": ["inflammatory_arthritis_symmetric", "positive_rheumatoid_factor_anti_ccp", "normal_iron_studies", "extra_articular_features"]
+      },
+      {
+        "diseaseId": "secondary_iron_overload_transfusional",
+        "discriminators": ["history_of_multiple_transfusions", "thalassemia_sickle_cell_mds", "ferritin_elevated_but_tsat_may_be_normal", "iron_loading_anemias"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Transferrin saturation (TSAT)", "priority": "immediate", "yield": 0.95, "indication": "first-line screening; fasting >45% suggests iron overload; early marker" },
+        { "name": "Serum ferritin", "priority": "immediate", "yield": 0.9, "indication": "elevated in iron overload but also acute phase reactant; >200 women, >300 men abnormal; >1000 associated with organ damage" },
+        { "name": "HFE genotyping (C282Y, H63D, S65C)", "priority": "high", "yield": 0.99, "indication": "confirm genetic hemochromatosis; C282Y homozygote = 80-90% penetrant; compound heterozygote = milder risk" },
+        { "name": "LFTs (ALT, AST, ALP, GGT, bilirubin)", "priority": "high", "yield": 0.6, "indication": "liver involvement; ALT/AST often normal even with significant iron" },
+        { "name": "Fasting glucose and HbA1c", "priority": "high", "yield": 0.4, "indication": "screen for diabetes (pancreatic iron deposition)" },
+        { "name": "Fasting lipid profile", "priority": "medium", "yield": 0.2, "indication": "baseline cardiovascular assessment" },
+        { "name": "Hormone panel: testosterone, LH, FSH", "priority": "medium", "yield": 0.3, "indication": "evaluate hypogonadotropic hypogonadism if symptoms" }
+      ],
+      "imaging": [
+        { "name": "MRI with T2* or R2 relaxometry (FerriScan/LiverMultiScan)", "priority": "high", "yield": 0.95, "indication": "non-invasive hepatic iron concentration quantification; excellent correlation with biopsy" },
+        { "name": "MRI cardiac T2*", "priority": "high", "yield": 0.95, "indication": "cardiac iron assessment if ferritin >1000 or TSAT >70% or cardiac symptoms; T2* <20ms suggests cardiac iron" },
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.5, "indication": "HCC surveillance if cirrhosis present; liver morphology assessment" },
+        { "name": "Transient elastography (FibroScan)", "priority": "high", "yield": 0.7, "indication": "fibrosis assessment (liver stiffness may be increased by iron alone)" },
+        { "name": "Liver biopsy with iron quantification (HIC)", "priority": "selected", "yield": 0.97, "indication": "rarely needed if MRI iron quantification available; indicated for concomitant liver disease suspicion, advanced age with fibrosis concerns, or if non-invasive tests discordant. Hepatic iron index >1.9 supports HH." }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines: Hemochromatosis; EASL Clinical Practice Guidelines: Hemochromatosis",
+      "pathways": [
+        {
+          "severity": "iron_overload_without_organ_damage",
+          "criteria": "TSAT >45%, ferritin elevated but <1000, no cirrhosis/diabetes/cardiomyopathy/arthropathy",
+          "treatment": "Therapeutic phlebotomy: 500mL (1 unit) weekly. Monitor ferritin and hemoglobin before each session. Target: ferritin <50 ng/mL. If Hb <12g/dL (women) or <13g/dL (men), reduce frequency to q2 weeks. Once ferritin target reached: maintenance phlebotomy q2-4 months to keep ferritin <50-100 ng/mL. Avoid iron supplements and vitamin C >500mg/day. Limit alcohol. Screen first-degree relatives with TSAT and ferritin; if elevated, proceed to HFE genotyping."
+        },
+        {
+          "severity": "iron_overload_with_organ_damage",
+          "criteria": "Ferritin >1000, cirrhosis present, diabetes, cardiomyopathy, or arthropathy",
+          "treatment": "Aggressive phlebotomy: 500mL 1-2x/week as tolerated (monitor Hb and ferritin). Target: ferritin <50 ng/mL. Manage organ damage: diabetes (insulin/oral agents), cardiomyopathy (standard heart failure therapy + phlebotomy reduces cardiac iron), arthropathy (symptomatic management; arthritis may not improve with phlebotomy), hypogonadism (testosterone replacement). HCC surveillance US + AFP q6m if cirrhosis present. Regular cardiac monitoring if cardiac iron seen on MRI."
+        },
+        {
+          "severity": "end_stage_iron_overload_decompensated",
+          "criteria": "Decompensated cirrhosis (ascites, variceal bleed, encephalopathy) or severe cardiomyopathy",
+          "treatment": "Continue phlebotomy as tolerated but may be limited by anemia of decompensation. Consider iron chelation if phlebotomy not tolerated (deferasirox 10-20mg/kg PO daily; monitor renal function, GI side effects). Liver transplant evaluation if decompensated cirrhosis. Manage cardiac complications aggressively (arrhythmias, heart failure). HCC surveillance continues."
+        },
+        {
+          "severity": "family_screening_and_preventive",
+          "criteria": "First-degree relatives of proband, no iron overload yet",
+          "treatment": "Genetic counseling. HFE genotyping + TSAT + ferritin testing. C282Y homozygotes with normal iron studies: monitor TSAT and ferritin annually. Start phlebotomy when ferritin approaches upper limit of normal. Early detection prevents all complications of iron overload."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hfe_gene_mutation_c282y",
+      "impaired_hfe_protein_function",
+      "decreased_hepcidin_expression_in_liver",
+      "loss_of_negative_feedback_on_ferroportin",
+      "increased_duodenal_iron_absorption_from_diet",
+      "excessive_iron_accumulation_in_parenchymal_organs",
+      "iron_catalyzed_fenton_reaction_and_oxidative_stress",
+      "lipid_peroxidation_and_mitochondrial_damage",
+      "dna_damage_and_hepatocarcinogenesis",
+      "hepatic_stellate_cell_activation_and_fibrosis",
+      "pancreatic_beta_cell_iron_toxicity_and_diabetes",
+      "cardiac_myocyte_iron_deposition_and_cardiomyopathy",
+      "pituitary_gonadal_iron_deposition_and_hypogonadism"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cirrhosis",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["ferritin_over_1000", "hepatomegaly", "elevated_lfts", "fibrosis_on_elastography_or_biopsy"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "probability": 0.15,
+        "severityBoost": 0.8,
+        "clues": ["cirrhosis_present", "rising_afp", "liver_mass_on_imaging", "age_over_50", "male"]
+      },
+      {
+        "diseaseId": "diabetes_mellitus",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["hyperglycemia_polyuria_polydipsia", "pancreatic_iron_on_mri", "family_history_of_diabetes"]
+      },
+      {
+        "diseaseId": "dilated_or_restrictive_cardiomyopathy",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["dyspnea_on_exertion", "arrhythmia_palpitations", "cardiac_iron_on_mri_t2_star_less_than_20", "reduced_ejection_fraction"]
+      },
+      {
+        "diseaseId": "hypogonadotropic_hypogonadism",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["loss_of_libido_impotence", "loss_of_body_hair", "testicular_atrophy", "low_testosterone_low_lh_fsh"]
+      },
+      {
+        "diseaseId": "osteoporosis",
+        "probability": 0.25,
+        "severityBoost": 0.1,
+        "clues": ["hypogonadism", "low_bone_mineral_density", "fragility_fractures"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium; high if cardiac involvement or decompensation",
+    "diagnosticClues": ["elevated_transferrin_saturation_greater_than_45_percent", "elevated_ferritin_above_age_gender_norms", "family_history_of_hemochromatosis", "c282y_homozygosity", "bronze_diabetes_and_arthropathy"],
+    "exclusionClues": ["normal_iron_studies_tsat_less_than_45_ferritin_normal", "anemia_of_chronic_disease_low_tsat", "secondary_iron_overload_from_transfusions", "no_c282y_mutation"]
+  }
+}

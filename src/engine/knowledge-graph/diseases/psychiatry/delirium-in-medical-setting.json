@@ -1,0 +1,190 @@
+{
+  "disease": {
+    "id": "delirium_in_medical_setting",
+    "name": "Delirium in Medical Setting",
+    "system": "psychiatry",
+    "agePeak_months": [720, 1080],
+    "note": "Acute neuropsychiatric syndrome characterized by fluctuating consciousness, inattention, disorganized thinking, and perceptual disturbances, arising from an underlying medical condition, intoxication, or medication side effect. Extremely common in ICU (up to 80% of ventilated patients) and general hospital wards. The Confusion Assessment Method (CAM-ICU) is the gold standard bedside screening tool. Delirium Rating Scale-Revised-98 (DRS-R-98) quantifies severity. Management involves treating the underlying cause, environmental interventions, and judicious use of antipsychotics (haloperidol, olanzapine, quetiapine).",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["delirium", "medical_psychiatry", "consultation_liaison", "emergency_psychiatry"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "agitation_risk_of_harm_or_line_pulling", "weight": 9 },
+        { "sign": "refusing_life_saving_treatment", "weight": 9 },
+        { "sign": "inability_to_protect_airway", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "noDangerSigns": true },
+      "severityLabel": "If agitated/fighting/airway risk -> EMERGENCY; hypoactive -> HIGH (often missed)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_onset_hours_to_days", "weight": 5 },
+      { "symptomId": "fluctuating_course", "weight": 5 },
+      { "symptomId": "inattention_and_distractibility", "weight": 5 },
+      { "symptomId": "altered_level_of_consciousness", "weight": 5 },
+      { "symptomId": "disorganized_thinking", "weight": 4 },
+      { "symptomId": "disorientation", "weight": 4 },
+      { "symptomId": "agitation_or_lethargy", "weight": 4 },
+      { "symptomId": "hallucinations_or_sleep_wake_reversal", "weight": 3 },
+      { "symptomId": "antecedent_infection_surgery_medication", "weight": 5 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fluctuating_consciousness_and_attention", "baseWeight": 5 },
+      { "signId": "disorganized_speech_or_thought", "baseWeight": 4 },
+      { "signId": "altered_psychomotor_activity", "baseWeight": 4 },
+      { "signId": "disorientation_or_hallucinations", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_age_over_70", "multiplier": 4.0 },
+      { "id": "pre_existing_dementia", "multiplier": 5.0 },
+      { "id": "icu_mechanical_ventilation", "multiplier": 5.0 },
+      { "id": "polypharmacy_anticholinergics", "multiplier": 3.0 },
+      { "id": "infection_sepsis", "multiplier": 4.0 },
+      { "id": "surgery_metabolic_or_organ_failure", "multiplier": 3.0 },
+      { "id": "alcohol_use_disorder", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hyperactive_delirium",
+        "name": "Hyperactive Delirium",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "psychomotor_agitation", "weight": 5 },
+          { "feature": "hallucinations_and_combativeness", "weight": 5 }
+        ],
+        "management": "Safety first. Haloperidol 0.5-2 mg IV/IM q4h prn. Reduce delirogenic meds. One-to-one nursing."
+      },
+      {
+        "id": "hypoactive_delirium",
+        "name": "Hypoactive Delirium",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "lethargy_withdrawal_reduced_output", "weight": 5 },
+          { "feature": "easily_missed_as_depression", "weight": 5 }
+        ],
+        "management": "Treat underlying cause. Reorientation, mobilization, family involvement. Avoid sedatives."
+      },
+      {
+        "id": "mixed_delirium",
+        "name": "Mixed Delirium",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "fluctuates_hypo_to_hyperactive", "weight": 5 },
+          { "feature": "most_common_in_icu", "weight": 4 }
+        ],
+        "management": "Nonpharmacological bundle. Antipsychotics prn for agitation. Avoid benzodiazepines except withdrawal."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "dementia",
+        "discriminators": ["insidious_onset", "stable_decline", "no_fluctuation", "no_altered_consciousness"]
+      },
+      {
+        "diseaseId": "depression_with_psychosis",
+        "discriminators": ["persistent_low_mood", "intact_attention", "mood_congruent_delusions"]
+      },
+      {
+        "diseaseId": "schizophrenia_exacerbation",
+        "discriminators": ["chronic_history", "no_fluctuation", "no_medical_precipitant"]
+      },
+      {
+        "diseaseId": "nonconvulsive_status_epilepticus",
+        "discriminators": ["eeg_ictal", "no_response_to_antipsychotics"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Confusion Assessment Method (CAM-ICU)", "priority": "immediate", "yield": 0.95, "indication": "Gold standard for delirium diagnosis" },
+        { "name": "Delirium Rating Scale Revised (DRS-R-98)", "priority": "high", "yield": 0.9, "indication": "Severity assessment and tracking" },
+        { "name": "Richmond Agitation-Sedation Scale (RASS)", "priority": "immediate", "yield": 0.85, "indication": "Quantify agitation, guide treatment" },
+        { "name": "Pulse oximetry", "priority": "immediate", "yield": 0.4, "indication": "Hypoxia as cause" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP, blood cultures, U&E, glucose, Ca, Mg", "priority": "immediate", "yield": 0.6, "indication": "Sepsis and metabolic causes" },
+        { "name": "LFTs, ammonia, TSH, B12", "priority": "high", "yield": 0.3, "indication": "Hepatic, endocrine, nutritional causes" },
+        { "name": "Toxicology screen and ABG", "priority": "high", "yield": 0.4, "indication": "Drug toxicity, withdrawal, hypoxia/hypercapnia" }
+      ],
+      "imaging": [
+        { "name": "CT head noncontrast", "priority": "medium", "yield": 0.15, "indication": "If fall, anticoagulation, focal signs, no clear cause" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.3, "indication": "Pneumonia as occult infection" }
+      ],
+      "special": [
+        { "name": "EEG", "priority": "medium", "yield": 0.25, "indication": "Nonconvulsive seizures; generalized slowing confirms delirium" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NICE CG103 / APA / SCCM PADIS Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_hypoactive",
+          "criteria": "CAM-ICU positive, RASS -1 to -2, safe",
+          "treatment": "Treat underlying cause. Nonpharmacological bundle: reorientation, sensory optimization, early mobilization, sleep hygiene, family involvement. Avoid sedatives."
+        },
+        {
+          "severity": "moderate_hyperactive",
+          "criteria": "RASS +1 to +2, mild agitation, interfering with care",
+          "treatment": "Haloperidol 0.5-2 mg IV/IM/PO q4-6h prn or olanzapine 2.5-5 mg IM/ODT q8h. Environmental optimization. Minimize lines and restraints."
+        },
+        {
+          "severity": "severe_agitated",
+          "criteria": "RASS +3 to +4, combative, pulling lines",
+          "treatment": "Haloperidol 2-5 mg IV/IM, repeat after 30 min. Olanzapine 5-10 mg IM. Avoid benzodiazepines except withdrawal. Restraints as last resort. 1:1 nursing. ICU transfer."
+        },
+        {
+          "severity": "refractory_or_withdrawal",
+          "criteria": "Alcohol/benzodiazepine withdrawal",
+          "treatment": "Lorazepam 1-2 mg IV q4h for withdrawal. Quetiapine 12.5-50 mg q12h for sleep-wake normalization. Dexmedetomidine for ICU delirium."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "acetylcholine_deficiency_dopamine_excess",
+      "neuroinflammation_and_cytokine_release",
+      "blood_brain_barrier_disruption",
+      "melatonin_dysregulation",
+      "global_neuronal_oxidative_stress"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "prolonged_cognitive_impairment",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["prolonged_delirium", "pre_existing_dementia", "advanced_age"]
+      },
+      {
+        "diseaseId": "accelerated_dementia_decline",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["pre_existing_mci_or_dementia", "prolonged_delirium"]
+      },
+      {
+        "diseaseId": "falls_and_injury",
+        "probability": 0.25,
+        "severityBoost": 0.3,
+        "clues": ["agitation", "wandering", "poor_balance"]
+      },
+      {
+        "diseaseId": "functional_decline_and_institutionalization",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["prolonged_hospital_stay", "loss_of_independence"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high; potentially life-threatening",
+    "diagnosticClues": ["acute_onset", "fluctuating_course", "inattention", "altered_consciousness", "cam_positive", "disorganized_thinking"],
+    "exclusionClues": ["gradual_insidious_onset", "stable_cognition_day_to_day", "intact_attention", "no_fluctuation", "age_appropriate_normal_consciousness"]
+  }
+}

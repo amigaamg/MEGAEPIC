@@ -1,0 +1,140 @@
+{
+  "disease": {
+    "id": "transplant_immunosuppression",
+    "name": "Kidney Transplant Immunosuppression",
+    "system": "RENAL",
+    "agePeak_months": [360, 720],
+    "note": "Lifelong immunosuppression after kidney transplantation prevents rejection. Balance between under-immunosuppression (rejection) and over-immunosuppression (infection, malignancy).",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["transplant_management", "immunosuppression", "graft_maintenance"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sepsis_over_immunosuppression", "weight": 10 },
+        { "sign": "severe_leukopenia_neutropenic_fever", "weight": 9 },
+        { "sign": "acute_rejection_from_under_immunosuppression", "weight": 9 },
+        { "sign": "post_transplant_lymphoproliferative_disorder", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Based on dosing adequacy (trough levels), adverse effects, graft function, and time post-transplant."
+    },
+    "historyFeatures": [
+      { "symptomId": "transplant_history_current_regimen", "weight": 5 },
+      { "symptomId": "adherence_to_medication", "weight": 5 },
+      { "symptomId": "side_effects_tremor_hypertension_nephrotoxicity", "weight": 4 },
+      { "symptomId": "infections_recent_cmv_uti", "weight": 4 },
+      { "symptomId": "fever_unexplained", "weight": 3 },
+      { "symptomId": "new_onset_diabetes_post_transplant", "weight": 3 },
+      { "symptomId": "skin_lesions_malignancy_screening", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "tremor_calcineurin_inhibitor_related", "baseWeight": 3 },
+      { "signId": "hypertension_uncontrolled", "baseWeight": 3 },
+      { "signId": "gingival_hypertrophy_ciclosporin", "baseWeight": 2 },
+      { "signId": "signs_of_infection", "baseWeight": 4 },
+      { "signId": "graft_tenderness_or_swelling", "baseWeight": 4 },
+      { "signId": "cushingoid_features_steroid_excess", "baseWeight": 2 },
+      { "signId": "hirsutism_ciclosporin", "baseWeight": 1 },
+      { "signId": "skin_cancers_actinic_keratosis_scc", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "non_adherence_to_immunosuppression", "multiplier": 5.0 },
+      { "id": "high_immunologic_risk_hla_mismatch", "multiplier": 2.0 },
+      { "id": "previous_transplant_rejection", "multiplier": 2.5 },
+      { "id": "delayed_graft_function", "multiplier": 1.5 },
+      { "id": "african_descent", "multiplier": 1.5 },
+      { "id": "young_age", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "induction_therapy",
+        "name": "Induction Immunosuppression",
+        "prevalenceModifier": 1.0,
+        "keyFeatures": [
+          { "feature": "perioperative_administration", "weight": 5 },
+          { "feature": "depleting_or_non_depleting_antibody", "weight": 4 },
+          { "feature": "high_risk_thymoglobulin_low_risk_basiliximab", "weight": 4 }
+        ],
+        "management": "Basiliximab (IL-2 receptor antagonist) 20 mg day 0 and day 4 for low-immunologic risk. ATG (thymoglobulin) 1.5 mg/kg x 3-5 days for high risk (DSA+, PRA high, retransplant). Alemtuzumab (anti-CD52) as alternative for some protocols. Methylprednisolone 500 mg intra-op + taper."
+      },
+      {
+        "id": "maintenance_triple_therapy",
+        "name": "Maintenance Triple Therapy",
+        "prevalenceModifier": 1.0,
+        "keyFeatures": [
+          { "feature": "cn_tacrolimus_or_ciclosporin", "weight": 5 },
+          { "feature": "antiproliferative_mmf_mpa_or_azathioprine", "weight": 5 },
+          { "feature": "corticosteroid_prednisolone", "weight": 4 }
+        ],
+        "management": "Tacrolimus: trough 8-12 ng/mL first 3 months, 5-10 ng/mL after. MMF: 500-1000 mg BID (dose reduce for leukopenia/GI toxicity). Prednisolone: 5-10 mg/day, taper off by 3-6 months in low-risk (steroid-sparing protocols). Ciclosporin alternative (2-4 h C2 monitoring preferred). Azathioprine 1-2 mg/kg/day as alternative to MMF."
+      },
+      {
+        "id": "cn_free_regimens",
+        "name": "CNI-Free Regimens (Belatacept/mTOR-I)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "avoid_cni_nephrotoxicity", "weight": 4 },
+          { "feature": "belatacept_iv_monthly", "weight": 4 },
+          { "feature": "sirolimus_everolimus_oral", "weight": 3 },
+          { "feature": "higher_acute_rejection_risk_early", "weight": 3 }
+        ],
+        "management": "Belatacept 10 mg/kg IV day 0, 4, 2 weeks, then monthly. Sirolimus/everolimus: trough 5-10 ng/mL. Combined with MMF + steroids. EBV seronegative is contraindication to belatacept (PTLD risk). mTOR-I: wound healing issues, proteinuria, pneumonitis, DLP."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "rejection_mimicking_under_immunosuppression", "discriminators": ["biopsy_proven", "dsa_positive", "creatinine_rise", "no_infection_on_biopsy"] },
+      { "diseaseId": "infection_mimicking_over_immunosuppression", "discriminators": ["positive_cultures_per_pcr", "no_rejection_on_biopsy", "responds_to_antimicrobials_reduced_immunosuppression"] }
+    ],
+    "investigations": {
+      "laboratory": [
+        { "name": "Tacrolimus/Ciclosporin trough level", "priority": "high", "yield": 0.9, "indication": "dosing adequacy, toxicity monitoring" },
+        { "name": "Serum creatinine, eGFR", "priority": "high", "yield": 0.95, "indication": "graft function" },
+        { "name": "FBC (WBC, Hb, platelets)", "priority": "high", "yield": 0.7, "indication": "MMF/azathioprine myelotoxicity" },
+        { "name": "Blood glucose, HbA1c", "priority": "high", "yield": 0.6, "indication": "new onset diabetes after transplant (NODAT)" },
+        { "name": "Lipid profile", "priority": "high", "yield": 0.5, "indication": "dyslipidemia from CNI, mTOR-I, steroids" },
+        { "name": "CMV, EBV, BKV PCR", "priority": "scheduled", "yield": 0.6, "indication": "viral reactivation surveillance" },
+        { "name": "Donor specific antibodies (DSA)", "priority": "annual or for cause", "yield": 0.7, "indication": "humoral rejection risk" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "KDIGO / AST Guidelines for Kidney Transplant Immunosuppression",
+      "pathways": [
+        {
+          "severity": "standard maintenance (tac/MMF/steroids)",
+          "criteria": "stable graft function, low immunologic risk",
+          "treatment": "Tacrolimus: target trough 5-10 ng/mL after 3 months. MMF 500-1000 mg BID. Prednisolone wean by 3-6 months. Monitor for NODAT, dyslipidemia, infection. Annual DSA. Cancer screening (skin, cervical, breast/colon per age). Vaccinations (inactivated)."
+        },
+        {
+          "severity": "infection complication (CMV, BKV)",
+          "criteria": "CMV viremia or BKV nephropathy, rising PCR",
+          "treatment": "CMV: reduce immunosuppression if feasible. Ganciclovir/valganciclovir. BKV: reduce immunosuppression (especially tacrolimus + MMF). Wait for immune recovery. Monitor PCR weekly. Leflunomide/cidofovir for persistent BKV."
+        },
+        {
+          "severity": "malignancy/PTLD",
+          "criteria": "post-transplant lymphoproliferative disorder, skin cancers",
+          "treatment": "Reduce immunosuppression (stop MMF/azathioprine, reduce CNI). Rituximab for CD20+ PTLD. Chemotherapy for refractory. Skin cancer: sunscreen, annual dermatology. Switch to mTOR-I (sirolimus/everolimus) with antiproliferative and anticarcinogenic effects."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "calcineurin_inhibition_tacrolimus_ciclosporin",
+      "il_2_blockade_and_t_cell_inhibition",
+      "antiproliferative_effect_mmf_on_b_t_cells",
+      "corticosteroid_broad_anti_inflammatory",
+      "mammalian_target_of_rapamycin_inhibition",
+      "co_stimulation_blockade_belatacept",
+      "targeted_depletion_of_t_cells_by_antibodies"
+    ],
+    "complications": [
+      { "diseaseId": "nephrotoxicity_calcineurin_inhibitor", "probability": 0.3, "severityBoost": 0.3, "clues": ["rising_creatinine_with_high_trough", "arteriolar_hyalinosis_on_biopsy", "graft_loss_long_term"] },
+      { "diseaseId": "new_onset_diabetes_after_transplant", "probability": 0.2, "severityBoost": 0.2, "clues": ["hyperglycemia_post_transplant", "tacrolimus_and_steroid_related", "insulin_or_ohd_required"] },
+      { "diseaseId": "post_transplant_infection", "probability": 0.3, "severityBoost": 0.3, "clues": ["cmv_ebv_bkv_reactivation", "uti_pyelonephritis", "pneumocystis_pneumonia", "wound_infection"] },
+      { "diseaseId": "skin_cancer_squamous_cell_basal_cell", "probability": 0.2, "severityBoost": 0.2, "clues": ["sun_exposed_areas", "multiple_lesions", "more_aggressive_than_general_population"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["kidney_transplant_history", "lifelong_immunosuppression_required", "balance_between_rejection_and_infection", "therapeutic_drug_monitoring_essential"],
+    "exclusionClues": ["no_transplant_history", "stable_graft_without_immunosuppression"]
+  }
+}

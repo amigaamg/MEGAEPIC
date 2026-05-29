@@ -1,0 +1,172 @@
+{
+  "disease": {
+    "id": "uterine_rupture",
+    "name": "Uterine Rupture",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Complete disruption of the uterine wall, most commonly occurring at the site of a previous cesarean scar. Catastrophic obstetric emergency with high maternal and fetal mortality.",
+    "prevalenceWeight": 0.002,
+    "syndromeTags": ["intrapartum_emergency", "maternal_collapse"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "maternal_cardiac_arrest", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "fetal_heart_rate_absent", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "loss_of_fetal_station", "weight": 9 },
+          { "sign": "abdominal_pain_sudden_severe", "weight": 9 },
+          { "sign": "palpable_fetal_parts_abdominally", "weight": 9 },
+          { "sign": "hemoperitoneum_signs", "weight": 8 },
+          { "sign": "cessation_of_contractions", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "All cases of uterine rupture are SEVERE (life-threatening)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sudden_severe_abdominal_pain", "weight": 5, "note": "Often described as a tearing sensation" },
+      { "symptomId": "previous_uterine_surgery", "weight": 5 },
+      { "symptomId": "prolonged_obstructed_labor", "weight": 4 },
+      { "symptomId": "cessation_of_contractions", "weight": 4 },
+      { "symptomId": "vaginal_bleeding", "weight": 4 },
+      { "symptomId": "fetal_movements_stopped", "weight": 4 },
+      { "symptomId": "lightheadedness_dizziness", "weight": 4 },
+      { "symptomId": "loss_of_consciousness", "weight": 4 },
+      { "symptomId": "oxytocin_augmentation", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "loss_of_fetal_presenting_part", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fetal_parts_palpable_abdominally", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "maternal_shock_hypotension_tachycardia", "baseWeight": 5 },
+      { "signId": "abdominal_tenderness_generalized", "baseWeight": 4 },
+      { "signId": "vaginal_bleeding_variable", "baseWeight": 3 },
+      { "signId": "distended_abdomen", "baseWeight": 4 },
+      { "signId": "absent_fetal_heart_rate", "baseWeight": 5 },
+      { "signId": "uterine_contour_abnormal", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "previous_cesarean_section", "multiplier": 10.0 },
+      { "id": "previous_uterine_surgery_myomectomy", "multiplier": 5.0 },
+      { "id": "grand_multiparity", "multiplier": 3.0 },
+      { "id": "obstructed_labor", "multiplier": 4.0 },
+      { "id": "oxytocin_augmentation", "multiplier": 2.0 },
+      { "id": "prostaglandin_induction_with_previous_scar", "multiplier": 5.0 },
+      { "id": "internal_podalic_version", "multiplier": 3.0 },
+      { "id": "difficult_instrumental_delivery", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "complete_rupture",
+        "name": "Complete Uterine Rupture",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "full_thickness_tear", "weight": 5 },
+          { "feature": "fetus_in_peritoneal_cavity", "weight": 5 },
+          { "feature": "hemoperitoneum", "weight": 5 },
+          { "feature": "maternal_shock", "weight": 5 }
+        ],
+        "management": "Emergency laparotomy. Deliver fetus. Repair uterine defect or hysterectomy. Massive transfusion protocol. ICU."
+      },
+      {
+        "id": "uterine_dehiscence",
+        "name": "Uterine Dehiscence (Incomplete Rupture)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "visceral_peritoneum_intact", "weight": 5 },
+          { "feature": "less_severe_bleeding", "weight": 4 },
+          { "feature": "fetus_often_still_in_uterus", "weight": 4 },
+          { "feature": "incidental_finding_at_cs", "weight": 4 }
+        ],
+        "management": "Delivery by C-section. Primary repair of the dehiscence. Assess for future pregnancy counseling."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "placental_abruption",
+        "discriminators": ["vaginal_bleeding_more_prominent", "uterine_hypertonus", "no_previous_scar"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Maternal vital signs monitoring", "priority": "immediate", "yield": 0.9, "indication": "assess shock" },
+        { "name": "Fetal heart rate monitoring", "priority": "immediate", "yield": 0.8, "indication": "fetal bradycardia or absent" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "high", "yield": 0.7, "indication": "falling Hb" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.8, "indication": "DIC risk" },
+        { "name": "Blood cross-match", "priority": "high", "yield": 0.9, "indication": "massive transfusion preparation" }
+      ],
+      "imaging": [
+        { "name": "Emergency ultrasound (FAST)", "priority": "immediate", "yield": 0.7, "indication": "free fluid, fetal position, fetal heart" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline on Uterine Rupture",
+      "pathways": [
+        {
+          "severity": "all_cases",
+          "criteria": "confirmed or suspected rupture",
+          "treatment": "Immediate laparotomy. Category-1 C-section. Deliver fetus within 5 minutes if alive. Repair uterine defect (debride edges, closure in layers). Hysterectomy if repair impossible (extensive damage, atonic bleeding, placenta accreta). Massive transfusion. IV broad-spectrum antibiotics. ICU admission. Monitor for DIC, AKI."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "scar_dehiscence",
+      "uterine_hyperdistension",
+      "traumatic_delivery",
+      "fundal_pressure",
+      "weakened_uterine_wall"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypovolemic_shock",
+        "probability": 0.8,
+        "lagDays": [0, 0],
+        "severityBoost": 0.9,
+        "clues": ["hypotension", "tachycardia", "pallor", "oliguria"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.3,
+        "lagDays": [0, 2],
+        "severityBoost": 0.9,
+        "clues": ["bleeding_from_multiple_sites", "abnormal_coagulation"]
+      },
+      {
+        "diseaseId": "maternal_death",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 1.0,
+        "clues": ["irreversible_shock", "cardiac_arrest"]
+      },
+      {
+        "diseaseId": "perinatal_asphyxia",
+        "probability": 0.5,
+        "lagDays": [0, 1],
+        "severityBoost": 0.8,
+        "clues": ["low_apgar", "cord_ph_low"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["previous_scar", "sudden_pain_tearing", "loss_of_station", "shock"],
+    "exclusionClues": ["normal_labor_progression", "no_uterine_tenderness"]
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "disease": {
+    "id": "placental_abruption",
+    "name": "Placental Abruption (Abruptio Placentae)",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Premature separation of a normally situated placenta from the uterine wall before delivery. Significant cause of perinatal mortality and maternal morbidity due to hemorrhage and DIC.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["antepartum_hemorrhage", "acute_abdomen", "maternal_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "concealed_hemorrhage_with_shock", "weight": 10 },
+        { "sign": "couvelaire_uterus", "weight": 10 },
+        { "sign": "disseminated_intravascular_coagulation", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "rigid_tense_uterus", "weight": 9 },
+          { "sign": "fetal_death", "weight": 9 },
+          { "sign": "maternal_hypotension", "weight": 8 },
+          { "sign": "fetal_distress", "weight": 8 },
+          { "sign": "abnormal_coagulation", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Concealed abruption with DIC or fetal death -> SEVERE; Mild revealed abruption -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_pain_sudden_severe", "weight": 5 },
+      { "symptomId": "vaginal_bleeding", "weight": 5, "note": "May be minimal in concealed abruption" },
+      { "symptomId": "uterine_hypertonus_contractions", "weight": 5 },
+      { "symptomId": "back_pain", "weight": 3 },
+      { "symptomId": "reduced_or_absent_fetal_movements", "weight": 4 },
+      { "symptomId": "lightheadedness_dizziness", "weight": 3 },
+      { "symptomId": "vomiting", "weight": 2 },
+      { "symptomId": "trauma_history", "weight": 3 },
+      { "symptomId": "preeclampsia_symptoms", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "uterine_hypertonus_or_tetanic_contractions", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "uterine_tenderness_diffuse", "baseWeight": 4 },
+      { "signId": "vaginal_bleeding_variable", "baseWeight": 4 },
+      { "signId": "fetal_bradycardia_or_absent_fetal_heart", "baseWeight": 5 },
+      { "signId": "maternal_hypotension_tachycardia", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "uterus_tense_woody_hard", "baseWeight": 5 },
+      { "signId": "coagulopathy_bleeding_from_punctures", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "preeclampsia_hypertension", "multiplier": 3.0 },
+      { "id": "abdominal_trauma", "multiplier": 5.0 },
+      { "id": "cocaine_or_methamphetamine_use", "multiplier": 5.0 },
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "previous_abruption", "multiplier": 6.0 },
+      { "id": "thrombophilia", "multiplier": 3.0 },
+      { "id": "multiparity", "multiplier": 1.5 },
+      { "id": "advanced_maternal_age", "multiplier": 2.0 },
+      { "id": "preterm_premature_rupture_of_membranes", "multiplier": 2.0 },
+      { "id": "polyhydramnios_prompt_rupture", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "revealed_abruption",
+        "name": "Revealed Abruption",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "visible_vaginal_bleeding", "weight": 5 },
+          { "feature": "less_severe_pain", "weight": 3 },
+          { "feature": "partial_separation", "weight": 3 },
+          { "feature": "still_some_placental_attachment", "weight": 3 }
+        ],
+        "management": "Assess severity. If mild, monitor. If severe, deliver. Cross-match blood. Correct coagulopathy."
+      },
+      {
+        "id": "concealed_abruption",
+        "name": "Concealed Abruption",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "retroplacental_clot_no_external_bleeding", "weight": 5 },
+          { "feature": "severe_abdominal_pain", "weight": 5 },
+          { "feature": "tense_woody_uterus", "weight": 5 },
+          { "feature": "shock_out_of_proportion_to_visible_bleeding", "weight": 5 },
+          { "feature": "fetal_death_common", "weight": 4 }
+        ],
+        "management": "Emergency delivery. Massive transfusion protocol. Correct DIC. ICU care. Hysterectomy may be needed for Couvelaire uterus."
+      },
+      {
+        "id": "mixed_abruption",
+        "name": "Mixed Abruption",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "both_revealed_and_concealed_components", "weight": 4 },
+          { "feature": "moderate_bleeding", "weight": 3 },
+          { "feature": "pain_present", "weight": 3 }
+        ],
+        "management": "As per concealed component; delivery usually required."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "placenta_previa",
+        "discriminators": ["painless_bleeding", "soft_uterus", "low_lying_placenta_on_us"]
+      },
+      {
+        "diseaseId": "uterine_rupture",
+        "discriminators": ["previous_scar", "loss_of_station", "no_coagulopathy"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Cardiotocography (CTG)", "priority": "immediate", "yield": 0.9, "indication": "fetal distress, hypertonus pattern" },
+        { "name": "Maternal vital signs", "priority": "immediate", "yield": 0.9, "indication": "assess shock" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "immediate", "yield": 0.8, "indication": "Hb, platelet count" },
+        { "name": "Coagulation profile", "priority": "immediate", "yield": 0.9, "indication": "PT, aPTT, fibrinogen, D-dimer" },
+        { "name": "Blood cross-match", "priority": "immediate", "yield": 0.95, "indication": "massive transfusion possible" },
+        { "name": "Kleihauer-Betke test", "priority": "medium", "yield": 0.5, "indication": "feto-maternal hemorrhage" }
+      ],
+      "imaging": [
+        { "name": "Ultrasound (limited)", "priority": "high", "yield": 0.5, "indication": "may show retroplacental clot, but abruption is clinical diagnosis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline - Placental Abruption",
+      "pathways": [
+        {
+          "severity": "mild_revealed",
+          "criteria": "minor bleeding, normal CTG, no coagulopathy, mother stable",
+          "treatment": "Admit, monitor. IV access, cross-match. Betamethasone if <34 weeks. CTG monitoring. Ultrasound for fetal growth. Deliver when appropriate (induction or C-section depending on case)."
+        },
+        {
+          "severity": "moderate_severe",
+          "criteria": "ongoing bleeding, uterine hypertonus, abnormal CTG, any coagulopathy",
+          "treatment": "Emergency delivery. Category-1 C-section if fetus alive and viable. If fetal death, attempt vaginal delivery unless maternal indication for C-section. Massive transfusion (1:1:1). Correct coagulopathy with FFP, cryoprecipitate, platelets. ICU."
+        },
+        {
+          "severity": "dic_and_shock",
+          "criteria": "coagulopathy, maternal shock, concealed abruption",
+          "treatment": "Aggressive resuscitation. Massive transfusion. Emergency delivery (C-section if viable, vaginal if not). Uterotonics. Hysterectomy if Couvelaire uterus with atonic bleeding. Multidisciplinary ICU management."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "decidual_hemorrhage",
+      "retroplacental_hematoma_formation",
+      "mechanical_separation",
+      "consumptive_coagulopathy",
+      "fetal_hypoxia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "probability": 0.2,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["bleeding_from_multiple_sites", "hypofibrinogenemia"]
+      },
+      {
+        "diseaseId": "maternal_death",
+        "probability": 0.01,
+        "lagDays": [0, 2],
+        "severityBoost": 1.0,
+        "clues": ["irreversible_shock", "uncontrolled_hemorrhage"]
+      },
+      {
+        "diseaseId": "perinatal_death",
+        "probability": 0.15,
+        "lagDays": [0, 1],
+        "severityBoost": 0.9,
+        "clues": ["absent_fetal_heart", "severe_abruption"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.6,
+        "clues": ["oliguria", "rising_creatinine"]
+      },
+      {
+        "diseaseId": "postpartum_hemorrhage",
+        "probability": 0.2,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["couvelaire_uterus", "uterine_atony"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["painful_bleeding", "tense_uterus", "hypertonus", "fetal_distress"],
+    "exclusionClues": ["painless_bleeding", "normal_placental_site"]
+  }
+}

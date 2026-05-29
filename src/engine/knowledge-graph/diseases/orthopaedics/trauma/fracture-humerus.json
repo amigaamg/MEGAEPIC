@@ -1,0 +1,110 @@
+{
+  "disease": {
+    "id": "fracture-humerus",
+    "name": "Humerus Fracture",
+    "system": "ORTHO",
+    "agePeak_months": [120, 600],
+    "note": "Fracture of the humerus. Proximal fractures in elderly, shaft fractures in young adults from trauma, supracondylar in children.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["upper_limb_fracture", "arm_trauma"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "open_fracture", "weight": 10 },
+        { "sign": "radial_nerve_injury_wrist_drop", "weight": 8 },
+        { "sign": "vascular_injury_brachial_artery", "weight": 9 },
+        { "sign": "compartment_syndrome", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "displaced_holstein_lewis_fracture", "weight": 7 },
+          { "sign": "segmental_fracture", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If open, radial nerve palsy, or vascular injury -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "mechanism_fall_direct_blow", "weight": 5 },
+      { "symptomId": "arm_pain_swelling", "weight": 5 },
+      { "symptomId": "deformity", "weight": 4 },
+      { "symptomId": "numbness_tingling_hand", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "arm_deformity_angulation", "baseWeight": 5 },
+      { "signId": "swelling_and_tenderness", "baseWeight": 4 },
+      { "signId": "radial_pulse_check", "baseWeight": 5 },
+      { "signId": "radial_nerve_function_wrist_extension", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "median_ulnar_nerve_check", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "osteoporosis", "multiplier": 2.5 },
+      { "id": "contact_sports", "multiplier": 2.0 },
+      { "id": "road_traffic_accident", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "humeral_shaft",
+        "name": "Humeral Shaft Fracture",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "fracture_diaphysis", "weight": 5 },
+          { "feature": "radial_nerve_palsy_possible", "weight": 3 }
+        ],
+        "management": "Hanging cast or functional brace for 6-8 weeks. ORIF with plate if failed closed reduction, segmental, or radial nerve palsy after reduction."
+      },
+      {
+        "id": "supracondylar_humerus",
+        "name": "Supracondylar Humerus Fracture (Pediatric)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "distal_humerus_in_children", "weight": 5 },
+          { "feature": "pulseless_pink_or_pale_hand", "weight": 5 }
+        ],
+        "management": "Gartland type 1: splint. Type 2: CRPP. Type 3: closed reduction and percutaneous pinning. Urgent reduction if neurovascular compromise."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "shoulder_dislocation",
+        "discriminators": ["loss_of_shoulder_contour", "xray_shows_dislocation_not_fracture"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [],
+      "imaging": [
+        { "name": "Humerus AP and lateral X-ray", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "CT arm", "priority": "medium", "yield": 0.8, "indication": "complex/intra-articular" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "OTA Fracture Guidelines",
+      "pathways": [
+        {
+          "severity": "non_surgical",
+          "criteria": "Closed, minimal displacement, no neurovascular deficit",
+          "treatment": "Coaptation splint or hanging cast. Transition to functional brace at 2 weeks. X-ray at 2, 6, 12 weeks. Range of motion exercises."
+        },
+        {
+          "severity": "surgical",
+          "criteria": "Open, failed closed reduction, radial nerve palsy after manipulation, segmental, vascular injury",
+          "treatment": "ORIF with plate and screws or intramedullary nail. Radial nerve exploration if indicated. Vascular repair if needed."
+        }
+      ]
+    },
+
+    "pathophysiology": ["direct_trauma", "fall_on_outstretched_hand", "axial_loading"]
+  }
+}

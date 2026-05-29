@@ -1,0 +1,185 @@
+{
+  "disease": {
+    "id": "chronic_suppurative_otitis_media",
+    "name": "Chronic Suppurative Otitis Media",
+    "system": "ent",
+    "agePeak_months": [60, 480],
+    "note": "Chronic inflammation of middle ear and mastoid with persistent otorrhea through a perforated TM lasting >6 weeks.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["chronic_otorrhea", "hearing_loss", "tm_perforation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "meningism", "weight": 10 },
+        { "sign": "mastoid_tenderness_swelling", "weight": 9 },
+        { "sign": "lateral_sinus_thrombosis_signs", "weight": 10 },
+        { "sign": "brain_abscess_signs", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "cholesteatoma_suspected", "weight": 8 },
+          { "sign": "facial_nerve_palsy", "weight": 9 },
+          { "sign": "vertigo_fistula_sign", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If cholesteatoma/intracranial extension/facial palsy -> SEVERE; else -> NON-SEVERE (tubotympanic)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "chronic_otorrhea", "weight": 5, "modifiers": [
+          { "condition": "purulent_discharge", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "hearing_loss", "weight": 5 },
+      { "symptomId": "ear_pain", "weight": 2, "note": "Pain is often mild unless acute exacerbation" },
+      { "symptomId": "vertigo", "weight": 3, "note": "Suggestive of labyrinthine fistula" },
+      { "symptomId": "fever", "weight": 1, "note": "Low grade or absent in chronic phase" },
+      { "symptomId": "facial_twitching_weakness", "weight": 4, "note": "Emergency - indicates facial canal erosion" }
+    ],
+
+    "examFeatures": [
+      { "signId": "tm_perforation", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "purulent_otorrhea", "baseWeight": 5 },
+      { "signId": "cholesteatoma_mass", "baseWeight": 5, "note": "White pearly mass in attic or posterosuperior quadrant" },
+      { "signId": "retraction_pocket", "baseWeight": 4 },
+      { "signId": "granulation_tissue", "baseWeight": 3 },
+      { "signId": "conductive_hearing_loss", "baseWeight": 3 },
+      { "signId": "post_auricular_tenderness", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "recurrent_aom", "multiplier": 2.0 },
+      { "id": "poor_socioeconomic_conditions", "multiplier": 2.0 },
+      { "id": "chronic_rhinosinusitis", "multiplier": 1.5 },
+      { "id": "immunodeficiency", "multiplier": 1.8 },
+      { "id": "smoking_exposure", "multiplier": 1.3 },
+      { "id": "cleft_palate", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "tubotympanic_csom",
+        "name": "Tubotympanic (Safe) CSOM",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "central_perforation", "weight": 5 },
+          { "feature": "mucoid_discharge", "weight": 4 },
+          { "feature": "mild_conductive_hearing_loss", "weight": 3 }
+        ],
+        "management": "Aural toilet. Topical antibiotics (Ciprofloxacin drops) for 2 weeks. Avoid water in ear. Address sinonasal disease. If fails, consider myringoplasty."
+      },
+      {
+        "id": "atticoantral_csom",
+        "name": "Atticoantral (Unsafe) CSOM",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "attic_or_marginal_perforation", "weight": 5 },
+          { "feature": "scanty_foul_discharge", "weight": 4 },
+          { "feature": "cholesteatoma", "weight": 5 },
+          { "feature": "severe_hearing_loss", "weight": 4 }
+        ],
+        "management": "Surgical exploration - cortical mastoidectomy with tympanoplasty. Intact canal wall vs canal wall down. Remove cholesteatoma sac. Ossicular reconstruction if needed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "otitis_externa",
+        "discriminators": ["tragal_tenderness", "canal_edema", "intact_TM", "pain_with_chewing"]
+      },
+      {
+        "diseaseId": "nasopharyngeal_carcinoma",
+        "discriminators": ["unilateral_serous_effusion", "cervical_lymphadenopathy", "epistaxis", "nasal_obstruction"]
+      },
+      {
+        "diseaseId": "tuberculous_otitis",
+        "discriminators": ["painless_otorrhea", "multiple_perforations", "pale_granulations", "pulmonary_TB"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Otoscopy with Microscope", "priority": "immediate", "yield": 0.9, "indication": "detailed assessment of TM and extent" },
+        { "name": "Tuning Fork Tests", "priority": "high", "yield": 0.7, "indication": "type and degree of hearing loss" }
+      ],
+      "laboratory": [
+        { "name": "Ear Swab Culture and Sensitivity", "priority": "high", "yield": 0.8, "indication": "guide antibiotic selection" }
+      ],
+      "imaging": [
+        { "name": "High Resolution CT Temporal Bone", "priority": "high", "yield": 0.9, "indication": "suspected cholesteatoma, intracranial complications, pre-surgical planning" },
+        { "name": "MRI Temporal Bone", "priority": "medium", "yield": 0.85, "indication": "differentiate cholesteatoma from granulation, DWI sequence" },
+        { "name": "Pure Tone Audiometry", "priority": "high", "yield": 0.9, "indication": "baseline and post-treatment hearing assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "UpToDate: Chronic Suppurative Otitis Media Management",
+      "pathways": [
+        {
+          "severity": "tubotympanic",
+          "criteria": "central perforation, mucoid discharge, no cholesteatoma",
+          "treatment": "Aural toilet under microscopy. Topical Ciprofloxacin 0.3% drops TID for 2 weeks. Avoid water ingress. If healed: myringoplasty at 3 months. If not healed: reassess."
+        },
+        {
+          "severity": "atticoantral",
+          "criteria": "attic/marginal perforation, cholesteatoma, scanty foul discharge",
+          "treatment": "Canal wall up or down mastoidectomy with tympanoplasty. Obliterate mastoid cavity if needed. Ossiculoplasty if ossicular erosion. Second-look surgery."
+        },
+        {
+          "severity": "complicated",
+          "criteria": "facial palsy, labyrinthine fistula, intracranial extension, sigmoid sinus thrombosis",
+          "treatment": "Emergency mastoid exploration. IV antibiotics (Ceftriaxone + Metronidazole). Neurosurgical consultation if intracranial abscess. Anticoagulation for sinus thrombosis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "persistent_tm_perforation",
+      "squamous_epithelial_migration",
+      "bacterial_biofilm",
+      "ossicular_erosion",
+      "bone_remodeling"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acquired_cholesteatoma",
+        "probability": 0.3,
+        "lagDays": [90, 730],
+        "severityBoost": 0.5,
+        "clues": ["attic_perforation", "foul_discharge", "keratin_debris"]
+      },
+      {
+        "diseaseId": "labyrinthine_fistula",
+        "probability": 0.05,
+        "lagDays": [180, 1095],
+        "severityBoost": 0.5,
+        "clues": ["vertigo", "positive_fistula_sign", "sensorineural_hearing_loss"]
+      },
+      {
+        "diseaseId": "facial_nerve_palsy",
+        "probability": 0.03,
+        "lagDays": [90, 730],
+        "severityBoost": 0.6,
+        "clues": ["facial_twitching", "gradual_weakness"]
+      },
+      {
+        "diseaseId": "intracranial_abscess",
+        "probability": 0.01,
+        "lagDays": [180, 1460],
+        "severityBoost": 0.7,
+        "clues": ["headache", "fever", "neurological_deficits", "seizures"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["chronic_otorrhea", "tm_perforation", "hearing_loss", "foul_discharge"],
+    "exclusionClues": ["acute_onset", "tragal_tenderness", "intact_TM"]
+  }
+}

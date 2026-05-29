@@ -1,0 +1,154 @@
+{
+  "disease": {
+    "id": "gastric_cancer",
+    "name": "Gastric Cancer",
+    "system": "gastroenterology",
+    "agePeak_months": [600, 960],
+    "note": "Adenocarcinoma of the stomach; often presents late with poor prognosis. Highest incidence in East Asia, Eastern Europe, South America.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["malignancy", "gastric", "dyspepsia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "gastric_outlet_obstruction", "weight": 9 },
+        { "sign": "hematemesis_massive", "weight": 9 },
+        { "sign": "perforation", "weight": 10 },
+        { "sign": "severe_weight_loss_cachexia", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "dyspepsia_persistent": true
+      },
+      "severityLabel": "If dysphagia, weight loss, bleeding -> URGENT endoscopy; if obstruction/perforation -> EMERGENCY"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain_persistent", "weight": 4 },
+      { "symptomId": "weight_loss_unintentional", "weight": 5 },
+      { "symptomId": "early_satiety", "weight": 4 },
+      { "symptomId": "anorexia", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "dysphagia", "weight": 3, "note": "If cardia involvement" },
+      { "symptomId": "hematemesis", "weight": 3 },
+      { "symptomId": "melena", "weight": 3 },
+      { "symptomId": "dyspepsia_not_responding_to_ppi", "weight": 4 },
+      { "symptomId": "abdominal_fullness", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "cachexia", "baseWeight": 4 },
+      { "signId": "epigastric_mass", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "left_supraclavicular_lymph_node_virchow", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly_nodular", "baseWeight": 3 },
+      { "signId": "ascites", "baseWeight": 3 },
+      { "signId": "sister_mary_joseph_nodule", "baseWeight": 4, "note": "Umbilical metastasis" }
+    ],
+
+    "riskFactors": [
+      { "id": "h_pylori_infection", "multiplier": 3.0 },
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "family_history_gastric_cancer", "multiplier": 2.5 },
+      { "id": "chronic_gastritis_atrophic", "multiplier": 3.0 },
+      { "id": "intestinal_metaplasia", "multiplier": 2.5 },
+      { "id": "pernicious_anemia", "multiplier": 2.0 },
+      { "id": "ebv_infection", "multiplier": 1.5 },
+      { "id": "diet_high_salt_smoked_foods", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["pain_relieved_by_food", "h_pylori_positive_ulcer", "no_weight_loss", "younger_age", "ulcer_heals_with_ppi"]
+      },
+      {
+        "diseaseId": "gastritis",
+        "discriminators": ["diffuse_discomfort", "nausea_predominant", "normal_endoscopy_or_benign_inflammation"]
+      },
+      {
+        "diseaseId": "lymphoma_gastric",
+        "discriminators": ["bulky_disease_on_imaging", "biopsy_shows_lymphoma", "h_pylori_association"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fecal occult blood", "priority": "high", "yield": 0.5, "indication": "all suspected gastric cancer" }
+      ],
+      "laboratory": [
+        { "name": "FBC", "priority": "high", "yield": 0.6, "indication": "iron deficiency anemia common" },
+        { "name": "LFTs", "priority": "high", "yield": 0.4, "indication": "liver metastases" },
+        { "name": "CEA, CA19-9", "priority": "medium", "yield": 0.5, "indication": "monitoring, not diagnostic" },
+        { "name": "H. pylori testing", "priority": "high", "yield": 0.7, "indication": "all patients" }
+      ],
+      "imaging": [
+        { "name": "Upper endoscopy with multiple biopsies", "priority": "immediate", "yield": 0.97, "indication": "gold standard for diagnosis" },
+        { "name": "EUS (Endoscopic Ultrasound)", "priority": "high", "yield": 0.9, "indication": "T and N staging" },
+        { "name": "CT abdomen/pelvis with contrast", "priority": "high", "yield": 0.85, "indication": "staging, metastatic workup" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "if CT equivocal for metastases" },
+        { "name": "Diagnostic laparoscopy", "priority": "high", "yield": 0.9, "indication": "detect peritoneal metastases before curative surgery" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines: Gastric Cancer",
+      "pathways": [
+        {
+          "severity": "early_localized",
+          "criteria": "T1a, N0 (confined to mucosa)",
+          "treatment": "Endoscopic mucosal resection (EMR) or endoscopic submucosal dissection (ESD) for eligible lesions."
+        },
+        {
+          "severity": "localized_resectable",
+          "criteria": "T2-T4a, any N, M0",
+          "treatment": "Gastrectomy (partial or total) with D2 lymphadenectomy. Perioperative chemotherapy (FLOT regimen) for advanced T or N+."
+        },
+        {
+          "severity": "metastatic",
+          "criteria": "M1 or unresectable",
+          "treatment": "Palliative chemotherapy (platinum + fluoropyrimidine + trastuzumab if HER2+, nivolumab if PD-L1+). Palliative surgery/stenting for obstruction."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "h_pylori_induced_chronic_gastritis",
+      "correa_cascade_superficial_gastritis_atrophic_gastritis_intestinal_metaplasia_dysplasia_carcinoma",
+      "genetic_mutations_cdh1_msi",
+      "angiogenesis",
+      "lymphatic_and_hematogenous_spread",
+      "peritoneal_seeding",
+      "krukenberg_tumor_ovarian_metastasis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "gastric_outlet_obstruction",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["recurrent_vomiting", "early_satiety", "succussion_splash"]
+      },
+      {
+        "diseaseId": "upper_gi_bleeding",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["hematemesis", "melena", "anemia"]
+      },
+      {
+        "diseaseId": "perforation",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["acute_abdomen", "peritonitis", "free_air"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if obstruction/bleeding; medium for workup",
+    "diagnosticClues": ["persistent_dyspepsia_in_patient_over_50", "unexplained_weight_loss", "iron_deficiency_anemia_in_men", "epigastric_mass"],
+    "exclusionClues": ["typical_gerd_symptoms_responding_to_ppi", "intermittent_symptoms_over_years", "negative_endoscopy_with_benign_biopsy"]
+  }
+}

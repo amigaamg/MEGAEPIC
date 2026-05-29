@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "giant_cell_arteritis",
+    "name": "Giant Cell Arteritis (Temporal Arteritis)",
+    "system": "rheumatology",
+    "agePeak_months": [720, 960],
+    "note": "Granulomatous vasculitis of large and medium arteries, preferentially affecting cranial branches of the aorta. Almost exclusively occurs in patients over age 50. Strongly associated with polymyalgia rheumatica.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["vasculitis", "large_vessel_vasculitis", "emergency", "aortic_inflammation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_vision_loss_amaurosis", "weight": 10 },
+        { "sign": "permanent_vision_loss", "weight": 10 },
+        { "sign": "aortic_dissection", "weight": 9 },
+        { "sign": "stroke", "weight": 9 },
+        { "sign": "acute_scalp_necrosis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If any visual or ischemic symptom -> EMERGENCY; else -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "new_onset_headache_temporal", "weight": 5 },
+      { "symptomId": "scalp_tenderness", "weight": 4 },
+      { "symptomId": "jaw_claudication", "weight": 5, "note": "Highly specific" },
+      { "symptomId": "vision_disturbance_diplopia", "weight": 5 },
+      { "symptomId": "amaurosis_fugax", "weight": 5 },
+      { "symptomId": "pmr_symptoms_shoulder_hip", "weight": 4 },
+      { "symptomId": "constitutional_fever_weight_loss", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "tender_nodular_temporal_artery", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "absent_temporal_artery_pulse", "baseWeight": 5 },
+      { "signId": "fundoscopy_anterior_ischemic_optic_neuropathy", "baseWeight": 5 },
+      { "signId": "scalp_tenderness", "baseWeight": 4 },
+      { "signId": "pmr_shoulder_hip_girdle_tenderness", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 10.0 },
+      { "id": "female_sex", "multiplier": 3.0 },
+      { "id": "northern_european_descent", "multiplier": 2.0 },
+      { "id": "polymyalgia_rheumatica", "multiplier": 5.0 }
+    ],
+
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "takayasu_arteritis",
+        "discriminators": ["age_under_40", "female", "aortic_arch_vessel_stenosis", "no_temporal_artery_involvement"]
+      },
+      {
+        "diseaseId": "migraine_tension_headache",
+        "discriminators": ["younger_age", "no_jaw_claudication", "no_vision_loss", "normal_crp_esr"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Fundoscopy", "priority": "immediate", "yield": 0.6, "indication": "anterior ischemic optic neuropathy" }
+      ],
+      "laboratory": [
+        { "name": "ESR", "priority": "immediate", "yield": 0.9, "indication": "markedly elevated (often > 100 mm/h)" },
+        { "name": "CRP", "priority": "immediate", "yield": 0.9, "indication": "elevated" },
+        { "name": "FBC", "priority": "high", "yield": 0.4, "indication": "normocytic anemia, thrombocytosis" }
+      ],
+      "imaging": [
+        { "name": "Temporal artery biopsy", "priority": "high", "yield": 0.85, "indication": "granulomatous inflammation, skip lesions" },
+        { "name": "Temporal artery ultrasound", "priority": "high", "yield": 0.7, "indication": "halo sign, stenosis, occlusion" },
+        { "name": "PET-CT or MRA aorta", "priority": "medium", "yield": 0.8, "indication": "large vessel involvement assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR/ACR Giant Cell Arteritis Guidelines",
+      "pathways": [
+        {
+          "severity": "ischemic",
+          "criteria": "visual symptoms, jaw claudication, amaurosis",
+          "treatment": "High-dose IV methylprednisolone (500-1000 mg daily x 3). Then oral prednisolone 60 mg/day. Do NOT wait for biopsy. Aspirin 75 mg."
+        },
+        {
+          "severity": "non_ischemic",
+          "criteria": "headache, PMR, elevated ESR, no ischemia",
+          "treatment": "Prednisolone 40-60 mg/day. Taper gradually over 12-18 months. Tocilizumab for steroid-sparing."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "granulomatous_inflammation",
+      "intimal_hyperplasia",
+      "vessel_stenosis_occlusion",
+      "skip_lesions",
+      "multinucleated_giant_cells",
+      "lamina_elastic_fragmentation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "permanent_vision_loss",
+        "probability": 0.15,
+        "severityBoost": 0.9,
+        "clues": ["amaurosis_fugax", "diplopia", "headache", "jaw_claudication"]
+      },
+      {
+        "diseaseId": "aortic_aneurysm_dissection",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["chest_back_pain", "aortic_regurgitation", "wide_mediastinum"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "Emergent - treat immediately to prevent blindness",
+    "diagnosticClues": ["age_over_50", "new_headache", "jaw_claudication", "vision_loss", "very_high_esr"],
+    "exclusionClues": ["age_under_50", "normal_esr_crp", "negative_temporal_artery_biopsy", "no_vascular_symptoms"]
+  }
+}

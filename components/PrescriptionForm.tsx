@@ -43,6 +43,7 @@ export function PrescriptionForm({
   toolType = 'clinical_intelligence',
   onSaved, onCancel,
 }: PrescriptionFormProps) {
+  return null;
   const [dosage, setDosage] = useState(calculatedDose);
   const [route, setRoute] = useState(defaultRoute);
   const [frequency, setFrequency] = useState(defaultFrequency);

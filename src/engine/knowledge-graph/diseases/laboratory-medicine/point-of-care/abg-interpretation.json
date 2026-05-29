@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "abg_interpretation",
+    "name": "Arterial Blood Gas Interpretation",
+    "system": "LAB",
+    "agePeak_months": [12, 960],
+    "note": "ABG analysis assesses oxygenation (PaO2), ventilation (PaCO2), and acid-base status (pH, HCO3). Systematic approach: check pH (acidemia <7.35, alkalemia >7.45), determine primary disorder (respiratory vs metabolic), calculate compensation, and check anion gap for metabolic acidosis.",
+    "prevalenceWeight": 0.85,
+    "syndromeTags": ["acid_base_disorder", "respiratory_failure", "metabolic_acidosis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "ph_lt_7_1", "weight": 10 },
+        { "sign": "paO2_lt_40_on_room_air", "weight": 9 },
+        { "sign": "paCO2_gt_80_with_depressed_consciousness", "weight": 9 },
+        { "sign": "severe_metabolic_acidosis_with_high_ag", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "ph_lt_7_2_or_gt_7_6", "weight": 8 },
+          { "sign": "paO2_lt_60_on_gt_60_percent_o2", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If pH <7.2 or PaO2 <40 -> CRITICAL; else -> NON-CRITICAL"
+    },
+    "historyFeatures": [
+      { "symptomId": "dyspnea_or_respiratory_distress", "weight": 5, "modifiers": [
+          { "condition": "acute_or_chronic", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "altered_mental_status", "weight": 4 },
+      { "symptomId": "diarrhea_vomiting_or_renal_failure", "weight": 3 },
+      { "symptomId": "diabetes_ketosis_suspected", "weight": 4 },
+      { "symptomId": "sepsis_or_shock", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "ph_value", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "paCO2_primary_or_compensatory", "baseWeight": 5 },
+      { "signId": "hCO3_primary_or_compensatory", "baseWeight": 5 },
+      { "signId": "anion_gap_calculation", "baseWeight": 4 },
+      { "signId": "winter_formula_compensation_check", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "copd_chronic_respiratory_acidosis", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus_dka", "multiplier": 2.5 },
+      { "id": "chronic_kidney_disease", "multiplier": 2.0 },
+      { "id": "sepsis", "multiplier": 2.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "metabolic_acidosis",
+        "name": "Metabolic Acidosis (Anion Gap Calculation)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "low_hco3_lt_22", "weight": 5 },
+          { "feature": "high_anion_gap_gt_12", "weight": 5 },
+          { "feature": "normal_anion_gap_hyperchloremic", "weight": 4 },
+          { "feature": "winter_formula_paco2_expected", "weight": 4 },
+          { "feature": "delta_delta_ratio_for_mixed_disorders", "weight": 4 }
+        ],
+        "management": "High AG: MUDPILES (methanol, uremia, DKA, propylene glycol, infection/iron, lactic, ethylene glycol, salicylates). Treat underlying cause. Give bicarb only if pH <7.1 or severe. Normal AG: diarrhea, RTA. Correct cause, bicarb loss replacement."
+      },
+      {
+        "id": "metabolic_alkalosis",
+        "name": "Metabolic Alkalosis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "elevated_hco3_gt_26", "weight": 5 },
+          { "feature": "compensatory_paco2_elevation", "weight": 4 },
+          { "feature": "urine_chloride_lt_20_saline_responsive", "weight": 4 },
+          { "feature": "urine_chloride_gt_20_saline_resistant", "weight": 4 },
+          { "feature": "hypokalemia_often_present", "weight": 3 }
+        ],
+        "management": "Saline-responsive (urine Cl <20): volume repletion with NS, K+ replacement. Saline-resistant (urine Cl >20): hold diuretics, treat hyperaldosteronism (spironolactone), consider acetazolamide if severe."
+      },
+      {
+        "id": "respiratory_acidosis",
+        "name": "Respiratory Acidosis (Hypercapnia)",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "elevated_paco2_gt_45", "weight": 5 },
+          { "feature": "acute_uncompensated_ph_lt_7_35_hco3_normal", "weight": 5 },
+          { "feature": "chronic_compensated_ph_near_normal_hco3_elevated", "weight": 5 },
+          { "feature": "expected_compensation_acute_hco3_up_1_per_10_paco2", "weight": 4 },
+          { "feature": "chronic_hco3_up_3_to_5_per_10_paco2", "weight": 4 }
+        ],
+        "management": "Acute: Non-invasive or invasive ventilation. Treat underlying (COPD exacerbation, opioid overdose, neuromuscular weakness). Avoid high FiO2 in CO2 retainers. Chronic: optimize lung function, LTOT, smoking cessation, pulmonary rehab."
+      },
+      {
+        "id": "respiratory_alkalosis",
+        "name": "Respiratory Alkalosis (Hypocapnia)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "low_paco2_lt_35", "weight": 5 },
+          { "feature": "elevated_ph_gt_7_45", "weight": 5 },
+          { "feature": "hyperventilation_cause", "weight": 4 },
+          { "feature": "acute_hco3_decrease_minimal", "weight": 3 },
+          { "feature": "chronic_hco3_lt_18", "weight": 3 }
+        ],
+        "management": "Treat underlying cause: anxiety/panic (rebreathing, benzodiazepine), PE (anticoagulate), sepsis (antibiotics), hepatic encephalopathy (lactulose), salicylate overdose (alkalinization). Symptomatic treatment for severe symptoms."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "venous_sample_mix_up",
+        "discriminators": ["paO2_40s_on_room_air_with_normal_sats", "no_arterial_pulsation", "lower_ph"]
+      },
+      {
+        "diseaseId": "pre_analytical_error_air_bubble",
+        "discriminators": ["paO2_gt_expected", "paCO2_low", "ph_altered"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Check sample quality (arterial vs venous, air bubbles, heparin)", "priority": "immediate", "yield": 0.7, "indication": "all ABG samples" }
+      ],
+      "laboratory": [
+        { "name": "ABG: pH, PaCO2, PaO2, HCO3, Base Excess, SaO2", "priority": "immediate", "yield": 1.0, "indication": "any critically ill patient or acid-base concern" },
+        { "name": "Serum electrolytes (Na, K, Cl, HCO3)", "priority": "immediate", "yield": 0.9, "indication": "anion gap calculation, delta ratio" },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "lactic acidosis, tissue hypoperfusion" },
+        { "name": "Albumin (corrected anion gap = AG + 2.5 x [4 - albumin])", "priority": "high", "yield": 0.6, "indication": "accurate AG in hypoalbuminemia" },
+        { "name": "Serum osmolality (calculated vs measured)", "priority": "medium", "yield": 0.5, "indication": "osmolar gap for methanol/ethylene glycol" },
+        { "name": "Ketones (beta-hydroxybutyrate)", "priority": "medium", "yield": 0.5, "indication": "DKA or alcoholic ketoacidosis" },
+        { "name": "Salicylate level", "priority": "medium", "yield": 0.3, "indication": "suspected overdose" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "ACCP/ATS Guidelines for Acid-Base Disorders",
+      "pathways": [
+        {
+          "severity": "mild_abnormality",
+          "criteria": "pH 7.35-7.45 or 7.30-7.50 with stable patient, no danger signs",
+          "treatment": "Investigate and treat underlying cause. Repeat ABG as needed for trending. No acute intervention required for acid-base itself."
+        },
+        {
+          "severity": "moderate_severe",
+          "criteria": "pH 7.2-7.3 or 7.5-7.6, some symptoms, abnormal compensation",
+          "treatment": "Target specific therapy per primary disorder. Consider bicarbonate for severe metabolic acidosis if pH <7.2 with adequate ventilation. Consider NIV for acute hypercapnia."
+        },
+        {
+          "severity": "critical",
+          "criteria": "pH <7.2 or >7.6, severe hypoxia, hypercapnia with AMS, shock",
+          "treatment": "ICU admission. Intubation and ventilation if needed (for acidosis with inadequate compensation or hypoxia). Correct reversible causes aggressively. Hemodialysis for severe refractory acidosis (e.g., toxins). Vasopressors for shock."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "impaired_gas_exchange_hypoxemia",
+      "alveolar_hypoventilation_hypercapnia",
+      "acid_base_disruption",
+      "buffering_systems_bicarbonate",
+      "compensatory_mechanisms_renal_or_respiratory"
+    ],
+    "complications": [
+      {
+        "diseaseId": "cardiac_arrhythmia_from_acidemia",
+        "probability": 0.1,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "clues": ["ph_lt_7_2", "hyperkalemia", "ecg_changes"]
+      },
+      {
+        "diseaseId": "intracerebral_hemorrhage_from_alkalemia",
+        "probability": 0.02,
+        "lagDays": [0, 2],
+        "severityBoost": 0.6,
+        "clues": ["ph_gt_7_6", "hypocapnia_severe", "altered_mental_status"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["abnormal_ph", "abnormal_paco2_hco3", "appropriate_compensation", "anion_gap"],
+    "exclusionClues": ["normal_abg", "chronic_stable_compensation"]
+  }
+}

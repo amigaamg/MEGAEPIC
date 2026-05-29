@@ -1,0 +1,133 @@
+{
+  "disease": {
+    "id": "bipolar_disorder",
+    "name": "Bipolar Disorder",
+    "system": "PSYCH",
+    "agePeak_months": [180, 360],
+    "note": "Chronic mood disorder with alternating manic/hypomanic and depressive episodes. Type I: full mania. Type II: hypomania + major depression.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["mood_disorder", "mania", "bipolar"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "suicidal_intent_or_plan", "weight": 10 },
+        { "sign": "psychotic_features", "weight": 9 },
+        { "sign": "severe_agitation_violence", "weight": 9 },
+        { "sign": "catatonia", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If suicidal/psychotic/violent/catatonic -> URGENT inpatient; else -> OUTPATIENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "elevated_expansive_mood", "weight": 5 },
+      { "symptomId": "decreased_need_for_sleep", "weight": 4 },
+      { "symptomId": "increased_goal_directed_activity", "weight": 4 },
+      { "symptomId": "grandiose_delusions", "weight": 4 },
+      { "symptomId": "pressured_speech", "weight": 4 },
+      { "symptomId": "racing_thoughts", "weight": 3 },
+      { "symptomId": "distractibility", "weight": 3 },
+      { "symptomId": "impulsive_behavior_financial_sexual", "weight": 3 },
+      { "symptomId": "depressive_episodes", "weight": 3 }
+    ],
+    "examFeatures": [
+      { "signId": "euphoric_or_irritable_affect", "baseWeight": 5 },
+      { "signId": "pressured_fast_speech", "baseWeight": 4 },
+      { "signId": "psychomotor_agitation", "baseWeight": 3 },
+      { "signId": "grandiosity"}, "baseWeight": 4 },
+      { "signId": "poor_insight_during_mania", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "family_history_bipolar", "multiplier": 5.0 },
+      { "id": "first_degree_relative", "multiplier": 7.0 },
+      { "id": "postpartum_period", "multiplier": 2.0 },
+      { "id": "seasonal_pattern", "multiplier": 1.3 },
+      { "id": "substance_abuse", "multiplier": 2.0 },
+      { "id": "sleep_deprivation_trigger", "multiplier": 2.0 }
+    ],
+    "subtypes": [
+      {
+        "id": "bipolar_type_1",
+        "name": "Bipolar I Disorder",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "full_manic_episodes", "weight": 5 },
+          { "feature": "major_depressive_episodes", "weight": 5 },
+          { "feature": "functional_impairment", "weight": 4 }
+        ],
+        "management": "Acute mania: lithium, valproate, olanzapine, or aripiprazole. Depressive episode: quetiapine, lamotrigine, or lithium. Avoid antidepressants monotherapy. Maintenance: lithium (first-line)."
+      },
+      {
+        "id": "bipolar_type_2",
+        "name": "Bipolar II Disorder",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "hypomanic_episodes_only", "weight": 5 },
+          { "feature": "predominant_depression", "weight": 5 }
+        ],
+        "management": "Depression: quetiapine, lamotrigine, lithium. Hypomania seldom requires treatment. Avoid antidepressant monotherapy. Maintenance: lamotrigine or lithium."
+      },
+      {
+        "id": "rapid_cycling",
+        "name": "Bipolar with Rapid Cycling",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "4_or_more_mood_episodes_per_year", "weight": 5 },
+          { "feature": "treatment_resistant", "weight": 4 }
+        ],
+        "management": "Optimize mood stabilizer. Valproate may be better than lithium. Avoid antidepressants. Add lamotrigine or atypical antipsychotic. Thyroid check."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "schizophrenia", "discriminators": ["psychosis_outside_mood_episodes", "negative_symptoms_prominent", "deteriorated_function"] },
+      { "diseaseId": "adhd", "discriminators": ["childhood_onset", "no_periodicity", "no_elevated_mood", "no_decreased_sleep_need"] },
+      { "diseaseId": "substance_induced_mania", "discriminators": ["temporal_use", "positive_tox", "resolution_with_abstinence"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Mood Disorder Questionnaire (MDQ)", "priority": "high", "yield": 0.8, "indication": "bipolar screening" },
+        { "name": "Young Mania Rating Scale (YMRS)", "priority": "high", "yield": 0.85, "indication": "mania severity" }
+      ],
+      "laboratory": [
+        { "name": "TSH, FBC, U&E, LFT", "priority": "high", "yield": 0.3, "indication": "baseline before mood stabilizers" },
+        { "name": "Urine toxicology", "priority": "high", "yield": 0.4, "indication": "substance-induced mood disorder" }
+      ]
+    },
+    "management": {
+      "protocolReference": "NICE Guidelines for Bipolar Disorder",
+      "pathways": [
+        {
+          "severity": "acute mania",
+          "criteria": "YMRS >20, psychotic features, agitation, risk",
+          "treatment": "Lithium (target 0.6-1.2 mmol/L) + olanzapine 10-20 mg or haloperidol 5-15 mg. Valproate 20 mg/kg if mixed/rapid cycling. Inpatient if severe. IM if refusing."
+        },
+        {
+          "severity": "bipolar depression",
+          "criteria": "depressive episode in bipolar patient",
+          "treatment": "Quetiapine 300-600 mg or lamotrigine 50-200 mg. Lithium. Avoid antidepressant monotherapy. ECT if severe/refractory."
+        },
+        {
+          "severity": "maintenance",
+          "criteria": "euthymic, prevent relapse",
+          "treatment": "Lithium (first-line, also reduces suicide risk). Valproate or lamotrigine. Quetiapine. Monitor lithium levels and renal/thyroid function. Psychoeducation. Lifestyle regularity."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "dopamine_dysregulation_mania",
+      "g_protein_signaling_abnormalities",
+      "mitochondrial_dysfunction",
+      "circadian_rhythm_disruption",
+      "inflammatory_markers_elevated",
+      "genetic_polygenic_predisposition"
+    ],
+    "complications": [
+      { "diseaseId": "suicide_attempt", "probability": 0.1, "severityBoost": 0.5, "clues": ["depressive_mixed_episode", "previous_attempts", "hopelessness"] },
+      { "diseaseId": "substance_abuse", "probability": 0.4, "severityBoost": 0.2, "clues": ["alcohol_cocaine_during_mania"] },
+      { "diseaseId": "cardiovascular_disease", "probability": 0.2, "severityBoost": 0.1, "clues": ["metabolic_syndrome_from_medications"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high if manic or suicidal",
+    "diagnosticClues": ["alternating_mania_and_depression", "family_history_bipolar", "decreased_sleep_need_in_mania"],
+    "exclusionClues": ["mania_only_with_substance", "symptoms_less_than_several_days", "single_mood_episode_only"]
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "disease": {
+    "id": "foreign_body_nose_ear",
+    "name": "Foreign Body (Nose / Ear)",
+    "system": "ent",
+    "agePeak_months": [12, 60],
+    "note": "Common pediatric ENT emergency. Nasal foreign bodies may present with foul-smelling discharge. Aural foreign bodies may cause pain, hearing loss, or otorrhea.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["nasal_discharge_foul", "ear_fullness", "foreign_body_retention"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "respiratory_distress", "weight": 10 },
+        { "sign": "stridor", "weight": 10 },
+        { "sign": "seizure", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "disc_battery_nose", "weight": 9 },
+          { "sign": "sharp_object_ear", "weight": 7 },
+          { "sign": "tm_perforation", "weight": 6 },
+          { "sign": "bleeding_significant", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If button battery/sharp object/airway risk -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "foul_smelling_nasal_discharge", "weight": 4, "note": "Classic presentation of chronic nasal FB" },
+      { "symptomId": "unilateral_nasal_obstruction", "weight": 3 },
+      { "symptomId": "nasal_bleeding", "weight": 2 },
+      { "symptomId": "ear_pain", "weight": 3 },
+      { "symptomId": "hearing_loss", "weight": 2, "note": "Complete occlusion of ear canal" },
+      { "symptomId": "ear_discharge", "weight": 2 },
+      { "symptomId": "tinnitus", "weight": 1 },
+      { "symptomId": "witness_placing_object", "weight": 3, "note": "Often unwitnessed in toddlers" },
+      { "symptomId": "irritability", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "visible_foreign_body_nose", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "visible_foreign_body_ear_canal", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "purulent_bloody_nasal_discharge_unilateral", "baseWeight": 4 },
+      { "signId": "nasal_mucosa_edema_erythema", "baseWeight": 2 },
+      { "signId": "ear_canal_erythema_edema", "baseWeight": 2 },
+      { "signId": "tm_perforation", "baseWeight": 3 },
+      { "signId": "halitosis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_1_to_4", "multiplier": 5.0 },
+      { "id": "developmental_delay", "multiplier": 2.5 },
+      { "id": "sibling_young", "multiplier": 1.5 },
+      { "id": "pica", "multiplier": 2.0 },
+      { "id": "curiosity_exploratory_behavior", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "nasal_foreign_body",
+        "name": "Nasal Foreign Body",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "unilateral_foul_discharge", "weight": 5 },
+          { "feature": "visible_object", "weight": 5 },
+          { "feature": "nasal_obstruction", "weight": 3 }
+        ],
+        "management": "Topical vasoconstrictor (oxymetazoline) + anesthetic (lidocaine). Removal using: positive pressure technique (parent mouth-to-mouth), catheter balloon, hook, or forceps. Do NOT push posteriorly. Refer for button battery."
+      },
+      {
+        "id": "aural_foreign_body",
+        "name": "Aural Foreign Body",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "visible_in_canal", "weight": 5 },
+          { "feature": "hearing_loss", "weight": 3 },
+          { "feature": "canal_abrasion", "weight": 2 }
+        ],
+        "management": "Remove with cerumen loop, suction, or alligator forceps under microscope. Avoid irrigation for organic objects (expansion) or batteries. General anesthesia if uncooperative or posterior/medial to isthmus."
+      },
+      {
+        "id": "button_battery",
+        "name": "Button Battery (Highest Priority)",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "disc_shaped", "weight": 5 },
+          { "feature": "double_rim_sign_Xray", "weight": 5 },
+          { "feature": "tissue_necrosis_dark", "weight": 5 }
+        ],
+        "management": "Emergency removal within 2 hours. Do NOT apply suction or forceps directly to battery (rupture risk). Nasal: remove under general anesthesia with magnet or suction catheter. Ear: microscopic removal under GA. Irrigate with saline after removal. ENT follow-up for stricture/stenosis."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_rhinosinusitis",
+        "discriminators": ["bilateral_discharge", "fever", "facial_pain", "no_object_visible"]
+      },
+      {
+        "diseaseId": "nasal_polyp",
+        "discriminators": ["bilateral", "grape_like", "persistent_over_time", "no_acute_onset"]
+      },
+      {
+        "diseaseId": "otitis_externa",
+        "discriminators": ["tragal_tenderness", "canal_edema", "no_visible_object"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Anterior Rhinoscopy / Otoscopy", "priority": "immediate", "yield": 0.9, "indication": "all suspected FB" }
+      ],
+      "laboratory": [],
+      "imaging": [
+        { "name": "X-ray Face (Waters view)", "priority": "medium", "yield": 0.6, "indication": "suspected radiopaque FB, button battery evaluation" },
+        { "name": "CT Sinuses", "priority": "low", "yield": 0.7, "indication": "suspected chronic FB with granulation" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Foreign Body Management",
+      "pathways": [
+        {
+          "severity": "simple nasal",
+          "criteria": "smooth object, unilateral, cooperative child, no battery",
+          "treatment": "Oxymetazoline spray. Positive pressure technique (parent blows into child's mouth while occluding opposite naris). Catheter balloon technique (Fogarty). Hook or forceps extraction."
+        },
+        {
+          "severity": "simple aural",
+          "criteria": "object lateral to isthmus, cooperative, no TM involvement",
+          "treatment": "Alligator forceps, cerumen loop, or suction under microscope. Atraumatic technique. If failed: refer for GA."
+        },
+        {
+          "severity": "complex/complicated",
+          "criteria": "button battery, sharp object, deeply impacted, uncooperative, TM injury",
+          "treatment": "General anesthesia. Microscopic removal. For button battery: immediate removal, irrigate with saline, monitor for septal perforation or canal stenosis. ENT follow-up."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "object_placement_in_cavity",
+      "mucosal_irritation",
+      "inflammatory_response",
+      "granulation_tissue_formation",
+      "tissue_necrosis_battery"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "nasal_septal_perforation",
+        "probability": 0.05,
+        "lagDays": [2, 14],
+        "severityBoost": 0.3,
+        "clues": ["battery_FB", "septal_tenderness", "crusting"]
+      },
+      {
+        "diseaseId": "tm_perforation",
+        "probability": 0.05,
+        "lagDays": [0, 3],
+        "severityBoost": 0.2,
+        "clues": ["sharp_object", "instrumentation_trauma"]
+      },
+      {
+        "diseaseId": "sinusitis_from_nasal_FB",
+        "probability": 0.05,
+        "lagDays": [3, 30],
+        "severityBoost": 0.1,
+        "clues": ["prolonged_discharge", "facial_pain", "fever"]
+      },
+      {
+        "diseaseId": "meat_canal_stenosis",
+        "probability": 0.02,
+        "lagDays": [7, 90],
+        "severityBoost": 0.2,
+        "clues": ["battery_FB", "hearing_loss", "canal_narrowing"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["unilateral_foul_nasal_discharge", "visible_object", "young_child", "suspected_battery"],
+    "exclusionClues": ["bilateral_discharge", "systemic_symptoms", "normal_otoscopy_rhinoscopy"]
+  }
+}

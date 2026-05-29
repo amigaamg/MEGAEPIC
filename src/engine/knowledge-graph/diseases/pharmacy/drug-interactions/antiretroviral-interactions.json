@@ -1,0 +1,160 @@
+{
+  "disease": {
+    "id": "antiretroviral_drug_interactions",
+    "name": "Antiretroviral Drug Interactions",
+    "system": "PHARM",
+    "agePeak_months": [240, 600],
+    "note": "Antiretroviral drugs, especially protease inhibitors (PIs) and pharmacokinetic boosters (ritonavir, cobicistat), are potent CYP3A4 inhibitors/inducers. This creates significant drug-drug interactions with statins, anticoagulants, anticonvulsants, methadone, oral contraceptives, and psychotropics.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["HIV_ARV", "drug_drug_interaction", "CYP_metabolism"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "torsades_de_pointes_from_interaction", "weight": 10 },
+        { "sign": "severe_rhabdomyolysis_statin_interaction", "weight": 9 },
+        { "sign": "opioid_respiratory_depression_enhanced", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "contraindicated_combination_present", "weight": 8 },
+          { "sign": "therapeutic_failure_risk_subtherapeutic_level", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If contraindicated combination -> CRITICAL; if dose adjustment needed -> INTERVENTION; if no interaction -> ACCEPTABLE"
+    },
+    "historyFeatures": [
+      { "symptomId": "arv_therapy_current_regimen", "weight": 5, "modifiers": [
+          { "condition": "protease_inhibitor_or_cobicistat", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "concomitant_medication_started_or_stopped", "weight": 5 },
+      { "symptomId": "statin_use_for_dyslipidemia", "weight": 4 },
+      { "symptomId": "anticoagulation_or_antiplatelet", "weight": 4 },
+      { "symptomId": "anticonvulsant_therapy_epilepsy", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "cyp3a4_inhibition_by_boosted_pi", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "cyp_induction_by_efavirenz_nevirapine", "baseWeight": 5 },
+      { "signId": "transport_effects_p_gp_bcrp", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "boosted_pi_regimen_darunavir_atazanavir", "multiplier": 3.0 },
+      { "id": "efavirenz_or_nevirapine_based", "multiplier": 2.5 },
+      { "id": "polypharmacy_gt_5_drugs", "multiplier": 2.0 },
+      { "id": "hepatic_or_renal_impairment", "multiplier": 1.8 },
+      { "id": "age_over_65", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "pi_statin_interaction",
+        "name": "PI + Statin Interaction",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "boosted_pi_inhibits_cyp3a4", "weight": 5 },
+          { "feature": "atorvastatin_and_simvastatin_affected", "weight": 5 },
+          { "feature": "lovastatin_contraindicated", "weight": 4 },
+          { "feature": "rhabdomyolysis_risk_significant", "weight": 4 },
+          { "feature": "pitavastatin_pravastatin_rosuvastatin_safer", "weight": 3 }
+        ],
+        "management": "Simvastatin/lovastatin: contraindicated. Atorvastatin: max 20mg/day with boosted PI. Rosuvastatin: max 10mg/day. Pitavastatin: no dose adjustment needed. Monitor CK and muscle symptoms."
+      },
+      {
+        "id": "arv_anticoagulant_interaction",
+        "name": "ARV + Anticoagulant Interaction",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "boosted_pi_reduces_riv_apixaban_levels", "weight": 4 },
+          { "feature": "efavirenz_induces_warfarin_metabolism", "weight": 4 },
+          { "feature": "cobicistat_increases_dabigatran", "weight": 3 },
+          { "feature": "inr_monitoring_essential", "weight": 4 }
+        ],
+        "management": "Warfarin: monitor INR closely when starting/stopping ARVs. DOACs: avoid rivaroxaban with boosted PI; adjust apixaban dose; edoxaban safer option. Consult pharmacist for specific recommendations."
+      },
+      {
+        "id": "arv_hormonal_contraception",
+        "name": "ARV + Hormonal Contraception",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "efavirenz_reduces_ethinyl_estradiol", "weight": 5 },
+          { "feature": "boosted_pi_reduces_contraceptive_efficacy", "weight": 4 },
+          { "feature": "implant_and_progestin_affected", "weight": 3 },
+          { "feature": "oral_contraceptive_failure_risk", "weight": 4 }
+        ],
+        "management": "Avoid oral contraceptives as sole method with efavirenz or boosted PIs. Use barrier method plus alternative. IUD (copper or LNG) is unaffected and effective. DMPA (Depo) requires no adjustment."
+      },
+      {
+        "id": "arv_methadone_buprenorphine",
+        "name": "ARV + Opioid Substitution Therapy",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "efavirenz_nevirapine_induce_methadone_metabolism", "weight": 5 },
+          { "feature": "opioid_withdrawal_symptoms", "weight": 5 },
+          { "feature": "boosted_pi_increase_buprenorphine_levels", "weight": 3 },
+          { "feature": "dose_adjustment_of_methadone_often_needed", "weight": 4 }
+        ],
+        "management": "Monitor for withdrawal when starting efavirenz/nevirapine (may need methadone dose increase 50-100%). Monitor for sedation with boosted PI + buprenorphine. Adjust doses gradually."
+      }
+    ],
+    "mimics": [],
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Liver function tests", "priority": "high", "yield": 0.5, "indication": "baseline and monitoring for hepatotoxicity" },
+        { "name": "CK level", "priority": "medium", "yield": 0.3, "indication": "if on statin + PI, muscle symptoms" },
+        { "name": "INR", "priority": "high", "yield": 0.6, "indication": "if on warfarin + ARV" },
+        { "name": "Therapeutic drug monitoring when available", "priority": "low", "yield": 0.4, "indication": "complex cases" }
+      ],
+      "imaging": []
+    },
+    "management": {
+      "protocolReference": "DHHS Guidelines for ARV Use in Adults, Liverpool HIV Drug Interactions Database",
+      "pathways": [
+        {
+          "severity": "contraindicated_combination",
+          "criteria": "drug pair contraindicated per Liverpool database (e.g., simvastatin + PI)",
+          "treatment": "Discontinue contraindicated drug. Choose alternative (e.g., switch statin to pitavastatin or pravastatin). Recheck in 2-4 weeks."
+        },
+        {
+          "severity": "potential_interaction_needs_dose_adjustment",
+          "criteria": "dose adjustment recommended, clinical monitoring advised",
+          "treatment": "Adjust dose per recommendations. Monitor drug levels if available. Monitor clinical response (INR, lipid profile, viral load, side effects)."
+        },
+        {
+          "severity": "no_significant_interaction",
+          "criteria": "no clinically meaningful interaction expected",
+          "treatment": "Standard dosing. Routine monitoring. Document in medication record."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "cyp450_enzyme_inhibition_or_induction",
+      "transport_protein_inhibition_p_gp",
+      "altered_bioavailability_and_clearance",
+      "synergistic_toxicity_additive"
+    ],
+    "complications": [
+      {
+        "diseaseId": "rhadomyolysis",
+        "probability": 0.02,
+        "lagDays": [7, 90],
+        "severityBoost": 0.5,
+        "clues": ["muscle_pain", "ck_gt_5x_uln", "statin_pi_combination"]
+      },
+      {
+        "diseaseId": "therapeutic_failure_hiv",
+        "probability": 0.05,
+        "lagDays": [14, 90],
+        "severityBoost": 0.4,
+        "clues": ["rising_viral_load", "declining_cd4", "drug_level_subtherapeutic"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["hiv_on_arv", "new_medication_started", "boosted_pi_or_nnrti_regimen"],
+    "exclusionClues": ["insti_based_regimen_dolutegravir_bictegravir_fewer_interactions"]
+  }
+}

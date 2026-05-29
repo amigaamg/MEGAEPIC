@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "septic-arthritis",
+    "name": "Septic Arthritis",
+    "system": "ORTHO",
+    "agePeak_months": [0, 60],
+    "note": "Bacterial joint infection. Orthopedic emergency. Rapid joint destruction within 24-48h. Most commonly hip or knee. Prompt drainage and antibiotics essential.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["joint_infection", "orthopedic_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "joint_destruction_xray_changes", "weight": 9 },
+        { "sign": "prosthetic_joint_infection", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "fever_high_grade_>39c", "weight": 7 },
+          { "sign": "refusal_to_move_joint_pseudoparalysis", "weight": 7 },
+          { "sign": "hip_joint_involvement", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If pseudoparalysis, high fever, or hip joint -> SEVERE; else NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_joint_pain_swelling", "weight": 5 },
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "refusal_to_move_joint_pseudoparalysis", "weight": 5 },
+      { "symptomId": "recent_bacteremia_skin_infection", "weight": 3 },
+      { "symptomId": "inability_to_weight_bear_leg", "weight": 4 },
+      { "symptomId": "irritability_crying_with_movement", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "joint_effusion_swelling", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "refusal_to_move_joint", "baseWeight": 5 },
+      { "signId": "joint_warmth_erythema", "baseWeight": 4 },
+      { "signId": "severe_pain_on_passive_range_of_motion", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_<3_years", "multiplier": 3.0 },
+      { "id": "prosthetic_joint", "multiplier": 4.0 },
+      { "id": "immunosuppression", "multiplier": 3.0 },
+      { "id": "recent_joint_surgery_injection", "multiplier": 3.0 },
+      { "id": "skin_infection_wound", "multiplier": 2.5 },
+      { "id": "sickle_cell_disease", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "native_joint_septic_arthritis",
+        "name": "Native Joint Septic Arthritis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "acute_monoarticular", "weight": 5 },
+          { "feature": "purulent_joint_aspiration", "weight": 5 },
+          { "feature": "wbc_>50k_in_joint_fluid", "weight": 5 }
+        ],
+        "management": "Empiric IV antibiotics (cloxacillin/cefazolin + gentamicin). Joint aspiration and drainage (arthroscopic or open). Send fluid for culture. Switch to targeted therapy per culture."
+      },
+      {
+        "id": "prosthetic_joint_infection",
+        "name": "Prosthetic Joint Infection",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "painful_prosthetic_joint", "weight": 5 },
+          { "feature": "sinus_tract_or_wound_drainage", "weight": 5 },
+          { "feature": "elevated_crp_esr", "weight": 4 }
+        ],
+        "management": "Two-stage revision: removal of prosthesis, antibiotic cement spacer, 6 weeks IV antibiotics, then reimplantation. DAIR (debridement, antibiotics, implant retention) if acute <4 weeks."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "transient_synovitis",
+        "discriminators": ["less_severe", "afebrile", "can_weight_bear", "kocher_criteria_<2"]
+      },
+      {
+        "diseaseId": "juvenile_idiopathic_arthritis",
+        "discriminators": ["chronic_course", "multiple_joints", "no_fever_or_toxic", "negative_culture"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Joint aspiration for Gram stain, culture, cell count", "priority": "immediate", "yield": 0.95, "indication": "confirm diagnosis" },
+        { "name": "Blood culture", "priority": "immediate", "yield": 0.5, "indication": "identify organism" },
+        { "name": "CBC, CRP, ESR", "priority": "high", "yield": 0.8, "indication": "infection markers" }
+      ],
+      "imaging": [
+        { "name": "Joint X-ray (AP, lateral)", "priority": "high", "yield": 0.3, "indication": "joint space widening early, destruction late" },
+        { "name": "Ultrasound joint", "priority": "high", "yield": 0.85, "indication": "effusion detection (especially hip)" },
+        { "name": "MRI with contrast", "priority": "medium", "yield": 0.8, "indication": "associated osteomyelitis, abscess" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAOS Septic Arthritis Guidelines / Kocher Criteria",
+      "pathways": [
+        {
+          "severity": "suspected",
+          "criteria": "Acute monoarticular hot swollen joint, fever, pseudoparalysis",
+          "treatment": "Joint aspiration STAT. Start empiric IV antibiotics (antistaphylococcal penicillin + aminoglycoside/3rd gen cephalosporin). Orthopedic consultation for urgent drainage."
+        },
+        {
+          "severity": "confirmed",
+          "criteria": "Positive aspiration + clinical signs",
+          "treatment": "Arthroscopic/open drainage and lavage. IV antibiotics 2-4 weeks (native joint). Tailor to culture. Monitor CRP for response. PT after resolution."
+        }
+      ]
+    },
+
+    "pathophysiology": ["hematogenous_seeding", "direct_inoculation", "bacterial_proliferation", "inflammatory_cascade", "proteolytic_joint_destruction"]
+  }
+}

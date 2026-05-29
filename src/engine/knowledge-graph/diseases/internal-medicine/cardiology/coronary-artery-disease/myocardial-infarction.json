@@ -1,0 +1,135 @@
+{
+  "disease": {
+    "id": "myocardial_infarction",
+    "name": "Myocardial Infarction",
+    "system": "CARD",
+    "agePeak_months": [480, 960],
+    "note": "Acute myocardial necrosis due to prolonged ischemia. Subtypes: STEMI and NSTEMI.",
+    "prevalenceWeight": 0.7,
+    "syndromeTags": ["chest_pain", "cardiac_emergency", "acute_coronary_syndrome"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiogenic_shock", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "sustained_ventricular_arrhythmia", "weight": 10 },
+        { "sign": "acute_pulmonary_oedema", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If shock/arrest/oedema/arrhythmia -> COMPLICATED MI; else -> UNCOMPLICATED MI"
+    },
+    "historyFeatures": [
+      { "symptomId": "prolonged_crushing_chest_pain", "weight": 5, "modifiers": [{ "condition": "retrosternal_persistent_20_min", "suspectTB": false }] },
+      { "symptomId": "radiation_to_left_arm_jaw_back", "weight": 4 },
+      { "symptomId": "dyspnea", "weight": 4 },
+      { "symptomId": "diaphoresis", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "lightheadedness_syncope", "weight": 2 },
+      { "symptomId": "palpitations", "weight": 2 },
+      { "symptomId": "fatigue_malaise", "weight": 2, "note": "Prodromal symptoms in preceding days" }
+    ],
+    "examFeatures": [
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "tachycardia_or_bradycardia", "baseWeight": 3 },
+      { "signId": "gallop_rhythm_s3", "baseWeight": 3 },
+      { "signId": "crackles_lung_bases", "baseWeight": 3 },
+      { "signId": "jugular_venous_distension", "baseWeight": 3 },
+      { "signId": "murmur_of_mitral_regurgitation", "baseWeight": 2 },
+      { "signId": "pericardial_rub", "baseWeight": 1, "note": "May suggest pericarditis or early post-MI pericarditis" }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "hypertension", "multiplier": 1.8 },
+      { "id": "diabetes", "multiplier": 2.5 },
+      { "id": "dyslipidemia", "multiplier": 1.8 },
+      { "id": "family_history_premature_cad", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.4 },
+      { "id": "sedentary_lifestyle", "multiplier": 1.3 }
+    ],
+    "subtypes": [
+      {
+        "id": "stemi",
+        "name": "ST-Elevation Myocardial Infarction",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "st_elevation_2_contiguous_leads", "weight": 5 },
+          { "feature": "new_lbbb", "weight": 5 },
+          { "feature": "high_troponin", "weight": 5 }
+        ],
+        "management": "Emergency reperfusion: primary PCI within 90 min or fibrinolysis within 30 min. Dual antiplatelet. Anticoagulation."
+      },
+      {
+        "id": "nstemi",
+        "name": "Non-ST-Elevation Myocardial Infarction",
+        "prevalenceModifier": 0.65,
+        "keyFeatures": [
+          { "feature": "st_depression_or_t_inversion", "weight": 4 },
+          { "feature": "positive_troponin", "weight": 5 },
+          { "feature": "no_st_elevation", "weight": 5 }
+        ],
+        "management": "Risk stratify (GRACE). Anticoagulation + dual antiplatelet. Early invasive strategy if high risk. Conservative if low risk."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "aortic_dissection", "discriminators": ["tearing_chest_back_pain", "bp_difference_arms", "wide_mediastinum"] },
+      { "diseaseId": "pulmonary_embolism", "discriminators": ["pleuritic_pain", "hemoptysis", "acute_right_heart_strain"] },
+      { "diseaseId": "pericarditis", "discriminators": ["pleuritic_positional_pain", "pericardial_rub", "diffuse_st_elevation"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.9, "indication": "within 10 min of arrival, diagnose STEMI" },
+        { "name": "Continuous cardiac monitoring", "priority": "immediate", "yield": 0.8, "indication": "arrhythmia detection" }
+      ],
+      "laboratory": [
+        { "name": "High-sensitivity Troponin I/T", "priority": "immediate", "yield": 0.98, "indication": "0h and 3h levels" },
+        { "name": "FBC, U&E, Cr, Glucose, INR", "priority": "high", "yield": 0.5, "indication": "baseline before intervention" },
+        { "name": "Lipid profile", "priority": "high", "yield": 0.4, "indication": "risk factor assessment" },
+        { "name": "BNP/NT-proBNP", "priority": "medium", "yield": 0.5, "indication": "prognostic marker" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.4, "indication": "pulmonary oedema, wide mediastinum" },
+        { "name": "Echocardiography", "priority": "high", "yield": 0.85, "indication": "wall motion, LVEF, mechanical complications" },
+        { "name": "Coronary angiography", "priority": "immediate", "yield": 0.99, "indication": "diagnostic and therapeutic" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for STEMI and NSTEMI Management",
+      "pathways": [
+        {
+          "severity": "STEMI <12h",
+          "criteria": "ST elevation or new LBBB within 12h of symptom onset",
+          "treatment": "Primary PCI within 90 min. If PCI delay >120 min: fibrinolysis (tenecteplase). Aspirin 300 mg. Ticagrelor 180 mg. Heparin. Beta-blocker."
+        },
+        {
+          "severity": "NSTEMI high-risk",
+          "criteria": "GRACE >140, recurrent ischemia, hemodynamic instability, arrhythmia",
+          "treatment": "Early invasive strategy (<24h). Aspirin + ticagrelor. Anticoagulation (fondaparinux or enoxaparin). Beta-blocker. Statin."
+        },
+        {
+          "severity": "complicated MI",
+          "criteria": "cardiogenic shock, mechanical complication, refractory arrhythmia",
+          "treatment": "ICU admission. Inotropes/vasopressors. IABP. Emergency revascularization. Mechanical ventilation if pulmonary oedema. Treat arrhythmias per ACLS."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "plaque_rupture",
+      "coronary_thrombosis",
+      "complete_occlusion_stemi",
+      "subtotal_occlusion_nstemi",
+      "myocardial_necrosis",
+      "reperfusion_injury",
+      "ventricular_remodeling"
+    ],
+    "complications": [
+      { "diseaseId": "cardiogenic_shock", "probability": 0.07, "severityBoost": 0.5, "clues": ["hypotension", "cold_peripheries", "oliguria"] },
+      { "diseaseId": "ventricular_fibrillation", "probability": 0.05, "severityBoost": 0.5, "clues": ["collapse", "pulseless", "preceding_vt"] },
+      { "diseaseId": "free_wall_rupture", "probability": 0.02, "severityBoost": 0.8, "clues": ["sudden_hypotension", "electromechanical_dissociation"] },
+      { "diseaseId": "papillary_muscle_rupture", "probability": 0.01, "severityBoost": 0.6, "clues": ["new_pansystolic_murmur", "acute_pulmonary_oedema"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["prolonged_crushing_chest_pain", "ecg_elevation_or_depression", "troponin_rise"],
+    "exclusionClues": ["normal_troponin_serial", "ecg_normal", "pain_non_cardiac_character"]
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "disease": {
+    "id": "anticoagulation_safety",
+    "name": "Anticoagulation Safety and Bleeding Risk Management",
+    "system": "PHARM",
+    "agePeak_months": [360, 960],
+    "note": "Anticoagulants (warfarin, DOACs, heparins) are high-alert medications. Safety priorities: correct indication and dosing, renal function monitoring (DOACs), avoiding major bleeding, managing reversal, and transitioning between agents. DOACs have fewer drug interactions but require dose adjustment in renal impairment.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["high_alert_medication", "anticoagulation", "bleeding_risk", "patient_safety"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "intracranial_hemorrhage", "weight": 10 },
+        { "sign": "gastrointestinal_bleeding_with_hemodynamic_instability", "weight": 10 },
+        { "sign": "retroperitoneal_hemorrhage", "weight": 9 },
+        { "sign": "inr_gt_8_with_bleeding", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "hemoglobin_drop_gt_2g_dL_from_bleeding", "weight": 8 },
+          { "sign": "inr_gt_6_without_bleeding", "weight": 7 },
+          { "sign": "failed_reversal_attempts", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If active major bleeding -> EMERGENT REVERSAL; if high INR without bleeding -> HOLD AND REVERSE; if therapeutic -> CONTINUE"
+    },
+    "historyFeatures": [
+      { "symptomId": "anticoagulant_therapy_indication_afib_pe_dvt", "weight": 5, "modifiers": [
+          { "condition": "new_onset_or_dose_change", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "bleeding_symptoms_epistaxis_hematochezia_hematuria", "weight": 5 },
+      { "symptomId": "fall_or_trauma_while_on_anticoagulant", "weight": 5 },
+      { "symptomId": "renal_impairment_dOAC_dosing_critical", "weight": 4 },
+      { "symptomId": "drug_interaction_antibiotic_azole_antiplatelet", "weight": 4 }
+    ],
+    "examFeatures": [
+      { "signId": "inr_or_anti_xa_level", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "dOAC_level_calibrated_if_available", "baseWeight": 4 },
+      { "signId": "renal_function_crcl_dOAC_dosing", "baseWeight": 5 },
+      { "signId": "hemoglobin_platelet_count", "baseWeight": 4 }
+    ],
+    "riskFactors": [
+      { "id": "age_over_75", "multiplier": 2.0 },
+      { "id": "ckd_crcl_lt_30", "multiplier": 3.0 },
+      { "id": "concomitant_antiplatelet_therapy", "multiplier": 2.5 },
+      { "id": "prior_gi_bleeding_or_ulcer", "multiplier": 2.0 },
+      { "id": "liver_disease_coagulopathy", "multiplier": 2.5 },
+      { "id": "labile_inr_on_warfarin", "multiplier": 1.8 }
+    ],
+    "subtypes": [
+      {
+        "id": "warfarin_management",
+        "name": "Warfarin Safety and INR Management",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "inr_therapeutic_range_2_0_3_0_most_indications", "weight": 5 },
+          { "feature": "inr_gt_4_0_increases_bleeding_risk_significantly", "weight": 5 },
+          { "feature": "drug_interactions_narrow_therapeutic_window", "weight": 4 },
+          { "feature": "dietary_vitamin_k_fluctuations", "weight": 3 }
+        ],
+        "management": "INR <5, no bleeding: hold warfarin, restart at lower dose when INR therapeutic. INR 5-9, no bleeding: hold warfarin, consider vitamin K 1-2.5mg PO. INR >9, no bleeding: hold warfarin, vitamin K 2.5-5mg PO. Any INR with bleeding: hold + 4F-PCC + vitamin K 10mg IV."
+      },
+      {
+        "id": "doac_safety",
+        "name": "DOAC Safety (Apixaban, Rivaroxaban, Edoxaban, Dabigatran)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "renal_dosing_critical_apixaban_crcl_lt_25_avoid", "weight": 5 },
+          { "feature": "rivaroxaban_avoid_crcl_lt_15", "weight": 4 },
+          { "feature": "dabigatran_avoid_crcl_lt_30", "weight": 4 },
+          { "feature": "no_need_for_routine_lab_monitoring", "weight": 4 },
+          { "feature": "reversal_agent_andexanet_for_anti_xa", "weight": 4 }
+        ],
+        "management": "Assess renal function before prescribing and annually. Use CHADS2-VASc + HAS-BLED for risk assessment. Dabigatran: idarucizumab (Praxbind) 5g IV for reversal. Factor Xa inhibitors (apixaban, rivaroxaban, edoxaban): andexanet alfa (Andexxa) or 4F-PCC as alternative."
+      },
+      {
+        "id": "heparin_lmwh_management",
+        "name": "Heparin/LMWH Safety",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "uFH_aptt_monitoring_every_6h_until_therapeutic", "weight": 5 },
+          { "feature": "hIT_type_2_risk_with_uFH_gt_lmwh", "weight": 4 },
+          { "feature": "renal_dosing_lmwh_enoxaparin_crcl_lt_30_dose_reduce", "weight": 4 },
+          { "feature": "protamine_reversal_different_for_uFH_vs_lmwh", "weight": 3 }
+        ],
+        "management": "UFH: weight-based protocol. Check aPTT q6h, adjust per nomogram. Monitor platelets q2-3d for HIT. LMWH: no routine monitoring except pregnancy/renal/obesity. HIT: stop heparin, start argatroban or fondaparinux. Protamine: 1mg protamine per 100U UFH; partial reversal only for LMWH."
+      },
+      {
+        "id": "perioperative_bridging",
+        "name": "Perioperative Anticoagulation Bridging",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "mechanical_heart_valve_high_thromboembolic_risk", "weight": 5 },
+          { "feature": "afib_with_chads2_vas_gt_5_or_stroke_within_3mo", "weight": 5 },
+          { "feature": "recent_vte_within_3_months", "weight": 4 },
+          { "feature": "brIDGE_trial_for_afib_no_benefit_of_bridging", "weight": 4 }
+        ],
+        "management": "Low risk (AFib CHADS2 <4, VTE >12mo): no bridging, hold anticoagulant 1-2 days pre-op. High risk (mechanical valve, stroke <3mo, VTE <3mo): UFH or LMWH bridge. Resume therapeutic anticoagulation post-op when hemostasis achieved."
+      }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "non_anticoagulant_gi_bleeding",
+        "discriminators": ["negative_coagulation_labs", "structural_lesion_on_endoscopy"]
+      }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Medication reconciliation", "priority": "immediate", "yield": 0.9, "indication": "all patients on anticoagulants" },
+        { "name": "Fall risk assessment", "priority": "high", "yield": 0.6, "indication": "elderly on anticoagulants" }
+      ],
+      "laboratory": [
+        { "name": "PT/INR (warfarin monitoring)", "priority": "immediate", "yield": 0.95, "indication": "warfarin patients" },
+        { "name": "aPTT (UFH monitoring)", "priority": "immediate", "yield": 0.9, "indication": "unfractionated heparin" },
+        { "name": "Anti-Xa (LMWH/DOAC level)", "priority": "medium", "yield": 0.7, "indication": "LMWH monitoring, DOAC level assessment" },
+        { "name": "Serum creatinine/eGFR (CrCl)", "priority": "immediate", "yield": 0.9, "indication": "DOAC dosing, renal function" },
+        { "name": "CBC (hemoglobin, platelets)", "priority": "high", "yield": 0.7, "indication": "bleeding assessment, HIT monitoring" },
+        { "name": "HIT antibody (ELISA and SRA if positive)", "priority": "medium", "yield": 0.5, "indication": "suspected HIT" }
+      ],
+      "imaging": [
+        { "name": "CT Head (if neurological symptoms)", "priority": "high", "yield": 0.2, "indication": "suspected ICH on anticoagulant" }
+      ]
+    },
+    "management": {
+      "protocolReference": "CHEST Guidelines, ACC/AHA Guidelines for AFib, ISTH Guidance on DOACs",
+      "pathways": [
+        {
+          "severity": "therapeutic_no_bleeding",
+          "criteria": "INR 2-3.5, DOAC at appropriate dose, no bleeding, stable renal function",
+          "treatment": "Continue current regimen. Monitor per guidelines (INR monthly for warfarin, annual renal for DOACs). Drug interaction review. Patient education."
+        },
+        {
+          "severity": "supratherapeutic_no_bleeding",
+          "criteria": "INR 4-9 or DOAC level 2x expected, no active bleeding",
+          "treatment": "Warfarin: hold dose, consider vitamin K PO. DOAC: hold 1-2 doses, check renal function, reassess indication and dose. Identify interaction or dose error."
+        },
+        {
+          "severity": "major_bleeding",
+          "criteria": "life-threatening or critical site bleeding (ICH, GI, retroperitoneal)",
+          "treatment": "Hold all anticoagulants immediately. Warfarin: 4F-PCC 25-50U/kg + vitamin K 10mg IV. Dabigatran: idarucizumab 5g IV. Factor Xa: andexanet alfa or 4F-PCC. GI bleeding: consult GI for endoscopy. ICH: consult neurosurgery. Reverse hypotension with fluids/transfusion."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "interruption_of_coagulation_cascade",
+      "vitamin_k_epoxide_reductase_inhibition_warfarin",
+      "direct_thrombin_inhibition_dabigatran",
+      "factor_xa_inhibition_apixaban_rivaroxaban",
+      "antithrombin_activation_heparins"
+    ],
+    "complications": [
+      {
+        "diseaseId": "intracranial_hemorrhage",
+        "probability": 0.02,
+        "lagDays": [1, 365],
+        "severityBoost": 0.8,
+        "clues": ["headache", "focal_deficit", "altered_consciousness", "elderly"]
+      },
+      {
+        "diseaseId": "gi_bleeding_upper_or_lower",
+        "probability": 0.04,
+        "lagDays": [7, 365],
+        "severityBoost": 0.4,
+        "clues": ["melena", "hematochezia", "hematemesis", "hgb_drop"]
+      },
+      {
+        "diseaseId": "thromboembolism_under_anticoagulation",
+        "probability": 0.03,
+        "lagDays": [30, 365],
+        "severityBoost": 0.4,
+        "clues": ["subtherapeutic_levels", "non_adherence", "interruption_for_procedure"]
+      }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["on_anticoagulant_therapy", "bleeding_or_high_inr", "renal_function_for_dOAC"],
+    "exclusionClues": ["not_on_anticoagulation", "therapeutic_range_achieved"]
+  }
+}

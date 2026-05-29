@@ -1,0 +1,159 @@
+{
+  "disease": {
+    "id": "rheumatoid_arthritis",
+    "name": "Rheumatoid Arthritis",
+    "system": "rheumatology",
+    "agePeak_months": [480, 720],
+    "note": "Chronic systemic autoimmune inflammatory disorder primarily affecting synovial joints. Associated with extra-articular manifestations and increased cardiovascular risk.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["inflammatory_arthritis", "autoimmune", "polyarthritis", "joint_pain"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_arthritis", "weight": 10 },
+        { "sign": "cervical_spine_instability", "weight": 9 },
+        { "sign": "pericarditis_tamponade", "weight": 8 },
+        { "sign": "vasculitic_ulceration", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If septic, cervical myelopathy, or vasculitic complications -> EMERGENCY; else -> NON-URGENT (rheumatology referral)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "morning_stiffness", "weight": 5 },
+      { "symptomId": "symmetric_joint_swelling", "weight": 5 },
+      { "symptomId": "hand_wrist_pain", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "joint_stiffness_over_30_min", "weight": 5 },
+      { "symptomId": "mcp_mtp_swelling", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "synovitis_swollen_joints", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "boutonniere_deformity", "baseWeight": 4 },
+      { "signId": "swan_neck_deformity", "baseWeight": 4 },
+      { "signId": "rheumatoid_nodules", "baseWeight": 4 },
+      { "signId": "ulnar_deviation", "baseWeight": 4 },
+      { "signId": "mcp_squeeze_tenderness", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_ra", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 2.5 },
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.3 },
+      { "id": "periodontal_disease", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "seropositive_ra",
+        "name": "Seropositive Rheumatoid Arthritis",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "positive_rheumatoid_factor", "weight": 5 },
+          { "feature": "positive_anti_ccp", "weight": 5 },
+          { "feature": "more_severe_joint_damage", "weight": 4 }
+        ],
+        "management": "DMARD therapy (methotrexate first-line). Treat-to-target approach."
+      },
+      {
+        "id": "seronegative_ra",
+        "name": "Seronegative Rheumatoid Arthritis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "negative_rheumatoid_factor", "weight": 5 },
+          { "feature": "negative_anti_ccp", "weight": 5 },
+          { "feature": "milder_course_often", "weight": 3 }
+        ],
+        "management": "DMARD therapy. May require biologic if inadequate response."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "psoriatic_arthritis",
+        "discriminators": ["psoriasis_skin_nails", "dactylitis", "asymmetric_oligoarthritis", "negative_rf_anti_ccp"]
+      },
+      {
+        "diseaseId": "osteoarthritis",
+        "discriminators": ["morning_stiffness_under_30_min", "no_synovitis", "heberden_nodes", "weight_bearing_joints"]
+      },
+      {
+        "diseaseId": "systemic_lupus_erythematosus",
+        "discriminators": ["malar_rash", "photosensitivity", "serositis", "renal_disease", "anti_dsdna"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Joint examination and count", "priority": "immediate", "yield": 0.9, "indication": "assess disease activity" }
+      ],
+      "laboratory": [
+        { "name": "Rheumatoid factor", "priority": "high", "yield": 0.7, "indication": "serological confirmation" },
+        { "name": "Anti-CCP antibodies", "priority": "high", "yield": 0.85, "indication": "highly specific for RA" },
+        { "name": "ESR and CRP", "priority": "high", "yield": 0.8, "indication": "assess inflammatory activity" },
+        { "name": "FBC", "priority": "high", "yield": 0.5, "indication": "anemia of chronic disease" }
+      ],
+      "imaging": [
+        { "name": "Hand and foot X-rays", "priority": "high", "yield": 0.7, "indication": "erosions, periarticular osteopenia" },
+        { "name": "Joint ultrasound", "priority": "medium", "yield": 0.85, "indication": "synovitis detection, Doppler activity" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ACR/EULAR Guidelines for Rheumatoid Arthritis",
+      "pathways": [
+        {
+          "severity": "active",
+          "criteria": "DAS28 > 5.1, swollen and tender joints, elevated acute phase",
+          "treatment": "Methotrexate + folic acid. Consider triple DMARD therapy (MTX + SSZ + HCQ). If inadequate response, add TNF inhibitor or alternative biologic."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "DAS28 3.2-5.1, limited joint involvement",
+          "treatment": "DMARD monotherapy (methotrexate or leflunomide). Taper to lowest effective dose."
+        },
+        {
+          "severity": "remission",
+          "criteria": "DAS28 < 2.6, no swollen joints, normal CRP",
+          "treatment": "Maintain DMARD. Consider gradual de-escalation after sustained remission."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "autoimmune_synovitis",
+      "citrullinated_protein_antibodies",
+      "shared_epitope_hla_drb1",
+      "osteoclast_activation",
+      "pannus_formation",
+      "cartilage_degradation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cervical_myelopathy",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["neck_pain", "sensory_deficit", "hyperreflexia", "hand_numbness"]
+      },
+      {
+        "diseaseId": "accelerated_cvd",
+        "probability": 0.15,
+        "severityBoost": 0.3,
+        "clues": ["chest_pain", "dyspnea", "chronic_inflammation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if cervical myelopathy or vasculitis",
+    "diagnosticClues": ["symmetric_synovitis_mcp_ptp", "morning_stiffness_over_30_min", "anti_ccp_positive"],
+    "exclusionClues": ["asymmetric_oligoarthritis", "dactylitis", "psoriasis", "negative_anti_ccp"]
+  }
+}

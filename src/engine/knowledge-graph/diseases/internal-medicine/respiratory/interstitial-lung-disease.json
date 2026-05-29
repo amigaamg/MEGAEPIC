@@ -1,0 +1,368 @@
+{
+  "disease": {
+    "id": "interstitial_lung_disease",
+    "name": "Interstitial Lung Disease / Idiopathic Pulmonary Fibrosis",
+    "system": "respiratory",
+    "note": "ILD encompasses a diverse group of diffuse parenchymal lung diseases. IPF is the most common idiopathic interstitial pneumonia, characterised by the UIP pattern on HRCT. ATS/ERS criteria guide diagnosis. Antifibrotic therapy with pirfenidone or nintedanib slows progression.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["diffuse_parenchymal_lung_disease", "restrictive_lung_disease", "fibrosing_lung_disease"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_exacerbation_of_IPF", "weight": 10, "description": "Acute respiratory worsening with new bilateral GGO on HRCT in <1 month" },
+        { "sign": "spo2_less_than_88", "weight": 10 },
+        { "sign": "acute_respiratory_failure", "weight": 10 },
+        { "sign": "right_heart_failure_decompensated", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "FVC_decline_greater_than_10_percent_6_months", "weight": 7 },
+          { "sign": "DLCO_less_than_30_percent", "weight": 6 },
+          { "sign": "six_minute_walk_distance_less_than_250_m", "weight": 5 },
+          { "sign": "GAP_index_stage_3", "description": "Gender-Age-Physiology index high mortality", "weight": 7 },
+          { "sign": "pulmonary_hypertension_present", "weight": 6 }
+        ]
+      },
+      "moderateCriteria": {
+        "anyOf": [
+          { "sign": "FVC_50_to_70_percent", "weight": 5 },
+          { "sign": "DLCO_30_to_50_percent", "weight": 4 },
+          { "sign": "six_minute_walk_250_to_450_m", "weight": 4 },
+          { "sign": "GAP_stage_2", "weight": 4 }
+        ],
+        "noDangerSigns": true
+      },
+      "mildCriteria": {
+        "FVC_greater_than_70_percent": true,
+        "DLCO_greater_than_50_percent": true,
+        "six_minute_walk_greater_than_450_m": true,
+        "GAP_stage_1": true
+      }
+    },
+
+    "historyFeatures": [
+      { "symptomId": "dyspnea", "weight": 5, "qualitativeModifiers": [
+          { "qualityKey": "progressive_exertional", "weightBoost": 3, "description": "Insidious onset, progressive over months" },
+          { "qualityKey": "restrictive_pattern", "weightBoost": 2 }
+        ]
+      },
+      { "symptomId": "cough", "weight": 4, "qualitativeModifiers": [
+          { "qualityKey": "dry", "weightBoost": 2 },
+          { "qualityKey": "non_productive", "weightBoost": 2 },
+          { "qualityKey": "persistent", "weightBoost": 2 }
+        ],
+        "note": "Dry, non-productive cough is hallmark; often paroxysmal and refractory to antitussives"
+      },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 2, "note": "Advanced disease" },
+      { "symptomId": "clubbing_history", "weight": 2, "note": "Up to 50% of IPF patients" },
+      { "symptomId": "arthralgia", "weight": 2, "note": "May indicate connective tissue disease-associated ILD" },
+      { "symptomId": "heartburn", "weight": 3, "note": "GERD is common in IPF; chronic microaspiration may drive fibrosis" },
+      { "symptomId": "occupational_exposure", "weight": 3, "note": "Asbestos, silica, coal, metal dusts, bird antigens (HP)" },
+      { "symptomId": "hemoptysis", "weight": 1, "note": "Rare in IPF; suggests alternative (vasculitis, malignancy, PE)" }
+    ],
+
+    "examFeatures": [
+      { "signId": "basal_crackles", "baseWeight": 6, "doubleWeight": true, "note": "Fine, velcro-like inspiratory crackles at bases; hallmark of IPF" },
+      { "signId": "clubbing", "baseWeight": 3, "note": "Up to 50% of IPF; uncommon in sarcoidosis" },
+      { "signId": "tachypnea", "baseWeight": 2 },
+      { "signId": "hypoxia", "baseWeight": 4, "severityBoost": true },
+      { "signId": "restrictive_chest_expansion", "baseWeight": 2 },
+      { "signId": "signs_of_pulmonary_hypertension", "baseWeight": 3, "severityMarker": true },
+      { "signId": "raised_JVP", "baseWeight": 3, "severityMarker": true },
+      { "signId": "digital_cyanosis", "baseWeight": 2, "severityMarker": true }
+    ],
+
+    "riskFactors": [
+      { "id": "smoking_history", "multiplier": 1.5, "note": "IPF is associated with cigarette smoking" },
+      { "id": "occupational_exposure", "multiplier": 1.4, "note": "Asbestos, silica, coal, metal dusts, wood dust, bird antigens" },
+      { "id": "family_history_ILD", "multiplier": 1.6, "note": "Familial IPF accounts for 5–20% of cases" },
+      { "id": "GERD", "multiplier": 1.3 },
+      { "id": "connective_tissue_disease", "multiplier": 1.5, "note": "RA, systemic sclerosis, myositis, Sjogren's" },
+      { "id": "drug_exposure", "multiplier": 1.3, "note": "Amiodarone, methotrexate, bleomycin, nitrofurantoin, checkpoint inhibitors" },
+      { "id": "viral_infections", "multiplier": 1.2, "note": "EBV, CMV, HCV hypothesised triggers" },
+      { "id": "telomere_shortening_mutations", "multiplier": 1.8, "note": "TERT, TERC, PARN, SFTPC, SFTPA2 mutations" }
+    ],
+
+    "subtypes": [
+      {
+        "id": "idiopathic_pulmonary_fibrosis",
+        "name": "Idiopathic Pulmonary Fibrosis (IPF)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "age_over_50", "weight": 5 },
+          { "feature": "insidious_progressive_dyspnea", "weight": 5 },
+          { "feature": "dry_cough", "weight": 4 },
+          { "feature": "velcro_crackles", "weight": 5 },
+          { "feature": "clubbing", "weight": 3 }
+        ],
+        "imagingFeatures": ["UIP_pattern_basal_predominant", "honeycombing", "traction_bronchiectasis", "reticulation_subpleural"],
+        "management": "Antifibrotic therapy (pirfenidone or nintedanib); lung transplant evaluation; oxygen; pulmonary rehabilitation"
+      },
+      {
+        "id": "hypersensitivity_pneumonitis",
+        "name": "Hypersensitivity Pneumonitis (HP)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "known_antigen_exposure", "weight": 5 },
+          { "feature": "symptom_improvement_away_from_exposure", "weight": 5 },
+          { "feature": "recurrent_episodes", "weight": 4 },
+          { "feature": "systemic_symptoms_fever_malaise", "weight": 3 }
+        ],
+        "imagingFeatures": ["centrilobular_nodules", "mosaic_attenuation", "air_trapping", "fibrotic_changes_chronic"],
+        "management": "Antigen avoidance; corticosteroids; antifibrotics if fibrotic HP"
+      },
+      {
+        "id": "connective_tissue_disease_associated_ILD",
+        "name": "CTD-associated ILD",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "known_CTD_diagnosis", "weight": 5 },
+          { "feature": "arthralgia_arthritis", "weight": 4 },
+          { "feature": "Raynaud_phenomenon", "weight": 4 },
+          { "feature": "sicca_symptoms", "weight": 3 },
+          { "feature": "myositis_signs", "weight": 3 }
+        ],
+        "imagingFeatures": ["NSIP_pattern", "bibasal_reticulation", "GGO", "UIP_in_RA"],
+        "management": "Treat underlying CTD; immunosuppression; antifibrotics if progressive fibrosis"
+      },
+      {
+        "id": "sarcoidosis_pulmonary",
+        "name": "Pulmonary Sarcoidosis",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "bilateral_hilar_lymphadenopathy", "weight": 5 },
+          { "feature": "erythema_nodosum", "weight": 4 },
+          { "feature": "uveitis", "weight": 4 },
+          { "feature": "skin_lesions", "weight": 3 },
+          { "feature": "age_20_to_40", "weight": 4 }
+        ],
+        "imagingFeatures": ["bilateral_hilar_lymphadenopathy", "peribronchovascular_nodules", "upper_lobe_predominance"],
+        "management": "Observation if asymptomatic; corticosteroids if progressive; steroid-sparing agents (methotrexate, azathioprine)"
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "COPD",
+        "discriminators": ["obstructive_PFTs", "smoking_history_dominant", "hyperinflation", "emphysema_on_CT"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "congestive_heart_failure",
+        "discriminators": ["PND_orthopnea", "cardiomegaly", "BNP_elevated", "pleural_effusion", "response_to_diuretics"],
+        "negativeImpactOnPneumonia": 3
+      },
+      {
+        "diseaseId": "bronchiectasis",
+        "discriminators": ["copious_sputum", "coarse_crackles", "HRCT_bronchial_dilation", "infectious_exacerbations"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "alveolar_proteinosis",
+        "discriminators": ["crazy_paving_on_HRCT", "milky_BAL", "anti_GM_CSF_antibodies"],
+        "negativeImpactOnPneumonia": 2
+      },
+      {
+        "diseaseId": "lymphangitic_carcinomatosis",
+        "discriminators": ["known_malignancy", "smooth_septal_thickening", "rapid_progression"],
+        "negativeImpactOnPneumonia": 2
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Pulse oximetry with desaturation walk test",
+          "priority": "initial",
+          "yield": 0.9,
+          "indication": "all suspected ILD; desaturation ≥4% is significant"
+        },
+        {
+          "name": "Six-minute walk test",
+          "priority": "baseline and annual",
+          "yield": 0.8,
+          "indication": "exercise capacity, desaturation assessment, prognosis"
+        },
+        {
+          "name": "MRC dyspnoea scale",
+          "priority": "initial",
+          "yield": 0.7,
+          "indication": "functional impact assessment"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "Serology for CTD (ANA, RF, anti-CCP, anti-Scl-70, anti-Jo1, anti-Ro, anti-La)",
+          "priority": "initial diagnostic workup",
+          "yield": 0.7,
+          "indication": "exclude CTD-associated ILD",
+          "note": "ATS/ERS recommends serology in all ILD patients"
+        },
+        {
+          "name": "Hypersensitivity pneumonitis panel (avian/thermophilic antigens)",
+          "priority": "selected",
+          "yield": 0.6,
+          "indication": "suspected HP based on exposure history"
+        },
+        {
+          "name": "HRCT chest (high-resolution)",
+          "priority": "diagnostic gold standard",
+          "yield": 1.0,
+          "indication": "essential for diagnosis and pattern recognition"
+        }
+      ],
+      "imaging": [
+        {
+          "name": "HRCT chest (supine + prone)",
+          "priority": "diagnostic",
+          "yield": 0.9,
+          "indication": "all patients; UIP pattern (basal+subpleural honeycombing, traction bronchiectasis, reticulation)",
+          "typicalFindings": {
+            "UIP": "basal predominant, subpleural, honeycombing, traction bronchiectasis, reticulation",
+            "NSIP": "bibasal GGO, fine reticulation, relative subpleural sparing",
+            "HP": "centrilobular nodules, mosaic attenuation, air trapping",
+            "COP": "subpleural_peribronchial consolidation, reversed halo sign",
+            "sarcoidosis": "perilymphatic nodules, upper lobe, BHL"
+          }
+        },
+        {
+          "name": "Chest X-ray",
+          "priority": "screening",
+          "yield": 0.4,
+          "indication": "initial chest imaging; reticulation, volume loss"
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Pulmonary function tests (spirometry, lung volumes, DLCO)",
+          "indication": "essential for diagnosis and monitoring",
+          "priority": "mandatory",
+          "note": "Restrictive pattern (reduced TLC, FVC), reduced DLCO. FVC decline >10% in 6 months is poor prognosis"
+        },
+        {
+          "name": "Bronchoscopy with BAL",
+          "indication": "exclude infection, HP (lymphocytosis), malignancy, alveolar proteinosis",
+          "priority": "selected",
+          "note": "BAL lymphocytosis >30% suggests HP or sarcoidosis; neutrophils and eosinophils in IPF"
+        },
+        {
+          "name": "Surgical lung biopsy (cryobiopsy or VATS)",
+          "indication": "when HRCT pattern is non-diagnostic and therapy decisions depend on diagnosis",
+          "priority": "selected",
+          "note": "ATS/ERS recommends multidisciplinary discussion (MDD) before biopsy"
+        }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ATS/ERS/JRS/ALAT IPF Guidelines 2022; ATS/ERS ILD Classification 2024",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "FVC >70%, DLCO >50%, minimal symptoms, limited HRCT extent",
+          "treatment": [
+            "Monitor every 3–6 months with PFTs and 6MWT",
+            "Smoking cessation",
+            "Vaccination (influenza, pneumococcal, COVID-19)",
+            "Pulmonary rehabilitation programme",
+            "GERD treatment if present (PPI or H2 antagonist)",
+            "Avoid drugs known to cause ILD"
+          ],
+          "followUp": "3–6 monthly PFTs, 6–12 monthly 6MWT"
+        },
+        {
+          "severity": "moderate",
+          "criteria": "FVC 50–70%, DLCO 30–50%, symptomatic, HRCT shows fibrosis",
+          "treatment": [
+            "Antifibrotic therapy: pirfenidone 2403 mg/day (3× 801 mg) or nintedanib 300 mg/day (2× 150 mg)",
+            "Pirfenidone reduces FVC decline by ~50% over 1 year; nintedanib reduces decline by ~44%",
+            "Monitor for side effects: GI intolerance, photosensitivity (pirfenidone); diarrhoea, LFT elevation (nintedanib)",
+            "Supplemental oxygen for exertional desaturation (SpO2 <88%)",
+            "Continue pulmonary rehabilitation",
+            "Evaluate for lung transplant referral (early referral recommended per ATS/ERS)"
+          ],
+          "followUp": "3 monthly clinic + PFTs; 6 monthly 6MWT"
+        },
+        {
+          "severity": "severe",
+          "criteria": "FVC <50% or DLCO <30%, significant hypoxia, advanced disease on HRCT",
+          "treatment": [
+            "Continue antifibrotic therapy if tolerated",
+            "Long-term oxygen therapy (LTOT) if PaO2 <7.3 kPa or exertional desaturation",
+            "Palliative care integration: symptom management (cough, dyspnea, anxiety)",
+            "Lung transplant assessment and listing (survival benefit highest in IPF; median survival without transplant 3–5 years)",
+            "Acute exacerbation management: high-dose corticosteroids (methylprednisolone 1 g IV × 3 days), empiric antibiotics, supportive care",
+            "Manage pulmonary hypertension if present (consider sildenafil as add-on)"
+          ],
+          "escalation": "Acute exacerbation of IPF is a medical emergency with high mortality. Consider ICU if potentially reversible."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "repetitive_alveolar_epithelial_injury",
+      "aberrant_wound_healing",
+      "excessive_ECM_deposition",
+      "fibroblast_to_myofibroblast_differentiation",
+      "extracellular_matrix_remodelling",
+      "loss_of_alveolar_capillary_units",
+      "reduced_lung_compliance",
+      "restrictive_ventilatory_defect",
+      "impaired_gas_exchange_hypoxemia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_exacerbation_of_IPF",
+        "probability": 0.15,
+        "severityBoost": 0.8,
+        "clues": ["acute_worsening_dyspnea_<30_days", "new_bilateral_GGO_on_HRCT", "no_alternative_cause"],
+        "management": "High-dose corticosteroids, empiric antibiotics, supportive care; mortality 50%"
+      },
+      {
+        "diseaseId": "pulmonary_hypertension",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["right_ventricular_strain", "6MWT_desaturation", "DLCO_disproportionately_low"]
+      },
+      {
+        "diseaseId": "respiratory_failure",
+        "probability": 0.25,
+        "severityBoost": 0.6,
+        "clues": ["progressive_hypoxia", "hypercapnia_late_sign"]
+      },
+      {
+        "diseaseId": "lung_cancer",
+        "probability": 0.1,
+        "clues": ["new_nodule_on_CT", "hemoptysis", "unexplained_weight_loss"],
+        "note": "Increased risk of lung cancer in IPF, especially squamous cell"
+      },
+      {
+        "diseaseId": "pneumothorax",
+        "probability": 0.05,
+        "clues": ["sudden_deterioration", "pleuritic_pain"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "if acute exacerbation (sudden worsening, new bilateral GGO) or severe hypoxia",
+
+    "diagnosticClues": [
+      "progressive exertional dyspnoea with dry cough",
+      "fine velcro-like bibasal inspiratory crackles",
+      "finger clubbing",
+      "restrictive PFTs with reduced DLCO",
+      "UIP pattern on HRCT: subpleural basal honeycombing and traction bronchiectasis",
+      "HRCT sensitivity for UIP is >90% when present"
+    ],
+    "exclusionClues": [
+      "obstructive spirometry with hyperinflation suggests COPD/emphysema",
+      "normal HRCT effectively excludes fibrotic ILD",
+      "improvement with antigen avoidance suggests HP",
+      "significant pleural disease suggests asbestos-related or CTD",
+      "crackles that clear after cough suggest bronchitis/bronchiectasis"
+    ]
+  }
+}

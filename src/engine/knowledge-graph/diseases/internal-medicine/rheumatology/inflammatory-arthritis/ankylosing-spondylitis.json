@@ -1,0 +1,151 @@
+{
+  "disease": {
+    "id": "ankylosing_spondylitis",
+    "name": "Ankylosing Spondylitis",
+    "system": "rheumatology",
+    "agePeak_months": [240, 480],
+    "note": "Chronic inflammatory axial spondyloarthritis predominantly affecting the sacroiliac joints and spine. Strongly associated with HLA-B27. May cause progressive spinal fusion.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["spondyloarthritis", "inflammatory_back_pain", "autoimmune", "axial_arthritis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_anterior_uveitis", "weight": 7 },
+        { "sign": "spinal_fracture", "weight": 10 },
+        { "sign": "cauda_equina_syndrome", "weight": 9 },
+        { "sign": "aortic_regurgitation", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If acute uveitis or neurologic compromise -> URGENT; else -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "inflammatory_back_pain", "weight": 5 },
+      { "symptomId": "morning_stiffness_spine", "weight": 5 },
+      { "symptomId": "buttock_pain_alternating", "weight": 4 },
+      { "symptomId": "night_pain_relieved_by_movement", "weight": 4 },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "peripheral_arthritis", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "limited_lumbar_flexion", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "sacroiliac_tenderness", "baseWeight": 5 },
+      { "signId": "schober_test_positive", "baseWeight": 4 },
+      { "signId": "occiput_to_wall_distance_increased", "baseWeight": 4 },
+      { "signId": "chest_expansion_reduced", "baseWeight": 3 },
+      { "signId": "fused_spine_posture", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "hla_b27_positive", "multiplier": 10.0 },
+      { "id": "family_history_as", "multiplier": 5.0 },
+      { "id": "male_sex", "multiplier": 2.5 },
+      { "id": "inflammatory_bowel_disease", "multiplier": 3.0 },
+      { "id": "psoriasis", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "radiographic_axial_as",
+        "name": "Radiographic Axial Spondyloarthritis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "definite_sacroiliitis_on_xray", "weight": 5 },
+          { "feature": "modified_new_york_criteria_met", "weight": 5 },
+          { "feature": "syndesmophytes_bamboo_spine", "weight": 4 }
+        ],
+        "management": "NSAIDs first-line. Biologic (anti-TNF) for active disease despite NSAIDs."
+      },
+      {
+        "id": "non_radiographic_axial_as",
+        "name": "Non-Radiographic Axial Spondyloarthritis",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "mri_sacroiliitis_only", "weight": 5 },
+          { "feature": "negative_xray", "weight": 4 },
+          { "feature": "hla_b27_positive", "weight": 4 }
+        ],
+        "management": "NSAIDs. Physiotherapy. Anti-TNF if active disease despite NSAIDs."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "mechanical_back_pain",
+        "discriminators": ["pain_worsens_with_movement", "improves_with_rest", "no_morning_stiffness", "normal_crp"]
+      },
+      {
+        "diseaseId": "diffuse_idiopathic_skeletal_hyperostosis",
+        "discriminators": ["older_age", "no_sacroiliitis", "flowing_calcification_anterior_longitudinal_ligament", "normal_crp"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Schober test", "priority": "immediate", "yield": 0.8, "indication": "lumbar flexion assessment" },
+        { "name": "Chest expansion measurement", "priority": "immediate", "yield": 0.6, "indication": "thoracic involvement" }
+      ],
+      "laboratory": [
+        { "name": "HLA-B27", "priority": "high", "yield": 0.85, "indication": "strong association" },
+        { "name": "CRP", "priority": "high", "yield": 0.6, "indication": "may be elevated in active disease" },
+        { "name": "ESR", "priority": "high", "yield": 0.5, "indication": "inflammatory marker" }
+      ],
+      "imaging": [
+        { "name": "Pelvis X-ray (SI joints)", "priority": "high", "yield": 0.7, "indication": "sacroiliitis grading" },
+        { "name": "MRI sacroiliac joints", "priority": "high", "yield": 0.9, "indication": "early sacroiliitis detection" },
+        { "name": "Spine X-ray", "priority": "medium", "yield": 0.6, "indication": "syndesmophytes, bamboo spine" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASAS/EULAR Guidelines for Axial Spondyloarthritis",
+      "pathways": [
+        {
+          "severity": "active",
+          "criteria": "BASDAI >= 4, elevated CRP, MRI active sacroiliitis",
+          "treatment": "NSAIDs continuously. Physiotherapy. Anti-TNF (adalimumab, etanercept, infliximab)."
+        },
+        {
+          "severity": "stable",
+          "criteria": "BASDAI < 4, normal CRP, on treatment",
+          "treatment": "Maintain therapy. Regular physiotherapy. Monitor spinal mobility."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hla_b27_misfolding",
+      "il_23_il_17_pathway",
+      "tnf_alpha_inflammation",
+      "entheseal_inflammation",
+      "syndesmophyte_formation",
+      "spinal_ankylosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "anterior_uveitis",
+        "probability": 0.35,
+        "severityBoost": 0.4,
+        "clues": ["red_painful_eye", "photophobia", "blurred_vision"]
+      },
+      {
+        "diseaseId": "spinal_fracture",
+        "probability": 0.04,
+        "severityBoost": 0.7,
+        "clues": ["osteporotic_spine", "minor_trauma", "neurological_deficit"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if uveitis or spinal fracture",
+    "diagnosticClues": ["inflammatory_back_pain_before_45", "morning_stiffness_improves_exercise", "hla_b27_positive", "sacroiliitis"],
+    "exclusionClues": ["mechanical_pattern_back_pain", "normal_si_joints", "negative_hla_b27_low_suspicion"]
+  }
+}

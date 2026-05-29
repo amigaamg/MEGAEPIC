@@ -1,0 +1,191 @@
+{
+  "disease": {
+    "id": "hearing_loss",
+    "name": "Hearing Loss",
+    "system": "ent",
+    "agePeak_months": [0, 1200],
+    "note": "Broad category encompassing conductive, sensorineural, and mixed hearing loss. Etiology varies widely by age and type.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["hearing_impairment", "deafness"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sudden_bilateral_profound_loss", "weight": 9 },
+        { "sign": "meningism", "weight": 10 },
+        { "sign": "brain_abscess_signs", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "severe_profound_sensorineural_loss", "weight": 7 },
+          { "sign": "speech_language_delay", "weight": 7 },
+          { "sign": "sudden_onset", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If sudden/profound/speech delay -> SEVERE; else -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hearing_loss", "weight": 5, "modifiers": [
+          { "condition": "sudden_onset", "suspectTB": false },
+          { "condition": "progressive", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "tinnitus", "weight": 3 },
+      { "symptomId": "vertigo", "weight": 3, "note": "Suggests labyrinthine or retrocochlear etiology" },
+      { "symptomId": "ear_fullness", "weight": 2 },
+      { "symptomId": "history_noise_exposure", "weight": 3 },
+      { "symptomId": "ototoxic_drug_exposure", "weight": 3 },
+      { "symptomId": "family_history", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abnormal_whispered_voice_test", "baseWeight": 4 },
+      { "signId": "conductive_pattern_tuning_forks", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "sensorineural_pattern_tuning_forks", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "tm_abnormalities", "baseWeight": 3 },
+      { "signId": "nystagmus", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "presbycusis_age", "multiplier": 3.0 },
+      { "id": "noise_exposure", "multiplier": 2.5 },
+      { "id": "ototoxic_medications", "multiplier": 2.0 },
+      { "id": "family_history_deafness", "multiplier": 2.0 },
+      { "id": "prematurity_nicu", "multiplier": 1.8 },
+      { "id": "congenital_infection", "multiplier": 2.5 },
+      { "id": "meningitis_history", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "conductive_hearing_loss",
+        "name": "Conductive Hearing Loss",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "abnormal_rinne_negative", "weight": 5 },
+          { "feature": "normal_weber_to_better_ear", "weight": 3 },
+          { "feature": "tm_abnormality", "weight": 4 }
+        ],
+        "management": "Treat underlying cause: myringotomy for effusion, tympanoplasty for perforation, ossiculoplasty for erosion, stapedectomy for otosclerosis. Hearing aid if surgical option declined."
+      },
+      {
+        "id": "sensorineural_hearing_loss",
+        "name": "Sensorineural Hearing Loss",
+        "prevalenceModifier": 0.55,
+        "keyFeatures": [
+          { "feature": "rinne_positive_bilateral", "weight": 3 },
+          { "feature": "weber_to_better_ear", "weight": 3 },
+          { "feature": "poor_speech_discrimination", "weight": 4 },
+          { "feature": "tinnitus", "weight": 3 }
+        ],
+        "management": "Hearing aids. Cochlear implant if severe-profound bilateral. For sudden SNHL: high-dose corticosteroids within 72 hours. Avoid noise, ototoxins."
+      },
+      {
+        "id": "mixed_hearing_loss",
+        "name": "Mixed Hearing Loss",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "combined_conductive_and_sensorineural", "weight": 5 },
+          { "feature": "abnormal_rinne_and_reduced_bc", "weight": 4 }
+        ],
+        "management": "Address conductive component surgically if possible. Hearing aid for sensorineural component. Cochlear implant if severe."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "auditory_neuropathy",
+        "discriminators": ["absent_ABR", "present_OAEs", "poor_speech_discrimination_out_of_proportion"]
+      },
+      {
+        "diseaseId": "functional_hearing_loss",
+        "discriminators": ["inconsistent_responses", "normal_OAEs_ABR", "stenger_test_positive"]
+      },
+      {
+        "diseaseId": "central_auditory_processing_disorder",
+        "discriminators": ["normal_peripheral_hearing", "difficulty_noisy_environments", "normal_tuning_forks"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Tuning Fork Tests (Rinne/Weber)", "priority": "immediate", "yield": 0.75, "indication": "differentiate conductive vs sensorineural" },
+        { "name": "Whispered Voice Test", "priority": "immediate", "yield": 0.65, "indication": "quick screening" }
+      ],
+      "laboratory": [
+        { "name": "Autoimmune Panel (ANA, ESR)", "priority": "low", "yield": 0.2, "indication": "suspected autoimmune hearing loss" },
+        { "name": "TORCH Titers", "priority": "low", "yield": 0.15, "indication": "congenital hearing loss" },
+        { "name": "Genetic Testing", "priority": "low", "yield": 0.3, "indication": "familial hearing loss, GJB2 mutation" }
+      ],
+      "imaging": [
+        { "name": "Pure Tone Audiometry", "priority": "high", "yield": 0.95, "indication": "all cases - quantify degree and type" },
+        { "name": "Speech Audiometry", "priority": "high", "yield": 0.8, "indication": "assess functional impact" },
+        { "name": "Tympanometry", "priority": "high", "yield": 0.85, "indication": "middle ear function" },
+        { "name": "Otoacoustic Emissions", "priority": "medium", "yield": 0.8, "indication": "cochlear outer hair cell function" },
+        { "name": "Auditory Brainstem Response", "priority": "medium", "yield": 0.85, "indication": "retrocochlear pathology, neonatal screening" },
+        { "name": "MRI IAM with Contrast", "priority": "medium", "yield": 0.9, "indication": "suspected acoustic neuroma or retrocochlear lesion" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AAO-HNS Clinical Practice Guideline: Hearing Loss",
+      "pathways": [
+        {
+          "severity": "mild-moderate",
+          "criteria": "hearing loss 26-55 dB, no speech delay, conductive or sensorineural",
+          "treatment": "Hearing aids for SNHL. Surgical treatment for conductive causes. Communication strategies. Annual audiologic monitoring."
+        },
+        {
+          "severity": "severe",
+          "criteria": "hearing loss 56-90 dB, poor speech discrimination, bilateral",
+          "treatment": "Power hearing aids. Consider cochlear implant evaluation. Speech therapy. Auditory-verbal therapy for children."
+        },
+        {
+          "severity": "profound",
+          "criteria": ">90 dB, no benefit from hearing aids",
+          "treatment": "Cochlear implantation. Auditory brainstem implant if cochlear nerve absent. Sign language. Educational support. Multidisciplinary rehabilitation."
+        },
+        {
+          "severity": "sudden",
+          "criteria": ">30 dB over 72 hours",
+          "treatment": "High-dose oral prednisolone 60 mg x 7 days then taper. Intratympanic steroids if salvage. MRI to exclude acoustic neuroma. Hyperbaric oxygen controversial."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "cochlear_hair_cell_damage",
+      "strial_atrophy",
+      "ossicular_chain_disruption",
+      "tm_perforation",
+      "auditory_nerve_pathology"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "speech_language_delay",
+        "probability": 0.3,
+        "lagDays": [180, 730],
+        "severityBoost": 0.4,
+        "clues": ["prelingual_onset", "bilateral_severe_loss", "no_intervention"]
+      },
+      {
+        "diseaseId": "social_isolation_depression",
+        "probability": 0.25,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.2,
+        "clues": ["elderly", "progressive_loss", "hearing_aid_non_use"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["reduced_hearing", "abnormal_tuning_fork", "abnormal_audiometry"],
+    "exclusionClues": ["normal_audiogram", "normal_tuning_forks"]
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "disease": {
+    "id": "malaria",
+    "name": "Malaria",
+    "system": "infectious_disease",
+    "agePeak_months": [0, 960],
+    "note": "Life-threatening parasitic infection transmitted by Anopheles mosquitoes. P. falciparum causes severe disease.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["febrile_illness", "parasitic_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cerebral_malaria", "weight": 10 },
+        { "sign": "severe_anemia_hb_less_5", "weight": 9 },
+        { "sign": "respiratory_distress", "weight": 9 },
+        { "sign": "hypoglycemia", "weight": 9 },
+        { "sign": "shock", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If any WHO severe malaria criteria -> SEVERE; else -> UNCOMPLICATED"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5, "modifiers": [
+          { "condition": "periodic_patterns", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "chills_rigors", "weight": 4 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "myalgia_arthralgia", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "travel_to_endemic_area", "weight": 5 },
+      { "symptomId": "jaundice", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "jaundice", "baseWeight": 2 },
+      { "signId": "altered_consciousness", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "travel_to_endemic_area", "multiplier": 3.0 },
+      { "id": "no_chemoprophylaxis", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 2.0 },
+      { "id": "age_under_5", "multiplier": 2.0 },
+      { "id": "hiv_infection", "multiplier": 2.0 },
+      { "id": "splenectomy", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "uncomplicated_malaria",
+        "name": "Uncomplicated Malaria",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "fever", "weight": 5 },
+          { "feature": "positive_rdt", "weight": 5 },
+          { "feature": "no_severe_features", "weight": 5 }
+        ],
+        "management": "Artemisinin-based Combination Therapy (ACT). Oral artemether-lumefantrine or artesunate-amodiaquine."
+      },
+      {
+        "id": "severe_malaria",
+        "name": "Severe Malaria (P. falciparum)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "cerebral_malaria_coma", "weight": 5 },
+          { "feature": "severe_anemia", "weight": 5 },
+          { "feature": "respiratory_distress", "weight": 5 },
+          { "feature": "parasitemia_over_5_percent", "weight": 4 }
+        ],
+        "management": "IV Artesunate 2.4 mg/kg at 0, 12, 24, 48h. Then complete with oral ACT. Supportive care (seizure control, blood transfusion, glucose). ICU."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "typhoid_fever",
+        "discriminators": ["step_ladder_fever", "relative_bradycardia", "rose_spots"]
+      },
+      {
+        "diseaseId": "dengue",
+        "discriminators": ["retro_orbital_pain", "severe_myalgia", "rash", "thrombocytopenia"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Rapid Diagnostic Test (RDT)", "priority": "immediate", "yield": 0.9, "indication": "all suspected malaria" }
+      ],
+      "laboratory": [
+        { "name": "Blood smear (thick and thin films)", "priority": "gold_standard", "yield": 0.95, "indication": "species identification and parasitemia" },
+        { "name": "FBC, Hb", "priority": "high", "yield": 0.6, "indication": "anemia and thrombocytopenia" },
+        { "name": "Blood glucose", "priority": "high", "yield": 0.5, "indication": "hypoglycemia in severe malaria" },
+        { "name": "LFT, U&E, Cr, ABG", "priority": "high", "yield": 0.5, "indication": "organ function in severe disease" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Malaria Treatment",
+      "pathways": [
+        {
+          "severity": "uncomplicated",
+          "criteria": "positive test, no severe features, able to take oral",
+          "treatment": "ACT (artemether-lumefantrine or artesunate-amodiaquine) for 3 days. Primaquine single dose for gametocyte clearance (if not G6PD deficient). Paracetamol for fever."
+        },
+        {
+          "severity": "severe",
+          "criteria": "any WHO severe malaria criterion",
+          "treatment": "IV Artesunate. ICU admission. Seizure prophylaxis. Blood transfusion if Hb <5. Glucose monitoring. Broad-spectrum antibiotics if sepsis suspected."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "plasmodium_parasitemia",
+      "erythrocyte_invasion",
+      "hemolysis",
+      "cytoadherence",
+      "rosetting",
+      "endothelial_activation",
+      "microvascular_obstruction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cerebral_malaria",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["coma", "seizures", "brainstem_signs"]
+      },
+      {
+        "diseaseId": "severe_anemia",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["pallor", "tachycardia", "hb_less_5"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if severe",
+    "diagnosticClues": ["fever_in_endemic_area", "positive_rdt_or_smear", "chills_headache_myalgia"],
+    "exclusionClues": ["negative_rdt_x2", "negative_blood_smear"]
+  }
+}

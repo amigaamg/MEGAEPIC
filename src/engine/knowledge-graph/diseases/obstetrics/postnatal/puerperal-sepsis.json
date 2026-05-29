@@ -1,0 +1,198 @@
+{
+  "disease": {
+    "id": "puerperal_sepsis",
+    "name": "Puerperal Sepsis",
+    "system": "OB",
+    "agePeak_months": [240, 360],
+    "note": "Maternal infection with evidence of systemic inflammatory response syndrome (SIRS) occurring after childbirth. Commonly originates from the genital tract but can be from any source.",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["postpartum_infection", "maternal_sepsis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "altered_consciousness", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "high_fever_over_39", "weight": 7 },
+          { "sign": "tachycardia_over_120", "weight": 6 },
+          { "sign": "tachypnea", "weight": 6 },
+          { "sign": "hypotension", "weight": 7 },
+          { "sign": "foul_smelling_lochia", "weight": 6 },
+          { "sign": "leukocytosis_or_leukopenia", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Sepsis with organ dysfunction or shock -> SEVERE; Localized infection -> NON-SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_postpartum", "weight": 5 },
+      { "symptomId": "rigors", "weight": 4 },
+      { "symptomId": "foul_smelling_lochia", "weight": 4 },
+      { "symptomId": "lower_abdominal_pain", "weight": 4 },
+      { "symptomId": "heavy_or_prolonged_bleeding", "weight": 3 },
+      { "symptomId": "malaise", "weight": 3 },
+      { "symptomId": "breathlessness", "weight": 3 },
+      { "symptomId": "confusion_or_disorientation", "weight": 3 },
+      { "symptomId": "reduced_urine_output", "weight": 3 },
+      { "symptomId": "breast_pain_redness", "weight": 2, "note": "Mastitis as source" }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "tachypnea", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "uterine_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "foul_lochia", "baseWeight": 4 },
+      { "signId": "subinvolution_of_uterus", "baseWeight": 3 },
+      { "signId": "wound_infection_signs", "baseWeight": 4 },
+      { "signId": "signs_of_sepsis_qsofa_positive", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "cesarean_section", "multiplier": 5.0 },
+      { "id": "prolonged_rupture_of_membranes", "multiplier": 3.0 },
+      { "id": "multiple_vaginal_examinations", "multiplier": 2.0 },
+      { "id": "instrumental_vaginal_delivery", "multiplier": 2.5 },
+      { "id": "third_or_fourth_degree_perineal_tear", "multiplier": 3.0 },
+      { "id": "manual_removal_of_placenta", "multiplier": 3.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "gestational_diabetes", "multiplier": 1.5 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "anemia", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "endometritis",
+        "name": "Postpartum Endometritis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "uterine_tenderness", "weight": 5 },
+          { "feature": "foul_lochia", "weight": 5 },
+          { "feature": "fever_within_48h_of_delivery", "weight": 5 },
+          { "feature": "subinvolution", "weight": 3 }
+        ],
+        "management": "IV broad-spectrum antibiotics (Clindamycin + Gentamicin). IV fluids. Uterotonics if lochia heavy. Monitor for sepsis progression."
+      },
+      {
+        "id": "wound_infection",
+        "name": "Cesarean or Perineal Wound Infection",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "wound_redness_swelling_discharge", "weight": 5 },
+          { "feature": "wound_dehiscence", "weight": 4 },
+          { "feature": "fever_localized", "weight": 3 }
+        ],
+        "management": "Wound exploration and drainage. Wound swab culture. Antibiotics according to culture results. Debridement if necrotic."
+      },
+      {
+        "id": "mastitis_breast_abscess",
+        "name": "Lactational Mastitis / Breast Abscess",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "breast_pain_redness_warmth", "weight": 5 },
+          { "feature": "flu_like_symptoms", "weight": 4 },
+          { "feature": "palpable_mass", "weight": 4 }
+        ],
+        "management": "Antibiotics (Flucloxacillin or Cephalexin). Continue breastfeeding/expression. Ultrasound if abscess suspected. Incision and drainage if abscess."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pulmonary_embolism",
+        "discriminators": ["sudden_dyspnea", "pleuritic_chest_pain", "no_fever_or_infection_signs"]
+      },
+      {
+        "diseaseId": "pyelonephritis",
+        "discriminators": ["CVA_tenderness", "dysuria", "positive_urine_culture"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "qSOFA score", "priority": "immediate", "yield": 0.8, "indication": "identify sepsis" },
+        { "name": "Urine dipstick", "priority": "high", "yield": 0.5, "indication": "exclude UTI source" }
+      ],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "immediate", "yield": 0.8, "indication": "WBC, platelets" },
+        { "name": "CRP", "priority": "immediate", "yield": 0.8, "indication": "elevated" },
+        { "name": "Blood cultures", "priority": "immediate", "yield": 0.6, "indication": "identify pathogen" },
+        { "name": "Lactate", "priority": "immediate", "yield": 0.8, "indication": "tissue hypoperfusion marker" },
+        { "name": "High vaginal swab culture", "priority": "high", "yield": 0.7, "indication": "identify organism" },
+        { "name": "Wound swab culture", "priority": "medium", "yield": 0.7, "indication": "if wound infection" },
+        { "name": "Urea and electrolytes", "priority": "high", "yield": 0.6, "indication": "renal function" }
+      ],
+      "imaging": [
+        { "name": "Pelvic ultrasound", "priority": "medium", "yield": 0.6, "indication": "retained products, abscess" },
+        { "name": "Chest X-ray", "priority": "medium", "yield": 0.4, "indication": "exclude pneumonia source" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "RCOG Green-top Guideline No. 64b - Sepsis in Pregnancy and Postpartum",
+      "pathways": [
+        {
+          "severity": "localized_infection",
+          "criteria": "focal wound infection or endometritis without systemic signs",
+          "treatment": "Oral or IV antibiotics based on source. Wound care. Drain any collection. Monitor vital signs. Paracetamol for fever."
+        },
+        {
+          "severity": "sepsis",
+          "criteria": "qSOFA >=2, organ dysfunction, hypotension",
+          "treatment": "Sepsis six: 1. High-flow oxygen. 2. Blood cultures. 3. IV broad-spectrum antibiotics (Piperacillin-Tazobactam or Meropenem + Gentamicin if severe). 4. IV fluids (30mL/kg crystalloid). 5. Check lactate. 6. Monitor urine output. Source control: wound debridement, drainage, D&C for retained products. ICU admission."
+        },
+        {
+          "severity": "septic_shock",
+          "criteria": "persistent hypotension despite fluid resuscitation, lactate >4",
+          "treatment": "ICU. Vasopressors (Noradrenaline). Inotropes. Central line monitoring. Broad-spectrum IV antibiotics. Source control surgery. Multidisciplinary care (obstetric, ICU, microbiology)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ascending_infection_from_genital_tract",
+      "wound_contamination",
+      "bacterial_translocation",
+      "systemic_inflammatory_response"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "septic_shock",
+        "probability": 0.1,
+        "lagDays": [0, 2],
+        "severityBoost": 0.8,
+        "clues": ["hypotension", "lactate_elevation", "organ_dysfunction"]
+      },
+      {
+        "diseaseId": "septic_pelvic_thrombophlebitis",
+        "probability": 0.02,
+        "lagDays": [2, 7],
+        "severityBoost": 0.5,
+        "clues": ["persistent_fever_despite_antibiotics", "abdominal_pain"]
+      },
+      {
+        "diseaseId": "toxic_shock_syndrome",
+        "probability": 0.01,
+        "lagDays": [0, 3],
+        "severityBoost": 0.9,
+        "clues": ["rash", "hypotension", "multi_organ_failure"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["postpartum_fever", "uterine_tenderness", "foul_lochia", "wound_infection"],
+    "exclusionClues": ["normal_puerperium", "physiological_lochia"]
+  }
+}

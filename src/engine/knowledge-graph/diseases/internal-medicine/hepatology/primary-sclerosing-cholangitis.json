@@ -1,0 +1,207 @@
+{
+  "disease": {
+    "id": "primary_sclerosing_cholangitis",
+    "name": "Primary Sclerosing Cholangitis (PSC)",
+    "system": "hepatology",
+    "agePeak_months": [360, 600],
+    "note": "Chronic cholestatic liver disease characterized by progressive inflammation, fibrosis, and stricturing of intrahepatic and extrahepatic bile ducts. Strongly associated with inflammatory bowel disease (IBD), especially ulcerative colitis. High risk of cholangiocarcinoma and colorectal cancer.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["liver", "cholestatic", "bile_duct_strictures", "ibd_associated", "cancer_risk"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cholangitis_fever_jaundice_abdominal_pain", "weight": 9 },
+        { "sign": "dominant_stricture_with_sepsis", "weight": 9 },
+        { "sign": "acute_cholangitis_refractory", "weight": 10 },
+        { "sign": "cholangiocarcinoma_suspected", "weight": 8 },
+        { "sign": "decompensated_cirrhosis", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "recurrent_cholangitis": true,
+        "cirrhosis_with_decompensation": true,
+        "suspected_cholangiocarcinoma": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "mild_lft_elevation_asymptomatic": true,
+        "no_dominant_stricture": true,
+        "compensated_cirrhosis": true
+      },
+      "severityLabel": "Acute cholangitis or dominant stricture -> URGENT ERCP/antibiotics; decompensated cirrhosis -> TRANSPLANT evaluation; asymptomatic -> SURVEILLANCE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue_chronic", "weight": 4 },
+      { "symptomId": "pruritus", "weight": 4 },
+      { "symptomId": "jaundice_intermittent_or_progressive", "weight": 4 },
+      { "symptomId": "right_upper_quadrant_abdominal_pain", "weight": 3 },
+      { "symptomId": "fever_chills", "weight": 3, "note": "Indicates bacterial cholangitis" },
+      { "symptomId": "weight_loss_unintentional", "weight": 3 },
+      { "symptomId": "history_of_ibd_ulcerative_colitis", "weight": 5, "note": "70% of PSC patients have IBD" },
+      { "symptomId": "history_of_ibd_crohn_disease", "weight": 3 },
+      { "symptomId": "dark_urine_pale_stools", "weight": 3 },
+      { "symptomId": "steatorrhea_greasy_stools", "weight": 1, "note": "Fat malabsorption" },
+      { "symptomId": "male_gender", "weight": 3, "note": "2:1 male predominance" },
+      { "symptomId": "prior_episodes_of_cholangitis", "weight": 3 },
+      { "symptomId": "family_history_of_psc_or_ibd", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 3, "note": "Portal hypertension in advanced disease" },
+      { "signId": "abdominal_tenderness_right_upper_quadrant", "baseWeight": 3 },
+      { "signId": "excoriations_from_pruritus", "baseWeight": 3 },
+      { "signId": "xanthelasma_xanthomas", "baseWeight": 1, "note": "Less common than PBC" },
+      { "signId": "signs_of_portal_hypertension", "baseWeight": 3, "note": "Ascites, caput medusae, spider angiomas in cirrhosis" }
+    ],
+
+    "riskFactors": [
+      { "id": "ulcerative_colitis", "multiplier": 10.0 },
+      { "id": "crohn_disease_colitis", "multiplier": 4.0 },
+      { "id": "male_gender", "multiplier": 2.0 },
+      { "id": "family_history_of_psc", "multiplier": 5.0 },
+      { "id": "northern_european_ancestry", "multiplier": 2.0 },
+      { "id": "hla_drb1_0301_dqa1_0103", "multiplier": 2.5 },
+      { "id": "non_smoking_paradoxical_protective", "multiplier": 0.3 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "primary_biliary_cholangitis",
+        "discriminators": ["female_predominance", "ama_positive", "no_ibd_association", "histology_florid_bile_duct_lesions", "no_beading_on_mrcp"]
+      },
+      {
+        "diseaseId": "ig_g4_related_sclerosing_cholangitis",
+        "discriminators": ["elevated_igg4", "autoimmune_pancreatitis_often_present", "steroid_responsive", "diffuse_thickening_of_bile_duct_wall", "no_ibd_association"]
+      },
+      {
+        "diseaseId": "secondary_sclerosing_cholangitis",
+        "discriminators": ["history_of_choledocholithiasis", "previous_biliary_surgery_trauma", "ischemic_cholangiopathy", "critical_illness", "hiv_or_immunosuppression"]
+      },
+      {
+        "diseaseId": "cholangiocarcinoma",
+        "discriminators": ["dominant_mass_on_imaging", "ca19_9_vastly_elevated_above_1000", "rapid_clinical_deterioration", "biliary_brushings_positive"]
+      },
+      {
+        "diseaseId": "biliary_obstruction_other_causes",
+        "discriminators": ["stone_or_mass_on_imaging", "isolated_dilation", "normal_non_involved_ducts", "relief_after_ercp"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "ALP (alkaline phosphatase)", "priority": "immediate", "yield": 0.9, "indication": "elevated in cholestasis; may fluctuate spontaneously; normal ALP does not exclude PSC" },
+        { "name": "GGT", "priority": "high", "yield": 0.85, "indication": "elevated in cholestasis" },
+        { "name": "ALT and AST", "priority": "high", "yield": 0.5, "indication": "mild to moderate elevation" },
+        { "name": "Total and direct bilirubin", "priority": "high", "yield": 0.7, "indication": "elevated in dominant stricture or advanced disease; fluctuating" },
+        { "name": "Serum albumin and INR", "priority": "high", "yield": 0.5, "indication": "synthetic function assessment" },
+        { "name": "Anti-mitochondrial antibody (AMA)", "priority": "high", "yield": 0.05, "indication": "almost always negative (differentiates from PBC)" },
+        { "name": "p-ANCA (atypical perinuclear anti-neutrophil cytoplasmic antibody)", "priority": "medium", "yield": 0.6, "indication": "positive in 65-80% of PSC patients (non-specific)" },
+        { "name": "Serum IgG4", "priority": "high", "yield": 0.3, "indication": "elevated in IgG4-SC (mimic); 9% of PSC have mildly elevated IgG4" },
+        { "name": "CA 19-9", "priority": "high", "yield": 0.5, "indication": "elevated in cholangiocarcinoma; >129 U/mL has 79% sensitivity; biliary obstruction itself can elevate; use with caution" },
+        { "name": "FBC with platelets", "priority": "high", "yield": 0.5, "indication": "thrombocytopenia if portal hypertension" },
+        { "name": "Liver biopsy", "priority": "selected", "yield": 0.8, "indication": "not required for diagnosis if MRCP diagnostic. Used if small-duct PSC suspected (normal MRCP) or to stage fibrosis. Classic: onion-skin periductal fibrosis." }
+      ],
+      "imaging": [
+        { "name": "MRCP (Magnetic Resonance Cholangiopancreatography)", "priority": "immediate", "yield": 0.95, "indication": "first-line imaging diagnosis: multifocal strictures and dilations (beaded appearance), intrahepatic and extrahepatic bile duct involvement; assesses for dominant stricture" },
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.5, "indication": "bile duct wall thickening, dilated ducts above strictures, gallstones, cirrhosis, HCC screening; may be normal in early disease" },
+        { "name": "ERCP (Endoscopic Retrograde Cholangiopancreatography)", "priority": "therapeutic", "yield": 0.95, "indication": "therapeutic: balloon dilation of dominant strictures, stent placement, brushings for cytology if cholangiocarcinoma suspected. Not diagnostic first-line (risk of pancreatitis, cholangitis)." },
+        { "name": "Contrast-enhanced CT abdomen", "priority": "medium", "yield": 0.7, "indication": "assess for cholangiocarcinoma mass, cirrhosis, portal hypertension" },
+        { "name": "Transient elastography (FibroScan)", "priority": "high", "yield": 0.85, "indication": "fibrosis stage assessment; prognostic tool" },
+        { "name": "Colonoscopy with biopsies", "priority": "high", "yield": 0.8, "indication": "mandatory at PSC diagnosis to screen for IBD (often asymptomatic); IBD surveillance q1-2 years" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines: Primary Sclerosing Cholangitis; EASL Clinical Practice Guidelines: Primary Sclerosing Cholangitis",
+      "pathways": [
+        {
+          "severity": "asymptomatic_mild_psc_no_dominant_stricture",
+          "criteria": "Incidental diagnosis via MRCP or LFTs, no jaundice, no cholangitis, ALP <2x ULN",
+          "treatment": "No disease-modifying therapy proven to alter natural history (UDCA showed no benefit and may be harmful at high doses; avoid high-dose UDCA >28mg/kg/day). Low-dose UDCA 13-15mg/kg/day can improve LFTs but does not delay progression. Monitor LFTs q3-6 months. MRCP q1-2 years if stable. Colonoscopy for IBD screening if not done. Annual US for gallbladder polyps (high risk of dysplasia). Surveillance for cholangiocarcinoma is controversial but consider MRCP + CA 19-9 q6-12 months in high-risk patients."
+        },
+        {
+          "severity": "psc_with_dominant_stricture_or_cholangitis",
+          "criteria": "Jaundice (bilirubin >3mg/dL), ALP markedly elevated, fever/cholangitis, dominant stricture on MRCP",
+          "treatment": "ERCP for therapeutic intervention: balloon dilation of dominant stricture (preferred over stenting; stents carry higher complication risk). Brushings for cytology/FISH to exclude cholangiocarcinoma. Antibiotics for cholangitis (ceftriaxone 2g IV daily + metronidazole 500mg IV q8h; or piperacillin-tazobactam 4.5g IV q6h). Consider ursodeoxycholic acid 13-15mg/kg/day (low-dose). Assess for dominant stricture recurrence after dilation."
+        },
+        {
+          "severity": "psc_cirrhosis_compensated",
+          "criteria": "Cirrhosis with portal hypertension but no decompensation, Child-Pugh A",
+          "treatment": "HCC surveillance US + AFP q6m. Variceal screening EGD. Cholangiocarcinoma surveillance (MRCP + CA 19-9 q6-12m; controversial but high-risk patients). No proven medical therapy. Manage complications of cirrhosis as per guidelines. Consider transplant evaluation proactively."
+        },
+        {
+          "severity": "psc_decompensated_or_recurrent_cholangitis",
+          "criteria": "Child-Pugh B/C, ascites, encephalopathy, variceal bleeding, recurrent cholangitis impacting quality of life",
+          "treatment": "Transplant evaluation and listing. PSC is one of the best indications for liver transplant (excellent outcomes). Manage decompensation (diuretics, lactulose, variceal prophylaxis). Recurrent cholangitis: empiric rotating antibiotics (ciprofloxacin 500mg PO BID or trimethoprim-sulfamethoxazole DS daily). ERCP as needed for dominant strictures. Nutritional support (MCT oil, fat-soluble vitamin supplementation)."
+        },
+        {
+          "severity": "psc_ibd_colorectal_cancer_surveillance",
+          "criteria": "PSC + known IBD (most commonly UC)",
+          "treatment": "Colonoscopy with chromoendoscopy and random biopsies q1-2 years (high risk of colorectal dysplasia/cancer). PSC-IBD patients have 4x higher risk of colorectal cancer than IBD alone. Chemoprevention with mesalamine/5-ASA is recommended. PSC patients with intact colon may be considered for colectomy if high-grade dysplasia found. After transplant, continue IBD surveillance (IBD may flare post-transplant due to tacrolimus)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "genetic_susceptibility_hla_and_non_hla_loci",
+      "gut_liver_axis_dysregulation_in_ibd",
+      "abnormal_lymphocyte_homing_to_liver_from_gut",
+      "increased_intestinal_permeability",
+      "toxic_bile_acid_accumulation",
+      "peribiliary_gland_inflammation_and_fibrosis",
+      "progressive_onion_skin_periductal_fibrosis",
+      "multifocal_bile_duct_strictures_and_dilations",
+      "cholestasis_and_secondary_biliary_cirrhosis",
+      "high_risk_of_cholangiocarcinoma_and_colorectal_cancer"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "dominant_bile_duct_stricture",
+        "probability": 0.5,
+        "severityBoost": 0.4,
+        "clues": ["worsening_jaundice", "rising_bilirubin", "fever_cholangitis", "stricture_on_mrcp_or_ercp"]
+      },
+      {
+        "diseaseId": "bacterial_cholangitis_recurrent",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["fever_rigors", "ruq_pain", "jaundice", "elevated_lfts_during_episodes", "positive_blood_cultures"]
+      },
+      {
+        "diseaseId": "cholangiocarcinoma",
+        "probability": 0.1,
+        "lagYears": [5, 20],
+        "severityBoost": 0.9,
+        "clues": ["rapid_deterioration", "ca19_9_markedly_elevated", "dominant_stricture_with_mass", "weight_loss", "biliary_brushings_positive"]
+      },
+      {
+        "diseaseId": "cirrhosis_and_liver_failure",
+        "probability": 0.3,
+        "severityBoost": 0.6,
+        "clues": ["fibrosis_progression", "portal_hypertension", "splenomegaly_thrombocytopenia", "decompensation_events"]
+      },
+      {
+        "diseaseId": "colorectal_dysplasia_and_cancer",
+        "probability": 0.15,
+        "severityBoost": 0.6,
+        "clues": ["longstanding_ibd", "pancolitis", "colonoscopy_surveillance_abnormal", "family_history_of_crc"]
+      },
+      {
+        "diseaseId": "fat_soluble_vitamin_deficiency_osteoporosis",
+        "probability": 0.2,
+        "severityBoost": 0.1,
+        "clues": ["chronic_cholestasis", "prolonged_inr_vit_k", "low_vitamin_d_levels"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if acute cholangitis or dominant stricture; medium for progressive disease; low for asymptomatic",
+    "diagnosticClues": ["male_with_ibd", "cholestatic_lfts", "mrcp_showng_beading_and_strictures", "pruritus", "recurrent_cholangitis"],
+    "exclusionClues": ["normal_mrcp", "ama_positive_suggests_pbc", "igg4_elevated_suggests_igg4_sc", "no_ibd_or_female_more_likely_pbc"]
+  }
+}

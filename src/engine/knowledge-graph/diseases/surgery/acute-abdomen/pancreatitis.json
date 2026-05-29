@@ -1,0 +1,176 @@
+{
+  "disease": {
+    "id": "acute_pancreatitis",
+    "name": "Acute Pancreatitis",
+    "system": "surgical",
+    "agePeak_months": [480, 840],
+    "note": "Epigastric pain radiating to back, vomiting, elevated amylase/lipase. Can progress to severe necrotizing pancreatitis.",
+    "prevalenceWeight": 0.65,
+    "syndromeTags": ["acute_abdomen", "epigastric_pain", "vomiting"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "multi_organ_failure", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "hemorrhagic_ascites", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "Glasgow_score_3_or_more", "weight": 8 },
+          { "sign": "crepitus_flanks", "weight": 7 },
+          { "sign": "saturation_below_90", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Organ failure/sepsis -> SEVERE (necrotizing); Glasgow <3 -> NON-SEVERE (interstitial/edematous)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain", "weight": 5, "modifiers": [
+          { "condition": "radiation_to_back", "suspectTB": false }
+        ]
+      },
+      { "symptomId": "nausea_vomiting", "weight": 4, "note": "Persistent vomiting, does not relieve pain" },
+      { "symptomId": "alcohol_abuse", "weight": 4, "note": "Most common cause" },
+      { "symptomId": "gallstones", "weight": 4, "note": "Second most common cause" },
+      { "symptomId": "fever", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "epigastric_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "guarding", "baseWeight": 3 },
+      { "signId": "absent_bowel_sounds", "baseWeight": 3, "note": "Ileus common in severe pancreatitis" },
+      { "signId": "grey-turner_sign", "baseWeight": 2, "note": "Flank ecchymosis in severe hemorrhagic pancreatitis" },
+      { "signId": "cullen_sign", "baseWeight": 2, "note": "Periumbilical ecchymosis" },
+      { "signId": "fever_tachycardia", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "gallstones", "multiplier": 2.0 },
+      { "id": "alcohol_abuse", "multiplier": 2.5 },
+      { "id": "hypertriglyceridemia", "multiplier": 1.8 },
+      { "id": "hypercalcemia", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.3 },
+      { "id": "family_history_of_pancreatitis", "multiplier": 1.4 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "interstitial_edematous_pancreatitis",
+        "name": "Interstitial/Edematous Pancreatitis",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "epigastric_pain", "weight": 5 },
+          { "feature": "mild_amylase_elevation", "weight": 4 },
+          { "feature": "no_organ_failure", "weight": 5 }
+        ],
+        "management": "Conservative: NBM, IV fluids, analgesia. CT if unclear. Oral intake when pain settles. Treat underlying cause."
+      },
+      {
+        "id": "necrotizing_pancreatitis",
+        "name": "Necrotizing Pancreatitis",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "severe_persistent_pain", "weight": 5 },
+          { "feature": "organ_failure", "weight": 5 },
+          { "feature": "pancreatic_necrosis_on_ct", "weight": 5 },
+          { "feature": "hypotension", "weight": 4 }
+        ],
+        "management": "ICU admission. Aggressive IV fluid resuscitation. Enteral nutrition via NG tube. IV antibiotics if infected necrosis. Step-up approach: percutaneous drainage then necrosectomy if needed."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "perforated_peptic_ulcer",
+        "discriminators": ["board_like_rigidity", "gas_under_diaphragm", "pain_not_relieved_by_leaning_forward"]
+      },
+      {
+        "diseaseId": "acute_cholecystitis",
+        "discriminators": ["murphy_sign", "right_upper_quadrant_pain", "normal_amylase"]
+      },
+      {
+        "diseaseId": "mesenteric_ischemia",
+        "discriminators": ["atrial_fibrillation", "pain_out_of_proportion", "bloody_diarrhea", "lactate_elevated"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Glasgow Score (Modified)", "priority": "immediate", "yield": 0.85, "indication": "severity assessment within 48 hours" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.2, "indication": "rule out cardiac cause of epigastric pain" }
+      ],
+      "laboratory": [
+        { "name": "Serum Lipase", "priority": "immediate", "yield": 0.95, "indication": "most sensitive and specific for pancreatitis" },
+        { "name": "Serum Amylase", "priority": "immediate", "yield": 0.85, "indication": "elevated >3x upper limit" },
+        { "name": "LFTs", "priority": "high", "yield": 0.6, "indication": "elevated ALT suggests gallstone etiology" },
+        { "name": "Triglycerides", "priority": "medium", "yield": 0.3, "indication": "rule out hypertriglyceridemia" },
+        { "name": "CRP", "priority": "high", "yield": 0.75, "indication": "CRP >150 at 48h suggests severe pancreatitis" }
+      ],
+      "imaging": [
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.7, "indication": "detect gallstones, assess biliary tree" },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.9, "indication": "assess necrosis, complications (after 48-72h)" },
+        { "name": "MRCP", "priority": "medium", "yield": 0.85, "indication": "detect CBD stones if suspected" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "IAP/APA Guidelines for Acute Pancreatitis",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "Glasgow <3, no organ failure, no necrosis on CT",
+          "treatment": "IV fluids (Ringer's lactate), analgesia, NBM initially then early oral feeding. Treat cause (cholecystectomy for gallstones)."
+        },
+        {
+          "severity": "severe",
+          "criteria": "Glasgow >=3, organ failure, pancreatic necrosis on CT",
+          "treatment": "ICU admission. Aggressive IV fluids. Enteral nutrition (NG tube). IV antibiotics only if infected necrosis. Step-up approach for necrosectomy. ERCP if gallstone pancreatitis with cholangitis."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "premature_trypsin_activation",
+      "acinar_cell_injury",
+      "local_inflammation",
+      "systemic_inflammatory_response",
+      "pancreatic_necrosis",
+      "multi_organ_dysfunction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pancreatic_pseudocyst",
+        "probability": 0.15,
+        "lagDays": [14, 28],
+        "severityBoost": 0.2,
+        "clues": ["persistent_elevated_amylase", "palpable_mass", "early_satiety"]
+      },
+      {
+        "diseaseId": "infected_pancreatic_necrosis",
+        "probability": 0.2,
+        "lagDays": [7, 21],
+        "severityBoost": 0.4,
+        "clues": ["persistent_fever", "worsening_sepsis", "gas_in_necrosis_on_ct"]
+      },
+      {
+        "diseaseId": "multi_organ_failure",
+        "probability": 0.1,
+        "lagDays": [1, 5],
+        "severityBoost": 0.5,
+        "clues": ["hypotension", "renal_failure", "respiratory_failure"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["epigastric_pain_radiating_to_back", "vomiting_not_relieving_pain", "elevated_lipase", "alcohol_or_gallstone_history"],
+    "exclusionClues": ["rlq_pain", "bloody_diarrhea", "pain_relieved_by_antacids"]
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "disease": {
+    "id": "cardiac_arrest",
+    "name": "Cardiac Arrest",
+    "system": "emergency_medicine",
+    "agePeak_months": [480, 960],
+    "note": "Sudden cessation of cardiac output. Immediate CPR and defibrillation are critical. Every minute delay reduces survival by 10%.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["cardiac_emergency", "resuscitation"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "pulselessness", "weight": 10 },
+        { "sign": "apnea", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "CARDIAC ARREST is always a critical emergency requiring immediate resuscitation"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "collapse", "weight": 5 },
+      { "symptomId": "loss_of_consciousness", "weight": 5 },
+      { "symptomId": "no_pulse", "weight": 5 },
+      { "symptomId": "no_breathing", "weight": 5 },
+      { "symptomId": "chest_pain_preceding", "weight": 2 },
+      { "symptomId": "shortness_of_breath_preceding", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "unconsciousness", "baseWeight": 5 },
+      { "signId": "no_carotid_pulse", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "no_breathing_gasping", "baseWeight": 5 },
+      { "signId": "pupils_dilated", "baseWeight": 3 },
+      { "signId": "cyanosis", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "coronary_artery_disease", "multiplier": 3.0 },
+      { "id": "cardiomyopathy", "multiplier": 2.5 },
+      { "id": "electrolyte_abnormalities", "multiplier": 2.0 },
+      { "id": "drug_overdose", "multiplier": 1.8 },
+      { "id": "hypothermia", "multiplier": 1.5 },
+      { "id": "previous_cardiac_arrest", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "vf_vt_cardiac_arrest",
+        "name": "Shockable Rhythm (VF/pVT)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "vf_on_monitor", "weight": 5 },
+          { "feature": "witnessed_collapse", "weight": 4 }
+        ],
+        "management": "Defibrillate immediately 150-200J biphasic. CPR 2 min. Repeat shock every 2 min. Epinephrine 1mg every 3-5 min. Amiodarone after 3 shocks."
+      },
+      {
+        "id": "pea_asystole_arrest",
+        "name": "Non-Shockable Rhythm (PEA/Asystole)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [
+          { "feature": "pea_or_asystole", "weight": 5 },
+          { "feature": "unwitnessed_arrest", "weight": 3 }
+        ],
+        "management": "CPR immediately. Epinephrine 1mg ASAP then every 3-5 min. Identify and treat reversible causes (4Hs and 4Ts)."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "ECG monitoring/defibrillator pads", "priority": "immediate", "yield": 1.0, "indication": "rhythm assessment during arrest" },
+        { "name": "End-tidal CO2 monitoring", "priority": "high", "yield": 0.8, "indication": "assess CPR quality and ROSC" },
+        { "name": "Ultrasound (POCUS)", "priority": "high", "yield": 0.7, "indication": "assess cardiac activity, reversible causes" }
+      ],
+      "laboratory": [
+        { "name": "ABG/VBG", "priority": "high", "yield": 0.6, "indication": "pH, lactate, electrolytes post-ROSC" },
+        { "name": "Serum K+, Ca2+, Mg2+", "priority": "high", "yield": 0.5, "indication": "electrolyte abnormalities as cause" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ERC/AHA Guidelines for Cardiopulmonary Resuscitation",
+      "pathways": [
+        {
+          "severity": "shockable",
+          "criteria": "VF/pVT on monitor",
+          "treatment": "Defibrillate 150-200J. CPR 2 min. Repeat shock. Epinephrine 1mg after 2nd shock. Amiodarone 300mg after 3rd shock. Identify reversible causes."
+        },
+        {
+          "severity": "non-shockable",
+          "criteria": "PEA or Asystole",
+          "treatment": "CPR immediately. Epinephrine 1mg ASAP. Identify 4Hs (Hypoxia, Hypovolemia, H+ acidosis, Hypothermia) and 4Ts (Tension PTX, Tamponade, Toxins, Thrombosis)."
+        },
+        {
+          "severity": "post-ROSC",
+          "criteria": "return of spontaneous circulation",
+          "treatment": "Targeted temperature management (32-36C). Ventilate to normocapnia. Coronary angiography if STEMI suspected. Treat underlying cause. Neuroprognostication."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "sudden_cardiac_output_cessation",
+      "global_ischemia",
+      "cellular_hypoxia",
+      "metabolic_acidosis",
+      "reperfusion_injury",
+      "post_cardiac_arrest_syndrome"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "hypoxic_brain_injury",
+        "probability": 0.5,
+        "severityBoost": 0.5,
+        "clues": ["prolonged_arrest", "no_roseless_20_min", "myoclonus"]
+      },
+      {
+        "diseaseId": "rib_fractures_cpr",
+        "probability": 0.3,
+        "severityBoost": 0.1,
+        "clues": ["chest_wall_crepitus"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["unresponsive", "no_pulse", "no_breathing"],
+    "exclusionClues": ["patient_conscious_and_breathing"]
+  }
+}

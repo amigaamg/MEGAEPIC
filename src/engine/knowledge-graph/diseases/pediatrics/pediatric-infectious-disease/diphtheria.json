@@ -1,0 +1,169 @@
+{
+  "disease": {
+    "id": "diphtheria",
+    "name": "Diphtheria (Pediatric)",
+    "system": "PAED",
+    "agePeak_months": [12, 120],
+    "note": "Toxin-mediated disease caused by Corynebacterium diphtheriae. Pseudomembrane formation in throat causing airway obstruction. Myocarditis and neuritis from toxin.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["vaccine_preventable", "upper_airway_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "airway_obstruction_pseudomembrane", "weight": 10 },
+        { "sign": "myocarditis_arrhythmia", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 10 },
+        { "sign": "severe_pseudomembrane_extending_to_trachea", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "bull_neck_severe_cervical_edema", "weight": 9 },
+          { "sign": "toxic_circulatory_collapse", "weight": 9 },
+          { "sign": "palatal_paralysis", "weight": 7 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "If airway compromise, myocarditis, or neuropathy -> SEVERE; else -> NON-SEVERE (mild throat involvement)"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sore_throat_severe", "weight": 5 },
+      { "symptomId": "fever_low_grade", "weight": 3 },
+      { "symptomId": "difficulty_swallowing", "weight": 4 },
+      { "symptomId": "voice_change_hoarseness", "weight": 3 },
+      { "symptomId": "croupy_cough", "weight": 3 },
+      { "symptomId": "no_diphtheria_vaccination", "weight": 5 },
+      { "symptomId": "nasal_discharge_blood_tinged", "weight": 3 },
+      { "symptomId": "palatal_weakness_nasal_regurgitation", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pseudomembrane_pharynx_tonsils", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "bull_neck_cervical_edema", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "lymphadenopathy_cervical", "baseWeight": 4 },
+      { "signId": "palatal_paralysis", "baseWeight": 4 },
+      { "signId": "stridor", "baseWeight": 4 },
+      { "signId": "toxic_appearance", "baseWeight": 4 },
+      { "signId": "signs_of_myocarditis_arrhythmia", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "unvaccinated_incomplete_vaccination", "multiplier": 5.0 },
+      { "id": "crowded_living", "multiplier": 2.5 },
+      { "id": "recent_travel_to_endemic_area", "multiplier": 3.0 },
+      { "id": "close_contact_with_diphtheria_case", "multiplier": 4.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "respiratory_diphtheria",
+        "name": "Respiratory Diphtheria (Pharyngeal/Tonsillar)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "pseudomembrane_on_tonsils_pharynx", "weight": 5 },
+          { "feature": "sore_throat_severe", "weight": 4 },
+          { "feature": "bull_neck", "weight": 4 }
+        ],
+        "management": "Diphtheria antitoxin (DAT) 20,000-100,000 IU IV. Antibiotics: erythromycin 40-50 mg/kg/day or penicillin G 100,000-150,000 U/kg/day for 14 days. Airway monitoring. ICU if respiratory compromise."
+      },
+      {
+        "id": "cutaneous_diphtheria",
+        "name": "Cutaneous Diphtheria",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "non_healing_ulcer_with_grayish_membrane", "weight": 5 },
+          { "feature": "travel_to_tropics", "weight": 3 },
+          { "feature": "less_toxic_systemic_effects", "weight": 3 }
+        ],
+        "management": "Wound cleaning and debridement. Antibiotics as above. Contact precautions. DAT if systemic symptoms develop."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_tonsillitis_strep",
+        "discriminators": ["high_fever", "exudate_not_membrane", "no_bull_neck", "positive_strep_test"]
+      },
+      {
+        "diseaseId": "infectious_mononucleosis",
+        "discriminators": ["atypical_lymphocytes", "positive_monospot", "hepatosplenomegaly"]
+      },
+      {
+        "diseaseId": "croup",
+        "discriminators": ["barking_cough", "steeple_sign_on_xray", "no_pseudomembrane"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Throat swab culture (Loeffler medium, tellurite plate)", "priority": "immediate", "yield": 0.8, "indication": "C. diphtheriae identification" },
+        { "name": "PCR for diphtheria toxin gene", "priority": "high", "yield": 0.95, "indication": "confirm toxigenic strain" },
+        { "name": "Gram stain throat swab", "priority": "high", "yield": 0.5, "indication": "gram-positive rods in Chinese character arrangement" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.6, "indication": "myocarditis screening (ST changes, arrhythmia)" }
+      ],
+      "imaging": [
+        { "name": "Neck X-ray", "priority": "medium", "yield": 0.4, "indication": "airway narrowing, pseudomembrane extent" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Diphtheria Management Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_non_toxic",
+          "criteria": "Localized pseudomembrane, no bull neck, no toxic effects, normal ECG",
+          "treatment": "DAT (equine) 20,000-40,000 IU IV after sensitivity testing. Erythromycin 40-50 mg/kg/day PO/IV x 14 days. Isolation (contact + droplet). Complete vaccination. Monitor for complications."
+        },
+        {
+          "severity": "severe_toxic",
+          "criteria": "Extensive membrane, bull neck, toxic shock, myocarditis, neuropathy",
+          "treatment": "DAT 80,000-100,000 IU IV. ICU admission. Antibiotics. Airway management (intubation/tracheostomy). Cardiac monitoring. Inotropes for myocarditis. Treat complications."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "corynebacterium_diphtheriae_infection",
+      "diphtheria_toxin_production",
+      "pseudomembrane_formation",
+      "airway_obstruction",
+      "toxin_mediated_myocarditis",
+      "demyelinating_neuropathy"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "myocarditis",
+        "probability": 0.2,
+        "lagDays": [1, 14],
+        "severityBoost": 0.6,
+        "clues": ["ecg_changes", "arrhythmia", "heart_failure", "cardiomegaly"]
+      },
+      {
+        "diseaseId": "polyneuropathy",
+        "probability": 0.15,
+        "lagDays": [14, 42],
+        "severityBoost": 0.4,
+        "clues": ["palatal_paralysis", "oculomotor_palsy", "peripheral_neuropathy"]
+      },
+      {
+        "diseaseId": "airway_obstruction_requiring_tracheostomy",
+        "probability": 0.15,
+        "lagDays": [0, 5],
+        "severityBoost": 0.5,
+        "clues": ["stridor", "extensive_membrane", "respiratory_distress"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pseudomembrane_on_throat", "bull_neck", "unvaccinated", "toxic_appearance"],
+    "exclusionClues": ["no_pseudomembrane", "negative_culture", "vaccinated"]
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "disease": {
+    "id": "acute_leukemia",
+    "name": "Acute Leukemia",
+    "system": "ONCO",
+    "agePeak_months": [18, 72],
+    "note": "Rapidly progressive hematologic malignancy. AML more common in adults, ALL in children. Medical emergency due to cytopenias.",
+    "prevalenceWeight": 0.25,
+    "syndromeTags": ["hematologic_malignancy", "bone_marrow_failure", "leukocytosis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "leukostasis_with_respiratory_failure", "weight": 10 },
+        { "sign": "intracranial_hemorrhage", "weight": 10 },
+        { "sign": "tumor_lysis_syndrome", "weight": 9 },
+        { "sign": "septic_shock_neutropenic", "weight": 10 },
+        { "sign": "spinal_cord_compression_granulocytic_sarcoma", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "Emergent presentation. Risk stratification by cytogenetics/molecular profile."
+    },
+    "historyFeatures": [
+      { "symptomId": "fatigue_weakness", "weight": 4 },
+      { "symptomId": "fever_infections", "weight": 4 },
+      { "symptomId": "easy_bruising_bleeding", "weight": 4 },
+      { "symptomId": "bone_pain", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "lymphadenopathy", "weight": 2 },
+      { "symptomId": "gingival_hypertrophy", "weight": 2, "note": "Classic for AML-M4/M5" },
+      { "symptomId": "dyspnea_on_exertion", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "petechiae_purpura", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "sternal_tenderness", "baseWeight": 3 },
+      { "signId": "lymphadenopathy", "baseWeight": 3 },
+      { "signId": "hepatosplenomegaly", "baseWeight": 3 },
+      { "signId": "gingival_hypertrophy", "baseWeight": 2 },
+      { "signId": "skin_leukemia_cutis", "baseWeight": 2 },
+      { "signId": "fundal_hemorrhages", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "prior_chemotherapy_alkylating_agents", "multiplier": 4.0 },
+      { "id": "ionizing_radiation_exposure", "multiplier": 3.0 },
+      { "id": "down_syndrome", "multiplier": 10.0 },
+      { "id": "myelodysplastic_syndrome_preceding", "multiplier": 5.0 },
+      { "id": "fanconi_anemia_bloom_syndrome", "multiplier": 5.0 },
+      { "id": "smoking", "multiplier": 1.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "aml",
+        "name": "Acute Myeloid Leukemia",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "myeloperoxidase_positive", "weight": 5 },
+          { "feature": "auer_rods", "weight": 5 },
+          { "feature": "cd13_cd33_positive", "weight": 4 },
+          { "feature": "adult_predominance", "weight": 3 }
+        ],
+        "management": "Induction: 7+3 (cytarabine 7 days + daunorubicin 3 days). Consolidation: high-dose cytarabine (HiDAC) or allogeneic SCT if adverse risk. Targeted: midostaurin (FLT3), gemtuzumab (CD33), enasidenib/ivosidenib (IDH)."
+      },
+      {
+        "id": "all",
+        "name": "Acute Lymphoblastic Leukemia",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "childhood_peak", "weight": 5 },
+          { "feature": "terminal_deoxynucleotidyl_transferase_positive", "weight": 4 },
+          { "feature": "cd19_cd10_cd20_status", "weight": 4 },
+          { "feature": "philadelphia_chromosome_bcr_abl", "weight": 3 }
+        ],
+        "management": "Pediatric-inspired protocols (induction, consolidation, maintenance). Berlin-Frankfurt-Munster (BFM) regimen. Tyrosine kinase inhibitors if Ph+. CAR-T (tisagenlecleucel) for relapsed/refractory B-ALL."
+      },
+      {
+        "id": "apl",
+        "name": "Acute Promyelocytic Leukemia (APL)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "pml_rara_translocation_t_15_17", "weight": 5 },
+          { "feature": "coagulopathy_dic", "weight": 5 },
+          { "feature": "hypergranular_promyelocytes", "weight": 5 },
+          { "feature": "younger_age", "weight": 3 }
+        ],
+        "management": "ATRA (all-trans retinoic acid) + arsenic trioxide (ATO). Low-intensity chemo for high-risk WBC >10. Extreme vigilance for differentiation syndrome. Coagulopathy support with cryoprecipitate/platelets."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "severe_aplastic_anemia", "discriminators": ["low_wbc_no_blasts", "hypocellular_marrow", "no_splenomegaly"] },
+      { "diseaseId": "infectious_mononucleosis", "discriminators": ["positive_monospot", "reactive_lymphocytes_not_blasts", "self_limiting"] },
+      { "diseaseId": "myelodysplastic_syndrome", "discriminators": ["chronic_course", "blast_percentage_under_20", "dysplasia_marrow"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Peripheral blood smear", "priority": "immediate", "yield": 0.9, "indication": "blasts, Auer rods, thrombocytopenia" }
+      ],
+      "laboratory": [
+        { "name": "FBC with differential", "priority": "immediate", "yield": 0.95, "indication": "pancytopenia or leukocytosis, blast percentage" },
+        { "name": "Coagulation profile (PT, aPTT, fibrinogen, D-dimer)", "priority": "immediate", "yield": 0.7, "indication": "DIC especially in APL" },
+        { "name": "U&E, uric acid, LDH, phosphate", "priority": "high", "yield": 0.6, "indication": "tumor lysis surveillance" },
+        { "name": "Flow cytometry (immunophenotyping)", "priority": "gold_standard", "yield": 0.98, "indication": "lineage assignment (AML vs ALL)" },
+        { "name": "Cytogenetics (karyotype)", "priority": "high", "yield": 0.85, "indication": "risk stratification (ELN/UKALL categories)" }
+      ],
+      "imaging": [
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "mediastinal mass (common in T-ALL), infection" },
+        { "name": "CT head", "priority": "medium", "yield": 0.3, "indication": "intracranial bleed if platelets <10 or neurological symptoms" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ELN/UKALL/NCCN Guidelines for Acute Leukemia",
+      "pathways": [
+        {
+          "severity": "newly diagnosed - induction",
+          "criteria": "confirmed acute leukemia, fit for intensive chemo",
+          "treatment": "AML: 7+3 (cytarabine + anthracycline). ALL: multi-agent induction (vincristine, steroid, anthracycline, asparaginase). APL: ATRA + ATO. Supportive care: transfusions, antibiotics, hydration, allopurinol/rasburicase."
+        },
+        {
+          "severity": "post-remission consolidation",
+          "criteria": "achieved CR after induction",
+          "treatment": "AML: HiDAC x 3-4 cycles or alloSCT. ALL: consolidation blocks + CNS prophylaxis (MTX IT). APL: ATRA + ATO consolidation. MRD monitoring."
+        },
+        {
+          "severity": "relapsed/refractory",
+          "criteria": "failure to achieve CR or relapse after CR",
+          "treatment": "Salvage chemotherapy (FLAG-IDA, MEC, clofarabine). Allogeneic SCT if fit. CAR-T for B-ALL. Targeted agents per mutation. Clinical trials."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "hematopoietic_stem_cell_mutation",
+      "clonal_expansion_of_blasts",
+      "bone_marrow_replacement",
+      "cytopenias_from_marrow_failure",
+      "extramedullary_infiltration",
+      "leukostasis_in_hyperleukocytosis"
+    ],
+    "complications": [
+      { "diseaseId": "tumor_lysis_syndrome", "probability": 0.2, "severityBoost": 0.5, "clues": ["hyperuricemia", "hyperkalemia", "hyperphosphatemia", "hypocalcemia", "high_ldh"] },
+      { "diseaseId": "disseminated_intravascular_coagulation", "probability": 0.15, "severityBoost": 0.5, "clues": ["low_fibrinogen", "elevated_d_dimer", "prolonged_pt_ptt", "bleeding_thrombosis"] },
+      { "diseaseId": "differentiation_syndrome", "probability": 0.2, "severityBoost": 0.4, "clues": ["dyspnea", "fever", "pulmonary_infiltrates", "fluid_overload", "associated_with_APL_treatment"] },
+      { "diseaseId": "invasive_fungal_infection", "probability": 0.1, "severityBoost": 0.4, "clues": ["persistent_fever_on_antibiotics", "pulmonary_nodules", "galactomannan_positive"] }
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["pancytopenia_or_leukocytosis", "peripheral_blasts", "fatigue_bruising_fever", "bone_pain"],
+    "exclusionClues": ["reactive_leukoerythroblastic", "normal_peripheral_smear", "hypocellular_marrow_no_blasts"]
+  }
+}

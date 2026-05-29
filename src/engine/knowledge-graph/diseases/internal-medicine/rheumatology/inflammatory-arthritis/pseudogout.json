@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "pseudogout",
+    "name": "Pseudogout (CPPD Crystal Deposition Disease)",
+    "system": "rheumatology",
+    "agePeak_months": [600, 960],
+    "note": "Crystal arthropathy caused by calcium pyrophosphate dihydrate (CPPD) crystal deposition in joints. Presents with acute or chronic arthritis, commonly affecting the knee. Associated with chondrocalcinosis.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["crystal_arthropathy", "inflammatory_arthritis", "monoarthritis", "chondrocalcinosis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_arthritis", "weight": 10 },
+        { "sign": "crowned_dens_syndrome", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "If septic joint excluded -> NON-URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_knee_swelling_pain", "weight": 5 },
+      { "symptomId": "joint_stiffness", "weight": 4 },
+      { "symptomId": "pseudogout_attack_triggered_by_illness", "weight": 3 },
+      { "symptomId": "previous_attacks_resolving_days", "weight": 4 },
+      { "symptomId": "chronic_arthritis_resembling_oa", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "knee_effusion_warmth", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "chondrocalcinosis_on_exam", "baseWeight": 3 },
+      { "signId": "limited_range_motion", "baseWeight": 3 },
+      { "signId": "joint_tenderness_swelling", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "advanced_age", "multiplier": 5.0 },
+      { "id": "osteoarthritis", "multiplier": 2.0 },
+      { "id": "hemochromatosis", "multiplier": 4.0 },
+      { "id": "hyperparathyroidism", "multiplier": 3.0 },
+      { "id": "hypomagnesemia", "multiplier": 3.0 },
+      { "id": "hypophosphatasia", "multiplier": 4.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acute_cppd",
+        "name": "Acute CPPD Crystal Arthritis",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "sudden_onset_severe_pain_knee_wrist", "weight": 5 },
+          { "feature": "self_limiting_days_to_weeks", "weight": 4 },
+          { "feature": "may_mimic_gout", "weight": 3 }
+        ],
+        "management": "Aspiration. NSAIDs or colchicine. Intra-articular steroids."
+      },
+      {
+        "id": "chronic_cppd",
+        "name": "Chronic CPPD Inflammatory Arthritis",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "persistent_polyarticular_inflammation", "weight": 4 },
+          { "feature": "mimics_ra_or_oa", "weight": 3 },
+          { "feature": "chondrocalcinosis_on_imaging", "weight": 5 }
+        ],
+        "management": "NSAIDs. Low-dose colchicine. Hydroxychloroquine. Treat underlying metabolic condition."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "gout",
+        "discriminators": ["calcium_pyrophosphate_crystals", "positive_birefringent", "chondrocalcinosis", "knee_over_mtp"]
+      },
+      {
+        "diseaseId": "septic_arthritis",
+        "discriminators": ["positive_culture", "toxic_appearance", "crystals_plus_infection_possible"]
+      },
+      {
+        "diseaseId": "rheumatoid_arthritis",
+        "discriminators": ["negative_rf_anti_ccp", "chondrocalcinosis", "crystals_on_aspiration", "older_age"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Joint aspiration and polarized microscopy", "priority": "immediate", "yield": 0.9, "indication": "positively birefringent rhomboid CPPD crystals" }
+      ],
+      "laboratory": [
+        { "name": "CRP and ESR", "priority": "high", "yield": 0.7, "indication": "elevated in acute attack" },
+        { "name": "Calcium, phosphate, magnesium", "priority": "high", "yield": 0.4, "indication": "screen for metabolic disease" },
+        { "name": "Ferritin and iron studies", "priority": "medium", "yield": 0.3, "indication": "exclude hemochromatosis" },
+        { "name": "PTH", "priority": "medium", "yield": 0.3, "indication": "hyperparathyroidism association" }
+      ],
+      "imaging": [
+        { "name": "Joint X-ray", "priority": "high", "yield": 0.8, "indication": "chondrocalcinosis (calcification of cartilage)" },
+        { "name": "Ultrasound", "priority": "medium", "yield": 0.7, "indication": "CPPD deposits in hyaline cartilage" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EULAR Recommendations for CPPD",
+      "pathways": [
+        {
+          "severity": "acute",
+          "criteria": "acute monoarthritis, knee most common",
+          "treatment": "Joint aspiration. NSAIDs or colchicine. Intra-articular steroid injection."
+        },
+        {
+          "severity": "chronic",
+          "criteria": "persistent inflammatory symptoms, multiple joints",
+          "treatment": "Low-dose colchicine prophylaxis. NSAIDs PRN. Hydroxychloroquine. Treat underlying metabolic disease."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "calcium_pyrophosphate_crystal_deposition",
+      "nlrp3_inflammasome_activation",
+      "excess_extracellular_pyrophosphate",
+      "ank_gene_mutations",
+      "cartilage_degradation",
+      "chondrocalcinosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "chronic_arthritis_damage",
+        "probability": 0.3,
+        "severityBoost": 0.2,
+        "clues": ["chondrocalcinosis", "advanced_age", "metabolic_disease"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["acute_knee_arthritis_elderly", "chondrocalcinosis", "cppd_crystals_positive_birefringent"],
+    "exclusionClues": ["urate_crystals", "negative_birefringent", "no_chondrocalcinosis", "normal_metabolic_workup"]
+  }
+}

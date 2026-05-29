@@ -1,0 +1,117 @@
+{
+  "disease": {
+    "id": "post_abdominal_surgery_icu",
+    "name": "Post-Abdominal Surgery ICU Management",
+    "system": "critical_care",
+    "agePeak_months": [120, 840],
+    "note": "ICU management after major abdominal surgery (laparotomy, colorectal, hepato-pancreato-biliary, bariatric, trauma laparotomy). Fluid management, sepsis, wound healing.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["post_surgical_care", "abdominal_surgery", "critical_care"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "abdominal_compartment_syndrome", "weight": 10 },
+        { "sign": "septic_shock_anastomotic_leak", "weight": 10 },
+        { "sign": "post_op_hemorrhage", "weight": 9 },
+        { "sign": "wound_dehiscence_evisceration", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Leak/ACS/hemorrhage -> CRITICAL; ileus/simple -> MODERATE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "recent_major_abdominal_surgery", "weight": 5 },
+      { "symptomId": "abdominal_pain_distension", "weight": 4 },
+      { "symptomId": "fever_or_hypothermia", "weight": 3 },
+      { "symptomId": "oliguria", "weight": 3 },
+      { "symptomId": "nausea_vomiting_ileus", "weight": 3 },
+      { "symptomId": "tachycardia_hypotension", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_distension_tenderness", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "oliguria", "baseWeight": 3 },
+      { "signId": "wound_drainage_purulent_or_feculent", "baseWeight": 4 },
+      { "signId": "decreased_bowel_sounds", "baseWeight": 2 },
+      { "signId": "elevated_intra_abdominal_pressure", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "emergency_laparotomy", "multiplier": 2.5 },
+      { "id": "generalized_peritonitis_at_surgery", "multiplier": 2.5 },
+      { "id": "bowel_anastomosis", "multiplier": 2.0 },
+      { "id": "malnutrition_low_albumin", "multiplier": 2.0 },
+      { "id": "copd_obesity_smoking", "multiplier": 1.5 },
+      { "id": "residual_sepsis_or_inadequate_source_control", "multiplier": 3.0 }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Intra-abdominal pressure (IAP) measurement", "priority": "high", "yield": 0.8, "indication": "suspected ACS, IAP >12 mmHg" }
+      ],
+      "laboratory": [
+        { "name": "FBC, CRP, Procalcitonin", "priority": "high", "yield": 0.6, "indication": "infection monitoring" },
+        { "name": "Lactate, ABG", "priority": "high", "yield": 0.7, "indication": "hypoperfusion" },
+        { "name": "U&E, Cr", "priority": "high", "yield": 0.5, "indication": "renal function" }
+      ],
+      "imaging": [
+        { "name": "CT Abdomen with IV and oral contrast", "priority": "high", "yield": 0.85, "indication": "suspected leak, abscess, collection" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES / Enhanced Recovery After Surgery (ERAS) Guidelines",
+      "pathways": [
+        {
+          "severity": "routine post-op ICU",
+          "criteria": "hemodynamically stable, no signs of leak or ACS",
+          "treatment": "Fluid resuscitation (balanced crystalloid). Early enteral nutrition if tolerated. Pain control (epidural recommended). Antibiotics if peritonitis. Monitor IAP. Ambulation asap. DVT prophylaxis."
+        },
+        {
+          "severity": "suspected complication",
+          "criteria": "tachycardia, fever, increasing abdominal pain, rising WBC/lactate, or elevated IAP",
+          "treatment": "CT abdomen. Broad-spectrum antibiotics (piperacillin-tazobactam or meropenem). Surgical re-exploration if leak/abscess/ischemia. Decompress abdomen if ACS. ICU organ support."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "surgical_trauma_and_inflammation",
+      "fluid_shifts_third_spacing",
+      "post_operative_ileus",
+      "systemic_inflammatory_response",
+      "risk_of_anastomotic_leak",
+      "intra_abdominal_hypertension",
+      "wound_healing_impairment"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "anastomotic_leak",
+        "probability": 0.05,
+        "lagDays": [3, 10],
+        "severityBoost": 0.5,
+        "clues": ["fever", "tachycardia", "peritonitis", "drain_content_feculent"]
+      },
+      {
+        "diseaseId": "abdominal_compartment_syndrome",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["distended_tense_abdomen", "IAP_greater_20", "oliguria", "elevated_airway_pressure"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["recent_laparotomy", "fever_tachycardia_distension", "elevated_white_cells_lactate"],
+    "exclusionClues": ["normal_post_op_course", "tolerating_feeds", "afebrile_stable"]
+  }
+}

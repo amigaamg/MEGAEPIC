@@ -1,0 +1,126 @@
+{
+  "disease": {
+    "id": "stable_angina",
+    "name": "Stable Angina Pectoris",
+    "system": "CARD",
+    "agePeak_months": [540, 960],
+    "note": "Predictable exertional chest pain due to fixed coronary stenosis. Relieved by rest or nitrates.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["chest_pain", "chronic_ischemic_heart_disease"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "prolonged_chest_pain_at_rest", "weight": 10 },
+        { "sign": "hemodynamic_instability", "weight": 10 },
+        { "sign": "acute_pulmonary_oedema", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If pain at rest/unstable features -> ACS; else -> STABLE ANGINA"
+    },
+    "historyFeatures": [
+      { "symptomId": "exertional_chest_pain", "weight": 5, "modifiers": [{ "condition": "retrosternal_heaviness", "suspectTB": false }] },
+      { "symptomId": "radiation_to_left_arm_jaw", "weight": 4 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "relieved_by_rest", "weight": 4 },
+      { "symptomId": "relieved_by_gtn", "weight": 4 },
+      { "symptomId": "nausea_with_exertion", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "normal_exam_at_rest", "baseWeight": 1, "note": "Mostly normal between episodes" },
+      { "signId": "hypotension_during_pain", "baseWeight": 3 },
+      { "signId": "gallop_rhythm", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "smoking", "multiplier": 2.0 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 2.0 },
+      { "id": "dyslipidemia", "multiplier": 1.5 },
+      { "id": "family_history_cad", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.3 }
+    ],
+    "subtypes": [
+      {
+        "id": "ccs_class_1",
+        "name": "CCS I - Ordinary Activity Does Not Cause Angina",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [{ "feature": "pain_only_with_strenuous_exertion", "weight": 5 }],
+        "management": "Medical therapy. Lifestyle modification. Consider stress testing."
+      },
+      {
+        "id": "ccs_class_2",
+        "name": "CCS II - Slight Limitation",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [{ "feature": "pain_walking_two_blocks_or_climbing_one_flight", "weight": 5 }],
+        "management": "Beta-blocker, aspirin, statin. Sublingual GTN PRN. Consider angiography."
+      },
+      {
+        "id": "ccs_class_3",
+        "name": "CCS III - Marked Limitation",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [{ "feature": "pain_walking_one_block_or_one_flight", "weight": 5 }],
+        "management": "Optimize medical therapy. Coronary angiography. Consider revascularization."
+      },
+      {
+        "id": "ccs_class_4",
+        "name": "CCS IV - Inability to Perform Any Activity Without Pain",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [{ "feature": "pain_at_minimal_exertion_or_rest", "weight": 5 }],
+        "management": "Urgent angiography. Consider revascularization (PCI/CABG). Rule out unstable angina."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "gastroesophageal_reflux", "discriminators": ["burning_quality", "post_prandial", "relieved_by_antacids"] },
+      { "diseaseId": "costochondritis", "discriminators": ["reproducible_palpation", "sharp_pain", "no_exertional_relation"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "Resting 12-lead ECG", "priority": "immediate", "yield": 0.3, "indication": "may show ST depression during pain" },
+        { "name": "Exercise tolerance test", "priority": "high", "yield": 0.75, "indication": "diagnostic and prognostic" }
+      ],
+      "laboratory": [
+        { "name": "Fasting lipid profile", "priority": "high", "yield": 0.5, "indication": "risk factor assessment" },
+        { "name": "HbA1c", "priority": "medium", "yield": 0.3, "indication": "screen for diabetes" },
+        { "name": "Troponin", "priority": "high", "yield": 0.2, "indication": "normal in stable angina, rule out ACS" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "high", "yield": 0.6, "indication": "wall motion abnormalities, LV function" },
+        { "name": "Myocardial perfusion imaging", "priority": "medium", "yield": 0.85, "indication": "inducible ischemia detection" },
+        { "name": "Coronary angiography", "priority": "medium", "yield": 0.95, "indication": "definitive anatomical assessment" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ESC Guidelines for Stable Coronary Artery Disease",
+      "pathways": [
+        {
+          "severity": "mild (CCS I-II)",
+          "criteria": "pain with moderate exertion, no high-risk features",
+          "treatment": "Aspirin 75 mg OD. Statin (atorvastatin 40-80 mg). Beta-blocker (bisoprolol 2.5-10 mg). Sublingual GTN PRN. Lifestyle modification."
+        },
+        {
+          "severity": "moderate (CCS III)",
+          "criteria": "pain with minimal exertion, limiting daily activities",
+          "treatment": "Optimize beta-blocker. Add calcium channel blocker or long-acting nitrate. Consider angiography and revascularization."
+        },
+        {
+          "severity": "severe (CCS IV)",
+          "criteria": "pain at rest or minimal exertion",
+          "treatment": "Urgent angiography. PCI or CABG. Dual antiplatelet if stented. Intensive risk factor management."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "fixed_coronary_stenosis",
+      "atherosclerosis",
+      "myocardial_oxygen_demand_supply_mismatch",
+      "endothelial_dysfunction",
+      "coronary_vasospasm_contributor"
+    ],
+    "complications": [
+      { "diseaseId": "acute_coronary_syndrome", "probability": 0.05, "severityBoost": 0.4, "clues": ["prolonged_pain", "troponin_elevation", "ecg_changes"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["exertional_retrosternal_chest_pain", "relieved_by_rest_or_gtn", "risk_factors"],
+    "exclusionClues": ["non_exertional_pain", "reproducible_on_palpation", "burning_quality"]
+  }
+}

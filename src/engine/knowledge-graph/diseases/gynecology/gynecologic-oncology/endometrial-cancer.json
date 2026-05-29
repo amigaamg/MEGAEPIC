@@ -1,0 +1,180 @@
+{
+  "disease": {
+    "id": "endometrial_cancer",
+    "name": "Endometrial Cancer",
+    "system": "GYN",
+    "agePeak_months": [600, 720],
+    "note": "Malignancy of the endometrial lining. Most common gynecologic cancer in developed countries. Type I (estrogen-dependent, endometrioid) and Type II (non-estrogen dependent, serous/clear cell).",
+    "prevalenceWeight": 0.015,
+    "syndromeTags": ["gynecologic_malignancy", "postmenopausal_bleeding"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "heavy_bleeding_with_hypovolemia", "weight": 8 },
+        { "sign": "pyometra_sepsis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "FIGO_stage_II_or_above", "weight": 8 },
+          { "sign": "deep_myometrial_invasion_over_50_percent", "weight": 7 },
+          { "sign": "cervical_stromal_invasion", "weight": 7 },
+          { "sign": "high_grade_serous_or_clear_cell", "weight": 8 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Stage II+, non-endometrioid histology or deep invasion -> SEVERE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "postmenopausal_bleeding", "weight": 5 },
+      { "symptomId": "abnormal_uterine_bleeding_in_perimenopause", "weight": 4 },
+      { "symptomId": "watery_bloody_discharge", "weight": 3 },
+      { "symptomId": "pelvic_pain_or_cramping", "weight": 3 },
+      { "symptomId": "abdominal_fullness_or_bloating", "weight": 2 },
+      { "symptomId": "weight_loss_unintentional", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "dyspareunia", "weight": 1 },
+      { "symptomId": "urinary_urgency_frequency", "weight": 1 },
+      { "symptomId": "history_of_endometrial_hyperplasia", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "uterine_enlargement", "baseWeight": 3 },
+      { "signId": "blood_on_speculum_or_cervix_normal", "baseWeight": 3 },
+      { "signId": "pyometra_tender_uterus_with_fever", "baseWeight": 3 },
+      { "signId": "abnormal_cervix_appearance_rare", "baseWeight": 1 },
+      { "signId": "adnexal_mass_if_ovarian_metastasis", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "unopposed_estrogen_therapy", "multiplier": 5.0 },
+      { "id": "obesity", "multiplier": 3.0 },
+      { "id": "nulliparity", "multiplier": 2.0 },
+      { "id": "late_menopause_over_55", "multiplier": 2.0 },
+      { "id": "early_menarche", "multiplier": 1.5 },
+      { "id": "PCOS_chronic_anovulation", "multiplier": 3.0 },
+      { "id": "tamoxifen_therapy", "multiplier": 2.5 },
+      { "id": "diabetes_mellitus", "multiplier": 2.0 },
+      { "id": "hereditary_Lynch_syndrome", "multiplier": 10.0 },
+      { "id": "hypertension", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "endometrioid_adenocarcinoma",
+        "name": "Endometrioid Adenocarcinoma (Type I)",
+        "prevalenceModifier": 0.8,
+        "keyFeatures": [
+          { "feature": "estrogen_dependent", "weight": 4 },
+          { "feature": "low_grade_well_differentiated", "weight": 3 },
+          { "feature": "better_prognosis", "weight": 3 },
+          { "feature": "associated_with_endometrial_hyperplasia", "weight": 4 }
+        ],
+        "management": "Total hysterectomy + bilateral salpingo-oophorectomy. Lymphadenectomy based on risk. Adjuvant radiotherapy if high-risk features."
+      },
+      {
+        "id": "serous_carcinoma",
+        "name": "Serous Carcinoma (Type II)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "non_estrogen_dependent", "weight": 4 },
+          { "feature": "high_grade_aggressive", "weight": 5 },
+          { "feature": "early_metastasis", "weight": 5 },
+          { "feature": "poor_prognosis", "weight": 5 },
+          { "feature": "associated_with_PS3_mutation", "weight": 4 }
+        ],
+        "management": "Full surgical staging: hysterectomy, BSO, omentectomy, lymphadenectomy, peritoneal biopsies. Adjuvant chemotherapy (Carboplatin + Paclitaxel). Consider targeted therapy."
+      },
+      {
+        "id": "clear_cell_carcinoma",
+        "name": "Clear Cell Carcinoma",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "clear_cells_on_histology", "weight": 5 },
+          { "feature": "aggressive_behavior", "weight": 5 },
+          { "feature": "poor_prognosis", "weight": 5 }
+        ],
+        "management": "Same as serous carcinoma. Surgery + adjuvant chemotherapy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "endometrial_atrophy",
+        "discriminators": ["thin_endometrium", "no_atypia", "no_bleeding_as_cause"]
+      },
+      {
+        "diseaseId": "endometrial_polyp",
+        "discriminators": ["well_defined_on_SIS", "benign_histology"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Complete blood count", "priority": "high", "yield": 0.5, "indication": "anemia" }
+      ],
+      "imaging": [
+        { "name": "Transvaginal ultrasound (endometrial thickness)", "priority": "first_line", "yield": 0.8, "indication": "thickened endometrium >4mm PMB" },
+        { "name": "Endometrial biopsy (Pipelle)", "priority": "diagnostic", "yield": 0.9, "indication": "histological diagnosis" },
+        { "name": "Hysteroscopy + curettage", "priority": "diagnostic", "yield": 0.95, "indication": "if biopsy inconclusive" },
+        { "name": "MRI pelvis", "priority": "staging", "yield": 0.85, "indication": "myometrial invasion, cervical involvement" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN / FIGO Guidelines for Endometrial Cancer",
+      "pathways": [
+        {
+          "severity": "early_stage_I_II",
+          "criteria": "confined to uterus, grade 1-2 endometrioid",
+          "treatment": "Total hysterectomy + bilateral salpingo-oophorectomy (TH+BSO). Sentinel lymph node biopsy or systematic lymphadenectomy based on risk. Adjuvant vaginal brachytherapy if high-intermediate risk."
+        },
+        {
+          "severity": "advanced_stage_III_IV",
+          "criteria": "extrauterine spread, high-grade, serous/clear cell",
+          "treatment": "Optimal debulking surgery (TH+BSO+omentectomy+lymphadenectomy+peritoneal biopsies). Adjuvant chemotherapy (Carboplatin + Paclitaxel) +/- radiotherapy. Hormonal therapy for estrogen-receptor positive."
+        },
+        {
+          "severity": "fertility_sparing",
+          "criteria": "grade 1 endometrioid, stage IA, no myometrial invasion, desires fertility",
+          "treatment": "High-dose oral progestins (megestrol acetate 160mg or MPA 200-400mg daily). Hysteroscopic resection. Repeat biopsy q3 months until remission. TH+BSO after childbearing."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "unopposed_estrogen_stimulation",
+      "endometrial_hyperplasia",
+      "atypical_hyperplasia_progression",
+      "PTEN_PIK3CA_alterations",
+      "mismatch_repair_deficiency"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "metastasis",
+        "probability": 0.1,
+        "lagDays": [365, 1825],
+        "severityBoost": 0.7,
+        "clues": ["recurrence", "distant_lesions"]
+      },
+      {
+        "diseaseId": "pyometra",
+        "probability": 0.02,
+        "lagDays": [0, 90],
+        "severityBoost": 0.4,
+        "clues": ["fever", "purulent_discharge", "tender_uterus"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["postmenopausal_bleeding", "thick_endometrium", "endometrial_biopsy_positive"],
+    "exclusionClues": ["regular_cyclic_bleeding_in_premenopausal", "normal_endometrium"]
+  }
+}

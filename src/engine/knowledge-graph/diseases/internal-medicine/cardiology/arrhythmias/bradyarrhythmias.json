@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "bradyarrhythmias",
+    "name": "Bradyarrhythmias",
+    "system": "CARD",
+    "agePeak_months": [600, 1080],
+    "note": "Heart rate <60 bpm due to sinus node dysfunction or AV conduction abnormalities. Spectrum from benign to life-threatening.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["arrhythmia", "bradycardia"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "asystole", "weight": 10 },
+        { "sign": "symptomatic_bradycardia", "weight": 9 },
+        { "sign": "hemodynamic_instability", "weight": 10 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
+      "severityLabel": "If symptomatic/hemodynamically unstable -> URGENT; else -> BENIGN/MONITOR"
+    },
+    "historyFeatures": [
+      { "symptomId": "syncope_or_presyncope", "weight": 4 },
+      { "symptomId": "dizziness", "weight": 3 },
+      { "symptomId": "fatigue_lethargy", "weight": 3 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 2 },
+      { "symptomId": "exercise_intolerance", "weight": 3 },
+      { "symptomId": "palpitations", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "heart_rate_less_60", "baseWeight": 4 },
+      { "signId": "regular_bradycardia", "baseWeight": 3 },
+      { "signId": "irregular_bradycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "signs_of_hypoperfusion", "baseWeight": 3 }
+    ],
+    "riskFactors": [
+      { "id": "advanced_age", "multiplier": 2.0 },
+      { "id": "ischemic_heart_disease", "multiplier": 1.5 },
+      { "id": "medications_beta_ccb_digoxin_amiodarone", "multiplier": 2.0 },
+      { "id": "sleep_apnea", "multiplier": 1.5 },
+      { "id": "hypothyroidism", "multiplier": 1.5 },
+      { "id": "trained_athlete", "multiplier": 0.5 }
+    ],
+    "subtypes": [
+      {
+        "id": "sinus_bradycardia",
+        "name": "Sinus Bradycardia",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "normal_p_waves", "weight": 5 },
+          { "feature": "rate_less_60", "weight": 5 }
+        ],
+        "management": "If asymptomatic: no treatment. If symptomatic: atropine, treat underlying cause, consider pacing."
+      },
+      {
+        "id": "sick_sinus_syndrome",
+        "name": "Sick Sinus Syndrome",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "sinus_bradycardia", "weight": 4 },
+          { "feature": "sinus_arrest", "weight": 5 },
+          { "feature": "tachy_brady_syndrome", "weight": 4 }
+        ],
+        "management": "Permanent pacemaker if symptomatic. Rate control drugs for tachyarrhythmia after pacing."
+      },
+      {
+        "id": "junctional_rhythm",
+        "name": "Junctional Rhythm",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "narrow_qrs", "weight": 5 },
+          { "feature": "absent_or_inverted_p_waves", "weight": 4 },
+          { "feature": "rate_40_60", "weight": 4 }
+        ],
+        "management": "Treat underlying cause (ischemia, digoxin toxicity). Atropine if symptomatic. Pacemaker if persistent."
+      },
+      {
+        "id": "idioventricular_rhythm",
+        "name": "Accelerated Idioventricular Rhythm",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "wide_qrs", "weight": 5 },
+          { "feature": "rate_40_100", "weight": 4 },
+          { "feature": "reperfusion_after_mi", "weight": 3 }
+        ],
+        "management": "Usually benign and self-limited. No treatment needed. Monitor rhythm. Remove underlying cause."
+      }
+    ],
+    "mimics": [
+      { "diseaseId": "complete_heart_block", "discriminators": ["av_dissociation", "atrial_rate_faster", "cannon_waves"] },
+      { "diseaseId": "sinus_arrhythmia", "discriminators": ["rate_variation_with_respiration", "normal_minimal_hr"] }
+    ],
+    "investigations": {
+      "bedside": [
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.9, "indication": "rhythm identification" },
+        { "name": "Continuous monitoring", "priority": "high", "yield": 0.8, "indication": "catch intermittent bradycardia" }
+      ],
+      "laboratory": [
+        { "name": "TSH", "priority": "medium", "yield": 0.3, "indication": "rule out hypothyroidism" },
+        { "name": "Electrolytes", "priority": "medium", "yield": 0.2, "indication": "electrolyte disturbance" },
+        { "name": "Digoxin level", "priority": "medium", "yield": 0.3, "indication": "if on digoxin" }
+      ],
+      "imaging": [
+        { "name": "Echocardiography", "priority": "medium", "yield": 0.3, "indication": "structural heart disease" }
+      ],
+      "advanced": [
+        { "name": "Holter monitor", "indication": "capture intermittent symptoms", "priority": "high" },
+        { "name": "Loop recorder", "indication": "infrequent but severe symptoms", "priority": "medium" }
+      ]
+    },
+    "management": {
+      "protocolReference": "ACC/AHA/HRS Guidelines for Bradycardia and Cardiac Pacing",
+      "pathways": [
+        {
+          "severity": "asymptomatic",
+          "criteria": "no symptoms, stable, rate >40",
+          "treatment": "No treatment needed. Review causative medications. Monitor. Holter if symptoms develop."
+        },
+        {
+          "severity": "symptomatic",
+          "criteria": "dizziness, fatigue, presyncope, rate <40",
+          "treatment": "Atropine 0.5 mg IV Q3-5 min (max 3 mg). Transcutaneous pacing if unstable. Treat underlying cause. Consider permanent pacemaker."
+        },
+        {
+          "severity": "unstable",
+          "criteria": "hypotension, altered mental status, heart failure",
+          "treatment": "Immediate transcutaneous pacing. Atropine. Isoproterenol infusion (2-10 mcg/min). Transvenous pacing. Permanent pacemaker."
+        }
+      ]
+    },
+    "pathophysiology": [
+      "sinus_node_dysfunction",
+      "conduction_system_fibrosis",
+      "autonomic_dysregulation",
+      "pharmacological_depression",
+      "metabolic_derangement",
+      "hypothyroidism"
+    ],
+    "complications": [
+      { "diseaseId": "syncope_injury", "probability": 0.1, "severityBoost": 0.3, "clues": ["recurrent_syncope", "falls"] },
+      { "diseaseId": "heart_failure", "probability": 0.03, "severityBoost": 0.2, "clues": ["chronic_bradycardia", "low_cardiac_output"] }
+    ],
+    "mustNotMiss": false,
+    "emergencyPriority": "high if unstable",
+    "diagnosticClues": ["heart_rate_less_60", "symptoms_of_hypoperfusion", "ecg_conduction_abnormality"],
+    "exclusionClues": ["normal_heart_rate", "asymptomatic"]
+  }
+}
