@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { getDepartmentTotalActiveCases, getDepartmentTotalEncountersToday } from '@/lib/workspaceData';
 
 export default function LiveDepartmentStats() {
-  const [stats, setStats] = useState({ totalActive: getDepartmentTotalActiveCases(), totalToday: getDepartmentTotalEncountersToday() });
+  const [deptStats] = useState({ totalActive: getDepartmentTotalActiveCases(), totalToday: getDepartmentTotalEncountersToday() });
   const [loading] = useState(false);
-  const { totalActive, totalToday } = stats;
+  const { totalActive, totalToday } = deptStats;
 
   if (loading) {
     return (
