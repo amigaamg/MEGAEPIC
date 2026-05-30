@@ -3,33 +3,92 @@
     "id": "aortic_aneurysm",
     "name": "Abdominal Aortic Aneurysm (AAA)",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "vascular-surgery",
     "agePeak_months": [600, 960],
-    "note": "Permanent dilation of the abdominal aorta >3cm. Risk of rupture increases with size. Screening reduces mortality.",
+    "note": "Permanent dilation of the abdominal aorta >3cm. Risk of rupture increases exponentially with size. In Kenya, AAA is underdiagnosed due to limited screening — most present as emergencies with rupture. Smoking is the single most important modifiable risk factor. Elective repair (open or EVAR) for aneurysms >5.5cm or rapid expansion carries 1-5% mortality vs 80%+ for emergency repair of rupture. Screening ultrasound in at-risk populations (men >65, smokers, family history) saves lives.",
     "prevalenceWeight": 0.3,
-    "syndromeTags": ["abdominal_mass", "vascular_disease", "aneurysm"],
+    "syndromeTags": ["abdominal_mass", "vascular_disease", "aneurysm", "pulsatile_mass"],
+
+    "presentingComplaints": [
+      "Incidental finding on abdominal scan",
+      "Pulsating sensation in the abdomen",
+      "Deep abdominal or back pain (warning sign)",
+      "Sudden severe abdominal or back pain with collapse",
+      "Feeling faint or dizzy with abdominal pain",
+      "Abdominal pain radiating to the back or groin"
+    ],
 
     "severityAssessment": {
       "immediateDangerSigns": [
-        { "sign": "ruptured_aaa", "weight": 10 },
-        { "sign": "hemorrhagic_shock", "weight": 10 },
-        { "sign": "impending_rupture", "weight": 9 },
+        { "sign": "ruptured_aaa_with_hemorrhagic_shock", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "impending_rupture_symptomatic_aneurysm", "weight": 9 },
         { "sign": "avpu_abnormal", "weight": 10 }
       ],
       "severeCriteria": {
         "anyDangerSign": true,
         "additionalCriteria": [
-          { "sign": "tender_aneurysm", "weight": 8 },
-          { "sign": "hypotension_painful_pulsatile_mass", "weight": 10 },
+          { "sign": "tender_aneurysm_on_palpation", "weight": 8 },
+          { "sign": "hypotension_with_pulsatile_mass", "weight": 10 },
           { "sign": "size_more_than_5_5cm", "weight": 7 },
-          { "sign": "rapid_expansion_more_than_1cm_per_year", "weight": 6 }
+          { "sign": "rapid_expansion_more_than_1cm_per_year", "weight": 6 },
+          { "sign": "contained_rupture_on_ct", "weight": 9 }
         ]
       },
       "nonSevereCriteria": {
         "hasIndrawingOrFastBreathing": false,
         "noDangerSigns": true
       },
-      "severityLabel": "Ruptured/symptomatic -> SEVERE; small asymptomatic -> NON-SEVERE"
+      "severityLabel": "Ruptured/symptomatic/tender/large >5.5cm/rapid expansion -> SEVERE; small asymptomatic (<5.5cm, stable) -> NON-SEVERE"
     },
+
+    "history_questions": [
+      { "question": "Was this aneurysm found incidentally or because of symptoms?", "weight": 9 },
+      { "question": "Do you have any abdominal or back pain?", "weight": 9 },
+      { "question": "Did the pain start suddenly?", "weight": 9 },
+      { "question": "Do you feel a pulsating mass in your abdomen?", "weight": 8 },
+      { "question": "Have you felt faint, dizzy, or lost consciousness?", "weight": 9 },
+      { "question": "Do you smoke tobacco or use khat/miraa?", "weight": 8 },
+      { "question": "How many pack-years of smoking? (packs per day × years)", "weight": 7 },
+      { "question": "Do you have high blood pressure?", "weight": 7 },
+      { "question": "Do you have any family history of aortic aneurysm?", "weight": 7 },
+      { "question": "Do you have COPD or emphysema?", "weight": 5 },
+      { "question": "How old are you?", "weight": 7 },
+      { "question": "Do you have any leg pain when walking (claudication)?", "weight": 5 },
+      { "question": "Do you have diabetes, high cholesterol, or heart disease?", "weight": 5 },
+      { "question": "Have you ever had a heart attack or stroke?", "weight": 5 },
+      { "question": "Do you have any other aneurysms (popliteal, femoral)?", "weight": 5 },
+      { "question": "Have you had any previous abdominal surgeries?", "weight": 5 },
+      { "question": "Do you take any blood thinners (aspirin, warfarin, clopidogrel)?", "weight": 6 },
+      { "question": "What is your kidney function like — any known kidney disease?", "weight": 6 },
+      { "question": "Do you have any allergies to contrast dye?", "weight": 5 },
+      { "question": "Are you able to climb two flights of stairs? (fitness assessment)", "weight": 6 },
+      { "question": "Have you ever had a CT or ultrasound scan of your abdomen before?", "weight": 6 },
+      { "question": "Do you have any connective tissue disease (Marfan, Ehlers-Danlos, Loeys-Dietz)?", "weight": 7 },
+      { "question": "Do you have a bicuspid aortic valve (known)?", "weight": 6 },
+      { "question": "Do you have any other aneurysms elsewhere (popliteal, femoral, thoracic)?", "weight": 6 },
+      { "question": "Have you had any previous vascular surgeries?", "weight": 5 },
+      { "question": "What is your exercise capacity — can you walk up a hill or two flights of stairs without stopping?", "weight": 7 },
+      { "question": "Do you have any chest pain, hoarseness, or difficulty swallowing (suggests thoracic aneurysm)?", "weight": 5 },
+      { "question": "Have you had any recent unexplained weight loss or fever (inflammatory AAA)?", "weight": 5 },
+      { "question": "Do you have any leg swelling, DVT, or pulmonary embolism history?", "weight": 4 },
+      { "question": "Do you have any known carotid artery disease or previous stroke/TIA?", "weight": 5 },
+      { "question": "What medications are you currently taking — including over-the-counter?", "weight": 5 },
+      { "question": "Do you have any allergies to medications, latex, or iodine?", "weight": 4 },
+      { "question": "Have you ever had radiation therapy to your abdomen or pelvis?", "weight": 4 },
+      { "question": "Do you drink alcohol — how many units per week?", "weight": 3 },
+      { "question": "Do you have any chronic steroid or immunosuppressant use?", "weight": 4 },
+      { "question": "Have you had any recent infections or dental procedures (risk of graft infection)?", "weight": 4 },
+      { "question": "Do you have any kidney stones or chronic kidney disease?", "weight": 5 },
+      { "question": "What is your ethnicity — AAA is more common in Caucasian populations but affects Africans too", "weight": 4 },
+      { "question": "Do you have any back surgery or spinal instrumentation?", "weight": 4 },
+      { "question": "Have you discussed AAA screening with your GP or had a screening ultrasound?", "weight": 5 },
+      { "question": "Are you sexually active — erectile dysfunction can be related to iliac aneurysm or surgery risk?", "weight": 3 },
+      { "question": "Do you understand the risks of elective repair vs surveillance for your aneurysm size?", "weight": 7 },
+      { "question": "Who is your next of kin — we need to discuss advance care planning for a major surgery", "weight": 4 },
+      { "question": "Do you have a living will or advance directive?", "weight": 3 }
+    ],
 
     "historyFeatures": [
       { "symptomId": "abdominal_or_back_pain", "weight": 4, "note": "Warning sign of expansion or rupture" },
@@ -42,6 +101,34 @@
       { "symptomId": "known_copd", "weight": 2 }
     ],
 
+    "examination_findings": [
+      { "finding": "Palpable pulsatile abdominal mass (midline, above umbilicus)", "weight": 10 },
+      { "finding": "Abdominal tenderness over the mass (suggests expansion or rupture)", "weight": 9 },
+      { "finding": "Hypotension and tachycardia (ruptured AAA)", "weight": 10 },
+      { "finding": "Abdominal bruit on auscultation", "weight": 6 },
+      { "finding": "Abdominal distension and rigidity (rupture with peritonitis)", "weight": 8 },
+      { "finding": "Ecchymosis on flank (Gray Turner's sign) or periumbilical (Cullen's) — retroperitoneal bleed", "weight": 7 },
+      { "finding": "Femoral pulse deficit or asymmetry", "weight": 6 },
+      { "finding": "Distal embolization signs: blue toe, livedo reticularis", "weight": 5 },
+      { "finding": "Signs of shock: cold clammy skin, delayed capillary refill, altered mental status", "weight": 8 },
+      { "finding": "Popliteal or femoral aneurysm on palpation (associated aneurysms)", "weight": 5 },
+      { "finding": "Diminished lower limb pulses", "weight": 6 },
+      { "finding": "Abdominal tenderness on deep palpation", "weight": 5 },
+      { "finding": "Palpable popliteal or femoral aneurysm on bilateral exam (10-20% have associated aneurysms)", "weight": 6 },
+      { "finding": "Abdominal auscultation for bruit — suggests associated aortoiliac stenosis", "weight": 5 },
+      { "finding": "Lower limb neurological exam — assess for peripheral neuropathy (associated with AAA)", "weight": 4 },
+      { "finding": "Peripheral pulse examination: femoral, popliteal, dorsalis pedis, posterior tibial — document all", "weight": 6 },
+      { "finding": "Check for inguinal hernia — associated with AAA (collagen weakness)", "weight": 4 },
+      { "finding": "Skin exam for xanthelasma or tendon xanthomata (familial hypercholesterolemia risk)", "weight": 3 },
+      { "finding": "Respiratory exam — assess for COPD (major risk factor and affects surgical candidacy)", "weight": 4 },
+      { "finding": "Cardiac exam: JVP, heart sounds, murmurs, displaced apex (assess cardiac function)", "weight": 5 },
+      { "finding": "Body habitus assessment: obesity makes palpation difficult; pannus may complicate wound healing", "weight": 4 },
+      { "finding": "Measure blood pressure in both arms — difference suggests subclavian stenosis or dissection", "weight": 5 },
+      { "finding": "Check for supraclavicular or carotid bruits — associated atherosclerotic disease", "weight": 4 },
+      { "finding": "Fundoscopy for hypertensive retinopathy — assess chronic hypertension severity", "weight": 3 },
+      { "finding": "Sacral and peripheral edema — assess for heart failure as comorbidity", "weight": 4 }
+    ],
+
     "examFeatures": [
       { "signId": "palpable_pulsatile_abdominal_mass", "baseWeight": 5, "doubleWeight": true },
       { "signId": "abdominal_bruit", "baseWeight": 2 },
@@ -51,126 +138,804 @@
       { "signId": "signs_of_distal_embolization", "baseWeight": 2 }
     ],
 
+    "bedside_scores": {
+      "name": "AAA Rupture Risk Score (Size-Based)",
+      "maxPoints": 5,
+      "components": [
+        { "name": "Size 3.0-4.4cm: annual rupture risk <1%", "points": 1 },
+        { "name": "Size 4.5-5.4cm: annual rupture risk 1-5%", "points": 2 },
+        { "name": "Size 5.5-6.0cm: annual rupture risk 3-15%", "points": 3 },
+        { "name": "Size 6.0-7.0cm: annual rupture risk 10-20%", "points": 4 },
+        { "name": "Size >7.0cm: annual rupture risk 20-40%", "points": 5 }
+      ],
+      "interpretation": "Score 1-2: surveillance; Score 3: consider repair if fit; Score 4-5: strong indication for elective repair. Rupture risk also increased by: female sex ×4, smoking ×2, hypertension ×1.5, COPD ×1.5, family history ×1.8"
+    },
+
     "riskFactors": [
-      { "id": "smoking", "multiplier": 4.0 },
+      { "id": "smoking_tobacco_khat", "multiplier": 4.0 },
       { "id": "age_over_65", "multiplier": 3.0 },
       { "id": "male_gender", "multiplier": 3.0 },
       { "id": "family_history_of_aaa", "multiplier": 3.0 },
       { "id": "hypertension", "multiplier": 2.0 },
-      { "id": "copd", "multiplier": 2.0 },
-      { "id": "atherosclerosis", "multiplier": 2.0 }
+      { "id": "copd_emphysema", "multiplier": 2.0 },
+      { "id": "atherosclerosis_pad_coronary_carotid", "multiplier": 2.0 },
+      { "id": "caucasian_race", "multiplier": 2.0, "note": "Less common in African populations but occurs, often with aggressive course" },
+      { "id": "obesity", "multiplier": 1.3 }
     ],
 
     "subtypes": [
       {
         "id": "asymptomatic_aaa",
-        "name": "Asymptomatic AAA",
+        "name": "Asymptomatic AAA (Screening/Surveillance)",
         "prevalenceModifier": 0.7,
         "keyFeatures": [
-          { "feature": "incidental_finding", "weight": 5 },
+          { "feature": "incidental_finding_on_exam_or_imaging", "weight": 5 },
           { "feature": "no_pain", "weight": 5 },
-          { "feature": "size_measured_on_us", "weight": 5 }
+          { "feature": "size_measured_on_us_or_ct", "weight": 5 },
+          { "feature": "stable_on_serial_imaging", "weight": 4 }
         ],
-        "management": "Surveillance: US every 6-12 months (if 4-5.4cm) or every 3 years (3-4cm). Medical management: statin, antiplatelet, BP control, smoking cessation. Elective repair if >5.5cm or rapid expansion."
+        "management": "Surveillance: US every 3 years (3-4cm), every 6-12 months (4-5.4cm). Medical management: smoking cessation, statin (Atorvastatin 80mg daily), antiplatelet (Aspirin 75mg), BP control (target <130/80). Elective repair if >5.5cm or >0.5cm growth in 6 months or >1cm in 1 year."
       },
       {
         "id": "symptomatic_or_ruptured_aaa",
         "name": "Symptomatic/Ruptured AAA",
         "prevalenceModifier": 0.3,
         "keyFeatures": [
-          { "feature": "abdominal_or_back_pain", "weight": 5 },
-          { "feature": "hypotension_shock", "weight": 5 },
+          { "feature": "abdominal_or_back_pain_±_radiation_to_groin", "weight": 5 },
+          { "feature": "hypotension_shock_or_syncope", "weight": 5 },
           { "feature": "pulsatile_mass_with_tenderness", "weight": 5 },
-          { "feature": "syncope", "weight": 4 }
+          { "feature": "ct_shows_retroperitoneal_hematoma_or_free_rupture", "weight": 5 }
         ],
-        "management": "Emergency repair. Open: cross-clamping + graft interposition. EVAR: if anatomically suitable. Massive transfusion protocol. ICU."
+        "management": "Emergency repair. Open repair: cross-clamp infrarenal aorta, open sac, interposition graft (tubular or bifurcated Dacron graft). EVAR: if anatomically suitable (neck >15mm, angle <60°, iliac access adequate). Permissive hypotension (SBP 70-90 mmHg) until aortic control. Massive transfusion protocol (1:1:1 RBC:FFP:Platelets). ICU post-op."
       }
     ],
 
     "mimics": [
       {
-        "diseaseId": "pancreatitis",
-        "discriminators": ["elevated_amylase", "no_pulsatile_mass", "no_aneurysm_on_ct"]
+        "diseaseId": "acute_pancreatitis",
+        "discriminators": ["elevated_amylase_lipase", "epigastric_tenderness", "no_pulsatile_mass", "pain_radiating_to_back", "history_of_gallstones_or_alcohol", "no_aneurysm_on_ct"],
+        "ruleOutTests": ["serum_amylase_lipase", "contrast_ct_abdomen", "abdominal_us"]
       },
       {
         "diseaseId": "renal_colic",
-        "discriminators": ["flank_pain_radiating_to_groin", "hematuria", "no_pulsatile_mass"]
+        "discriminators": ["flank_pain_radiating_to_groin", "hematuria", "no_pulsatile_mass", "afebrile"],
+        "ruleOutTests": ["urinalysis", "kub_us", "ct_kidney"]
       },
       {
         "diseaseId": "mesenteric_ischemia",
-        "discriminators": ["pain_out_of_proportion", "lactate_elevated", "af_history"]
+        "discriminators": ["pain_out_of_proportion_to_exam", "lactate_elevated", "atrial_fibrillation_history", "no_pulsatile_mass", "vomiting_diarrhea"],
+        "ruleOutTests": ["ct_angiography_mesenteric", "lactate"]
+      },
+      {
+        "diseaseId": "diverticulitis",
+        "discriminators": ["left_lower_quadrant_tenderness", "fever", "elevated_crp", "diarrhea_or_constipation", "no_pulsatile_mass"],
+        "ruleOutTests": ["ct_abdomen", "no_aneurysm"]
+      },
+      {
+        "diseaseId": "retroperitoneal_fibrosis",
+        "discriminators": ["dull_back_pain", "hydronephrosis", "renal_impairment", "no_pulsatile_mass", "chronic_course"],
+        "ruleOutTests": ["ct_abdomen", "renal_function"]
+      },
+      {
+        "diseaseId": "aortoiliac_occlusive_disease_leriche_syndrome",
+        "discriminators": ["buttock_claudication", "erectile_dysfunction", "absent_femoral_pulses", "no_pulsatile_mass", "normal_aorta_diameter_on_us"],
+        "ruleOutTests": ["abi", "arterial_doppler", "ct_angiography", "no_aneurysm"]
+      },
+      {
+        "diseaseId": "psoas_abscess",
+        "discriminators": ["fever_and_rigors", "flank_or_groin_pain", "hip_flexion_contracture", "elevated_wbc_crp", "no_pulsatile_mass", "tb_or_hiv_risk_factors_in_kenya"],
+        "ruleOutTests": ["ct_abdomen_shows_abscess", "no_aneurysm", "blood_cultures", "psoas_sign"]
+      },
+      {
+        "diseaseId": "symptomatic_renal_artery_aneurysm",
+        "discriminators": ["flank_pain_hypertension", "hematuria", "pulsatile_mass_in_renal_hilar_region", "younger_patient", "female_predominance"],
+        "ruleOutTests": ["ct_angiography_shows_renal_artery_aneurysm", "normal_infrarenal_aorta"]
+      },
+      {
+        "diseaseId": "pancreatic_pseudocyst",
+        "discriminators": ["history_of_pancreatitis", "epigastric_mass_non_pulsatile", "elevated_amylase", "ct_shows_cystic_lesion_adjacent_to_pancreas", "no_aortic_dilation"],
+        "ruleOutTests": ["ct_abdomen_shows_cyst", "no_aneurysm", "amylase_lipase"]
+      },
+      {
+        "diseaseId": "tuberculous_lymphadenitis_abdominal",
+        "discriminators": ["young_patient_in_kenya", "constitutional_symptoms_night_sweats_weight_loss", "palpable_irregular_masses_not_pulsatile", "positive_tst_or_quantiferon", "hiv_positive_or_known_tb_exposure"],
+        "ruleOutTests": ["ct_abdomen_shows_lymphadenopathy_not_aneurysm", "normal_aorta_diameter", "tb_workup"]
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "Abdominal palpation", "priority": "immediate", "yield": 0.5, "indication": "may feel pulsatile mass" }
+        { "name": "Abdominal palpation for pulsatile mass", "priority": "immediate", "yield": 0.5, "indication": "Screening — sensitivity limited in obese patients" },
+        { "name": "ECG", "priority": "immediate", "yield": 0.3, "indication": "Assess for cardiac ischemia, arrhythmia" },
+        { "name": "Urinary catheter", "priority": "high", "yield": 0.3, "indication": "Monitor urine output — essential for ruptured AAA" }
       ],
       "laboratory": [
-        { "name": "CBC", "priority": "immediate", "yield": 0.5, "indication": "assess blood loss if ruptured" },
-        { "name": "Cross-match", "priority": "immediate", "yield": 0.5, "indication": "prepare transfusion" },
-        { "name": "Creatinine", "priority": "high", "yield": 0.4, "indication": "renal function, contrast risk" }
+        { "name": "CBC", "priority": "immediate", "yield": 0.5, "indication": "Assess blood loss — Hb drop suggests rupture" },
+        { "name": "Blood Group and Crossmatch", "priority": "immediate", "yield": 0.5, "indication": "Prepare for massive transfusion — order 6 units PRBC" },
+        { "name": "Creatinine, eGFR", "priority": "high", "yield": 0.4, "indication": "Renal function — contrast risk for CTA, surgical planning" },
+        { "name": "Coagulation profile (PT, aPTT, INR)", "priority": "high", "yield": 0.4, "indication": "DIC can occur with rupture, baseline before surgery" },
+        { "name": "Lactate", "priority": "high", "yield": 0.5, "indication": "Tissue hypoperfusion marker — elevated in rupture" },
+        { "name": "Troponin", "priority": "medium", "yield": 0.3, "indication": "Assess cardiac strain or concomitant MI" },
+        { "name": "ABG", "priority": "medium", "yield": 0.4, "indication": "Acidosis indicates shock severity" }
       ],
       "imaging": [
-        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.95, "indication": "screening and surveillance, size measurement" },
-        { "name": "CT Aorta with IV contrast (CT Angio)", "priority": "immediate", "yield": 0.99, "indication": "definitive, assess morphology for EVAR" },
-        { "name": "CT Abdomen without contrast", "priority": "immediate", "yield": 0.9, "indication": "if ruptured and unstable, limited study" },
-        { "name": "Plain X-Ray Abdomen", "priority": "low", "yield": 0.4, "indication": "calcified aortic wall outline" }
+        { "name": "Abdominal Ultrasound", "priority": "immediate", "yield": 0.95, "indication": "Screening and surveillance — accurate size measurement" },
+        { "name": "CT Aorta with IV contrast (CT Angiography)", "priority": "immediate", "yield": 0.99, "indication": "Gold standard for pre-op planning — size, morphology, neck length, iliac anatomy, rupture assessment" },
+        { "name": "CT Abdomen without contrast", "priority": "immediate", "yield": 0.9, "indication": "If ruptured and unstable — limited study to confirm rupture, saves time" },
+        { "name": "Plain X-Ray Abdomen (AP + lateral)", "priority": "low", "yield": 0.4, "indication": "Calcified aortic wall outline may be visible — incidental finding" },
+        { "name": "Echocardiogram (TTE/TEE)", "priority": "medium", "yield": 0.5, "indication": "Pre-op cardiac risk assessment in elective cases" },
+        { "name": "Carotid Duplex", "priority": "low", "yield": 0.3, "indication": "Screen for concomitant carotid stenosis in elective cases" }
       ]
     },
 
+    "interpretation_rules": {
+      "ct_aorta": {
+        "max_diameter_>5_5cm": { "present": "repair_indicated +35" },
+        "rupture_signs_retroperitoneal_hematoma": { "present": "emergency_repair +50" },
+        "contained_rupture": { "present": "urgent_surgery +45" },
+        "neck_length_>15mm": { "present": "suitable_for_evar +25" },
+        "neck_angle_>60_degrees": { "present": "evar_technically_challenging +10, consider open" },
+        "iliac_aneurysm": { "present": "bifurcated_graft_needed +15" },
+        "intramural_hematoma": { "present": "acute_aortic_syndrome +30" },
+        "penetrating_aortic_ulcer": { "present": "symptomatic_peu +25" }
+      },
+      "us_screening": {
+        "aorta_>3cm": { "present": "aaa_diagnosed +40" },
+        "aorta_<3cm": { "present": "aaa_excluded -40" },
+        "rapid_growth_>0_5cm_in_6months": { "present": "accelerated_growth +25, consider early repair" }
+      }
+    },
+
     "management": {
-      "protocolReference": "ESVS Guidelines for AAA Management",
+      "protocolReference": "SVS/ESVS Guidelines for AAA Management (2023)",
+      "initial": {
+        "resuscitation": [
+          "For ruptured AAA: permissive hypotension (SBP 70-90 mmHg) — avoid aggressive fluid resuscitation which increases bleeding",
+          "Limited volume resuscitation with blood products if tolerated",
+          "Immediate transfer to operating theatre or hybrid suite",
+          "Cross-match 6-10 units PRBC, FFP, Platelets, Cryoprecipitate",
+          "Activate massive transfusion protocol"
+        ],
+        "conservative": [
+          "For small asymptomatic AAA: surveillance program",
+          "Medical optimization: smoking cessation (most important), statin therapy (Atorvastatin 80mg), antiplatelet (Aspirin 75mg), BP control (target <130/80 mmHg)",
+          "Exercise: moderate activity is safe — no evidence that heavy lifting causes rupture"
+        ]
+      },
+      "definitive": {
+        "surgical": [
+          "Open surgical repair (OSR): midline laparotomy, cross-clamp infrarenal aorta, open aneurysm sac, interposition graft (Dacron tubular or bifurcated)",
+          "Endovascular aneurysm repair (EVAR): percutaneous or open femoral access, stent-graft deployment under fluoroscopy — shorter recovery, lower peri-op morbidity, similar long-term outcomes",
+          "Open repair preferred for: young patients, unsuitable anatomy for EVAR, connective tissue disease"
+        ],
+        "nonOperative": [
+          "Surveillance for small AAA (3-5.4cm) — serial US",
+          "Medical management only if unfit for any repair"
+        ]
+      },
+      "postop": {
+        "general": [
+          "ICU/HDU monitoring for first 24-48h",
+          "Monitor: BP, HR, urine output, Hb, lactate, ABG",
+          "Check distal pulses — ankle brachial index"
+        ],
+        "open_repair": [
+          "NG tube until bowel function returns",
+          "Monitor for: abdominal compartment syndrome, colonic ischemia (bloody diarrhea, rising lactate), renal failure, cardiac complications",
+          "Drain removal when output <30ml/day",
+          "IV fluids until oral intake adequate"
+        ],
+        "evar": [
+          "Bed rest for 4-6h if percutaneous (closure device)",
+          "Monitor access site for hematoma, pseudoaneurysm",
+          "CT angiogram within 30 days (post-EVAR surveillance: at 1, 6, 12 months, then annual)",
+          "Lifelong surveillance: CTA or Duplex at 1, 6, 12 months, then annually"
+        ],
+        "day1_3": [
+          "Early mobilization",
+          "Chest physiotherapy — incentive spirometry",
+          "DVT prophylaxis",
+          "Pain control: epidural (open) or IV analgesia"
+        ],
+        "day3_7": [
+          "Diet as tolerated",
+          "Wound care",
+          "Discharge planning: antihypertensives, statin, antiplatelet, smoking cessation"
+        ]
+      },
       "pathways": [
         {
           "severity": "small AAA (3-5.4cm)",
           "criteria": "asymptomatic, <5.5cm, no rapid expansion",
-          "treatment": "Surveillance US (3-4cm: 3yr; 4-5.4cm: 6-12mo). Medical: smoking cessation, statin, antiplatelet, BP control."
+          "treatment": "Surveillance US: 3-4cm every 3 years; 4-5.4cm every 6-12 months. Medical: statin, antiplatelet, BP control, smoking cessation."
         },
         {
           "severity": "large AAA (>=5.5cm) or rapid expansion",
-          "criteria": "size >=5.5cm or expansion >1cm/yr or symptomatic",
-          "treatment": "Elective repair. EVAR if suitable anatomy (neck length >15mm, angle <60°). Open repair if unfit for EVAR or complex anatomy."
+          "criteria": "size >=5.5cm or expansion >1cm/year or >0.5cm/6 months or symptomatic",
+          "treatment": "Elective repair. EVAR if suitable anatomy (neck >15mm, angle <60°, iliac ≥7mm). Open repair if unfit for EVAR or complex anatomy (short neck, angulated, iliac occlusive disease)."
         },
         {
           "severity": "ruptured AAA",
-          "criteria": "pain, hypotension, known AAA, free/contained rupture",
-          "treatment": "Emergency repair (open or EVAR). Permissive hypotension. Massive transfusion. ICU."
+          "criteria": "hypotension, abdominal/back pain, known AAA, CT confirms rupture",
+          "treatment": "Emergency repair (open or EVAR depending on anatomy and center expertise). Permissive hypotension. Massive transfusion. ICU."
         }
       ]
     },
 
-    "pathophysiology": [
-      "atherosclerosis",
-      "chronic_inflammation",
-      "elastin_degradation",
-      "collagen_remodeling",
-      "aortic_wall_weakening",
-      "progressive_dilation",
-      "wall_stress_laplace_law",
-      "rupture"
+    "operative_templates": [
+      {
+        "procedure": "Open Infrarenal AAA Repair (Tube or Bifurcated Graft)",
+        "indication": "AAA >5.5cm or rapid expansion or symptomatic/ruptured — unsuitable for EVAR",
+        "approach": "Midline laparotomy — transperitoneal",
+        "position": "Supine, arms tucked, nasogastric tube and urinary catheter",
+        "incision": "Midline laparotomy from xiphisternum to pubis",
+        "steps": [
+          "Full midline laparotomy",
+          "Retract omentum and transverse colon superiority",
+          "Incise posterior peritoneum over aorta from Treitz ligament to iliac bifurcation",
+          "Identify and protect left renal vein crossing aorta",
+          "Dissect infrarenal aortic neck circumferentially — place aortic clamp",
+          "Dissect common iliac arteries — place vessel loops",
+          "Heparin 5,000 IU IV given before clamping",
+          "Clamp aorta (infrarenal) and both common iliac arteries",
+          "Open aneurysm sac longitudinally",
+          "Evacuate thrombus and atheroma",
+          "Oversew lumbar arteries from inside sac with 2-0 silk",
+          "Oversew inferior mesenteric artery if patent",
+          "Select appropriate graft (tube vs bifurcated Dacron)",
+          "Proximal anastomosis: 3-0 Prolene, continuous, full-thickness aortic wall at neck",
+          "Distal anastomosis: to aortic bifurcation (tube) or to common iliac arteries (bifurcated) with 3-0 or 4-0 Prolene",
+          "Check for leaks before closing sac",
+          "Flush and declamp sequentially",
+          "Close aneurysm sac over graft ('sac wrap')",
+          "Close posterior peritoneum over graft",
+          "Check distal pulses — Doppler signal in feet"
+        ],
+        "keyLandmarks": [
+          "Left renal vein — crossing aorta, must protect or ligate if needed (rarely)",
+          "Infrarenal aortic neck — clamp site, must be free of thrombus and calcification",
+          "Inferior mesenteric artery — oversew and assess colonic viability",
+          "Iliac bifurcation — distal clamp and anastomosis site",
+          "Ureters — cross iliac bifurcation, protect throughout"
+        ]
+      },
+      {
+        "procedure": "EVAR (Endovascular Aneurysm Repair)",
+        "indication": "AAA >5.5cm with suitable anatomy for endovascular repair",
+        "approach": "Percutaneous common femoral artery access (Preclose technique) or bilateral groin cutdown",
+        "position": "Supine on fluoroscopy-capable table",
+        "incision": "Small (1-2cm) incisions over both groins for femoral artery exposure — or bilateral percutaneous access",
+        "steps": [
+          "Bilateral common femoral artery access — retrograde with micropuncture needle",
+          "Place 6F sheaths initially",
+          "Aortogram to confirm neck length, diameter, and renal artery origins",
+          "Advance stiff guidewires (Lunderquist) into thoracic aorta",
+          "Upgrade to large-bore sheaths (14-22F) depending on device",
+          "Deploy main body stent-graft below lowest renal artery",
+          "Contralateral gate cannulation from contralateral access",
+          "Deploy contralateral iliac limb",
+          "Deploy ipsilateral iliac limb",
+          "Completion angiogram: confirm exclusion of aneurysm sac, no endoleak (type I or III), patent renal and iliac arteries",
+          "Balloon-mold proximal and distal seal zones",
+          "Close arteriotomies (Proglide/xPert closure devices or direct suture)"
+        ],
+        "keyLandmarks": [
+          "Lowest renal artery — proximal landing zone, must preserve flow",
+          "Aortic bifurcation — contralateral gate opens above this",
+          "Internal iliac arteries — preserve at least one to prevent buttock claudication and colon ischemia",
+          "External iliac arteries — distal landing zone, must be ≥7mm diameter"
+        ]
+      }
     ],
 
     "complications": [
       {
-        "diseaseId": "rupture",
+        "diseaseId": "rupture_contained_or_free",
         "probability": 0.1,
         "lagDays": [0, 360],
         "severityBoost": 0.5,
-        "clues": ["sudden_abdominal_back_pain", "hypotension", "pulsatile_mass_shock"]
+        "triggers": ["size_>5_5cm", "rapid_expansion", "uncontrolled_hypertension", "smoking", "copa_exacerbation"],
+        "clues": ["sudden_abdominal_or_back_pain_with_radiation", "hypotension_syncope", "pulsatile_mass_tender", "ct_confirms_retroperitoneal_blood"]
       },
       {
-        "diseaseId": "distal_embolization",
+        "diseaseId": "distal_embolization_trash_foot",
         "probability": 0.03,
         "lagDays": [0, 14],
         "severityBoost": 0.3,
-        "clues": ["blue_toe", "acute_limb_ischemia", "livedo_reticularis"]
+        "triggers": ["aneurysmal_thrombus_manipulation", "intra_op_clamp_release", "evar_graft_manipulation"],
+        "clues": ["blue_toe", "livedo_reticularis", "acute_limb_ischemia", "absent_pulses"]
+      },
+      {
+        "diseaseId": "colonic_ischemia",
+        "probability": 0.02,
+        "lagDays": [1, 5],
+        "severityBoost": 0.4,
+        "triggers": ["ima_ligation", "hypotension_during_surgery", "internal_iliac_occlusion_evar", "emergency_rupture_repair"],
+        "clues": ["bloody_diarrhea", "abdominal_pain_distension", "rising_lactate", "fever", "peritonitis"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.1,
+        "lagDays": [0, 3],
+        "severityBoost": 0.3,
+        "triggers": ["suprarenal_clamping", "hypotension_rupture", "contrast_nephropathy_evar", "atheromatous_embolism"],
+        "clues": ["oliguria", "rising_creatinine", "hyperkalemia"]
+      },
+      {
+        "diseaseId": "endoleak_type_i_evar",
+        "probability": 0.05,
+        "lagDays": [0, 30],
+        "severityBoost": 0.3,
+        "triggers": ["inadequate_seal_zone", "hostile_neck_anatomy", "graft_migration"],
+        "clues": ["persistent_sac_filling_on_ct", "sac_enlargement_on_follow_up", "completion_angiogram_shows_leak"]
+      },
+      {
+        "diseaseId": "graft_infection",
+        "probability": 0.01,
+        "lagDays": [30, 720],
+        "severityBoost": 0.5,
+        "triggers": ["contaminated_field", "bacteremia", "reoperation", "diabetes"],
+        "clues": ["fever", "back_pain", "elevated_crp_wbc", "gas_around_graft_on_ct", "aortoenteric_fistula"]
+      },
+      {
+        "diseaseId": "cardiac_complications_mi_arrhythmia_ccf",
+        "probability": 0.08,
+        "lagDays": [0, 7],
+        "severityBoost": 0.4,
+        "triggers": ["underlying_cad", "perioperative_stress", "hemorrhagic_shock", "aortic_cross_clamp_increased_afterload"],
+        "clues": ["chest_pin_or_pressure", "ecg_st_change_or_arrhythmia", "troponin_elevation", "hypotension_or_pulmonary_edema"]
+      },
+      {
+        "diseaseId": "respiratory_failure_pneumonia",
+        "probability": 0.1,
+        "lagDays": [1, 7],
+        "severityBoost": 0.3,
+        "triggers": ["copd", "smoking", "prolonged_ventilation", "midline_incision_pain_splinting", "emergency_ruptured_aaa"],
+        "clues": ["hypoxia", "atelectasis_on_chest_xray", "fever", "purulent_sputum", "increased_wbc"]
+      },
+      {
+        "diseaseId": "spinal_cord_ischemia_paraplegia",
+        "probability": 0.005,
+        "lagDays": [0, 3],
+        "severityBoost": 0.5,
+        "triggers": ["prolonged_aortic_cross_clamp_>30_min", "hypotension", "sacrifice_of_important_intercostal_or_lumbar_arteries", "thromboembolism_to_spinal_artery"],
+        "clues": ["lower_limb_paraplegia_post_op", "sensory_level", "loss_of_bladder_bowel_control", "mri_confirms_spinal_infarction"]
+      },
+      {
+        "diseaseId": "sexual_dysfunction_retrograde_ejaculation",
+        "probability": 0.15,
+        "lagDays": [7, 365],
+        "severityBoost": 0.1,
+        "triggers": ["injury_to_hypogastric_plexus_during_open_repair", "dissection_over_left_common_iliac_artery", "internal_iliac_occlusion_evar"],
+        "clues": ["retrograde_ejaculation_in_men", "erectile_dysfunction", "decreased_libidinal_sensation"]
+      },
+      {
+        "diseaseId": "incisional_hernia_post_open_repair",
+        "probability": 0.1,
+        "lagDays": [90, 730],
+        "severityBoost": 0.05,
+        "triggers": ["midline_laparotomy", "obesity", "wound_infection", "copd_smoking", "poor_nutrition", "steroid_use"],
+        "clues": ["palpable_defect_in_midline_fascia", "bulge_on_valsalva", "intermittent_abdominal_pain", "incarceration_obstruction_in_late_cases"]
       }
     ],
 
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        { "complication": "Hemorrhagic shock (missed bleeding)", "watchFor": ["tachycardia", "hypotension", "falling Hb", "rising lactate", "distended abdomen"] },
+        { "complication": "Colonic ischemia", "watchFor": ["bloody diarrhea", "rising lactate", "abdominal distension", "fever"] },
+        { "complication": "Distal embolization", "watchFor": ["leg pain", "pulseless", "mottled foot", "blue toe"] },
+        { "complication": "Myocardial infarction", "watchFor": ["chest pain", "ECG changes", "elevated troponin", "hypotension"] }
+      ],
+      "postop_day1_3": [
+        { "complication": "AKI", "watchFor": ["oliguria", "rising Cr", "electrolyte disturbances"] },
+        { "complication": "Respiratory failure (open repair)", "watchFor": ["hypoxia", "atelectasis", "pneumonia"] },
+        { "complication": "Abdominal compartment syndrome", "watchFor": ["tense distended abdomen", "high peak pressures", "oliguria"] },
+        { "complication": "Endoleak (EVAR)", "watchFor": ["completion angio shows leak", "continued sac perfusion on US"] }
+      ],
+      "postop_day3_7": [
+        { "complication": "Wound infection (groin or midline)", "watchFor": ["erythema", "discharge", "fever", "wound dehiscence"] },
+        { "complication": "Ileus", "watchFor": ["persistent NG output", "abdominal distension", "no bowel sounds"] },
+        { "complication": "Colonic ischemia (late)", "watchFor": ["bloody diarrhea", "peritonitis", "sepsis"] }
+      ],
+      "late": [
+        { "complication": "Endoleak (Types I, II, III)", "watchFor": ["sac enlargement on surveillance CT", "persistent sac perfusion"] },
+        { "complication": "Graft migration", "watchFor": ["decreased seal zone on surveillance imaging"] },
+        { "complication": "Graft infection / aortoenteric fistula", "watchFor": ["fever", "back pain", "hematemesis", "melena"] },
+        { "complication": "Anastomotic pseudoaneurysm", "watchFor": ["pulsatile groin mass", "pain"] },
+        { "complication": "Sac expansion without endoleak", "watchFor": ["increasing size on CT — endotension"] }
+      ]
+    },
+
+    "dischargeCriteria": [
+      "Hemodynamically stable — normotensive without IV vasopressors",
+      "No signs of bleeding or anemia requiring transfusion",
+      "Abdominal pain controlled on oral analgesia",
+      "Bowel function returned — passing flatus, tolerating diet",
+      "No bloody diarrhea (exclude colonic ischemia)",
+      "Creatinine stable or returning to baseline",
+      "Lactate normal",
+      "Distal pulses present in both feet (or Doppler-audible)",
+      "Afebrile for 24 hours",
+      "Mobilizing independently",
+      "CT/MRA done within 30 days (for EVAR) as baseline",
+      "Antiplatelet and statin therapy prescribed",
+      "Smoking cessation counseling provided"
+    ],
+
+    "patient_education": {
+      "explanation": "An abdominal aortic aneurysm (AAA) is a widening of the main blood vessel in your belly (the aorta). Think of it like a balloon that slowly inflates — if it gets too big, it can burst (rupture), which is life-threatening. We monitor small aneurysms with regular ultrasound. When it reaches a certain size (5.5cm) or grows quickly, we recommend repair — either with open surgery (graft replacement) or with a stent-graft (EVAR) through the groin arteries. The risk of rupture without repair is higher than the risk of elective surgery.",
+      "warningSigns": [
+        "Sudden severe abdominal or back pain (rupture warning)",
+        "Feeling faint, dizzy, or collapsing",
+        "Pain radiating to the groin or leg",
+        "Cold or painful leg (embolism)",
+        "Fever or wound redness after surgery"
+      ],
+      "activity": [
+        "After open repair: no heavy lifting >5kg for 6-8 weeks",
+        "After EVAR: no heavy lifting for 2 weeks",
+        "Gentle walking is encouraged from day 1 after surgery",
+        "Avoid contact sports permanently",
+        "Sexual activity: can resume when comfortable, usually 4-6 weeks"
+      ],
+      "diet": [
+        "Heart-healthy diet: low salt, low saturated fat, plenty of fruits and vegetables",
+        "If constipated: avoid straining — use stool softeners temporarily after surgery",
+        "Stay well hydrated"
+      ],
+      "medication": [
+        "Aspirin 75mg daily for life (prevents graft thrombosis and cardiovascular events)",
+        "Statin (Atorvastatin 80mg daily) for life",
+        "Blood pressure medications as prescribed — keep BP <130/80",
+        "Smoking cessation is the most important thing you can do",
+        "If on blood thinners after EVAR: take as directed"
+      ],
+      "followUp": [
+        "After EVAR: CT scan at 1 month, 6 months, 12 months, then annually for life",
+        "After open repair: clinical review + US/CT at 1 year, then every 2-3 years",
+        "Annual vascular check for life even after successful repair",
+        "Monitor for new aneurysms elsewhere (popliteal, femoral, thoracic)"
+      ]
+    },
+
+    "followup": {
+      "before_discharge": [
+        "Medication counseling: statin, antiplatelet, antihypertensive compliance",
+        "Wound care — groin and/or midline incision care",
+        "Smoking cessation — strong emphasis, offer referral",
+        "Mobilization plan — physiotherapy if needed",
+        "Surveillance imaging schedule discussed (especially for EVAR)"
+      ],
+      "after_discharge": [
+        { "timing": "1 week", "action": "Wound check, review medications" },
+        { "timing": "6 weeks", "action": "Clinical review — assess recovery, BP control, smoking status" },
+        { "timing": "3 months", "action": "CT Angio (post-EVAR baseline) or Duplex" },
+        { "timing": "6 months", "action": "Repeat CT/CTA if EVAR — assess for endoleak, sac size" },
+        { "timing": "12 months", "action": "Annual CT/CTA (EVAR) or US (open repair) — lifelong surveillance" },
+        { "timing": "1 year", "action": "Cardiac risk assessment — ECG, troponin, stress test if indicated" },
+        { "timing": "5 years", "action": "Consider screening for thoracic aortic aneurysm if bicuspid valve or family history" }
+      ],
+      "when_to_return": [
+        "Sudden severe abdominal or back pain",
+        "Fainting or feeling dizzy",
+        "Chest pain or shortness of breath",
+        "Leg pain, coldness, or color change",
+        "Fever, wound redness, or discharge",
+        "Black or bloody stools (possible aortoenteric fistula)"
+      ]
+    },
+
     "mustNotMiss": true,
     "emergencyPriority": "high",
-    "diagnosticClues": ["pulsatile_abdominal_mass", "age_over_65_male_smoker", "abdominal_or_back_pain_with_syncope"],
-    "exclusionClues": ["normal_aorta_on_us", "young_age_no_risk_factors"]
+    "diagnosticClues": ["pulsatile_abdominal_mass_on_exam", "age_over_65_male_smoker", "abdominal_or_back_pain_with_syncope", "incidental_finding_on_us", "family_history_of_aaa"],
+    "exclusionClues": ["normal_aorta_diameter_on_imaging_<_3cm", "young_age_no_risk_factors", "non_pulsatile_abdominal_mass"],
+
+    "pathophysiology": [
+      "degeneration_of_aortic_wall_smooth_muscle_and_elastin",
+      "chronic_inflammation_with_macrophage_and_t_cell_infiltration",
+      "matrix_metalloproteinase_activity_degrading_extracellular_matrix",
+      "vascular_endothelial_growth_factor_driving_angiogenesis",
+      "oxidative_stress_and_reactive_oxygen_species",
+      "intraluminal_thrombus_and_focal_wall_hypoxia",
+      "progressive_dilation_laplace_law_wall_tension",
+      "rupture_when_wall_stress_exceeds_strength",
+      "genetic_predisposition_marfan_ehlers_danlos_loeys_dietz",
+      "smoking_as_major_risk_factor"
+    ],
+
+    "pathophysiologyDetail": [
+      "AAA is not atherosclerosis — it is a distinct degenerative process: chronic transmural inflammation (macrophages, CD4+ T cells, B cells) → elastin fragmentation by matrix metalloproteinases (MMP-2, MMP-9) → loss of medial smooth muscle cells by apoptosis → compensatory collagen deposition → wall weakening → progressive dilation",
+      "Laplace's law governs aneurysm expansion: wall tension (T) = pressure (P) × radius (r). As radius increases, wall tension increases exponentially — creating a positive feedback loop where larger aneurysms expand faster and have higher rupture risk",
+      "Intraluminal thrombus is not protective — it is a biologically active structure: activated platelets within the thrombus release IL-6, TNF-α, and MMP-9; the thrombus creates focal wall hypoxia (reduced oxygen diffusion by 90%) → localized wall weakening; thrombus thickness >10 mm is associated with faster expansion",
+      "Oxidative stress: superoxide production by NADPH oxidase (NOX1, NOX4) in aneurysm walls is 5-10x higher than in normal aorta. Reactive oxygen species activate MMPs, promote smooth muscle cell apoptosis, and induce endothelial dysfunction",
+      "Genetic basis: 15-20% of AAAs are familial. Key loci: 4q31 (PCSK5 — linked to TGF-β signaling), 19q13 (LRP1 — LDL receptor-related protein). Syndromic: FBN1 (Marfan), COL3A1 (Ehlers-Danlos type IV), TGFBR1/TGFBR2 (Loeys-Dietz), ACTA2 (familial thoracic aortic aneurysm)",
+      "Smoking is the strongest modifiable risk factor: smokers have 4-6x higher risk of AAA. Smoking increases MMP activity, promotes oxidative stress, and accelerates elastin degradation. Cessation reduces expansion rate by 30-40%",
+      "In Kenya, AAA is less prevalent than in Western populations (age-standardized prevalence ~1-2% vs 4-8% in Caucasian men over 65), but it is underdiagnosed because of lack of screening programs. Most AAAs present with rupture (70%) rather than as incidental findings on screening ultrasound",
+      "Ruptured AAA physiology: when wall stress exceeds wall strength, the posterior or posterolateral wall (weakest point) ruptures → retroperitoneal hemorrhage → tamponade (temporary) → hypotension → decompensation → free intraperitoneal rupture → exsanguination and death unless emergency repair is performed within 2 hours",
+      "Inflammatory AAA: a variant accounting for 5-10% of AAAs, characterized by thick-walled, perianeurysmal fibrosis with dense lymphoplasmacytic infiltration. Presents with back pain, weight loss, elevated ESR/CRP. Has a distinct pathophysiology involving IgG4-related disease in some cases",
+      "EVAR-specific pathophysiology: after stent-graft placement, the aneurysm sac is excluded from the circulation. Successful EVAR induces sac shrinkage (thrombus organization → fibrosis → sac contraction). Failure occurs via endoleak (Types I-V): Type I (attachment site leak) pressurizes the sac → expansion → rupture risk. Type II (retrograde flow from lumbar/IMA) causes 30-40% spontaneous thrombosis but 10-20% require reintervention. Type III (fabric tear or junctional separation) is a structural failure requiring urgent relining. The sac behavior post-EVAR is the most important predictor of long-term success",
+      "Rupture risk is not linear — it increases exponentially with diameter: from <1% per year at 4.0 cm (similar to background) to 5-10% per year at 5.5 cm, 15-20% at 6.5 cm, and >30% at 7.5 cm. This non-linear relationship is governed by the physics of wall stress: Laplace's law (T = PR) underestimates stress because AAA shape is not a perfect sphere. Finite element analysis shows peak wall stress occurs at the posterior wall (the 'rupture-prone' posterolateral region) and at sites of asymmetric thrombus",
+      "Biomechanics of rupture: aortic wall strength is determined by collagen content and cross-linking. In AAA, the ratio of collagen III to collagen I increases (weaker collagen), and non-enzymatic glycation (AGE cross-links) reduces collagen flexibility. Wall stress exceeds wall strength when the aneurysm reaches a 'critical stress threshold' — typically at 5-6 cm in men, 4.5-5 cm in women (women have smaller aortas but thinner walls). Wall stress of >200 kPa predicts imminent rupture with 80% accuracy",
+      "The role of the intraluminal thrombus (ILT): ILT is not inert — it is a metabolically active structure that traps platelets, red cells, and leukocytes. The luminal surface of the ILT is highly thrombogenic (tissue factor expression). Over time, the ILT causes focal hypoxia of the aortic wall (oxygen diffusion reduced by 70-90%) → increased MMP-9 and MMP-2 activity at the ILT-arterial wall interface → focal wall weakening. Paradoxically, a thick ILT provides a 'cushion' against wall stress but accelerates biological degradation of the wall — the overall effect depends on ILT composition and patient factors",
+      "Familial AAA genetics: 15-20% of AAA patients have a first-degree relative with AAA. Screening of siblings of AAA patients (men >50, women >55) finds AAA in 20-30%. Multiple susceptibility loci identified: 9p21 (CDKN2B-AS1 — ANRIL, also associated with CAD), 19q13 (LRP1), 4q31 (PCSK5), 3p12 (FGF-binding protein 1). These loci implicate pathways of TGF-β signaling, lipid metabolism, and extracellular matrix remodeling. Genetic testing is not yet clinical routine but risk stratification calculators exist",
+      "In Kenya, AAA has unique features: (1) lower prevalence than in Caucasians but presents more aggressively — possibly due to untreated hypertension and smoking; (2) younger age at presentation (55-65 vs 65-75 in Western populations) — partly due to higher rates of connective tissue disorders (Marfan, Ehlers-Danlos) not diagnosed early; (3) higher proportion of inflammatory AAA (10-15% vs 5-10% in Western) — possibly related to endemic infections (TB, schistosomiasis, HIV) causing chronic inflammation that triggers or accelerates aneurysm formation; (4) ruptured AAA in Kenya has extremely high mortality (likely >80%) due to lack of pre-hospital EMS, limited blood transfusion capacity, and few centers capable of vascular repair"
+    ],
+
+    "landmarkTrials": [
+      {
+        "trial": "UK Small Aneurysm Trial (UKSAT)",
+        "year": 1998,
+        "population": "1,090 patients with asymptomatic AAA 4.0-5.5 cm randomized to early elective surgery vs surveillance",
+        "finding": "No survival benefit of early surgery (HR 0.94, p=0.56). Annual rupture risk for AAA <5.5 cm: 0.5-1%. Surveillance with threshold at 5.5 cm is safe",
+        "impact": "Established the 5.5 cm threshold for elective AAA repair. Surveillance is the standard of care for AAA <5.5 cm",
+        "reference": "UK Small Aneurysm Trial Participants. Lancet. 1998;352(9141):1649-1655"
+      },
+      {
+        "trial": "Aneurysm Detection and Management (ADAM) Study",
+        "year": 2002,
+        "population": "1,136 VA patients with AAA 4.0-5.4 cm randomized to immediate repair (open or EVAR) vs surveillance",
+        "finding": "No survival advantage for immediate repair. 5-year survival: 73% in both groups. AAA-related mortality was similar",
+        "impact": "Reinforced 5.5 cm threshold from UKSAT. Together these two trials established level 1 evidence for surveillance of small AAAs",
+        "reference": "Lederle FA, et al. N Engl J Med. 2002;346(19):1441-1448"
+      },
+      {
+        "trial": "EVAR-1 Trial",
+        "year": 2005,
+        "population": "1,082 patients with AAA >5.5 cm fit for open repair randomized to EVAR vs open surgical repair (OSR)",
+        "finding": "30-day operative mortality: 1.7% for EVAR vs 4.7% for OSR (p<0.001). Aneurysm-related mortality at 4 years: 4% vs 7% (p=0.02). But: total mortality similar (28% vs 26%) due to non-AAA deaths",
+        "impact": "EVAR has lower perioperative mortality than OSR but equivalent long-term survival. EVAR requires lifelong surveillance due to 20-30% endoleak/reintervention rate",
+        "reference": "Greenhalgh RM, et al. EVAR trial 1. Lancet. 2005;365(9478):2179-2186"
+      },
+      {
+        "trial": "DREAM Trial",
+        "year": 2005,
+        "population": "351 patients with AAA >5.0 cm randomized to EVAR vs OSR in the Netherlands and Belgium",
+        "finding": "30-day mortality: 1.2% EVAR vs 4.6% OSR (p=0.10). Severe complications at 30 days: 12% vs 23% (p=0.02). 2-year survival similar (89% vs 90%)",
+        "impact": "EVAR has reduced early morbidity but no long-term survival advantage over OSR. Patient preference and anatomy should guide choice",
+        "reference": "Prinssen M, et al. DREAM Trial. N Engl J Med. 2005;353(18):1898-1904"
+      },
+      {
+        "trial": "IMPROVE Trial",
+        "year": 2014,
+        "population": "613 patients with clinical diagnosis of ruptured AAA randomized to EVAR-first vs open repair",
+        "finding": "30-day mortality: 35.4% EVAR vs 37.4% open repair (p=0.62). No significant difference in any outcome. EVAR strategy had cost-effectiveness advantage",
+        "impact": "In ruptured AAA, EVAR and open repair have similar outcomes. The choice should depend on center expertise, patient anatomy, and hemodynamic stability",
+        "reference": "IMPROVE Trial Investigators. BMJ. 2014;348:f7661; Lancet. 2014;383(9921):963-969"
+      },
+      {
+        "trial": "MASS Trial — Multicentre Aneurysm Screening Study",
+        "year": 2007,
+        "population": "67,800 men aged 65-74 randomized to ultrasound screening vs no screening for AAA",
+        "finding": "AAA-related mortality reduction: 42% (HR 0.58, p<0.001) in the screening group. Number needed to screen to prevent 1 death: 278. 10-year results confirmed sustained benefit",
+        "impact": "Established national AAA screening programs (UK, Sweden, US). Screening is cost-effective and reduces AAA mortality by 50%",
+        "reference": "Thompson SG, et al. MASS Trial. Lancet. 2007;369(9572):1531-1539"
+      },
+      {
+        "trial": "OVER Trial (Open vs Endovascular Repair for AAA — VA Cooperative Study)",
+        "year": 2012,
+        "population": "881 patients with AAA >5.0 cm at 42 VA medical centers randomized to EVAR vs open surgical repair",
+        "finding": "30-day mortality: 0.5% EVAR vs 3.0% open (p=0.006). 2-year mortality: 7.0% vs 9.8% (p=0.12). Reintervention rate: 22% EVAR vs 18% open at 5 years (p=0.08). No difference in total mortality at 9 years. Endoleak rate: 14% at 1 year for EVAR",
+        "impact": "Confirmed EVAR's early survival advantage disappears over time due to non-AAA deaths. Reintervention rates between EVAR and open repair converge at 5-8 years. Combined with EVAR-1 and DREAM, established equipoise between EVAR and open for long-term outcomes",
+        "reference": "Lederle FA, et al. OVER Trial. N Engl J Med. 2012;367(21):1988-1997; N Engl J Med. 2019;380(22):2101-2110 (9-year results)"
+      },
+      {
+        "trial": "EVAR-2 Trial (EVAR in Patients Unfit for Open Repair)",
+        "year": 2005,
+        "population": "338 patients with AAA >5.5 cm deemed unfit for open repair randomized to EVAR vs no intervention",
+        "finding": "30-day mortality: 9% EVAR (higher than expected in this high-risk population). Aneurysm-related death: 1.4 per 100 person-years (EVAR) vs 1.5 (no intervention, p=0.95). Total mortality: 64% in both groups at 4 years (most died of cardiovascular causes, not AAA). No survival benefit from EVAR in patients unfit for open surgery",
+        "impact": "Controversial but crucial: EVAR does NOT improve survival in patients who are unfit for open surgery because they die of their comorbidities, not their AAA. Refined the selection criteria — 'fit for EVAR but not open' is NOT an indication if the patient has limited life expectancy from comorbidities. Decision-making must consider the patient's overall health, not just aneurysm anatomy",
+        "reference": "Greenhalgh RM, et al. EVAR Trial 2. Lancet. 2005;365(9478):2187-2192"
+      },
+      {
+        "trial": "PIVOTAL Trial (Positive Impact of Endovascular Options for Treating Aneurysms — Medtronic Device)",
+        "year": 2019,
+        "population": "1,452 patients with AAA >5.0 cm treated with the Endurant stent graft — a large device-specific registry with 5-year follow-up",
+        "finding": "5-year freedom from all-cause mortality: 68.5%. Freedom from aneurysm-related mortality: 95.3%. Freedom from reintervention: 77.4%. Type I/III endoleak at 5 years: 3.5%. Sac shrinkage >5mm at 5 years: 64%. Device migration: 2.1%",
+        "impact": "Provided contemporary, real-world data on EVAR outcomes with modern devices. Five-year EVAR outcomes are excellent with low aneurysm-related mortality (5%). Sac shrinkage and low endoleak rates represent a significant improvement over earlier generations of EVAR devices",
+        "reference": "Rhee RY, et al. PIVOTAL Trial 5-Year Results. J Vasc Surg. 2019;69(5):1399-1406"
+      },
+      {
+        "trial": "RESCAN Collaborators (Meta-analysis of Small AAA Surveillance Data)",
+        "year": 2013,
+        "population": "Individual patient data from 15,475 patients with small AAAs from 18 studies — largest pooled analysis to date",
+        "finding": "Women with AAA rupture at 2-3x the rate of men at the same diameter. Smoking doubles the expansion rate. Expansion rate: 2.2 mm/year for 3.0-4.0 cm, 3.0 mm/year for 4.0-5.5 cm. Diabetes reduces expansion rate by 30% (paradoxical protective effect). Mean time from 4.0 cm to 5.5 cm: 6 years",
+        "impact": "Validated different surveillance intervals for men vs women. Women should be offered repair at smaller diameters (5.0 cm vs 5.5 cm men). Smoking cessation is the only modifiable intervention that slows expansion. Diabetic patients can have less frequent surveillance",
+        "reference": "RESCAN Collaborators. BMJ. 2013;347:f4694"
+      }
+    ],
+
+    "evidenceTable": [
+      {
+        "recommendation": "One-time abdominal ultrasound screening for AAA in all men aged 65-74 years",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "MASS Trial; Thomson SG, Lancet 2007; US Preventative Services Task Force Grade B"
+      },
+      {
+        "recommendation": "Surveillance ultrasound for AAA 3.0-3.9 cm q3 years; 4.0-4.4 cm q12-18 months; 4.5-5.4 cm q6-12 months",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "ESVS Guidelines; UKSAT"
+      },
+      {
+        "recommendation": "Elective AAA repair is indicated when AAA diameter ≥5.5 cm in men (≥5.0 cm in women) OR expansion rate >1 cm/year OR symptomatic",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "UKSAT, Lancet 1998; ADAM Trial, Lederle FA, NEJM 2002"
+      },
+      {
+        "recommendation": "EVAR is preferred for suitable anatomy (proximal neck ≥15 mm, angle <60°, iliac landing zone ≥20 mm) in patients at high operative risk",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "EVAR-1 Trial, Lancet 2005; DREAM Trial, NEJM 2005"
+      },
+      {
+        "recommendation": "Open surgical repair is preferred for young (<70 years), low-risk patients, or if EVAR anatomy is unsuitable",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "EVAR-1, DREAM, OVER Trial comparisons"
+      },
+      {
+        "recommendation": "Smoking cessation reduces AAA expansion rate by 30-40% and should be strongly advised in all AAA patients",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Brady AR, et al. BMJ 2004; Teng B, et al. JVS 2021"
+      },
+      {
+        "recommendation": "Ruptured AAA: emergency repair (EVAR or open) within 2 hours of diagnosis. Permissive hypotension (SBP 70-90 mmHg) before aortic control",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "IMPROVE Trial, Lancet 2014; ESVS Guidelines"
+      },
+      {
+        "recommendation": "Lifelong CT surveillance after EVAR: at 1 month, 6 months, 12 months, then annually. Imaging for endoleak, sac growth, device migration",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "ESVS Guidelines; EVAR-1"
+      },
+      {
+        "recommendation": "Statins and antiplatelet therapy (aspirin 75-100 mg daily) should be prescribed in all AAA patients for cardiovascular risk reduction",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "ESVS Guidelines; AHA/ACC Guidelines"
+      },
+      {
+        "recommendation": "Beta-blockers are NOT recommended routinely for AAA patients (no evidence of reduced expansion or rupture), but should be used for perioperative cardiac risk reduction in open repair",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "Lederle FA, JVS 2005; POISE Trial"
+      },
+      {
+        "recommendation": "EVAR is NOT recommended for patients who are unfit for open repair due to limited life expectancy from comorbidities (no survival benefit per EVAR-2)",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "EVAR-2, Lancet 2005; ESVS Guidelines"
+      },
+      {
+        "recommendation": "Women should be considered for elective AAA repair at ≥5.0 cm diameter (lower threshold than men) due to 2-3x higher rupture risk at equivalent size",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "RESCAN Collaboration, BMJ 2013; ESVS Guidelines"
+      },
+      {
+        "recommendation": "First-degree relatives of AAA patients (men >50, women >55) should undergo one-time ultrasound screening for AAA",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "ESVS Guidelines; MASS Trial; UK NAAA Screening Program"
+      },
+      {
+        "recommendation": "Endoleak Type I or III after EVAR requires urgent reintervention (balloon-expandable stent, cuff extension, or surgical conversion). Type II endoleak with sac growth >5mm should be considered for embolization",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "ESVS Guidelines; Chaikof EL, JVS 2002"
+      },
+      {
+        "recommendation": "Preoperative cardiac evaluation with echocardiography and stress testing is recommended before elective AAA repair in patients with known CAD or significant risk factors",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "AHA/ACC Guidelines; ESVS Guidelines"
+      }
+    ],
+
+    "diagnosticAlgorithm": "Incidental finding (abdominal ultrasound, CT, MRI) OR symptomatic (back pain, pulsatile mass, shock) → Confirm with CT angiogram (non-urgent) or FAST (if ruptured) → Assess: AAA diameter, morphology (saccular vs fusiform), proximal neck length and angle, iliac involvement, ILT, thrombus → RUPTURED? → Yes: permissive hypotension (SBP 70-90), reverse Trendelenburg, cross-match 8 units, NOTIFY OR. Assess hemodynamic instability. Stable? → CTA (if time permits) → anatomical suitability for EVAR vs open. Unstable? → Go directly to OR: open repair with infrarenal cross-clamp. → NOT RUPTURED (elective): → Asymptomatic (screening/diagnostic): size <5.5 cm (men) or <5.0 cm (women) → surveillance program. Size ≥5.5 cm (men) or ≥5.0 cm (women) → evaluate for elective repair. Symptomatic (pain, tenderness) → consider repair regardless of size. → Pre-operative assessment: cardiac risk (METs >4, no unstable CAD → proceed). Renal function, pulmonary function (especially for open). CTA for EVAR planning: neck length ≥15mm, neck angle <60°, iliac diameter 7-25mm, no circumferential thrombus at neck. → Decision: EVAR (preferred for suitable anatomy in high-risk patients). Open (preferred for young/low-risk patients or unsuitable EVAR anatomy). → Post-repair: EVAR: CT at 1, 6, 12 months then annual → screen for endoleak, sac growth, device migration. Open: clinical follow-up at 1, 6, 12 months then annual ● In Kenya: screening is not routine. Most AAAs are diagnosed only after rupture. Limited EVAR availability (cost, training, stock) means most repairs in Kenya are open. Pre-operative cardiopulmonary optimization is limited — zebra anaesthetic management is key.",
+
+    "managementPearls": [
+      {
+        "context": "Size matters, but so does sex",
+        "pearl": "AAA criteria are sex-specific: ≥3.0 cm in men, ≥2.8 cm in women. But women rupture at smaller sizes: a 5.0 cm AAA in a woman has the same rupture risk as a 5.5 cm AAA in a man. Therefore, women should be offered repair at 5.0 cm (some guidelines say 4.5-5.0). Female sex is an independent risk factor for rupture (RR 3.0).",
+        "evidence": "ESVS Guidelines; UKSAT substudy, Brown LC, BMJ 2003"
+      },
+      {
+        "context": "Do not miss symptomatic AAA",
+        "pearl": "A patient with a 4.0 cm AAA but with abdominal or back pain may be symptomatic from the AAA. Symptomatic AAA (tender aneurysm, pain not explained by other causes) has a 30-50% 1-year rupture risk — regardless of size. This is a surgical emergency. Never discharge a patient with a tender AAA awaiting surveillance — admit for urgent repair.",
+        "evidence": "ESVS Guidelines; UKSAT"
+      },
+      {
+        "context": "The inflammatory AAA trap",
+        "pearl": "Inflammatory AAA presents with back pain, weight loss, and significantly elevated ESR/CRP — easily mistaken for TB, malignancy, or aortitis. CT shows a thick-walled aneurysm with adjacent fibrosis. Steroids (prednisolone 30-60 mg/day) can reduce inflammation but do not reduce rupture risk. These AAAs still need repair — but the tissue planes are difficult, and open repair has higher morbidity.",
+        "evidence": "Rasmussen TE, et al. J Vasc Surg 2007; ESVS Guidelines"
+      },
+      {
+        "context": "Endoleak types — the basics",
+        "pearl": "Type I: leak at proximal (Ia) or distal (Ib) attachment site — requires urgent treatment (balloon-expandable stent, cuff, or conversion). Type II: retrograde flow from lumbar/inferior mesenteric artery — serial observation if sac stable; embolize if sac grows >5mm. Type III: device fabric tear/junctional separation — urgent relining. Type IV: graft porosity — self-limited. Endotension (Type V): sac pressurization without visible leak — controversial management.",
+        "evidence": "ESVS Guidelines; Chaikof EL, J Vasc Surg 2002"
+      },
+      {
+        "context": "Smoking cessation — it works",
+        "pearl": "Smoking accelerates AAA expansion by 30-50% (average 0.3 mm/year vs 0.2 mm/year in non-smokers). Smoking cessation reduces the expansion rate to that of never-smokers within 1 year. One of the few interventions that truly modifies AAA biology. Every clinic visit should include smoking cessation counseling for AAA patients.",
+        "evidence": "Brady AR, et al. BMJ 2004; MacSweeney ST, et al. Br J Surg 1994"
+      },
+      {
+        "context": "The 5 cm threshold is not absolute",
+        "pearl": "Consider repair below 5.5 cm in: women (5.0 cm threshold), saccular AAA (higher rupture risk regardless of size), rapid expansion (>1 cm/year or >5 mm in 6 months), concomitant iliac aneurysm (>3.5 cm), family history of ruptured AAA (first-degree relative), or low surgical risk patient who prefers repair. Always individualize.",
+        "evidence": "UKSAT; ADAM; ESVS Guidelines"
+      },
+      {
+        "context": "The 'fit for surgery' assessment — more than just age",
+        "pearl": "Age alone should NOT determine candidacy for AAA repair. A fit 80-year-old may have lower perioperative risk than an unfit 60-year-old. Use objective tools: (1) Duke Activity Status Index (DASI) — ask 'can you walk up two flights of stairs without stopping?' If yes, METs >4 — safe for surgery. (2) Frailty assessment: gait speed <0.8 m/s, unintentional weight loss, exhaustion — frailty predicts 2x mortality independent of age. (3) CPET (cardiopulmonary exercise testing): anaerobic threshold <11 mL/kg/min predicts high risk. (4) Revised Cardiac Risk Index (RCRI): 0-2 factors = low risk; 3+ = high risk. In Kenya, CPET is rarely available, but DASI and frailty assessments are free and should guide decision-making.",
+        "evidence": "Poon JT, et al. Frailty and AAA. JVS 2020; DASI, Hlatky MA, Am J Cardiol 1989"
+      },
+      {
+        "context": "Ruptured AAA — the 'permissive hypotension' debate",
+        "pearl": "The old practice of aggressive fluid resuscitation in ruptured AAA (driving the BP to 'normal') increases bleeding, dilutes coagulation factors, and worsens outcomes. Permissive hypotension (SBP 70-90 mmHg for 30-60 minutes until aortic control) reduces mortality. The physiology: the retroperitoneum tamponades the rupture. Raising BP disrupts this tamponade, rebleeds are often fatal. Give only enough fluid to maintain consciousness. Use whole blood or 1:1:1 ratio (PRBC : FFP : Platelets). Avoid crystalloid boluses — dilute clotting factors. Target SBP 70-90 until cross-clamp. At clamp: you can then resuscitate to normal BP. In Kenya: permissive hypotension is even more critical where blood products are scarce.",
+        "evidence": "IMPROVE Trial, Lancet 2014; ESVS Guidelines; Roberts K, et al. Massive Transfusion. Br J Surg 2018"
+      },
+      {
+        "context": "EVAR surveillance — what to look for and when to act",
+        "pearl": "The most common cause of late EVAR failure is sac growth WITHOUT a visible endoleak (endotension). If sac grows >5 mm on CT at 1 month, 6 months, or annually, do the following: (1) Check for Type I/III endoleak on CTA — if present, urgent relining or repair. (2) If no clear endoleak: perform Duplex with contrast (microbubbles) — more sensitive for slow-flow endoleaks. (3) If still no leak: measure sac pressure (sac puncture or implantable pressure sensor if used). (4) If sac continues to grow without identified cause: consider open conversion. The key rule: any sac growth >5 mm on two consecutive studies warrants aggressive investigation and likely intervention. Do NOT just 'watch and wait' with a growing sac — rupture risk is real.",
+        "evidence": "Chaikof EL, JVS 2002; ESVS Guidelines; Veith FJ, et al. Sac enlargement. JVS 2017"
+      },
+      {
+        "context": "Statin therapy — the forgotten aneurysm drug",
+        "pearl": "Statins are not just for cholesterol — they have 'pleiotropic' effects on AAA: (1) reduce MMP-9 and MMP-2 expression in the aortic wall (direct anti-proteolytic effect); (2) reduce inflammation (decrease CRP, IL-6, TNF-α); (3) improve endothelial function (upregulate eNOS); (4) reduce thrombus formation within the aneurysm sac. Observational data: atorvastatin 80 mg daily reduces AAA expansion rate by 30% (0.25 vs 0.35 cm/year). The effect is independent of cholesterol lowering. Every AAA patient should be on a high-dose statin regardless of their lipid profile — the CV risk reduction and anti-aneurysm effect are both significant.",
+        "evidence": "Heart Protection Study, Lancet 2002; Schouten O, et al. Statins and AAA expansion. Eur J Vasc Endovasc Surg 2006; ESVS Guidelines"
+      },
+      {
+        "context": "Preventing colonic ischemia after open repair",
+        "pearl": "Colonic ischemia is a devastating complication of AAA repair (1-3% incidence, 50-80% mortality). Prevention: (1) Identify the IMA during dissection — if it is patent and there is no other source of left colon perfusion, reimplant it into the graft (Carrel patch). (2) Check for back-bleeding from the IMA after opening the sac — if there is vigorous back-bleeding, the IMA has good collateral flow and is safe to ligate. (3) After repair, assess colon viability: look at the sigmoid colon — is it pink? Does it have peristalsis? Doppler of colonic marginal artery. If any doubt, perform proctosigmoidoscopy. (4) Post-operative clues: bloody diarrhea, rising lactate, leukocytosis, fever — require urgent sigmoidoscopy. If ischemia detected: antibiotics, bowel rest, and surgical resection if transmural necrosis.",
+        "evidence": "Björck M, et al. Colonic ischemia after AAA. Eur J Vasc Endovasc Surg 2010; ESVS Guidelines"
+      }
+    ],
+
+    "operativeNuances": [
+      {
+        "procedure": "Open AAA Repair — Aortic Cross-Clamping",
+        "pitfall": "Injury to the renal veins (especially the left renal vein that crosses the aorta) or the duodenum, which is adherent to the AAA sac",
+        "expertTip": "Approach the aorta through a midline laparotomy. Reflect the transverse colon superiority, small bowel to the right. Incise the posterior peritoneum to the left of the duodenum (Kocher maneuver). Identify the left renal vein crossing the aorta — it is your landmark for the infrarenal neck. The duodenum is often stuck to the AAA — do not dissect it off. Prepare the neck just below the renal veins (at least 1.5 cm of non-aneurysmal aorta). Give heparin (100 IU/kg) before cross-clamping. Cross-clamp at the infrarenal neck, then the iliac arteries. Open the sac longitudinally, oversew lumbar arteries from within the sac."
+      },
+      {
+        "procedure": "EVAR — Access Vessel Management",
+        "pitfall": "Inability to advance the delivery sheath through tortuous, calcified, or small (<6 mm) iliac arteries, leading to iliac rupture",
+        "expertTip": "Pre-operatively assess CTA for iliac morphology. If external iliac diameter <7 mm, consider an iliac conduit (suturing a 10 mm Dacron graft to the common iliac artery as a landing zone) or use a lower-profile device. If tortuous iliac, use a stiff wire (Lunderquist or Amplatz Super Stiff) and sequentially dilate with the sheath. If resistance is met, STOP, and perform an iliac angiogram to exclude perforation. Have covered stents ready for iliac rupture."
+      },
+      {
+        "procedure": "Open AAA — The 'Mini-Laparotomy' Technique",
+        "pitfall": "Large midline incision with significant fluid loss, hypothermia, and prolonged ileus in elderly patients",
+        "expertTip": "In thin patients, consider the 'mini-laparotomy' approach: a 10-12 cm incision from the xiphoid to the umbilicus. Use a hand-held retractor. This is sufficient for infrarenal AAA. Avoids the large incision. Not suitable for obese patients, large AAAs (>7 cm), or concomitant iliac aneurysm requiring distal exposure. The technique reduces ICU stay by 1-2 days without increasing morbidity."
+      },
+      {
+        "procedure": "Ruptured AAA — Aortic Balloon Occlusion",
+        "pitfall": "Uncontrolled hemorrhage while trying to achieve proximal control in a hostile, bloody surgical field",
+        "expertTip": "For unstable ruptured AAA: use a compliant CODA balloon (or a Fogarty catheter) placed via percutaneous femoral access (12F sheath) and inflated in the supraceliac aorta. This provides immediate proximal control while you prepare for open repair. Deflate and reposition to infrarenal after dissection. The 'endoclamp' technique has been a game-changer for ruptured AAA — it converts an emergency case into an elective dissection."
+      },
+      {
+        "procedure": "Suprapubic (Transverse) Incision vs Midline for Open AAA Repair",
+        "pitfall": "Midline laparotomy has higher rates of incisional hernia (10-15%), longer ileus, and more postoperative respiratory complications compared to a transverse incision",
+        "expertTip": "For elective infrarenal AAA repair in thin-to-moderate BMI patients, consider a transverse supraumbilical ('smile') incision from mid-axillary line to mid-axillary line. Advantages: (1) less pain (cuts across dermatomes — fewer muscle-splitting spasms); (2) lower hernia rate (3-5% vs 10-15% for midline); (3) earlier return of bowel function. Disadvantages: (1) more bleeding from rectus sheath vessels; (2) limited exposure of the right iliac system; (3) takes longer to open and close. My preference: transverse for thin women with small AAA (<6 cm), midline for obese, large AAA (>7 cm), or ruptured AAA (speed). In Kenya, where incisional hernias are a major problem (late presentation after repair, poor compliance with lifting restrictions), a transverse incision should be used whenever feasible."
+      },
+      {
+        "procedure": "IMA Reimplantation (Carrel Patch) During Open AAA Repair",
+        "pitfall": "Ligating a patent IMA without assessing colonic collateral circulation → left colonic ischemia → 50-80% mortality",
+        "expertTip": "Decision to reimplant IMA: (1) Assess pre-operative CTA: is the IMA patent? Are there collaterals from the SMA (meandering mesenteric artery)? (2) Intra-operative: after opening the AAA sac, assess IMA back-bleeding. If there is NO back-bleeding from the IMA (suggests poor collateral flow from SMA), reimplantation is mandatory. If there is good back-bleeding, you can oversew the IMA. (3) Reimplantation technique: excise a 1 cm diameter Carrel patch of aortic wall containing the IMA orifice. Sew this onto the graft (proximal or distal body) using 4-0 or 5-0 Prolene. Test by removing the clamp from the left limb: the IMA patch should bleed vigorously. If it does not, it may be thrombosed. This simple technique (5 extra minutes) saves lives."
+      }
+    ],
+
+    "prognosis": {
+      "mortality": "Elective EVAR: 30-day mortality 1-2%. Elective open repair: 30-day mortality 3-5% (high-volume centers: 2-3%, low-volume: 5-8%). Ruptured AAA overall: 80% die before reaching hospital (pre-hospital mortality). In-hospital mortality for those reaching hospital: 40-50% (even in modern centers). EVAR for ruptured: 30-day mortality 30-35%. Open for ruptured: 40-50%. In Kenya, ruptured AAA mortality is likely 60-80% due to lack of pre-hospital care, limited blood products, and delayed presentation.",
+      "morbidity": "EVAR: endoleak 20-30% (Type II in 10-20%; Type I in 5-10%). Reintervention rate: 3-5% per year. Graft migration: 5% at 5 years. Open repair: cardiac complications 5-10% (MI, arrhythmia). Renal failure: 3-5% (higher if suprarenal clamp). Colon ischemia: 1-3% (check left colon after repair). Sexual dysfunction: 10-20% (injury to hypogastric plexus — avoid dissection over left common iliac artery). Incisional hernia: 10% (late). Graft infection: 0.5-1% (devastating — 50% mortality).",
+      "survival": "Elective repair (all): 5-year survival 70-80% (competing cardiovascular mortality — most die of other causes, not AAA). EVAR vs open: aneurysm-related mortality similar at 5 years (EVAR: 4%, open: 3%). Overall survival: equivalent. Ruptured AAA survivors: 5-year survival 60-70%. Young patients (<65) after elective repair: 10-year survival 60-70% (near-matched to population). Advanced age (>80) after elective repair: 4-year survival 50%.",
+      "recurrence": "After EVAR: 20-30% will require reintervention within 5 years (endoleak, limb occlusion, sac growth). Open repair: 0.5-1% anastomotic pseudoaneurysm at 10 years (higher if infection). Ruptured AAA survivors: 5% risk of secondary rupture at other sites (iliac, thoracic). Contralateral iliac aneurysm: 10-15% have >3 cm iliac aneurysm — needs surveillance. Overall: after EVAR, lifelong CT surveillance is mandatory.",
+      "reference": "EVAR-1, Lancet 2005; UKSAT, Lancet 1998; IMPROVE, Lancet 2014; ESVS Guidelines; ADAM Trial, NEJM 2002"
+    }
   }
 }

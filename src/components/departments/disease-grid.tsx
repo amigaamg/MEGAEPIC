@@ -52,7 +52,7 @@ export default function DiseaseGrid({ diseases, departmentKey, sectionSlug, hosp
             transition={{ delay: i * 0.03 }}
           >
             <Link
-              href={`/clinical-workspace/${hospitalId}/departments/${departmentKey}/${sectionSlug}/${disease.id}`}
+              href={`/clinical-workspace/${hospitalId}/departments/${departmentKey.toLowerCase()}/${sectionSlug}/${disease.id}`}
               className="frost-card p-4 flex flex-col gap-2 no-underline transition-all duration-200 hover:translate-y-[-2px] block"
             >
               <div className="flex items-center justify-between">

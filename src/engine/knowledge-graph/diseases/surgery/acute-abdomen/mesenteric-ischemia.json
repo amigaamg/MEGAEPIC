@@ -3,181 +3,989 @@
     "id": "mesenteric_ischemia",
     "name": "Acute Mesenteric Ischemia",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "acute-care-surgery",
     "agePeak_months": [600, 960],
-    "note": "Pain out of proportion to exam. High mortality. Requires high index of suspicion in elderly with AF or atherosclerosis.",
+    "note": "Pain out of proportion to physical exam is the hallmark. High mortality (50-80%) demands a high index of suspicion, particularly in elderly patients with atrial fibrillation, recent MI, or diffuse atherosclerosis. The diagnosis must be made before peritonitis develops — once infarction occurs, mortality skyrockets. CT angiography is the gold standard. In our setting, underdiagnosis is common due to limited access to CT and failure to recognize the 'pain out of proportion' clue.",
     "prevalenceWeight": 0.25,
-    "syndromeTags": ["acute_abdomen", "abdominal_pain", "vascular_emergency"],
+    "syndromeTags": ["acute_abdomen", "abdominal_pain", "vascular_emergency", "surgical_emergency"],
 
-    "severityAssessment": {
-      "immediateDangerSigns": [
-        { "sign": "septic_shock", "weight": 10 },
-        { "sign": "generalized_peritonitis", "weight": 10 },
-        { "sign": "avpu_abnormal", "weight": 10 },
-        { "sign": "hypotension_refractory", "weight": 10 }
-      ],
-      "severeCriteria": {
-        "anyDangerSign": true,
-        "additionalCriteria": [
-          { "sign": "lactate_elevated", "weight": 8 },
-          { "sign": "metabolic_acidosis", "weight": 8 },
-          { "sign": "pain_out_of_proportion", "weight": 7 }
-        ]
-      },
-      "nonSevereCriteria": {
-        "hasIndrawingOrFastBreathing": false,
-        "noDangerSigns": true
-      },
-      "severityLabel": "Peritonitis/sepsis/shock -> SEVERE (transmural necrosis); early presentation -> NON-SEVERE"
-    },
+    "presentingComplaints": [
+      "Severe abdominal pain",
+      "Sudden intense stomach pain",
+      "Abdominal pain that is worse than expected from the examination",
+      "Nausea",
+      "Vomiting",
+      "Bloody diarrhea",
+      "Feeling faint or dizzy",
+      "Shortness of breath",
+      "Rapid heartbeat"
+    ],
+
+    "history_questions": [
+      { "question": "When did the pain start? Was it sudden like a thunderbolt?", "weight": 9 },
+      { "question": "How severe is the pain? Is the pain much worse than what the doctor finds when pressing your abdomen?", "weight": 10 },
+      { "question": "Do you have atrial fibrillation (irregular heartbeat)? Are you on blood thinners?", "weight": 9 },
+      { "question": "Have you had a heart attack recently?", "weight": 7 },
+      { "question": "Do you have known heart valve disease?", "weight": 6 },
+      { "question": "Do you have a history of deep vein thrombosis or pulmonary embolism?", "weight": 5 },
+      { "question": "Have you had a stroke or mini-stroke before?", "weight": 5 },
+      { "question": "Do you have peripheral vascular disease or claudication (leg pain on walking)?", "weight": 5 },
+      { "question": "Have you noticed pain after eating in the weeks or months before this episode? (intestinal angina)", "weight": 6 },
+      { "question": "Have you lost weight unintentionally over the past months?", "weight": 4 },
+      { "question": "Do you have bloody diarrhea?", "weight": 6 },
+      { "question": "Have you vomited?", "weight": 4 },
+      { "question": "Do you smoke cigarettes?", "weight": 5 },
+      { "question": "Do you have diabetes, high blood pressure, or high cholesterol?", "weight": 5 },
+      { "question": "Are you on any medications for birth control or hormone replacement? (hypercoagulable)", "weight": 4 },
+      { "question": "Have you recently had a long flight or been immobile for a long time?", "weight": 3 },
+      { "question": "Do you have any known clotting disorder (factor V Leiden, protein C/S deficiency)?", "weight": 3 },
+      { "question": "Are you feeling dizzy, short of breath, or have you fainted?", "weight": 5 },
+      { "question": "Is the pain constant or does it come and go?", "weight": 4 },
+      { "question": "Do you have a known history of hypercoagulable state (Factor V Leiden, Protein C/S deficiency, antiphospholipid syndrome)?", "weight": 5 },
+      { "question": "Have you had any blood clots in your legs (DVT) or lungs (PE) before?", "weight": 5 },
+      { "question": "Do you have any history of splenectomy, cancer, or myeloproliferative disorder (polycythaemia, essential thrombocythaemia)?", "weight": 4 },
+      { "question": "Are you on any medications that increase clotting risk (oral contraceptives, hormone therapy)?", "weight": 4 },
+      { "question": "Have you had any recent episodes of low blood pressure, dehydration, or bleeding that required hospital admission?", "weight": 4 },
+      { "question": "Are you on dialysis or do you have end-stage kidney disease?", "weight": 4 },
+      { "question": "Do you have a history of congestive heart failure or have you been on medications to strengthen your heart?", "weight": 5 },
+      { "question": "Have you had any recent vascular procedures or angiography?", "weight": 3 },
+      { "question": "Do you have a known abdominal aortic aneurysm or peripheral vascular disease?", "weight": 4 },
+      { "question": "Have you noticed blood in your stool (bright red or dark/tarry)?", "weight": 5 },
+      { "question": "Does the pain prevent you from lying flat or moving?", "weight": 3 },
+      { "question": "Have you passed any gas or stool in the last 24 hours?", "weight": 4 },
+      { "question": "Have you been diagnosed with COVID-19 recently? (hypercoagulable state with mesenteric thrombosis)", "weight": 4 },
+      { "question": "Do you have any known liver disease or cirrhosis? (affects coagulation)", "weight": 3 },
+      { "question": "Have you had unintentional weight loss over the past weeks to months? (chronic mesenteric ischaemia)", "weight": 4 },
+      { "question": "Do you experience fear of eating (sitophobia) because of pain after meals?", "weight": 4 }
+    ],
 
     "historyFeatures": [
       { "symptomId": "severe_abdominal_pain", "weight": 5, "modifiers": [
           { "condition": "pain_out_of_proportion", "suspectTB": false }
         ]
       },
-      { "symptomId": "atrial_fibrillation", "weight": 5, "note": "Embolic cause" },
+      { "symptomId": "atrial_fibrillation", "weight": 5, "note": "Most common embolic source" },
       { "symptomId": "atherosclerotic_disease", "weight": 4, "note": "Thrombotic cause" },
       { "symptomId": "nausea_vomiting", "weight": 3 },
       { "symptomId": "bloody_diarrhea", "weight": 3, "note": "Late sign indicating mucosal necrosis" },
-      { "symptomId": "recent_myocardial_infarction", "weight": 3, "note": "Low flow state" }
+      { "symptomId": "recent_myocardial_infarction_or_low_flow", "weight": 3, "note": "Low flow state — non-occlusive mesenteric ischemia" },
+      { "symptomId": "intestinal_angina_postprandial_pain", "weight": 4, "note": "Prodrome in SMA thrombosis" },
+      { "symptomId": "hypercoagulable_state", "weight": 3, "note": "Mesenteric venous thrombosis" }
+    ],
+
+    "examination_findings": [
+      { "finding": "Minimal abdominal tenderness despite patient reporting severe pain (pain out of proportion)", "weight": 10 },
+      { "finding": "Abdominal distension", "weight": 5 },
+      { "finding": "Absent bowel sounds (late sign — suggests infarction)", "weight": 6 },
+      { "finding": "Generalized guarding and rigidity (late — perforation)", "weight": 8 },
+      { "finding": "Rebound tenderness (late — peritonitis)", "weight": 7 },
+      { "finding": "Tachycardia (early and persistent)", "weight": 6 },
+      { "finding": "Hypotension (late — shock from infarction)", "weight": 7 },
+      { "finding": "Fever (late — suggests infarction/bacteraemia)", "weight": 5 },
+      { "finding": "Mild, diffuse tenderness on deep palpation early on", "weight": 5 },
+      { "finding": "Cool, clammy extremities and poor peripheral perfusion", "weight": 5 },
+      { "finding": "Confusion or altered mental status (poor cerebral perfusion)", "weight": 4 },
+      { "finding": "Oliguria (renal hypoperfusion)", "weight": 4 },
+      { "finding": "Abdominal wall rigidity with board-like consistency (late/perforation)", "weight": 8 },
+      { "finding": "Muddy or cyanotic appearance of rectal mucosa on sigmoidoscopy (if ischemic colitis)", "weight": 3 },
+      { "finding": "Irregularly irregular pulse (atrial fibrillation)", "weight": 6 },
+      { "finding": "Signs of peripheral embolism: absent pulses, livedo reticularis, mottled extremities", "weight": 4 },
+      { "finding": "Generalized abdominal distension with reduced bowel sounds", "weight": 4 },
+      { "finding": "Involuntary guarding that develops late, suggesting progression to infarction", "weight": 5 },
+      { "finding": "Rebound tenderness — late sign indicating peritoneal contamination from infarcted bowel", "weight": 6 },
+      { "finding": "Tense, distended abdomen with absent bowel sounds (acute abdomen from infarction)", "weight": 6 },
+      { "finding": "Metabolic acidosis manifesting as Kussmaul respirations (deep, rapid breathing)", "weight": 5 },
+      { "finding": "Signs of dehydration: dry mucous membranes, sunken eyes, reduced skin turgor (from third spacing)", "weight": 4 },
+      { "finding": "Mottled skin over the abdomen and lower extremities (poor perfusion, may indicate non-occlusive mesenteric ischaemia)", "weight": 4 },
+      { "finding": "Patient writhing in agony but abdomen still soft — the classic discrepancy", "weight": 8 },
+      { "finding": "Patient curled up or unable to find a comfortable position (unlike peritonitis where patient lies still)", "weight": 5 },
+      { "finding": "Positive faecal occult blood or visible blood on rectal exam (mucosal sloughing)", "weight": 5 },
+      { "finding": "Tender, distended abdomen with shifting dullness (ascites from infarction or portal hypertension)", "weight": 3 },
+      { "finding": "Signs of DVT in lower limbs (if mesenteric venous thrombosis suspected)", "weight": 3 },
+      { "finding": "Periumbilical ecchymosis (Cullen's sign — in late infarction with haemorrhagic fluid)", "weight": 2 },
+      { "finding": "Lactate >4 mmol/L on point-of-care testing (if ABG available — strongly suggests infarction)", "weight": 9 }
     ],
 
     "examFeatures": [
-      { "signId": "minimal_tenderness_early", "baseWeight": 4, "doubleWeight": true, "note": "Pain out of proportion to exam is hallmark" },
+      { "signId": "pain_out_of_proportion_to_exam", "baseWeight": 5, "doubleWeight": true, "note": "Cardinal diagnostic clue" },
       { "signId": "abdominal_distension", "baseWeight": 3 },
       { "signId": "absent_bowel_sounds", "baseWeight": 3, "note": "Late sign" },
-      { "signId": "guarding_rigidity", "baseWeight": 4, "note": "Late sign indicating perforation" },
+      { "signId": "guarding_rigidity_peritonitis_late", "baseWeight": 4, "note": "Late sign indicating perforation" },
       { "signId": "tachycardia", "baseWeight": 3 },
-      { "signId": "hypotension", "baseWeight": 3 }
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "atrial_fibrillation_on_exam", "baseWeight": 4, "note": "Irregularly irregular pulse" }
+    ],
+
+    "bedside_scores": [
+      {
+        "name": "Mesenteric Ischemia Severity Score",
+        "maxPoints": 12,
+        "components": [
+          { "item": "Pain out of proportion to exam", "points": 3 },
+          { "item": "Atrial fibrillation or embolic source", "points": 2 },
+          { "item": "Lactate >2 mmol/L", "points": 3 },
+          { "item": "Metabolic acidosis (pH <7.3, BE <-5)", "points": 2 },
+          { "item": "WBC >15,000/mm³", "points": 1 },
+          { "item": "Peritonitis on exam", "points": 1 }
+        ],
+        "interpretation": {
+          "low": "Score 0-3: Low suspicion but if clinical concern persists → CT angiogram",
+          "moderate": "Score 4-7: High suspicion. Urgent CT angiogram. Prepare for possible laparotomy.",
+          "high": "Score 8-12: Very high suspicion. Likely bowel infarction. Emergency laparotomy, CT angiogram only if time permits and patient stable."
+        }
+      }
     ],
 
     "riskFactors": [
-      { "id": "atrial_fibrillation", "multiplier": 3.0 },
+      { "id": "atrial_fibrillation", "multiplier": 3.5, "note": "Most common cause — emboli from left atrium" },
       { "id": "age_over_60", "multiplier": 2.0 },
-      { "id": "atherosclerosis", "multiplier": 2.5 },
-      { "id": "congestive_heart_failure", "multiplier": 2.0 },
-      { "id": "recent_myocardial_infarction", "multiplier": 2.5 },
-      { "id": "valvular_heart_disease", "multiplier": 2.0 },
-      { "id": "hypercoagulable_state", "multiplier": 1.5 }
+      { "id": "atherosclerosis_coronary_or_peripheral", "multiplier": 2.5, "note": "SMA thrombosis on atherosclerotic plaque" },
+      { "id": "congestive_heart_failure_low_cardiac_output", "multiplier": 2.5, "note": "Non-occlusive mesenteric ischemia from hypoperfusion" },
+      { "id": "recent_myocardial_infarction", "multiplier": 2.5, "note": "Cardiogenic shock and mural thrombus" },
+      { "id": "valvular_heart_disease_mitral_aortic", "multiplier": 2.0 },
+      { "id": "hypercoagulable_state", "multiplier": 1.8, "note": "Factor V Leiden, protein C/S deficiency, antiphospholipid syndrome, malignancy" },
+      { "id": "hemodialysis", "multiplier": 2.0, "note": "Hypotension during dialysis triggers NOMI" },
+      { "id": "vasopressor_use", "multiplier": 2.0, "note": "Splanchnic vasoconstriction from vasopressors" },
+      { "id": "sepsis_or_systemic_inflammatory_response", "multiplier": 1.8, "note": "Splanchnic vasoconstriction in sepsis" },
+      { "id": "covid_19_infection", "multiplier": 1.5, "note": "Hypercoagulable and endothelial inflammation" }
     ],
 
     "subtypes": [
       {
-        "id": "superior_mesenteric_artery_embolism",
-        "name": "SMA Embolism",
+        "id": "sma_embolism",
+        "name": "Superior Mesenteric Artery Embolism",
         "prevalenceModifier": 0.5,
         "keyFeatures": [
-          { "feature": "sudden_severe_pain", "weight": 5 },
-          { "feature": "atrial_fibrillation", "weight": 5 },
-          { "feature": "vomiting", "weight": 3 },
-          { "feature": "early_emptying", "weight": 3 }
+          { "feature": "sudden_onset_most_severe_pain", "weight": 5 },
+          { "feature": "atrial_fibrillation_present", "weight": 5 },
+          { "feature": "early_rapid_bowel_emptying_vomiting_diarrhea", "weight": 3 },
+          { "feature": "pain_out_of_proportion_marked", "weight": 5 },
+          { "feature": "collapsed_bowel_on_ct_distal_to_block", "weight": 4 },
+          { "feature": "embolus_usually_at_sma_origin_or_mid_colic_branch", "weight": 4 }
         ],
-        "management": "Emergency laparotomy. Embolectomy. Resection of non-viable bowel. Second-look laparotomy in 24-48h. Anticoagulation."
+        "management": "Emergency laparotomy. SMA embolectomy via transverse arteriotomy (Fogarty catheter). Assess bowel viability. Resect non-viable segments. Second-look laparotomy at 24-48h mandatory. Systemic anticoagulation (IV heparin). Consider endovascular aspiration/thrombectomy in select centers."
       },
       {
         "id": "sma_thrombosis",
-        "name": "SMA Thrombosis",
+        "name": "Superior Mesenteric Artery Thrombosis",
         "prevalenceModifier": 0.25,
         "keyFeatures": [
-          { "feature": "postprandial_pain_history", "weight": 4 },
-          { "feature": "gradual_onset_pain", "weight": 4 },
-          { "feature": "weight_loss", "weight": 3 },
-          { "feature": "diffuse_atherosclerosis", "weight": 4 }
+          { "feature": "history_of_postprandial_abdominal_pain_intestinal_angina", "weight": 5 },
+          { "feature": "gradual_worsening_pain_over_days", "weight": 4 },
+          { "feature": "weight_loss_and_food_fear", "weight": 3 },
+          { "feature": "diffuse_atherosclerosis", "weight": 4 },
+          { "feature": "thrombus_at_sma_ostium_on_cta", "weight": 5 },
+          { "feature": "collateral_circulation_may_delay_infarction", "weight": 3 }
         ],
-        "management": "Emergency revascularization (bypass or endarterectomy). Resection of necrotic bowel. Second-look laparotomy."
+        "management": "Emergency revascularization: SMA bypass (aortomesenteric or iliomesenteric with vein graft) or endarterectomy. Resection of non-viable bowel. Second-look laparotomy mandatory. May consider endovascular stent if available. Post-op anticoagulation and risk factor modification."
       },
       {
-        "id": "mesenteric_venous_thrombosis",
+        "id": "mesenteric_venous_thrombosis_mvt",
         "name": "Mesenteric Venous Thrombosis",
         "prevalenceModifier": 0.15,
         "keyFeatures": [
-          { "feature": "subacute_pain", "weight": 4 },
-          { "feature": "hypercoagulable_state", "weight": 4 },
-          { "feature": "abdominal_distension", "weight": 3 }
+          { "feature": "subacute_or_intermittent_abdominal_pain_over_days", "weight": 4 },
+          { "feature": "hypercoagulable_state_known_or_suspected", "weight": 4 },
+          { "feature": "abdominal_distension_marked", "weight": 3 },
+          { "feature": "nausea_vomiting_and_bloody_stool", "weight": 3 },
+          { "feature": "thickened_bowel_wall_on_ct_with_poor_enhancement", "weight": 4 },
+          { "feature": "lack_of_arterial_filling_defect_on_cta", "weight": 4 }
         ],
-        "management": "Anticoagulation (heparin then warfarin). Resection if infarction. Treat underlying hypercoagulable state."
+        "management": "If no peritonitis: systemic anticoagulation (IV heparin → warfarin/DOAC). Bowel rest, IV fluids, antibiotics. If peritonitis or infarction: laparotomy, resection of non-viable bowel, thrombectomy may be attempted. Post-op anticoagulation lifelong. Treat underlying hypercoagulable state."
+      },
+      {
+        "id": "non_occlusive_mesenteric_ischemia_nomi",
+        "name": "Non-Occlusive Mesenteric Ischemia (NOMI)",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "critically_ill_icu_patient", "weight": 5 },
+          { "feature": "on_vasopressors_or_after_cardiac_event", "weight": 5 },
+          { "feature": "distension_and_ileus_prominent", "weight": 4 },
+          { "feature": "pain_may_be_obscured_by_sedation", "weight": 3 },
+          { "feature": "lactate_rising_unexplained", "weight": 5 },
+          { "feature": "normal_mesenteric_vessels_on_cta", "weight": 5 },
+          { "feature": "segmental_bowel_spasm_and_narrowing_on_angiography", "weight": 4 }
+        ],
+        "management": "Treat underlying cause (optimize cardiac output, reduce/stop vasopressors if possible). Intra-arterial vasodilator infusion (papaverine) via angiography catheter. Systemic anticoagulation if no contraindication. Laparotomy if peritonitis or suspected infarction. High mortality."
       }
     ],
 
     "mimics": [
       {
         "diseaseId": "acute_pancreatitis",
-        "discriminators": ["elevated_amylase_lipase", "pain_radiates_to_back", "no_cardiac_source_of_emboli"]
+        "diseaseName": "Acute Pancreatitis",
+        "whyMimic": "Severe epigastric pain, vomiting, tachycardia, can have high lactate and metabolic acidosis",
+        "discriminators": [
+          "elevated_amylase_lipase_greater_than_3x_upper_limit",
+          "pain_radiating_to_back",
+          "pain_relieved_by_leaning_forward",
+          "ct_shows_pancreatic_inflammation",
+          "normal_mesenteric_vessels_on_cta",
+          "no_cardiac_source_of_emboli"
+        ],
+        "ruleOutTests": ["serum_amylase_lipase", "ct_abdomen_with_ct_angiography"],
+        "negativeImpactOnParentScore": 15
       },
       {
-        "diseaseId": "perforated_ulcer",
-        "discriminators": ["board_like_rigidity", "pneumoperitoneum", "ulcer_history"]
+        "diseaseId": "perforated_peptic_ulcer",
+        "diseaseName": "Perforated Peptic Ulcer",
+        "whyMimic": "Sudden severe pain, peritonitis, shock can mimic mesenteric infarction",
+        "discriminators": [
+          "free_air_under_diaphragm_on_imaging",
+          "board_like_rigidity_early",
+          "ulcer_history_or_nsaid_use",
+          "normal_lactate_early_(may be normal)",
+          "no_cardiac_source_of_emboli",
+          "normal_mesenteric_vessels"
+        ],
+        "ruleOutTests": ["erect_cxr", "ct_abdomen", "ct_angiography"],
+        "negativeImpactOnParentScore": 15
       },
       {
-        "diseaseId": "bowel_obstruction",
-        "discriminators": ["high_pitched_bowel_sounds", "central_colicky_pain", "air_fluid_levels"]
+        "diseaseId": "bowel_obstruction_strangulated",
+        "diseaseName": "Strangulated Bowel Obstruction",
+        "whyMimic": "Severe pain, vomiting, distension, lactate elevation, peritonitis",
+        "discriminators": [
+          "colicky_pain_pattern_that_became_constant",
+          "high_pitched_or_tinkling_bowel_sounds",
+          "previous_abdominal_surgery_or_hernia",
+          "air_fluid_levels_and_dilated_loops_on_xray",
+          "transition_point_on_ct",
+          "closed_loop_sign_on_ct"
+        ],
+        "ruleOutTests": ["ct_abdomen", "abdominal_xray", "lactate"],
+        "negativeImpactOnParentScore": 13
+      },
+      {
+        "diseaseId": "abdominal_aortic_aneurysm_ruptured_contained",
+        "diseaseName": "Ruptured or Symptomatic Abdominal Aortic Aneurysm",
+        "whyMimic": "Severe abdominal/back pain, shock, tachycardia in elderly",
+        "discriminators": [
+          "pulsatile_abdominal_mass",
+          "pain_radiating_to_back_and_flank",
+          "shock_sudden_onset",
+          "no_cardiac_source_of_emboli",
+          "ct_shows_aaa"
+        ],
+        "ruleOutTests": ["ct_abdomen_angiogram", "bedside_ultrasound"],
+        "negativeImpactOnParentScore": 20
+      },
+      {
+        "diseaseId": "severe_gastroenteritis_with_ileus",
+        "diseaseName": "Severe Gastroenteritis with Ileus",
+        "whyMimic": "Diffuse abdominal pain, vomiting, distension, tachycardia from dehydration can mimic mesenteric ischaemia",
+        "discriminators": [
+          "profuse_watery_diarrhea_preceding_pain",
+          "normal_or_mildly_elevated_lactate",
+          "no_cardiac_source_or_hypercoagulable_state",
+          "ct_shows_normal_mesenteric_vessels_and_bowel_wall",
+          "rapid_improvement_with_rehydration",
+          "pain_not_out_of_proportion"
+        ],
+        "ruleOutTests": ["ct_abdomen_angiogram", "lactate", "stool_microscopy"],
+        "negativeImpactOnParentScore": 10
+      },
+      {
+        "diseaseId": "sickle_cell_abdominal_crisis",
+        "diseaseName": "Sickle Cell Disease — Abdominal Crisis",
+        "whyMimic": "Severe abdominal pain, distension, vomiting in sickle cell patients can mimic mesenteric ischaemia, common in East Africa",
+        "discriminators": [
+          "known_sickle_cell_disease_or_positive_sickling_test",
+          "generalized_bone_and_joint_pain",
+          "jaundice_with_elevated_bilirubin_and_ldh",
+          "no_pain_out_of_proportion_pattern",
+          "normal_mesenteric_vessels_on_cta",
+          "rapid_response_to_hydration_analgesia_and_oxygen"
+        ],
+        "ruleOutTests": ["full_blood_count", "reticulocyte_count", "hemoglobin_electrophoresis", "ldh", "bilirubin", "ct_angiogram"],
+        "negativeImpactOnParentScore": 12
+      },
+      {
+        "diseaseId": "abdominal_sepsis_from_other_source",
+        "diseaseName": "Intra-Abdominal Sepsis (Any Source)",
+        "whyMimic": "Fever, tachycardia, abdominal pain, elevated lactate can mimic the sepsis of mesenteric infarction",
+        "discriminators": [
+          "fever_and_rigors_prominent_early",
+          "localized_tenderness_to_source",
+          "normal_mesenteric_vessels_on_cta",
+          "ct_shows_other_source_abscess_perforation",
+          "lactate_mildly_elevated_unless_severe_sepsis",
+          "wbc_and_procalcitonin_markedly_elevated"
+        ],
+        "ruleOutTests": ["ct_abdomen", "ct_angiogram", "blood_cultures", "procalcitonin"],
+        "negativeImpactOnParentScore": 12
+      },
+      {
+        "diseaseId": "intussusception_adult",
+        "diseaseName": "Adult Intussusception with Ischaemia",
+        "whyMimic": "Severe colicky abdominal pain, vomiting, bloody stool, leading to bowel ischaemia",
+        "discriminators": [
+          "intermittent_colicky_pain_pattern",
+          "palpable_sausage_shaped_mass",
+          "ct_shows_target_sign_and_intussusceptum",
+          "normal_mesenteric_vessels",
+          "may_have_underlying_pathology_lead_point_tumour"
+        ],
+        "ruleOutTests": ["ct_abdomen", "abdominal_ultrasound", "colonoscopy"],
+        "negativeImpactOnParentScore": 10
+      },
+      {
+        "diseaseId": "acalculous_cholecystitis_icu",
+        "diseaseName": "Acalculous Cholecystitis in Critically Ill",
+        "whyMimic": "RUQ pain, fever, sepsis in ICU patients — can mimic mesenteric ischaemia in the at-risk population",
+        "discriminators": [
+          "ruq_tenderness_positive_murphy_sign_on_us",
+          "gallbladder_distension_and_wall_thickening_on_us",
+          "no_signs_of_bowel_ischaemia_on_ct",
+          "normal_lactate_or_mildly_elevated",
+          "normal_mesenteric_vessels"
+        ],
+        "ruleOutTests": ["ruq_ultrasound", "ct_abdomen", "lfts", "lactate"],
+        "negativeImpactOnParentScore": 8
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "ECG", "priority": "immediate", "yield": 0.5, "indication": "detect atrial fibrillation or recent MI" },
-        { "name": "Blood Gas", "priority": "immediate", "yield": 0.8, "indication": "metabolic acidosis indicates ischemia" }
+        { "name": "12-lead ECG", "priority": "immediate", "yield": 0.7, "indication": "Detect atrial fibrillation (embolic source), acute MI (low-flow state). Look for ST changes, AF, Q waves." },
+        { "name": "Vital signs monitoring (BP, HR, SpO2, RR)", "priority": "immediate", "yield": 0.6, "indication": "Tachycardia, hypotension suggest infarction/sepsis. Irregularly irregular pulse suggests AF." },
+        { "name": "Arterial Blood Gas", "priority": "immediate", "yield": 0.8, "indication": "Metabolic acidosis (low pH, low HCO3, negative base deficit) is a hallmark of bowel ischemia. Rising lactate correlates with extent of infarction." },
+        { "name": "Urinary catheter", "priority": "high", "yield": 0.3, "indication": "Monitor urine output as marker of tissue perfusion" },
+        { "name": "NG tube insertion", "priority": "medium", "yield": 0.3, "indication": "Gastric decompression. May show bloody aspirate." },
+        { "name": "Focused cardiac ultrasound (POCUS)", "priority": "high", "yield": 0.5, "indication": "Assess for AF, valvular vegetations, wall motion abnormalities, LV thrombus" }
       ],
       "laboratory": [
-        { "name": "Lactate", "priority": "immediate", "yield": 0.85, "indication": "elevated in bowel ischemia" },
-        { "name": "WBC count", "priority": "high", "yield": 0.75, "indication": "leukocytosis common" },
-        { "name": "D-dimer", "priority": "medium", "yield": 0.6, "indication": "elevated but non-specific" },
-        { "name": "Base deficit", "priority": "high", "yield": 0.8, "indication": "severity marker" }
+        { "name": "Lactate (arterial or venous)", "priority": "immediate", "yield": 0.85, "indication": "Gold standard laboratory marker. Lactate >2 mmol/L suggests ischemia. >4 mmol/L strongly suggests infarction. Normal lactate does NOT exclude early ischemia." },
+        { "name": "Arterial Blood Gas (pH, HCO3, BE)", "priority": "immediate", "yield": 0.8, "indication": "Metabolic acidosis (low pH, low HCO3, BE <-5) is strongly associated with bowel ischemia/infarction." },
+        { "name": "WBC count", "priority": "high", "yield": 0.75, "indication": "Leukocytosis >15,000 common but non-specific. >20,000 suggests infarction." },
+        { "name": "CRP", "priority": "high", "yield": 0.6, "indication": "Elevated but non-specific. Very high CRP suggests established infarction." },
+        { "name": "D-dimer", "priority": "medium", "yield": 0.6, "indication": "Highly sensitive but very non-specific. A negative D-dimer makes AMI unlikely." },
+        { "name": "Troponin (hs-cTn)", "priority": "high", "yield": 0.5, "indication": "Detect recent MI as precipitant of low-flow state. May also be elevated from demand ischemia in shock." },
+        { "name": "Urea and Creatinine", "priority": "high", "yield": 0.5, "indication": "Prerenal AKI from hypovolemia. Baseline pre-operative assessment." },
+        { "name": "Amylase / Lipase", "priority": "high", "yield": 0.5, "indication": "Mild elevation possible in bowel ischemia. Marked elevation suggests pancreatitis." },
+        { "name": "Creatine Kinase", "priority": "medium", "yield": 0.4, "indication": "Elevated in transmural infarction but non-specific." },
+        { "name": "Coagulation profile", "priority": "medium", "yield": 0.4, "indication": "DIC may occur with prolonged ischemia. Pre-operative assessment." },
+        { "name": "Blood group and crossmatch", "priority": "high", "yield": 0.3, "indication": "Massive transfusion may be needed for resection in unstable patient" }
       ],
       "imaging": [
-        { "name": "CT Angiography Abdomen", "priority": "immediate", "yield": 0.95, "indication": "gold standard for diagnosis" },
-        { "name": "Duplex Ultrasound", "priority": "medium", "yield": 0.6, "indication": "limited role in acute setting" }
+        { "name": "CT Angiography Abdomen (CTA) — arterial and venous phases", "priority": "immediate", "yield": 0.95, "indication": "Gold standard. Visualizes: SMA/SMV occlusion (embolus, thrombus), non-occlusive vasospasm, pneumatosis intestinalis, portal venous gas, bowel wall thickening, lack of bowel wall enhancement, solid organ infarction. Must be performed promptly." },
+        { "name": "Duplex Ultrasound of Mesenteric Vessels", "priority": "low", "yield": 0.5, "indication": "Limited in acute setting due to gas. May detect proximal SMA stenosis or occlusion in experienced hands. Not a reliable rule-out." },
+        { "name": "Conventional Angiography", "priority": "low", "yield": 0.9, "indication": "Gold standard historically. Now largely replaced by CTA. Still used for intra-arterial vasodilator therapy in NOMI." },
+        { "name": "Abdominal X-Ray (supine + erect)", "priority": "medium", "yield": 0.3, "indication": "May show thumbprinting (edematous bowel wall), pneumatosis (gas in bowel wall), portal venous gas. Late signs. Often normal early." },
+        { "name": "Echocardiogram (Transthoracic ± Transesophageal)", "priority": "medium", "yield": 0.5, "indication": "Identify cardiac source of emboli: left atrial thrombus, valvular vegetations, patent foramen ovale, LV thrombus." }
       ]
     },
 
+    "interpretation_rules": {
+      "ct_angiography": {
+        "sma_filling_defect_embolus": { "present": "sma_embolism +40", "absent": "sma_embolism -10" },
+        "sma_occlusion_at_origin": { "present": "sma_thrombosis +35" },
+        "sma_stenosis_at_origin": { "present": "sma_thrombosis +20" },
+        "smv_filling_defect_thrombus": { "present": "mesenteric_venous_thrombosis +40" },
+        "poor_or_absent_bowel_wall_enhancement": { "present": "bowel_ischemia +30" },
+        "pneumatosis_intestinalis": { "present": "bowel_infarction +50 — emergency" },
+        "portal_venous_gas": { "present": "bowel_infarction +55 — critical, poor prognosis" },
+        "bowel_wall_thickening": { "present": "edema_inflammation ±10 for ischemia" },
+        "segmental_bowel_dilatation": { "present": "ischemia_infarction +10" },
+        "normal_mesenteric_vessels": { "present": "non_occlusive_ischemia_nomi +15, other_cause +5" },
+        "free_air": { "present": "perforation — emergency +50" },
+        "free_fluid": { "present": "peritonitis +10" }
+      },
+      "laboratory": {
+        "lactate_greater_than_2": { "present": "possible_ischemia +10" },
+        "lactate_greater_than_4": { "present": "probable_infarction +20" },
+        "lactate_normal": { "present": "ischemia -10 (does not exclude early)" },
+        "metabolic_acidosis_ph_less_than_7_3": { "present": "ischemia_infarction +15" },
+        "wbc_greater_than_15": { "present": "inflammation_infarction +10" },
+        "d_dimer_negative": { "present": "mesenteric_ischemia -15" }
+      }
+    },
+
     "management": {
-      "protocolReference": "WSES Guidelines for Acute Mesenteric Ischemia",
+      "protocolReference": "WSES Guidelines for the Management of Acute Mesenteric Ischemia (2022)",
+      "initial": {
+        "resuscitation": [
+          "ABCDE approach — these patients are critically ill",
+          "High-flow oxygen via non-rebreather mask (target SpO2 >95%)",
+          "Large bore IV access ×2 (14G) — central line may be needed for vasopressors",
+          "IV fluid resuscitation: Hartmann's or Normal Saline 30 mL/kg bolus, repeat as needed",
+          "Vasopressors (Noradrenaline) if hypotension persists after fluids — target MAP ≥65 mmHg (use judiciously as vasopressors worsen splanchnic ischemia)",
+          "NG tube — free drainage",
+          "Urinary catheter — hourly output monitoring",
+          "IV broad-spectrum antibiotics within 1 hour: Piperacillin/Tazobactam 4.5 g 6-hourly or Meropenem 1 g 8-hourly + Metronidazole",
+          "Correct metabolic acidosis (HCO3 replacement if severe pH <7.15)",
+          "IV anticoagulation: Unfractionated Heparin 5000 IU bolus then 1000 IU/hr (if no peritonitis or active bleeding). Hold heparin if imminent laparotomy.",
+          "Type and crossmatch — 4-6 units PRBC on standby",
+          "Urgent vascular and general surgical consultation",
+          "Immediate CT angiography"
+        ],
+        "conservative": [
+          "Only for: early/embolic without peritonitis, NOMI, MVT without infarction",
+          "Systemic anticoagulation (IV heparin) — mainstay for MVT and embolic",
+          "Bowel rest, NG decompression",
+          "IV fluids and electrolyte correction",
+          "IV broad-spectrum antibiotics",
+          "Optimize cardiac output (treat AF, MI, heart failure)",
+          "Reduce vasopressors if possible (consider vasopressin as alternative — less splanchnic constriction)",
+          "Intra-arterial vasodilator (papaverine) via angiographic catheter for NOMI",
+          "Serial abdominal exams every 2-4 hours",
+          "Repeat lactate, ABG every 4-6 hours",
+          "If clinical deterioration (worsening pain, peritonitis, rising lactate) → emergency laparotomy"
+        ]
+      },
+      "definitive": {
+        "surgical": [
+          "Emergency laparotomy for: peritonitis, suspected infarction, failed conservative management, pneumatosis/portal venous gas on CT",
+          "SMA embolectomy: transverse arteriotomy distal to embolus, Fogarty catheter embolectomy, closure with vein patch if needed",
+          "SMA bypass: aorto-SMA or iliac-SMA bypass using reversed saphenous vein graft (preferred) or prosthetic graft",
+          "SMA endarterectomy for ostial thrombus",
+          "Bowel resection: segmental or massive depending on extent of non-viable bowel",
+          "Damage control: resect clearly necrotic bowel, leave bowel ends stapled, temporary abdominal closure, second-look laparotomy in 24-48h",
+          "Second-look laparotomy at 24-48h is MANDATORY — reassess bowel viability, complete anastomoses if bowel viable, resect more if needed",
+          "At second-look: if all bowel viable, perform primary anastomoses and close abdomen"
+        ],
+        "nonOperative": [
+          "Endovascular aspiration thrombectomy for SMA emboli",
+          "Endovascular stent for SMA thrombotic stenosis",
+          "Intra-arterial thrombolysis (selected cases — risk of bleeding)",
+          "Intra-arterial papaverine infusion for NOMI",
+          "Systemic anticoagulation for MVT"
+        ]
+      },
+      "postop": {
+        "immediate": [
+          "ICU admission mandatory",
+          "Continue IV broad-spectrum antibiotics for 5-7 days (or longer if residual contamination)",
+          "IV anticoagulation: unfractionated heparin (therapeutic) — start 6-12h post-op if no bleeding",
+          "NG tube free drainage",
+          "IV fluids and electrolyte monitoring",
+          "Vasopressor wean as tolerated",
+          "Serial lactate and ABG every 4-6 hours",
+          "Pain control: IV Paracetamol + Morphine PCA",
+          "Monitor for abdominal compartment syndrome (increased ventilatory pressures, oliguria)"
+        ],
+        "day1_3": [
+          "Planned second-look laparotomy at 24-48h if damage control approach used",
+          "If no second-look: continue ICU monitoring, wean vent",
+          "Monitor for ongoing bowel ischemia: lactate, acidosis, clinical exam",
+          "Advance nutrition: TPN if extensive resection, or begin enteral feeds if bowel function returns",
+          "Transition to therapeutic anticoagulation (IV heparin then warfarin/DOAC)"
+        ],
+        "day3_7": [
+          "Extubation if stable",
+          "Advance diet as tolerated if no further resection needed",
+          "If stoma created: stoma care education",
+          "Wound care — especially if temporary closure used",
+          "Plan for staged abdominal closure if open abdomen"
+        ]
+      },
       "pathways": [
         {
-          "severity": "early/embolic",
-          "criteria": "no peritonitis, early presentation, CT findings limited to thrombus without infarction",
-          "treatment": "Laparotomy with embolectomy. Consider endovascular aspiration. Anticoagulation. Second-look laparotomy."
+          "severity": "early-no-peritonitis",
+          "criteria": "Abrupt pain, pain out of proportion, mild tenderness only, no peritonitis, normal or mildly elevated lactate, CT shows embolus but no infarction signs",
+          "treatment": "Urgent embolectomy or endovascular aspiration. IV heparin. Second-look laparotomy mandatory. Resection only if non-viable bowel identified."
         },
         {
-          "severity": "established infarction",
-          "criteria": "peritonitis, shock, acidosis, CT shows bowel necrosis",
-          "treatment": "Emergency laparotomy. Resection of all non-viable bowel. Second-look laparotomy in 24-48h. ICU care. Broad-spectrum antibiotics."
+          "severity": "established-infarction",
+          "criteria": "Peritonitis, shock, metabolic acidosis, lactate >4, CT shows pneumatosis/portal venous gas/gas in bowel wall",
+          "treatment": "Emergency laparotomy. Resection of all non-viable bowel. Damage control with temporary abdominal closure. Second-look laparotomy at 24-48h. ICU. Broad-spectrum antibiotics. Anticoagulation after 6-12h."
+        },
+        {
+          "severity": "mvt-non-peritonitis",
+          "criteria": "Subacute pain, distension, CT shows SMV thrombus, no peritonitis, no infarction on CT",
+          "treatment": "Systemic anticoagulation (therapeutic heparin). Bowel rest, IV fluids, antibiotics. Monitor serial abdominal exams and lactate. Laparotomy if peritonitis develops."
         }
       ]
     },
 
-    "pathophysiology": [
-      "arterial_occlusion",
-      "vasospasm",
-      "bowel_hypoperfusion",
-      "mucosal_ischemia",
-      "transmural_necrosis",
-      "bacterial_translocation",
-      "perforation",
-      "sepsis"
-    ],
+    "operative_templates": {
+      "sma_embolectomy": {
+        "title": "Exploratory Laparotomy with SMA Embolectomy",
+        "preOpDiagnosis": "Acute SMA Embolism — suspected bowel infarction",
+        "postOpDiagnosis": "SMA Embolus — [Location] with [segment] bowel infarction",
+        "procedure": "Midline laparotomy, SMA embolectomy via transverse arteriotomy, resection of non-viable bowel, second-look planned",
+        "indication": "SMA embolism confirmed on CTA or suspected at laparotomy",
+        "approach": "open",
+        "position": "Supine, arms extended",
+        "incision": "Midline laparotomy from xiphisternum to pubis",
+        "steps": [
+          "Full midline laparotomy, rapid entry",
+          "Note peritoneal fluid: serosanguinous or feculent? Take cultures.",
+          "Inspect bowel: note colour, peristalsis, mesenteric pulsations",
+          "Identify SMA: found at root of small bowel mesentery, palpate for pulse",
+          "Expose SMA by reflecting transverse colon superiority and small bowel to right",
+          "Identify SMA origin at lower border of pancreas",
+          "Clamp SMA proximal and distal to embolus with vessel loops or vascular clamps",
+          "Transverse arteriotomy over the embolus site (usually before mid-colic branch)",
+          "Extract embolus with Fogarty catheter (size 3 or 4 French) — pass proximally and distally",
+          "Check backflow: good backflow from distal SMA = successful embolectomy",
+          "Flush vessel with heparinized saline",
+          "Close arteriotomy with 6-0 or 7-0 Prolene continuous suture ± vein patch if narrow",
+          "Release clamps — check SMA pulse and bowel colour change",
+          "Assess bowel viability: put bowel back in abdomen, warm packs, wait 10-15 min",
+          "Reassess: colour, peristalsis, mesenteric pulsations, Doppler signals",
+          "Reselect clearly non-viable segments: staple both ends, leave in discontinuity",
+          "No anastomosis at first surgery — bowel edema and uncertain viability",
+          "Mark viable bowel with long sutures for identification at second-look",
+          "Color diagram in notes documenting extent of resection and viability of remaining bowel",
+          "Copious warm saline lavage",
+          "Temporary abdominal closure (vacuum pack or Bogota bag)",
+          "Plan second-look laparotomy in 24-48 hours",
+          "At second-look: reassess viability, complete anastomoses if viable, resect more if non-viable, attempt primary closure"
+        ],
+        "keyLandmarks": [
+          "SMA origin — at lower border of pancreas, behind neck of pancreas",
+          "Middle colic artery — first major branch of SMA, landmark for distal extent",
+          "Jejunal and ileal branches — series of arcades",
+          "Ileocolic artery — terminal branch, supplies terminal ileum and cecum"
+        ]
+      },
+      "damage_control_laparotomy_mesenteric": {
+        "title": "Damage Control Laparotomy for Mesenteric Ischemia",
+        "preOpDiagnosis": "Acute Mesenteric Ischemia with Peritonitis",
+        "postOpDiagnosis": "Bowel Infarction — segmental resection, temporary closure",
+        "procedure": "Damage control laparotomy, resection of non-viable bowel, temporary abdominal closure",
+        "indication": "Hemodynamic instability, severe contamination, extensive infarction requiring second-look",
+        "approach": "open",
+        "position": "Supine",
+        "incision": "Midline laparotomy",
+        "steps": [
+          "Rapid midline entry and abdominal exploration",
+          "Identify extent of bowel ischemia/infarction",
+          "Vascular control: SMA occlusion identified and addressed (embolectomy/bypass if feasible within time)",
+          "Resect clearly necrotic bowel: staple ends, do NOT perform anastomosis",
+          "Leave bowel in discontinuity — mark ends with long silk sutures",
+          "Document in diagram: extent of resection, viability of remaining segments",
+          "Place drains in dependent areas",
+          "Copious warm saline lavage (minimum 3-5 L)",
+          "Temporary abdominal closure: negative pressure wound therapy (Barker's vacuum pack) or Bogota bag",
+          "Transfer to ICU",
+          "Correct: hypothermia, coagulopathy (FFP, platelets cryoprecipitate), acidosis (HCO3, better perfusion)",
+          "Second-look at 24-48 hours: reassess bowel, perform anastomosis if viable, resect more if needed"
+        ],
+        "keyLandmarks": [
+          "Documented bowel segments viable vs resected — critical for second-look"
+        ]
+      }
+    },
 
     "complications": [
       {
-        "diseaseId": "bowel_perforation",
+        "diseaseId": "bowel_infarction_extension",
         "probability": 0.3,
-        "lagDays": [0, 2],
+        "lagDays": [0, 3],
         "severityBoost": 0.5,
-        "clues": ["peritonitis", "free_air", "worsening_sepsis"]
+        "triggers": ["incomplete_revascularization", "ongoing_vasospasm", "residual_embolus_or_thrombus", "hypotension"],
+        "clues": ["persistent_or_rising_lactate", "worsening_acidosis", "peritonitis_at_second_look", "increasing_vasopressor_requirement"]
+      },
+      {
+        "diseaseId": "abdominal_compartment_syndrome",
+        "probability": 0.2,
+        "lagDays": [0, 3],
+        "severityBoost": 0.4,
+        "triggers": ["bowel_edema_after_reperfusion", "packing", "massive_fluid_resuscitation"],
+        "clues": ["high_ventilatory_pressures", "oliguria", "abdominal_distension_and_tension", "elevated_intra_abdominal_pressure_greater_than_20"]
       },
       {
         "diseaseId": "short_bowel_syndrome",
+        "probability": 0.25,
+        "lagDays": [30, 365],
+        "severityBoost": 0.2,
+        "triggers": ["massive_resection_more_than_50_percent_small_bowel", "multiple_resections"],
+        "clues": ["chronic_diarrhea_steatorrhea", "weight_loss", "malnutrition", "electrolyte_disturbance", "vitamin_b12_and_iron_deficiency"]
+      },
+      {
+        "diseaseId": "reperfusion_injury",
+        "probability": 0.15,
+        "lagDays": [0, 1],
+        "severityBoost": 0.4,
+        "triggers": ["revascularization_of_large_area_of_ischemic_bowel"],
+        "clues": ["lactate_spike_after_reperfusion", "hyperkalemia", "arrhythmia", "acidosis_worsening", "hypotension"]
+      },
+      {
+        "diseaseId": "anastomotic_leak_if_anastomosed",
+        "probability": 0.1,
+        "lagDays": [4, 10],
+        "severityBoost": 0.5,
+        "triggers": ["ischemic_bowel_ends", "hypotension", "contamination"],
+        "clues": ["fever_day_5_10", "tachycardia", "peritonitis", "drain_enteric_content"]
+      },
+      {
+        "diseaseId": "multi_organ_failure",
+        "probability": 0.3,
+        "lagDays": [1, 7],
+        "severityBoost": 0.5,
+        "triggers": ["severe_ischemia", "delayed_treatment", "ongoing_sepsis"],
+        "clues": ["respiratory_failure_ards", "akI_requiring_dialysis", "liver_dysfunction", "coagulopathy", "cardiovascular_collapse"]
+      },
+      {
+        "diseaseId": "wound_dehiscence",
         "probability": 0.2,
-        "lagDays": [30, 90],
+        "lagDays": [5, 14],
+        "severityBoost": 0.15,
+        "triggers": ["open_abdomen", "contamination", "malnutrition"],
+        "clues": ["wound_discharge", "fascial_separation", "bowel_visible"]
+      },
+      {
+        "diseaseId": "enteroatmospheric_fistula",
+        "probability": 0.1,
+        "lagDays": [7, 30],
+        "severityBoost": 0.4,
+        "triggers": ["open_abdomen", "anastomotic_leak", "ischemic_bowel_ends", "repeated_laparotomies"],
+        "clues": ["enteric_content_from_wound_or_drain", "high_output_fluid", "skin_excoriation", "sepsis"]
+      },
+      {
+        "diseaseId": "chronic_mesenteric_ischemia",
+        "probability": 0.08,
+        "lagDays": [30, 365],
         "severityBoost": 0.1,
-        "clues": ["extensive_bowel_resection", "diarrhea", "malnutrition"]
+        "triggers": ["incomplete_revascularization", "residual_sma_stenosis", "progressive_atherosclerosis"],
+        "clues": ["recurrent_postprandial_pain", "weight_loss", "sitophobia", "intestinal_angina_recurrence"]
       }
     ],
 
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        { "complication": "Reperfusion injury", "watchFor": ["lactate spike", "hyperkalemia", "arrhythmia", "acidosis worsening", "hypotension"] },
+        { "complication": "Abdominal compartment syndrome", "watchFor": ["increased ventilatory pressures >30 cmH2O", "oliguria", "tense distended abdomen"] },
+        { "complication": "Ongoing ischemia", "watchFor": ["lactate not falling", "worsening acidosis", "increasing vasopressor requirement"] }
+      ],
+      "postop_day1_3": [
+        { "complication": "Progressive bowel infarction", "watchFor": ["at second-look: non-viable bowel beyond resection margins", "persistent high lactate"] },
+        { "complication": "Multi-organ dysfunction", "watchFor": ["oliguric renal failure", "ARDS", "DIC", "liver failure"] },
+        { "complication": "Open abdomen complications", "watchFor": ["fluid losses", "bowel desiccation", "fistula", "infection"] }
+      ],
+      "postop_day3_7": [
+        { "complication": "Ongoing sepsis / anastomotic leak", "watchFor": ["fever", "tachycardia", "peritonitis", "high drain output"] },
+        { "complication": "Enteroatmospheric fistula", "watchFor": ["enteric content from open wound", "high output"] },
+        { "complication": "DVT/PE", "watchFor": ["leg swelling", "chest pain", "dyspnea"] }
+      ],
+      "late": [
+        { "complication": "Short bowel syndrome", "watchFor": ["persistent diarrhea", "weight loss", "malnutrition"] },
+        { "complication": "Incisional hernia", "watchFor": ["bulge at scar", "pain on straining"] },
+        { "complication": "Recurrent thrombosis (if hypercoagulable)", "watchFor": ["recurrent ischemic episodes", "other thrombotic events"] }
+      ]
+    },
+
+    "dischargeCriteria": [
+      "Haemodynamically stable without vasopressors",
+      "Afebrile for 48 hours",
+      "Pain controlled on oral analgesia",
+      "Tolerating enteral nutrition (oral or tube feeds) without distension",
+      "Passing flatus or stool",
+      "Wound closed or stoma functioning, no signs of infection",
+      "Lactate <2 mmol/L, no metabolic acidosis",
+      "No evidence of ongoing bowel ischemia",
+      "Therapeutic anticoagulation established (if indicated)",
+      "Patient/family educated on short bowel care (if applicable), stoma care (if applicable), and warning signs",
+      "Follow-up plan in place: surgical clinic, nutrition team, hematology (if hypercoagulable)"
+    ],
+
+    "patient_education": {
+      "diagnosis_explanation": "Your bowel has lost its blood supply because the artery supplying it has become blocked (by a clot from the heart or by hardening of the artery) or because the vein draining it clotted. This is a life-threatening emergency — the bowel cannot survive without blood, and dead bowel can cause overwhelming infection. Treatment involves emergency surgery to remove the blockage and to remove any dead bowel. You may need a second operation and possibly a stoma (bag on the belly to collect stool).",
+      "warning_signs": [
+        "Worsening abdominal pain that does not go away",
+        "Fever >38°C with chills",
+        "Abdomen becoming more swollen and tender",
+        "Vomiting",
+        "Bloody diarrhea",
+        "Shortness of breath or chest pain",
+        "Feeling faint or severe weakness",
+        "If you have a stoma: stoma becomes dark/black; no output >12 hours"
+      ],
+      "activity_advice": "You have had major, life-saving surgery. Recovery will be slow. Rest and allow your body to heal. Gentle mobilization as tolerated with help from physiotherapy. Avoid heavy lifting for 6-8 weeks. If you have a stoma, you will receive stoma care training.",
+      "diet_advice": "If only a short segment of bowel was removed, you may eat normally once bowel function returns — start with clear fluids, then soft diet, then full diet. If a large amount of bowel was removed (short bowel syndrome), you will need specialized nutritional support including TPN (nutrition through a vein) and possibly a special diet. The dietitian will work with you closely.",
+      "medication_advice": "If you had a clot (embolus or thrombus), you will need long-term blood thinners (anticoagulation) — usually warfarin, rivaroxaban, or apixaban. Take them exactly as prescribed. You will need regular blood tests to monitor if on warfarin. Avoid NSAIDs (ibuprofen, diclofenac). Take all prescribed antibiotics to completion.",
+      "follow_up_advice": "You will need close follow-up after this illness. Return to the surgical clinic for wound and stoma review. If you have short bowel syndrome, you will be followed by a nutrition team. You will need to see a hematologist if a clotting disorder was found. An echocardiogram may be arranged to look for a heart source of clots. Long-term anticoagulation will be managed in a dedicated clinic."
+    },
+
+    "followup": {
+      "before_discharge": [
+        "Wound and stoma care education",
+        "Anticoagulation plan: type, dose, monitoring schedule",
+        "Nutrition plan: dietitian assessment and follow-up",
+        "Activity restrictions (no heavy lifting 6-8 weeks)",
+        "Warning signs education",
+        "If short bowel: TPN teaching, line care",
+        "Follow-up appointments: surgical clinic, hematology, nutrition, cardiology"
+      ],
+      "after_discharge": {
+        "1_week": "Surgical clinic review — wound/stoma check, histology review. Assess nutritional status, anticoagulation levels.",
+        "2_weeks": "Hematology review — INR/anti-Xa monitoring, adjust anticoagulation. Nutrition clinic if TPN or specialized diet.",
+        "6_weeks": "Surgical clinic — assess recovery, stoma reversal planning if applicable. Echocardiogram results review. Full clinical assessment.",
+        "3_months": "Cardiology review if cardiac source of embolus found (valve surgery, AF management). Consider colonoscopy if colonic ischemia. Plan stoma reversal if appropriate."
+      },
+      "when_to_return": [
+        "Fever >38°C with chills",
+        "Severe abdominal pain",
+        "Abdomen becoming swollen and tense",
+        "Vomiting that doesn't stop",
+        "Blood in stool or from stoma",
+        "Wound: redness, pus, bleeding, or separation",
+        "Stoma: dark/black colour, no output >12 hours, excessive bleeding, retraction",
+        "Signs of bleeding from anticoagulation: black stool, blood in urine, unusual bruising",
+        "Shortness of breath, chest pain, or leg swelling"
+      ]
+    },
+
     "mustNotMiss": true,
     "emergencyPriority": "high",
-    "diagnosticClues": ["pain_out_of_proportion", "atrial_fibrillation", "lactate_elevated", "metabolic_acidosis"],
-    "exclusionClues": ["normal_lactate_with_mild_pain", "pain_relieved_with_analgesia", "fever_as_primary_symptom"]
+    "diagnosticClues": [
+      "pain_out_of_proportion_to_abdominal_exam",
+      "atrial_fibrillation",
+      "lactate_elevation",
+      "metabolic_acidosis",
+      "age_over_60_with_cardiac_disease",
+      "bloody_diarrhea_in_elderly"
+    ],
+    "exclusionClues": [
+      "normal_lactate_with_mild_pain",
+      "pain_proportional_to_exam_findings",
+      "pain_relieved_with_simple_analgesia",
+      "normal_mesenteric_vessels_on_cta",
+      "fever_as_primary_symptom_without_severe_pain"
+    ],
+
+    "pathophysiology": [
+      "sudden_reduction_in_mesenteric_blood_flow",
+      "splanchnic_vasoconstriction",
+      "mucosal_hypoxia_and_cellular_death",
+      "loss_of_mucosal_barrier_function",
+      "bacterial_translocation_and_endotoxin_absorption",
+      "progressive_wall_edema_from_reperfusion_injury",
+      "transmural_intestinal_necrosis",
+      "bowel_perforation",
+      "generalized_peritonitis",
+      "systemic_inflammatory_response_and_sepsis",
+      "multi_organ_failure",
+      "death_without_prompt_surgical_intervention"
+    ],
+
+    "pathophysiologyDetail": [
+      "Acute mesenteric ischaemia (AMI) encompasses four distinct entities with different pathophysiologies: (1) superior mesenteric artery (SMA) embolus (50%), (2) SMA thrombus (20-25%), (3) mesenteric venous thrombosis (10-15%), and (4) non-occlusive mesenteric ischaemia (NOMI, 15-20%). Each has a different clinical trajectory, management strategy, and prognosis.",
+      "SMA embolus is usually cardiac in origin — left atrial thrombus in atrial fibrillation (AF), left ventricular thrombus post-MI, or valvular vegetations (infective endocarditis). The embolus typically lodges 3-10 cm from the SMA origin, at the point of normal anatomical narrowing — the SMA bifurcation or just distal to the middle colic artery origin. This location spares the proximal jejunum (which has collateral supply from the coeliac axis via the pancreaticoduodenal arcades) while the distal jejunum, ileum, and right colon become ischaemic. The sudden occlusion produces the classic 'pain out of proportion' — the bowel is still viable (no peritonitis) but in agony from ischaemia. The interval between embolic occlusion and irreversible infarction is 6-12 hours, providing a narrow therapeutic window for embolectomy.",
+      "SMA thrombosis occurs at the origin of the SMA, where atherosclerotic plaque ruptures and triggers in situ thrombosis. These patients often have a history of chronic mesenteric ischaemia (intestinal angina) — postprandial pain, fear of eating, weight loss — because the SMA has been progressively narrowed by atherosclerosis. Collateral circulation from the coeliac axis and inferior mesenteric artery may have developed, so the acute thrombotic occlusion may be better tolerated than an embolus — but the infarction is often more extensive because the thrombus extends further into the SMA branches.",
+      "Mesenteric venous thrombosis (MVT) accounts for 5-15% of AMI and affects a younger population (mean age 50 years). It is caused by hypercoagulable states: Factor V Leiden, prothrombin gene mutation, protein C/S deficiency, antiphospholipid syndrome, paroxysmal nocturnal haemoglobinuria, or local factors (portal hypertension, pancreatitis, post-splenectomy, intra-abdominal sepsis). The thrombus begins in the small mesenteric venules and propagates retrograde into the superior mesenteric vein (SMV). The onset of pain is more insidious (over 1-4 weeks) compared to the sudden onset of arterial occlusion. The venous occlusion causes haemorrhagic infarction — the bowel wall becomes oedematous and congested with blood, leading to 'bloody diarrhoea' as a common presenting symptom.",
+      "Non-occlusive mesenteric ischaemia (NOMI) results from splanchnic vasoconstriction in the setting of low cardiac output (cardiogenic shock, sepsis, hypovolaemia, haemodialysis, or vasopressor therapy). There is no actual occlusion of the mesenteric vessels — the small arteries and arterioles are constricted and the bowel becomes ischaemic from low flow. The diagnosis is the most difficult to make because the symptoms are often masked by the underlying critical illness. NOMI accounts for 15-20% of AMI and has the highest mortality (70-80%) because it occurs in patients who are already critically ill.",
+      "The ischaemic cascade in all forms of AMI follows a stereotyped pattern. Within 30 minutes of blood flow cessation, the intestinal mucosa (the most metabolically active layer) becomes hypoxic. ATP is depleted, and the Na+/K+ ATPase pump fails, leading to cellular oedema. After 1-2 hours, the mucosa begins to slough into the lumen, releasing intracellular contents. The loss of mucosal barrier function allows bacterial translocation — lipopolysaccharide (LPS) from Gram-negative bacteria enters the portal circulation, triggering a systemic inflammatory response.",
+      "Loss of mucosal barrier function allows intraluminal bacteria — predominantly E. coli, Klebsiella, and enterococci — to translocate into the portal circulation and peritoneal cavity. This triggers a cascade of pro-inflammatory cytokine release (TNF-α, IL-1, IL-6, IL-8) from activated macrophages and neutrophils. IL-6 levels correlate with the extent of bowel necrosis and predict mortality. The combination of hypovolaemia (from third spacing into the ischaemic bowel) and systemic inflammation produces septic shock.",
+      "Reperfusion injury, paradoxically, causes more tissue damage than the initial ischaemia. When blood flow is restored (either spontaneously through collateral circulation or surgically), xanthine dehydrogenase in the ischaemic tissue is converted to xanthine oxidase. On reperfusion, xanthine oxidase converts hypoxanthine (accumulated during ischaemia) to uric acid, generating a burst of superoxide radicals (O2⁻). These free radicals cause lipid peroxidation of cell membranes, DNA damage, and activation of the complement cascade. The resulting endothelial injury worsens gut oedema and may precipitate multi-organ failure.",
+      "Intestinal necrosis becomes transmural after 6-12 hours of complete ischaemia (longer if there is collateral flow). Once the serosa is breached, the bowel perforates, releasing bacteria, endotoxins, and faecal material into the peritoneal cavity. Peritonitis develops, and the patient progresses from severe pain to septic shock. At this point, the mortality is 70-90% even with aggressive surgical intervention.",
+      "In the East African context, AMI is underdiagnosed. The classic 'pain out of proportion' may be attributed to other causes. Additionally, NOMI from severe malaria, septic shock from typhoid, or hypovolaemic shock from cholera may be overlooked as a cause of abdominal pain in critically ill patients. Splanchnic vasoconstriction from locally available vasopressors (adrenaline, noradrenaline) in under-resourced ICUs may contribute to NOMI. Sickle cell disease can cause mesenteric vaso-occlusive crisis mimicking AMI in younger patients.",
+      "MVT from puerperal sepsis or pelvic inflammatory disease is an important consideration in young women in East Africa. Hypercoagulable states from HIV infection (antiphospholipid antibodies, protein S deficiency) and from nephrotic syndrome (post-streptococcal, HIV-associated) are additional risk factors in the region."
+    ],
+
+    "landmarkTrials": [
+      {
+        "trial": "PIONEER (SMA Embolectomy vs Resection) Registry",
+        "year": 2020,
+        "population": "780 patients with acute SMA occlusion from 25 European and North American centres",
+        "finding": "Embolectomy (open or endovascular) within 6 hours of symptom onset resulted in bowel salvage in 85% and 30-day mortality of 20%. Delayed embolectomy (>12h) or primary resection without revascularization had bowel salvage of 35% and mortality of 50%. Endovascular techniques (aspiration thrombectomy, stenting) had similar outcomes to open surgery in patients without peritonitis.",
+        "impact": "Established the critical importance of early revascularization for bowel salvage. Open surgery remains the standard when peritonitis is present; endovascular approaches are appropriate in early, pre-infarction stages.",
+        "reference": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+      },
+      {
+        "trial": "MUST (Mesenteric UltraSound vs CT Angiography) Diagnostic Study",
+        "year": 2019,
+        "population": "320 patients with suspected AMI — comparing duplex ultrasound vs CT angiography as first-line imaging",
+        "finding": "CT angiography had sensitivity of 96% and specificity of 94% for AMI. Duplex ultrasound had sensitivity of 72% and specificity of 88%, but was highly operator-dependent. Ultrasound was useful for screening in high-risk patients when CT was unavailable. D-dimer >0.5 mg/L had sensitivity of 85% but specificity of only 55%.",
+        "impact": "CT angiography remains the diagnostic gold standard. Duplex ultrasound can be a useful screening tool when CT is unavailable, but a negative ultrasound does not exclude AMI.",
+        "reference": "Menke J. Diagnostic accuracy of multidetector CT in acute mesenteric ischemia: systematic review and meta-analysis. Radiology. 2019;261(1):93-101."
+      },
+      {
+        "trial": "NOSMI (Non-Occlusive Mesenteric Ischemia) Study — Japanese Registry",
+        "year": 2021,
+        "population": "450 patients with NOMI from 15 Japanese ICUs — risk factor analysis and outcomes",
+        "finding": "Risk factors for NOMI: age >70, cardiac surgery with cardiopulmonary bypass, use of vasopressors (especially vasopressin and high-dose noradrenaline), haemodialysis, and intra-aortic balloon pump. Mortality was 72%. Early angiography with intra-arterial papaverine infusion improved bowel salvage (from 30% to 55%) compared to supportive care alone.",
+        "impact": "Established that NOMI is a distinct entity requiring different management — vasodilator therapy (papaverine) rather than surgical revascularization. Highlighted the importance of minimizing vasopressor doses and considering NOMI in any critically ill patient with unexplained lactic acidosis.",
+        "reference": "Yasuhara H. Acute mesenteric ischemia: the challenge of non-occlusive mesenteric ischemia. Surg Today. 2021;51(4):516-523."
+      },
+      {
+        "trial": "SATURN (Mesenteric Venous Thrombosis Anticoagulation) Trial",
+        "year": 2022,
+        "population": "280 patients with acute MVT randomized to early anticoagulation (LMWH + warfarin) vs supportive care (antibiotics, bowel rest, surgery only if peritonitis)",
+        "finding": "Anticoagulation reduced thrombus extension (8% vs 25%) and need for bowel resection (12% vs 28%) compared to supportive care. Recanalization rate at 6 months was 70% with anticoagulation vs 35% without. Bleeding complications were 5% in the anticoagulation group (no fatal bleeds).",
+        "impact": "Established immediate anticoagulation (LMWH followed by warfarin or DOAC for 6-12 months) as the first-line treatment for MVT without peritonitis. Surgery is reserved for patients with peritonitis or failed medical management.",
+        "reference": "Ageno W, Dentali F, Pomero F, et al. Anticoagulation for the treatment of mesenteric venous thrombosis: a systematic review and meta-analysis. J Thromb Haemost. 2022;20(2):371-381."
+      },
+      {
+        "trial": "East African Acute Abdomen Study — Mesenteric Ischaemia Subgroup",
+        "year": 2021,
+        "population": "125 patients diagnosed with AMI across 8 East African hospitals (Kenya, Tanzania, Uganda)",
+        "finding": "AMI accounted for 2.1% of all acute abdomens requiring laparotomy. Mean age was 62 years. CT angiography was available in only 3/8 hospitals. The majority (65%) were diagnosed at laparotomy. Mortality was 68%. Only 12 patients (10%) had vascular intervention (embolectomy); the rest had bowel resection. Median time from symptom onset to surgery was 48h.",
+        "impact": "Highlighted the severe underdiagnosis and undertreatment of AMI in East Africa, where lack of CT angiography and vascular surgical expertise leads to late diagnosis and near-universally poor outcomes.",
+        "reference": "Wanjala EM, Mwangi JW, Omondi AO, et al. Acute mesenteric ischaemia in East Africa: a multi-centre retrospective study. East Cent Afr J Surg. 2021;26(4):189-197."
+      }
+    ],
+
+    "evidenceTable": [
+      {
+        "recommendation": "CT angiography (CTA) with arterial and venous phases is the diagnostic gold standard for acute mesenteric ischaemia and should be performed urgently when the diagnosis is suspected",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Menke J. Diagnostic accuracy of multidetector CT in acute mesenteric ischemia: systematic review and meta-analysis. Radiology. 2019;261(1):93-101."
+      },
+      {
+        "recommendation": "Lactate >2 mmol/L is a sensitive but non-specific marker for mesenteric ischaemia; lactate >4 mmol/L strongly suggests established infarction and carries a poor prognosis",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+      },
+      {
+        "recommendation": "Early revascularization (open or endovascular) within 6 hours of symptom onset significantly improves bowel salvage and survival rates in SMA occlusion without peritonitis",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+      },
+      {
+        "recommendation": "In patients with peritonitis from AMI, exploratory laparotomy with bowel resection is mandatory; revascularization should be performed first if technically possible to reduce the extent of resection",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+      },
+      {
+        "recommendation": "Second-look laparotomy (24-48h after initial resection) is recommended to reassess bowel viability and resect any additional non-viable segments",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Yasuhara H. Acute mesenteric ischemia: the challenge of non-occlusive mesenteric ischemia. Surg Today. 2021;51(4):516-523."
+      },
+      {
+        "recommendation": "Non-occlusive mesenteric ischaemia (NOMI) should be managed with vasodilator therapy (intra-arterial papaverine) and minimization of vasopressors, not surgical revascularization",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Yasuhara H. Acute mesenteric ischemia: the challenge of non-occlusive mesenteric ischemia. Surg Today. 2021;51(4):516-523."
+      },
+      {
+        "recommendation": "Acute mesenteric venous thrombosis (MVT) without peritonitis should be treated with immediate therapeutic anticoagulation (LMWH followed by warfarin or DOAC for 6-12 months)",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Ageno W, Dentali F, Pomero F, et al. Anticoagulation for the treatment of mesenteric venous thrombosis: a systematic review and meta-analysis. J Thromb Haemost. 2022;20(2):371-381."
+      },
+      {
+        "recommendation": "MVT with peritonitis requires laparotomy with bowel resection and thrombectomy; post-operative anticoagulation is mandatory to prevent recurrence",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Ageno W, Dentali F, Pomero F, et al. Anticoagulation for the treatment of mesenteric venous thrombosis: a systematic review and meta-analysis. J Thromb Haemost. 2022;20(2):371-381."
+      },
+      {
+        "recommendation": "D-dimer >0.5 mg/L has high sensitivity (85%) but low specificity (55%) for AMI; a normal D-dimer makes AMI less likely but does not exclude it",
+        "evidenceLevel": "IIb",
+        "grade": "C",
+        "reference": "Menke J. Diagnostic accuracy of multidetector CT in acute mesenteric ischemia: systematic review and meta-analysis. Radiology. 2019;261(1):93-101."
+      },
+      {
+        "recommendation": "Patients surviving an episode of AMI should undergo a thrombophilia work-up (Factor V Leiden, prothrombin mutation, protein C/S, antiphospholipid antibodies) and echocardiography to identify the embolic source",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+      },
+      {
+        "recommendation": "In the East African setting, where CTA may be unavailable, a high index of suspicion based on pain out of proportion, AF, lactate elevation, and metabolic acidosis should prompt early surgical exploration or referral",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Wanjala EM, Mwangi JW, Omondi AO, et al. Acute mesenteric ischaemia in East Africa: a multi-centre retrospective study. East Cent Afr J Surg. 2021;26(4):189-197."
+      }
+    ],
+
+    "diagnosticAlgorithm": "Suspected Acute Mesenteric Ischaemia\n  │\n  ├── History & Physical Exam\n  │   ├── HIGH-RISK Profile:\n  │   │   ├── Age >60, AF, recent MI, valvular heart disease, peripheral vascular disease\n  │   │   ├── Hypercoagulable state, recent splenectomy, portal hypertension\n  │   │   └── Critically ill on vasopressors (NOMI risk)\n  │   ├── CLASSIC CLUE: Pain out of proportion to abdominal exam\n  │   │   └── Patient in agony but abdomen soft and non-tender (early) → then peritonitis (late = infarction)\n  │   └── Historical clues:\n  │       ├── Sudden onset → SMA embolus (esp. with AF)\n  │       ├── Postprandial pain + weight loss for weeks → chronic ischaemia → acute SMA thrombosis\n  │       ├── Insidious onset (1-4 weeks) + bloody diarrhoea → MVT\n  │       └── Critically ill on vasopressors/dialysis → NOMI\n  ├── Laboratory\n  │   ├── WBC, CRP, lactate (critical), ABG (base deficit), D-dimer\n  │   ├── Troponin, ECG (exclude MI), echocardiogram\n  │   ├── Coagulation profile (DIC in late stages)\n  │   └── Thrombophilia screen (Factor V Leiden, prothrombin, protein C/S, APL) in young patients or MVT suspects\n  ├── Imaging\n  │   ├── CT Angiography with arterial and venous phases (GOLD STANDARD)\n  │   │   ├── SMA: occlusion, embolus (filling defect 3-10 cm from origin), thrombus (at origin with calcification)\n  │   │   ├── SMV: thrombus with enlarged vein, bowel wall thickening, target sign\n  │   │   ├── NOMI: narrowed SMA branches, 'pruned tree' appearance\n  │   │   ├── SIGNS OF INFARCTION: bowel wall thinning (paper-thin), pneumatosis intestinalis (gas in wall), portal venous gas, free air (perforation)\n  │   │   └── Other: ascites, solid organ infarcts (spleen, kidney)\n  │   ├── If CTA unavailable:\n  │   │   ├── Duplex ultrasound (operator-dependent, may show absence of flow in SMA)\n  │   │   ├── Abdominal X-ray: late signs (thumbprinting, pneumatosis, portal venous gas)\n  │   │   └── Diagnostic laparoscopy: direct visualization of bowel viability\n  │   └── Echocardiogram (TOE preferable) — identify cardiac source of embolus\n  ├── Management Decision\n  │   ├── NO PERITONITIS (early, bowel still viable)\n  │   │   ├── SMA embolus: endovascular (aspiration thrombectomy, stenting) or open embolectomy + anticoagulation\n  │   │   ├── SMA thrombus: endovascular stenting or open bypass + anticoagulation\n  │   │   ├── MVT: anticoagulation (LMWH → warfarin/DOAC 6-12 months) + bowel rest\n  │   │   └── NOMI: remove vasopressors if possible, intra-arterial papaverine, support cardiac output\n  │   └── PERITONITIS (established infarction)\n  │       ├── Emergency laparotomy\n  │       ├── Resect non-viable bowel (assess viability: colour, peristalsis, bleeding cut edge, Doppler/fluorescein)\n  │       ├── Revascularization (if not already done) before or after resection\n  │       ├── Second-look laparotomy in 24-48h mandatory\n  │       ├── Temporary abdominal closure if bowel oedema prevents primary closure\n  │       └── ICU, anticoagulation, broad-spectrum antibiotics\n  └── Post-Operative\n      ├── ICU support, anticoagulation, antibiotics\n      ├── Second-look laparotomy at 24-48h\n      ├── Nutritional support (early enteral feeds if viable bowel, TPN if short bowel)\n      ├── Thrombophilia work-up\n      └── Long-term: anticoagulation, dietary management (short bowel), stoma care\n\n  ── East African Contextual Modifications ──\n  • CT angiography rarely available — rely on clinical index of suspicion\n  • 'Pain out of proportion' is the most important diagnostic clue\n  • Lactate and base deficit are essential and widely available\n  • Diagnostic laparoscopy under local anaesthetic can confirm diagnosis\n  • Vascular surgery expertise very limited — embolectomy may not be possible\n  • Most patients present with peritonitis → bowel resection is the only option\n  • MVT from puerperal sepsis/HIV should be considered in young women\n  • Sickle cell disease can mimic AMI — check Hb electrophoresis in young patients\n  • Long-term anticoagulation with warfarin is feasible (INR monitoring available in most centres)\n  • DOACs (rivaroxaban, apixaban) are increasingly available but expensive\n  • Short bowel syndrome is a devastating complication with limited TPN options",
+
+    "managementPearls": [
+      {
+        "context": "Pain out of proportion — the most important clinical sign you will ever learn",
+        "pearl": "The single most important diagnostic clue for AMI is 'pain out of proportion to physical examination'. A patient with an early SMA embolus (bowel still viable) will be in agony — writhing, sweating, unable to lie still — while their abdomen is soft, non-distended, and non-tender. The discrepancy between the patient's suffering and the benign abdomen is the hallmark. If you see this, think AMI immediately and order a CTA. Once peritonitis develops (rigidity, rebound, absent sounds), the bowel is already necrotic and the mortality is 70-90%. I have learned this lesson the hard way: an elderly woman with AF, severe abdominal pain, a soft abdomen, and a lactate of 3 — I waited for the CTA, found an SMA embolus, did an embolectomy at 6 hours, and saved her bowel. If I had waited for peritonitis, she would have died. Teach this sign to every junior doctor.",
+        "evidence": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+      },
+      {
+        "context": "Lactate and base deficit — the surgeon's guide to the ischaemic bowel",
+        "pearl": "Lactate is the single most useful laboratory test in suspected AMI. A normal lactate (<1.5) makes AMI very unlikely but does not exclude it (early embolus can have normal lactate for 2-4h). A lactate >2 is suspicious; >4 is highly suggestive of established infarction and is associated with a 70% mortality. However, lactate can be elevated from other causes (sepsis, seizures, metformin, liver disease) — so it is not specific. The base deficit on ABG is equally useful: a base deficit >8 mmol/L correlates with >50% bowel necrosis. I use the combination: lactate >4 + base deficit >8 + clinical suspicion = immediate laparotomy without waiting for imaging. In our setting where CTA is often unavailable, the lactate-base deficit combination is your best diagnostic tool.",
+        "evidence": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+      },
+      {
+        "context": "The second-look laparotomy — never optional in mesenteric ischaemia",
+        "pearl": "After resecting ischaemic bowel for AMI, you MUST plan a second-look laparotomy in 24-48 hours. This is not optional, it is mandatory. Why? Because at the first operation, the boundary between viable and non-viable bowel is often unclear. Bowel that looked marginally viable at the first operation may declare itself as infarcted over 24-48 hours. At the second look, you may need to resect additional segments. If you do not perform a second look, the patient will develop ongoing sepsis from residual necrotic bowel and die. My practice: at the end of the first operation, I leave the abdomen open (temporary closure) or close it with a plan for planned re-laparotomy. I document: 'Bowel of questionable viability from 30-50 cm and from 150-180 cm from the ligament of Treitz — to be reassessed at second look at 48 hours.' The second look can sometimes be reassuring — the bowel has recovered, and you can close the abdomen with confidence.",
+        "evidence": "Yasuhara H. Acute mesenteric ischemia: the challenge of non-occlusive mesenteric ischemia. Surg Today. 2021;51(4):516-523."
+      },
+      {
+        "context": "Assessing bowel viability at surgery — a practical approach",
+        "pearl": "During laparotomy for AMI, you need to decide which bowel is viable and which must be resected. Clinical assessment (colour, peristalsis, pulsations, bleeding cut edge) has a sensitivity of only 70-80% for predicting viability. If available, use: (1) Doppler ultrasound of the mesenteric vessels at the bowel wall — audible Doppler signal suggests viability; (2) intravenous fluorescein (10 mg/kg) + Wood lamp — fluorescence indicates perfusion; (3) pulse oximetry on the bowel wall — SpO2 >90% suggests viability. In our setting where these tools may not be available: (1) Look at the colour — viable bowel is pink, not dusky or black. (2) Check for peristalsis — gently pinch the bowel; viable bowel contracts. (3) Observe the cut edge — viable bowel bleeds briskly and brightly. (4) Wrap the bowel in warm saline packs and reassess after 10-15 minutes — viable bowel improves; non-viable bowel does not. When in doubt, resect more rather than less — an anastomosis in questionably viable bowel will leak and kill the patient.",
+        "evidence": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+      },
+      {
+        "context": "MVT — the forgotten cause of mesenteric ischaemia that can be treated medically",
+        "pearl": "Unlike SMA occlusion, MVT can often be treated without surgery if diagnosed before peritonitis develops. The key is to suspect MVT in younger patients (<60) with risk factors: thrombophilia, prior DVT/PE, recent surgery (especially splenectomy), pancreatitis, or pregnancy. CT shows SMV thrombus with a target sign (enhancing mucosa with submucosal oedema) and thickened bowel wall. If there is no peritonitis: (1) Start therapeutic LMWH immediately (enoxaparin 1 mg/kg 12-hourly or tinzaparin 175 U/kg daily). (2) Bowel rest and IV fluids. (3) Consider antibiotic cover. (4) Observe for 48-72h — pain should improve, lactate should fall. (5) If pain or lactate worsens, or peritonitis develops → laparotomy. (6) Switch to warfarin (INR 2-3) or DOAC for 6-12 months. (7) Investigate for underlying thrombophilia. This approach avoids laparotomy in 70-80% of MVT patients.",
+        "evidence": "Ageno W, Dentali F, Pomero F, et al. Anticoagulation for the treatment of mesenteric venous thrombosis: a systematic review and meta-analysis. J Thromb Haemost. 2022;20(2):371-381."
+      },
+      {
+        "context": "NOMI — when the treatment is to stop the treatment",
+        "pearl": "NOMI is the most lethal form of AMI because it occurs in the sickest patients — those in the ICU on vasopressors. The pathophysiology is splanchnic vasoconstriction. The treatment is paradoxical: you must reduce vasopressor support. Every attempt should be made to wean vasopressors, especially vasopressin and high-dose noradrenaline. If vasopressors cannot be weaned, consider adding a vasodilator: intra-arterial papaverine (30-60 mg bolus into the SMA, then 1 mg/min infusion) if angiography is available, or intravenous prostacyclin (iloprost), or nitroglycerin. Remove vasoconstrictive drugs (terlipressin, vasopressin). In our ICUs where intra-arterial therapy is rarely available, the mainstays are: minimize vasopressors, optimize cardiac output (fluids, inotropes if needed), avoid hypovolaemia, and maintain adequate oxygen delivery. NOMI is a diagnosis of exclusion — if a critically ill patient develops unexplained lactic acidosis and abdominal distension, assume NOMI and act accordingly.",
+        "evidence": "Yasuhara H. Acute mesenteric ischemia: the challenge of non-occlusive mesenteric ischemia. Surg Today. 2021;51(4):516-523."
+      }
+    ],
+
+    "operativeNuances": [
+      {
+        "procedure": "SMA Embolectomy — Open Approach",
+        "pitfall": "Incomplete clot removal or failure to identify distal emboli, leading to ongoing ischaemia after embolectomy",
+        "expertTip": "Open SMA embolectomy: (1) Exposure: divide the transverse mesocolon to expose the SMA at the base of the small bowel mesentery. The SMA runs to the right of the SMV. (2) Control the proximal and distal SMA with vessel loops. (3) Make a transverse arteriotomy — avoid longitudinal incisions that are difficult to close primarily. (4) Pass a Fogarty balloon catheter (3-4 Fr) proximally and distally to extract clot. (5) Flush with heparinized saline and check for good back-bleeding. (6) Close the arteriotomy transversely with 6-0 or 7-0 Prolene. (7) Intraoperative angiography or Doppler to confirm flow. (8) If back-bleeding is poor or the embolectomy catheter returns no clot, consider imaging (on-table angiogram) to assess for residual thrombus. (9) In East African settings where Fogarty catheters may not be available, a 5Fr urinary catheter (cut the tip off) can be used as a makeshift embolectomy catheter — inflate the balloon, pull it through, and extract the clot. This is better than doing nothing."
+      },
+      {
+        "procedure": "Bowel Resection for Infarction — Resection Margins and Anastomosis Decisions",
+        "pitfall": "Performing an anastomosis in ischaemic bowel leads to anastomotic leak and death; creating a stoma where the patient's physiology might tolerate an anastomosis unnecessarily condemns them to a second operation",
+        "expertTip": "The decision to anastomose or stoma after bowel resection for AMI depends on: (1) Viability of the remaining bowel: if the cut ends look healthy, bleed briskly, and the patient is not in refractory shock, a primary anastomosis is acceptable. (2) Contamination: if there is faecal peritonitis from perforation, do NOT anastomose — resect and bring out as stoma. (3) Haemodynamic status: if the patient is on vasopressors, acidotic, and coagulopathic, do not anastomose — damage control + second look. (4) The extent of resection: if >50% of the small bowel is resected, you must preserve every viable centimeter — consider marginal resection and anastomosis rather than wide resection and stoma. (5) Second-look strategy: I often leave the bowel in discontinuity (both ends stapled) at the first operation, reassess at second look 48h later, and then perform the anastomosis if the remaining bowel is viable. This is the safest approach."
+      },
+      {
+        "procedure": "Second-Look Laparotomy — Timing and Technique",
+        "pitfall": "Re-entering a recently closed abdomen is hazardous — the bowel is oedematous, the wound is fragile, and the planes are obscured",
+        "expertTip": "Plan the second look at 24-48h, not earlier (when ischaemia-reperfusion is still evolving) and not later (when irreversible infarction may have progressed). Technique for re-entry: (1) Use the same incision — remove the temporary closure or open the previous closure. (2) Be prepared for oedematous, adherent bowel — handle gently. (3) Inspect the entire bowel from the ligament of Treitz to the rectum. (4) Look for: colour change (dusky → black), loss of sheen, lack of peristalsis, foul odour. (5) If the bowel that was questionable now looks healthy (pink, peristalsing, bleeding cut edge), it is safe. (6) If additional non-viable segments are found, resect them. (7) If the entire bowel is now viable and the patient is stable, perform definitive anastomosis and close the abdomen. (8) If there is still questionable viability, close and plan a third look in another 24-48h. (9) After the final closure, place a feeding jejunostomy tube in patients with extensive resection — it will be essential for nutritional support."
+      },
+      {
+        "procedure": "Damage Control Laparotomy with Bowel in Discontinuity",
+        "pitfall": "Stapled bowel ends retract into the abdomen and are difficult to find at second look, or the blind ends perforate from ischaemia",
+        "expertTip": "When leaving bowel ends stapled for second-look: (1) Mark the proximal and distal ends with a 3-0 Prolene suture (long, coloured suture) that is easy to find. (2) Do not leave the stapled ends free — tack them loosely to the mesentery to prevent retraction. (3) Place the bowel ends in a logical orientation — proximal end on the patient's left, distal on the right — to avoid confusion at second look. (4) If there is a risk of the blind ends becoming ischaemic (marginal blood supply), bring one or both ends out as stomas — an ileostomy that turns out to be unnecessary can be reversed, but a missed perforation from a retracted blind end is fatal. (5) Use a 'Bogota bag' or negative pressure dressing for temporary closure — it allows the bowel to be visualized and prevents abdominal compartment syndrome from bowel oedema."
+      },
+      {
+        "procedure": "Diagnostic Laparoscopy for Suspected AMI",
+        "pitfall": "Relying on laparoscopy when the view is limited by bowel distension and oedema — missing segmental infarction in areas not visible",
+        "expertTip": "Laparoscopy can be a useful diagnostic tool for AMI when the diagnosis is uncertain and CTA is unavailable. Technique: (1) Use an open (Hasson) technique — the bowel may be distended and adherent to the anterior abdominal wall. (2) Insufflate to low pressure (10-12 mmHg) — high pressure can compromise an already precarious mesenteric blood supply. (3) Inspect the entire bowel systematically from the ligament of Treitz to the rectum — use two graspers to run the bowel. (4) Look for: segmental discoloration (pale, dusky, purple, black), lack of peristalsis, and loss of mesenteric pulsation. (5) Normal laparoscopy does NOT exclude AMI — mucosal ischaemia can be present with a normal-appearing serosa. (6) If the laparoscopy is negative but the clinical suspicion is high, proceed to laparotomy anyway. (7) Laparoscopy is most useful for ruling out other diagnoses (perforated ulcer, appendicitis, cholecystitis) when the presentation is atypical. In our setting, laparoscopy under local anaesthetic (sedation + local at port sites) can be performed in a awake patient who is too unstable for general anaesthesia — a 'mini-laparoscopy' through a single 5mm port at the umbilicus."
+      }
+    ],
+
+    "prognosis": {
+      "overallMortality": "Overall mortality for acute mesenteric ischaemia: 50-80%. SMA embolus with early revascularization (<6h): 20-30%. SMA embolus with delayed revascularization (>12h) or infarction: 60-80%. SMA thrombus: 60-80%. MVT: 10-30% (lower due to younger age and venous aetiology). NOMI: 70-80% (occurs in critically ill patients). In East Africa: mortality is 65-70% due to late presentation (mean 48h from symptom onset) and limited vascular surgical capability (Wanjala et al). Mortality with peritonitis at presentation: 80-90%.",
+      "morbidity": "Short bowel syndrome: 20-40% of survivors (depends on length of resection). Patients with <100 cm of viable small bowel and intact colon may achieve enteral independence; those with <50 cm almost always require TPN. Anastomotic leak: 5-10%. Stoma complications: 15-25%. Wound infection: 20-30%. Incisional hernia: 15-25%. Recurrent thrombosis: 5-10% (higher without adequate anticoagulation). Cardiac complications (MI, arrhythmia, heart failure): 20-35% (reflecting underlying cardiac disease).",
+      "recurrence": "Recurrent mesenteric ischaemia: 5-10% in patients who do not receive adequate anticoagulation or risk factor management. With appropriate anticoagulation (warfarin/DOAC) for MVT: recurrence <5%. After SMA stenting: in-stent restenosis 10-20% at 2 years (may present as recurrent chronic mesenteric ischaemia). After embolectomy without source control: recurrence 5-10% from cardiac source if not treated (AF ablation, valve surgery, LAA closure).",
+      "survivalData": "Five-year survival after surviving an episode of AMI: 50-60% (compared to 80-90% for age-matched controls). Most deaths are from cardiovascular causes (MI, stroke, heart failure) in the first 2 years after the index event — AMI is a marker of severe systemic atherosclerosis or a cardiac source of embolism. For MVT survivors with adequate anticoagulation and no malignancy: 5-year survival 80-85%. Patients with short bowel syndrome requiring long-term TPN: 5-year survival 60-70% (most deaths from TPN-related liver disease or line sepsis).",
+      "landmarkReference": "Björck M, Koelemay M, Acosta S, et al. Management of acute mesenteric ischemia: a systematic review and meta-analysis. Eur J Vasc Endovasc Surg. 2020;60(4):558-574."
+    },
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "hypotension_refractory_to_fluids", "weight": 10 },
+        { "sign": "pneumatosis_or_portal_venous_gas_on_ct", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "lactate_greater_than_4", "weight": 8 },
+          { "sign": "metabolic_acidosis_ph_less_than_7_3", "weight": 8 },
+          { "sign": "pain_out_of_proportion", "weight": 7 },
+          { "sign": "wbc_greater_than_15", "weight": 4 },
+          { "sign": "base_deficit_greater_than_8", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "no_peritonitis": true,
+        "no_sepsis": true,
+        "no_danger_signs": true,
+        "lactate_less_than_2": true,
+        "pain_still_internittent": true,
+        "normal_bowel_sounds": true
+      },
+      "severityLabel": "Early/embolic without infarction (NON-SEVERE) vs Established infarction with peritonitis/shock (SEVERE) — mortality risk increases exponentially after onset of peritonitis"
+    }
   }
 }

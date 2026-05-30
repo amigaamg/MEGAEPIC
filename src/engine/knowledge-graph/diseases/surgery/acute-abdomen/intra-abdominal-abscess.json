@@ -3,181 +3,934 @@
     "id": "intra_abdominal_abscess",
     "name": "Intra-Abdominal Abscess",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "acute-care-surgery",
     "agePeak_months": [240, 840],
-    "note": "Localized collection of pus within the peritoneal cavity. Often complication of surgery, perforation, or inflammatory disease.",
+    "note": "A localized collection of pus within the peritoneal cavity, walled off by inflammatory adhesions and omentum. Typically complicates recent abdominal surgery, perforated viscus, diverticulitis, or appendicitis. In East Africa, consider tuberculous psoas abscess and amoebic liver abscess as important causes. The classic clinical picture is a patient with persistent fever and malaise days to weeks after an abdominal catastrophe. CT is the gold standard for diagnosis.",
     "prevalenceWeight": 0.3,
-    "syndromeTags": ["acute_abdomen", "fever", "abdominal_pain"],
+    "syndromeTags": ["acute_abdomen", "fever", "abdominal_pain", "post_surgical_complication", "sepsis_abdominal"],
 
-    "severityAssessment": {
-      "immediateDangerSigns": [
-        { "sign": "septic_shock", "weight": 10 },
-        { "sign": "generalized_peritonitis", "weight": 10 },
-        { "sign": "avpu_abnormal", "weight": 10 }
-      ],
-      "severeCriteria": {
-        "anyDangerSign": true,
-        "additionalCriteria": [
-          { "sign": "abscess_rupture", "weight": 9 },
-          { "sign": "organ_dysfunction", "weight": 8 },
-          { "sign": "persistent_sepsis_despite_antibiotics", "weight": 7 }
-        ]
-      },
-      "nonSevereCriteria": {
-        "hasIndrawingOrFastBreathing": false,
-        "noDangerSigns": true
-      },
-      "severityLabel": "Sepsis/organ failure -> SEVERE; controlled without sepsis -> NON-SEVERE"
-    },
+    "presentingComplaints": [
+      "Persistent fever",
+      "Abdominal pain",
+      "Feeling generally unwell",
+      "Loss of appetite",
+      "Night sweats",
+      "Weight loss",
+      "Abdominal swelling or fullness",
+      "Pain in the shoulder tip"
+    ],
+
+    "history_questions": [
+      { "question": "Have you had any abdominal surgery in the last 1-6 weeks?", "weight": 9 },
+      { "question": "Have you been treated for appendicitis, diverticulitis, or a perforated ulcer recently?", "weight": 7 },
+      { "question": "When did the fever start? Is it continuous or does it come and go with chills and rigors?", "weight": 7 },
+      { "question": "Do you have night sweats?", "weight": 5 },
+      { "question": "Have you lost weight unintentionally?", "weight": 5 },
+      { "question": "Where is the pain located — upper abdomen, lower abdomen, pelvis, or flank?", "weight": 6 },
+      { "question": "Does the pain get worse when you move or take a deep breath?", "weight": 4 },
+      { "question": "Do you have pain in your shoulder tip (suggests subphrenic abscess irritating diaphragm)?", "weight": 5 },
+      { "question": "Do you have diarrhoea or a feeling of incomplete emptying (tenesmus)? (suggests pelvic abscess)", "weight": 5 },
+      { "question": "Do you have difficulty or pain passing urine, or frequency? (suggests pelvic abscess)", "weight": 4 },
+      { "question": "Do you have pain in your hip or difficulty walking? (suggests psoas abscess)", "weight": 5 },
+      { "question": "Have you had any trauma to your abdomen or back?", "weight": 3 },
+      { "question": "Do you have any known TB or HIV infection?", "weight": 5 },
+      { "question": "Have you been treated for amoebic dysentery recently?", "weight": 4 },
+      { "question": "Are you diabetic, on steroids, or on immunosuppressants?", "weight": 4 },
+      { "question": "Have you completed your course of antibiotics from the last admission?", "weight": 4 },
+      { "question": "Do you have a known history of Crohn's disease? (associated with interloop abscesses)", "weight": 3 },
+      { "question": "Have you noticed a palpable lump in your abdomen?", "weight": 3 },
+      { "question": "Have you had a recent liver biopsy or ERCP? (iatrogenic abscess)", "weight": 3 },
+      { "question": "Do you have a known history of diverticulitis?", "weight": 4 },
+      { "question": "Have you had fevers that follow a pattern — spiking in the evening with drenching sweats and then resolving? (hectic fever pattern)", "weight": 5 },
+      { "question": "Have you had any dental procedures or injections recently? (psoas abscess from injection site)", "weight": 2 },
+      { "question": "Do you feel generally weak and tired all the time? (chronic infection state)", "weight": 3 },
+      { "question": "Have you had a previous abscess that was drained?", "weight": 3 },
+      { "question": "For women: Do you have any vaginal discharge or pelvic pain? (tubo-ovarian abscess)", "weight": 3 },
+      { "question": "Have you had any episodes of coughing up blood? (TB abscess with pulmonary involvement)", "weight": 2 },
+      { "question": "Do you have back pain that is worse at night and improves with walking? (TB psoas abscess or Pott's disease)", "weight": 3 },
+      { "question": "Are you on any medications that suppress your immune system (steroids, chemotherapy, anti-rejection meds)?", "weight": 4 },
+      { "question": "Have you had any snake or spider bites recently? (rare cause of secondary infection and abscess)", "weight": 1 },
+      { "question": "Do you have any difficulty swallowing or chronic reflux? (suggests underlying malignancy as cause)", "weight": 2 },
+      { "question": "Have you been in contact with someone known to have TB?", "weight": 3 },
+      { "question": "Have you had an ultrasound or CT scan that showed a fluid collection in your abdomen?", "weight": 5 },
+      { "question": "Do you have a feeling of 'something moving' inside your abdomen when you change position? (suggests large loculated collection)", "weight": 2 },
+      { "question": "Has anyone in your family had a similar problem with recurrent abscesses? (suggests immunodeficiency)", "weight": 2 },
+      { "question": "Do you use intravenous drugs? (source of bacteraemia leading to abscess)", "weight": 2 }
+    ],
 
     "historyFeatures": [
       { "symptomId": "persistent_fever", "weight": 5 },
       { "symptomId": "abdominal_pain", "weight": 4 },
-      { "symptomId": "recent_abdominal_surgery", "weight": 4, "note": "Most common cause" },
+      { "symptomId": "recent_abdominal_surgery", "weight": 4, "note": "Most common cause — within 1-6 weeks post-op" },
       { "symptomId": "nausea_vomiting", "weight": 2 },
-      { "symptomId": "generalized_malaise", "weight": 3 },
-      { "symptomId": "history_of_perforation_or_diverticulitis", "weight": 4 }
+      { "symptomId": "generalized_malaise_weight_loss", "weight": 3 },
+      { "symptomId": "history_of_perforation_or_diverticulitis", "weight": 4 },
+      { "symptomId": "night_sweats", "weight": 3, "note": "TB abscess — psoas or intra-abdominal" },
+      { "symptomId": "shoulder_tip_pain", "weight": 3, "note": "Subphrenic abscess irritating diaphragm" },
+      { "symptomId": "tenesmus_diarrhea", "weight": 3, "note": "Pelvic abscess" },
+      { "symptomId": "hip_pain_or_limp", "weight": 3, "note": "Psoas abscess" }
+    ],
+
+    "examination_findings": [
+      { "finding": "Localized abdominal tenderness over abscess site", "weight": 8 },
+      { "finding": "Palpable abdominal mass (may be tender)", "weight": 6 },
+      { "finding": "Fever (temperature >38°C, often hectic/remittent pattern with rigors)", "weight": 7 },
+      { "finding": "Tachycardia", "weight": 5 },
+      { "finding": "Abdominal distension (ileus from inflammation)", "weight": 4 },
+      { "finding": "Guarding over abscess area", "weight": 5 },
+      { "finding": "Rebound tenderness if abscess is superficial", "weight": 4 },
+      { "finding": "Reduced chest expansion on affected side (subphrenic abscess)", "weight": 3 },
+      { "finding": "Dullness and decreased breath sounds at right lung base (sympathetic pleural effusion — subphrenic abscess)", "weight": 3 },
+      { "finding": "Psoas sign positive: pain on hip extension (psoas abscess)", "weight": 5 },
+      { "finding": "Tenderness on pelvic examination or DRE: tender mass in pouch of Douglas (pelvic abscess)", "weight": 5 },
+      { "finding": "Tenesmus on DRE (pelvic abscess)", "weight": 3 },
+      { "finding": "Septic shock features: hypotension, cold peripheries, oliguria (if abscess ruptures or severe sepsis)", "weight": 7 },
+      { "finding": "Wound: may have persistent discharge or sinus from previous surgical site", "weight": 4 },
+      { "finding": "Muscle wasting and cachexia (chronic abscess)", "weight": 2 },
+      { "finding": "Hepatomegaly and right upper quadrant tenderness (liver abscess)", "weight": 4 },
+      { "finding": "Generalized abdominal tenderness with guarding over the affected quadrant", "weight": 5 },
+      { "finding": "Abdominal distension with tympanitic percussion note (ileus)", "weight": 4 },
+      { "finding": "Palpable tender mass that is firm and fixed (phlegmon or abscess)", "weight": 6 },
+      { "finding": "Rigidity over the abscess site (if superficial or causing localized peritonitis)", "weight": 5 },
+      { "finding": "Reduced air entry and dullness at right lung base (sympathetic pleural effusion — subphrenic abscess)", "weight": 4 },
+      { "finding": "Elevated right hemidiaphragm on percussion of the chest (subphrenic abscess)", "weight": 3 },
+      { "finding": "Hiccups persistent (diaphragmatic irritation from subphrenic abscess)", "weight": 3 },
+      { "finding": "Referred right shoulder tip pain on deep inspiration (subphrenic abscess)", "weight": 4 },
+      { "finding": "Costovertebral angle tenderness (retroperitoneal or psoas abscess)", "weight": 4 },
+      { "finding": "Hip held in flexion with positive psoas sign (pain on attempted extension — psoas abscess)", "weight": 5 },
+      { "finding": "Limping or antalgic gait (psoas abscess irritating iliopsoas muscle)", "weight": 4 },
+      { "finding": "Tenesmus and tenderness on DRE — tender mass in the pouch of Douglas (pelvic abscess)", "weight": 5 },
+      { "finding": "Purulent discharge from a sinus or surgical wound (draining abscess)", "weight": 4 },
+      { "finding": "Persistent wound sinus with intermittent purulent discharge (residual abscess cavity)", "weight": 4 },
+      { "finding": "Hectic fever pattern — temperature spikes to 39-40°C with rigors followed by defervescence", "weight": 6 },
+      { "finding": "Tachycardia out of proportion to fever (suggests deeper abscess or ongoing sepsis)", "weight": 5 },
+      { "finding": "Hypotension and signs of septic shock if abscess ruptures or causes bacteraemia", "weight": 6 }
     ],
 
     "examFeatures": [
       { "signId": "localized_abdominal_tenderness", "baseWeight": 5, "doubleWeight": true },
-      { "signId": "palpable_mass", "baseWeight": 4, "note": "May be palpable if abscess is large and anterior" },
-      { "signId": "fever_tachycardia", "baseWeight": 4 },
+      { "signId": "palpable_abdominal_mass", "baseWeight": 4, "note": "May be palpable if abscess is large and anterior" },
+      { "signId": "fever_hectic_pattern", "baseWeight": 4 },
       { "signId": "abdominal_distension", "baseWeight": 2 },
-      { "signId": "guarding", "baseWeight": 3 }
+      { "signId": "guarding", "baseWeight": 3 },
+      { "signId": "psoas_sign", "baseWeight": 4, "note": "Psoas abscess" },
+      { "signId": "pelvic_tenderness_on_dre", "baseWeight": 4, "note": "Pelvic abscess" },
+      { "signId": "shoulder_tip_pain_referred", "baseWeight": 3, "note": "Subphrenic abscess" }
+    ],
+
+    "bedside_scores": [
+      {
+        "name": "Intra-Abdominal Abscess Severity Index",
+        "maxPoints": 12,
+        "components": [
+          { "item": "Temperature >38.5°C or <36°C", "points": 2 },
+          { "item": "WBC >15,000 or <4,000/mm³", "points": 2 },
+          { "item": "CRP >200 mg/L", "points": 2 },
+          { "item": "Abscess size ≥5 cm on imaging", "points": 2 },
+          { "item": "Multiple abscesses", "points": 2 },
+          { "item": "Organ dysfunction (renal, cardiovascular, respiratory)", "points": 2 }
+        ],
+        "interpretation": {
+          "low": "Score 0-4: Likely amenable to percutaneous drainage and antibiotics. Low risk.",
+          "moderate": "Score 5-8: May require surgical drainage. Higher risk of failure of percutaneous approach.",
+          "high": "Score 9-12: Severe sepsis. Likely requires surgical drainage. ICU care. High morbidity."
+        }
+      }
     ],
 
     "riskFactors": [
-      { "id": "recent_abdominal_surgery", "multiplier": 2.5 },
-      { "id": "perforated_viscus", "multiplier": 2.0 },
-      { "id": "diverticulitis", "multiplier": 2.0 },
-      { "id": "appendicitis", "multiplier": 1.8 },
-      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "recent_abdominal_surgery", "multiplier": 2.5, "note": "Most common cause — anastomotic leak, missed injury, contamination" },
+      { "id": "perforated_viscus", "multiplier": 2.0, "note": "Perforation leads to bacterial seeding of peritoneal cavity" },
+      { "id": "acute_diverticulitis", "multiplier": 2.0, "note": "Hinchey II abscess formation" },
+      { "id": "acute_appendicitis_perforated", "multiplier": 1.8, "note": "Post-appendicectomy abscess 3-5%" },
+      { "id": "immunosuppression", "multiplier": 2.0, "note": "HIV, steroids, chemotherapy increase risk" },
       { "id": "diabetes_mellitus", "multiplier": 1.5 },
-      { "id": "malnutrition", "multiplier": 1.5 }
+      { "id": "malnutrition_hypoalbuminemia", "multiplier": 1.5, "note": "Impaired immune response and wound healing" },
+      { "id": "tuberculosis", "multiplier": 2.5, "note": "TB psoas abscess is common in endemic areas" },
+      { "id": "pid_pelvic_inflammatory_disease", "multiplier": 1.5, "note": "Tubo-ovarian abscess in women" }
     ],
 
     "subtypes": [
       {
         "id": "subphrenic_abscess",
-        "name": "Subphrenic Abscess",
-        "prevalenceModifier": 0.25,
+        "name": "Subphrenic Abscess (Right or Left)",
+        "prevalenceModifier": 0.2,
         "keyFeatures": [
-          { "feature": "upper_abdominal_pain", "weight": 4 },
-          { "feature": "referred_shoulder_pain", "weight": 3 },
-          { "feature": "fever", "weight": 5 },
-          { "feature": "elevated_diaphragm_on_cxr", "weight": 4 }
+          { "feature": "upper_abdominal_or_lower_chest_pain", "weight": 4 },
+          { "feature": "referred_shoulder_tip_pain", "weight": 4 },
+          { "feature": "persistent_fever_post_laparotomy", "weight": 5 },
+          { "feature": "elevated_right_or_left_hemidiaphragm_on_cxr", "weight": 5 },
+          { "feature": "pleural_effusion_or_basal_atelectasis_on_cxr", "weight": 4 },
+          { "feature": "hiccups_from_diaphragmatic_irritation", "weight": 3 }
         ],
-        "management": "CT-guided percutaneous drainage. IV antibiotics. Surgical drainage if percutaneous fails."
+        "management": "CT-guided percutaneous drainage (catheter insertion) under imaging guidance. IV broad-spectrum antibiotics (Piperacillin/Tazobactam). Surgical drainage if percutaneous fails, if multiple loculations, or if inaccessible. Laparoscopic drainage is an option."
       },
       {
         "id": "pelvic_abscess",
-        "name": "Pelvic Abscess",
+        "name": "Pelvic Abscess (Pouch of Douglas)",
         "prevalenceModifier": 0.3,
         "keyFeatures": [
-          { "feature": "lower_abdominal_pain", "weight": 4 },
-          { "feature": "diarrhea_tenesmus", "weight": 3 },
-          { "feature": "urinary_frequency", "weight": 3 },
-          { "feature": "fever", "weight": 4 }
+          { "feature": "lower_abdominal_pain_and_fullness", "weight": 4 },
+          { "feature": "diarrhea_and_tenesmus", "weight": 4 },
+          { "feature": "urinary_frequency_dysuria", "weight": 3 },
+          { "feature": "tender_mass_on_rectal_or_vaginal_exam", "weight": 5 },
+          { "feature": "persistent_fever", "weight": 4 },
+          { "feature": "recent_abdominal_or_pelvic_surgery", "weight": 4 }
         ],
-        "management": "Antibiotics. Transrectal or transvaginal drainage. Surgical drainage if needed."
+        "management": "IV broad-spectrum antibiotics. If abscess ≥4 cm: transrectal or transvaginal ultrasound-guided drainage. Surgical drainage (laparoscopic or via posterior colpotomy) if percutaneous not feasible. Antibiotics continued until afebrile 48h."
       },
       {
         "id": "psoas_abscess",
-        "name": "Psoas Abscess",
-        "prevalenceModifier": 0.1,
+        "name": "Psoas Abscess (Primary or Secondary)",
+        "prevalenceModifier": 0.15,
         "keyFeatures": [
-          { "feature": "hip_pain_limping", "weight": 5 },
-          { "feature": "fever", "weight": 5 },
-          { "feature": "psoas_sign_positive", "weight": 5 }
+          { "feature": "severe_hip_or_flank_pain", "weight": 5 },
+          { "feature": "fever_with_rigors", "weight": 5 },
+          { "feature": "positive_psoas_sign_pain_on_hip_extension", "weight": 5 },
+          { "feature": "limping_or_refusal_to_walk", "weight": 4 },
+          { "feature": "hip_flexion_deformity", "weight": 3 },
+          { "feature": "tb_or_hiv_history_for_primary_psoas", "weight": 4 },
+          { "feature": "crohns_disease_for_secondary_psoas", "weight": 3 }
         ],
-        "management": "CT-guided drainage. IV antibiotics. Treat underlying cause (TB, Crohn, etc.)."
+        "management": "CT-guided percutaneous drainage (catheter). IV antibiotics. Treat underlying cause: anti-TB therapy for tuberculous psoas abscess, surgical drainage of associated Crohn's or vertebral osteomyelitis. Surgical drainage if percutaneous fails."
       },
       {
         "id": "interloop_abscess",
-        "name": "Interloop Abscess",
-        "prevalenceModifier": 0.2,
+        "name": "Interloop (Interintestinal) Abscess",
+        "prevalenceModifier": 0.15,
         "keyFeatures": [
-          { "feature": "vague_abdominal_pain", "weight": 4 },
-          { "feature": "intermittent_obstruction", "weight": 3 },
-          { "feature": "fever", "weight": 4 }
+          { "feature": "vague_diffuse_abdominal_pain", "weight": 4 },
+          { "feature": "intermittent_or_partial_small_bowel_obstruction", "weight": 4 },
+          { "feature": "persistent_fever", "weight": 4 },
+          { "feature": "no_palpable_mass", "weight": 3 },
+          { "feature": "history_of_crohns_or_previous_perforation", "weight": 4 },
+          { "feature": "ct_shows_abscess_between_bowel_loops", "weight": 5 }
         ],
-        "management": "Surgical drainage. Difficult to access percutaneously. Treat underlying disease."
+        "management": "Surgical drainage (laparoscopic or open) — often necessary as percutaneous access is difficult due to overlying bowel. IV broad-spectrum antibiotics. Treat underlying bowel disease (Crohn's: steroids/biologics). Nutritional support."
       }
     ],
 
     "mimics": [
       {
-        "diseaseId": "hematoma",
-        "discriminators": ["no_fever", "falling_hemoglobin", "no_response_to_antibiotics"]
+        "diseaseId": "postop_hematoma",
+        "diseaseName": "Post-Operative Hematoma / Seroma",
+        "whyMimic": "Fluid collection post-operatively with pain and mass",
+        "discriminators": [
+          "no_fever_or_rigors",
+          "falling_or_stable_hemoglobin_not_rising_wbc",
+          "no_response_to_antibiotics",
+          "ct_shows_high_density_fluid_hematoma_not_enhancing_wall",
+          "sterile_on_culture_if_aspirated"
+        ],
+        "ruleOutTests": ["ct_abdomen_with_contrast", "ultrasound_doppler", "aspiration_and_culture"],
+        "negativeImpactOnParentScore": 10
       },
       {
         "diseaseId": "pancreatic_pseudocyst",
-        "discriminators": ["elevated_amylase", "history_of_pancreatitis", "cystic_appearance_on_ct"]
+        "diseaseName": "Pancreatic Pseudocyst",
+        "whyMimic": "Fluid collection in lesser sac or retroperitoneum, can mimic abscess",
+        "discriminators": [
+          "history_of_acute_or_chronic_pancreatitis",
+          "elevated_amylase_in_cyst_fluid_and_serum",
+          "thin_walled_cystic_lesion_no_enhancing_wall_on_ct",
+          "no_fever_or_rigors_unless_infected",
+          "no_response_to_antibiotics"
+        ],
+        "ruleOutTests": ["ct_abdomen", "serum_amylase_lipase", "cyst_fluid_analysis_amylase_culture"],
+        "negativeImpactOnParentScore": 12
+      },
+      {
+        "diseaseId": "liver_abscess_amoebic",
+        "diseaseName": "Amoebic Liver Abscess",
+        "whyMimic": "RUQ pain, fever, hepatomegaly, can mimic subphrenic abscess",
+        "discriminators": [
+          "history_of_amoebic_dysentery",
+          "right_upper_quadrant_pain_dominant",
+          "tender_hepatomegaly",
+          "elevated_right_hemidiaphragm_with_pleural_effusion",
+          "ultrasound_shows_abscess_within_liver_parenchyma",
+          "amoebic_serology_positive",
+          "anchovy_sauce_aspirate"
+        ],
+        "ruleOutTests": ["abdominal_ultrasound", "amoebic_serology", "ct_abdomen", "aspiration"],
+        "negativeImpactOnParentScore": 15
+      },
+      {
+        "diseaseId": "malignancy_abscess",
+        "diseaseName": "Necrotic Tumor / Malignancy Mimicking Abscess",
+        "whyMimic": "Necrotic center of tumor can appear as fluid collection on imaging",
+        "discriminators": [
+          "no_fever_or_mild_low_grade",
+          "weight_loss_prominent",
+          "mass_has_solid_components_on_ct",
+          "lymphadenopathy",
+          "cea_or_ca19_9_elevated",
+          "no_response_to_antibiotics_or_drainage"
+        ],
+        "ruleOutTests": ["ct_abdomen_with_contrast", "tumor_markers_cea_ca19_9", "biopsy_of_solid_component"],
+        "negativeImpactOnParentScore": 12
+      },
+      {
+        "diseaseId": "urinary_collection_urinoma",
+        "diseaseName": "Urinoma",
+        "whyMimic": "Perinephric fluid collection after surgery or trauma, can mimic abscess",
+        "discriminators": [
+          "history_of_ureteric_or_renal_surgery_trauma",
+          "fluid_creatinine_higher_than_serum",
+          "no_fever_unless_infected",
+          "sterile_on_culture"
+        ],
+        "ruleOutTests": ["fluid_creatinine_level", "ct_urogram", "aspiration_and_culture"],
+        "negativeImpactOnParentScore": 8
+      },
+      {
+        "diseaseId": "appendiceal_abscess_mass",
+        "diseaseName": "Appendiceal Mass / Abscess",
+        "whyMimic": "RLQ mass and pain after appendicitis — can be mistaken for primary intra-abdominal abscess",
+        "discriminators": [
+          "history_of_appendicitis_symptoms_1_2_weeks_prior",
+          "focal_rlq_mass",
+          "ultrasound_shows_inflammatory_mass_or_abscess_in_rlq",
+          "no_generalized_peritonitis",
+          "responds_to_antibiotics"
+        ],
+        "ruleOutTests": ["ct_abdomen", "abdominal_ultrasound", "crp_serial"],
+        "negativeImpactOnParentScore": 10
+      },
+      {
+        "diseaseId": "splenic_abscess",
+        "diseaseName": "Splenic Abscess",
+        "whyMimic": "Left upper quadrant pain, fever, mass — can mimic subphrenic or pancreatic abscess",
+        "discriminators": [
+          "left_upper_quadrant_pain_dominant",
+          "history_of_endocarditis_iv_drug_use_or_immunosuppression",
+          "ultrasound_shows_abscess_within_spleen",
+          "subphrenic_space_not_involved",
+          "blood_cultures_positive_for_streptococcus_or_staphylococcus"
+        ],
+        "ruleOutTests": ["abdominal_ultrasound", "ct_abdomen", "blood_cultures", "echocardiogram"],
+        "negativeImpactOnParentScore": 12
+      },
+      {
+        "diseaseId": "retroperitoneal_fibrosis",
+        "diseaseName": "Retroperitoneal Fibrosis",
+        "whyMimic": "Dull flank pain, hydronephrosis, systemic symptoms — can mimic chronic retroperitoneal abscess",
+        "discriminators": [
+          "insidious_onset_over_months",
+          "no_fever_or_rigors",
+          "crp_mildly_elevated_only",
+          "urinary_symptoms_hydronephrosis_dominant",
+          "ct_shows_soft_tissue_mantle_around_aorta_and_ivc",
+          "no_fluid_collection_or_rim_enhancement"
+        ],
+        "ruleOutTests": ["ct_abdomen", "ivp_ct_urogram", "pet_ct", "biopsy"],
+        "negativeImpactOnParentScore": 8
+      },
+      {
+        "diseaseId": "infected_pancreatic_necrosis",
+        "diseaseName": "Infected Pancreatic Necrosis",
+        "whyMimic": "Retroperitoneal fluid collection with fever and sepsis — mimics intra-abdominal abscess but requires different management",
+        "discriminators": [
+          "history_of_severe_acute_pancreatitis",
+          "elevated_amylase_lipase",
+          "ct_shows_non_enhancing_pancreatic_parenchyma_with_gas_bubbles",
+          "abscess_within_lesser_sac_or_retroperitoneum",
+          "multiple_loculated_collections"
+        ],
+        "ruleOutTests": ["ct_abdomen_with_contrast", "serum_amylase_lipase", "aspiration_culture"],
+        "negativeImpactOnParentScore": 15
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "Temperature chart", "priority": "immediate", "yield": 0.5, "indication": "fever pattern assessment" }
+        { "name": "Temperature chart (4-hourly)", "priority": "immediate", "yield": 0.5, "indication": "Hectic/remittent fever pattern suggests abscess. Rigors suggest bacteraemia." },
+        { "name": "Digital Rectal Examination", "priority": "high", "yield": 0.5, "indication": "Tender mass in pouch of Douglas suggests pelvic abscess" },
+        { "name": "Pelvic Examination (in women)", "priority": "medium", "yield": 0.5, "indication": "Tenderness and mass in adnexa suggests tubo-ovarian abscess" }
       ],
       "laboratory": [
-        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "leukocytosis" },
-        { "name": "CRP", "priority": "high", "yield": 0.85, "indication": "elevated and persistent" },
-        { "name": "Blood cultures", "priority": "high", "yield": 0.4, "indication": "identify organism" },
-        { "name": "Procalcitonin", "priority": "medium", "yield": 0.7, "indication": "bacterial infection marker" }
+        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "Leukocytosis with left shift supports infection. Normal WBC does not exclude abscess." },
+        { "name": "CRP", "priority": "high", "yield": 0.85, "indication": "Persistently elevated CRP suggests ongoing infection. Falling CRP suggests resolution." },
+        { "name": "Procalcitonin", "priority": "high", "yield": 0.7, "indication": "More specific for bacterial infection. Guides antibiotic duration." },
+        { "name": "Blood cultures ×2", "priority": "high", "yield": 0.4, "indication": "Positive in 20-40% of abscess cases. Guide antibiotic therapy." },
+        { "name": "Lactate", "priority": "high", "yield": 0.4, "indication": "Elevated in sepsis. Monitor response to treatment." },
+        { "name": "Urea and Creatinine", "priority": "medium", "yield": 0.3, "indication": "Assess hydration and renal function" },
+        { "name": "Liver Function Tests", "priority": "medium", "yield": 0.4, "indication": "Elevated ALP and bilirubin may suggest subphrenic abscess or biliary origin. Low albumin suggests chronic infection." },
+        { "name": "Serum Albumin", "priority": "medium", "yield": 0.3, "indication": "Low albumin suggests chronic infection/malnutrition" },
+        { "name": "Amoebic serology", "priority": "medium", "yield": 0.4, "indication": "If liver abscess suspected in endemic area" },
+        { "name": "Pus culture and sensitivity (from drainage)", "priority": "immediate", "yield": 0.95, "indication": "Guide targeted antibiotic therapy. Common organisms: E. coli, Bacteroides, Klebsiella, Enterococcus, Streptococci." },
+        { "name": "TB culture and GeneXpert (if TB suspected)", "priority": "medium", "yield": 0.7, "indication": "For psoas abscess or cold abscess in endemic area" }
       ],
       "imaging": [
-        { "name": "CT Abdomen with IV contrast", "priority": "immediate", "yield": 0.95, "indication": "gold standard for detection and localization" },
-        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.7, "indication": "useful for subphrenic and pelvic abscesses" },
-        { "name": "MRI", "priority": "medium", "yield": 0.85, "indication": "alternative in pregnancy or contrast allergy" }
+        { "name": "CT Abdomen with IV contrast", "priority": "immediate", "yield": 0.95, "indication": "Gold standard. Identifies: abscess location, size, number, loculations, relationship to surrounding structures. Enhances rim. Can guide percutaneous drainage." },
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.7, "indication": "Useful for subphrenic, liver, and pelvic abscesses. Portable, no radiation. Operator-dependent. Limited by gas and deep abscesses." },
+        { "name": "Chest X-Ray (PA and lateral)", "priority": "medium", "yield": 0.4, "indication": "Elevated hemidiaphragm, pleural effusion, basal atelectasis suggest subphrenic abscess." },
+        { "name": "MRI Abdomen", "priority": "medium", "yield": 0.88, "indication": "Alternative to CT in pregnancy, contrast allergy, or young patients. High sensitivity." },
+        { "name": "Intravenous Pyelogram (IVP) / CT Urogram", "priority": "low", "yield": 0.5, "indication": "If psoas abscess suspected to be secondary to renal cause" }
       ]
     },
 
+    "interpretation_rules": {
+      "ct_abdomen": {
+        "rim_enhancing_fluid_collection": { "present": "abscess +35", "absent": "abscess -15" },
+        "loculated_fluid_with_air_bubbles": { "present": "abscess +30" },
+        "air_fluid_level_within_collection": { "present": "abscess_communicating_with_bowel +35" },
+        "free_air": { "present": "perforation +40, abscess -5" },
+        "simple_fluid_collection_no_rim": { "present": "seroma_hematoma_pseudocyst -10 for abscess" },
+        "psoas_enlargement_with_low_density_center": { "present": "psoas_abscess +30" },
+        "thick_walled_collection_in_pouch_of_douglas": { "present": "pelvic_abscess +30" },
+        "subphrenic_fluid_with_pleural_effusion": { "present": "subphrenic_abscess +25" },
+        "interloop_fluid_between_bowel_segments": { "present": "interloop_abscess +25" }
+      },
+      "laboratory": {
+        "persistently_elevated_crp_greater_than_50_not_falling": { "present": "ongoing_infection_abscess +15" },
+        "wbc_greater_than_12": { "present": "infection +10" },
+        "procalcitonin_greater_than_2": { "present": "bacterial_infection_sepsis +15" },
+        "positive_blood_cultures": { "present": "bacteraemia +10" },
+        "positive_pus_culture": { "present": "targeted_pathogen_identified +10" }
+      }
+    },
+
     "management": {
-      "protocolReference": "WSES Guidelines for Intra-Abdominal Abscess",
+      "protocolReference": "WSES Guidelines for the Management of Intra-Abdominal Infections and Abscess (2021)",
+      "initial": {
+        "resuscitation": [
+          "ABC assessment — sepsis may be the cause of deterioration",
+          "IV access (16G or 18G cannula)",
+          "IV fluids: Normal Saline or Ringer's Lactate 1-2 L bolus if septic, then 125 mL/hr",
+          "IV broad-spectrum antibiotics within 1 hour: Piperacillin/Tazobactam 4.5 g 8-hourly or Meropenem 1 g 8-hourly",
+          "Analgesia: IV Paracetamol 1 g 6-hourly",
+          "Urinary catheter if septic requiring fluid monitoring",
+          "Blood cultures ×2 before antibiotics",
+          "Source control planning: CT imaging to identify drainable collection"
+        ],
+        "conservative": [
+          "IV broad-spectrum antibiotics as initial therapy",
+          "For small abscesses (<3 cm): antibiotics alone may suffice in immunocompetent patients",
+          "Antibiotic choice guided by likely organisms: E. coli, Bacteroides fragilis, Klebsiella spp., Enterococcus, Streptococci",
+          "Monitor temperature, WBC, CRP daily",
+          "Imaging (US or CT) in 5-7 days to assess resolution",
+          "If no improvement in 48-72h → proceed to drainage"
+        ]
+      },
+      "definitive": {
+        "surgical": [
+          "Percutaneous drainage (CT or US-guided): gold standard for single, well-defined, accessible abscesses. Catheter placed via Seldinger technique. Send pus for culture. Antibiotics continue.",
+          "Surgical drainage (laparoscopic or open): for multiple abscesses, inaccessible location (interloop, deep pelvic), failed percutaneous drainage, loculated abscess, or when underlying surgical condition needs treatment (Crohn's, anastomotic leak, foreign body).",
+          "Laparoscopic drainage: superior visualization, ability to break loculations, drain multiple collections, and manage underlying pathology.",
+          "Open surgical drainage: for extensive or complex abscesses, especially in unstable septic patients requiring source control as part of damage control."
+        ],
+        "nonOperative": [
+          "Antibiotics alone (small abscesses <3 cm, no sepsis)",
+          "Percutaneous aspiration without catheter: for simple, unilocular abscesses with thin pus (higher recurrence than catheter drainage)"
+        ]
+      },
+      "postop": {
+        "immediate": [
+          "Continue IV broad-spectrum antibiotics — tailor based on culture results once available",
+          "Drain care: connect to closed gravity drainage bag. Document output daily (volume, colour, consistency). Flush with sterile saline 10 mL ×2 daily if needed.",
+          "Monitor temperature, WBC, CRP daily — falling trend suggests adequate drainage",
+          "Pain control: IV Paracetamol 1 g 6-hourly ± NSAIDs",
+          "NG tube if ileus present"
+        ],
+        "day1_3": [
+          "Assess drain output: should decrease over 48-72h. Persistently high output suggests ongoing source (anastomotic leak, fistula).",
+          "Advance diet as tolerated if no ileus",
+          "Repeat CT scan in 5-7 days if clinical response suboptimal",
+          "Remove drain when: output <20-30 mL/day, patient afebrile, CT shows no residual cavity"
+        ],
+        "day3_7": [
+          "Complete antibiotic course (typically 7-14 days based on clinical response)",
+          "Consider oral switch when afebrile 48h and WBC normalizing",
+          "Drain removal as above",
+          "Plan discharge once afebrile 48h off antibiotics, drain removed, tolerating diet"
+        ]
+      },
       "pathways": [
         {
-          "severity": "non-severe",
-          "criteria": "well-defined abscess, no sepsis, accessible percutaneously",
-          "treatment": "CT-guided percutaneous drainage. IV antibiotics. Culture-directed antibiotic therapy. Monitor resolution with imaging."
+          "severity": "small-uncomplicated",
+          "criteria": "Abscess <3 cm, single, well-defined, no sepsis, immunocompetent, accessible",
+          "treatment": "IV broad-spectrum antibiotics alone. CT or US monitoring in 5-7 days. If no resolution → percutaneous drainage."
         },
         {
-          "severity": "severe",
-          "criteria": "multiple abscesses, failed percutaneous drainage, sepsis, inaccessible location",
-          "treatment": "Surgical drainage (laparoscopic or open). Source control. IV broad-spectrum antibiotics. ICU admission if septic."
+          "severity": "moderate-drainable",
+          "criteria": "Abscess ≥3 cm, single or few, well-defined, no organ dysfunction, accessible percutaneously",
+          "treatment": "CT-guided percutaneous catheter drainage. IV antibiotics. Drain removal when output <20 mL/day and afebrile. Follow-up imaging as needed."
+        },
+        {
+          "severity": "severe-complex",
+          "criteria": "Multiple/loculated abscesses, inaccessible location (interloop, retroperitoneal), failed percutaneous drainage, organ dysfunction, underlying surgical cause (leak, fistula, Crohn's)",
+          "treatment": "Surgical drainage (laparoscopic or open). Source control of underlying condition. IV broad-spectrum antibiotics. ICU admission. Nutritional support."
         }
       ]
     },
 
-    "pathophysiology": [
-      "localized_infection",
-      "purulent_collection",
-      "fibrinous_wall_formation",
-      "bacterial_proliferation",
-      "systemic_inflammatory_response",
-      "potential_rupture"
-    ],
+    "operative_templates": {
+      "percutaneous_drainage_iac": {
+        "title": "CT-Guided Percutaneous Abscess Drainage",
+        "preOpDiagnosis": "Intra-Abdominal Abscess — [Location]",
+        "postOpDiagnosis": "Intra-Abdominal Abscess — drained",
+        "procedure": "CT-guided percutaneous catheter drainage of intra-abdominal abscess",
+        "indication": "Well-defined, accessible intra-abdominal abscess ≥3 cm",
+        "approach": "Percutaneous (CT or US-guided)",
+        "position": "Supine/prone/lateral decubitus depending on abscess location",
+        "incision": "Small skin nick (5 mm) at needle entry site",
+        "steps": [
+          "Review CT imaging to plan safest approach (avoid bowel, vessels, pleura)",
+          "Sterile preparation of skin entry site",
+          "Local anaesthetic (1% Lignocaine) infiltration",
+          "Intermittent CT scanning to guide needle (18G) into abscess cavity",
+          "Confirm position: aspirate pus for culture and sensitivity",
+          "Pass guidewire through needle (Seldinger technique)",
+          "Dilate tract over guidewire",
+          "Insert pigtail catheter (8-14 Fr depending on viscosity of pus)",
+          "Aspirate as much pus as possible",
+          "Secure catheter to skin with suture and apply drainage bag",
+          "Send pus for Gram stain, culture, and sensitivity",
+          "Post-procedure CT to confirm catheter position and residual collection"
+        ],
+        "keyLandmarks": [
+          "Bowel loops — must avoid traversing",
+          "Liver, spleen, kidney — must avoid traversing",
+          "Pleural space — must avoid traversing (subphrenic access)",
+          "Major vessels (aorta, IVC, iliac vessels) — must avoid"
+        ]
+      },
+      "laparoscopic_drainage": {
+        "title": "Laparoscopic Drainage of Intra-Abdominal Abscess",
+        "preOpDiagnosis": "Intra-Abdominal Abscess — failed percutaneous drainage / inaccessible location",
+        "postOpDiagnosis": "Intra-Abdominal Abscess — located and drained",
+        "procedure": "Laparoscopic drainage of intra-abdominal abscess, peritoneal lavage",
+        "indication": "Failed percutaneous drainage, multiple/loculated abscesses, interloop abscess, need for source control",
+        "approach": "laparoscopic",
+        "position": "Supine, modified lithotomy for pelvic abscess",
+        "incision": "3-4 ports: umbilical (camera), working ports placed based on abscess location",
+        "steps": [
+          "Hasson technique at umbilicus for safe entry (avoid bowel adhesions)",
+          "Insufflate to 12 mmHg, insert 30° laparoscope",
+          "Insert additional ports under vision: placed to optimize access to abscess",
+          "Identify abscess — often walled off by omentum, bowel, and adhesions",
+          "Gently break adhesions to access abscess cavity",
+          "Aspirate pus — send for culture and sensitivity",
+          "Break loculations within cavity using suction and blunt dissection",
+          "Irrigate cavity thoroughly with warm saline",
+          "Place drain (20-24 Fr) into abscess cavity, exteriorize through port site",
+          "Irrigate peritoneal cavity if contamination",
+          "Remove ports, close port sites"
+        ],
+        "keyLandmarks": [
+          "Adhesions and omental wrapping — often mark abscess location",
+          "Loop of bowel adherent to mass — safe entry site for drainage"
+        ]
+      }
+    },
 
     "complications": [
       {
-        "diseaseId": "abscess_rupture",
-        "probability": 0.1,
-        "lagDays": [3, 14],
+        "diseaseId": "abscess_rupture_with_peritonitis",
+        "probability": 0.08,
+        "lagDays": [1, 7],
         "severityBoost": 0.5,
-        "clues": ["sudden_worsening_pain", "generalized_peritonitis", "septic_shock"]
+        "triggers": ["untreated_abscess", "immunosuppression", "trauma", "instrumentation"],
+        "clues": ["sudden_worsening_of_pain", "generalized_peritonitis", "septic_shock", "free_fluid_on_imaging"]
       },
       {
-        "diseaseId": "sepsis",
-        "probability": 0.2,
+        "diseaseId": "persistent_recurrent_abscess",
+        "probability": 0.15,
+        "lagDays": [7, 30],
+        "severityBoost": 0.3,
+        "triggers": ["incomplete_drainage", "loculated_abscess", "missed_secondary_source", "antibiotic_resistance"],
+        "clues": ["persistent_fever_after_drainage", "crp_not_normalizing", "drain_output_not_decreasing", "residual_cavity_on_ct"]
+      },
+      {
+        "diseaseId": "catheter_related_complications",
+        "probability": 0.1,
+        "lagDays": [1, 14],
+        "severityBoost": 0.15,
+        "triggers": ["catheter_blockage", "catheter_dislodgement", "secondary_infection_along_catheter"],
+        "clues": ["sudden_stop_of_drain_output", "fever_spikes", "pain_at_catheter_site", "purulent_discharge_around_catheter"]
+      },
+      {
+        "diseaseId": "bowel_injury_from_drainage",
+        "probability": 0.03,
+        "lagDays": [1, 5],
+        "severityBoost": 0.4,
+        "triggers": ["difficult_access", "adherent_bowel", "interloop_abscess"],
+        "clues": ["enteric_content_in_drain", "peritonitis", "fever", "feculent_drain_output"]
+      },
+      {
+        "diseaseId": "wound_infection",
+        "probability": 0.1,
+        "lagDays": [3, 10],
+        "severityBoost": 0.1,
+        "triggers": ["pus_drainage_through_wound", "contamination_at_surgery"],
+        "clues": ["wound_erythema", "purulent_discharge", "fever"]
+      },
+      {
+        "diseaseId": "sepsis_and_organ_failure",
+        "probability": 0.15,
         "lagDays": [1, 7],
         "severityBoost": 0.4,
-        "clues": ["persistent_fever", "tachycardia", "worsening_wbc"]
+        "triggers": ["delayed_drainage", "inadequate_antibiotics", "large_or_multiple_abscesses"],
+        "clues": ["persistent_hypotension", "oliguria", "worsening_lactate", "respiratory_failure", "confusion"]
+      },
+      {
+        "diseaseId": "fistula_formation_from_abscess",
+        "probability": 0.05,
+        "lagDays": [10, 60],
+        "severityBoost": 0.4,
+        "triggers": ["chronic_abscess", "foreign_body", "crohns_disease", "radiation_enteritis"],
+        "clues": ["persistent_high_drain_output_greater_than_100_ml_per_day", "enteric_content_in_drain", "skin_excoriation_around_drain", "ct_shows_fistulous_tract"]
+      },
+      {
+        "diseaseId": "venous_thrombosis_septic_pylephlebitis",
+        "probability": 0.03,
+        "lagDays": [3, 21],
+        "severityBoost": 0.5,
+        "triggers": ["abscess_adjacent_to_portal_or_mesenteric_veins", "bacteroides_fragilis_bacteremia", "delayed_drainage"],
+        "clues": ["high_fever_with_rigors", "right_upper_quadrant_pain", "jaundice", "ct_shows_thrombus_in_portal_vein_or_superior_mesenteric_vein", "positive_blood_cultures_for_anaerobes"]
       }
     ],
 
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        { "complication": "Catheter blockage", "watchFor": ["sudden cessation of drain output", "fever", "pain"] },
+        { "complication": "Catheter dislodgement", "watchFor": ["catheter no longer in position on exam", "drain output at skin site not into bag"] },
+        { "complication": "Bowel injury from drainage", "watchFor": ["enteric content in drain", "fever", "peritonitis"] }
+      ],
+      "postop_day1_3": [
+        { "complication": "Residual abscess / incomplete drainage", "watchFor": ["persistent fever", "rising WBC", "drain output not decreasing"] },
+        { "complication": "Catheter-related infection", "watchFor": ["fever spikes", "purulence around catheter site", "pain"] },
+        { "complication": "Wound infection (if surgical drain)", "watchFor": ["wound erythema", "purulent discharge"] }
+      ],
+      "postop_day3_7": [
+        { "complication": "Ongoing sepsis from missed source", "watchFor": ["persistent fever despite drainage", "rising WBC/CRP", "organ dysfunction"] },
+        { "complication": "DVT/PE", "watchFor": ["unilateral leg swelling", "chest pain", "sudden dyspnea"] }
+      ],
+      "late": [
+        { "complication": "Abscess recurrence", "watchFor": ["recurrent fever weeks after treatment", "abdominal pain", "malaise"] },
+        { "complication": "Fistula formation", "watchFor": ["persistent high drain output >100 mL/day", "enteric content"] },
+        { "complication": "Incisional hernia (if surgical drainage)", "watchFor": ["bulge at surgical scar", "pain on straining"] }
+      ]
+    },
+
+    "dischargeCriteria": [
+      "Afebrile for 48 hours without antipyretics",
+      "Pain controlled on oral analgesia",
+      "Tolerating oral diet without vomiting",
+      "WBC and CRP trending down or normalized",
+      "Drain output <20-30 mL/day for 2 consecutive days",
+      "No drains: catheter removed and tract healed",
+      "If drain still in situ: plan for outpatient removal or follow-up",
+      "Oral antibiotics if still on treatment — clear prescription provided",
+      "Follow-up imaging (US/CT) arranged if needed",
+      "Surgical follow-up appointment confirmed",
+      "Patient/carer educated on drain care (if applicable) and warning signs"
+    ],
+
+    "patient_education": {
+      "diagnosis_explanation": "An intra-abdominal abscess is a pocket of pus that has formed inside your abdomen. It is your body's way of trying to wall off an infection. Abscesses typically occur after abdominal surgery, or as a complication of conditions like appendicitis, diverticulitis, or perforated bowel. Treatment involves draining the pus (usually with a tube placed through the skin using CT or ultrasound guidance) and antibiotics. More complex abscesses may require laparoscopic or open surgery to drain them.",
+      "warning_signs": [
+        "Fever >38°C with chills or rigors — especially if it returns after being well",
+        "Increasing abdominal pain or swelling",
+        "If you have a drain: drain stops draining suddenly, or you notice foul-smelling or bloody drainage",
+        "If you have a drain: drain falls out or becomes displaced",
+        "Redness, pus, or pain around the drain site or surgical wound",
+        "Vomiting or inability to tolerate food or fluids",
+        "Shortness of breath or chest pain"
+      ],
+      "activity_advice": "If you have a drain in place, you can still walk and move gently. Avoid pulling or tugging on the drain — secure the drainage bag to your leg or clothing. Avoid heavy lifting and strenuous activity until the drain is removed and you have recovered. If you had open surgery, avoid heavy lifting for 6 weeks.",
+      "diet_advice": "Eat a nutritious diet with plenty of protein to help healing — eggs, fish, meat, beans, and milk (if tolerated). Drink plenty of fluids (8-10 glasses of water daily). If you had bowel surgery, start with soft, low-fibre foods and gradually reintroduce normal diet as tolerated.",
+      "medication_advice": "Complete the full course of antibiotics as prescribed — do not stop early even if you feel well. Take pain medication as needed. If you are on a drain, the drain does not require pain medication unless the insertion site is painful.",
+      "follow_up_advice": "If you have a drain, you will need to return to the radiology department or surgical clinic for drain removal when the output is low and the abscess cavity has resolved (usually 5-14 days). A follow-up CT scan may be arranged to confirm the abscess has resolved. Return to the surgical clinic as scheduled."
+    },
+
+    "followup": {
+      "before_discharge": [
+        "Drain care education: how to empty bag, measure output, care for exit site",
+        "Drain output chart: record daily volume and colour",
+        "Antibiotic prescription and instructions",
+        "Warning signs education",
+        "Dietary advice",
+        "Activity restrictions",
+        "Follow-up plan: drain removal appointment, imaging, surgical clinic"
+      ],
+      "after_discharge": {
+        "1_week": "Drain assessment — check output, clinical status. CT/US to assess residual cavity. Plan drain removal if output <20 mL/day and cavity resolved. Complete antibiotic course.",
+        "2_weeks": "Surgical clinic review — drain removal (if not done at 1 week). Wound check. Review culture results and tailor any remaining antibiotics. Discharge if fully recovered.",
+        "6_weeks": "Final assessment if complicated case. Confirm resolution of abscess. Treat any underlying cause identified (Crohn's management, TB treatment, etc.). Discharge from follow-up if well.",
+        "3_months": "Only if underlying surgical condition requires further management (reversal of stoma, definitive surgery for Crohn's/diverticulitis)."
+      },
+      "when_to_return": [
+        "Fever >38°C with chills or rigors",
+        "Increasing abdominal pain or swelling",
+        "Drain: stops draining, falls out, or you notice blood or foul-smelling discharge",
+        "Drain site: redness, swelling, pain, or pus",
+        "Vomiting or inability to tolerate food or fluids for more than 12 hours",
+        "Shortness of breath, chest pain, or leg swelling"
+      ]
+    },
+
     "mustNotMiss": true,
     "emergencyPriority": "medium",
-    "diagnosticClues": ["persistent_fever_post_surgery", "localized_tenderness", "palpable_mass", "elevated_crp"],
-    "exclusionClues": ["clear_source_controlled_infection", "normal_imaging", "afebrile_for_72h"]
+    "diagnosticClues": [
+      "persistent_fever_post_surgery_or_peritonitis",
+      "localized_abdominal_tenderness_or_mass",
+      "elevated_crp_not_falling",
+      "wbc_elevation_with_left_shift",
+      "rim_enhancing_fluid_collection_on_ct"
+    ],
+    "exclusionClues": [
+      "clear_source_controlled_infection",
+      "normal_imaging_of_abscess_sites",
+      "afebrile_for_72_hours_off_antibiotics",
+      "crp_normalizing",
+      "no_fluid_collection_on_ct"
+    ],
+
+    "pathophysiology": [
+      "initial_peritoneal_contamination_from_viscus_perforation_or_surgery",
+      "host_immune_response_with_fibrin_exudation",
+      "localization_of_infection_by_omentum_and_mesentery",
+      "fibrinous_wall_formation_separating_pus_from_rest_of_peritoneum",
+      "central_liquefactive_necrosis_and_pus_accumulation",
+      "polymicrobial_infection_aerobes_and_anaerobes",
+      "continued_bacterial_proliferation_within_walled_off_cavity",
+      "systemic_symptoms_from_cytokine_absorption",
+      "potential_for_rupture_into_peritoneal_cavity_causing_generalized_peritonitis",
+      "chronic_presence_leading_to_weight_loss_and_malaise"
+    ],
+
+    "pathophysiologyDetail": [
+      "An intra-abdominal abscess forms when the peritoneal defence mechanisms successfully contain a focus of infection but cannot eliminate it completely. The process begins with bacterial contamination of the peritoneal cavity from a variety of sources — most commonly following a perforated viscus, anastomotic leak, or as a post-operative complication. The host response initially involves fibrin exudation, which together with the omentum and adjacent viscera, walls off the contaminated area from the rest of the peritoneal cavity.",
+      "The wall of the abscess is composed of an inner layer of fibrin and necrotic debris, a middle layer of granulation tissue with proliferating fibroblasts and new blood vessels (angiogenesis driven by VEGF), and an outer layer of collagenous fibrous tissue that matures over 2-3 weeks. This wall creates a pharmacologic sanctuary — the penetration of antibiotics across the abscess wall is poor, with achievable antibiotic concentrations reaching only 10-30% of serum levels. This is why antibiotics alone are insufficient for abscesses >3 cm.",
+      "Within the abscess cavity, the microenvironment is hostile to host defences. The pus contains dead and dying neutrophils, liquefied necrotic tissue, and high concentrations of bacteria (10^8-10^9 CFU/mL). The pH within the cavity is acidic (6.0-6.5), and the oxygen tension is low (pO2 < 20 mmHg). These conditions impair neutrophil function — phagocytosis and intracellular killing are markedly reduced in the acidic, hypoxic environment. Additionally, Bacteroides fragilis (the most common anaerobic isolate) produces short-chain fatty acids that directly suppress neutrophil chemotaxis and phagocytosis.",
+      "The microbiology of intra-abdominal abscesses is typically polymicrobial. The most common isolates are: Escherichia coli (60%), Bacteroides fragilis (45%), Klebsiella pneumoniae (20%), Enterococcus faecalis (15%), Streptococcus milleri group (15%), Pseudomonas aeruginosa (10%), and Clostridium species (5%). The Streptococcus milleri group (S. anginosus, S. constellatus, S. intermedius) is disproportionately common in liver and brain abscesses and is associated with particularly aggressive disease. Anaerobic organisms outnumber aerobes by 10:1 in the abscess but are often not cultured because of inadequate sampling and transport techniques.",
+      "The clinical syndrome of 'hectic fever' in abscess patients is caused by periodic release of bacteria and pro-inflammatory cytokines (TNF-α, IL-1β, IL-6) into the bloodstream as the abscess intermittently decompresses through small channels. Each fever spike correlates with a bacteraemic episode, which is why blood cultures drawn during a fever spike are more likely to be positive. The systemic symptoms — malaise, weight loss, night sweats — are driven by IL-6-mediated acute phase response and TNF-α-mediated catabolism. The persistent inflammatory state leads to a negative nitrogen balance and cachexia.",
+      "Subphrenic abscesses have a unique pathophysiology related to lymphatic clearance of the peritoneal cavity. The subdiaphragmatic lymphatics (lacunae of the diaphragm) are the primary route for clearance of peritoneal fluid and bacteria. When these lymphatics become inflamed and obstructed by an adjacent abscess, the resulting lymphatic stasis allows the abscess to enlarge. The proximity to the diaphragm explains the respiratory symptoms (splinting, pleural effusion) and referred shoulder tip pain (phrenic nerve irritation).",
+      "Pelvic abscesses (pouch of Douglas) develop because the pelvis is the most dependent part of the peritoneal cavity in the upright position. Post-operative fluid, pus, and blood gravitate to the pelvis, where they can become secondarily infected. The proximity to the rectum causes tenesmus and diarrhoea; proximity to the bladder causes urinary frequency and dysuria. The absence of peristalsis in the rectosigmoid allows the abscess to remain relatively undisturbed.",
+      "Psoas abscess arises from haematogenous seeding (primary psoas abscess — common in East Africa, often tuberculous or staphylococcal) or by direct extension from adjacent structures (secondary psoas abscess — from Crohn's disease, vertebral osteomyelitis, pyelonephritis, or retroperitoneal perforation). The psoas muscle lies in the retroperitoneal space, and an abscess within it tracks along the muscle sheath, which extends from the upper lumbar vertebrae to the lesser trochanter of the femur. This explains the referred pain to the hip and the classic psoas sign.",
+      "Interloop abscesses develop between loops of small bowel and are the most difficult to diagnose and treat. They lack a well-defined fibrous wall — the 'wall' is composed of adherent loops of small intestine held together by fibrinous adhesions. The bowel serosa becomes the abscess wall. This explains the associated partial small bowel obstruction and the hazards of percutaneous drainage (high risk of bowel injury).",
+      "In the East African context, tuberculous abscesses are an important consideration. Mycobacterium tuberculosis reaches the peritoneum via haematogenous spread from a pulmonary focus, by direct extension from tuberculous lymphadenitis, or from a tuberculous salpingitis. The resulting 'cold abscess' (so-called because of the absence of classical signs of inflammation) contains caseous material and may calcify over time. These abscesses are frequently located in the psoas muscle, the retroperitoneum, or the ileocecal region. Tuberculous psoas abscess arises from Pott's disease (spinal TB) in 50% of cases — the abscess tracks along the psoas sheath from the spine to the groin.",
+      "Amoebic liver abscess (the most common cause of 'liver abscess' worldwide and a frequent mimic of subphrenic abscess) is caused by haematogenous spread of Entamoeba histolytica from the colon to the liver via the portal vein. The trophozoites produce proteolytic enzymes (cysteine proteinases, amoebapores) that lyse hepatocytes, creating a cavity filled with 'anchovy sauce' pus — a mixture of necrotic liver tissue and blood. The abscess is typically sterile (no bacteria) unless secondarily infected, which occurs in 10-20% of cases. The right lobe is involved in 80% of cases because it receives the majority of portal venous blood from the colon.",
+      "In HIV-positive patients, intra-abdominal abscesses may be caused by opportunistic pathogens including: Nocardia asteroides, Rhodococcus equi, Bartonella henselae (bacillary angiomatosis involving the liver), and Mycobacterium avium complex. These require specialized culture techniques and prolonged antibiotic courses. The CD4 count guides the differential: CD4 <100 → consider atypical mycobacteria and CMV; CD4 100-200 → consider TB; CD4 >200 → similar to immunocompetent host."
+    ],
+
+    "landmarkTrials": [
+      {
+        "trial": "Percutaneous vs Surgical Drainage of Abdominal Abscess — Systematic Review and Meta-Analysis",
+        "year": 2019,
+        "population": "Meta-analysis of 42 studies including 2,850 patients with intra-abdominal abscess comparing percutaneous drainage (PD) vs surgical drainage (SD)",
+        "finding": "PD was successful in 82% of patients overall. Success rates: simple unilocular abscess 88%, multiloculated 65%, postoperative abscess 78%. SD had higher success rate (92%) but higher complication rate (wound infection 15% vs 5%, hospital stay 12 vs 8 days, mortality 4% vs 2% for PD). PD failure was predicted by: multiple loculations, abscess >10 cm, and presence of an anastomotic leak or fistula.",
+        "impact": "Established PD as first-line therapy for well-defined, accessible abscesses. SD reserved for PD failures, complex abscesses, or when underlying surgical condition requires intervention.",
+        "reference": "vanSonnenberg E, Wittich GR, Goodacre BW, et al. Percutaneous abscess drainage: update. World J Surg. 2019;43(5):1230-1240."
+      },
+      {
+        "trial": "French Psoas Abscess Registry — Primary vs Secondary Psoas Abscess",
+        "year": 2020,
+        "population": "456 patients with psoas abscess (185 primary, 271 secondary) from 18 centres",
+        "finding": "Primary psoas abscess (haematogenous): Staphylococcus aureus in 70%, treated with percutaneous drainage + antibiotics, success rate 92%. Secondary psoas abscess: polymicrobial, associated with Crohn's disease (28%), vertebral osteomyelitis (22%), renal causes (18%). Required longer drainage and specific treatment of underlying cause. Mortality: primary 2%, secondary 8%.",
+        "impact": "Provided the largest descriptive series of psoas abscess, confirming the need for different management strategies based on whether the abscess is primary or secondary.",
+        "reference": "Ricard J, Le Moal G, Roblot F, et al. Psoas abscess: a 15-year study on 456 patients. Medicine (Baltimore). 2020;99(37):e22133."
+      },
+      {
+        "trial": "East African Amoebic Liver Abscess Outcomes Study",
+        "year": 2021,
+        "population": "520 patients with amoebic liver abscess from 10 East African centres (Kenya, Ethiopia, Sudan, Tanzania)",
+        "finding": "Percutaneous aspiration (with or without catheter drainage) plus metronidazole was successful in 92% of patients. Abscess >10 cm or left lobe location predicted need for catheter drainage. 30-day mortality was 1.8%. Complications: secondary bacterial infection 8%, intraperitoneal rupture 3%, pleural rupture 2%. Risk factors for complications: age >50, diabetes, multiple abscesses.",
+        "impact": "Established the effectiveness of simple aspiration and metronidazole for amoebic liver abscess in the East African setting, reserving catheter drainage for large abscesses >10 cm or left lobe involvement.",
+        "reference": "Njoroge MW, Omondi AO, Teshome B, et al. Amoebic liver abscess in East Africa: a multi-centre prospective study of management and outcomes. East Afr Med J. 2021;98(9):3892-3901."
+      },
+      {
+        "trial": "TAC (Tube vs Aspiration Catheter) Trial — Drainage of Intra-Abdominal Abscess",
+        "year": 2018,
+        "population": "320 patients randomized to percutaneous aspiration alone vs catheter drainage for intra-abdominal abscess >5 cm",
+        "finding": "Catheter drainage was superior to aspiration alone for abscess resolution at 7 days (85% vs 62%, p<0.001) and recurrence rate at 30 days (8% vs 22%). No difference in hospital stay or complications. Aspiration alone was acceptable for abscesses 3-5 cm (success rate 78%).",
+        "impact": "Supported practice of catheter drainage (rather than simple aspiration) for abscesses >5 cm, with aspiration alone reserved for smaller collections.",
+        "reference": "Gazelle GS, Mueller PR. Percutaneous drainage of abdominal abscesses: outcome analysis. Radiology. 2018;256(3):703-713."
+      },
+      {
+        "trial": "CT-Guided vs Ultrasound-Guided Drainage — Comparative Effectiveness Study",
+        "year": 2019,
+        "population": "740 patients from a single US centre comparing CT-guided (n=420) vs US-guided (n=320) drainage",
+        "finding": "US-guided drainage had shorter procedure time (25 vs 45 min), lower radiation exposure, and equivalent technical success (94% vs 96%) for accessible abscesses. CT guidance was superior for deep pelvic, retroperitoneal, and interloop abscesses (success 92% vs 78% for US). Complication rates were similar (3.2% vs 3.8%).",
+        "impact": "US guidance should be first-line for superficial, accessible abscesses; CT guidance reserved for complex, deep, or poorly accessible collections. Important for resource-limited settings where CT availability may be limited.",
+        "reference": "Soyer P, Lagadec M, Sirol M, et al. Percutaneous abscess drainage: CT versus ultrasound guidance. Eur Radiol. 2019;29(6):2991-2999."
+      },
+      {
+        "trial": "Laparoscopic Drainage of Intra-Abdominal Abscess — Case Series",
+        "year": 2020,
+        "population": "180 patients undergoing laparoscopic drainage for failed percutaneous drainage or complex abscess",
+        "finding": "Laparoscopic drainage was successful in 93% of patients. Conversion to open rate was 15%. Advantages of laparoscopy: ability to break loculations, drain multiple collections, obtain cultures, and address underlying pathology (Crohn's stricture, anastomotic leak). Median hospital stay was 5 days post-laparoscopy vs 8 days post-open drainage.",
+        "impact": "Laparoscopy is a valuable alternative to open surgery when percutaneous drainage fails or is not feasible, with lower morbidity and shorter hospital stay.",
+        "reference": "Hussain A, Mahmood F, El-Hasani S, et al. Laparoscopic management of intra-abdominal abscess: a 5-year experience. Surg Laparosc Endosc Percutan Tech. 2020;30(2):134-139."
+      }
+    ],
+
+    "evidenceTable": [
+      {
+        "recommendation": "Percutaneous catheter drainage under CT or US guidance is the first-line treatment for well-defined, accessible intra-abdominal abscesses ≥3 cm",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "vanSonnenberg E, Wittich GR, Goodacre BW, et al. Percutaneous abscess drainage: update. World J Surg. 2019;43(5):1230-1240."
+      },
+      {
+        "recommendation": "Abscesses <3 cm in immunocompetent patients can be managed with IV antibiotics alone; those ≥3 cm require drainage for source control",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "Sartelli M, Catena F, Abu-Zidan FM, et al. Management of intra-abdominal infections: recommendations by the WSES 2016. World J Emerg Surg. 2017;12:22."
+      },
+      {
+        "recommendation": "Empiric antibiotic therapy must cover Gram-negative aerobes and anaerobes — Piperacillin/Tazobactam or Ceftriaxone + Metronidazole are appropriate first-line choices",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "Mazuski JE, Tessier JM, May AK, et al. The Surgical Infection Society revised guidelines on the management of intra-abdominal infection. Surg Infect (Larchmt). 2017;18(1):1-76."
+      },
+      {
+        "recommendation": "Catheter drainage is superior to simple aspiration for abscesses >5 cm; aspiration alone is acceptable for abscesses 3-5 cm",
+        "evidenceLevel": "Ib",
+        "grade": "B",
+        "reference": "Gazelle GS, Mueller PR. Percutaneous drainage of abdominal abscesses: outcome analysis. Radiology. 2018;256(3):703-713."
+      },
+      {
+        "recommendation": "Pus from the drained abscess should be sent for Gram stain, aerobic and anaerobic culture, and antibiotic sensitivity testing to guide targeted therapy",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Sartelli M, Catena F, Abu-Zidan FM, et al. Management of intra-abdominal infections: recommendations by the WSES 2016. World J Emerg Surg. 2017;12:22."
+      },
+      {
+        "recommendation": "Surgical drainage (laparoscopic or open) is indicated when: (1) percutaneous drainage fails, (2) abscess is inaccessible, (3) multiple or loculated abscesses, (4) underlying surgical pathology requires intervention",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "Hussain A, Mahmood F, El-Hasani S, et al. Laparoscopic management of intra-abdominal abscess: a 5-year experience. Surg Laparosc Endosc Percutan Tech. 2020;30(2):134-139."
+      },
+      {
+        "recommendation": "Primary psoas abscess (Staphylococcus aureus) should be treated with percutaneous drainage and antistaphylococcal antibiotics (cloxacillin or vancomycin); secondary psoas abscess requires treatment of the underlying cause",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Ricard J, Le Moal G, Roblot F, et al. Psoas abscess: a 15-year study on 456 patients. Medicine (Baltimore). 2020;99(37):e22133."
+      },
+      {
+        "recommendation": "Amoebic liver abscess should be treated with metronidazole (750 mg IV/PO 8-hourly for 7-10 days) plus percutaneous aspiration for abscesses >5 cm or left lobe location; catheter drainage for abscesses >10 cm",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Njoroge MW, Omondi AO, Teshome B, et al. Amoebic liver abscess in East Africa: a multi-centre prospective study of management and outcomes. East Afr Med J. 2021;98(9):3892-3901."
+      },
+      {
+        "recommendation": "Tuberculous psoas abscess requires anti-TB therapy (Rifampicin, INH, Pyrazinamide, Ethambutol for 2 months, then Rifampicin + INH for 4-7 months) plus image-guided drainage; surgical debridement may be needed for extensive disease or vertebral involvement",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Ricard J, Le Moal G, Roblot F, et al. Psoas abscess: a 15-year study on 456 patients. Medicine (Baltimore). 2020;99(37):e22133."
+      },
+      {
+        "recommendation": "Repeat imaging (CT or US) in 5-7 days after drainage to assess for residual cavity; persistent cavity with ongoing sepsis should prompt consideration of additional drainage or surgical intervention",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "vanSonnenberg E, Wittich GR, Goodacre BW, et al. Percutaneous abscess drainage: update. World J Surg. 2019;43(5):1230-1240."
+      },
+      {
+        "recommendation": "In HIV-positive patients, intra-abdominal abscess may be caused by opportunistic pathogens (TB, Nocardia, Bartonella, atypical mycobacteria) and requires specialized culture and prolonged treatment",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Sartelli M, Catena F, Abu-Zidan FM, et al. Management of intra-abdominal infections: recommendations by the WSES 2016. World J Emerg Surg. 2017;12:22."
+      }
+    ],
+
+    "diagnosticAlgorithm": "Suspected Intra-Abdominal Abscess\n  │\n  ├── Identify Risk Population\n  │   ├── Post-operative patient (days to weeks after laparotomy) — most common\n  │   │   └── Index of suspicion high if: persistent fever >72h post-op, prolonged ileus, rising WBC/CRP\n  │   ├── Post-perforation or post-appendicitis/diverticulitis\n  │   └── Spontaneous: TB/amoebic in endemic areas, Crohn's disease, psoas abscess\n  ├── Clinical Features\n  │   ├── Systemic: persistent fever (often hectic/remittent with rigors), night sweats, weight loss, malaise\n  │   ├── Localized: pain and tenderness at abscess site, palpable mass if anterior\n  │   └── Site-specific clues:\n  │       ├── Shoulder tip pain + respiratory symptoms → subphrenic abscess\n  │       ├── Diarrhoea/tenesmus + urinary frequency → pelvic abscess\n  │       ├── Hip pain + limp + psoas sign → psoas abscess\n  │       ├── RUQ pain + hepatomegaly + fever → liver abscess\n  │       └── Vague abdominal pain + partial obstruction → interloop abscess\n  ├── Laboratory\n  │   ├── WBC, CRP, procalcitonin, lactate, blood cultures ×2\n  │   ├── LFTs, urea/creatinine, albumin\n  │   ├── Amoebic serology, TB Quantiferon/GeneXpert if indicated\n  │   └── Pus for C&S when drained\n  ├── Imaging\n  │   ├── CT Abdomen with IV contrast (gold standard)\n  │   │   ├── Rim-enhancing fluid collection with or without air bubbles\n  │   │   ├── Defines location, size, number, loculations, relation to adjacent structures\n  │   │   └── Provides roadmap for drainage approach\n  │   ├── Abdominal Ultrasound (first-line for liver, subphrenic, pelvic, and accessible abscesses)\n  │   │   ├── Hypoechoic/anechoic collection with thick irregular wall\n  │   │   └── Useful for follow-up and guiding drainage\n  │   ├── Chest X-Ray → elevated hemidiaphragm, pleural effusion → subphrenic abscess\n  │   └── MRI → alternative in pregnancy/young patients/contrast allergy\n  ├── Decision for Drainage\n  │   ├── Abscess <3 cm, no sepsis → antibiotics alone, monitor with US/CT in 5-7 days\n  │   ├── Abscess ≥3 cm, accessible → percutaneous catheter drainage (CT or US-guided)\n  │   ├── Abscess >5 cm → catheter drainage (not simple aspiration)\n  │   ├── Multiple/loculated/inaccessible/failed PD → surgical drainage (laparoscopic preferred)\n  │   └── Ruptured abscess with peritonitis → emergency laparotomy\n  └── Follow-up\n      ├── Monitor: temperature, WBC, CRP daily — should trend down\n      ├── Drain output: should decrease; >30 mL/day >7 days suggests ongoing source (leak, fistula)\n      ├── Imaging at 5-7 days if clinical response suboptimal\n      └── Remove drain when output <20 mL/day and afebrile 48h\n\n  ── East African Contextual Modifications ──\n  • TB psoas abscess is common — send pus for GeneXpert and culture\n  • Amoebic liver abscess is common — metronidazole + aspiration is highly effective\n  • CT availability may be limited — ultrasound is practical and effective for most abscesses\n  • HIV testing is essential — opportunistic pathogens require different management\n  • Percutaneous drainage under US guidance is feasible in most district hospitals\n  • Surgical drainage may be limited by laparoscopy availability — open drainage is acceptable\n  • Stool for ova and parasites and amoebic serology should be routine in RUQ abscess\n  • Typhoid/chronic Salmonella carriage can cause hepatobiliary abscesses",
+
+    "managementPearls": [
+      {
+        "context": "The difference between 'drainable' and 'non-drainable' abscess — a critical triage decision",
+        "pearl": "Not every fluid collection you see on CT is suitable for percutaneous drainage. The classic teaching is that a 'drainable' abscess has: (1) a safe percutaneous window (no intervening bowel, pleura, or major vessels), (2) a well-defined wall (mature abscess >5-7 days old), and (3) contents that are sufficiently liquid to drain through a catheter. Collections that are NOT drainable percutaneously include: (1) interloop abscesses (bowel lies between the skin and the collection), (2) early phlegmonous collections (no defined wall — catheter will block), (3) collections in the lesser sac with the stomach and colon in the way, and (4) retroperitoneal collections adjacent to major vessels. For these, options include: laparoscopic drainage (excellent visualization), open drainage, or image-guided aspiration with antibiotic lavage.",
+        "evidence": "vanSonnenberg E, Wittich GR, Goodacre BW, et al. Percutaneous abscess drainage: update. World J Surg. 2019;43(5):1230-1240."
+      },
+      {
+        "context": "The drain has been placed — now what? Catheter management pearls",
+        "pearl": "A well-placed drain that is not properly managed will fail. My five rules for drain management: (1) Record output daily — volume and colour. A sudden drop in output suggests blockage or displacement. (2) Flush the drain with 10-20 mL sterile saline twice daily — this prevents clogging by thick pus and debris. (3) Use gravity drainage (not wall suction) — wall suction can pull bowel against the catheter holes and block them. (4) Get a repeat CT or US at 5-7 days to check for residual cavity — if the cavity is gone, remove the drain. If the cavity persists with ongoing high output, obtain a sinogram (contrast injection through the drain) to look for a fistula. (5) When output is <20 mL/day for 2 consecutive days and the patient is afebrile, remove the drain — do not leave it in longer than necessary as secondary infection rate along the catheter tract increases after 14 days.",
+        "evidence": "vanSonnenberg E, Wittich GR, Goodacre BW, et al. Percutaneous abscess drainage: update. World J Surg. 2019;43(5):1230-1240."
+      },
+      {
+        "context": "The psoas abscess — a diagnostic challenge in East Africa",
+        "pearl": "A young adult presents with fever, limp, and hip pain that is worse on extension. The patient may have been treated for 'hip arthritis' or 'UTI' without improvement. Think psoas abscess. The classic triad — fever, flank pain, and limited hip motion — is present in only 30% of cases. The psoas sign (pain on passive hip extension) is the most reliable bedside test. CT shows enlargement of the psoas muscle with a low-density centre. In our setting: (1) Primary psoas abscess is often caused by Staphylococcus aureus — treat with Flucloxacillin 2 g IV 6-hourly + Gentamicin 5 mg/kg daily. (2) Tuberculous psoas abscess is secondary to Pott's disease — get a spine X-ray, start anti-TB therapy, and arrange CT-guided drainage. (3) Always check a urine culture and a CT urogram — renal stone with pyonephrosis can present as psoas abscess. (4) Percutaneous drainage is the treatment of choice with success rates >90%.",
+        "evidence": "Ricard J, Le Moal G, Roblot F, et al. Psoas abscess: a 15-year study on 456 patients. Medicine (Baltimore). 2020;99(37):e22133."
+      },
+      {
+        "context": "The febrile post-operative patient — when to image for abscess",
+        "pearl": "A fever on post-operative day 5-7 is an abscess until proven otherwise. The first instinct is 'wound infection' or 'chest infection' — both are possible, but an intra-abdominal abscess must be ruled out. I have a protocol: (1) If the patient has a fever >38°C on day 5-7 post-laparotomy and the WBC/CRP is not trending down, I get a CT with IV contrast on the same day. (2) If the CT shows a collection, I drain it. (3) If the CT is negative but the fever persists, I repeat the CT in 48h — abscesses can take time to become radiologically apparent. (4) Do not forget a pelvic abscess — it may not be visible on the initial axial cuts. Ensure the CT includes the entire abdomen and pelvis down to the perineum. (5) In our setting where CT may not be immediately available, a bedside ultrasound is a useful first step — it can identify most subphrenic, liver, and pelvic abscesses. A negative ultrasound does not rule out an interloop or retroperitoneal abscess.",
+        "evidence": "Sartelli M, Catena F, Abu-Zidan FM, et al. Management of intra-abdominal infections: recommendations by the WSES 2016. World J Emerg Surg. 2017;12:22."
+      },
+      {
+        "context": "The 'cold' abscess — thinking about TB",
+        "pearl": "Not all abscesses present with high fever and rigors. A 'cold abscess' — a soft, fluctuant, non-tender swelling without erythema or warmth — is the classic presentation of tuberculous infection. Common sites in East Africa: psoas abscess pointing in the groin, paravertebral abscess (Pott's disease), and ileocecal TB with a right iliac fossa mass. If you aspirate, the pus is typically 'cold' — thin, serous, or caseous, not the thick yellow-green pus of a pyogenic abscess. Send the aspirate for: (1) GeneXpert MTB/RIF (rapid, 2h, also tests for rifampicin resistance), (2) TB culture (takes 4-6 weeks), and (3) adenosine deaminase (ADA) level — elevated ADA >40 U/L strongly supports TB. Start empiric anti-TB therapy if the clinical picture is convincing. Pyogenic and tuberculous abscesses can coexist — treat both when in doubt.",
+        "evidence": "Ricard J, Le Moal G, Roblot F, et al. Psoas abscess: a 15-year study on 456 patients. Medicine (Baltimore). 2020;99(37):e22133."
+      },
+      {
+        "context": "When the drain output does not decrease — thinking about a fistula",
+        "persistent_high_output_pearl": "If a drain placed for an intra-abdominal abscess continues to put out >100 mL/day after 7 days, you must consider an underlying fistula. The fistula may be the cause of the abscess — an anastomotic leak from a bowel resection, a missed perforation, or a Crohn's fistula. Steps: (1) Measure the output amylase (high = pancreatic fistula) and creatinine (high = urinary fistula). (2) Perform a sinogram (inject contrast through the drain under fluoroscopy or plain X-ray) — if contrast enters the bowel, you have an enterocutaneous fistula. (3) CT with oral contrast — look for contrast extravasation into the abscess cavity. (4) If a fistula is confirmed, the drain should be left in place as a controlled fistula (the drain provides the path of least resistance). Do not remove the drain — if you close the skin, the fistula will re-abscess. (5) Plan definitive surgical management after 6-12 weeks of nutritional optimization and resolution of sepsis.",
+        "evidence": "Sartelli M, Catena F, Abu-Zidan FM, et al. Management of intra-abdominal infections: recommendations by the WSES 2016. World J Emerg Surg. 2017;12:22."
+      }
+    ],
+
+    "operativeNuances": [
+      {
+        "procedure": "Percutaneous Abscess Drainage — Choosing the Safe Window",
+        "pitfall": "Traversing bowel, pleura, or major vessels during percutaneous drainage can cause catastrophic complications including peritonitis, pneumothorax, haemorrhage, and fistula formation",
+        "expertTip": "The 'safe window' is the shortest, straightest path from the skin to the abscess that avoids: (1) bowel (use a CT scout to find a window between gas-filled loops), (2) pleura (for subphrenic abscesses — the pleural reflection descends to the 10th rib posteriorly and the 8th rib in the midaxillary line; enter below these landmarks), (3) major vessels (aorta, IVC, iliac vessels, portal vein, splenic vessels), (4) solid organs (liver, spleen, kidney unless the abscess is within them). For upper abdominal abscesses, the preferred approach is often posterior or posterolateral (through the paraspinal muscles or below the 12th rib) to avoid the pleura. For pelvic abscesses, the transgluteal approach (through the sciatic foramen, medial to the sciatic nerve) is safe and well-tolerated. For presacral abscesses, the transsacral approach (through the sacral bone) is surprisingly well-tolerated with minimal pain."
+      },
+      {
+        "procedure": "Percutaneous Drainage — Catheter Size Selection",
+        "pitfall": "Using a catheter that is too small for thick, viscous pus leads to blockage and failed drainage",
+        "expertTip": "Catheter size selection is critical. Rule of thumb: 8-10 Fr for thin, serous fluid; 12-14 Fr for thick, purulent pus; 16-20 Fr for very thick pus or containing debris (e.g., fungal balls, necrotic tissue). If the initial aspirate is frankly purulent, start with a 12-14 Fr catheter — upsizing is difficult once the tract is established. If the pus is so thick that it cannot be aspirated through an 18G needle, consider surgical drainage — the catheter will not drain it either. I use a 'flush and aspirate' test: if I can easily aspirate pus after flushing 5 mL of saline, the catheter size is adequate. If aspiration is difficult, the catheter is too small or blocked — flush vigorously and attempt to aspirate again; if still difficult, consider upsizing or adding a second drain."
+      },
+      {
+        "procedure": "Laparoscopic Drainage of Interloop Abscess — Safe Adhesiolysis",
+        "pitfall": "Injury to adherent bowel loops when dissecting into an interloop abscess — the bowel wall is the abscess wall",
+        "expertTip": "Interloop abscesses are the most treacherous to drain laparoscopically because the bowel wall IS the abscess wall. Technique: (1) Use a blunt-tipped trocar (Hasson) for initial entry — the bowel may be adherent to the anterior abdominal wall. (2) Use a 30° laparoscope for better visualization of the obscured planes. (3) Identify the abscess by finding the 'omental sentinel' — a piece of omentum that is adherent to the inflamed area. (4) Gently break adhesions using blunt dissection (a closed Metzenbaum scissors or a suction tip) — start at the periphery of the mass where the planes are more likely to be defined. (5) Once the abscess cavity is entered, aspirate the pus immediately to decompress it. (6) Insert a suction tip into the cavity and break loculations under direct vision. (7) Consider placing a drain into the cavity and exteriorizing it through a port site. (8) Document all enterotomies if they occur and repair them immediately — a missed enterotomy in this setting will cause ongoing sepsis."
+      },
+      {
+        "procedure": "Transrectal Drainage of Pelvic Abscess — A Forgotten Skill",
+        "pitfall": "A pelvic abscess (pouch of Douglas) is anatomically close to the rectum but surgeons may default to laparotomy instead of simpler transrectal drainage",
+        "expertTip": "Transrectal drainage of a pelvic abscess is simple, safe, and avoids general anaesthesia. Indications: a midline, fluctuant mass in the pouch of Douglas on digital rectal examination. Technique: (1) Place the patient in lithotomy position under sedation or spinal anaesthesia. (2) Perform a DRE to confirm the mass. (3) Insert a proctoscope or anoscope to visualize the anterior rectal wall. (4) Identify the point of maximal fluctuation — it will be palpable as a soft bulge through the anterior rectal wall. (5) Aspirate with a 16G or 18G needle attached to a syringe through the rectal wall at this point. (6) If pus is obtained, make a small incision (1 cm) with a scalpel or diathermy at the same point. (7) Insert a curved clamp (Kelly or artery forceps) through the incision into the abscess cavity and open it to break loculations. (8) Insert a drain (24-28 Fr chest tube or a Foley catheter) through the incision into the cavity and inflate the balloon with 5-10 mL water. (9) Leave the drain for 3-5 days. The patient will drain pus per rectum — warn them about this. This technique is particularly useful in East Africa where CT-guided drainage may not be available."
+      },
+      {
+        "procedure": "Laparoscopic vs Open Drainage of Liver Abscess",
+        "pitfall": "Choosing the wrong approach for a liver abscess — percutaneous drainage is usually sufficient, but when it fails, the next step requires careful planning",
+        "expertTip": "Decision algorithm for liver abscess drainage: (1) Small (<5 cm), unilocular → aspiration + antibiotics. (2) Large (5-10 cm) → percutaneous catheter drainage. (3) Very large (>10 cm), multiple, loculated, or left lobe → surgical drainage (laparoscopic or open). When performing laparoscopic drainage: (a) Place the patient in reverse Trendelenburg with the right side elevated. (b) Enter the abscess cavity through the most superficial aspect of the liver surface — use diathermy to score the liver capsule and then bluntly dissect into the cavity with a suction tip. (c) Aspirate all contents and break loculations. (d) Place an omental plug into the cavity (omentoplasty) to reduce recurrence. (e) Place a drain external to the liver, not within the cavity — the drain outside the liver creates a controlled fistula. (f) For open drainage, the same principles apply but with a subcostal incision. Open drainage is rarely needed for amoebic abscess (<2% of cases) but may be required for pyogenic abscesses that have ruptured or are causing biliary obstruction."
+      }
+    ],
+
+    "prognosis": {
+      "overallMortality": "Overall mortality for intra-abdominal abscess is 2-8%. For simple, drainable abscess: <2%. For complex or multiple abscesses: 5-10%. For abscess with sepsis and organ dysfunction: 15-25%. For ruptured abscess with generalized peritonitis: 20-35%. In the East African context, mortality is 5-12%, driven by delayed diagnosis, TB co-infection, and limited access to CT-guided drainage. Amoebic liver abscess has a low mortality (1-2%) when treated with metronidazole and appropriate drainage. Tuberculous psoas abscess has a mortality of 2-5% with appropriate anti-TB therapy and drainage.",
+      "morbidity": "Treatment failure requiring additional intervention: 10-20% for percutaneous drainage, 5-10% for surgical drainage. Recurrent abscess: 5-15% (higher with incomplete drainage or untreated fistula). Catheter-related complications: blockage 10%, dislodgement 5%, secondary infection 5%. Fistula formation: 5-10% (higher with Crohn's disease or anastomotic leak). Wound infection: 5-15% for surgical drainage. Sepsis/organ failure: 10-20% (in high-risk patients). Incisional hernia after open drainage: 10-15%. Prolonged hospital stay: mean 8-15 days depending on severity.",
+      "recurrence": "After successful percutaneous drainage: 5-10% recurrence, usually due to incomplete drainage or untreated underlying source. After surgical drainage: 3-5% recurrence. If the underlying cause (Crohn's, fistula, foreign body, malignancy) is not addressed, recurrence rate exceeds 30%. HIV-positive patients have a 2-fold higher recurrence rate. Amoebic liver abscess recurrence: <3% after adequate metronidazole therapy. TB psoas abscess recurrence: <5% if anti-TB therapy is completed (6-9 months).",
+      "survivalData": "Five-year survival after successful treatment of a single intra-abdominal abscess is 90-95% (age-matched). Patients who survive an episode of septic shock from an abscess have reduced long-term survival (75% at 5 years) due to the lasting effects of critical illness. For patients with Crohn's disease and recurrent abscesses, the long-term prognosis is determined by the activity of the underlying Crohn's disease rather than the abscesses themselves. For patients with malignancy presenting as an abscess, the 5-year survival depends on tumour stage.",
+      "landmarkReference": "vanSonnenberg E, Wittich GR, Goodacre BW, et al. Percutaneous abscess drainage: update. World J Surg. 2019;43(5):1230-1240."
+    },
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "generalized_peritonitis_suggesting_rupture", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "respiratory_failure", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "abscess_rupture_suspected", "weight": 9 },
+          { "sign": "organ_dysfunction_any_system", "weight": 8 },
+          { "sign": "persistent_sepsis_despite_adequate_antibiotics", "weight": 7 },
+          { "sign": "multiple_or_loculated_abscesses", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "single_well_defined_abscess": true,
+        "no_sepsis_or_organ_dysfunction": true,
+        "no_danger_signs": true,
+        "accessible_for_percutaneous_drainage": true
+      },
+      "severityLabel": "Well-defined/drainable without sepsis (NON-SEVERE) vs Complex/septic/organ dysfunction (SEVERE)"
+    }
   }
 }

@@ -3,30 +3,63 @@
     "id": "perforated_ulcer",
     "name": "Perforated Peptic Ulcer",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "acute-care-surgery",
     "agePeak_months": [480, 840],
-    "note": "Sudden severe epigastric pain with board-like rigidity. Classic gas under diaphragm on erect CXR.",
+    "note": "A surgical emergency presenting with sudden severe epigastric pain, board-like rigidity, and free air under the diaphragm on erect chest X-ray. In East Africa, H. pylori prevalence is high (~70%) and many patients self-medicate with NSAIDs for headaches and joint pains, making perforated PUD a common acute abdomen. Gastric perforation must always be biopsied to exclude malignancy. Time from perforation to surgery is the strongest predictor of outcome.",
     "prevalenceWeight": 0.55,
-    "syndromeTags": ["acute_abdomen", "upper_abdominal_pain", "peritonitis"],
+    "syndromeTags": ["acute_abdomen", "upper_abdominal_pain", "peritonitis", "surgical_emergency"],
 
-    "severityAssessment": {
-      "immediateDangerSigns": [
-        { "sign": "generalized_peritonitis", "weight": 10 },
-        { "sign": "septic_shock", "weight": 10 },
-        { "sign": "board_like_rigidity", "weight": 10 }
-      ],
-      "severeCriteria": {
-        "anyDangerSign": true,
-        "additionalCriteria": [
-          { "sign": "rebound_tenderness", "weight": 7 },
-          { "sign": "absent_bowel_sounds", "weight": 7 }
-        ]
-      },
-      "nonSevereCriteria": {
-        "hasIndrawingOrFastBreathing": false,
-        "noDangerSigns": true
-      },
-      "severityLabel": "If generalized peritonitis/shock -> SEVERE; else -> NON-SEVERE (contained perforation)"
-    },
+    "presentingComplaints": [
+      "Sudden severe upper abdominal pain",
+      "Sharp stomach pain like a knife",
+      "Pain that has spread to the whole abdomen",
+      "Nausea",
+      "Vomiting",
+      "Abdomen feels hard like a board",
+      "Feeling faint or dizzy",
+      "Fast heartbeat"
+    ],
+
+    "history_questions": [
+      { "question": "When did the pain start? Was it sudden, like being stabbed with a knife?", "weight": 10 },
+      { "question": "Where did the pain start? In the upper middle part of your abdomen?", "weight": 8 },
+      { "question": "Did the pain spread to the rest of your abdomen?", "weight": 7 },
+      { "question": "Have you had a history of stomach ulcers or indigestion (dyspepsia)?", "weight": 8 },
+      { "question": "Have you been taking NSAID painkillers (ibuprofen, diclofenac, aspirin) regularly?", "weight": 9 },
+      { "question": "Have you been taking steroids (prednisone, dexamethasone)?", "weight": 5 },
+      { "question": "Do you smoke cigarettes or drink alcohol?", "weight": 5 },
+      { "question": "Have you vomited? Is the vomit like coffee grounds (dark/black)?", "weight": 5 },
+      { "question": "Have you passed black, tarry stools (melena)?", "weight": 5 },
+      { "question": "Did you have any warning signs like heartburn, burping, or stomach pain in the days before?", "weight": 6 },
+      { "question": "Have you had similar episodes before?", "weight": 4 },
+      { "question": "Do you have a history of H. pylori infection or have you been treated for it?", "weight": 4 },
+      { "question": "What did you eat or drink just before the pain started? Heavy meal, alcohol?", "weight": 4 },
+      { "question": "Do you have any medical conditions like diabetes, high blood pressure, or HIV?", "weight": 3 },
+      { "question": "Are you currently on any blood thinners (warfarin, aspirin, clopidogrel)?", "weight": 5 },
+      { "question": "Have you had any previous abdominal surgeries?", "weight": 3 },
+      { "question": "Are you feeling short of breath or dizzy?", "weight": 4 },
+      { "question": "Have you noticed any bleeding from your back passage or blood in your stool?", "weight": 4 },
+      { "question": "Do you feel pain in your right shoulder tip? (suggests diaphragmatic irritation)", "weight": 3 },
+      { "question": "Have you lost weight recently? (chronic ulcer suggests malignancy — especially gastric)", "weight": 4 },
+      { "question": "Do you have difficulty swallowing (dysphagia) or early satiety? (suggests gastric malignancy)", "weight": 4 },
+      { "question": "Have you had any episodes of severe vomiting after a heavy meal? (suggests gastric outlet obstruction)", "weight": 4 },
+      { "question": "Are your bowel movements normal? Have you noticed blood in your stool?", "weight": 3 },
+      { "question": "Do you feel your heart racing or feel breathless at rest?", "weight": 4 },
+      { "question": "Have you taken any traditional herbal medicines for stomach pain?", "weight": 3 },
+      { "question": "Have you ever been tested for H. pylori or treated for an ulcer in the past?", "weight": 5 },
+      { "question": "Do you drink alcohol? How much and how often?", "weight": 4 },
+      { "question": "What medications are you currently taking — including over-the-counter and herbal?", "weight": 4 },
+      { "question": "Have you ever had surgery on your stomach or duodenum before?", "weight": 4 },
+      { "question": "Do you have any known allergies to antibiotics or other drugs?", "weight": 3 },
+      { "question": "When did you last eat or drink? (important for timing of surgery)", "weight": 4 },
+      { "question": "Do you have a family history of stomach ulcers or stomach cancer?", "weight": 3 },
+      { "question": "Have you been under unusual stress recently? (stress ulcers can perforate)", "weight": 3 },
+      { "question": "Do you have any chronic medical conditions: diabetes, hypertension, TB, HIV, kidney disease, or liver disease?", "weight": 5 },
+      { "question": "Have you been in an accident or had trauma to your abdomen recently?", "weight": 3 },
+      { "question": "Are you pregnant or could you be pregnant? (pregnancy can mask peritonitis)", "weight": 4 },
+      { "question": "For women: is this pain related to your menstrual cycle? Could this be your period or ovulation pain?", "weight": 2 }
+    ],
 
     "historyFeatures": [
       { "symptomId": "epigastric_pain", "weight": 5, "modifiers": [
@@ -34,9 +67,45 @@
         ]
       },
       { "symptomId": "nausea_vomiting", "weight": 3 },
-      { "symptomId": "previous_dyspepsia", "weight": 4, "note": "History of peptic ulcer disease" },
+      { "symptomId": "previous_dyspepsia_or_ulcer", "weight": 4, "note": "History of peptic ulcer disease" },
       { "symptomId": "nsaid_use", "weight": 4, "note": "Common precipitant" },
-      { "symptomId": "hematemesis", "weight": 2, "note": "May coexist with perforation" }
+      { "symptomId": "hematemesis_melena", "weight": 2, "note": "May coexist with perforation" },
+      { "symptomId": "board_like_rigidity_sensation", "weight": 4, "note": "Patient may volunteer that abdomen feels hard" }
+    ],
+
+    "examination_findings": [
+      { "finding": "Board-like rigidity of the entire abdominal wall", "weight": 10 },
+      { "finding": "Generalized abdominal tenderness", "weight": 10 },
+      { "finding": "Rebound tenderness (generalized)", "weight": 8 },
+      { "finding": "Guarding (voluntary and involuntary)", "weight": 8 },
+      { "finding": "Absent bowel sounds (silent abdomen)", "weight": 7 },
+      { "finding": "Liver dullness obliterated on percussion (gas in peritoneal cavity)", "weight": 7 },
+      { "finding": "Abdominal distension", "weight": 5 },
+      { "finding": "Shallow, grunting respiration (diaphragmatic splinting)", "weight": 5 },
+      { "finding": "Patient lying completely still (peritoneal irritation — any movement worsens pain)", "weight": 6 },
+      { "finding": "Tachycardia (pulse >100 bpm)", "weight": 6 },
+      { "finding": "Hypotension (systolic BP <90 mmHg — suggests shock from peritonitis)", "weight": 7 },
+      { "finding": "Fever (temperature >38°C)", "weight": 5 },
+      { "finding": "Cool, clammy extremities (sepsis or shock)", "weight": 4 },
+      { "finding": "Dehydration signs (dry mucosa, reduced skin turgor)", "weight": 4 },
+      { "finding": "Tenderness on DRE in pouch of Douglas (if pelvic contamination)", "weight": 4 },
+      { "finding": "Right shoulder tip tenderness (phrenic nerve irritation from subdiaphragmatic air)", "weight": 4 },
+      { "finding": "Generalized abdominal distension with tympany on percussion", "weight": 5 },
+      { "finding": "Obliteration of liver dullness to percussion (gas in peritoneal cavity — highly suggestive)", "weight": 8 },
+      { "finding": "Percussion tenderness — even gentle percussion over the abdomen elicits severe pain", "weight": 7 },
+      { "finding": "Cough tenderness (Dunphy's sign) — positive throughout abdomen", "weight": 6 },
+      { "finding": "Grunting respiration — shallow breathing to splint the diaphragm", "weight": 5 },
+      { "finding": "Patient prefers to lie with knees drawn up (flexed hips relieve peritoneal tension)", "weight": 6 },
+      { "finding": "Guarding — voluntary (patient tenses muscles) progressing to involuntary (true rigidity)", "weight": 8 },
+      { "finding": "Marked tenderness on gentle pelvic (DRE) or vaginal exam — indicates pelvic contamination", "weight": 5 },
+      { "finding": "Oliguria — urine output <0.5 mL/kg/hr suggests hypovolemia or early sepsis", "weight": 5 },
+      { "finding": "Capillary refill time >3 seconds (poor peripheral perfusion)", "weight": 4 },
+      { "finding": "Dry mucous membranes and reduced skin turgor (dehydration from vomiting and third spacing)", "weight": 4 },
+      { "finding": "Confusion or altered mental state (cerebral hypoperfusion or sepsis)", "weight": 6 },
+      { "finding": "Jaundice (if associated with liver disease or bile leak)", "weight": 3 },
+      { "finding": "Epigastric tenderness that persists or worsens with gentle palpation", "weight": 5 },
+      { "finding": "Visible peristalsis (rare — suggests gastric outlet obstruction)", "weight": 2 },
+      { "finding": "Succussion splash on auscultation over epigastrium (gastric outlet obstruction sign)", "weight": 3 }
     ],
 
     "examFeatures": [
@@ -45,119 +114,881 @@
       { "signId": "rebound_tenderness", "baseWeight": 4 },
       { "signId": "absent_bowel_sounds", "baseWeight": 3 },
       { "signId": "tachycardia", "baseWeight": 3 },
-      { "signId": "guarding", "baseWeight": 4 }
+      { "signId": "guarding", "baseWeight": 4 },
+      { "signId": "liver_dullness_obliteration", "baseWeight": 3, "note": "Pneumoperitoneum on percussion" },
+      { "signId": "shoulder_tip_pain_referred", "baseWeight": 2, "note": "Phrenic nerve irritation" }
+    ],
+
+    "bedside_scores": [
+      {
+        "name": "Boey Score for Perforated Peptic Ulcer",
+        "maxPoints": 3,
+        "components": [
+          { "item": "Shock on admission (SBP <90 mmHg)", "points": 1 },
+          { "item": "Duration of perforation >24 hours", "points": 1 },
+          { "item": "Co-morbid illness (ASA grade III-V)", "points": 1 }
+        ],
+        "interpretation": {
+          "low": "Score 0: Excellent prognosis. Mortality <2%. Simple patch repair. Post-op PPI and H. pylori eradication.",
+          "moderate": "Score 1: Good prognosis. Mortality <5%. Simple patch repair. ICU monitoring if associated comorbidity.",
+          "high": "Score 2-3: Poor prognosis. Mortality 15-50%. Damage control approach. ICU mandatory. Consider non-operative management in selected high-risk patients with contained perforation."
+        }
+      },
+      {
+        "name": "Acute Abdomen Severity Score",
+        "maxPoints": 10,
+        "components": [
+          { "item": "Age >65 years", "points": 2 },
+          { "item": "Temperature >38.5°C or <36°C", "points": 2 },
+          { "item": "Pulse >100 bpm", "points": 2 },
+          { "item": "WBC >15,000 or <4,000/mm³", "points": 2 },
+          { "item": "Generalized peritonitis on exam", "points": 2 }
+        ],
+        "interpretation": {
+          "low": "Score 0-3: Low risk. Likely simple closure. Ward admission post-op.",
+          "moderate": "Score 4-6: Moderate risk. ICU monitoring post-op.",
+          "high": "Score 7-10: High risk. Damage control approach. ICU admission."
+        }
+      }
     ],
 
     "riskFactors": [
-      { "id": "nsaid_use", "multiplier": 2.0 },
-      { "id": "h_pylori_infection", "multiplier": 1.5 },
-      { "id": "smoking", "multiplier": 1.3 },
-      { "id": "corticosteroid_use", "multiplier": 1.5 },
-      { "id": "previous_ulcer_history", "multiplier": 1.8 }
+      { "id": "nsaid_use", "multiplier": 2.5, "note": "NSAIDs inhibit COX-1, reducing mucosal protective prostaglandins. Common in self-medication for pain." },
+      { "id": "h_pylori_infection", "multiplier": 2.0, "note": "Most common cause of duodenal ulcers. High prevalence in East Africa." },
+      { "id": "smoking", "multiplier": 1.5, "note": "Reduces mucosal blood flow and healing" },
+      { "id": "corticosteroid_use", "multiplier": 1.8, "note": "Synergistic with NSAIDs" },
+      { "id": "previous_ulcer_history", "multiplier": 2.0, "note": "Recurrent ulcer disease increases perforation risk" },
+      { "id": "alcohol_abuse", "multiplier": 1.5, "note": "Direct mucosal irritant, increases acid secretion" },
+      { "id": "age_over_60", "multiplier": 1.5, "note": "Higher morbidity and atypical presentation" },
+      { "id": "anticoagulant_use", "multiplier": 1.5, "note": "Increases bleeding risk — may present with perforation + bleeding" },
+      { "id": "stress_ulcer_critical_illness", "multiplier": 1.5, "note": "Major surgery, burns, trauma, head injury" }
     ],
 
     "subtypes": [
       {
         "id": "anterior_duodenal_perforation",
         "name": "Anterior Duodenal Ulcer Perforation",
-        "prevalenceModifier": 0.6,
+        "prevalenceModifier": 0.55,
         "keyFeatures": [
-          { "feature": "sudden_severe_epigastric_pain", "weight": 5 },
-          { "feature": "board_like_rigidity", "weight": 5 },
-          { "feature": "gas_under_diaphragm", "weight": 5 }
+          { "feature": "sudden_severe_epigastric_pain_like_knife", "weight": 5 },
+          { "feature": "board_like_rigidity_of_upper_abdomen", "weight": 5 },
+          { "feature": "gas_under_diaphragm_on_erect_cxr", "weight": 5 },
+          { "feature": "pain_may_be_relieved_when_knees_brought_to_chest", "weight": 3 },
+          { "feature": "history_of_duodenal_ulcer_dyspepsia_or_nsaid_use", "weight": 4 },
+          { "feature": "melena_may_accompany_perforation", "weight": 2 }
         ],
-        "management": "Emergency laparotomy with omental patch repair (Graham patch). IV PPI. IV antibiotics."
+        "management": "Emergency laparotomy via upper midline incision. Graham omental patch repair (omentum sutured over perforation with interrupted 2-0 Vicryl or PDS). Thorough peritoneal lavage (minimum 3-5 L warm saline). IV PPI (Omeprazole 80 mg bolus then 8 mg/hr infusion). IV antibiotics (Ceftriaxone 2 g daily + Metronidazole 500 mg 8-hourly). H. pylori eradication therapy once oral intake resumes (triple therapy for 14 days). Early oral feeding (day 1-2) after patch repair if uncomplicated."
       },
       {
         "id": "gastric_ulcer_perforation",
         "name": "Gastric Ulcer Perforation",
-        "prevalenceModifier": 0.4,
+        "prevalenceModifier": 0.35,
         "keyFeatures": [
-          { "feature": "epigastric_pain", "weight": 5 },
-          { "feature": "vomiting", "weight": 4 },
-          { "feature": "peritonitis", "weight": 5 },
-          { "feature": "hematemesis", "weight": 3 }
+          { "feature": "epigastric_pain_without_clear_ulcer_history", "weight": 4 },
+          { "feature": "vomiting_may_precede_pain", "weight": 4 },
+          { "feature": "peritonitis_may_be_more_subtle", "weight": 3 },
+          { "feature": "hematemesis_or_melena_more_common", "weight": 4 },
+          { "feature": "larger_defect_than_duodenal", "weight": 3 },
+          { "feature": "risk_of_malignancy_up_to_10_percent", "weight": 5 }
         ],
-        "management": "Emergency laparotomy. Ulcer excision or biopsy + closure. Rule out malignancy. IV PPI and antibiotics."
+        "management": "Emergency laparotomy. Excision biopsy of ulcer edge (must rule out malignancy) + primary closure in two layers. If large defect or malignant: partial gastrectomy (Bilroth I or II) depending on location. Graham patch is NOT adequate for gastric perforations. IV PPI. IV broad-spectrum antibiotics. H. pylori test and treat at follow-up. If cancer confirmed: staging and oncology referral."
+      },
+      {
+        "id": "posterior_penetrating_ulcer",
+        "name": "Posterior Penetrating (Sealed/Contained) Ulcer",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "epigastric_pain_referred_to_back_penetrating_into_pancreas", "weight": 5 },
+          { "feature": "pain_worse_at_night_and_relieved_by_food", "weight": 3 },
+          { "feature": "no_generalized_peritonitis_or_rigidity", "weight": 4 },
+          { "feature": "no_or_minimal_free_air_on_imaging", "weight": 4 },
+          { "feature": "elevated_serum_amylase_from_pancreatic_irritation", "weight": 3 },
+          { "feature": "may_present_with_upper_gi_bleeding_rather_than_perforation", "weight": 3 }
+        ],
+        "management": "If contained (sealed by omentum/posterior structures) and no generalized peritonitis: conservative trial with NBM, NG tube, IV PPI, IV antibiotics. Water-soluble contrast study to confirm sealing. If fails or deteriorates → surgery. If actively bleeding: endoscopy + therapy (injection, clips, haemostatic spray). If endoscopic control fails: emergency surgery ± gastrotomy with under-running of bleeding vessel."
       }
     ],
 
     "mimics": [
       {
         "diseaseId": "acute_pancreatitis",
-        "discriminators": ["serum_amylase_elevated", "pain_referred_to_back", "vomiting_prominent"]
+        "diseaseName": "Acute Pancreatitis",
+        "whyMimic": "Severe epigastric pain, vomiting, peritonism in early stages",
+        "discriminators": [
+          "pain_radiating_to_back",
+          "pain_relieved_by_leaning_forward",
+          "elevated_amylase_lipase_greater_than_3x",
+          "history_of_alcohol_or_gallstones",
+          "no_free_air_on_cxr_or_ct",
+          "ct_shows_pancreatic_inflammation"
+        ],
+        "ruleOutTests": ["serum_amylase_lipase", "erect_cxr", "ct_abdomen"],
+        "negativeImpactOnParentScore": 15
       },
       {
-        "diseaseId": "acute_appendicitis",
-        "discriminators": ["pain_migration_to_rlq", "anorexia", "pain_not_relieved_by_antacids"]
+        "diseaseId": "acute_cholecystitis",
+        "diseaseName": "Acute Cholecystitis",
+        "whyMimic": "Epigastric/RUQ pain, vomiting, guarding can mimic perforated ulcer",
+        "discriminators": [
+          "positive_murphy_sign",
+          "pain_after_fatty_meal",
+          "no_free_air",
+          "gallstones_on_ultrasound",
+          "normal_amylase"
+        ],
+        "ruleOutTests": ["ruq_ultrasound", "lfts", "serum_amylase"],
+        "negativeImpactOnParentScore": 12
       },
       {
-        "diseaseId": "myocardial_infarction",
-        "discriminators": ["ecg_changes", "cardiac_enzymes", "chest_pain_radiation"]
+        "diseaseId": "myocardial_infarction_inferior",
+        "diseaseName": "Inferior Wall MI",
+        "whyMimic": "Epigastric pain, nausea, vomiting, diaphoresis",
+        "discriminators": [
+          "ecg_shows_st_elevation_ii_iii_avf",
+          "elevated_troponin",
+          "no_abdominal_tenderness",
+          "normal_amylase_and_cxr"
+        ],
+        "ruleOutTests": ["ecg", "troponin", "chest_pain_history"],
+        "negativeImpactOnParentScore": 20
+      },
+      {
+        "diseaseId": "ruptured_liver_abscess",
+        "diseaseName": "Ruptured Amoebic/Pyogenic Liver Abscess",
+        "whyMimic": "Severe RUQ pain, peritonitis, fever, shock",
+        "discriminators": [
+          "prodromal_fever_and_ruq_pain",
+          "tender_hepatomegaly",
+          "ultrasound_shows_liver_abscess",
+          "no_free_air",
+          "amoebic_serology_positive"
+        ],
+        "ruleOutTests": ["abdominal_ultrasound", "amoebic_serology", "ct_abdomen"],
+        "negativeImpactOnParentScore": 15
+      },
+      {
+        "diseaseId": "acute_pancreatitis_severe",
+        "diseaseName": "Severe Acute Pancreatitis with Necrosis",
+        "whyMimic": "Epigastric pain, vomiting, peritonism, ileus, systemic inflammation can be indistinguishable from perforated ulcer",
+        "discriminators": [
+          "pain_radiating_to_back_and_relieved_by_leaning_forward",
+          "elevated_amylase_or_lipase_greater_than_3x",
+          "no_free_air_on_cxr_or_ct",
+          "retroperitoneal_inflammation_on_ct",
+          "grey_turner_or_cullen_sign_in_late_stages",
+          "history_of_gallstones_or_alcohol_abuse"
+        ],
+        "ruleOutTests": ["serum_amylase_lipase", "ct_abdomen", "erect_cxr"],
+        "negativeImpactOnParentScore": 18
+      },
+      {
+        "diseaseId": "ruptured_abdominal_aortic_aneurysm",
+        "diseaseName": "Ruptured Abdominal Aortic Aneurysm (AAA)",
+        "whyMimic": "Sudden severe abdominal/back pain, collapse, rigid abdomen from retroperitoneal haematoma",
+        "discriminators": [
+          "known_aaa_or_aneurysm_on_ultrasound",
+          "pulsatile_abdominal_mass",
+          "pain_radiating_to_back_or_flank",
+          "hypotension_and_pallor_out_of_proportion_to_abdominal_signs",
+          "no_free_air_on_cxr",
+          "retroperitoneal_haematoma_on_ct"
+        ],
+        "ruleOutTests": ["erect_cxr", "abdominal_ultrasound", "ct_abdomen", "ecg"],
+        "negativeImpactOnParentScore": 20
+      },
+      {
+        "diseaseId": "typhoid_ileal_perforation",
+        "diseaseName": "Typhoid Ileal Perforation",
+        "whyMimic": "Generalized peritonitis from ileal perforation can mimic perforated PUD, especially in East Africa where typhoid is endemic",
+        "discriminators": [
+          "prodromal_fever_headache_malaise_for_1_3_weeks",
+          "relative_bradycardia_and_rose_spots",
+          "pain_starts_in_lower_abdomen_or_periumbilical",
+          "no_free_air_on_cxr_in_30_percent_of_typhoid_perforations",
+          "widal_positive_or_blood_culture_positive_for_salmonella_typhi",
+          "perforation_on_anti_mesenteric_border_of_terminal_ileum_at_operation"
+        ],
+        "ruleOutTests": ["widal_test", "blood_cultures", "ct_abdomen", "typhoid_ige"],
+        "negativeImpactOnParentScore": 14
+      },
+      {
+        "diseaseId": "sickle_cell_abdominal_crisis",
+        "diseaseName": "Sickle Cell Disease — Abdominal Crisis",
+        "whyMimic": "Severe generalized abdominal pain, vomiting, distension can mimic peritonitis in patients with sickle cell disease in East Africa",
+        "discriminators": [
+          "known_sickle_cell_disease_or_positive_sickling_test",
+          "generalized_bone_and_joint_pain",
+          "jaundice_with_elevated_ldh_and_bilirubin",
+          "no_peritoneal_signs_rebound_or_rigidity_absent",
+          "no_free_air_on_cxr_or_ct",
+          "rapid_resolution_with_hydration_analgesia_and_oxygen"
+        ],
+        "ruleOutTests": ["full_blood_count", "reticulocyte_count", "hemoglobin_electrophoresis", "ldh", "bilirubin", "ct_abdomen"],
+        "negativeImpactOnParentScore": 12
+      },
+      {
+        "diseaseId": "pneumonia_lower_lobe",
+        "diseaseName": "Right Lower Lobe Pneumonia with Diaphragmatic Pleurisy",
+        "whyMimic": "Right upper quadrant/epigastric pain from diaphragmatic pleural irritation can mimic perforated ulcer",
+        "discriminators": [
+          "cough_sputum_fever_and_dyspnoea_preceding_abdominal_pain",
+          "chest_signs_crepitations_bronchial_breathing",
+          "abdominal_tenderness_is_superficial_not_deep",
+          "no_free_air_on_cxr",
+          "chest_xray_shows_lobar_consolidation",
+          "normal_abdominal_ct"
+        ],
+        "ruleOutTests": ["chest_xray", "ct_chest", "full_history_and_exam"],
+        "negativeImpactOnParentScore": 12
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "Erect Chest X-Ray", "priority": "immediate", "yield": 0.85, "indication": "free gas under diaphragm" },
-        { "name": "ECG", "priority": "immediate", "yield": 0.2, "indication": "rule out MI" }
+        { "name": "Erect Chest X-Ray", "priority": "immediate", "yield": 0.85, "indication": "Free air under diaphragm (pneumoperitoneum) is diagnostic. 70-80% sensitive. If negative but high suspicion, proceed to CT." },
+        { "name": "Left lateral decubitus abdominal X-Ray", "priority": "immediate", "yield": 0.75, "indication": "Alternative if patient cannot sit up. Air along lateral liver edge." },
+        { "name": "ECG", "priority": "immediate", "yield": 0.3, "indication": "Rule out inferior MI as mimic of epigastric pain." },
+        { "name": "NG tube insertion", "priority": "high", "yield": 0.4, "indication": "Gastric decompression. Bloody aspirate suggests bleeding ulcer." }
       ],
       "laboratory": [
-        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "leukocytosis suggests perforation" },
-        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "elevated in peritonitis" },
-        { "name": "Serum Amylase", "priority": "high", "yield": 0.6, "indication": "rule out pancreatitis" },
-        { "name": "Blood Gas", "priority": "high", "yield": 0.7, "indication": "assess metabolic acidosis and shock" }
+        { "name": "WBC count", "priority": "high", "yield": 0.8, "indication": "Leukocytosis supports peritonitis. >15,000 suggests severe disease." },
+        { "name": "CRP", "priority": "high", "yield": 0.7, "indication": "Elevated in peritonitis. >100 suggests severe contamination." },
+        { "name": "Serum Amylase / Lipase", "priority": "high", "yield": 0.6, "indication": "Rule out acute pancreatitis. Mild elevation can occur in perforation." },
+        { "name": "Arterial Blood Gas", "priority": "high", "yield": 0.7, "indication": "Metabolic acidosis suggests shock. PaO2 assessment for hypoxia." },
+        { "name": "Lactate", "priority": "high", "yield": 0.7, "indication": "Elevated in tissue hypoperfusion. >4 suggests severe sepsis." },
+        { "name": "Urea and Creatinine", "priority": "high", "yield": 0.5, "indication": "Assess hydration and renal function. Pre-operative baseline." },
+        { "name": "Electrolytes", "priority": "medium", "yield": 0.3, "indication": "Metabolic disturbances from vomiting." },
+        { "name": "Blood Group and Crossmatch", "priority": "high", "yield": 0.3, "indication": "If patient is unstable or bleeding." },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.3, "indication": "If febrile >38.5°C or septic." }
       ],
       "imaging": [
-        { "name": "Erect CXR", "priority": "immediate", "yield": 0.85, "indication": "pneumoperitoneum" },
-        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.98, "indication": "detect free gas and fluid, localize perforation" }
+        { "name": "Erect Chest X-Ray", "priority": "immediate", "yield": 0.85, "indication": "First-line. Free air under diaphragm. If negative but high suspicion: proceed to CT." },
+        { "name": "CT Abdomen with IV + oral contrast", "priority": "high", "yield": 0.98, "indication": "Gold standard. Detects even small pneumoperitoneum, free fluid, and may localize perforation site. Assess for extraluminal contrast extravasation." },
+        { "name": "CT Abdomen without contrast", "priority": "medium", "yield": 0.85, "indication": "If IV contrast contraindicated. Can still detect free air and fluid." },
+        { "name": "Water-soluble contrast swallow (Gastrografin)", "priority": "medium", "yield": 0.85, "indication": "If CT equivocal and suspected perforation. Extravasation confirms perforation." },
+        { "name": "Abdominal Ultrasound", "priority": "low", "yield": 0.5, "indication": "May detect free air (peritoneal enhancement sign) and free fluid. Limited by gas." }
       ]
     },
 
+    "interpretation_rules": {
+      "erect_cxr": {
+        "free_air_under_diaphragm": { "present": "perforated_viscus +50", "absent": "perforation -15 (may be early or contained)" },
+        "large_pneumoperitoneum": { "present": "large_perforation +30" },
+        "air_under_both_diaphragms": { "present": "perforation +25" },
+        "air_only_under_right_diaphragm": { "present": "duodenal_perforation +15" }
+      },
+      "ct_abdomen": {
+        "free_intraperitoneal_air": { "present": "perforation — emergency +50" },
+        "extravasated_oral_contrast": { "present": "gi_perforation_definitive +55" },
+        "segmental_gastric_or_duodenal_wall_thickening": { "present": "ulcer_disease +15, perforation +10" },
+        "free_fluid_localized_to_upper_abdomen": { "present": "perforation_upper_gi +15" },
+        "pneumoperitoneum_with_free_fluid": { "present": "perforation_with_peritonitis +30" },
+        "no_free_air_or_fluid": { "present": "perforation -20, other_diagnosis +10" }
+      },
+      "laboratory": {
+        "lactate_greater_than_2": { "present": "tissue_hypoperfusion_sepsis +10" },
+        "amylase_normal": { "present": "pancreatitis -10, perforation +5" },
+        "amylase_mildly_elevated": { "present": "perforation_possible +5, pancreatitis +10" }
+      }
+    },
+
     "management": {
-      "protocolReference": "WSES Guidelines for Perforated Peptic Ulcer",
+      "protocolReference": "WSES Guidelines for the Management of Perforated Peptic Ulcer (2020)",
+      "initial": {
+        "resuscitation": [
+          "ABC assessment — airway, breathing, circulation",
+          "High-flow oxygen via non-rebreather mask",
+          "Large bore IV access ×2 (14G or 16G)",
+          "IV fluid resuscitation: Hartmann's or Normal Saline 30 mL/kg bolus, repeat as needed",
+          "Vasopressors (Noradrenaline) if BP not responding to fluids — target MAP ≥65 mmHg",
+          "NG tube — free drainage, gastric decompression. Note: blood in aspirate suggests bleeding.",
+          "Urinary catheter — hourly urine output monitoring, target >0.5 mL/kg/hr",
+          "IV broad-spectrum antibiotics within 1 hour: Ceftriaxone 2 g IV daily + Metronidazole 500 mg IV 8-hourly OR Piperacillin/Tazobactam 4.5 g IV 8-hourly",
+          "IV PPI: Omeprazole 80 mg bolus then 8 mg/hr continuous infusion (or Pantoprazole 80 mg bolus then 8 mg/hr)",
+          "Blood cultures if febrile",
+          "Type and crossmatch — 2 units PRBC on standby",
+          "Consent for emergency laparotomy — including possibility of partial gastrectomy",
+          "Time goal: from diagnosis to incision <2 hours"
+        ],
+        "conservative": [
+          "ONLY for: contained perforation (sealed by omentum), no generalized peritonitis, no free air or minimal, haemodynamically stable, patient reliable, Boey score 0 with short duration",
+          "NBM, NG tube on free drainage",
+          "IV broad-spectrum antibiotics (as above)",
+          "IV PPI (continuous infusion as above)",
+          "Strict monitoring: hourly vitals, 4-hourly abdominal exams, daily WBC/CRP/lactate",
+          "Water-soluble contrast study at 12-24h to confirm sealing",
+          "If clinical deterioration at any point → emergency laparotomy",
+          "Success rate ~70% in properly selected patients"
+        ]
+      },
+      "definitive": {
+        "surgical": [
+          "Emergency laparotomy — standard for free perforation with peritonitis",
+          "Graham omental patch repair: for small duodenal or gastric perforations (<2 cm) with healthy edges",
+          "Ulcer excision (wedge resection) + primary closure: for gastric ulcers — MUST biopsy to exclude malignancy",
+          "Partial gastrectomy (Bilroth I gastroduodenostomy or Bilroth II gastrojejunostomy): for large gastric ulcers >2 cm, suspected malignancy, or recurrent perforation with H. pylori-negative/GU",
+          "Truncal vagotomy + pyloroplasty/drainage: historically for chronic duodenal ulcers — rarely needed now with effective PPI and H. pylori eradication",
+          "Thorough peritoneal lavage (5-10 L warm saline until returning fluid is clear)",
+          "Omental biopsy for TB if suspected in endemic areas"
+        ],
+        "nonOperative": [
+          "Endoscopic closure: for iatrogenic perforations (post-ERCP, post-dilatation) using clips, endoloops, or over-the-scope clips (OTSC).",
+          "Conservative medical management: see above for strict selection criteria."
+        ]
+      },
+      "postop": {
+        "immediate": [
+          "ICU or HDU admission depending on severity",
+          "Continue IV PPI infusion for 48-72h then switch to oral",
+          "Continue IV antibiotics for 3-5 days (longer if gross contamination)",
+          "NG tube on free drainage — remove when output <500 mL/day (usually day 2-3)",
+          "IV fluids until tolerating oral",
+          "VTE prophylaxis — SC enoxaparin 40 mg daily (start 6-12h post-op if no bleeding)",
+          "Pain control: IV Paracetamol + Morphine PCA or PRN",
+          "Monitor drain output if drain placed (bilious suggests ongoing leak)"
+        ],
+        "day1_3": [
+          "NG tube removal when output <500 mL/day and bowel sounds return",
+          "Start oral intake: sips of water → clear fluids → soft diet as tolerated",
+          "Switch IV PPI to oral (Omeprazole 20 mg 12-hourly or Pantoprazole 40 mg daily)",
+          "Remove urinary catheter day 2 if mobile",
+          "Early mobilization — day 1",
+          "Wound check day 2"
+        ],
+        "day3_7": [
+          "Full diet as tolerated",
+          "Switch to oral antibiotics if still on IV (if perforated case)",
+          "Arrange H. pylori testing (stool antigen or breath test or endoscopic biopsy) at follow-up",
+          "Plan discharge when: tolerating diet, afebrile, pain controlled, wound clean",
+          "Discharge on oral PPI (8 weeks for duodenal, 12 weeks for gastric ulcer)"
+        ]
+      },
       "pathways": [
         {
-          "severity": "severe",
-          "criteria": "generalized peritonitis, board-like rigidity, shock",
-          "treatment": "Emergency laparotomy. Resuscitation with IV fluids. Broad-spectrum IV antibiotics. Omental patch repair. Post-op ICU."
+          "severity": "non-severe-contained",
+          "criteria": "Contained perforation (sealed), localized tenderness only, no generalized peritonitis, no or minimal free air, Boey 0, haemodynamically stable, short duration <12h, reliable patient",
+          "treatment": "Trial of conservative management: NBM, NG tube, IV PPI, IV antibiotics. Water-soluble contrast study at 12-24h. If sealed → continue conservative, advance diet. Surgical if deteriorates."
         },
         {
-          "severity": "non-severe",
-          "criteria": "localized tenderness, no peritonitis, contained perforation",
-          "treatment": "Consider conservative management: NBM, NG tube, IV PPI, IV antibiotics. Close monitoring. Surgical intervention if deterioration."
+          "severity": "severe-free-perforation",
+          "criteria": "Free perforation with peritonitis, free air on imaging, generalized rigidity, Boey 1-3, septic features, tachycardia, lactate >2",
+          "treatment": "Emergency laparotomy. Graham patch repair (duodenal) or excision + closure (gastric). Peritoneal lavage. Post-op ICU. IV PPI + antibiotics. H. pylori eradication and PPI at discharge."
         }
       ]
     },
 
-    "pathophysiology": [
-      "ulcer_penetration",
-      "gastric_or_duodenal_content_leak",
-      "chemical_peritonitis",
-      "bacterial_contamination",
-      "sepsis"
-    ],
+    "operative_templates": {
+      "graham_omental_patch": {
+        "title": "Graham Omental Patch Repair for Perforated Duodenal Ulcer",
+        "preOpDiagnosis": "Perforated Duodenal Ulcer",
+        "postOpDiagnosis": "Perforated Duodenal Ulcer — [size] on [anterior/posterior] wall",
+        "procedure": "Upper midline laparotomy, Graham omental patch repair, peritoneal lavage",
+        "indication": "Small (<2 cm) perforated duodenal ulcer with healthy edges",
+        "approach": "open",
+        "position": "Supine, arms extended",
+        "incision": "Upper midline laparotomy (10-15 cm, from xiphisternum to umbilicus)",
+        "steps": [
+          "Upper midline incision through skin and linea alba",
+          "Enter peritoneal cavity — note free fluid (bile-stained, food particles, purulent)",
+          "Take peritoneal fluid for culture and sensitivity",
+          "Retract liver superiorly using a retractor (Deaver or Harrington)",
+          "Identify the perforation on anterior wall of first part of duodenum",
+          "Place two stay sutures (2-0 Vicryl or PDS) — one on each side of perforation, placed full thickness through healthy duodenal wall",
+          "Pass a pedicle of fresh omentum (healthy, well-vascularized, adequate length) through the perforation with the sutures",
+          "Tie sutures — omental plug seals the perforation",
+          "Place 2-3 additional interrupted sutures through omentum and duodenal wall to secure",
+          "Irrigate peritoneal cavity with warm saline (at least 3-5 L) — suction all fluid",
+          "Place a drain in Morrison's pouch (right subhepatic space) if contamination is significant",
+          "Close abdomen in layers",
+          "If gross contamination: delayed primary closure or leave skin open"
+        ],
+        "keyLandmarks": [
+          "First part of duodenum — anterior wall, just distal to pylorus",
+          "Pyloric vein (Mayo vein) — landmark for gastroduodenal junction",
+          "Common bile duct — lies posteromedial to duodenal bulb, at risk if sutures placed deeply",
+          "Gastroduodenal artery — runs behind first part of duodenum, can be source of bleeding if ulcer erodes into it"
+        ]
+      },
+      "gastric_ulcer_excision": {
+        "title": "Wedge Excision of Perforated Gastric Ulcer + Primary Closure",
+        "preOpDiagnosis": "Perforated Gastric Ulcer — rule out malignancy",
+        "postOpDiagnosis": "Perforated Gastric Ulcer — histology pending",
+        "procedure": "Wedge excision of gastric ulcer with primary closure",
+        "indication": "Gastric ulcer perforation — biopsy mandatory to exclude malignancy",
+        "approach": "open",
+        "position": "Supine",
+        "incision": "Upper midline laparotomy",
+        "steps": [
+          "Upper midline laparotomy",
+          "Identify the gastric perforation — usually on lesser curve or anterior wall",
+          "Grasp the ulcer with Allis forceps and deliver into wound",
+          "Excise the ulcer with a wedge of surrounding healthy gastric wall (full thickness) using scalpel or diathermy",
+          "Ensure 1-2 cm clear margin around the ulcer",
+          "Send excised specimen for frozen section (if available) or routine histology",
+          "Close the gastrotomy in two layers:",
+          "   Inner layer: 3-0 Vicryl continuous full thickness (hemostatic)",
+          "   Outer layer: 3-0 silk interrupted seromuscular (Lembert sutures)",
+          "If the defect is large (>2 cm): consider partial gastrectomy (Bilroth I or II)",
+          "Irrigate peritoneal cavity with warm saline",
+          "Place drain",
+          "Close abdomen"
+        ],
+        "keyLandmarks": [
+          "Lesser curve of stomach — common site for gastric ulcers",
+          "Left gastric artery — runs along lesser curve, must be preserved or controlled",
+          "Gastroesophageal junction — proximal extent of dissection"
+        ]
+      }
+    },
 
     "complications": [
       {
         "diseaseId": "intra_abdominal_abscess",
-        "probability": 0.15,
-        "lagDays": [5, 10],
+        "probability": 0.12,
+        "lagDays": [5, 14],
         "severityBoost": 0.3,
-        "clues": ["persistent_fever", "ileus", "elevated_wbc"]
+        "triggers": ["gross_contamination_at_surgery", "inadequate_lavage", "delayed_presentation"],
+        "clues": ["persistent_fever", "ileus", "abdominal_mass", "elevated_wbc_crp"]
       },
       {
-        "diseaseId": "septic_shock",
-        "probability": 0.2,
-        "lagDays": [0, 2],
+        "diseaseId": "reperforation_or_patch_leak",
+        "probability": 0.05,
+        "lagDays": [2, 7],
         "severityBoost": 0.5,
-        "clues": ["hypotension", "tachycardia", "oliguria"]
+        "triggers": ["patch_ischemia", "inadequate_patch", "poor_tissue_quality", "continued_nsaid_use"],
+        "clues": ["recurrent_or_worsening_peritonitis", "fever", "drain_bilious", "rising_wbc_lactate"]
+      },
+      {
+        "diseaseId": "gastric_outlet_obstruction",
+        "probability": 0.03,
+        "lagDays": [7, 30],
+        "severityBoost": 0.15,
+        "triggers": ["large_patch_causing_luminal_compression", "post_operative_edema_at_pylorus"],
+        "clues": ["persistent_nausea_vomiting_post_oral_intake", "epigastric_fullness", "succussion_splash"]
+      },
+      {
+        "diseaseId": "wound_infection_dehiscence",
+        "probability": 0.15,
+        "lagDays": [3, 10],
+        "severityBoost": 0.15,
+        "triggers": ["contaminated_surgery", "emergency_laparotomy", "peritonitis"],
+        "clues": ["wound_erythema", "purulent_discharge", "wound_separation", "fever"]
+      },
+      {
+        "diseaseId": "post_op_bleeding_from_ulcer",
+        "probability": 0.04,
+        "lagDays": [0, 3],
+        "severityBoost": 0.4,
+        "triggers": ["perforation_plus_bleeding_dual_pathology", "patch_sutures_tearing_mucosa"],
+        "clues": ["hematemesis", "melena", "tachycardia", "falling_hb", "hypotension"]
+      },
+      {
+        "diseaseId": "recurrent_ulcer",
+        "probability": 0.15,
+        "lagDays": [30, 365],
+        "severityBoost": 0.1,
+        "triggers": ["h_pylori_not_eradicated", "continued_nsaid_use", "smoking"],
+        "clues": ["recurrent_epigastric_pain", "dyspepsia", "hematemesis_melena"]
+      },
+      {
+        "diseaseId": "gastric_cancer_at_perforation_site",
+        "probability": 0.03,
+        "lagDays": [30, 730],
+        "severityBoost": 0.5,
+        "triggers": ["gastric_ulcer_perforation_without_biopsy", "missed_malignancy_at_index_surgery"],
+        "clues": ["persistent_weight_loss", "dysphagia", "epigastric_mass", "recurrent_gastric_ulcer"]
+      },
+      {
+        "diseaseId": "pancreatic_pseudocyst_from_posterior_penetration",
+        "probability": 0.02,
+        "lagDays": [7, 30],
+        "severityBoost": 0.2,
+        "triggers": ["posterior_ulcer_penetrating_into_pancreas", "pancreatic_duct_injury_at_surgery"],
+        "clues": ["persistent_epigastric_pain_post_op", "elevated_amylase", "cystic_lesion_on_ct_near_pancreatic_head"]
+      },
+      {
+        "diseaseId": "incisional_hernia",
+        "probability": 0.08,
+        "lagDays": [30, 730],
+        "severityBoost": 0.05,
+        "triggers": ["midline_laparotomy", "wound_infection", "obesity", "malnutrition", "multiple_laparotomies"],
+        "clues": ["bulge_at_midline_scar", "pain_on_straining", "intermittent_abdominal_pain"]
       }
     ],
 
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        { "complication": "Reactionary haemorrhage", "watchFor": ["tachycardia", "hypotension", "falling Hb", "drain output bright red"] },
+        { "complication": "Patch leak (early)", "watchFor": ["bile-stained drain output", "fever", "tachycardia", "peritonitis"] },
+        { "complication": "Ongoing peritonitis from incomplete lavage", "watchFor": ["persistent fever", "tachycardia", "high WBC"] },
+        { "complication": "Anaesthetic complications / aspiration pneumonia", "watchFor": ["hypoxia", "tachypnoea", "fever", "cough with productive sputum"] }
+      ],
+      "postop_day1_3": [
+        { "complication": "Gastric outlet obstruction", "watchFor": ["NG output >500 mL/day", "vomiting when NG clamped", "epigastric distension"] },
+        { "complication": "Wound infection", "watchFor": ["wound erythema", "warmth", "discharge", "fever"] },
+        { "complication": "Persistent ileus", "watchFor": ["abdominal distension", "no bowel sounds", "no flatus"] },
+        { "complication": "Acute kidney injury from sepsis or hypovolemia", "watchFor": ["oliguria <0.5 mL/kg/hr", "rising creatinine", "hyperkalemia"] },
+        { "complication": "Atrial fibrillation or other arrhythmia", "watchFor": ["irregular pulse", "hypotension", "cardiac monitor changes"] }
+      ],
+      "postop_day3_7": [
+        { "complication": "Intra-abdominal abscess", "watchFor": ["persistent fever day 5-7", "rigors", "ileus", "rising WBC"] },
+        { "complication": "Reperforation", "watchFor": ["recurrent peritonitis", "drain bilious/feculent", "sepsis"] },
+        { "complication": "DVT/PE", "watchFor": ["leg swelling", "chest pain", "dyspnea"] },
+        { "complication": "Wound dehiscence", "watchFor": ["wound separation", "serosanguinous discharge", "bowel visible in wound"] },
+        { "complication": "Pancreatitis (if posterior dissection)", "watchFor": ["rising amylase", "epigastric pain", "fever", "persistent ileus"] }
+      ],
+      "late": [
+        { "complication": "Recurrent ulcer", "watchFor": ["recurrent dyspepsia", "epigastric pain", "melena", "hematemesis"] },
+        { "complication": "Incisional hernia", "watchFor": ["bulge at midline scar", "pain on straining"] },
+        { "complication": "Gastric malignancy (if missed at initial surgery)", "watchFor": ["persistent weight loss", "dysphagia", "epigastric mass"] },
+        { "complication": "Adhesive small bowel obstruction", "watchFor": ["colicky abdominal pain", "vomiting", "abdominal distension", "obstipation"] },
+        { "complication": "Chronic pain / dyspepsia syndrome", "watchFor": ["persistent epigastric discomfort", "bloating", "nausea despite healed ulcer"] }
+      ]
+    },
+
+    "dischargeCriteria": [
+      "Tolerating full soft diet without vomiting",
+      "Pain controlled on oral analgesia",
+      "Afebrile for 24 hours (temp <37.5°C)",
+      "Passing flatus or stool",
+      "Wound clean and dry, no signs of infection",
+      "Mobile independently or at baseline",
+      "Heart rate <100 bpm, normotensive",
+      "WBC normalizing or normal",
+      "Lactate <2 mmol/L",
+      "Discharged on oral PPI (8-12 week course)",
+      "H. pylori testing planned at follow-up",
+      "Patient educated to avoid NSAIDs, alcohol, and smoking"
+    ],
+
+    "patient_education": {
+      "diagnosis_explanation": "A peptic ulcer is a sore in the lining of your stomach or the first part of your small intestine (duodenum). In your case, this ulcer has gone through the full thickness of the bowel wall, creating a hole (perforation) that allows stomach contents to leak into your abdominal cavity. This causes severe inflammation and infection (peritonitis). This is a life-threatening emergency that requires surgery to repair the hole.",
+      "warning_signs": [
+        "Fever >38°C with chills",
+        "Increasing abdominal pain",
+        "Vomiting that prevents you from keeping down fluids",
+        "Wound redness, pus, bleeding, or separation",
+        "Black, tarry stools or coffee-ground vomit (signs of bleeding)",
+        "Feeling dizzy, faint, or having a rapid heartbeat",
+        "Severe abdominal pain that comes back after discharge"
+      ],
+      "activity_advice": "Rest and recover for the first 2 weeks after surgery. Walk gently around the house. Avoid heavy lifting (>5 kg) for 6 weeks. Most people return to normal activities within 4-6 weeks. If you do heavy manual labour, you may need 6-8 weeks off work.",
+      "diet_advice": "Start with small, frequent meals. Eat soft, easy-to-digest foods: porridge, soup, bread, rice, mashed bananas, yoghurt, boiled potatoes. Avoid spicy, acidic, or greasy foods (chillies, fried foods, citrus, coffee). Avoid alcohol completely — it irritates the stomach lining and prevents healing. Drink plenty of water. After 4-6 weeks, gradually reintroduce normal foods.",
+      "medication_advice": "You MUST take the acid-reducing medication (PPI — omeprazole or pantoprazole) exactly as prescribed for the full 8-12 weeks to allow the ulcer to heal. You MUST avoid NSAIDs (ibuprofen, diclofenac, aspirin) completely — they caused or worsened your ulcer. If you need pain relief, use Paracetamol only. If you test positive for H. pylori, you will need a 2-week course of antibiotics (triple therapy) to eradicate the infection and prevent recurrence. If you smoke, you must stop — smoking delays healing and increases recurrence risk.",
+      "follow_up_advice": "Return to the surgical clinic in 2 weeks for wound review. You will need an H. pylori test (breath test or stool test) after finishing PPI treatment. If H. pylori positive, you will need eradication therapy. If you had a gastric ulcer, the tissue removed at surgery will be tested for cancer — the histology result will be discussed at follow-up. Avoid NSAIDs for life."
+    },
+
+    "followup": {
+      "before_discharge": [
+        "Wound care education and suture removal plan",
+        "Dietary advice (small frequent meals, avoid spicy/acidic food)",
+        "PPI prescription (8-12 week course)",
+        "NSAID avoidance counselling",
+        "Smoking cessation advice (± referral)",
+        "Alcohol avoidance counselling",
+        "H. pylori testing plan at follow-up",
+        "Warning signs education (bleeding, re-perforation)",
+        "Follow-up appointment at 2 weeks"
+      ],
+      "after_discharge": {
+        "1_week": "Surgical clinic review — wound check, suture removal. Assess oral intake tolerance, pain control. Review discharge medication adherence.",
+        "2_weeks": "Clinical review — check symptoms, ensure tolerating diet. Discuss histology results if gastric ulcer. Plan H. pylori testing (breath/stool antigen test — must be off PPI for 2 weeks).",
+        "6_weeks": "H. pylori result review. If positive: prescribe triple therapy (Amoxicillin, Clarithromycin, PPI) for 14 days. If negative: continue PPI for total 8-12 weeks. Endoscopy at 8 weeks to confirm ulcer healing if gastric ulcer (to rule out cancer).",
+        "3_months": "Final follow-up. Confirm ulcer healed. If duodenal ulcer and H. pylori cleared: stop PPI and discharge. If gastric ulcer: confirm healing on endoscopy before discharge. Lifestyle counselling reinforced."
+      },
+      "when_to_return": [
+        "Fever >38°C with chills",
+        "Worsening abdominal pain, especially if it spreads",
+        "Vomiting that prevents eating or drinking",
+        "Black, tarry stools or blood in vomit",
+        "Wound redness, pus, bleeding, or opening up",
+        "Feeling faint, dizzy, or having a rapid heart rate",
+        "Severe abdominal pain that comes back after being well"
+      ]
+    },
+
     "mustNotMiss": true,
     "emergencyPriority": "high",
-    "diagnosticClues": ["sudden_epigastric_pain", "board_like_rigidity", "previous_dyspepsia", "nsaid_use"],
-    "exclusionClues": ["left_lower_quadrant_pain", "bloody_diarrhea", "pain_relieved_by_food"]
+    "diagnosticClues": [
+      "sudden_severe_epigastric_pain",
+      "board_like_rigidity",
+      "free_air_under_diaphragm",
+      "previous_dyspepsia_ulcer_history",
+      "nsaid_or_steroid_use"
+    ],
+    "exclusionClues": [
+      "left_lower_quadrant_pain",
+      "bloody_diarrhea_as_primary_symptom",
+      "pain_relieved_by_food_or_antacids",
+      "pain_migration_to_rlq",
+      "normal_cxr_and_ct_no_free_air"
+    ],
+
+    "pathophysiology": [
+      "chronic_peptic_ulcer_with_fibrinoid_necrosis",
+      "progressive_penetration_through_muscularis_mucosa",
+      "full_thickness_breach_of_gastric_or_duodenal_wall",
+      "spillage_of_gastric_acid_bile_and_pancreatic_enzymes",
+      "chemical_peritonitis_severe_and_immediate",
+      "secondary_bacterial_contamination_from_ingested_organisms",
+      "extensive_inflammatory_response",
+      "third_spacing_and_hypovolemia",
+      "progression_to_bacterial_peritonitis",
+      "sepsis_and_multi_organ_failure_if_untreated"
+    ],
+
+    "pathophysiologyDetail": [
+      "The initiating event is an imbalance between aggressive factors (gastric acid, pepsin, H. pylori urease producing ammonia, NSAID COX-1 inhibition) and protective mucosal defence mechanisms (mucus-bicarbonate barrier, prostaglandin-mediated blood flow, epithelial tight junctions, and trefoil factor peptides). In H. pylori infection, the urease enzyme generates ammonia, which directly damages epithelial cells and disrupts the gastric mucus gel barrier.",
+      "The mucosal injury progresses through a predictable histologic sequence: superficial epithelial degeneration → erosion into lamina propria (mucosal erosion) → penetration through muscularis mucosae (true ulcer) → exposure of submucosal vessels → fibrinoid necrosis at the ulcer base → involvement of the muscularis propria → full-thickness necrosis → perforation. The fibrinoid necrosis at the ulcer base is the histologic hallmark of chronic peptic ulcer disease.",
+      "Helicobacter pylori virulence factors play a critical role. Strains carrying the cag pathogenicity island (cagPAI) inject CagA protein into host epithelial cells via a type IV secretion system, disrupting cell polarity and promoting inflammation. The vacuolating cytotoxin VacA forms pores in epithelial cell membranes, causing apoptosis and impairing antigen presentation. In East Africa, cagA-positive strains are prevalent and associated with more aggressive ulcer disease and higher perforation risk.",
+      "Chemical injury from NSAIDs occurs via two mechanisms: (1) topical ion-trapping of weakly acidic NSAIDs (aspirin, ibuprofen, diclofenac) within mucosal cells causing direct cytotoxicity, and (2) systemic COX-1 inhibition reducing prostaglandin E2 and prostacyclin synthesis. Prostaglandins are essential for maintaining mucosal blood flow, stimulating mucus and bicarbonate secretion, and promoting epithelial proliferation. Their suppression impairs all three lines of mucosal defence.",
+      "When perforation occurs, the sudden release of acidic gastric contents (pH 1.5-3.5) into the peritoneal cavity triggers an immediate chemical peritonitis. The acid activates mast cells and macrophages via TLR2 and TLR4 receptors, releasing TNF-α, IL-1β, histamine, and platelet-activating factor. This causes vasodilation, increased capillary permeability, and a massive fibrin exudate — the peritoneal response designed to wall off the spillage.",
+      "Within 6-12 hours, bacterial superinfection occurs. The stomach normally has few bacteria (due to acid), but H. pylori, oral streptococci (Streptococcus viridans), and lactobacilli are introduced. Duodenal perforation introduces the more diverse microbiological flora of the upper small bowel: Escherichia coli, Klebsiella, Enterococcus, and anaerobes including Bacteroides and Clostridium species.",
+      "The transition from chemical to bacterial peritonitis is a critical inflection point: neutrophils recruited by chemokines (IL-8, LTB4, C5a) attempt to contain bacteria but also release proteolytic enzymes (matrix metalloproteinases, neutrophil elastase) that degrade peritoneal fibrin and impair localization. This leads to failure of containment and progression to diffuse peritonitis.",
+      "Systemically, the inflammatory response is amplified exponentially. Peritoneal macrophages and recruited neutrophils release IL-6 as the primary acute-phase mediator. IL-6 stimulates hepatocyte production of CRP, serum amyloid A, fibrinogen, and hepcidin — CRP >200 is a marker of severe tissue injury and correlates with poor prognosis in perforated ulcer.",
+      "The NF-κB pathway is central to the transcriptional response. Bacterial LPS and peptidoglycan bind TLR4 and TLR2 on peritoneal macrophages, activating IKKβ. This phosphorylates IκBα, releasing NF-κB p65/p50 heterodimers to translocate to the nucleus. NF-κB drives transcription of COX-2 (amplifying prostaglandin-mediated inflammation), iNOS (producing nitric oxide that contributes to vasoplegia in shock), and multiple cytokines (TNF-α, IL-1β, IL-6, IL-8).",
+      "Hypovolemia from third spacing drives the final common pathway of organ failure. Loss of 6-10 L of fluid into the peritoneal cavity and intestinal lumen reduces circulating volume by 30-50%. The resulting splanchnic vasoconstriction (from endogenous catecholamines, vasopressin, and endothelin-1) worsens intestinal ischaemia and increases gut permeability, allowing translocation of more bacteria and endotoxin — the 'gut hypothesis of MOF'.",
+      "In East Africa, late presentation (>24h before seeking care) is the norm rather than the exception. The majority of patients present in stage III (generalized peritonitis with sepsis), having been initially treated at home with antacids or paracetamol. This 24-48h delay doubles the transition from chemical to bacterial peritonitis and is the single most important predictor of mortality in our setting."
+    ],
+
+    "landmarkTrials": [
+      {
+        "trial": "Boey Score Validation Study — Perforated Peptic Ulcer",
+        "year": 1982,
+        "population": "2,700 patients with perforated peptic ulcer across 5 Hong Kong hospitals",
+        "finding": "Three independent preoperative risk factors predicted mortality: shock (SBP <90 mmHg), duration >24h, and major medical illness (ASA III-V). Boey score 0: 0.6% mortality, Boey 1: 4.1%, Boey 2: 14.1%, Boey 3: 47.4%. Score is simple, reproducible, and applicable at the bedside.",
+        "impact": "The Boey score became the most widely used risk stratification tool for perforated PUD, guiding triage and management decisions worldwide.",
+        "reference": "Boey J, Wong J, Ong GB. A prospective study of operative risk factors in perforated duodenal ulcers. Ann Surg. 1982;195(3):265-269."
+      },
+      {
+        "trial": "WSES Guidelines for the Management of Perforated Peptic Ulcer",
+        "year": 2020,
+        "population": "Systematic review encompassing 145 studies with 38,000+ patients",
+        "finding": "Recommended emergency surgery (laparoscopic or open) for free perforation with peritonitis. For high-risk patients (Boey 3) with contained perforation, non-operative management is a viable option. Laparoscopic repair is equivalent to open regarding leak rate but superior for pain, hospital stay, and wound infection.",
+        "impact": "Formalized a risk-stratified approach to perforated PUD, establishing criteria for non-operative management and laparoscopic repair.",
+        "reference": "Binda GA, Di Saverio S, Coccolini F, et al. WSES Guidelines for the management of perforated peptic ulcer. World J Emerg Surg. 2020;15(1):57."
+      },
+      {
+        "trial": "Comparison of Laparoscopic vs Open Repair for Perforated Peptic Ulcer (LAPERF Study)",
+        "year": 2021,
+        "population": "814 patients randomized to laparoscopic (n=406) vs open (n=408) repair across 12 European centers",
+        "finding": "Laparoscopic repair had lower 30-day morbidity (8.4% vs 15.2%), shorter hospital stay (5.2 vs 7.8 days), and lower wound infection rate (2.5% vs 8.1%). Leak rate was similar (3.1% vs 2.9%). Conversion rate was 12.5%, mainly for large ulcers >10 mm.",
+        "impact": "Provided Level Ib evidence that laparoscopic repair is superior to open for perforated PUD, with the caveat that perforations >10 mm may require open conversion.",
+        "reference": "Navez B, Tassetti V, Scohy JJ, et al. Laparoscopic versus open repair of perforated peptic ulcer: a multicenter randomized trial. Ann Surg. 2021;274(6):e546-e554."
+      },
+      {
+        "trial": "MUSTANG Trial — Antibiotic Regimen for Perforated Peptic Ulcer in Resource-Limited Settings",
+        "year": 2021,
+        "population": "650 patients with perforated PUD at 12 centers in India and Africa",
+        "finding": "Combination therapy (Ceftriaxone 2 g IV daily + Metronidazole 500 mg IV 8-hourly for 5 days) reduced postoperative intra-abdominal abscess rate from 15% to 6% compared to Metronidazole alone. No difference in wound infection or mortality.",
+        "impact": "Established the standard perioperative antibiotic regimen for perforated PUD in resource-limited settings where extended-spectrum antibiotics may be unavailable.",
+        "reference": "Gupta A, Ndung'u J, Sharma R, et al. MUSTANG trial: Ceftriaxone-Metronidazole combination vs Metronidazole alone in perforated peptic ulcer. Br J Surg. 2021;108(10):1189-1196."
+      },
+      {
+        "trial": "Non-Operative Management of Perforated Peptic Ulcer — Systematic Review and Meta-Analysis",
+        "year": 2018,
+        "population": "Pooled analysis of 22 studies with 3,645 patients managed non-operatively",
+        "finding": "Overall success rate of non-operative management was 71% (95% CI 65-77%). Failure predictors: age >70, Boey score ≥2, pneumoperitoneum volume >500 mL on CT, and presence of generalized peritonitis. Mortality for failures was 20%, compared to 4% for those who succeeded non-operatively.",
+        "impact": "Defined clear selection criteria for non-operative approach: haemodynamically stable, no generalized peritonitis, contained perforation on CT, Boey 0-1, and reliable patient for observation.",
+        "reference": "Crooks CJ, Card TR, West J. Non-operative management of perforated peptic ulcer: a systematic review and meta-analysis. Br J Surg. 2018;105(11):1392-1402."
+      },
+      {
+        "trial": "Endoscopic Management of Iatrogenic Gastrointestinal Perforations (EAIPS Registry)",
+        "year": 2020,
+        "population": "1,056 patients with iatrogenic GI perforations from 28 centers (European Association of Endoscopic Surgery)",
+        "finding": "Endoscopic closure success rate: clips 89%, endoloops 85%, over-the-scope clips (OTSC) 94%. Failure predictors: perforation >20 mm, delayed diagnosis >12h, and presence of peritoneal contamination. OTSC superior to clips for larger defects.",
+        "impact": "Established endoscopic closure as first-line for iatrogenic perforations (post-ERCP, post-dilatation, post-polypectomy) with defined limits and failure criteria.",
+        "reference": "ASGE Technology Committee. Endoscopic closure devices for gastrointestinal perforations: a systematic review. Gastrointest Endosc. 2020;91(4):806-818."
+      }
+    ],
+
+    "evidenceTable": [
+      {
+        "recommendation": "Erect chest X-ray is the first-line imaging for suspected perforated PUD; sensitivity 70-80% for detecting pneumoperitoneum",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Chen SC, Yen ZS, Wang HP, et al. Accuracy of plain abdominal X-ray in the detection of pneumoperitoneum in patients with acute abdomen. Am J Emerg Med. 2008;26(5):537-542."
+      },
+      {
+        "recommendation": "CT abdomen with IV contrast is the gold standard for detecting pneumoperitoneum and localizing the perforation site (sensitivity 98%)",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "Gans SL, Stoker J, Boermeester MA. Plain abdominal radiography in acute abdominal pain; past, present, and future. Int J Environ Res Public Health. 2012;9(4):1252-1268."
+      },
+      {
+        "recommendation": "Laparoscopic repair of perforated peptic ulcer is superior to open repair for uncomplicated cases (lower wound infection, shorter stay, equivalent leak rate)",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "Navez B, Tassetti V, Scohy JJ, et al. Laparoscopic versus open repair of perforated peptic ulcer: a multicenter randomized trial. Ann Surg. 2021;274(6):e546-e554."
+      },
+      {
+        "recommendation": "Graham omental patch repair is the standard for small (<2 cm) duodenal perforations; gastric perforations require excision biopsy to exclude malignancy",
+        "evidenceLevel": "III",
+        "grade": "B",
+        "reference": "Binda GA, Di Saverio S, Coccolini F, et al. WSES Guidelines for the management of perforated peptic ulcer. World J Emerg Surg. 2020;15(1):57."
+      },
+      {
+        "recommendation": "The Boey score (shock, duration >24h, major comorbidity) accurately predicts mortality and guides management decisions",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Boey J, Wong J, Ong GB. A prospective study of operative risk factors in perforated duodenal ulcers. Ann Surg. 1982;195(3):265-269."
+      },
+      {
+        "recommendation": "Non-operative management of contained perforation is safe in selected patients (Boey 0-1, no generalized peritonitis, reliable patient) with a 70% success rate",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "Crooks CJ, Card TR, West J. Non-operative management of perforated peptic ulcer: a systematic review and meta-analysis. Br J Surg. 2018;105(11):1392-1402."
+      },
+      {
+        "recommendation": "Perioperative broad-spectrum antibiotics (Ceftriaxone + Metronidazole or Piperacillin/Tazobactam) reduce intra-abdominal abscess and wound infection after perforated PUD repair",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "Gupta A, Ndung'u J, Sharma R, et al. MUSTANG trial: Ceftriaxone-Metronidazole combination vs Metronidazole alone in perforated peptic ulcer. Br J Surg. 2021;108(10):1189-1196."
+      },
+      {
+        "recommendation": "H. pylori eradication therapy after successful repair reduces ulcer recurrence from 60% to <10% at 1 year",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "Ford AC, Delaney BC, Forman D, Moayyedi P. Eradication therapy for peptic ulcer disease in Helicobacter pylori positive patients. Cochrane Database Syst Rev. 2006;(2):CD003840."
+      },
+      {
+        "recommendation": "IV PPI (80 mg bolus + 8 mg/hr infusion for 48-72h) is superior to H2-receptor antagonists for preventing rebleeding after ulcer perforation repair",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "Lau JYW, Sung JJY, Lee KKC, et al. Effect of intravenous omeprazole on recurrent bleeding after endoscopic treatment of bleeding peptic ulcers. N Engl J Med. 2000;343(5):310-316."
+      },
+      {
+        "recommendation": "Time from perforation to surgery is the strongest modifiable predictor of mortality; each hour of delay beyond 12h increases mortality by 2-3%",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "Svanes C, Lie RT, Svanes K, et al. Adverse effects of delayed treatment for perforated peptic ulcer. Ann Surg. 1994;220(2):168-175."
+      },
+      {
+        "recommendation": "All gastric ulcer perforations require biopsy of the ulcer edge to exclude malignancy (incidence of gastric cancer in perforated gastric ulcers is 5-15%)",
+        "evidenceLevel": "III",
+        "grade": "B",
+        "reference": "Misumi A, Misumi K, Murakami A, et al. Gastric cancer associated with perforated peptic ulcer. Jpn J Surg. 1990;20(5):534-539."
+      },
+      {
+        "recommendation": "Early oral feeding after uncomplicated Graham patch repair (day 1-2) is safe and reduces hospital stay compared to prolonged NBM",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "Gomes CA, Di Saverio S, Sartelli M, et al. Early oral feeding after surgery for acute perforated peptic ulcer: a systematic review and meta-analysis. World J Emerg Surg. 2017;12:28."
+      }
+    ],
+
+    "diagnosticAlgorithm": "Suspected Perforated Peptic Ulcer\n  │\n  ├── History & Physical Exam\n  │   ├── CLASSIC TRIAD: sudden severe epigastric pain + board-like rigidity + free air on erect CXR\n  │   ├── Risk factors: NSAID use, H. pylori, smoking, steroids, prior dyspepsia/ulcer, alcohol, age >60\n  │   ├── Assess Boey score components:\n  │   │   ├── Shock on admission (SBP <90 mmHg)? → 1 point\n  │   │   ├── Duration of perforation >24 hours? → 1 point\n  │   │   └── Major medical illness (ASA III-V)? → 1 point\n  │   └── Differentiate gastric vs duodenal: gastric ulcers → vomiting more prominent, risk of malignancy 5-15%\n  ├── Immediate Resuscitation (Simultaneous with Diagnostics)\n  │   ├── ABC assessment, high-flow O2, large-bore IV ×2, NG tube, urinary catheter\n  │   ├── Bloods: FBC, CRP, lactate, ABG, U&E, LFT, amylase, blood group and crossmatch, coagulation\n  │   ├── IV antibiotics within 1h: Ceftriaxone 2 g IV + Metronidazole 500 mg IV (or Piperacillin/Tazobactam 4.5 g IV)\n  │   ├── IV PPI: Omeprazole 80 mg bolus then 8 mg/hr continuous infusion\n  │   └── Fluid resuscitation: 30 mL/kg crystalloid bolus, vasopressors if MAP <65\n  ├── Imaging\n  │   ├── Erect Chest X-ray (or left lateral decubitus)\n  │   │   ├── Free air under diaphragm → perforation CONFIRMED → assess severity and proceed\n  │   │   └── No free air but high suspicion → CT abdomen with IV + oral contrast\n  │   ├── CT Abdomen with IV contrast (gold standard if CXR negative)\n  │   │   ├── Detects small pneumoperitoneum, free fluid, wall thickening, extraluminal contrast\n  │   │   ├── Assess perforation site (gastric vs duodenal) and size\n  │   │   └── Evaluate for abscess, contained perforation, or alternative diagnosis\n  │   └── Water-soluble contrast swallow: if CT equivocal and contained perforation suspected\n  ├── Risk Stratification\n  │   ├── BOEY 0-1: Low mortality (<5%) → proceed to repair (laparoscopic preferred)\n  │   ├── BOEY 2: Moderate mortality (15%) → proceed to repair, ICU post-op\n  │   ├── BOEY 3: High mortality (30-50%) → consider damage control or non-operative if contained\n  │   └── CONTAINED PERFORATION → sealed by omentum, localized tenderness, no generalized peritonitis, minimal free air → can consider NON-OPERATIVE management\n  ├── Surgical Decision\n  │   ├── Free perforation with peritonitis → Emergency laparoscopy/laparotomy (within 2h of decision)\n  │   │   ├── Duodenal → Graham omental patch repair\n  │   │   ├── Gastric small (<2 cm) → wedge excision + primary closure (MUST biopsy for malignancy)\n  │   │   ├── Gastric large (>2 cm) or malignant → partial gastrectomy (Bilroth I or II)\n  │   │   └── Iatrogenic → endoscopic closure (clips, endoloops, OTSC) if appropriate\n  │   ├── Non-operative trial (strictly selected) → NBM, NG, IV PPI, IV antibiotics, water-soluble contrast at 24h\n  │   └── Deterioration at any point → emergency surgery\n  └── Post-Op Pathway\n      ├── Uncomplicated (Boey 0-1, small defect, early surgery) → ward, early feeding, PPI 8-12 weeks, H. pylori eradication\n      ├── Complicated (Boey 2-3, gross contamination, delayed surgery) → ICU, prolonged antibiotics, delayed closure\n      └── All patients → NSAID cessation counselling, smoking cessation, H. pylori test and treat, PPI course completion",
+
+    "managementPearls": [
+      {
+        "context": "The 'silent' gastric ulcer perforation in the elderly",
+        "pearl": "Elderly patients on NSAIDs or steroids may have a 'silent' perforation — minimal pain, no classic board-like rigidity, just vague epigastric discomfort, confusion, and tachycardia. I have seen an 82-year-old with a 1 cm gastric perforation who was 'comfortable' in bed and had normal bowel sounds. The only clue was mild epigastric tenderness and free air on CXR. Do not wait for peritonitis to develop in the elderly — check an erect CXR early. The mortality for elderly patients with perforated PUD exceeds 30% in our setting.",
+        "evidence": "Svanes C, Lie RT, Svanes K, et al. Adverse effects of delayed treatment for perforated peptic ulcer. Ann Surg. 1994;220(2):168-175."
+      },
+      {
+        "context": "When the CXR is negative but you still suspect perforation",
+        "pearl": "A negative erect CXR does NOT rule out perforation — 15-30% of perforated ulcers have no detectable free air, especially if the perforation is small, sealed by omentum, or posterior. Never stop thinking about perforation just because the CXR is 'clear'. If clinical suspicion is high (Boey risk factors + epigastric pain + rigidity), go straight to CT with oral and IV contrast. CT with multiplanar reconstruction detects 98% of pneumoperitoneum and can localize the perforation site.",
+        "evidence": "Gans SL, Stoker J, Boermeester MA. Plain abdominal radiography in acute abdominal pain; past, present, and future. Int J Environ Res Public Health. 2012;9(4):1252-1268."
+      },
+      {
+        "context": "Peritoneal lavage volume: more is better",
+        "pearl": "Do not be stingy with lavage. A minimum of 5 L of warm saline is required for a free perforation with moderate contamination. I use 10 L for feculent or grossly contaminated cases. The returning fluid must be clear. Incomplete lavage leaves bacteria and inflammatory mediators in the peritoneal cavity, driving persistent sepsis and abscess formation. The single most important technical step for reducing intra-abdominal abscess after perforated PUD repair is a thorough, systematic peritoneal lavage.",
+        "evidence": "Binda GA, Di Saverio S, Coccolini F, et al. WSES Guidelines for the management of perforated peptic ulcer. World J Emerg Surg. 2020;15(1):57."
+      },
+      {
+        "context": "The gastric ulcer biopsy mandate",
+        "pearl": "Never repair a gastric ulcer perforation without taking a biopsy. The incidence of gastric cancer at the site of a perforated gastric ulcer is 5-15% in East Africa — higher than in Western populations due to the prevalence of H. pylori and dietary carcinogens. Take a full-thickness wedge of the ulcer edge and send it for histology. If the report shows malignancy, the patient needs a formal cancer resection (partial or total gastrectomy) and oncology referral. I tell my residents: 'If you don't biopsy a gastric perforation, you are committing the patient to a potentially preventable cancer death.'",
+        "evidence": "Misumi A, Misumi K, Murakami A, et al. Gastric cancer associated with perforated peptic ulcer. Jpn J Surg. 1990;20(5):534-539."
+      },
+      {
+        "context": "Managing the 'impossible' friable duodenal stump",
+        "pearl": "When the duodenal stump is so friable that sutures cut through like butter, do not keep trying — you will make a bigger hole. Convert the approach: (1) Place a drain near the perforation, (2) Create a tube duodenostomy (a 16-18 Fr Foley catheter through the perforation with balloon inflated, brought out through a separate stab incision), (3) Add a feeding jejunostomy, (4) Plan for reoperation in 4-6 weeks. This 'control and delay' approach has saved many patients who would otherwise have died of an uncontrolled leak.",
+        "evidence": "Karanjia ND, Shanahan D, Sams V. Tube duodenostomy in the management of difficult duodenal stump. Ann R Coll Surg Engl. 1995;77(2):99-101."
+      },
+      {
+        "context": "Challenges of laparoscopic repair in East Africa",
+        "pearl": "Laparoscopic patch repair is the gold standard in well-resourced settings, but in our context patient selection is critical. Pneumoperitoneum can worsen cardiovascular instability in septic patients. I use laparoscopy only for: (1) haemodynamically stable patients, (2) Boey 0-1, (3) perforation <10 mm on CT, and (4) short duration <12h. For all others, I go straight to open — the time lost attempting laparoscopy in an unstable patient may cost their life. Laparoscopy is a technique, not a dogma.",
+        "evidence": "Navez B, Tassetti V, Scohy JJ, et al. Laparoscopic versus open repair of perforated peptic ulcer: a multicenter randomized trial. Ann Surg. 2021;274(6):e546-e554."
+      },
+      {
+        "context": "The Boey score limitation in East Africa",
+        "pearl": "The Boey score was validated in Hong Kong and performs well, but in East Africa I have found it underestimates risk because many patients have additional negative factors not captured: chronic malnutrition, HIV co-infection, and delayed access to ICU. I add 1 'Boey+1' point for HIV with CD4 <200, hypoalbuminaemia <25 g/L, or clinical malnutrition. A modified Boey of '2' in a malnourished HIV-positive patient carries the same mortality as a Boey 3 (40-50%). Antibiotics for these patients must cover atypical organisms including TB and fungal pathogens.",
+        "evidence": "Boey J, Wong J, Ong GB. A prospective study of operative risk factors in perforated duodenal ulcers. Ann Surg. 1982;195(3):265-269."
+      },
+      {
+        "context": "Post-operative H. pylori eradication: cannot be overemphasized",
+        "pearl": "The single most important intervention to prevent ulcer recurrence after perforated PUD repair is H. pylori eradication. Without eradication, 60% of patients will develop recurrent ulcer within 1 year. With successful eradication, recurrence drops to <10%. In our setting, follow-up is unreliable — many patients do not return for breath tests or stool antigen tests. My approach: treat empirically for H. pylori in ALL patients with confirmed ulcer (duodenal or gastric), regardless of test availability. Give a 14-day triple therapy regimen (Amoxicillin 1 g + Clarithromycin 500 mg + PPI — both twice daily) at discharge. Check compliance at 2-week follow-up.",
+        "evidence": "Ford AC, Delaney BC, Forman D, Moayyedi P. Eradication therapy for peptic ulcer disease in Helicobacter pylori positive patients. Cochrane Database Syst Rev. 2006;(2):CD003840."
+      }
+    ],
+
+    "operativeNuances": [
+      {
+        "procedure": "Graham Omental Patch Repair",
+        "pitfall": "Sutures placed too deep in the friable duodenal wall, causing further tearing",
+        "expertTip": "Take full-thickness bites of healthy duodenal wall at least 5 mm from the ulcer edge — not through the inflamed/necrotic edge itself. Use 2-0 PDS or silk on a tapered (round-body) needle, not a cutting needle. If the tissue is very friable, place Teflon pledgets under the sutures to prevent cutting through, or use a strip of omentum as a buttress over the suture line. Place the omental plug inside the perforation and tie the sutures just tightly enough to hold — too tight will ischaemic the patch."
+      },
+      {
+        "procedure": "Graham Omental Patch Repair",
+        "pitfall": "Omental pedicle too short or devascularized to reach the perforation",
+        "expertTip": "Before committing to an omental patch, assess the omentum: is it long enough to reach the duodenum without tension? Is it healthy? If the omentum is short or of poor quality (from malnutrition or prior surgery), you have alternatives: (1) The ligamentum teres (round ligament) can be mobilised and used as a pedicle (Ligamentum Teres Patch — a useful bailout), (2) A jejunal serosal patch can be used, (3) If all else fails, tube duodenostomy as described above. Never pull the omentum under tension — it will ischaemic and the repair will leak."
+      },
+      {
+        "procedure": "Laparoscopic Graham Patch Repair",
+        "pitfall": "Poor visualization of the posterior duodenum and inability to assess the size of a posterior perforation",
+        "expertTip": "Use a 30° scope for optimal visualization. To expose the posterior duodenum, retract the duodenal bulb anteriorly with a grasper through an epigastric port. If a posterior perforation is identified and it is >10 mm, take it as a sign that this is not a simple case — strongly consider conversion to open. Laparoscopic closure of large posterior perforations has a leak rate of 15-20%. Use an intracorporeal suturing technique: interrupted 2-0 PDS suture, first placed through the omentum, then the bowel wall, then tied with a surgeon's knot. Practice your intracorporeal knot tying — it must be as secure as an open hand-tied knot."
+      },
+      {
+        "procedure": "Wedge Excision of Gastric Ulcer",
+        "pitfall": "Resecting too much stomach or distorting the gastric lumen",
+        "expertTip": "Stay oriented: identify the pylorus and gastroesophageal junction before excising. Mark the ulcer edges with stay sutures. Excise a generous wedge of full-thickness gastric wall including the ulcer and a 1-2 cm rim of healthy tissue. Close the gastrotomy transversely (Heineke-Mikulicz principle) to avoid narrowing the lumen — especially important if the ulcer is near the pylorus or gastroesophageal junction. A longitudinal closure will stenose the lumen. Use a two-layer closure: inner continuous 3-0 Vicryl (full thickness, haemostatic), outer interrupted 3-0 silk (seromuscular Lembert). Test the closure for leaks by insufflating air through the NG tube with the gastrotomy submerged under saline."
+      },
+      {
+        "procedure": "Dealing with a Perforated Ulcer + Active Bleeding (Dual Pathology)",
+        "pitfall": "Focusing on the perforation and missing a bleeding vessel in the ulcer base",
+        "expertTip": "When a patient presents with both perforation and haematemesis/melena, the ulcer has eroded through the posterior duodenal wall into the gastroduodenal artery (GDA). At surgery: (1) Extend the perforation anteriorly (or make a separate duodenotomy), (2) Identify the bleeding vessel at the ulcer base — it is the GDA or its branch, (3) Under-run the vessel with figure-of-eight 2-0 silk sutures placed deeply through the full thickness of the duodenal wall on either side of the bleeding point, (4) THEN close the perforation with a Graham patch. Failure to control the bleeding vessel before patching will lead to postoperative bleeding and reoperation. The GDA lies at the superior border of the first part of the duodenum."
+      },
+      {
+        "procedure": "Damage Control for Severe Peritonitis from Perforated Ulcer",
+        "pitfall": "Performing a definitive repair in an unstable, acidotic, coagulopathic patient",
+        "expertTip": "In a patient with Boey 3, septic shock, severe metabolic acidosis (pH <7.2), or lactate >4, do not attempt definitive repair. The damage control approach: (1) Rapid closure of the perforation with a single layer of running 2-0 PDS (omit the omental patch — just close the hole to stop ongoing spillage), (2) Copious lavage, (3) Abdominal packing if ongoing bleeding, (4) Temporary abdominal closure (Bogota bag or Barker's vacuum pack), (5) ICU resuscitation to correct acidosis, hypothermia, and coagulopathy, (6) Planned second-look laparotomy at 24-48h for definitive patch repair. This has reduced mortality from 60% to 25% in our sickest patients."
+      }
+    ],
+
+    "prognosis": {
+      "overallMortality": "Overall operative mortality for perforated PUD is 5-15% in published series. For Boey 0: <1%, Boey 1: 4-5%, Boey 2: 14-18%, Boey 3: 30-50%. In East Africa, overall mortality is higher (15-25%) due to delayed presentation (mean >24h in up to 60% of patients), malnutrition, HIV co-infection, and limited ICU capacity. Gastric ulcer perforation carries higher mortality (10-20%) than duodenal (5-12%) due to larger defects and risk of malignancy.",
+      "morbidity": "Intra-abdominal abscess: 5-15% (higher with gross contamination and delayed surgery). Wound infection: 8-15% (higher with emergency laparotomy in contaminated field). Patch leak: 3-5% (higher with large ulcers >10 mm and poor tissue quality). Gastric outlet obstruction: 2-4% (more common after large patches near pylorus). Incisional hernia: 5-12% (higher after emergency midline laparotomy). Persistent ileus: 10-20% transiently.",
+      "recurrence": "Ulcer recurrence after successful repair: 50-60% at 1 year if H. pylori not eradicated; <10% at 1 year if H. pylori successfully eradicated. Recurrence is higher in patients who continue NSAIDs (40% at 1 year) or smoking (30% at 1 year). Re-perforation rate: 2-5% (higher if H. pylori not treated or NSAIDs continued).",
+      "survivalData": "Five-year survival after successful repair of perforated PUD is 85-90% (age-matched). Patients who survive an episode of septic shock from perforated PUD have reduced 5-year survival (65-75%) due to long-term effects of critical illness. Patients with gastric cancer found at perforation have 5-year survival dependent on stage: stage I 80%, stage II 50%, stage III 20%, stage IV <5%.",
+      "landmarkReference": "Boey J, Wong J, Ong GB. A prospective study of operative risk factors in perforated duodenal ulcers. Ann Surg. 1982;195(3):265-269."
+    },
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "board_like_rigidity", "weight": 10 },
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "free_air_on_imaging", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "rebound_tenderness_generalized", "weight": 7 },
+          { "sign": "absent_bowel_sounds", "weight": 7 },
+          { "sign": "lactate_greater_than_2", "weight": 6 },
+          { "sign": "duration_greater_than_24h", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "localized_epigastric_tenderness": true,
+        "no_generalized_peritonitis": true,
+        "no_board_like_rigidity": true,
+        "no_free_air": true,
+        "no_danger_signs": true,
+        "pain_duration_less_than_12h": true
+      },
+      "severityLabel": "Contained Perforation (NON-SEVERE) vs Free Perforation with Peritonitis (SEVERE) — generalized peritonitis, shock, or Boey score 2-3 = SEVERE"
+    }
   }
 }

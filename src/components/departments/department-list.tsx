@@ -49,7 +49,7 @@ export default function DepartmentList({ departments, hospitalId, search, onSear
           return (
             <motion.div key={dept.key} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.02 }}>
               <Link
-                href={`/clinical-workspace/${hospitalId}/departments/${dept.key}`}
+                href={`/clinical-workspace/${hospitalId}/departments/${dept.key.toLowerCase()}`}
                 className="frost-card p-4 flex flex-col gap-2.5 no-underline transition-all duration-200 hover:translate-y-[-2px] block"
               >
                 <div className="flex items-center justify-between">

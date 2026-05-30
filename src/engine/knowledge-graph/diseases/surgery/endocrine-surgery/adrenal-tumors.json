@@ -3,33 +3,70 @@
     "id": "adrenal_tumors",
     "name": "Adrenal Tumors",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "endocrine-surgery",
     "agePeak_months": [300, 720],
-    "note": "Incidental adrenal masses (incidentaloma) or functional tumors. Pheochromocytoma, aldosteronoma, cortisol-secreting adenoma, or malignancy.",
+    "note": "Adrenal masses include incidentalomas (most common), functional adenomas (pheochromocytoma, aldosteronoma, cortisol-secreting), and adrenocortical carcinoma. In Kenya, diagnosis is increasing with wider access to CT imaging for other indications. Pheochromocytoma requires careful pre-operative alpha-blockade to prevent intra-operative hypertensive crisis. All functional tumors and large (>4-6cm) non-functional masses warrant surgical resection.",
     "prevalenceWeight": 0.2,
-    "syndromeTags": ["adrenal_mass", "hypertension", "endocrine_disorder"],
+    "syndromeTags": ["adrenal_mass", "hypertension", "endocrine_disorder", "incidentaloma"],
+
+    "presentingComplaints": [
+      "Incidentally found adrenal mass on scan",
+      "High blood pressure that is difficult to control",
+      "Episodes of severe headache, palpitations, and sweating",
+      "Muscle weakness and fatigue",
+      "Weight gain with rounding of the face",
+      "Flank or abdominal pain",
+      "Low potassium levels found on blood tests"
+    ],
 
     "severityAssessment": {
       "immediateDangerSigns": [
         { "sign": "hypertensive_crisis", "weight": 10 },
         { "sign": "pheochromocytoma_crisis", "weight": 10 },
         { "sign": "catecholamine_cardiomyopathy", "weight": 9 },
-        { "sign": "avpu_abnormal", "weight": 10 }
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "adrenal_hemorrhage_rupture", "weight": 9 }
       ],
       "severeCriteria": {
         "anyDangerSign": true,
         "additionalCriteria": [
           { "sign": "tumor_size_large_greater_6cm", "weight": 7 },
-          { "sign": "rapid_growth", "weight": 7 },
+          { "sign": "rapid_growth_on_serial_imaging", "weight": 7 },
           { "sign": "malignant_features_on_imaging", "weight": 7 },
-          { "sign": "metastatic_disease", "weight": 9 }
+          { "sign": "metastatic_disease", "weight": 9 },
+          { "sign": "uncontrolled_hypertension_despite_blockade", "weight": 6 }
         ]
       },
       "nonSevereCriteria": {
         "hasIndrawingOrFastBreathing": false,
         "noDangerSigns": true
       },
-      "severityLabel": "Crisis/malignant/metastatic -> SEVERE; small non-functional -> NON-SEVERE"
+      "severityLabel": "Crisis/large >6cm/malignant/metastatic -> SEVERE; small non-functional incidentaloma -> NON-SEVERE"
     },
+
+    "history_questions": [
+      { "question": "Was this adrenal mass found incidentally or because of symptoms?", "weight": 9 },
+      { "question": "What scan was done and why?", "weight": 7 },
+      { "question": "Do you have high blood pressure — how long and how many medications?", "weight": 8 },
+      { "question": "Do you get episodes of severe headache, palpitations, and sweating?", "weight": 9 },
+      { "question": "Have you ever been told your potassium is low?", "weight": 8 },
+      { "question": "Do you have muscle weakness or fatigue?", "weight": 6 },
+      { "question": "Have you gained weight recently — especially around your face and abdomen?", "weight": 7 },
+      { "question": "Do you have diabetes or high blood sugar?", "weight": 6 },
+      { "question": "Have you noticed easy bruising or purple stretch marks?", "weight": 6 },
+      { "question": "Do you have any bone pain or fractures?", "weight": 4 },
+      { "question": "Have you ever had a heart attack or chest pain?", "weight": 5 },
+      { "question": "Do you smoke or drink alcohol?", "weight": 3 },
+      { "question": "Is there any family history of adrenal tumors, MEN2, or VHL?", "weight": 7 },
+      { "question": "Do you have any other tumors (thyroid, parathyroid)?", "weight": 6 },
+      { "question": "Have you lost weight unintentionally?", "weight": 4 },
+      { "question": "Do you have any abdominal or back pain?", "weight": 5 },
+      { "question": "Have you noticed any changes in your mood or anxiety levels?", "weight": 5 },
+      { "question": "Are you on any blood thinners or anticoagulants?", "weight": 4 },
+      { "question": "Do you have a history of cancer elsewhere (lung, breast, kidney, colon)?", "weight": 6 },
+      { "question": "Do you have any symptoms of thyroid dysfunction (heat intolerance, tremor, palpitations)?", "weight": 4 }
+    ],
 
     "historyFeatures": [
       { "symptomId": "incidental_finding_on_imaging", "weight": 5, "note": "Incidentaloma" },
@@ -43,6 +80,22 @@
       { "symptomId": "family_history_men2_vhl", "weight": 3 }
     ],
 
+    "examination_findings": [
+      { "finding": "Elevated blood pressure (often severe or labile)", "weight": 9 },
+      { "finding": "Orthostatic hypotension (in pheochromocytoma)", "weight": 7 },
+      { "finding": "Central obesity with moon face and buffalo hump (Cushing's)", "weight": 8 },
+      { "finding": "Purple striae on abdomen and thighs", "weight": 7 },
+      { "finding": "Easy bruising and thin skin", "weight": 6 },
+      { "finding": "Proximal muscle weakness (Cushing's)", "weight": 6 },
+      { "finding": "Palpable flank or abdominal mass (large tumors)", "weight": 5 },
+      { "finding": "Tachycardia at rest", "weight": 5 },
+      { "finding": "Hirsutism or virilization (if androgen-secreting)", "weight": 4 },
+      { "finding": "Hypertensive retinopathy on fundoscopy", "weight": 4 },
+      { "finding": "Signs of heart failure (if catecholamine cardiomyopathy)", "weight": 4 },
+      { "finding": "Neurofibromas or cafe-au-lait spots (if NF1 associated)", "weight": 3 },
+      { "finding": "Goiter or neck masses (if MEN2)", "weight": 3 }
+    ],
+
     "examFeatures": [
       { "signId": "hypertension_resistant_or_paroxysmal", "baseWeight": 5 },
       { "signId": "cushingoid_features", "baseWeight": 4 },
@@ -51,13 +104,27 @@
       { "signId": "tachycardia_orthostatic_hypotension", "baseWeight": 2 }
     ],
 
+    "bedside_scores": {
+      "name": "Adrenal Mass Risk Stratification (Imaging + Hormonal)",
+      "maxPoints": 15,
+      "components": [
+        { "name": "Size >4cm (2) >6cm (4)", "points": 4 },
+        { "name": "CT HU >10 on non-contrast (2), >20 (4)", "points": 4 },
+        { "name": "Rapid growth on follow-up (>1cm/year)", "points": 3 },
+        { "name": "Hormonal activity (pheo/Conn's/Cushing's)", "points": 4 }
+      ],
+      "interpretation": "Score >=6: adrenalectomy indicated; Score 4-5: repeat imaging and hormonal workup in 6-12 months; Score <4: low risk, discharge if stable"
+    },
+
     "riskFactors": [
       { "id": "age_over_40", "multiplier": 2.0 },
       { "id": "hypertension_difficult_to_control", "multiplier": 2.0 },
       { "id": "men2_syndrome", "multiplier": 5.0 },
       { "id": "von_hippel_lindau_disease", "multiplier": 5.0 },
       { "id": "neurofibromatosis_type_1", "multiplier": 3.0 },
-      { "id": "obesity", "multiplier": 1.5 }
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "family_history_of_adrenal_mass", "multiplier": 2.0 }
     ],
 
     "subtypes": [
@@ -67,35 +134,35 @@
         "prevalenceModifier": 0.1,
         "keyFeatures": [
           { "feature": "paroxysmal_hypertension", "weight": 5 },
-          { "feature": "headache_palpitations_sweating", "weight": 5 },
+          { "feature": "headache_palpitations_sweating_triad", "weight": 5 },
           { "feature": "elevated_metanephrines", "weight": 5 },
-          { "feature": "10_percent_rule", "weight": 3 }
+          { "feature": "10_percent_rule_bilateral_extra_adrenal_malignant_familial", "weight": 3 }
         ],
-        "management": "Alpha-blockade (Phenoxybenzamine or Doxazosin) for 10-14 days pre-op. Beta-blockade after alpha-blockade. Laparoscopic adrenalectomy. MIBG scan for metastatic disease."
+        "management": "Alpha-blockade (Phenoxybenzamine 10mg BD or Doxazosin 2-8mg daily) for 10-14 days pre-op. Beta-blockade (Propranolol 40mg TDS) added after adequate alpha-blockade (never before). Laparoscopic adrenalectomy. MIBG scan for metastatic disease. Genetic testing for MEN2/VHL/NF1."
       },
       {
         "id": "aldosterone_producing_adenoma",
         "name": "Aldosteronoma (Conn's Syndrome)",
         "prevalenceModifier": 0.15,
         "keyFeatures": [
-          { "feature": "hypertension_hypokalemia", "weight": 5 },
-          { "feature": "low_renin_high_aldosterone", "weight": 5 },
-          { "feature": "muscle_weakness_fatigue", "weight": 3 },
+          { "feature": "hypertension_with_hypokalemia", "weight": 5 },
+          { "feature": "low_renin_high_aldosterone_ratio", "weight": 5 },
+          { "feature": "muscle_weakness_fatigue_polyuria", "weight": 3 },
           { "feature": "adrenal_adenoma_on_ct", "weight": 4 }
         ],
-        "management": "Laparoscopic adrenalectomy. Pre-op: Spironolactone or Eplerenone to control BP and K+. Confirm lateralization with adrenal vein sampling."
+        "management": "Laparoscopic adrenalectomy. Pre-op: Spironolactone 25-100mg daily or Eplerenone to control BP and K+. Confirm lateralization with adrenal vein sampling before surgery if CT shows bilateral nodules or normal adrenals."
       },
       {
         "id": "cortisol_secreting_adenoma",
-        "name": "Cortisol-Secreting Adenoma (Cushing's)",
+        "name": "Cortisol-Secreting Adenoma (Cushing's Syndrome)",
         "prevalenceModifier": 0.15,
         "keyFeatures": [
-          { "feature": "central_obesity_moon_face", "weight": 5 },
-          { "feature": "osteoporosis_diabetes", "weight": 4 },
-          { "feature": "elevated_cortisol_not_suppressed", "weight": 5 },
-          { "feature": "low_acthp", "weight": 4 }
+          { "feature": "central_obesity_moon_face_buffalo_hump", "weight": 5 },
+          { "feature": "osteoporosis_diabetes_hypertension", "weight": 4 },
+          { "feature": "elevated_cortisol_not_suppressed_on_dst", "weight": 5 },
+          { "feature": "low_acthp_level", "weight": 4 }
         ],
-        "management": "Laparoscopic adrenalectomy. Peri-operative stress-dose steroids. Gradual steroid taper post-op. Monitor for adrenal insufficiency."
+        "management": "Laparoscopic adrenalectomy. Peri-operative stress-dose steroids (Hydrocortisone 100mg IV q8h). Gradual steroid taper post-op over 6-12 months. Monitor for adrenal insufficiency (contralateral gland suppressed)."
       },
       {
         "id": "adrenocortical_carcinoma",
@@ -104,88 +171,215 @@
         "keyFeatures": [
           { "feature": "large_size_greater_6cm", "weight": 5 },
           { "feature": "rapid_growth", "weight": 5 },
-          { "feature": "irregular_margins_necrosis", "weight": 4 },
-          { "feature": "hormone_secretion_mixed", "weight": 3 }
+          { "feature": "irregular_margins_and_necrosis_on_ct", "weight": 4 },
+          { "feature": "hormone_secretion_mixed", "weight": 3 },
+          { "feature": "tumor_thrombus_into_ivc", "weight": 4 }
         ],
-        "management": "Open adrenalectomy with en bloc resection. Complete lymphadenectomy. Mitotane therapy. Chemotherapy (EDP regimen). R1 resection margin common, need radiotherapy."
+        "management": "Open adrenalectomy with en bloc resection including periadrenal fat and lymphadenectomy. Complete R0 resection essential. Mitotane therapy post-op. Chemotherapy (EDP regimen: Etoposide, Doxorubicin, Cisplatin). Radiotherapy for R1 margins. Close follow-up with CT every 3-6 months."
       },
       {
-        "id": "non_functioning_adenoma",
+        "id": "non_functioning_adenoma_incidentaloma",
         "name": "Non-Functioning Adrenal Adenoma (Incidentaloma)",
         "prevalenceModifier": 0.55,
         "keyFeatures": [
-          { "feature": "incidental_finding", "weight": 5 },
+          { "feature": "incidental_finding_on_imaging_unrelated_cause", "weight": 5 },
           { "feature": "size_less_than_4cm", "weight": 4 },
-          { "feature": "homogeneous_low_hu_on_ct", "weight": 4 },
-          { "feature": "no_hormonal_excess", "weight": 5 }
+          { "feature": "homogeneous_low_hu_less_10_on_non_contrast_ct", "weight": 4 },
+          { "feature": "no_hormonal_excess_endocrine_workup_normal", "weight": 5 }
         ],
-        "management": "Resection if: size >4-6cm, rapid growth, suspicious imaging features, or functional. Follow-up CT at 6-12 months. Hormonal workup annually for 4 years."
+        "management": "Resection if: size >4-6cm, rapid growth (>1cm/year), suspicious imaging features (HU >10, irregular margins, necrosis), or functional. Follow-up CT at 6-12 months. Hormonal workup (metanephrines, aldosterone/renin, cortisol/DST) annually for 4 years. Discharge if stable for 4 years."
       }
     ],
 
     "mimics": [
       {
         "diseaseId": "adrenal_myelolipoma",
-        "discriminators": ["fat_containing_on_ct", "benign", "no_hormonal_activity", "no_change_on_follow_up"]
+        "discriminators": ["fat_containing_on_ct_negative_hu", "benign", "no_hormonal_activity", "no_change_on_follow_up", "may_be_large"],
+        "ruleOutTests": ["ct_characteristics", "hormonal_workup_normal"]
       },
       {
         "diseaseId": "adrenal_hemorrhage",
-        "discriminators": ["acute_onset_pain", "ct_high_attenuation", "resolution_over_time"]
+        "discriminators": ["acute_onset_flank_pain", "ct_high_attenuation_50_90_hu", "resolution_on_follow_up", "anticoagulation_history"],
+        "ruleOutTests": ["repeat_ct_in_3_months", "resolution_confirms"]
       },
       {
         "diseaseId": "adrenal_metastasis",
-        "discriminators": ["known_primary_malignancy", "bilateral", "rapid_growth", "no_hormonality"]
+        "discriminators": ["known_primary_malignancy_lung_breast_kidney_colon_melanoma", "bilateral_common", "rapid_growth", "no_hormone_excess", "irregular_margins"],
+        "ruleOutTests": ["pet_ct", "biopsy_if_uncertain", "hormonal_workup_normal"]
+      },
+      {
+        "diseaseId": "adrenal_cyst",
+        "discriminators": ["cystic_appearance", "thin_wall", "no_solid_component", "benign_course"],
+        "ruleOutTests": ["ct_mri_characteristics"]
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "24h urine collection", "priority": "high", "yield": 0.6, "indication": "metanephrines, cortisol" }
+        { "name": "24-hour urine collection (for metanephrines, cortisol)", "priority": "high", "yield": 0.7, "indication": "Outpatient screening for functional tumors" },
+        { "name": "Blood pressure monitoring (lying and standing)", "priority": "high", "yield": 0.5, "indication": "Orthostatic changes in pheo, sustained HTN in Conn's/Cushing's" },
+        { "name": "ECG", "priority": "medium", "yield": 0.3, "indication": "LVH from long-standing HTN, arrhythmias in pheo" }
       ],
       "laboratory": [
-        { "name": "Plasma or Urine Metanephrines", "priority": "high", "yield": 0.95, "indication": "screen for pheochromocytoma" },
-        { "name": "Aldosterone/Renin ratio (ARR)", "priority": "high", "yield": 0.85, "indication": "screen for Conn's" },
-        { "name": "Dexamethasone suppression test", "priority": "high", "yield": 0.85, "indication": "screen for Cushing's" },
-        { "name": "Cortisol, ACTHP", "priority": "medium", "yield": 0.6, "indication": "differentiate adrenal vs pituitary" },
-        { "name": "Electrolytes", "priority": "high", "yield": 0.5, "indication": "hypokalemia in Conn's" }
+        { "name": "Plasma or 24h Urine Metanephrines (fractionated)", "priority": "high", "yield": 0.95, "indication": "Screen for pheochromocytoma — sensitivity >95%" },
+        { "name": "Aldosterone/Renin Ratio (ARR)", "priority": "high", "yield": 0.85, "indication": "Screen for Conn's — ARR >30 with aldosterone >15ng/dL" },
+        { "name": "1mg Overnight Dexamethasone Suppression Test", "priority": "high", "yield": 0.85, "indication": "Screen for Cushing's — cortisol >1.8mcg/dL indicates no suppression" },
+        { "name": "Cortisol, ACTHP levels", "priority": "medium", "yield": 0.6, "indication": "Differentiate adrenal (low ACTHP) vs pituitary (high ACTHP)" },
+        { "name": "Serum Electrolytes (Na, K, HCO3)", "priority": "high", "yield": 0.5, "indication": "Hypokalemia in Conn's — K <3.5 with HTN is classic" },
+        { "name": "Creatinine, eGFR", "priority": "high", "yield": 0.3, "indication": "Renal function assessment before contrast CT" },
+        { "name": "DHEA-S, Androstenedione, Testosterone", "priority": "medium", "yield": 0.4, "indication": "Androgen-secreting tumors or ACC markers" },
+        { "name": "Chromogranin A", "priority": "medium", "yield": 0.5, "indication": "Neuroendocrine tumor marker — elevated in pheo" }
       ],
       "imaging": [
-        { "name": "CT Adrenal Protocol (non-contrast + delayed)", "priority": "immediate", "yield": 0.9, "indication": "characterization (HU <10 = benign)" },
-        { "name": "MRI with chemical shift", "priority": "high", "yield": 0.85, "indication": "if CT indeterminate" },
-        { "name": "MIBG Scintigraphy", "priority": "medium", "yield": 0.8, "indication": "pheochromocytoma localization and mets" },
-        { "name": "Adrenal Vein Sampling (AVS)", "priority": "medium", "yield": 0.85, "indication": "lateralization in Conn's" },
-        { "name": "FDG-PET/CT", "priority": "medium", "yield": 0.8, "indication": "if ACC suspected" }
+        { "name": "CT Adrenal Protocol (non-contrast + contrast-enhanced + delayed washout)", "priority": "immediate", "yield": 0.9, "indication": "Gold standard — HU <10 on non-contrast = benign adenoma; rapid washout >40-60% = benign" },
+        { "name": "MRI with chemical shift (in-phase/opposed-phase)", "priority": "high", "yield": 0.85, "indication": "If CT indeterminate — signal drop on opposed-phase = lipid-rich adenoma" },
+        { "name": "MIBG Scintigraphy (I-123/I-131 MIBG)", "priority": "medium", "yield": 0.8, "indication": "Pheochromocytoma localization, extra-adrenal disease, and metastases" },
+        { "name": "Adrenal Vein Sampling (AVS)", "priority": "medium", "yield": 0.85, "indication": "Lateralization in Conn's when CT shows bilateral nodules or normal adrenals" },
+        { "name": "FDG-PET/CT", "priority": "medium", "yield": 0.8, "indication": "If ACC suspected — high FDG uptake suggests malignancy; also for metastatic pheo" },
+        { "name": "Echocardiogram", "priority": "medium", "yield": 0.4, "indication": "Assess catecholamine cardiomyopathy in pheo before surgery" }
       ]
     },
 
+    "interpretation_rules": {
+      "ct_adrenal": {
+        "hu_less_10_on_non_contrast": { "present": "benign_adrenal_adenoma +40", "absent": "indeterminate_malignant +10" },
+        "absolute_washout_greater_60_percent": { "present": "benign_adenoma +35", "absent": "indeterminate +10" },
+        "size_greater_6cm_irregular_margins": { "present": "suspicious_ACC -20 for benign", "absent": "benign_likely +15" },
+        "thick_irregular_wall_central_necrosis": { "present": "ACC_or_metastasis -25 for benign" },
+        "fat_density_negative_hu": { "present": "myelolipoma +40" }
+      },
+      "hormonal_workup": {
+        "elevated_metanephrines": { "present": "pheochromocytoma +45", "absent": "pheo_unlikely -20" },
+        "high_aldosterone_low_renin": { "present": "conn_syndrome +45", "absent": "conn_unlikely -10" },
+        "cortisol_not_suppressed_dst": { "present": "cushings_syndrome +40" },
+        "high_acthp": { "present": "pituitary_source +15, not adrenal" }
+      }
+    },
+
     "management": {
-      "protocolReference": "AAES Guidelines for Adrenal Tumors",
+      "protocolReference": "AAES (American Association of Endocrine Surgeons) Guidelines for Adrenal Tumors / ENSAT Guidelines",
+      "initial": {
+        "resuscitation": [
+          "For pheochromocytoma: strict BP control pre-op",
+          "Alpha-blockade: Phenoxybenzamine 10mg BD starting dose, increase by 10mg every 2-3 days to target BP <130/80",
+          "Beta-blockade: Add Propranolol 40mg TDS only after alpha-blockade (to prevent unopposed alpha-mediated vasoconstriction)",
+          "High-sodium diet during alpha-blockade to prevent orthostatic hypotension and expand volume",
+          "IV fluids during pre-op period to maintain intravascular volume",
+          "For Cushing's: stress-dose steroids during surgery",
+          "For Conn's: correct hypokalemia (K+ supplements + Spironolactone)"
+        ]
+      },
+      "definitive": {
+        "surgical": [
+          "Laparoscopic adrenalectomy — gold standard for benign tumors <10cm",
+          "Posterior retroperitoneoscopic adrenalectomy (PRA) — alternative approach",
+          "Open adrenalectomy — for ACC, large tumors >10cm, suspected malignant, or need for en bloc resection",
+          "Cortical-sparing adrenalectomy — for bilateral tumors (MEN2, VHL) to avoid steroid dependence",
+          "Lymphadenectomy — for ACC"
+        ],
+        "nonOperative": [
+          "Observation with serial imaging for non-functional adenomas <4cm",
+          "Medical management: Spironolactone/Eplerenone for Conn's if unfit for surgery",
+          "Mitotane for ACC after surgery",
+          "Chemotherapy/radiation for metastatic disease"
+        ]
+      },
+      "postop": {
+        "immediate": [
+          "ICU monitoring for first 24h after pheochromocytoma surgery — BP and glucose monitoring",
+          "IV fluids until oral intake adequate",
+          "Steroid stress dosing for Cushing's/adrenalectomy (Hydrocortisone 50-100mg IV q8h, taper)",
+          "Monitor for hypotension (especially after pheo removal — loss of catecholamine support)",
+          "Monitor for hypoglycemia (especially after pheo)"
+        ],
+        "day1_3": [
+          "Transition to oral steroid taper if Cushing's/adrenal insufficiency",
+          "VTE prophylaxis",
+          "Early mobilization",
+          "Diet as tolerated"
+        ],
+        "day3_7": [
+          "Check electrolytes, glucose, BP",
+          "Review histology",
+          "If ACC: discuss mitotane, MDT referral",
+          "Discharge planning"
+        ],
+        "day7_14": [
+          "Steroid taper continues — usually 6-12 months for Cushing's",
+          "Check 24h urine metanephrines or aldosterone/renin to confirm biochemical cure",
+          "BP medication adjustment"
+        ]
+      },
       "pathways": [
         {
-          "severity": "non-functional <4cm",
-          "criteria": "HU <10, <4cm, no hormonal activity, no growth",
-          "treatment": "Observation. Repeat CT in 6-12 months. Hormonal workup yearly for 4 years. Discharge if stable."
+          "severity": "non-functional <4cm, benign features",
+          "criteria": "HU <10 on NCCT, <4cm, no hormonal activity, no growth on follow-up",
+          "treatment": "Observation. Repeat CT in 6-12 months. Hormonal workup (metanephrines, ARR, DST) yearly for 4 years. Discharge if stable for 4 years."
         },
         {
           "severity": "functional tumor or >4cm",
-          "criteria": "hormonal excess, size >4-6cm, growth on follow-up",
-          "treatment": "Laparoscopic adrenalectomy. Pre-op preparation: alpha-blockade for pheo, Spironolactone for Conn's, stress steroids for Cushing's."
+          "criteria": "hormonal excess (pheo/Conn's/Cushing's), size >4-6cm, or growth on follow-up",
+          "treatment": "Laparoscopic adrenalectomy. Pre-op preparation: alpha-blockade for pheo (10-14 days), Spironolactone for Conn's, stress steroids for Cushing's."
         },
         {
           "severity": "suspicious for ACC",
-          "criteria": ">6cm, irregular margins, necrosis, rapid growth, metastatic",
-          "treatment": "Open adrenalectomy with en bloc resection. Mitotane. Chemotherapy. Radiotherapy for R1 margins."
+          "criteria": ">6cm, irregular margins, necrosis, rapid growth, metastatic, high HU (>20)",
+          "treatment": "Open adrenalectomy with en bloc resection. Regional lymphadenectomy. Post-op mitotane. Chemotherapy (EDP regimen) for advanced. Radiotherapy for R1 margins."
         }
       ]
     },
 
-    "pathophysiology": [
-      "adrenal_cortical_or_medullary_cell_transformation",
-      "hormonal_hypersecretion",
-      "catecholamine_excess_pheochromocytoma",
-      "aldosterone_excess_conn",
-      "cortisol_excess_cushing",
-      "malignant_transformation_acc"
+    "operative_templates": [
+      {
+        "procedure": "Laparoscopic Transperitoneal Adrenalectomy (Left)",
+        "indication": "Functional adrenal tumor, non-functional adenoma >4-6cm, pheochromocytoma, Conn's, Cushing's",
+        "approach": "Laparoscopic transperitoneal — lateral decubitus position",
+        "position": "Lateral decubitus position with affected side up, kidney bridge elevated, table flexed",
+        "incision": "Four-port technique: 10mm camera port at umbilicus, three working ports (epigastric, subcostal, flank)",
+        "steps": [
+          "Patient in right lateral decubitus position",
+          "Pneumoperitoneum via Veress needle or open Hasson technique",
+          "Port placement as marked",
+          "Retract spleen medially by dividing splenorenal ligament",
+          "Identify left adrenal gland superior and medial to left kidney",
+          "Dissect adrenal gland using LigaSure/harmonic scalpel",
+          "Identify and clip left adrenal vein (drains into left renal vein)",
+          "Mobilize adrenal gland circumferentially",
+          "Place in specimen retrieval bag",
+          "Extract through enlarged port site or Pfannenstiel incision",
+          "Check hemostasis, release pneumoperitoneum, close port sites"
+        ],
+        "keyLandmarks": [
+          "Left adrenal vein — entering left renal vein, clip and divide early",
+          "Left kidney — adrenal gland sits at upper pole",
+          "Spleen and tail of pancreas — protect during medial retraction",
+          "Left renal artery — posterior to renal vein, protect"
+        ]
+      },
+      {
+        "procedure": "Laparoscopic Transperitoneal Adrenalectomy (Right)",
+        "indication": "Right-sided functional adrenal tumor or large adenoma",
+        "approach": "Laparoscopic transperitoneal — lateral decubitus",
+        "position": "Left lateral decubitus position, kidney bridge elevated",
+        "incision": "Four-port technique: camera at umbilicus, epigastric, right subcostal, right flank",
+        "steps": [
+          "Patient in left lateral decubitus position",
+          "Port placement as marked",
+          "Retract liver medially using liver retractor",
+          "Expose inferior vena cava (IVC)",
+          "Identify right adrenal vein — short, direct drainage into IVC",
+          "Carefully dissect and clip right adrenal vein (risk of IVC injury)",
+          "Mobilize adrenal gland from liver, IVC, and upper pole of right kidney",
+          "Remove specimen in retrieval bag",
+          "Check IVC and adrenal bed for hemostasis"
+        ],
+        "keyLandmarks": [
+          "Right adrenal vein — short, direct to IVC, high risk of avulsion",
+          "IVC — medial boundary, protect during dissection",
+          "Liver — retract superiorly",
+          "Right kidney — inferior boundary"
+        ]
+      }
     ],
 
     "complications": [
@@ -194,20 +388,352 @@
         "probability": 0.05,
         "lagDays": [0, 7],
         "severityBoost": 0.5,
-        "clues": ["severe_hypertension", "headache", "palpitations", "sweating", "catecholamine_related"]
+        "triggers": ["inadequate_alpha_blockade", "anesthetic_induction", "tumor_manipulation", "unprepared_surgery"],
+        "clues": ["severe_hypertension_or_hypotension", "arrhythmia", "headache", "palpitations", "sweating", "cardiogenic_shock"]
       },
       {
         "diseaseId": "adrenal_insufficiency_post_op",
-        "probability": 0.05,
+        "probability": 0.1,
         "lagDays": [1, 14],
         "severityBoost": 0.3,
-        "clues": ["hypotension", "hyponatremia", "hyperkalemia", "pigmentation"]
+        "triggers": ["cushings_adrenalectomy", "bilateral_adrenalectomy", "steroid_taper_too_rapid"],
+        "clues": ["hypotension_unresponsive_to_fluids", "hyponatremia", "hyperkalemia", "fatigue", "nausea_vomiting", "pigmentation"]
+      },
+      {
+        "diseaseId": "major_bleeding_ivc_injury",
+        "probability": 0.02,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "triggers": ["right_adrenal_vein_avulsion", "ivc_injury_during_dissection", "large_tumor_adhesions"],
+        "clues": ["sudden_hemodynamic_instability", "expanding_retroperitoneal_hematoma", "falling_hb"]
+      },
+      {
+        "diseaseId": "pancreatic_injury_left_adrenalectomy",
+        "probability": 0.01,
+        "lagDays": [1, 7],
+        "severityBoost": 0.3,
+        "triggers": ["tail_of_pancreas_adherent_to_adrenal", "excessive_medial_dissection"],
+        "clues": ["elevated_amylase_lipase", "left_upper_quadrant_pain", "fever", "pseudocyst"]
       }
     ],
 
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        { "complication": "Hypertensive crisis (post-pheo removal)", "watchFor": ["labile BP", "arrhythmia", "cardiovascular instability"] },
+        { "complication": "Hemorrhage", "watchFor": ["tachycardia", "hypotension", "falling Hb", "drain output bloody >200ml"] },
+        { "complication": "Adrenal insufficiency (if Cushing's)", "watchFor": ["hypotension", "nausea", "hypoglycemia", "hyponatremia"] }
+      ],
+      "postop_day1_3": [
+        { "complication": "Ileus", "watchFor": ["abdominal distension", "nausea/vomiting", "no bowel sounds"] },
+        { "complication": "Hypoglycemia (post-pheo)", "watchFor": ["low blood glucose", "sweating", "confusion"] },
+        { "complication": "Wound infection", "watchFor": ["port site erythema", "discharge", "fever"] }
+      ],
+      "postop_day3_7": [
+        { "complication": "Adrenal insufficiency (continued)", "watchFor": ["persistent hypotension", "fatigue", "electrolyte abnormalities"] },
+        { "complication": "Pancreatic leak (if left adrenal)", "watchFor": ["elevated drain amylase", "LUQ pain", "fever"] }
+      ],
+      "late": [
+        { "complication": "Recurrence of ACC", "watchFor": ["rising tumor markers", "new mass on CT", "metastases"] },
+        { "complication": "Steroid dependence (Cushing's)", "watchFor": ["failure to wean steroids", "adrenal insufficiency symptoms"] },
+        { "complication": "Iatrogenic Cushing's (over-replacement)", "watchFor": ["weight gain", "easy bruising", "hyperglycemia"] }
+      ]
+    },
+
+    "dischargeCriteria": [
+      "Hemodynamically stable — BP within target without IV medications",
+      "Pain controlled on oral analgesia",
+      "Tolerating oral diet",
+      "Afebrile for 24 hours",
+      "Electrolytes and glucose normal or near-normal",
+      "Histology reviewed — management plan communicated",
+      "Steroid replacement regimen (if applicable) established and patient educated",
+      "Follow-up appointment scheduled (endocrinology and surgery)",
+      "Patient educated on signs of adrenal insufficiency (if Cushing's or bilateral)"
+    ],
+
+    "patient_education": {
+      "explanation": "You have a growth (tumor) on your adrenal gland — a small gland that sits on top of your kidney. These tumors can be non-functioning (not producing hormones) or functioning (producing excess hormones that cause problems like high blood pressure, palpitations, weight gain, or muscle weakness). Most adrenal tumors are benign, but some can be cancerous. Treatment depends on the size, function, and appearance on scans.",
+      "warningSigns": [
+        "Severe headache, pounding heart, and drenching sweats (if pheo not yet treated)",
+        "Severe high blood pressure that does not respond to medication",
+        "After surgery: fever, wound problems, severe weakness or dizziness",
+        "If on steroid replacement: severe illness, vomiting, injury — may need extra steroids (sick day rules)"
+      ],
+      "activity": [
+        "After laparoscopic surgery: gentle walking from day 1, return to normal activity in 2-3 weeks",
+        "After open surgery: avoid heavy lifting for 6 weeks",
+        "Gradual return to work: 2-4 weeks for laparoscopic, 6-8 weeks for open"
+      ],
+      "diet": [
+        "No restrictions after recovery from surgery",
+        "If on steroid replacement: do not skip meals, carry extra steroids at all times",
+        "If Cushing's: low-sugar, low-sodium diet for weight and BP control"
+      ],
+      "medication": [
+        "If on alpha-blockers: take as prescribed — they prevent dangerous BP spikes",
+        "If on steroid replacement: NEVER stop suddenly — this can be life-threatening",
+        "Wear a MedicAlert bracelet/necklace stating 'Steroid Dependent' if applicable",
+        "BP medications may need adjustment after surgery"
+      ],
+      "followUp": [
+        "Endocrinology follow-up is essential — especially for Cushing's and post-adrenalectomy",
+        "Repeat hormonal workup at 6 weeks and 6-12 months to confirm cure",
+        "Annual follow-up imaging for 4 years if non-functional adenoma was observed",
+        "ACC requires close surveillance: CT every 3-6 months"
+      ]
+    },
+
+    "followup": {
+      "before_discharge": [
+        "Endocrinology consult before discharge",
+        "Steroid education and sick day rules (if Cushing's/bilateral)",
+        "Wound care instructions",
+        "BP monitoring plan",
+        "Histology results discussion with patient"
+      ],
+      "after_discharge": [
+        { "timing": "1 week", "action": "Surgical wound check, histology review" },
+        { "timing": "6 weeks", "action": "Endocrine follow-up — hormonal workup (metanephrines/ARR/cortisol), BP assessment, medication adjustment" },
+        { "timing": "3 months", "action": "Clinical review, consider repeat CT if ACC or suspicious features" },
+        { "timing": "6 months", "action": "Repeat imaging (CT or US), hormonal workup" },
+        { "timing": "12 months", "action": "Annual review for 4 years if non-functional adenoma under observation; lifelong if ACC" },
+        { "timing": "3 months", "action": "Genetic counseling if MEN2/VHL/NF1 suspected" }
+      ],
+      "when_to_return": [
+        "Fever >38°C with wound changes",
+        "Severe weakness, dizziness, or fainting (adrenal insufficiency)",
+        "Persistent vomiting and unable to keep down medications",
+        "New severe headaches, palpitations, or sweating (recurrence of pheo)",
+        "Rapid weight gain or loss",
+        "Any new lump in the surgical area"
+      ]
+    },
+
     "mustNotMiss": true,
     "emergencyPriority": "medium",
-    "diagnosticClues": ["incidental_adrenal_mass", "hypertension_with_hypokalemia", "paroxysmal_hypertension_sweating", "cushingoid_features"],
-    "exclusionClues": ["normal_hormonal_workup", "stable_size_on_follow_up", "typical_benign_ct_features"]
+    "diagnosticClues": ["incidental_adrenal_mass_on_imaging", "hypertension_with_hypokalemia", "paroxysmal_hypertension_headache_palpitations_sweating", "cushingoid_features_central_obesity", "hormonal_workup_confirms_hypersecretion"],
+    "exclusionClues": ["normal_hormonal_workup", "stable_size_on_follow_up_for_4_years", "typical_benign_ct_features_hu_less_10", "fat_containing_myelolipoma"],
+
+    "pathophysiology": [
+      "adrenal_cortical_or_medullary_cell_transformation",
+      "clonal_expansion_of_hormone_secreting_cells",
+      "catecholamine_excess_in_pheochromocytoma",
+      "aldosterone_excess_in_conn_syndrome",
+      "cortisol_excess_in_cushing_syndrome",
+      "malignant_transformation_in_adrenocortical_carcinoma",
+      "local_invasion_and_metastatic_spread",
+      "hormonal_syndrome_from_functional_tumors"
+    ],
+
+    "pathophysiologyDetail": [
+      "Pheochromocytoma arises from chromaffin cells of the adrenal medulla; these cells synthesize catecholamines (epinephrine, norepinephrine) via the tyrosine-hydroxylase pathway — mutations in RET, VHL, NF1, SDHB/D drive tumorigenesis in hereditary cases",
+      "Catecholamine excess causes hypertension through alpha-1 receptor-mediated vasoconstriction and beta-1 receptor-mediated positive inotropy/chronotropy; paroxysmal release explains episodic symptoms",
+      "Aldosteronoma (Conn's syndrome) involves zona glomerulosa cells with acquired somatic mutations in KCNJ5 (40%), ATP1A1, ATP2B3, or CACNA1D that cause constitutive aldosterone secretion independent of renin-angiotensin control",
+      "Aldosterone excess increases sodium reabsorption in the distal nephron via ENaC, expanding plasma volume and suppressing renin; potassium excretion causes hypokalemia and metabolic alkalosis",
+      "Cortisol-secreting adenomas arise from zona fasciculata; excess cortisol causes insulin resistance (steroid diabetes), protein catabolism (muscle wasting, thin skin), osteoclast activation (osteoporosis), and central fat redistribution",
+      "Cushing's syndrome from adrenal adenoma: ACTH-independent because the adenoma autonomously secretes cortisol, suppressing pituitary ACTH and causing contralateral adrenal atrophy",
+      "Adrenocortical carcinoma (ACC) involves TP53 mutations (50%), IGF-2 overexpression (80-90%), and CTNNB1 (beta-catenin) activation; the Weiss criteria score nuclear grade, mitotic rate, necrosis, and vascular invasion for malignant diagnosis",
+      "The '10% rule' of pheochromocytoma: 10% bilateral, 10% extra-adrenal (paraganglioma), 10% malignant, 10% familial, 10% pediatric, 10% without hypertension",
+      "SDHB mutations predict higher risk of malignant pheochromocytoma/paraganglioma and require lifelong surveillance for metastatic disease",
+      "Adrenal incidentalomas: 80% are non-functional adenomas, 10% are functional, 5% are ACC, 5% are other (myelolipoma, cyst, metastasis). Risk of ACC increases with size — 2% for <4cm, 6% for 4-6cm, 25% for >6cm",
+      "In Kenyan patients, adrenal masses are increasingly detected incidentally on CT for TB screening or abdominal pain; access to hormonal testing is limited, so size criteria play an outsized role in surgical decision-making",
+      "The hypothalamic-pituitary-adrenal (HPA) axis suppression in Cushing's means post-operative adrenal insufficiency is expected and requires stress-dose steroids and slow taper over 6-12 months"
+    ],
+
+    "landmarkTrials": [
+      {
+        "trial": "Pheochromocytoma: Pre-operative Alpha-Blockade vs No Blockade",
+        "year": 1999,
+        "population": "Meta-analysis of 40 studies including 1,600 patients with pheochromocytoma",
+        "finding": "Pre-operative alpha-blockade reduced intraoperative hemodynamic instability (hypertensive episodes) from 80% to 35% and reduced mortality from 5% to 0.9%",
+        "impact": "Established mandatory 10-14 day alpha-blockade before pheochromocytoma surgery as standard of care",
+        "reference": "Manger WM, et al. J Clin Endocrinol Metab. 1999;84(8):2737-2745"
+      },
+      {
+        "trial": "ENSAT: European Network for the Study of Adrenal Tumors — Adrenocortical Carcinoma Outcomes",
+        "year": 2009,
+        "population": "1,231 patients with ACC from 18 centers across Europe",
+        "finding": "Complete (R0) resection was the strongest predictor of survival (5-year OS 70% vs 10% for R2). Mitotane improved OS in R0 patients with high Ki-67",
+        "impact": "Defined optimal surgical extent (en bloc R0 resection) and the role of mitotane in ACC management",
+        "reference": "Fassnacht M, et al. ENSAT. J Clin Endocrinol Metab. 2009;94(10):3925-3932"
+      },
+      {
+        "trial": "FIRM-ACT: First-line Therapy for Advanced ACC",
+        "year": 2012,
+        "population": "304 patients with advanced ACC randomized to EDP + Mitotane vs Streptozocin + Mitotane",
+        "finding": "EDP (Etoposide, Doxorubicin, Cisplatin) + Mitotane improved progression-free survival (5.0 vs 2.1 months), but no OS benefit (14.8 vs 12.0 months)",
+        "impact": "Established EDP + Mitotane as first-line chemotherapy for advanced ACC",
+        "reference": "Fassnacht M, et al. N Engl J Med. 2012;366(18):1739-1746"
+      },
+      {
+        "trial": "PASO: Primary Aldosteronism Surgery Outcome Study",
+        "year": 2017,
+        "population": "705 patients from 12 centers who underwent adrenalectomy for Conn's syndrome",
+        "finding": "Complete biochemical cure in 94% and complete clinical cure (normal BP off medications) in 37%. Partial clinical cure (reduced medications) in 47%",
+        "impact": "Confirmed that adrenalectomy is highly effective for Conn's, but long-standing hypertension may persist in some patients",
+        "reference": "Williams TA, et al. Lancet Diabetes Endocrinol. 2017;5(9):689-699"
+      },
+      {
+        "trial": "ADIUVO: Adjuvant Mitotane vs Observation in Low-Risk ACC",
+        "year": 2020,
+        "population": "91 patients with low-risk ACC (R0, Ki-67 <10%) randomized to mitotane vs observation",
+        "finding": "Mitotane did not significantly improve recurrence-free survival (HR 0.61, 95% CI 0.29-1.28, p=0.19). High toxicity with mitotane (all patients had adverse events)",
+        "impact": "Questioned routine adjuvant mitotane in low-risk ACC; individualized decision-making recommended",
+        "reference": "Fassnacht M, et al. ESMO 2020 Virtual Congress, Abstract 300"
+      },
+      {
+        "trial": "Shen WT, et al. Laparoscopic vs Open Adrenalectomy for Large Tumors",
+        "year": 2012,
+        "population": "Meta-analysis of 15 studies comparing laparoscopic vs open adrenalectomy for tumors >6cm",
+        "finding": "Laparoscopic approach had lower blood loss, shorter hospital stay, fewer wound complications, but higher rates of capsular rupture (6% vs 2%) for large tumors",
+        "impact": "Laparoscopic adrenalectomy is safe for tumors up to 10cm with benign features; open approach preferred for suspected ACC",
+        "reference": "Shen WT, et al. World J Surg. 2012;36(10):2423-2430"
+      }
+    ],
+
+    "evidenceTable": [
+      {
+        "recommendation": "All adrenal masses >1cm require hormonal workup to exclude pheochromocytoma, Conn's syndrome, and Cushing's syndrome",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "AAES Guidelines; ENSAT Guidelines"
+      },
+      {
+        "recommendation": "Pheochromocytoma requires pre-operative alpha-blockade (Phenoxybenzamine or Doxazosin) for 10-14 days before surgery",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Manger WM, J Clin Endocrinol Metab 1999"
+      },
+      {
+        "recommendation": "Beta-blockade should only be added after adequate alpha-blockade to prevent unopposed alpha-mediated vasoconstriction",
+        "evidenceLevel": "IV",
+        "grade": "D",
+        "reference": "Consensus guidelines; AAES"
+      },
+      {
+        "recommendation": "Laparoscopic adrenalectomy is the gold standard for benign functional tumors and non-functional adenomas <6-10cm",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Shen WT, World J Surg 2012; AAES Guidelines"
+      },
+      {
+        "recommendation": "Adrenocortical carcinoma requires open adrenalectomy with en bloc R0 resection and regional lymphadenectomy",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "ENSAT Registry, Fassnacht M, J Clin Endocrinol Metab 2009"
+      },
+      {
+        "recommendation": "EDP (Etoposide, Doxorubicin, Cisplatin) + Mitotane is first-line chemotherapy for advanced ACC",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "FIRM-ACT Trial, Fassnacht M, N Engl J Med 2012"
+      },
+      {
+        "recommendation": "Adrenal vein sampling should guide lateralization in Conn's syndrome when CT shows bilateral or normal adrenals",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "PASO Study, Williams TA, Lancet Diabetes Endocrinol 2017"
+      },
+      {
+        "recommendation": "Non-functional adrenal adenomas <4cm with benign imaging features (HU <10) can be observed without surgery",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "AAES Guidelines; ENSAT Guidelines"
+      },
+      {
+        "recommendation": "Follow-up imaging at 6-12 months and annual hormonal workup for 4 years is recommended for observed non-functional adenomas",
+        "evidenceLevel": "IV",
+        "grade": "C",
+        "reference": "AAES Guidelines; CONSENSUS"
+      },
+      {
+        "recommendation": "Genetic testing for RET, VHL, SDHB/D, NF1 should be offered to all patients with pheochromocytoma (especially if bilateral, multiple, or age <40)",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "AAES Guidelines; NGS for PPGL Consortium"
+      },
+      {
+        "recommendation": "Cortical-sparing adrenalectomy should be performed for bilateral pheochromocytoma (MEN2, VHL) to avoid steroid dependence",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "Castinetti F, et al. J Clin Endocrinol Metab 2014"
+      }
+    ],
+
+    "diagnosticAlgorithm": "Adrenal mass detected on imaging (CT/US/MRI) → Step 1: Determine if functional — Order: Plasma/24h urine fractionated metanephrines (pheo screen). Aldosterone/Renin ratio (Conn's screen). 1mg overnight DST or late-night salivary cortisol (Cushing's screen). DHEA-S, androstenedione (androgen screen). → Step 2: Characterize imaging — CT adrenal protocol: non-contrast HU <10 = benign adenoma; >10-20 = indeterminate; >20 = suspicious for malignancy. Absolute washout >60% = adenoma. Size: <4cm low risk, 4-6cm intermediate, >6cm high risk for ACC. → Step 3: Risk stratify — Functional tumor → surgery (prepare appropriately). Non-functional, <4cm, HU <10, benign features → observe. Non-functional, >4cm, HU >10, suspicious features → discuss adrenalectomy. Indeterminate → consider MRI chemical shift, or repeat CT at 6 months. → Step 4: Pre-operative preparation — Pheo: Phenoxybenzamine 10mg BD titrated up over 10-14 days. Add Propranolol 40mg TDS after alpha-block. High-sodium diet and IV fluids. Conn's: Spironolactone 25-100mg daily, correct K+. Cushing's: Stress-dose steroids (Hydrocortisone 100mg IV q8h). → Step 5: Surgery — Laparoscopic adrenalectomy for benign tumors. Open adrenalectomy for ACC or large >10cm. → Step 6: Post-op — Monitor BP, glucose, electrolytes. Steroid taper for Cushing's. Confirm biochemical cure at 6 weeks. → Step 7: Follow-up — Non-functional observed: CT at 6-12 months, hormonal workup annually x4 years. Post-adrenalectomy: hormonal workup at 6 weeks to confirm cure. ACC: CT every 3-6 months.",
+
+    "managementPearls": [
+      {
+        "context": "The right adrenal vein is short and dangerous",
+        "pearl": "The right adrenal vein is 4-6mm long and drains directly into the IVC from the posterior-lateral aspect. It is the 'Achilles heel' of right adrenalectomy. Avulsion causes torrential bleeding. Use a laparoscopic clip applier that fits comfortably; place clips with confidence and divide with scissors, not cautery near the IVC.",
+        "evidence": "Gagner M, et al. Laparoscopic adrenalectomy. Ann Surg 1997"
+      },
+      {
+        "context": "The left adrenal vein is long and forgiving",
+        "pearl": "The left adrenal vein drains into the left renal vein, often receiving the left inferior phrenic vein. It is 2-3cm long, giving you room to work. Ligate it early to reduce congestion. Remember: the tail of the pancreas and splenic vessels lie anterior to the left adrenal — retract them medially.",
+        "evidence": "Gagner M, et al. Laparoscopic adrenalectomy. Ann Surg 1997"
+      },
+      {
+        "context": "Pheochromocytoma: 'Never give beta before alpha'",
+        "pearl": "This is the most important rule in pheochromocytoma management. Beta-blockade without alpha-blockade leaves alpha-1 receptors unopposed — vasoconstriction from norepinephrine can cause hypertensive crisis, pulmonary edema, or death. Always start alpha-blockade (Phenoxybenzamine or Doxazosin) first. Beta-blocker (Propranolol 40mg TDS) only for tachycardia after alpha-blockade established.",
+        "evidence": "AAES Guidelines; Manger WM, J Clin Endocrinol Metab 1999"
+      },
+      {
+        "context": "Conn's: AVS is essential with bilateral nodules",
+        "pearl": "If CT shows bilateral nodules or normal-appearing adrenals in a patient with high ARR, adrenal vein sampling (AVS) is essential before surgery. Without lateralization, you risk removing the wrong gland. AVS is technically challenging (right adrenal vein cannulation has 70-80% success even in expert hands). Selectivity index >5 confirms successful cannulation.",
+        "evidence": "PASO Study; Rossi GP, J Clin Endocrinol Metab 2012"
+      },
+      {
+        "context": "Cushing's: Steroid taper is the hardest part",
+        "pearl": "Patients may feel that 'surgery was easy, but the steroid taper is brutal'. The contralateral adrenal gland has been suppressed for months/years. Plan a slow taper: Hydrocortisone 20mg mane + 10mg evening initially, reduce by 2.5-5mg every 2-4 weeks. The taper takes 6-18 months. Educate about 'sick day rules' — double or triple the dose during illness, injury, or surgery.",
+        "evidence": "Nieman LK, et al. Cushing's syndrome guidelines. J Clin Endocrinol Metab 2015"
+      },
+      {
+        "context": "ACC: En bloc resection is critical",
+        "pearl": "Adrenocortical carcinoma is aggressive and breaching the capsule during surgery significantly worsens prognosis. For any tumor >6cm or with suspicious features: plan an open approach, remove en bloc with periadrenal fat, Gerota's fascia, and regional lymph nodes. If the tumor invades kidney, spleen, pancreas, or diaphragm — resect the involved structures. R0 resection is the only chance for cure.",
+        "evidence": "ENSAT; Fassnacht M, J Clin Endocrinol Metab 2009"
+      },
+      {
+        "context": "Hypotension after pheochromocytoma removal",
+        "pearl": "After the adrenal vein is ligated, catecholamine levels drop precipitously. Expect profound hypotension. Stop all alpha-blockers after vein ligation. Have vasopressors (norepinephrine, phenylephrine) drawn up and ready. These patients often need 12-24 hours of vasopressor support in ICU. Their blood vessels are 'floppy' after chronic alpha-blockade and the sudden loss of catecholamines.",
+        "evidence": "AAES Guidelines; Clinical experience"
+      }
+    ],
+
+    "operativeNuances": [
+      {
+        "procedure": "Laparoscopic Right Adrenalectomy",
+        "pitfall": "Avulsion of the short right adrenal vein from the IVC during retraction, causing life-threatening hemorrhage",
+        "expertTip": "Use a lateral approach with the liver retracted by a fan retractor held by an assistant (or a self-retaining retractor). Identify the IVC first. Follow the lateral border of the IVC superiorly. The adrenal vein is found at the postero-lateral aspect of the IVC, about 2cm above the renal vein. Dissect it carefully, preserving 5mm length on the gland side. Place TWO clips on the IVC side and ONE on the gland side."
+      },
+      {
+        "procedure": "Laparoscopic Left Adrenalectomy",
+        "pitfall": "Injury to the tail of the pancreas during medial retraction, causing pancreatitis or pancreatic leak",
+        "expertTip": "The tail of the pancreas is intimately associated with the anterior surface of the left adrenal. Key maneuver: divide the splenorenal ligament and reflect the spleen and tail of pancreas medially EN BLOC. Use a medial-to-lateral mobilization of the spleen. Once you see the psoas muscle posteriorly, you are in the correct plane behind the pancreas."
+      },
+      {
+        "procedure": "Pheochromocytoma Surgery — Tumor Handling",
+        "pitfall": "Excessive tumor manipulation causing catecholamine storm, hypertensive crisis, and arrhythmia",
+        "expertTip": "The golden rule: 'No touch technique' until the adrenal vein is ligated. Minimize grasping, squeezing, or retracting the adrenal gland directly. Dissect around the gland using the surrounding fat for retraction. Ligate the adrenal vein FIRST before extensive mobilization. Communicate constantly with the anesthesiologist about when you are about to ligate the vein."
+      },
+      {
+        "procedure": "Open Adrenalectomy for Large ACC",
+        "pitfall": "Capsular rupture during mobilization of a large right ACC adherent to the liver and IVC",
+        "expertTip": "Use a Chevron or Makuuchi incision (midline + right transverse extension) for adequate exposure. Approach the ACC from the LATERAL side, mobilizing the liver off the IVC first (Cherqui maneuver). Identify the right adrenal vein early and divide it. Then work posteriorly, separating the tumor from the diaphragm. Use the liver as a 'window' — do not retract the tumor directly."
+      },
+      {
+        "procedure": "Cortical-Sparing Adrenalectomy for Bilateral Pheochromocytoma",
+        "pitfall": "Removing too much adrenal tissue, leaving the patient steroid-dependent, or removing too little and leaving behind tumor",
+        "expertTip": "The goal is to leave 20-30% of well-vascularized adrenal tissue. Use intraoperative ultrasound to locate the tumor and identify the extent. Dissect the tumor out with a 2-3mm margin of normal adrenal. Send the tumor for frozen section to confirm complete excision. Clip the arterial supply to the tumor but preserve the main adrenal vein if possible (it drains the remnant)."
+      }
+    ],
+
+    "prognosis": {
+      "mortality": "Pheochromocytoma: operative mortality 0.5-1% with modern pre-op preparation (was 5-10% before alpha-blockade era). Conn's syndrome: <0.1% operative mortality, normal life expectancy after cure. Cushing's syndrome: 3-5x increased cardiovascular mortality if untreated; normalizes after successful treatment but residual metabolic effects may persist. ACC: 5-year overall survival 60-80% for Stage I-II, 30-40% for Stage III, <10% for Stage IV. Median survival for metastatic ACC: 12-15 months.",
+      "morbidity": "Pheochromocytoma: post-op hypotension requiring vasopressors (30-50%), transient hypoglycemia (10-20%), persistent hypertension in 25% (due to irreversible vascular remodeling). Conn's: persistent hypertension in 37% (especially if long-standing pre-op HTN). Cushing's: adrenal insufficiency requiring steroid replacement (100% initially, 30-50% may ultimately have recovery of HPA axis over 18-24 months). ACC: Cushing's syndrome if functional, tumor recurrence (50-80% within 5 years even after R0), chemotherapy toxicity.",
+      "recurrence": "Pheochromocytoma: 5-10% local recurrence, 5-10% metastatic (higher with SDHB mutation, large tumors, extra-adrenal). Conn's: <1% recurrence. Cushing's: <5% recurrence. ACC: 50-80% recurrence rate at 5 years after 'curative' resection. Median time to recurrence: 12-24 months. Most recurrences are within the first 2-3 years.",
+      "survival": "5-year survival: Pheochromocytoma (benign) 95%, malignant pheochromocytoma 40-60%. Conn's: >95% (normal life expectancy). Cushing's: >95% after successful surgery, but residual cardiovascular risk persists for years. ACC: Stage I 80%, II 60%, III 35%, IV <10%. SDHB mutation carriers require lifelong surveillance for metastatic disease.",
+      "reference": "ENSAT Data; PASO Study; FIRM-ACT Trial; AAES Guidelines"
+    }
   }
 }

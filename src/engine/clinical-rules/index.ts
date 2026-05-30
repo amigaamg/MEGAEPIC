@@ -40,3 +40,5 @@ export interface ClinicalAlert {
 export { evaluateAdmission } from './admission-criteria';
 export { evaluateDischarge } from './discharge-criteria';
 export { checkVitalAlerts, checkLabAlerts, checkSepsisScreen, checkDeterioration } from './alerts';
+export { detectComplications, checkPostOpWatch } from './complication-detection';
+export type { PatientState, DetectedComplication } from './complication-detection';

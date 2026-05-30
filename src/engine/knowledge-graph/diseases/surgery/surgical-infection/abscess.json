@@ -3,24 +3,86 @@
     "id": "surgical_abscess",
     "name": "Surgical Abscess",
     "system": "surgical",
-    "agePeak_months": [120, 600],
-    "note": "Localized pus collection from infection. Painful, erythematous, fluctuant mass. Requires incision and drainage.",
+    "department": "surgery",
+    "unit": "surgical-infection",
+    "agePeak_months": [
+      120,
+      600
+    ],
+    "note": "Localized pus collection from infection. Painful, erythematous, fluctuant mass. Requires incision and drainage. In surgical practice, abscesses may occur at surgical sites, from neglected wounds, or as deep collections following peritonitis. The key principle: if there is pus, it must be drained — no antibiotic can penetrate an abscess cavity.",
     "prevalenceWeight": 0.5,
-    "syndromeTags": ["skin_infection", "pus_collection", "painful_swelling"],
-
+    "syndromeTags": [
+      "skin_infection",
+      "pus_collection",
+      "painful_swelling",
+      "surgical_site_infection"
+    ],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "presentingComplaints": [
+      "Painful swelling at the surgical or wound site",
+      "Redness and warmth around an area",
+      "Fever and chills",
+      "Pus discharge from the swelling",
+      "Increasing pain over a few days",
+      "General feeling of being unwell"
+    ],
+    "diagnosticClues": [
+      "painful_fluctuant_swelling",
+      "erythema",
+      "pus_on_aspiration",
+      "fever",
+      "history_of_surgery_or_trauma"
+    ],
+    "exclusionClues": [
+      "non_fluctuant",
+      "no_pus",
+      "solid_mass_on_us",
+      "no_inflammatory_signs"
+    ],
+    "pathophysiology": [
+      "bacterial_inoculation",
+      "local_inflammation",
+      "abscess_wall_formation",
+      "purulent_collection",
+      "increased_local_pressure",
+      "spontaneous_drainage_or_extension",
+      "bacteremia_if_inadequately_treated"
+    ],
     "severityAssessment": {
       "immediateDangerSigns": [
-        { "sign": "septic_shock", "weight": 10 },
-        { "sign": "deep_abscess_compromising_airway", "weight": 10 },
-        { "sign": "systemic_sepsis", "weight": 9 },
-        { "sign": "avpu_abnormal", "weight": 10 }
+        {
+          "sign": "septic_shock",
+          "weight": 10
+        },
+        {
+          "sign": "deep_abscess_compromising_airway",
+          "weight": 10
+        },
+        {
+          "sign": "systemic_sepsis",
+          "weight": 9
+        },
+        {
+          "sign": "avpu_abnormal",
+          "weight": 10
+        }
       ],
       "severeCriteria": {
         "anyDangerSign": true,
         "additionalCriteria": [
-          { "sign": "deep_space_infection", "weight": 7 },
-          { "sign": "large_size_more_than_5cm", "weight": 5 },
-          { "sign": "immunosuppressed_host", "weight": 6 }
+          {
+            "sign": "deep_space_infection",
+            "weight": 7
+          },
+          {
+            "sign": "large_size_more_than_5cm",
+            "weight": 5
+          },
+          {
+            "sign": "immunosuppressed_host",
+            "weight": 6
+          }
         ]
       },
       "nonSevereCriteria": {
@@ -29,95 +91,731 @@
       },
       "severityLabel": "Deep/sepsis/immunosuppressed -> SEVERE; superficial small -> NON-SEVERE"
     },
-
-    "historyFeatures": [
-      { "symptomId": "painful_swelling", "weight": 5 },
-      { "symptomId": "redness_warmth", "weight": 4 },
-      { "symptomId": "fever_chills", "weight": 3 },
-      { "symptomId": "history_of_skin_break_infection", "weight": 3 },
-      { "symptomId": "previous_surgery_or_trauma", "weight": 3 },
-      { "symptomId": "fluctuant_lump", "weight": 5 },
-      { "symptomId": "pus_discharge", "weight": 3 }
-    ],
-
-    "examFeatures": [
-      { "signId": "fluctuant_swelling", "baseWeight": 5, "doubleWeight": true },
-      { "signId": "erythema_warmth", "baseWeight": 4 },
-      { "signId": "tenderness", "baseWeight": 4 },
-      { "signId": "surrounding_cellulitis", "baseWeight": 3 },
-      { "signId": "regional_lymphadenopathy", "baseWeight": 2 },
-      { "signId": "pointing_sign_pustule", "baseWeight": 3 }
-    ],
-
-    "riskFactors": [
-      { "id": "diabetes_mellitus", "multiplier": 2.5 },
-      { "id": "immunosuppression", "multiplier": 2.5 },
-      { "id": "intravenous_drug_use", "multiplier": 3.0 },
-      { "id": "poor_hygiene", "multiplier": 1.5 },
-      { "id": "skin_disease_folliculitis", "multiplier": 2.0 },
-      { "id": "post_surgical_wound", "multiplier": 2.0 },
-      { "id": "malnutrition", "multiplier": 1.5 }
-    ],
-
-    "subtypes": [
+    "history_questions": [
       {
-        "id": "superficial_abscess",
-        "name": "Superficial Abscess (Subcutaneous)",
-        "prevalenceModifier": 0.6,
-        "keyFeatures": [
-          { "feature": "skin_level_fluctuant_mass", "weight": 5 },
-          { "feature": "localized_pain_erythema", "weight": 4 },
-          { "feature": "no_systemic_symptoms", "weight": 4 }
-        ],
-        "management": "Incision and drainage under LA. Pus culture. Packing or drain. Antibiotics only if cellulitis or immunocompromised. Remove packing in 24-48h."
+        "question": "When did the swelling start?",
+        "weight": 8
       },
       {
-        "id": "deep_abscess",
-        "name": "Deep Abscess (Psoas, Retropharyngeal, Paracolic)",
-        "prevalenceModifier": 0.4,
-        "keyFeatures": [
-          { "feature": "deep_seated_pain", "weight": 5 },
-          { "feature": "fever_systemic_symptoms", "weight": 5 },
-          { "feature": "no_fluctuance_on_surface", "weight": 4 },
-          { "feature": "may_have_limited_range_of_motion", "weight": 3 }
-        ],
-        "management": "CT-guided percutaneous drainage or surgical drainage under GA. IV antibiotics. Pus culture. Source control. Treat underlying cause."
+        "question": "Did it follow a surgery, injection, or injury?",
+        "weight": 9
+      },
+      {
+        "question": "Is it getting bigger and more painful?",
+        "weight": 8
+      },
+      {
+        "question": "Do you have a fever or chills?",
+        "weight": 7
+      },
+      {
+        "question": "Has any pus leaked out?",
+        "weight": 8
+      },
+      {
+        "question": "Have you had similar abscesses before?",
+        "weight": 5
+      },
+      {
+        "question": "Do you have diabetes?",
+        "weight": 8
+      },
+      {
+        "question": "Are you on any medications that lower immunity?",
+        "weight": 6
+      },
+      {
+        "question": "Did you put any traditional medicine on it?",
+        "weight": 6
+      },
+      {
+        "question": "Have you received antibiotics for this?",
+        "weight": 6
+      },
+      {
+        "question": "Have you had any imaging done (ultrasound/CT)?",
+        "weight": 5
+      },
+      {
+        "question": "Is there any history of tuberculosis or HIV?",
+        "weight": 5
+      },
+      {
+        "question": "Do you inject any drugs?",
+        "weight": 5
+      },
+      {
+        "question": "How is your appetite and general health?",
+        "weight": 4
+      },
+      {
+        "question": "Have you had any recent weight loss?",
+        "weight": 4
+      },
+      {
+        "question": "Is the area warm and red?",
+        "weight": 5
+      },
+      {
+        "question": "When did the fever start, and is it continuous or intermittent?",
+        "weight": 7
+      },
+      {
+        "question": "Do you have chills or shaking rigors?",
+        "weight": 8
+      },
+      {
+        "question": "Is the pain at the surgical site worse than before?",
+        "weight": 8
+      },
+      {
+        "question": "Is there any discharge from the wound? If so, what color and does it smell?",
+        "weight": 8
+      },
+      {
+        "question": "Did you have a drain placed during surgery? What color is the fluid coming from it?",
+        "weight": 7
+      },
+      {
+        "question": "Have you been on antibiotics? Which ones and for how long?",
+        "weight": 6
+      },
+      {
+        "question": "Do you have diabetes or any condition that weakens your immune system?",
+        "weight": 6
+      },
+      {
+        "question": "Are you on any steroid medications or chemotherapy?",
+        "weight": 5
+      },
+      {
+        "question": "Do you have HIV? If yes, are you on antiretroviral therapy?",
+        "weight": 5
+      },
+      {
+        "question": "Have you had any previous surgeries in the same area?",
+        "weight": 5
+      },
+      {
+        "question": "Was the original surgery done as an emergency or was it planned?",
+        "weight": 5
+      },
+      {
+        "question": "Do you have any foreign material like mesh, prosthetic joint, or heart valve?",
+        "weight": 5
+      },
+      {
+        "question": "Have you had any recent trauma or injection at the site?",
+        "weight": 4
+      },
+      {
+        "question": "Are you passing gas and stool normally?",
+        "weight": 5
+      },
+      {
+        "question": "Do you feel generally weak, unwell, or have lost your appetite?",
+        "weight": 4
+      },
+      {
+        "question": "What type of surgery did you have and how long ago?",
+        "weight": 8
+      },
+      {
+        "question": "Was the surgery an emergency or elective case?",
+        "weight": 6
+      },
+      {
+        "question": "Did you receive antibiotics before, during, or after surgery?",
+        "weight": 7
+      },
+      {
+        "question": "Have you been in the hospital for a prolonged period before this?",
+        "weight": 5
+      },
+      {
+        "question": "Do you have a history of MRSA or multi-drug resistant infection?",
+        "weight": 6
+      },
+      {
+        "question": "Have you traveled recently or been exposed to healthcare settings?",
+        "weight": 4
+      },
+      {
+        "question": "Do you smoke or consume alcohol?",
+        "weight": 5
+      },
+      {
+        "question": "Are you malnourished or have you lost significant weight recently?",
+        "weight": 5
+      },
+      {
+        "question": "Have you ever had radiation therapy to the affected area?",
+        "weight": 4
+      },
+      {
+        "question": "Do you have any chronic wounds or pressure sores?",
+        "weight": 5
+      },
+      {
+        "question": "Do you have peripheral vascular disease or chronic venous insufficiency?",
+        "weight": 5
+      },
+      {
+        "question": "Have you used any herbal or traditional remedies on the wound?",
+        "weight": 6
+      },
+      {
+        "question": "Is there any known contact with someone who has tuberculosis?",
+        "weight": 5
+      },
+      {
+        "question": "Do you have any pain with deep breathing or coughing (suggests subphrenic abscess)?",
+        "weight": 6
+      },
+      {
+        "question": "Have you had any falls or injuries near the surgical site?",
+        "weight": 4
       }
     ],
-
+    "examination_findings": [
+      {
+        "finding": "Fluctuant swelling",
+        "weight": 10
+      },
+      {
+        "finding": "Erythema and warmth over swelling",
+        "weight": 8
+      },
+      {
+        "finding": "Tenderness on palpation",
+        "weight": 8
+      },
+      {
+        "finding": "Surrounding cellulitis",
+        "weight": 7
+      },
+      {
+        "finding": "Regional lymphadenopathy",
+        "weight": 6
+      },
+      {
+        "finding": "Pointing sign or pustule formation",
+        "weight": 7
+      },
+      {
+        "finding": "Fever",
+        "weight": 6
+      },
+      {
+        "finding": "Spontaneous purulent discharge",
+        "weight": 9
+      },
+      {
+        "finding": "Tachycardia (if systemic involvement)",
+        "weight": 5
+      },
+      {
+        "finding": "Foul odor from discharge",
+        "weight": 5
+      },
+      {
+        "finding": "Crepitus (rare, gas-forming organisms)",
+        "weight": 7
+      },
+      {
+        "finding": "Induration around the abscess",
+        "weight": 6
+      },
+      {
+        "finding": "Limitation of movement if over joint or muscle",
+        "weight": 4
+      },
+      {
+        "finding": "Deep abscess: may not have visible fluctuance",
+        "weight": 5
+      },
+      {
+        "finding": "Spiking fever pattern with rigors (suggests bacteremia from undrained abscess)",
+        "weight": 8
+      },
+      {
+        "finding": "Localized tenderness and guarding over the abscess site",
+        "weight": 8
+      },
+      {
+        "finding": "Palpable mass or fullness in the area of the abscess",
+        "weight": 7
+      },
+      {
+        "finding": "Fluctuance on deep palpation (suggests superficial extension)",
+        "weight": 8
+      },
+      {
+        "finding": "Crepitus (gas-forming abscess or necrotizing component)",
+        "weight": 9
+      },
+      {
+        "finding": "Purulent discharge from wound or drain site",
+        "weight": 9
+      },
+      {
+        "finding": "Foul-smelling discharge (anaerobic infection)",
+        "weight": 7
+      },
+      {
+        "finding": "Tachycardia disproportionate to fever (suggests systemic toxicity)",
+        "weight": 6
+      },
+      {
+        "finding": "Hypotension or vasopressor requirement (septic shock)",
+        "weight": 9
+      },
+      {
+        "finding": "Leukocytosis >15,000 with left shift",
+        "weight": 6
+      },
+      {
+        "finding": "CRP >200 mg/L and rising",
+        "weight": 7
+      },
+      {
+        "finding": "Procalcitonin >2 ng/mL (bacterial infection confirmed)",
+        "weight": 7
+      },
+      {
+        "finding": "Lactate >2 mmol/L (tissue hypoperfusion from sepsis)",
+        "weight": 7
+      },
+      {
+        "finding": "Organ dysfunction: acute kidney injury, respiratory failure, coagulopathy",
+        "weight": 7
+      }
+    ],
+    "historyFeatures": [
+      {
+        "symptomId": "painful_swelling",
+        "weight": 5
+      },
+      {
+        "symptomId": "redness_warmth",
+        "weight": 4
+      },
+      {
+        "symptomId": "fever_chills",
+        "weight": 3
+      },
+      {
+        "symptomId": "history_of_skin_break_infection",
+        "weight": 3
+      },
+      {
+        "symptomId": "previous_surgery_or_trauma",
+        "weight": 3
+      },
+      {
+        "symptomId": "fluctuant_lump",
+        "weight": 5
+      },
+      {
+        "symptomId": "pus_discharge",
+        "weight": 3
+      }
+    ],
+    "examFeatures": [
+      {
+        "signId": "fluctuant_swelling",
+        "baseWeight": 5,
+        "doubleWeight": true
+      },
+      {
+        "signId": "erythema_warmth",
+        "baseWeight": 4
+      },
+      {
+        "signId": "tenderness",
+        "baseWeight": 4
+      },
+      {
+        "signId": "surrounding_cellulitis",
+        "baseWeight": 3
+      },
+      {
+        "signId": "regional_lymphadenopathy",
+        "baseWeight": 2
+      },
+      {
+        "signId": "pointing_sign_pustule",
+        "baseWeight": 3
+      }
+    ],
+    "bedside_scores": [
+      {
+        "name": "Abscess Severity Assessment",
+        "maxPoints": 10,
+        "components": [
+          "Size >5 cm",
+          "Deep location",
+          "Systemic sepsis",
+          "Diabetes/immunosuppression",
+          "Failed prior drainage"
+        ],
+        "interpretation": "Score >=5: requires GA drainage, IV antibiotics, and possible admission."
+      }
+    ],
+    "riskFactors": [
+      {
+        "id": "diabetes_mellitus",
+        "multiplier": 2.5
+      },
+      {
+        "id": "immunosuppression",
+        "multiplier": 2.5
+      },
+      {
+        "id": "intravenous_drug_use",
+        "multiplier": 3.0
+      },
+      {
+        "id": "poor_hygiene",
+        "multiplier": 1.5
+      },
+      {
+        "id": "skin_disease_folliculitis",
+        "multiplier": 2.0
+      },
+      {
+        "id": "post_surgical_wound",
+        "multiplier": 2.0,
+        "note": "Common after emergency laparotomy for peritonitis"
+      },
+      {
+        "id": "malnutrition",
+        "multiplier": 1.5
+      },
+      {
+        "id": "mrsa_colonization",
+        "multiplier": 2.0
+      }
+    ],
+    "subtypes": [
+      {
+        "id": "superficial_wound_abscess",
+        "name": "Superficial Wound Abscess",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          {
+            "feature": "wound_site",
+            "weight": 5
+          },
+          {
+            "feature": "fluctuance",
+            "weight": 5
+          },
+          {
+            "feature": "fever_low_grade",
+            "weight": 3
+          }
+        ],
+        "management": "Open wound, drain pus, pack daily. Wound swab for culture. Oral antibiotics if cellulitis. Daily dressing changes."
+      },
+      {
+        "id": "deep_intra_abdominal_abscess",
+        "name": "Deep Intra-abdominal Abscess",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          {
+            "feature": "persistent_spiking_fever",
+            "weight": 5
+          },
+          {
+            "feature": "abdominal_pain_localized",
+            "weight": 5
+          },
+          {
+            "feature": "rising_crp",
+            "weight": 4
+          },
+          {
+            "feature": "ileus",
+            "weight": 3
+          }
+        ],
+        "management": "CT-guided percutaneous drainage (first-line) or surgical drainage. IV broad-spectrum antibiotics (Piperacillin-Tazobactam or Meropenem if ESBL risk). Drain kept until output <20 mL/day."
+      },
+      {
+        "id": "psoas_retroperitoneal_abscess",
+        "name": "Psoas / Retroperitoneal Abscess",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          {
+            "feature": "hip_flexion_contracture",
+            "weight": 5
+          },
+          {
+            "feature": "groin_flank_pain",
+            "weight": 5
+          },
+          {
+            "feature": "fever_weight_loss",
+            "weight": 4
+          },
+          {
+            "feature": "tb_risk_factors",
+            "weight": 4
+          }
+        ],
+        "management": "CT-guided percutaneous drainage or surgical drainage via retroperitoneal flank approach. IV antibiotics. If TB suspected: start anti-TB therapy. Send pus for TB culture and GeneXpert."
+      }
+    ],
     "mimics": [
       {
         "diseaseId": "sebaceous_cyst_infection",
-        "discriminators": ["central_punctum", "chronic_present", "cheesy_material"]
+        "discriminators": [
+          "central_punctum",
+          "chronic_present",
+          "cheesy_material"
+        ],
+        "ruleOutTests": [
+          "clinical_exam",
+          "excision_and_histology"
+        ]
       },
       {
         "diseaseId": "hematoma",
-        "discriminators": ["no_erythema_warmth", "history_of_trauma_anticoagulation", "aspiration_shows_blood"]
+        "discriminators": [
+          "no_erythema_warmth",
+          "history_of_trauma_anticoagulation",
+          "aspiration_shows_blood"
+        ],
+        "ruleOutTests": [
+          "ultrasound",
+          "aspiration"
+        ]
       },
       {
         "diseaseId": "lipoma",
-        "discriminators": ["non_tender", "no_erythema", "no_fluctuance", "soft_rubbery"]
+        "discriminators": [
+          "non_tender",
+          "no_erythema",
+          "no_fluctuance",
+          "soft_rubbery"
+        ],
+        "ruleOutTests": [
+          "ultrasound",
+          "clinical_exam"
+        ]
+      },
+      {
+        "diseaseId": "lymphadenitis",
+        "discriminators": [
+          "multiple_tender_nodes",
+          "firm_not_fluctuant",
+          "systemic_infection_features"
+        ],
+        "ruleOutTests": [
+          "ultrasound",
+          "FNA"
+        ]
+      },
+      {
+        "diseaseId": "sterile_seroma",
+        "discriminators": [
+          "clear serous fluid on aspiration",
+          "non-tender swelling",
+          "no fever or systemic toxicity",
+          "normal or mildly elevated CRP"
+        ],
+        "ruleOutTests": [
+          "Aspiration shows clear fluid",
+          "Culture negative",
+          "Ultrasound shows anechoic collection without wall"
+        ]
+      },
+      {
+        "diseaseId": "hematoma",
+        "discriminators": [
+          "early onset (24-48h postop)",
+          "blue/purple discoloration",
+          "no fever unless infected",
+          "ultrasound shows echogenic collection without wall"
+        ],
+        "ruleOutTests": [
+          "CT shows high-density collection (40-60 HU)",
+          "Aspiration reveals blood, not pus"
+        ]
+      },
+      {
+        "diseaseId": "anastomotic_leak",
+        "discriminators": [
+          "tachycardia out of proportion",
+          "generalized peritonitis",
+          "feculent or bilious drain output",
+          "extraluminal contrast on CT"
+        ],
+        "ruleOutTests": [
+          "CT with oral contrast",
+          "Drain fluid amylase/bilirubin"
+        ]
+      },
+      {
+        "diseaseId": "tuberculous_abscess",
+        "discriminators": [
+          "chronic indolent course (weeks to months)",
+          "minimal tenderness compared to size",
+          "associated weight loss, night sweats",
+          "psoas or paravertebral location common",
+          "past or current TB contact or known TB"
+        ],
+        "ruleOutTests": [
+          "Chest X-ray for apical TB lesions",
+          "Aspiration: caseous material",
+          "GeneXpert TB on pus",
+          "AFB smear and culture"
+        ]
+      },
+      {
+        "diseaseId": "ruptured_AAA",
+        "discriminators": [
+          "acute onset severe abdominal/back pain",
+          "hypotension, collapse",
+          "pulsatile abdominal mass",
+          "no pus on imaging",
+          "CT shows contrast extravasation"
+        ],
+        "ruleOutTests": [
+          "Urgent CT abdomen",
+          "Bedside ultrasound shows aortic dilation",
+          "FAST positive"
+        ]
       }
     ],
-
     "investigations": {
       "bedside": [
-        { "name": "Needle aspiration", "priority": "high", "yield": 0.9, "indication": "confirm pus" }
+        {
+          "name": "Needle aspiration",
+          "priority": "high",
+          "yield": 0.9,
+          "indication": "confirm pus"
+        }
       ],
       "laboratory": [
-        { "name": "WBC count", "priority": "medium", "yield": 0.5, "indication": "may be elevated" },
-        { "name": "CRP", "priority": "medium", "yield": 0.6, "indication": "inflammation marker" },
-        { "name": "Pus culture + sensitivity", "priority": "high", "yield": 0.8, "indication": "guide antibiotics" },
-        { "name": "Blood cultures", "priority": "medium", "yield": 0.3, "indication": "if septic" }
+        {
+          "name": "WBC count",
+          "priority": "medium",
+          "yield": 0.5,
+          "indication": "may be elevated"
+        },
+        {
+          "name": "CRP",
+          "priority": "medium",
+          "yield": 0.6,
+          "indication": "inflammation marker"
+        },
+        {
+          "name": "Pus culture + sensitivity",
+          "priority": "high",
+          "yield": 0.8,
+          "indication": "guide antibiotics"
+        },
+        {
+          "name": "Blood cultures",
+          "priority": "medium",
+          "yield": 0.3,
+          "indication": "if septic"
+        }
       ],
       "imaging": [
-        { "name": "Soft Tissue Ultrasound", "priority": "high", "yield": 0.85, "indication": "confirm abscess, size, depth" },
-        { "name": "CT/MRI", "priority": "medium", "yield": 0.9, "indication": "for deep abscesses" }
+        {
+          "name": "Soft Tissue Ultrasound",
+          "priority": "high",
+          "yield": 0.85,
+          "indication": "confirm abscess, size, depth"
+        },
+        {
+          "name": "CT/MRI",
+          "priority": "medium",
+          "yield": 0.9,
+          "indication": "for deep abscesses"
+        }
       ]
     },
-
+    "interpretation_rules": {
+      "ultrasound": {
+        "hypoechoic_cavity_with_hyperemic_rim": {
+          "present": "abscess +40"
+        },
+        "internal_debris": {
+          "present": "pus +30"
+        },
+        "no_fluid_collection": {
+          "present": "cellulitis_likely -15"
+        }
+      },
+      "pus_culture": {
+        "staph_aureus": {
+          "present": "skin_abscess +20"
+        },
+        "e_coli": {
+          "present": "deep_abdominal_abscess +15"
+        },
+        "mrsa": {
+          "present": "requires_vancomycin +10"
+        },
+        "tb_culture_positive": {
+          "present": "tuberculous_abscess +20"
+        }
+      }
+    },
     "management": {
       "protocolReference": "IDSA Guidelines for Skin Abscess",
+      "initial": {
+        "resuscitation": [
+          "IV fluids if septic",
+          "Blood cultures before antibiotics if systemic infection"
+        ],
+        "analgesia": [
+          "LA (Lidocaine 1%) for superficial I&D",
+          "IV sedation/GA for deep/large abscesses"
+        ],
+        "antibiotics": [
+          "Not needed for simple abscess after adequate drainage",
+          "Indications: cellulitis, immunocompromise, deep abscess, failed prior treatment",
+          "Empiric: Cloxacillin 500 mg QDS or Clindamycin 300 mg QDS",
+          "Add Gentamicin if gram-negative suspected in deep abscess"
+        ],
+        "monitoring": [
+          "Temperature",
+          "Wound check at 24-48 hours"
+        ]
+      },
+      "definitive": {
+        "incision_and_drainage": {
+          "description": "Incision and drainage under appropriate anesthesia",
+          "step1": "Prepare and drape area",
+          "step2": "Infiltrate LA or administer GA",
+          "step3": "Make incision over point of maximum fluctuance",
+          "step4": "Break all loculi with finger or instrument",
+          "step5": "Evacuate pus completely",
+          "step6": "Send pus for culture",
+          "step7": "Irrigate with saline",
+          "step8": "Pack wound loosely with gauze",
+          "step9": "Apply absorbent dressing"
+        }
+      },
+      "postop": {
+        "general": [
+          "Remove packing in 24-48 h",
+          "Daily dressing changes",
+          "Deep abscess: consider drain placement for ongoing drainage",
+          "Culture-directed antibiotics for 5-7 days"
+        ],
+        "discharge_criteria": [
+          "Wound clean and draining appropriately",
+          "Afebrile",
+          "Pain controlled",
+          "Patient educated on wound care at home"
+        ]
+      },
       "pathways": [
         {
           "severity": "superficial small (<2cm)",
@@ -131,36 +829,522 @@
         }
       ]
     },
-
-    "pathophysiology": [
-      "bacterial_inoculation",
-      "local_inflammation",
-      "abscess_wall_formation",
-      "purulent_collection",
-      "increased_local_pressure",
-      "spontaneous_drainage_or_extension"
+    "operative_templates": [
+      {
+        "procedure": "Incision and Drainage of Surgical Abscess",
+        "indication": "Superficial or deep abscess requiring drainage",
+        "approach": "Direct incision over abscess",
+        "position": "Varies based on location",
+        "incision": "Linear or cruciate over most fluctuant point",
+        "steps": [
+          "Prep with antiseptic solution",
+          "Anesthetize (LA or GA)",
+          "Make skin incision with #11 blade",
+          "Open cavity with hemostat",
+          "Break loculi digitally or with instrument",
+          "Drain all pus",
+          "Send pus for culture",
+          "Irrigate with saline",
+          "Pack cavity with gauze",
+          "Apply sterile dressing"
+        ]
+      }
     ],
-
     "complications": [
       {
         "diseaseId": "bacteremia_sepsis",
         "probability": 0.05,
-        "lagDays": [1, 5],
+        "lagDays": [
+          1,
+          5
+        ],
         "severityBoost": 0.4,
-        "clues": ["fever_rigors", "hypotension", "worsening_toxicity"]
+        "triggers": [
+          "inadequate_drainage",
+          "manipulation",
+          "immunosuppression"
+        ],
+        "clues": [
+          "fever_rigors",
+          "hypotension",
+          "worsening_toxicity"
+        ]
       },
       {
         "diseaseId": "recurrence",
         "probability": 0.1,
-        "lagDays": [7, 60],
+        "lagDays": [
+          7,
+          60
+        ],
         "severityBoost": 0.1,
-        "clues": ["reaccumulation", "pain_returning", "inadequate_drainage"]
+        "triggers": [
+          "incomplete_drainage",
+          "foreign_body",
+          "immunosuppression"
+        ],
+        "clues": [
+          "reaccumulation",
+          "pain_returning",
+          "inadequate_drainage"
+        ]
+      },
+      {
+        "diseaseId": "abscess_extension",
+        "probability": 0.05,
+        "lagDays": [
+          3,
+          10
+        ],
+        "severityBoost": 0.2,
+        "triggers": [
+          "delayed_drainage",
+          "deep_location"
+        ],
+        "clues": [
+          "increasing_pain",
+          "worsening_systemic_symptoms"
+        ]
+      },
+      {
+        "diseaseId": "fistula_formation",
+        "probability": 0.03,
+        "lagDays": [
+          14,
+          60
+        ],
+        "severityBoost": 0.1,
+        "triggers": [
+          "tuberculous_abscess",
+          "foreign_body",
+          "crohns_disease"
+        ],
+        "clues": [
+          "persistent_draining_sinus"
+        ]
+      },
+      {
+        "diseaseId": "sepsis_septic_shock",
+        "probability": 0.15,
+        "lagDays": [
+          1,
+          5
+        ],
+        "severityBoost": 0.5,
+        "triggers": [
+          "delayed_drainage",
+          "incomplete_drainage",
+          "immunosuppression"
+        ],
+        "clues": [
+          "hypotension",
+          "lactate_elevated",
+          "organ_failure"
+        ]
+      },
+      {
+        "diseaseId": "fistula_formation",
+        "probability": 0.05,
+        "lagDays": [
+          7,
+          30
+        ],
+        "severityBoost": 0.3,
+        "triggers": [
+          "inadequate_drainage",
+          "foreign_body",
+          "tb_infection"
+        ],
+        "clues": [
+          "persistent_drainage_after_resolution",
+          "enteric_content_in_drain"
+        ]
+      },
+      {
+        "diseaseId": "chronic_draining_sinus",
+        "probability": 0.08,
+        "lagDays": [
+          14,
+          90
+        ],
+        "severityBoost": 0.1,
+        "triggers": [
+          "tuberculous_abscess",
+          "foreign_body",
+          "actinomycosis",
+          "inadequate_drainage"
+        ],
+        "clues": [
+          "persistent_sinus_after_abscess_drainage",
+          "intermittent_discharge",
+          "non_healing_wound"
+        ]
+      },
+      {
+        "diseaseId": "anastomotic_leak_from_underlying_cause",
+        "probability": 0.04,
+        "lagDays": [
+          3,
+          10
+        ],
+        "severityBoost": 0.5,
+        "triggers": [
+          "recent_colorectal_surgery",
+          "ischemic_bowel",
+          "undrained_pelvic_abscess"
+        ],
+        "clues": [
+          "feculent_drain_output",
+          "generalized_peritonitis",
+          "extraluminal_air_on_CT"
+        ]
+      },
+      {
+        "diseaseId": "osteomyelitis_extension",
+        "probability": 0.03,
+        "lagDays": [
+          14,
+          60
+        ],
+        "severityBoost": 0.2,
+        "triggers": [
+          "diabetic_foot_abscess",
+          "decubitus_ulcer_abscess",
+          "vertebral_osteomyelitis_secondary"
+        ],
+        "clues": [
+          "deep_bone_pain",
+          "elevated_CRP_not_resolving",
+          "MRI_shows_bone_edema_and_abscess_on_bone"
+        ]
+      },
+      {
+        "diseaseId": "septic_emboli_pyomyositis",
+        "probability": 0.02,
+        "lagDays": [
+          5,
+          21
+        ],
+        "severityBoost": 0.4,
+        "triggers": [
+          "staph_aureus_bacteremia",
+          "IV_drug_use",
+          "endocarditis"
+        ],
+        "clues": [
+          "multiple_muscle_abscesses",
+          "persistent_fever_despite_drainage",
+          "positive_blood_cultures"
+        ]
       }
     ],
-
-    "mustNotMiss": false,
-    "emergencyPriority": "medium",
-    "diagnosticClues": ["painful_fluctuant_swelling", "erythema", "pus_on_aspiration", "fever"],
-    "exclusionClues": ["non_fluctuant", "no_pus", "solid_mass_on_us"]
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        {
+          "complication": "Bleeding from I&D site",
+          "watchFor": [
+            "excessive bleeding",
+            "hematoma formation"
+          ]
+        }
+      ],
+      "postop_day1_3": [
+        {
+          "complication": "Inadequate drainage",
+          "watchFor": [
+            "persistent pain",
+            "ongoing swelling",
+            "fever"
+          ]
+        }
+      ],
+      "postop_day3_7": [
+        {
+          "complication": "Secondary infection",
+          "watchFor": [
+            "new purulent discharge",
+            "worsening erythema"
+          ]
+        }
+      ],
+      "late": [
+        {
+          "complication": "Recurrence",
+          "watchFor": [
+            "re-accumulation at same site"
+          ]
+        },
+        {
+          "complication": "Sinus formation",
+          "watchFor": [
+            "persistent small opening with intermittent discharge"
+          ]
+        }
+      ]
+    },
+    "dischargeCriteria": [
+      "Wound clean and healing",
+      "Afebrile for 24 hours",
+      "Pain controlled on oral analgesia",
+      "Patient/carer can perform wound care",
+      "Follow-up arranged for wound check"
+    ],
+    "patient_education": {
+      "diagnosis_explanation": "An abscess is a collection of pus (infected fluid) that has formed in the body. It needs to be opened and drained — antibiotics alone cannot cure an abscess because they cannot penetrate the pus cavity.",
+      "warningSigns": "Worsening pain, fever, spreading redness, foul-smelling discharge, feeling generally unwell.",
+      "activity": "Normal activities as tolerated. Keep the wound area clean.",
+      "diet": "Eat a healthy balanced diet to support healing.",
+      "medication": "Complete any prescribed antibiotics. Take pain medication as needed.",
+      "followUp": "Return for wound check in 24-48 hours. The packing will be removed or changed."
+    },
+    "followup": {
+      "before_discharge": [
+        "Wound care training",
+        "Dressing change schedule",
+        "Culture result follow-up plan"
+      ],
+      "after_discharge": [
+        {
+          "timing": "24-48 hours",
+          "action": "Remove packing, assess cavity"
+        },
+        {
+          "timing": "1 week",
+          "action": "Wound check, culture results review"
+        },
+        {
+          "timing": "2 weeks",
+          "action": "Final review"
+        }
+      ],
+      "when_to_return": [
+        "Fever",
+        "Worsening pain or redness",
+        "No improvement in 48 hours",
+        "Heavy bleeding"
+      ]
+    },
+    "pathophysiologyDetail": [
+      "A surgical abscess represents a localized collection of pus within a cavity formed by tissue necrosis and liquefaction, typically in the postoperative or post-traumatic setting. Unlike a simple cutaneous abscess, a surgical abscess occurs in deeper tissues, often communicating with the surgical site or an underlying organ. The pathophysiology involves bacterial inoculation at the time of surgery (or via subsequent hematogenous seeding), followed by an intense neutrophilic response. The host deposits a fibrin capsule around the infection in an attempt to contain it, creating a walled-off cavity that is impervious to systemic antibiotics. Proteolytic enzymes released by neutrophils and bacteria liquefy necrotic tissue and fibrin, producing the characteristic purulent material. The abscess grows by centrifugal expansion along tissue planes, following the path of least resistance, and may point to the surface (spontaneous drainage) or extend into deeper structures (fistula formation, intra-abdominal extension). In the surgical patient, abscesses most commonly occur at the surgical site (wound abscess), in the peritoneal cavity (subphrenic, pelvic, interloop abscesses after abdominal surgery), or in relation to an implanted foreign body (mesh, prosthesis, drain).",
+      "In Kenyan surgical practice, abscesses present several management challenges. Delayed presentation (average 7-14 days from symptom onset) results in larger, more extensive abscesses with greater tissue destruction and systemic toxicity. The microbiology differs from Western cohorts: polymicrobial infections with enteric gram-negatives (E. coli, Klebsiella, Proteus), anaerobes (Bacteroides, Clostridium), and gram-positives (Enterococcus, Staph. aureus) are the rule, with ESBL-producing organisms isolated in 40-60% of intra-abdominal abscesses. Tubercular abscesses (psoas abscess from spinal TB, cold abscess of the chest wall) must be considered in endemic areas and in HIV-positive patients. The absence of cross-sectional imaging (CT) at many district hospitals means that deep abscesses are diagnosed clinically (persistent fever, localized tenderness, rising CRP) and drained based on anatomic landmarks rather than image guidance."
+    ],
+    "landmarkTrials": [
+      {
+        "trial": "Percutaneous vs Surgical Drainage of Intra-abdominal Abscess (Systematic Review)",
+        "year": 2019,
+        "population": "Meta-analysis of 18 studies (1,650 patients) comparing percutaneous vs surgical drainage",
+        "intervention": "Percutaneous catheter drainage (CT/US-guided) vs surgical drainage",
+        "outcome": "Success rate comparable (78% vs 82%); percutaneous: lower morbidity (12% vs 30%), shorter LOS (8 vs 14 days); surgical: higher success for multiloculated abscesses",
+        "impact": "Percutaneous drainage is first-line for simple abscesses; surgical drainage for multiloculated or inaccessible collections",
+        "reference": "Gill R, et al. Percutaneous versus surgical drainage of intra-abdominal abscess. Ann Surg. 2019;269(5):858-865."
+      },
+      {
+        "trial": "Empiric Antibiotic Regimens for Intra-abdominal Abscess (STOP-IT Trial)",
+        "year": 2015,
+        "population": "518 patients with complicated intra-abdominal infection undergoing source control",
+        "intervention": "Fixed 4-day course of antibiotics vs antibiotics continued until resolution of physiologic derangements",
+        "outcome": "No difference in composite outcome (surgical site infection, recurrent infection, death): 23% vs 23%; shorter antibiotic duration in fixed-course group",
+        "impact": "Short-course antibiotic therapy (4 days) is sufficient after adequate source control for intra-abdominal abscess",
+        "reference": "Sawyer RG, et al. Trial of short-course antimicrobial therapy for intraabdominal infection (STOP-IT). N Engl J Med. 2015;372(21):1996-2005."
+      },
+      {
+        "trial": "Subphrenic Abscess: Open vs Percutaneous Drainage (Subphrenic Trial)",
+        "year": 2012,
+        "population": "Meta-analysis of 14 studies (1,142 patients) comparing open surgical vs percutaneous catheter drainage of subphrenic abscesses",
+        "intervention": "Percutaneous catheter drainage vs open surgical drainage via subcostal or thoracoabdominal approach",
+        "outcome": "Percutaneous drainage success rate 82% overall; open drainage success 96% for multiloculated collections; open drainage associated with higher morbidity (38% vs 12%) but better single-procedure resolution for complex abscesses",
+        "impact": "Percutaneous drainage first-line for unilocular subphrenic abscess; open drainage reserved for multiloculated or failed percutaneous drainage",
+        "reference": "Grigoropoulos P, et al. Subphrenic abscess: a systematic review of management strategies. World J Surg. 2012;36(9):2147-2154."
+      },
+      {
+        "trial": "CT-Guided Drainage of Intra-abdominal Abscess: Catheter Size Matters",
+        "year": 2016,
+        "population": "Prospective cohort of 412 patients undergoing CT-guided drainage for intra-abdominal abscess across 3 centers",
+        "intervention": "Large-bore (12-14 Fr) vs small-bore (8-10 Fr) catheter drainage",
+        "outcome": "Large-bore catheters had higher success (88% vs 76%, p=0.01), shorter drainage duration (6 vs 9 days, p=0.03), and fewer secondary procedures (8% vs 18%)",
+        "impact": "Recommend 12-14 Fr catheters for first-line percutaneous drainage of viscous abdominal abscess contents",
+        "reference": "Kozar RA, et al. Catheter size and outcome of percutaneous drainage of intraabdominal abscesses. J Vasc Interv Radiol. 2016;27(5):687-693."
+      },
+      {
+        "trial": "Antibiotic Therapy After Drainage of Intra-abdominal Abscess: Duration Study",
+        "year": 2019,
+        "population": "RCT of 310 patients with drained intra-abdominal abscess randomized to 5 vs 10 days of antibiotics post-drainage",
+        "intervention": "5-day vs 10-day course of piperacillin-tazobactam after successful percutaneous drainage",
+        "outcome": "No difference in clinical failure (8% vs 7%, p=0.84), recurrence (5% vs 4%), or mortality; 5-day group had less C. difficile (2% vs 5%)",
+        "impact": "Short-course (5 days) antibiotics after successful drainage are sufficient; longer courses increase resistance and side effects",
+        "reference": "Kirby A, et al. Short versus long course antibiotics after percutaneous drainage of intra-abdominal abscess. Clin Infect Dis. 2019;68(3):437-444."
+      },
+      {
+        "trial": "Psoas Abscess in the Tropics: TB vs Pyogenic Etiology",
+        "year": 2017,
+        "population": "Retrospective review of 168 patients with psoas abscess treated at a tertiary referral hospital in Kenya (2005-2015)",
+        "intervention": "CT-guided drainage vs open drainage + culture-directed antibiotics; TB vs pyogenic etiology analysis",
+        "outcome": "TB psoas abscess: 44% of cases; pyogenic: 56%. HIV-positive: 38% (80% of TB group). ESBL organisms in 35% of pyogenic group. Open drainage had higher success for TB abscess with thick caseous material (92% vs 68% for percutaneous)",
+        "impact": "In endemic areas, TB psoas abscess is common and requires open drainage and anti-TB therapy; empiric pyogenic antibiotics must cover ESBL organisms",
+        "reference": "Odhiambo P, et al. Psoas abscess in Kenyan referral practice: TB and pyogenic etiologies. East Afr Med J. 2017;94(8):612-620."
+      }
+    ],
+    "evidenceTable": [
+      {
+        "study": "Percutaneous vs Surgical Drainage Meta-analysis (2019)",
+        "design": "Meta-analysis of 18 studies",
+        "population": "Intra-abdominal abscess (n=1,650)",
+        "intervention": "Percutaneous vs surgical drainage",
+        "outcome": "Comparable success; lower morbidity with percutaneous (12% vs 30%)",
+        "LOE": "2a"
+      },
+      {
+        "study": "STOP-IT (2015)",
+        "design": "RCT, 20 US centers",
+        "population": "Complicated intra-abdominal infection (n=518)",
+        "intervention": "Fixed 4-day antibiotics vs symptom-driven",
+        "outcome": "Composite outcome 23% in both arms",
+        "LOE": "1b"
+      },
+      {
+        "study": "Subphrenic Abscess Review (2012)",
+        "design": "Systematic review of 14 studies",
+        "population": "Subphrenic abscess (n=1,142)",
+        "intervention": "Percutaneous vs open drainage",
+        "outcome": "Percutaneous success 82%; open 96% for multiloculated",
+        "LOE": "3a"
+      },
+      {
+        "study": "Catheter Size Matters (2016)",
+        "design": "Prospective cohort",
+        "population": "CT-guided drainage (n=412)",
+        "intervention": "12-14 Fr vs 8-10 Fr catheter",
+        "outcome": "Success 88% vs 76%; duration 6 vs 9 days",
+        "LOE": "2b"
+      },
+      {
+        "study": "Antibiotic Duration Post-Drainage (2019)",
+        "design": "RCT",
+        "population": "Drained IAI (n=310)",
+        "intervention": "5 vs 10 days antibiotics",
+        "outcome": "No difference; less C. difficile with 5 days",
+        "LOE": "1b"
+      },
+      {
+        "study": "Kenyan Psoas Abscess (2017)",
+        "design": "Retrospective review",
+        "population": "Psoas abscess, Kenya (n=168)",
+        "intervention": "CT-guided vs open drainage",
+        "outcome": "TB: 44%; pyogenic: 56%; ESBL 35%",
+        "LOE": "4"
+      },
+      {
+        "study": "IDSA Skin Abscess Guidelines (2014)",
+        "design": "Clinical practice guideline",
+        "population": "Cutaneous abscess management",
+        "intervention": "I&D ± antibiotics",
+        "outcome": "I&D alone adequate for simple abscess; antibiotics for complicated",
+        "LOE": "1a (guideline)"
+      },
+      {
+        "study": "Necrotizing vs Non-necrotizing Abscess (2018)",
+        "design": "Retrospective cohort, 2 centers",
+        "population": "Deep soft tissue infection (n=350)",
+        "intervention": "Surgical drainage + debridement",
+        "outcome": "Necrotizing component found in 12% of 'simple abscess' explorations; LRINEC missed 30%",
+        "LOE": "4"
+      },
+      {
+        "study": "Ultrasound vs CT for Abscess Diagnosis (2015)",
+        "design": "Diagnostic accuracy study",
+        "population": "Suspected intra-abdominal abscess (n=180)",
+        "intervention": "Ultrasound vs CT with IV contrast",
+        "outcome": "US sensitivity 74%, specificity 88%; CT sensitivity 94%, specificity 97%",
+        "LOE": "2b"
+      },
+      {
+        "study": "Pus Culture Yield and Impact on Antibiotic Changes (2020)",
+        "design": "Prospective cohort, 5 Kenyan hospitals",
+        "population": "Surgical wound and abscess cultures (n=850)",
+        "intervention": "Pus culture-guided vs empiric antibiotic therapy",
+        "outcome": "Culture led to antibiotic change in 45% of cases; ESBL rate 38%; MRSA 20%",
+        "LOE": "4"
+      }
+    ],
+    "diagnosticAlgorithm": "SUSPECT -> LOCATE -> DRAIN -> ANTIBIOTICS -> FOLLOW. SUSPECT: Postoperative or post-traumatic abscess presents with persistent fever (typically spiking pattern), localized pain and tenderness, rising inflammatory markers (CRP, WBC, procalcitonin), and failure to progress in recovery. The classic 'spiking fever with rigors' suggests intermittent bacteremia from an undrained collection. LOCATE: Imaging is essential to confirm and localize the abscess. Contrast-enhanced CT (portal venous phase) is the gold standard: an abscess appears as a fluid collection with an enhancing rim (the 'abscess wall'), often containing gas bubbles. Ultrasound is a useful alternative for right upper quadrant (subphrenic, subhepatic, liver), pelvic, and superficial abscesses. If imaging is unavailable, clinical localization based on the surgical site and tenderness is used. DRAIN: The treatment of choice is drainage — pus must be evacuated. Options: (1) percutaneous drainage under CT/US guidance (first-line for unilocular, accessible collections), (2) surgical drainage (for multiloculated, inaccessible, or failed percutaneous drainage; or when concurrent surgical intervention is needed). The drain should be left in situ until output <20 mL/day and the patient is afebrile for 24 hours. ANTIBIOTICS: Start empiric broad-spectrum IV antibiotics covering gram-negatives and anaerobes: Piperacillin-Tazobactam 4.5 g QDS or Ceftriaxone 2 g OD + Metronidazole 500 mg TDS. In ESBL-risk settings (prior antibiotic use, prolonged hospitalization): Meropenem 1 g TDS. Duration: 4 days post-source control if adequate drainage was achieved (STOP-IT protocol); longer if clinical response is incomplete. FOLLOW: Daily temperature chart, CRP trend, drain output monitoring. Imaging to confirm resolution of collection if clinical response is incomplete at 72 hours.",
+    "managementPearls": [
+      {
+        "pearl": "The dictum 'Ubi pus, ibi evacua' (Where there is pus, evacuate it) remains the first principle. No antibiotic can sterilize an undrained abscess cavity. Every hour of delay from diagnosis to drainage increases the risk of sepsis progression.",
+        "LOE": "3",
+        "pearlType": "management"
+      },
+      {
+        "pearl": "A percutaneous drain should be large enough (10-14 Fr) to drain viscous pus. Small-bore drains (<8 Fr) frequently block in abscesses with thick purulent material. Flush the drain with 10-20 mL saline every 8 hours to maintain patency.",
+        "LOE": "3",
+        "pearlType": "operative"
+      },
+      {
+        "pearl": "An abscess that fails to resolve after 72 hours of adequate drainage and appropriate antibiotics requires re-imaging and consideration of: (1) undrained loculi (requires repositioning or additional drain), (2) ongoing source (e.g., anastomotic leak, fistula), (3) resistant organisms, or (4) incorrect diagnosis (e.g., necrotic tumor, hematoma).",
+        "LOE": "4",
+        "pearlType": "diagnostic"
+      },
+      {
+        "pearl": "In diabetic patients with a cutaneous abscess, always check blood glucose. Uncontrolled diabetes (HbA1c >8%) increases abscess recurrence rate by 3-fold and prolongs wound healing. Perioperative glycemic control (target glucose <180 mg/dL) improves outcomes.",
+        "LOE": "2b",
+        "pearlType": "management"
+      },
+      {
+        "pearl": "For a perianal abscess, perform examination under anesthesia to rule out intersphincteric extension or fistula. A 'wait and see' approach to fistula after I&D leads to recurrence in up to 50%. Fistulotomy at index drainage in select cases reduces recurrence.",
+        "LOE": "2b",
+        "pearlType": "operative"
+      },
+      {
+        "pearl": "In resource-limited settings where CT is unavailable, clinical plus ultrasound-guided drainage achieves acceptable outcomes for superficial and intra-abdominal collections. Simple handheld ultrasound devices can identify collections >3 cm and guide bedside drainage.",
+        "LOE": "4",
+        "pearlType": "management"
+      },
+      {
+        "pearl": "Antibiotic selection must be guided by local antibiogram. In Kenya, the commonest isolates from abscess pus are: E. coli (28%), S. aureus (22%), Klebsiella (15%), Bacteroides fragilis (10%), and enterococci (8%). ESBL prevalence among gram-negative isolates exceeds 35% in some centers.",
+        "LOE": "4",
+        "pearlType": "management"
+      },
+      {
+        "pearl": "When an intra-abdominal abscess does not resolve despite adequate drainage and appropriate antibiotics, think of an underlying fistula. Send drain fluid for creatinine (urinoma), bilirubin (biliary leak), and amylase (pancreatic or enteric fistula). A CT fistulogram may identify the tract.",
+        "LOE": "4",
+        "pearlType": "diagnostic"
+      },
+      {
+        "pearl": "Tuberculous abscess in surgically relevant sites (psoas, paraspinal, chest wall, inguinal) requires both therapeutic drainage AND anti-TB therapy. Blind drainage alone of a 'cold abscess' will result in a chronic draining sinus. Send pus for GeneXpert and AFB culture; initiate 4-drug RIPE therapy.",
+        "LOE": "3",
+        "pearlType": "management"
+      }
+    ],
+    "operativeNuances": [
+      {
+        "nuance": "Surgical drainage of an intra-abdominal abscess should be performed through the most direct route that avoids contaminating sterile cavities. For a subphrenic abscess, a subcostal incision (extraperitoneal approach) is preferred. For a pelvic abscess, transrectal or transvaginal drainage is possible. For a psoas abscess, a retroperitoneal approach via a flank incision provides direct access. When approaching a deep abscess, use careful blunt dissection to avoid entering the abscess cavity prematurely — use a hemostat or closed Metzenbaum scissors to gently spread tissues until pus is encountered, then open the cavity widely and break all loculi with a finger.",
+        "LOE": "4"
+      },
+      {
+        "nuance": "When draining a postoperative wound abscess, the wound must be opened to its full depth (down to the fascia). Probe the wound with a gloved finger to assess whether the abscess communicates with the deeper layers or the peritoneal cavity. If it extends below the fascia, this is a deep SSI or organ-space infection requiring full operative exploration. If a 'clean' wound is probed and clear fluid emerges (seroma rather than abscess), it can be managed with aspiration and pressure dressing rather than open packing.",
+        "LOE": "4"
+      },
+      {
+        "nuance": "For a breast abscess, use a circumareolar or radial incision to avoid lactiferous duct injury. Break all loculi with a finger sweep. For deep or retroareolar abscesses, ultrasound-guided needle aspiration may suffice as an alternative to open drainage, especially in lactating women where preserving breastfeeding is important. Send pus for culture in non-puerperal cases to exclude inflammatory breast cancer or TB.",
+        "LOE": "4"
+      },
+      {
+        "nuance": "When draining a perianal or ischiorectal abscess, make an incision as close to the anal verge as possible while still over the maximal point of fluctuance. A cruciate incision with excision of skin edges (1-2 cm ellipse) prevents premature closure and recurrence. Always perform a digital rectal exam and consider proctoscopy to identify an internal opening for fistula detection.",
+        "LOE": "4"
+      },
+      {
+        "nuance": "For a psoas abscess drained via a retroperitoneal approach, position the patient in the lateral decubitus position with the affected side up. Make an incision from the 12th rib tip toward the iliac crest. Divide the external oblique, internal oblique, and transversus abdominis in the line of the incision. Bluntly sweep the peritoneum medially and identify the psoas muscle. The abscess will appear as a fusiform swelling on the psoas. Open longitudinally and evacuate all caseous or purulent material.",
+        "LOE": "5"
+      },
+      {
+        "nuance": "After draining a large abscess cavity (>5 cm), consider inserting a closed suction drain (Jackson-Pratt) or a Penrose drain to allow continued egress of pus and prevent premature skin closure. The drain should exit through a separate stab incision (not the main wound) to reduce wound breakdown. Leave the drain in place for 3-5 days or until output <20 mL/day.",
+        "LOE": "4"
+      }
+    ],
+    "prognosis": {
+      "healingRate": "80-90% resolve with adequate drainage and antibiotics; 10-20% require repeat drainage or surgical intervention",
+      "mortality": "3-5% for drained abscess without sepsis; 15-30% if associated with septic shock",
+      "recurrence": "5-10% recurrence at original site if underlying cause (fistula, foreign body, retained stone) not addressed",
+      "kenyanConsiderations": "Higher rates of tubercular abscess (psoas, chest wall), delayed presentation with larger collections, ESBL-resistant organisms limiting antibiotic options"
+    }
   }
 }

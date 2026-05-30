@@ -3,127 +3,755 @@
     "id": "colorectal_cancer",
     "name": "Colorectal Cancer",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "colorectal-surgery",
     "agePeak_months": [600, 960],
-    "note": "One of the most common malignancies. Right-sided and left-sided have different presentations.",
+    "note": "One of the most common malignancies worldwide and rising in Kenya due to westernization of diet. Right-sided and left-sided colon cancers present differently: right-sided with anemia and vague pain, left-sided with change in bowel habit and obstruction. In Kenya, many patients present at advanced stages with obstruction or palpable masses. Screening colonoscopy is underutilized — we need to advocate for it more aggressively.",
     "prevalenceWeight": 0.5,
-    "syndromeTags": ["gastrointestinal_malignancy", "lower_gi_bleeding"],
-
+    "syndromeTags": ["gastrointestinal_malignancy", "lower_gi_bleeding", "bowel_obstruction", "anemia"],
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "pathophysiologyDetail": [
+      "Adenoma-carcinoma sequence: stepwise accumulation of genetic mutations (APC, KRAS, TP53, SMAD4) over 10-15 years transforms normal colonic epithelium through aberrant crypt foci → adenomatous polyp → carcinoma",
+      "APC gene loss (chromosome 5q21) is the initiating event in 80% of sporadic CRCs — loss of the Wnt/β-catenin pathway suppressor leads to constitutive β-catenin activation and uncontrolled crypt cell proliferation",
+      "KRAS mutations (codons 12, 13, 61, 146) occur in 35-45% of CRCs and constitutively activate the MAPK/ERK signaling pathway, driving proliferation independent of EGFR activation — confers resistance to anti-EGFR therapy (cetuximab, panitumumab)",
+      "BRAF V600E mutation (8-10% of CRCs) is mutually exclusive with KRAS and defines a distinct molecular subtype with poor prognosis, associated with serrated pathway, MSI-H, and right-sided tumors",
+      "Microsatellite instability (MSI) from mismatch repair deficiency (MLH1, MSH2, MSH6, PMS2 silencing or mutation) defines the MSI-H phenotype — 15% of all CRCs, better stage-adjusted prognosis but no benefit from 5-FU adjuvant therapy",
+      "CpG island methylator phenotype (CIMP) causes epigenetic silencing of tumor suppressor genes through promoter hypermethylation — associated with BRAF mutations, right-sided location, and the serrated neoplasia pathway",
+      "Chromosomal instability (CIN) pathway accounts for 65-70% of CRCs and involves widespread aneuploidy, loss of heterozygosity at 17p (TP53), 18q (SMAD4), and 8q (MYC) — the classic Vogelstein model",
+      "Wnt/β-catenin signaling dysregulation occurs in >90% of CRCs through APC loss, CTNNB1 (β-catenin) activating mutations, or RNF43/ZNRF3 inactivation — nuclear β-catenin accumulation drives MYC and CCND1 transcription",
+      "TGF-β signaling is inactivated in 30-50% of CRCs through SMAD4 loss (18q21), TGFBR2 mutations (particularly in MSI-H), or SMAD2/SMAD7 alterations — loss of TGF-β-mediated growth suppression",
+      "TP53 mutations (chromosome 17p) occur in 50-60% of CRCs and are a late event in the adenoma-carcinoma sequence, coinciding with the transition from advanced adenoma to invasive carcinoma",
+      "COX-2 (PTGS2) overexpression in 80-90% of CRCs drives prostaglandin E2 synthesis, promoting cell proliferation, angiogenesis (VEGF upregulation), and immune evasion — the target for aspirin chemoprevention",
+      "PIK3CA mutations (exon 9 and 20, 10-20% of CRCs) activate the PI3K/Akt/mTOR pathway and have been associated with response to aspirin therapy and resistance to anti-EGFR therapy",
+      "Lynch syndrome (hereditary non-polyposis colorectal cancer, HNPCC) results from germline mutations in MMR genes (MLH1, MSH2, MSH6, PMS2) — lifetime CRC risk 50-80%, markedly accelerated adenoma-carcinoma sequence (2-3 years vs 10-15 years)",
+      "Familial adenomatous polyposis (FAP) from germline APC mutations causes hundreds to thousands of colorectal adenomas by the second decade, with near 100% lifetime CRC risk without prophylactic colectomy",
+      "Tumor-infiltrating lymphocytes (TILs) density is higher in MSI-H tumors due to increased neoantigen load — the immunogenic microenvironment explains the dramatic response to immune checkpoint inhibitors in dMMR/MSI-H tumors",
+      "Perineural invasion (PNI) is an independent poor prognostic factor reflecting neurotropic migration of tumor cells along nerve sheaths — present in 15-30% of CRCs and associated with higher local recurrence",
+      "Lymphovascular invasion (LVI) predicts nodal metastasis and hematogenous spread — tumor emboli within endothelial-lined channels identify aggressive disease requiring adjuvant therapy even in Stage II",
+      "Grading (well, moderate, poor differentiation) reflects the degree of glandular architecture preservation — poorly differentiated/mucinous/signet-ring subtypes have worse prognosis and are more common in MSI-H and right-sided tumors"
+    ],
+    "landmarkTrials": [
+      {
+        "trial": "CRYSTAL Trial — FOLFIRI ± Cetuximab in First-Line KRAS Wild-Type mCRC",
+        "year": 2011,
+        "population": "666 patients with KRAS wild-type stage IV CRC randomized to FOLFIRI vs FOLFIRI + Cetuximab",
+        "finding": "Median OS improved from 21.0 to 28.4 months (p=0.002). PFS improved from 8.4 to 11.4 months. No benefit in KRAS-mutant subgroup",
+        "impact": "Established anti-EGFR therapy as standard in KRAS wild-type mCRC; mandating KRAS testing before treatment",
+        "reference": "Van Cutsem E, et al. J Clin Oncol 2011;29:2011-9"
+      },
+      {
+        "trial": "FIRE-3 Trial — FOLFIRI + Cetuximab vs FOLFIRI + Bevacizumab",
+        "year": 2013,
+        "population": "592 KRAS wild-type mCRC patients randomized to Cetuximab vs Bevacizumab with FOLFIRI",
+        "finding": "Cetuximab improved OS (28.7 vs 25.0 months, p=0.017) despite no difference in PFS. Higher response rate 62% vs 50%",
+        "impact": "Suggests superiority of anti-EGFR over anti-VEGF in left-sided KRAS wild-type RAS mCRC",
+        "reference": "Heinemann V, et al. Lancet Oncol 2014;15:569-79"
+      },
+      {
+        "trial": "OPRA Trial — Total Neoadjuvant Therapy for Rectal Cancer",
+        "year": 2021,
+        "population": "324 patients with Stage II-III rectal cancer randomized to induction chemotherapy vs consolidation chemotherapy before CRT",
+        "finding": "50% of patients had complete clinical response at restaging and avoided surgery (watch-and-wait). 3-year DFS equivalent to standard TME approach",
+        "impact": "Organ preservation is achievable in half of patients with total neoadjuvant therapy — paradigm shift in rectal cancer management",
+        "reference": "Garcia-Aguilar J, et al. J Clin Oncol 2021;39(15_suppl):3507"
+      },
+      {
+        "trial": "IDEA Collaboration — 3 vs 6 months Adjuvant Chemotherapy for Stage III",
+        "year": 2018,
+        "population": "12,834 patients with Stage III colon cancer across 6 RCTs",
+        "finding": "3-month CAPOX non-inferior to 6-month CAPOX (5-year DFS 81.1% vs 80.7%). 3-month FOLFOX inferior to 6-month FOLFOX in high-risk T4/N2",
+        "impact": "3-month CAPOX is standard for low-risk Stage III; 6-month FOLFOX for high-risk Stage III",
+        "reference": "Grothey A, et al. N Engl J Med 2018;378:1177-88"
+      },
+      {
+        "trial": "ACCENT Database — 5-FU/LV Adjuvant Therapy Benefit by Stage",
+        "year": 2005,
+        "population": "20,898 patients from 18 RCTs of adjuvant 5-FU therapy",
+        "finding": "5-FU improves 5-year OS by: Stage II 2-4% (NS), Stage III 15-20% (p<0.0001). Benefit limited to Stage III",
+        "impact": "Established that adjuvant chemotherapy is not standard for Stage II except high-risk features",
+        "reference": "Gill S, et al. J Clin Oncol 2005;23:849-57"
+      },
+      {
+        "trial": "C24-1 — Stool DNA Screening (Cologuard) vs FIT",
+        "year": 2014,
+        "population": "9,989 average-risk subjects comparing multitarget stool DNA test vs FIT",
+        "finding": "Stool DNA detected 92.3% of CRCs (vs 73.8% for FIT), 42.4% of advanced adenomas (vs 23.8%). Specificity 86.6% vs 94.9%",
+        "impact": "Stool DNA screening is an alternative to FIT with higher sensitivity but lower specificity",
+        "reference": "Imperiale TF, et al. N Engl J Med 2014;370:1287-97"
+      },
+      {
+        "trial": "Watch-and-Wait for Rectal Cancer After Complete Clinical Response — International Registry",
+        "year": 2018,
+        "population": "880 patients from 47 institutions with cCR after CRT opting for non-operative management",
+        "finding": "2-year local regrowth 25%, salvageable in 95% of cases. 5-year OS 85%, equivalent to surgical series. Distant metastases 8%",
+        "impact": "Watch-and-wait is safe with close surveillance (MRI + endoscopy q3-4 months); salvage surgery is effective for regrowth",
+        "reference": "van der Valk MJM, et al. Lancet 2018;391:2537-45"
+      },
+      {
+        "trial": "KEYNOTE-177 — Pembrolizumab vs Chemotherapy in MSI-H mCRC",
+        "year": 2020,
+        "population": "307 patients with MSI-H/dMMR mCRC randomized to Pembrolizumab vs standard chemotherapy ± targeted therapy",
+        "finding": "PFS was 16.5 months with Pembrolizumab vs 8.2 months with chemotherapy (HR 0.60, p=0.0002). Response rate 43.8% vs 33.1%. Fewer grade 3+ AEs 22% vs 66%",
+        "impact": "Pembrolizumab is now first-line standard for MSI-H/dMMR mCRC — immunotherapy before chemotherapy",
+        "reference": "Andre T, et al. N Engl J Med 2020;383:2207-18"
+      },
+      {
+        "trial": "GLOW Trial — Capecitabine vs Observation in High-Risk Stage II",
+        "year": 2007,
+        "population": "3,643 patients with Stage II CRC randomized to 6 months capecitabine vs observation",
+        "finding": "5-year OS 81.6% (capecitabine) vs 80.4% (observation) — not significant. Only high-risk T4 sub-group had benefit (HR 0.66)",
+        "impact": "Adjuvant therapy for Stage II should be reserved for high-risk patients (T4, perforation, obstruction, poor differentiation, <12 nodes examined)",
+        "reference": "Twelves C, et al. N Engl J Med 2007;357:2096-107"
+      }
+    ],
+    "evidenceTable": [
+      {
+        "recommendation": "Colonoscopy is the gold standard for diagnosis and staging of colorectal cancer",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "NCCN Guidelines for CRC, 2024"
+      },
+      {
+        "recommendation": "All patients <50 should undergo MSI/MMR testing; MSI-H/dMMR tumors should be referred for immunotherapy",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "ESMO Guidelines for CRC, 2023; KEYNOTE-177 trial"
+      },
+      {
+        "recommendation": "Total mesorectal excision (TME) is the standard surgical technique for rectal cancer",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Heald RJ, et al. Lancet 1986; paradigm shift"
+      },
+      {
+        "recommendation": "Neoadjuvant chemoradiation is indicated for locally advanced rectal cancer (T3/T4 or N+)",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "Sauer R, et al. N Engl J Med 2004; German Rectal Cancer Trial"
+      },
+      {
+        "recommendation": "Adjuvant chemotherapy (FOLFOX/CAPOX for 3-6 months) is indicated for Stage III colon cancer",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "IDEA Collaboration, N Engl J Med 2018"
+      },
+      {
+        "recommendation": "KRAS/NRAS testing is mandatory before initiating anti-EGFR therapy",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "CRYSTAL Trial, J Clin Oncol 2011"
+      },
+      {
+        "recommendation": "Screening colonoscopy every 10 years starting at age 50 (age 45 in African Americans) reduces CRC mortality by 60-70%",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "NCCN/ASCRS Screening Guidelines, 2024"
+      },
+      {
+        "recommendation": "Watch-and-wait is an option for patients with complete clinical response after neoadjuvant CRT for rectal cancer",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "OPRA Trial, J Clin Oncol 2021; International Watch-and-Wait Registry"
+      },
+      {
+        "recommendation": "CEA monitoring every 3-6 months for 3 years and CT chest/abdomen/pelvis annually for 3 years is recommended post-resection",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "NCCN/ESMO Guidelines 2024"
+      },
+      {
+        "recommendation": "Laparoscopic colectomy is non-inferior to open surgery for colon cancer in terms of oncologic outcomes",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "COST Trial, N Engl J Med 2004"
+      },
+      {
+        "recommendation": "Adjuvant chemotherapy is NOT recommended for Stage II colon cancer unless high-risk features are present",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "ACCENT Database, J Clin Oncol 2005; GLOW Trial"
+      },
+      {
+        "recommendation": "Self-expanding metallic stent as bridge to surgery is recommended for obstructing left-sided colon cancer",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "ESGE/ESMO Guidelines, 2016; Arezzo A, Cochrane Review 2017"
+      },
+      {
+        "recommendation": "Aspirin 100mg daily reduces adenoma recurrence and CRC incidence in high-risk populations (PIK3CA mutation, Lynch syndrome)",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "CAPP2 Trial for Lynch; Chan AT, JAMA 2008 for sporadic"
+      },
+      {
+        "recommendation": "Prophylactic total colectomy is recommended for FAP patients by age 20-25 and for Lynch syndrome after CRC diagnosis or high-risk adenomas",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "NCCN Guidelines for Hereditary CRC Syndromes, 2024"
+      }
+    ],
+    "diagnosticAlgorithm": "Patient presents with change in bowel habit, rectal bleeding, weight loss, or anemia\n→ History: duration, family history (1st degree CRC, Lynch, FAP), dietary habits (red/processed meat), smoking, alcohol, IBD history\n→ Physical exam: DRE, abdominal mass, lymphadenopathy, hepatomegaly, ascites\n→ Laboratory: CBC (anemia), CEA, LFTs\n→ Colonoscopy with biopsy → confirm adenocarcinoma\n  │\n  ├── If rectal cancer → MRI RECTUM (CRM status, T stage, N stage)\n  │     → Endorectal ultrasound for early T1 tumors (EUS)\n  │\n  └── If colon cancer → proceed to staging\n        → CT CHEST/ABDOMEN/PELVIS with IV contrast\n        → MSI/MMR testing (all patients <50, recommended for all)\n        → KRAS/NRAS/BRAF testing if metastatic\n  │\n→ STAGING (TNM, AJCC 8th Edition)\n  │\n  ├── STAGE 0 (Tis, N0, M0) → Polypectomy / EMR / ESD\n  │\n  ├── STAGE I (T1-2 N0 M0) → Surgical resection alone\n  │     ├── T1 low-risk → EMR/ESD possible\n  │     └── T1 high-risk/T2 → Colectomy + lymphadenectomy\n  │\n  ├── STAGE II (T3-4 N0 M0) → Surgical resection\n  │     ├── Low risk (T3, no high-risk features) → Surgery alone\n  │     └── High risk (T4, perforation, obstruction, <12 nodes, LVI/PNI, poor diff) → Consider adjuvant FOLFOX/CAPOX\n  │\n  ├── STAGE III (Any T, N1-2, M0) → Surgical resection + Adjuvant FOLFOX/CAPOX\n  │     ├── Low risk (T1-3 N1) → 3 months CAPOX\n  │     └── High risk (T4 or N2) → 6 months FOLFOX\n  │\n  ├── STAGE IV (M1) → MDT discussion\n  │     ├── Resectable liver/lung mets → Neoadjuvant chemo → Resection primary + mets → Adjuvant chemo\n  │     ├── Unresectable → Palliative chemo ± targeted therapy\n  │     │     ├── MSI-H/dMMR → Pembrolizumab (KEYNOTE-177)\n  │     │     ├── RAS wt, left-sided → FOLFIRI/FOLFOX + Cetuximab\n  │     │     └── RAS mut → FOLFIRI/FOLFOX + Bevacizumab\n  │     └── Obstruction/perforation → Emergency surgery first\n  │\n  └── RECTAL CANCER (Stage II-III)\n        → Neoadjuvant CRT (50.4 Gy + Capecitabine 825mg/m2 BD)\n        → Restage at 6-10 weeks: MRI + endoscopy\n        ├── cCR → Watch-and-wait or TME\n        └── No cCR → TME (LAR or APR)\n              → Adjuvant chemo if indicated\n              → Stoma reversal in 3-6 months",
+    "managementPearls": [
+      {
+        "context": "Sidedness Matters",
+        "pearl": "Right-sided colon cancers present with iron deficiency anemia from chronic occult blood loss — always check ferritin in any elderly patient with anemia. Left-sided tumors present with change in bowel habit and obstruction. Sidedness also predicts therapy response: left-sided KRAS wt tumors respond better to anti-EGFR therapy.",
+        "evidence": "Heinemann V, FIRE-3; Venook AP, KRAS/Landmark analysis"
+      },
+      {
+        "context": "CEA Caution",
+        "pearl": "CEA >5 ng/mL has 80% sensitivity for CRC recurrence but is NOT a diagnostic test. Benign causes of elevated CEA: smoking, COPD, cirrhosis, pancreatitis, diverticulitis. Use CEA for pre-op prognosis and post-op surveillance, not for initial diagnosis.",
+        "evidence": "ESMO Guidelines 2023; Level II evidence"
+      },
+      {
+        "context": "MSI Testing Rationale",
+        "pearl": "Test every CRC patient for MSI/dMMR. Three reasons: (1) Lynch syndrome screening, (2) Stage II — MSI-H patients do NOT benefit from 5-FU alone, (3) Advanced disease — MSI-H predicts dramatic response to immunotherapy (Pembrolizumab) with 40-50% response rates.",
+        "evidence": "KEYNOTE-177; NCCN/ESMO Guidelines 2024"
+      },
+      {
+        "context": "CRM on MRI is Critical",
+        "pearl": "The circumferential resection margin (CRM) on MRI is THE most important predictor of local recurrence in rectal cancer. A threatened CRM (<1mm from tumor to mesorectal fascia) mandates neoadjuvant CRT. Positive CRM converts a potentially curative case into a palliative one.",
+        "evidence": "MERCURY Study Group, Lancet Oncol 2006; Level Ib evidence"
+      },
+      {
+        "context": "TME Quality",
+        "pearl": "The surgeon is the single most important prognostic factor in rectal cancer. A complete TME with intact mesorectal envelope yields 5% local recurrence at 5 years. A poor TME with breaches yields 30% recurrence. Photograph the specimen — it is your quality metric.",
+        "evidence": "Heald RJ, N Engl J Med 1986; Quirke P, Lancet 2009"
+      },
+      {
+        "context": "Laparoscopic vs Open for Colon Cancer",
+        "pearl": "Laparoscopic colectomy offers faster recovery, less pain, and equivalent oncologic outcomes — but ONLY if performed by an experienced surgeon. The COST trial showed conversion rates of 20-30% with comparable survival. For T4 tumors, open approach is preferred.",
+        "evidence": "COST Trial 2004; CLASICC Trial 2005; COLOR II Trial 2013"
+      },
+      {
+        "context": "Watch-and-Wait Non-Operative Management",
+        "pearl": "Rectal cancer patients with complete clinical response (cCR) after CRT have excellent outcomes with watch-and-wait. cCR defined by: no tumor on digital exam, no visible tumor on endoscopy (flat white scar), no residual tumor on MRI (T2 signal fibrosis). Regrowth occurs in 25% but 95% are salvageable.",
+        "evidence": "OPRA Trial 2021; International Watch-and-Wait Registry 2018"
+      },
+      {
+        "context": "Lynch Syndrome Screening",
+        "pearl": "All CRC patients <50 and those with a family history suggestive of Lynch should have MMR immunohistochemistry or MSI testing. If deficient, proceed to MLH1 methylation testing or germline genetic testing. A positive diagnosis has implications for the patient (synchronous/metachronous tumors) AND family members.",
+        "evidence": "NCCN Guidelines for Hereditary CRC; Level IIa evidence"
+      },
+      {
+        "context": "Adjuvant Chemotherapy Timing",
+        "pearl": "Adjuvant chemotherapy for Stage III colon cancer should start within 6-8 weeks of surgery. Delays beyond 12 weeks significantly reduce benefit (HR 1.3 for OS per 4-week delay). Do not let a wound infection or prolonged ileus delay chemotherapy referral.",
+        "evidence": "Biagi JJ, et al. J Clin Oncol 2011; Level II evidence"
+      },
+      {
+        "context": "Anemia Correction Before Surgery",
+        "pearl": "Preoperative anemia (Hb <10) in CRC patients is associated with increased morbidity, longer hospital stay, and higher transfusion requirements. Optimize with IV iron (ferric carboxymaltose) 2-4 weeks before elective surgery. Red cell transfusion should be reserved for Hb <7 or symptomatic patients.",
+        "evidence": "ASCRS Guidelines; NATA Guidelines for Perioperative Anemia"
+      },
+      {
+        "context": "Kenyan Context",
+        "pearl": "In Kenya, CRC presents at younger age (median 45-50) and advanced stage (70% Stage III-IV at diagnosis). Common barriers: lack of screening, reliance on traditional medicine, cost of care, poor pathology infrastructure. Advocacy for FIT screening in urban populations and colonoscopy access in referral hospitals is critical.",
+        "evidence": "Kenyan National Cancer Registry Data; Local epidemiological studies"
+      },
+      {
+        "context": "Stoma Teaching Before APR",
+        "pearl": "For patients undergoing APR with permanent colostomy, pre-operative stoma siting by a stoma therapist reduces complications by 40%. Show the patient where the stoma will be, let them touch a sample bag, and have a post-APR patient talk to them. The psychological impact of a permanent stoma must not be underestimated.",
+        "evidence": "WOCN Society Guidelines; Level III evidence"
+      },
+      {
+        "context": "Diet and Chemoprevention",
+        "pearl": "Red meat (heme iron, N-nitroso compounds), processed meats, and alcohol are CRC risk factors. Fiber (especially cereal fiber), calcium, vitamin D, and physical activity are protective. Aspirin 100mg daily reduces adenoma recurrence by 30% — consider for primary prevention in patients over 50 with cardiovascular risk.",
+        "evidence": "World Cancer Research Fund; CAPP2 Trial; Level I evidence"
+      }
+    ],
+    "operativeNuances": [
+      {
+        "procedure": "Total Mesorectal Excision (TME)",
+        "pitfall": "Entering the wrong presacral plane — going too anterior (into the rectal wall) or too posterior (into the presacral venous plexus) causes bleeding, nerve injury, or incomplete resection",
+        "expertTip": "Use the 'Holy Plane' concept: dissect in the avascular plane between the visceral fascia (mesorectal fascia) and the parietal fascia (presacral fascia). The 'angel hairs' are the areolar tissue of this plane. Use a combination of sharp scissor dissection and careful traction-countertraction. The hypogastric nerves run on the parietal fascia — sweep them posteriorly."
+      },
+      {
+        "procedure": "Splenic Flexure Mobilization",
+        "pitfall": "Excessive traction on the splenic flexure can avulse the short gastric vessels or cause splenic capsule tear — splenectomy is required in 1-5% of cases",
+        "expertTip": "Mobilize the splenic flexure in a medial-to-lateral approach after IMA and IMV division. The splenic flexure is the highest point of the colon. Use gentle traction on the omentum, not the colon. If the plane is unclear, come from the left paracolic gutter laterally. Always inspect the splenic capsule at the end of the case."
+      },
+      {
+        "procedure": "Colorectal Anastomosis (Low Anterior Resection)",
+        "pitfall": "Creating the anastomosis with tension on the proximal colon — the most common cause of anastomotic leak after LAR",
+        "expertTip": "The descending colon must reach the pelvic floor without tension. If the colon does not reach, perform full splenic flexure mobilization and consider dividing the IMV at the lower border of the pancreas. If still under tension, accept a covering loop ileostomy. An anastomosis under tension WILL leak."
+      },
+      {
+        "procedure": "Abdominoperineal Resection (APR) Perineal Phase",
+        "pitfall": "A 'traditional' APR performed with a narrow coning-down perineal dissection results in a 'waisted' specimen with high risk of positive CRM in the lower rectum",
+        "expertTip": "Perform the 'extralevator' APR: The perineal dissection should be wider and include the levator ani muscle origins at the pelvic sidewall. The specimen is cylindrical, not waisted. The patient should be flipped to prone jack-knife for the perineal phase for optimal visualization. The wider defect may need a myocutaneous flap (VRAM) closure."
+      },
+      {
+        "procedure": "Right Hemicolectomy — Vascular Ligation",
+        "pitfall": "Bleeding from the middle colic vein during transverse colon mobilization — can retract into the mesocolon and be difficult to control",
+        "expertTip": "Identify and ligate the middle colic vessels at their origin BEFORE manipulating the transverse colon. Use a medial-to-lateral approach: lift the right colon mesentery, identify the superior mesenteric vein, and trace the ileocolic, right colic, and middle colic vessels. Ligate each one before dividing. Place a vessel loop around the SMV/PV as a safety measure."
+      },
+      {
+        "procedure": "Rectal Cancer — Nerve Preservation",
+        "pitfall": "Injury to the pelvic autonomic nerves during TME causes urinary dysfunction (20-50%), sexual dysfunction (50-80%), and is a major source of patient dissatisfaction",
+        "expertTip": "Use the 'landmark' approach: (1) Identify the superior hypogastric plexus at the aortic bifurcation, (2) Preserve the hypogastric nerves as they bifurcate and run along the pelvic sidewalls, (3) Lateral stalks — divide them close to the rectum, not the pelvic wall, to preserve the pelvic splanchnic nerves (erigent nerves, S2-4). Use nerve stimulator if unsure."
+      },
+      {
+        "procedure": "Complete Mesocolic Excision (CME)",
+        "pitfall": "Incomplete lymphadenectomy with <12 nodes harvested leads to under-staging and under-treatment",
+        "expertTip": "CME for colon cancer mirrors TME: dissect the embryologic plane between the visceral (mesocolon) and parietal (retroperitoneum) fascia. Central vascular ligation at the origin of the feeding artery. The specimen should have an intact mesocolic envelope. A minimum of 12 lymph nodes is the quality metric — if CME is performed, you will easily find 20-50 nodes."
+      },
+      {
+        "procedure": "Ileostomy Reversal",
+        "pitfall": "Performing ileostomy reversal too early (<8 weeks) or too late (>12 months) — early reversal has higher leak rate, late reversal is more challenging due to adhesions",
+        "expertTip": "The ideal window is 3-6 months after the primary surgery. Before reversal, confirm: (1) distal anastomosis healing (CT enema or endoscopic visualization), (2) nutritional status (albumin >3.0), (3) no ongoing chemotherapy, (4) no steroid use. A water-soluble contrast enema via the distal limb confirms anastomotic patency."
+      }
+    ],
+    "prognosis": {
+      "overallMortality": "5-year overall survival by stage (SEER data): Stage I 90-95%, Stage II 70-85%, Stage III 50-70%, Stage IV 10-15%. Mortality highest in emergency presentations (obstruction/perforation): 30-day mortality 5-15%.",
+      "morbidity": "Overall complication rate 30-40% for elective resection. Anastomotic leak 3-10% (highest in low rectal anastomosis). Surgical site infection 5-15%. Cardiopulmonary complications 5-10%. VTE 3-5%. Stoma-related complications 10-25%.",
+      "recurrence": "Local recurrence after TME for rectal cancer: 3-8% with adequate neoadjuvant therapy and surgery. Distant recurrence (metastases) occurs in 30-40% overall. Surveillance CEA and CT detect 70% of recurrences at a potentially curable stage.",
+      "survivalData": "Adjuvant FOLFOX improves 5-year DFS in Stage III from 45% to 65%. MSI-H/dMMR Stage II patients have paradoxically better prognosis (HR 0.6 for OS) but do not benefit from 5-FU. Watch-and-wait for cCR: 5-year OS 85%, equivalent to TME. Emergency resection for obstruction has 2-3x higher mortality than elective.",
+      "landmarkReference": "NCCN Clinical Practice Guidelines in Oncology: Colon Cancer and Rectal Cancer, Version 4.2024"
+    },
+    "presentingComplaints": [
+      "Change in bowel habit — persistent diarrhea, constipation, or both alternating",
+      "Rectal bleeding — dark blood mixed with stool or bright red per rectum",
+      "Persistent abdominal discomfort or cramping",
+      "Unintentional weight loss and loss of appetite",
+      "Feeling of incomplete evacuation (tenesmus)"
+    ],
+    "diagnosticClues": [
+      "change_in_bowel_habit",
+      "rectal_bleeding",
+      "weight_loss",
+      "age_over_50",
+      "palpable_abdominal_or_rectal_mass"
+    ],
+    "exclusionClues": [
+      "normal_colonoscopy",
+      "negative_fobt",
+      "positive_response_to_conservative_management",
+      "self_limiting_symptoms"
+    ],
+    "pathophysiology": [
+      "adenoma_carcinoma_sequence",
+      "kras_and_braf_mutations",
+      "mismatch_repair_deficiency_(dMMR)",
+      "chromosomal_instability_pathway",
+      "microsatellite_instability_(MSI)",
+      "cpg_island_methylator_phenotype",
+      "tumor_invasion_through_bowel_wall",
+      "lymphatic_and_hematogenous_metastasis",
+      "liver_and_lung_common_metastatic_sites"
+    ],
     "severityAssessment": {
       "immediateDangerSigns": [
         { "sign": "bowel_obstruction", "weight": 10 },
         { "sign": "perforation", "weight": 10 },
-        { "sign": "massive_lower_gi_bleed", "weight": 9 }
+        { "sign": "massive_lower_gi_bleed", "weight": 9 },
+        { "sign": "septic_shock", "weight": 10 }
       ],
       "severeCriteria": {
-        "anyDangerSign": true
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "unresectable_metastatic_disease", "weight": 7 },
+          { "sign": "t4_tumor_invasion", "weight": 6 },
+          { "sign": "symptomatic_anemia_hb_less_7", "weight": 6 }
+        ]
       },
       "nonSevereCriteria": {
         "hasIndrawingOrFastBreathing": false,
         "noDangerSigns": true
       },
-      "severityLabel": "If obstruction/perforation/bleeding -> EMERGENCY; else -> ELECTIVE"
+      "severityLabel": "If obstruction/perforation/bleeding -> EMERGENCY; if metastatic -> STAGE IV; if localized -> ELECTIVE"
     },
-
-    "historyFeatures": [
-      { "symptomId": "change_in_bowel_habit", "weight": 4 },
-      { "symptomId": "rectal_bleeding", "weight": 4 },
-      { "symptomId": "weight_loss", "weight": 4 },
-      { "symptomId": "abdominal_pain", "weight": 3 },
-      { "symptomId": "fatigue", "weight": 2 },
-      { "symptomId": "tenesmus", "weight": 2, "note": "More common in rectal cancer" },
-      { "symptomId": "narrow_stool_caliber", "weight": 2 }
+    "history_questions": [
+      { "question": "When did you first notice a change in your bowel habit?", "weight": 9 },
+      { "question": "Have you noticed blood in your stool? If so, what colour?", "weight": 9 },
+      { "question": "Have you lost weight unintentionally in the past 6 months? How much?", "weight": 9 },
+      { "question": "Do you have a family history of colon or rectal cancer in a first-degree relative?", "weight": 8 },
+      { "question": "Have you ever had a colonoscopy before?", "weight": 8 },
+      { "question": "Do you have a history of polyps removed from your colon?", "weight": 8 },
+      { "question": "Have you ever been diagnosed with inflammatory bowel disease (Crohn's or ulcerative colitis)?", "weight": 8 },
+      { "question": "Do you smoke or use any tobacco products?", "weight": 7 },
+      { "question": "How much alcohol do you consume weekly?", "weight": 6 },
+      { "question": "How often do you eat red meat or processed meats?", "weight": 7 },
+      { "question": "Do you feel that your bowel doesn't empty completely after a movement?", "weight": 7 },
+      { "question": "Do you have any pain during bowel movements?", "weight": 5 },
+      { "question": "Have you felt any lump in your abdomen?", "weight": 7 },
+      { "question": "Do you feel unusually tired or weak?", "weight": 6 },
+      { "question": "Have you had any episodes of abdominal distension or bloating?", "weight": 6 },
+      { "question": "What is your typical diet — do you eat enough vegetables and fruits?", "weight": 6 },
+      { "question": "Do you have any chronic illnesses like diabetes or hypertension?", "weight": 4 },
+      { "question": "Have you had any previous surgeries for other conditions?", "weight": 4 },
+      { "question": "Have you taken any traditional herbal medicines for your symptoms?", "weight": 5 },
+      { "question": "For women: have you had any gynaecological cancers or abnormal bleeding?", "weight": 5 },
+      { "question": "Have you noticed your stool becoming narrower than usual?", "weight": 7 },
+      { "question": "How long have you had these symptoms — weeks, months, or years?", "weight": 8 },
+      { "question": "Have you had any previous cancer anywhere else?", "weight": 7 },
+      { "question": "Has anyone in your family had breast, ovarian, uterine, or stomach cancer (suggesting Lynch syndrome)?", "weight": 8 },
+      { "question": "Do you know if your parents or siblings ever had colon polyps removed?", "weight": 7 },
+      { "question": "Have you ever been tested for HIV?", "weight": 4 },
+      { "question": "What is your occupation and how active is your lifestyle?", "weight": 4 },
+      { "question": "Do you take any daily medications like aspirin or ibuprofen?", "weight": 5 },
+      { "question": "Have you had any blood transfusions in the past?", "weight": 5 },
+      { "question": "Do you have any skin changes — dark patches, hair changes, or jaundice?", "weight": 4 },
+      { "question": "Have you ever had a FOBT (fecal occult blood test) done?", "weight": 6 },
+      { "question": "Do you eat a lot of roasted or processed meat (nyama choma, sausages)?", "weight": 6 },
+      { "question": "How many servings of fruits and vegetables do you eat per day?", "weight": 5 },
+      { "question": "Have you had any recent travel or change in your usual bowel pattern with travel?", "weight": 3 },
+      { "question": "For men: have you noticed any difficulty with urination or a change in stream?", "weight": 4 },
+      { "question": "Do you have any lower back or pelvic pain?", "weight": 5 },
+      { "question": "Have you had any leg swelling (suggesting DVT from hypercoagulable state)?", "weight": 5 },
+      { "question": "Did you see a traditional healer before coming to the hospital?", "weight": 5 },
+      { "question": "How long did you wait before seeking medical attention for these symptoms?", "weight": 7 }
     ],
-
-    "examFeatures": [
-      { "signId": "palpable_abdominal_mass", "baseWeight": 4 },
-      { "signId": "rectal_mass_on_dre", "baseWeight": 5, "doubleWeight": true },
-      { "signId": "pallor", "baseWeight": 3 },
-      { "signId": "hepatomegaly", "baseWeight": 3, "note": "Suggests liver metastases" },
-      { "signId": "abdominal_distension", "baseWeight": 3, "note": "Suggests obstruction" }
+    "examination_findings": [
+      { "finding": "Palpable abdominal mass — right iliac fossa (right colon) or left lower quadrant (left colon)", "weight": 9 },
+      { "finding": "Rectal mass on digital rectal examination — fixed or mobile, ulcerated or polypoid", "weight": 10, "doubleWeight": true },
+      { "finding": "Pallor suggesting chronic anemia from right-sided cancer", "weight": 8 },
+      { "finding": "Hepatomegaly suggesting liver metastases", "weight": 8 },
+      { "finding": "Abdominal distension suggesting obstruction", "weight": 7 },
+      { "finding": "Ascites suggesting peritoneal metastases", "weight": 7 },
+      { "finding": "Palpable supraclavicular lymph node (Virchow's node)", "weight": 6 },
+      { "finding": "Skin nodules suggesting cutaneous metastases", "weight": 5 },
+      { "finding": "Palpable periumbilical nodule (Sister Mary Joseph nodule)", "weight": 6 },
+      { "finding": "Finger clubbing (hypertrophic pulmonary osteoarthropathy)", "weight": 4 },
+      { "finding": "Visible blood on glove after digital rectal examination", "weight": 9 },
+      { "finding": "Decreased breath sounds or pleural effusion (lung metastases)", "weight": 5 },
+      { "finding": "Jaundice from liver metastases", "weight": 5 },
+      { "finding": "Cachexia and muscle wasting in advanced disease", "weight": 6 },
+      { "finding": "Abdominal tenderness over tumor site", "weight": 6 },
+      { "finding": "Palpable Krukenberg mass on pelvic exam in women (ovarian metastases)", "weight": 5 },
+      { "finding": "Blumer's rectal shelf — palpable peritoneal deposit in the rectovesical/rectovaginal pouch on DRE", "weight": 7 },
+      { "finding": "Spider naevi, palmar erythema from liver failure in extensive metastases", "weight": 4 },
+      { "finding": "Auscultation: high-pitched bowel sounds with early obstruction", "weight": 5 },
+      { "finding": "Tachypnea from diaphragmatic splinting in massive hepatomegaly or ascites", "weight": 4 },
+      { "finding": "Lower extremity edema from IVC compression by enlarged lymph nodes or tumor", "weight": 5 },
+      { "finding": "Sacral or perineal pain on percussion suggests sacral invasion in advanced rectal cancer", "weight": 5 },
+      { "finding": "Faecal occult blood on gloved finger DRE", "weight": 8 },
+      { "finding": "Inguinal lymphadenopathy in low rectal cancer (nodal drainage below dentate line)", "weight": 5 }
     ],
-
+    "bedside_scores": [
+      {
+        "name": "Polyp Surveillance Risk Score (for screening)",
+        "maxPoints": 8,
+        "components": [
+          { "name": "Age >50 years", "points": 2 },
+          { "name": "First-degree relative with CRC", "points": 3 },
+          { "name": "Previous adenomatous polyp", "points": 2 },
+          { "name": "IBD history", "points": 1 }
+        ],
+        "interpretation": "0-2: average risk, start screening at 50; 3-5: moderate risk, start colonoscopy at 40; 6-8: high risk, urgent colonoscopy and genetic testing"
+      }
+    ],
     "riskFactors": [
-      { "id": "age_over_50", "multiplier": 2.0 },
-      { "id": "family_history_crc", "multiplier": 2.5 },
-      { "id": "inflammatory_bowel_disease", "multiplier": 2.0 },
-      { "id": "smoking", "multiplier": 1.4 },
-      { "id": "obesity", "multiplier": 1.3 },
-      { "id": "red_meat_consumption", "multiplier": 1.2 }
+      { "id": "age_over_50", "multiplier": 2.0, "note": ">90% of cases occur after age 50" },
+      { "id": "family_history_crc", "multiplier": 2.5, "note": "First-degree relative doubles risk" },
+      { "id": "inflammatory_bowel_disease", "multiplier": 2.0, "note": "UC and Crohn's colitis increase risk" },
+      { "id": "smoking", "multiplier": 1.4, "note": "Direct carcinogen exposure" },
+      { "id": "obesity", "multiplier": 1.3, "note": "Insulin resistance and inflammation" },
+      { "id": "red_meat_consumption", "multiplier": 1.2, "note": "Heme iron and N-nitroso compounds" },
+      { "id": "alcohol_consumption", "multiplier": 1.3, "note": "Acetaldehyde metabolite" },
+      { "id": "lynch_syndrome", "multiplier": 5.0, "note": "MMR gene mutation carriers" },
+      { "id": "familial_adenomatous_polyposis", "multiplier": 10.0, "note": "APC mutation, near 100% lifetime risk" },
+      { "id": "diabetes_mellitus_type_2", "multiplier": 1.3, "note": "Metabolic syndrome association" }
     ],
-
+    "subtypes": [
+      {
+        "id": "right_colon_cancer",
+        "name": "Right-Sided Colon Cancer",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "anemia_as_presenting_sign", "weight": 5 },
+          { "feature": "vague_abdominal_pain", "weight": 4 },
+          { "feature": "palpable_mass_in_rlf", "weight": 4 },
+          { "feature": "less_likely_to_obstruct", "weight": 4 }
+        ],
+        "management": "Right hemicolectomy with lymphadenectomy. Minimally invasive if possible. Stage II-III: adjuvant chemotherapy (CAPOX/FOLFOX). MSI-H: immunotherapy (Pembrolizumab) in advanced disease."
+      },
+      {
+        "id": "left_colon_cancer",
+        "name": "Left-Sided Colon Cancer",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "change_in_bowel_habit", "weight": 5 },
+          { "feature": "rectal_bleeding_dark", "weight": 5 },
+          { "feature": "narrow_calibre_stool", "weight": 4 },
+          { "feature": "obstruction_more_common", "weight": 4 }
+        ],
+        "management": "Left hemicolectomy or sigmoid colectomy. SEMS as bridge to surgery for obstruction. Adjuvant chemotherapy for Stage III. Watch-and-wait for low rectal cancer with complete clinical response after chemoradiation."
+      },
+      {
+        "id": "rectal_cancer",
+        "name": "Rectal Cancer",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "tenesmus_and_urgency", "weight": 5 },
+          { "feature": "rectal_bleeding_fresh_blood", "weight": 5 },
+          { "feature": "sensation_of_incomplete_evacuation", "weight": 4 },
+          { "feature": "pain_in_rectum_or_sacrum", "weight": 4 }
+        ],
+        "management": "Neoadjuvant chemoradiotherapy (CRT) for T3/T4 or node-positive. Total mesorectal excision (TME) — laparoscopic or open. Abdominoperineal resection (APR) for low rectal cancer. Watch-and-wait if complete clinical response after CRT."
+      },
+      {
+        "id": "hereditary_crc_syndromes",
+        "name": "Hereditary Colorectal Cancer Syndromes",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "age_younger_than_50", "weight": 5 },
+          { "feature": "multiple_primary_crcs", "weight": 4 },
+          { "feature": "family_history_of_crc_in_multiple_generations", "weight": 5 },
+          { "feature": "associated_tumors_endometrial_ovarian_other", "weight": 4 }
+        ],
+        "management": "Genetic counseling and testing. Lynch syndrome: total/near-total colectomy for CRC; annual endometrial screening for women. FAP: prophylactic total colectomy with IPAA by age 20-25. Surveillance colonoscopy for at-risk family members. Aspirin chemoprevention for Lynch (CAPP2 Trial)."
+      }
+    ],
     "mimics": [
       {
         "diseaseId": "diverticulitis",
-        "discriminators": ["acute_pain", "fever", "leukocytosis", "no_bleeding"]
+        "discriminators": ["acute_pain", "fever", "leukocytosis", "no_bleeding_or_mild", "localized_llq_tenderness"],
+        "ruleOutTests": ["CT_abdomen", "colonoscopy_after_resolution"]
       },
       {
         "diseaseId": "hemorrhoids",
-        "discriminators": ["bright_red_blood_per_rectum", "no_weight_loss", "prolapsing_mass"]
+        "discriminators": ["bright_red_blood_per_rectum", "no_weight_loss", "prolapsing_mass", "no_change_in_bowel_habit"],
+        "ruleOutTests": ["proctoscopy", "digital_rectal_exam"]
+      },
+      {
+        "diseaseId": "irritable_bowel_syndrome",
+        "discriminators": ["long_history", "pain_relieved_by_defecation", "no_weight_loss", "no_bleeding", "younger_age"],
+        "ruleOutTests": ["colonoscopy", "fecal_calprotectin_normal"]
+      },
+      {
+        "diseaseId": "intestinal_tuberculosis",
+        "discriminators": ["positive_quantiferon", "chest_xray_abnormal", "ileocecal_involvement", "night_sweats", "responds_to_anti_tb"],
+        "ruleOutTests": ["quantiferon_gold", "ct_chest", "ileocolonoscopy_with_biopsy"]
+      },
+      {
+        "diseaseId": "inflammatory_bowel_disease",
+        "discriminators": ["bloody_diarrhea_primary", "younger_age", "extraintestinal_manifestations", "chronic_relapsing_course"],
+        "ruleOutTests": ["colonoscopy_with_biopsy", "fecal_calprotectin"]
+      },
+      {
+        "diseaseId": "ischaemic_colitis",
+        "discriminators": ["acute_onset_in_elderly", "left_sided", "pain_out_of_proportion", "resolves_spontaneously"],
+        "ruleOutTests": ["CT_angiography", "colonoscopy"]
+      },
+      {
+        "diseaseId": "amoebic_colitis",
+        "discriminators": ["acute_onset", "positive_amoeba_serology", "flask_shaped_ulcers", "responds_to_metronidazole", "recent_travel_to_endemic_area"],
+        "ruleOutTests": ["stool_for_ova_parasites", "amoeba_serology", "colonoscopy_biopsy"]
+      },
+      {
+        "diseaseId": "endometriosis_colonic",
+        "discriminators": ["symptoms_cyclic_with_menstruation", "younger_woman", "history_of_pelvic_pain", "no_weight_loss", "no_anemia"],
+        "ruleOutTests": ["MRI_pelvis", "colonoscopy_biopsy_showing_endometrial_glands"]
       }
     ],
-
     "investigations": {
       "bedside": [
-        { "name": "Digital Rectal Examination", "priority": "immediate", "yield": 0.7, "indication": "all patients with rectal bleeding or change in bowel habit" }
+        { "name": "Digital Rectal Examination", "priority": "immediate", "yield": 0.7, "indication": "all patients with rectal bleeding or change in bowel habit — can detect low rectal cancers" }
       ],
       "laboratory": [
-        { "name": "Fecal Occult Blood Test", "priority": "high", "yield": 0.5, "indication": "screening" },
-        { "name": "CEA (Carcinoembryonic Antigen)", "priority": "high", "yield": 0.6, "indication": "baseline and monitoring" },
-        { "name": "Full Blood Count", "priority": "high", "yield": 0.5, "indication": "anaemia from chronic blood loss" }
+        { "name": "Complete Blood Count", "priority": "high", "yield": 0.5, "indication": "assess for iron deficiency anemia (common in right-sided)" },
+        { "name": "CEA (Carcinoembryonic Antigen)", "priority": "high", "yield": 0.6, "indication": "baseline for prognosis and post-treatment surveillance" },
+        { "name": "CA 19-9", "priority": "medium", "yield": 0.4, "indication": "adjunctive marker" },
+        { "name": "Liver Function Tests", "priority": "high", "yield": 0.4, "indication": "assess for liver metastases" },
+        { "name": "Fecal Occult Blood Test (FOBT)", "priority": "medium", "yield": 0.5, "indication": "screening tool" },
+        { "name": "Fecal Immunochemical Test (FIT)", "priority": "medium", "yield": 0.6, "indication": "more sensitive than FOBT" }
       ],
       "imaging": [
-        { "name": "Colonoscopy with biopsy", "priority": "high", "yield": 0.95, "indication": "gold standard for diagnosis" },
+        { "name": "Colonoscopy with biopsy", "priority": "high", "yield": 0.95, "indication": "gold standard — visualization, biopsy for histology, tattoo for localization" },
+        { "name": "CT Abdomen/Pelvis with IV and oral contrast", "priority": "high", "yield": 0.9, "indication": "staging — assess T stage, nodal involvement, and distant metastases" },
+        { "name": "CT Chest", "priority": "high", "yield": 0.8, "indication": "exclude pulmonary metastases (most common extra-abdominal site)" },
+        { "name": "MRI Rectum (for rectal cancer)", "priority": "high", "yield": 0.92, "indication": "assess circumferential resection margin (CRM), T stage, nodal status" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.85, "indication": "for equivocal metastatic disease or suspected recurrence" },
         { "name": "CT colonography", "priority": "medium", "yield": 0.85, "indication": "when colonoscopy incomplete or contraindicated" },
-        { "name": "CT Abdomen/Pelvis with contrast", "priority": "high", "yield": 0.9, "indication": "staging, assess metastases" }
+        { "name": "Endorectal Ultrasound (ERUS)", "priority": "medium", "yield": 0.88, "indication": "early rectal cancer T staging" }
       ]
     },
-
+    "interpretation_rules": {
+      "cea_levels": "CEA >5 ng/mL suggests advanced disease. Used for monitoring recurrence post-resection (rising CEA = recurrence until proven otherwise).",
+      "msi_status": "MSI-H/dMMR tumors have better prognosis and respond to immunotherapy (Pembrolizumab). All patients <50 should have MSI testing.",
+      "crm_status_on_mri": "CRM (Circumferential Resection Margin) involvement on MRI predicts local recurrence in rectal cancer. Positive CRM = need for neoadjuvant therapy.",
+      "tme_quality": "Complete mesorectal excision (TME) with intact mesorectal fascia is the key determinant of local recurrence in rectal cancer surgery.",
+      "tumor_sidedness": "Right-sided tumors (cecum to transverse) = worse prognosis than left-sided (splenic flexure to rectum). Left-sided more responsive to anti-EGFR therapy."
+    },
     "management": {
-      "protocolReference": "NCCN Guidelines for Colorectal Cancer",
+      "protocolReference": "NCCN Guidelines for Colorectal Cancer (2024), Kenyan National Cancer Control Guidelines",
+      "initial": "Full staging: colonoscopy + biopsy, CT chest/abdomen/pelvis, MRI rectum (for rectal cancer), CEA. Multidisciplinary team discussion (MDT). Nutritional optimization. Correct anemia with iron or blood transfusion if needed. Bowel preparation if elective resection planned.",
+      "definitive": "Stage I (T1-2, N0): endoscopic mucosal resection (T1) or surgical resection alone. Stage II (T3-4, N0): surgical resection + consider adjuvant chemotherapy if high-risk features. Stage III (any T, N+): surgical resection + adjuvant chemotherapy (FOLFOX/CAPOX for 6 months). Stage IV: neoadjuvant chemotherapy + resection of primary and metastases if resectable; palliative chemotherapy + targeted therapy if unresectable. Rectal cancer: neoadjuvant chemoradiation for T3/T4 or N+ followed by TME. Watch-and-wait if complete clinical response.",
+      "postop": "Early mobilization. NG tube removed early. VTE prophylaxis (LMWH for 4 weeks post-op for cancer patients). Monitor for anastomotic leak. Wound care. Stoma care if created. Return to oral diet as tolerated. MDT discussion of pathology results. Oncologist referral if adjuvant therapy indicated.",
       "pathways": [
         {
-          "severity": "localized",
-          "criteria": "tumour confined to bowel wall, no metastases",
-          "treatment": "Surgical resection with lymphadenectomy. Adjuvant chemotherapy if high-risk features (T4, nodal involvement)."
+          "severity": "localized (Stage I-III)",
+          "criteria": "tumour confined to bowel wall or regional nodes, no distant metastases, resectable",
+          "treatment": "Surgical resection with lymphadenectomy. Colectomy for colon cancer. TME for rectal cancer. Adjuvant chemotherapy if Stage III or high-risk Stage II."
         },
         {
-          "severity": "metastatic",
+          "severity": "metastatic (Stage IV)",
           "criteria": "distant metastases (liver, lung, peritoneum)",
-          "treatment": "Neoadjuvant chemotherapy. Consider resection of primary and metastases. Palliative chemotherapy if unresectable."
+          "treatment": "Neoadjuvant chemotherapy (FOLFOX/FOLFIRI ± targeted therapy). Consider resection of primary and metastases. Palliative chemotherapy if unresectable. Immunotherapy for MSI-H."
         },
         {
           "severity": "obstructed/perforated",
-          "criteria": "acute obstruction or perforation",
-          "treatment": "Emergency surgery (resection or diverting stoma). IV fluids. Broad-spectrum antibiotics. ICU if septic."
+          "criteria": "acute obstruction or perforation with peritonitis",
+          "treatment": "Emergency surgery (resection or diverting stoma if palliation). IV fluids resuscitation. Broad-spectrum antibiotics. ICU if septic. Staged approach with interval resection after decompression."
         }
       ]
     },
-
-    "pathophysiology": [
-      "adenoma_carcinoma_sequence",
-      "mismatch_repair_deficiency",
-      "chromosomal_instability",
-      "kras_mutation",
-      "microsatellite_instability"
+    "operative_templates": [
+      {
+        "procedure": "Total Mesorectal Excision (TME) — Low Anterior Resection",
+        "indication": "Mid to upper rectal cancer (above 5cm from anal verge), neoadjuvant CRT if indicated",
+        "approach": "Laparoscopic or robotic (preferred) or open",
+        "position": "Lloyd-Davies (modified lithotomy) with steep Trendelenburg",
+        "incision": "5-port laparoscopic technique or midline laparotomy",
+        "steps": [
+          "Position in Lloyd-Davies with steep Trendelenburg and right tilt",
+          "Access abdomen, diagnostic laparoscopy (assess liver, peritoneum)",
+          "Mobilize left colon — white line of Toldt, medial to lateral approach",
+          "Identify and protect left ureter and gonadal vessels",
+          "High ligation of inferior mesenteric artery (IMA) at aorta",
+          "Divide inferior mesenteric vein (IMV) at lower border of pancreas",
+          "Mobilize splenic flexure if needed for tension-free anastomosis",
+          "Enter the presacral (holy) plane — TME dissection sharp dissection",
+          "Preserve pelvic autonomic nerves (hypogastric nerves, pelvic plexus)",
+          "Complete TME down to the pelvic floor (Waldeyer's fascia)",
+          "Divide rectum with stapler 1-2cm below the tumour",
+          "Extract specimen via Pfannenstiel incision",
+          "Create colorectal or coloanal anastomosis (EEA stapler)",
+          "Air leak test of anastomosis",
+          "Place pelvic drain",
+          "Covering loop ileostomy if low anastomosis"
+        ]
+      },
+      {
+        "procedure": "Abdominoperineal Resection (APR)",
+        "indication": "Low rectal cancer <5cm from anal verge, involving the sphincter complex",
+        "approach": "Combined abdominal (laparoscopic/open) and perineal",
+        "position": "Lloyd-Davies for abdominal phase, then lithotomy for perineal phase",
+        "incision": "Midline or laparoscopic ports (abdominal) + perineal elliptical incision",
+        "steps": [
+          "Abdominal phase: TME dissection as above down to the pelvic floor",
+          "Mobilize sigmoid and descending colon",
+          "Ligate IMA and IMV",
+          "Create end colostomy (left iliac fossa) — mature stoma",
+          "Close abdomen",
+          "Reposition for perineal phase",
+          "Elliptical incision around anus, including both sphincters and ischiorectal fat",
+          "Dissect through ischiorectal fossa to meet the abdominal dissection",
+          "Deliver specimen through perineal wound",
+          "Place pelvic drains",
+          "Close perineal wound in layers — consider myocutaneous flap (VRAM or gracilis) if large defect or irradiated field"
+        ]
+      }
     ],
-
     "complications": [
+      {
+        "diseaseId": "anastomotic_leak",
+        "probability": 0.08,
+        "lagDays": [3, 10],
+        "severityBoost": 0.4,
+        "triggers": ["low_rectal_anastomosis", "neoadjuvant_radiotherapy", "poor_nutrition", "tension_on_anastomosis", "smoking"],
+        "clues": ["tachycardia", "fever", "peritonitis", "feculent_drain_output", "leukocytosis"]
+      },
+      {
+        "diseaseId": "wound_infection",
+        "probability": 0.15,
+        "lagDays": [3, 7],
+        "severityBoost": 0.1,
+        "triggers": ["contaminated_field", "emergency_surgery", "stoma_creation", "obesity", "diabetes"],
+        "clues": ["wound_erythema", "purulent_discharge", "wound_dehiscence", "fever"]
+      },
       {
         "diseaseId": "bowel_obstruction",
         "probability": 0.15,
+        "lagDays": [1, 30],
         "severityBoost": 0.4,
-        "clues": ["distension", "vomiting", "constipation"]
+        "triggers": ["obstructing_tumor", "adhesions", "stoma_dysfunction"],
+        "clues": ["distension", "vomiting", "constipation", "colicky_pain"]
       },
       {
         "diseaseId": "perforation",
         "probability": 0.03,
+        "lagDays": [0, 3],
         "severityBoost": 0.5,
-        "clues": ["acute_severe_pain", "peritonitis"]
+        "triggers": ["obstructing_tumor_with_competent_valve", "colonoscopy_related", "stent_related"],
+        "clues": ["acute_severe_pain", "peritonitis", "free_air"]
+      },
+      {
+        "diseaseId": "stoma_complications",
+        "probability": 0.1,
+        "lagDays": [1, 30],
+        "severityBoost": 0.1,
+        "triggers": ["emergency_stoma", "obesity", "poor_siting"],
+        "clues": ["stoma_retraction", "parastomal_hernia", "skin_excoriation", "high_output"]
+      },
+      {
+        "diseaseId": "dvt_pe",
+        "probability": 0.05,
+        "lagDays": [3, 14],
+        "severityBoost": 0.3,
+        "triggers": ["pelvic_surgery", "cancer_hypercoagulable", "prolonged_surgery", "immobility"],
+        "clues": ["unilateral_leg_swelling", "chest_pain", "shortness_of_breath", "hypoxia"]
+      },
+      {
+        "diseaseId": "recurrence",
+        "probability": 0.2,
+        "lagDays": [180, 720],
+        "severityBoost": 0.4,
+        "triggers": ["positive_margins", "lymphovascular_invasion", "advanced_stage", "inadequate_lymphadenectomy"],
+        "clues": ["rising_cea", "new_mass_on_imaging", "bowel_symptoms", "pain"]
+      },
+      {
+        "diseaseId": "low_anterior_resection_syndrome_lars",
+        "probability": 0.5,
+        "lagDays": [30, 365],
+        "severityBoost": 0.2,
+        "triggers": ["low_rectal_anastomosis_less_than_5cm", "neoadjuvant_radiotherapy", "total_mesorectal_excision"],
+        "clues": ["fecal_urgency", "clustering", "incomplete_evacuation", "fecal_incontinence", "increased_stool_frequency"]
+      },
+      {
+        "diseaseId": "chemotherapy_toxicity",
+        "probability": 0.3,
+        "lagDays": [7, 180],
+        "severityBoost": 0.2,
+        "triggers": ["folfox_oxaliplatin_neuropathy", "folfiri_diarrhea_bone_marrow", "capecitabine_hand_foot_syndrome"],
+        "clues": ["peripheral_neuropathy_oxaliplatin", "neutropenic_fever", "diarrhea_grades_3_4", "hand_foot_skin_reaction"]
       }
     ],
-
-    "mustNotMiss": true,
-    "diagnosticClues": ["change_in_bowel_habit", "rectal_bleeding", "weight_loss", "age_over_50"],
-    "exclusionClues": ["normal_colonoscopy", "negative_fobt"]
+    "complicationTrigers": {
+      "immediate_postop_24h": ["hemorrhage", "hypotension", "electrolyte_derangement", "high_stoma_output"],
+      "postop_day1_3": ["paralytic_ileus", "wound_infection_early", "stoma_dysfunction", "urinary_retention"],
+      "postop_day3_7": ["anastomotic_leak_peak", "wound_dehiscence", "intra_abdominal_abscess", "dvt_pe"],
+      "late": ["disease_recurrence", "incisional_hernia", "stoma_complications", "adhesive_sbo", "radiation_proctitis", "chemotherapy_neuropathy"]
+    },
+    "dischargeCriteria": [
+      "Tolerating oral diet without nausea/vomiting",
+      "Passing flatus or stool",
+      "Pain controlled on oral analgesia",
+      "No fever or signs of sepsis",
+      "Wound clean and dry with no discharge",
+      "Ambulating independently",
+      "Stoma functioning (if created)",
+      "Patient/caregiver educated on warning signs and stoma care",
+      "Histology results reviewed and MDT plan documented",
+      "Oncology referral made if adjuvant therapy needed"
+    ],
+    "patient_education": {
+      "explanation": "Colorectal cancer is a growth in the large intestine that can start as a small polyp (a benign growth) and over years turn into cancer. In Kenya, many cases are found late because screening is not common. The good news is that if caught early, surgery can be curative. Treatment may involve surgery, chemotherapy, radiation, or a combination. The key is early detection — we recommend colonoscopy screening for everyone above age 50 or earlier if you have a family history.",
+      "warningSigns": "Return to hospital immediately if you have: severe abdominal pain, vomiting, inability to pass stool or gas, fever with chills, heavy bleeding from the back passage, or wound redness/discharge. For patients with a stoma: if there is no output for 8 hours, or the stoma becomes dark, retracted, or has bloody output.",
+      "activity": "After surgery, start walking as soon as possible. Avoid heavy lifting (more than 5kg) for 6-8 weeks. Do not drive for 2-4 weeks depending on the surgery. For high anterior resection, you can return to desk work in 2-4 weeks, for APR or low anterior resection, 4-6 weeks. Pelvic floor exercises may help if you have a low rectal anastomosis.",
+      "diet": "Eat small frequent meals. Start with clear fluids and advance to a normal diet as tolerated. After recovery, follow a balanced diet with plenty of fruits, vegetables, and whole grains. Limit red meat and processed foods. If you have a stoma, avoid foods that can block it (nuts, popcorn, maize seeds, raw vegetables, mushrooms, dried fruits). Stay well hydrated — at least 8 glasses of water daily.",
+      "medication": "Take all prescribed medications — antibiotics (if prescribed), pain medication as needed, and stool softeners if constipated. If you are on chemotherapy, you will receive specific instructions about side effects. Stoma patients will receive a stoma kit and training. Do not take traditional herbal medicines without informing your oncologist.",
+      "followUp": "You will need regular check-ups: CEA blood test every 3-6 months for 3 years, CT scan at 12 and 24 months, and colonoscopy at 1 year (then every 3-5 years). If you had a stoma, you will be seen by a stoma therapist. If you need chemotherapy, you will meet with the oncologist within 2-4 weeks of surgery."
+    },
+    "followup": {
+      "before_discharge": "Wound inspection. Histology results MDT discussion. Stoma care teaching (if applicable). Confirm adequate dietary intake. Ensure DVT prophylaxis plan. Education on warning signs.",
+      "after_discharge": {
+        "1_week": "Wound check and suture removal. Stoma assessment. Review histology with patient and family. Referral to oncology if Stage II high-risk or Stage III. CEA baseline.",
+        "2_weeks": "Ensure wound healing progressing. Nutritional assessment and counseling. Stoma therapy follow-up. Start adjuvant chemotherapy if indicated (within 6-8 weeks post-op).",
+        "6_weeks": "Full recovery evaluation. Assess for adjuvant therapy tolerance. Plan for stoma reversal if temporary stoma created (typically 3-6 months post-op). CT scan if symptomatic.",
+        "3_months": "CEA levels. Clinical examination. CT Chest/Abdomen/Pelvis (surveillance). Colonoscopy at 1 year post-op. Long-term surveillance plan established."
+      },
+      "when_to_return": "Emergency: severe abdominal pain, vomiting, fever, bleeding, wound problems, inability to pass stool/flatus. Urgent: increasing CEA levels between visits, new symptoms (weight loss, pain, change in bowel habit), or any new lump/mass. Ensure patient has emergency contact numbers."
+    }
   }
 }

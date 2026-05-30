@@ -14,7 +14,7 @@ export default function SectionCard({ unit, departmentKey, hospitalId }: Section
 
   return (
     <Link
-      href={`/clinical-workspace/${hospitalId}/departments/${departmentKey}/${unit.id}`}
+      href={`/clinical-workspace/${hospitalId}/departments/${departmentKey.toLowerCase()}/${unit.id}`}
       className="frost-card p-4 flex flex-col gap-2 no-underline transition-all duration-200 hover:translate-y-[-2px] block"
     >
       <div className="flex items-center justify-between">

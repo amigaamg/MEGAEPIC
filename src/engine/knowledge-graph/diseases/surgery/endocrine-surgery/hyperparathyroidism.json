@@ -3,32 +3,69 @@
     "id": "hyperparathyroidism",
     "name": "Hyperparathyroidism",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "endocrine-surgery",
     "agePeak_months": [480, 720],
-    "note": "Excess PTH secretion. Primary from parathyroid adenoma/hyperplasia. Stones, bones, groans, psychiatric overtones.",
+    "note": "Excess PTH secretion causing hypercalcemia. Primary (parathyroid adenoma/hyperplasia) is most common. 'Stones, bones, groans, psychiatric overtones' summarizes the multiorgan effects. In Kenya, many cases are detected incidentally on routine lab work. Secondary hyperparathyroidism from chronic kidney disease and vitamin D deficiency is common in our setting. Parathyroidectomy is curative for primary disease. Intraoperative PTH monitoring confirms biochemical cure.",
     "prevalenceWeight": 0.3,
-    "syndromeTags": ["hypercalcemia", "parathyroid_disease"],
+    "syndromeTags": ["hypercalcemia", "parathyroid_disease", "renal_stones", "osteoporosis"],
+
+    "presentingComplaints": [
+      "Incidental finding of high calcium on blood test",
+      "Recurrent kidney stones",
+      "Bone pain or fractures from minor trauma",
+      "Feeling tired, weak, and depressed",
+      "Abdominal pain and constipation",
+      "Excessive thirst and frequent urination",
+      "Muscle aches and joint pain"
+    ],
 
     "severityAssessment": {
       "immediateDangerSigns": [
-        { "sign": "hypercalcemic_crisis_greater_14", "weight": 10 },
-        { "sign": "cardiac_arrhythmia", "weight": 10 },
+        { "sign": "hypercalcemic_crisis_calcium_greater_14", "weight": 10 },
+        { "sign": "cardiac_arrhythmia_prolonged_qt", "weight": 10 },
         { "sign": "acute_pancreatitis", "weight": 8 },
+        { "sign": "coma_or_stupor", "weight": 10 },
         { "sign": "avpu_abnormal", "weight": 10 }
       ],
       "severeCriteria": {
         "anyDangerSign": true,
         "additionalCriteria": [
-          { "sign": "calcium_greater_than_12", "weight": 8 },
-          { "sign": "renal_failure", "weight": 7 },
-          { "sign": "severe_osteoporosis_fracture", "weight": 6 }
+          { "sign": "calcium_greater_than_12_mg_dl", "weight": 8 },
+          { "sign": "renal_failure_egfr_less_60", "weight": 7 },
+          { "sign": "severe_osteoporosis_t_score_less_2_5_with_fracture", "weight": 6 },
+          { "sign": "recurrent_kidney_stones", "weight": 5 }
         ]
       },
       "nonSevereCriteria": {
         "hasIndrawingOrFastBreathing": false,
         "noDangerSigns": true
       },
-      "severityLabel": "Hypercalcemic crisis/renal failure -> SEVERE; mild asymptomatic -> NON-SEVERE"
+      "severityLabel": "Hypercalcemic crisis/renal failure/severe osteoporosis -> SEVERE; mild asymptomatic hypercalcemia -> NON-SEVERE"
     },
+
+    "history_questions": [
+      { "question": "Have you ever been told your calcium level is high?", "weight": 10 },
+      { "question": "Have you had kidney stones — how many times and how were they treated?", "weight": 8 },
+      { "question": "Do you have bone pain or have you had any fractures?", "weight": 8 },
+      { "question": "Have you been feeling unusually tired or depressed?", "weight": 7 },
+      { "question": "Do you have abdominal pain or persistent constipation?", "weight": 6 },
+      { "question": "Are you drinking more water than usual and urinating frequently?", "weight": 7 },
+      { "question": "Do you have muscle weakness or aches?", "weight": 6 },
+      { "question": "Have you lost weight unintentionally?", "weight": 5 },
+      { "question": "Do you have a history of pancreatitis?", "weight": 5 },
+      { "question": "Do you have high blood pressure?", "weight": 5 },
+      { "question": "Have you ever had a DEXA bone density scan?", "weight": 5 },
+      { "question": "Are you on any calcium or Vitamin D supplements?", "weight": 6 },
+      { "question": "Do you take lithium for any psychiatric condition?", "weight": 4 },
+      { "question": "Do you have a family history of hyperparathyroidism or MEN syndrome?", "weight": 7 },
+      { "question": "Do you have a family history of thyroid cancer or other endocrine tumors?", "weight": 5 },
+      { "question": "Have you had neck surgery before?", "weight": 5 },
+      { "question": "Do you have kidney disease or have you been on dialysis?", "weight": 7 },
+      { "question": "Do you have any other medical conditions (sarcoidosis, TB)?", "weight": 4 },
+      { "question": "Are you postmenopausal and how long?", "weight": 5 },
+      { "question": "Have you noticed any neck lump?", "weight": 3 }
+    ],
 
     "historyFeatures": [
       { "symptomId": "renal_colic_kidney_stones", "weight": 4 },
@@ -43,6 +80,20 @@
       { "symptomId": "incidental_finding_on_lab", "weight": 4, "note": "Most common presentation now" }
     ],
 
+    "examination_findings": [
+      { "finding": "Neck palpation — parathyroid mass rarely palpable (<5%)", "weight": 5 },
+      { "finding": "Signs of dehydration (dry mucosa, reduced skin turgor)", "weight": 6 },
+      { "finding": "Hypertension", "weight": 6 },
+      { "finding": "Band keratopathy (calcium deposits on cornea — slit lamp exam)", "weight": 4 },
+      { "finding": "Bone tenderness on palpation of long bones or spine", "weight": 4 },
+      { "finding": "Proximal muscle weakness (difficulty standing from squat)", "weight": 5 },
+      { "finding": "Depressed mood or lethargy", "weight": 4 },
+      { "finding": "ECG changes: shortened QT interval, prolonged PR", "weight": 4 },
+      { "finding": "Abdominal tenderness (if pancreatitis or constipation)", "weight": 3 },
+      { "finding": "Cervical lymphadenopathy (rare — consider parathyroid cancer)", "weight": 3 },
+      { "finding": "Bowing deformities or pathological fractures", "weight": 4 }
+    ],
+
     "examFeatures": [
       { "signId": "neck_palpation_rarely_palpable", "baseWeight": 2 },
       { "signId": "signs_of_dehydration", "baseWeight": 2 },
@@ -51,135 +102,579 @@
       { "signId": "bone_tenderness", "baseWeight": 1 }
     ],
 
+    "bedside_scores": {
+      "name": "Surgical Criteria for Primary Hyperparathyroidism (AAES Guidelines)",
+      "maxPoints": 10,
+      "components": [
+        { "name": "Serum calcium >1 mg/dL above upper limit of normal", "points": 3 },
+        { "name": "Age <50 years", "points": 2 },
+        { "name": "Creatinine clearance <60 mL/min", "points": 2 },
+        { "name": "Bone density T-score <-2.5 at any site", "points": 2 },
+        { "name": "Nephrolithiasis or nephrocalcinosis on imaging", "points": 1 }
+      ],
+      "interpretation": "Score >=2: parathyroidectomy indicated. Score 0-1: can be observed if asymptomatic with monitoring. Surgery also indicated for symptomatic disease regardless of score."
+    },
+
     "riskFactors": [
       { "id": "female_gender_postmenopausal", "multiplier": 3.0 },
       { "id": "age_over_50", "multiplier": 2.0 },
       { "id": "neck_radiation_history", "multiplier": 2.5 },
       { "id": "family_history_familial_hpt", "multiplier": 3.0 },
-      { "id": "men_syndrome", "multiplier": 4.0 },
-      { "id": "lithium_therapy", "multiplier": 2.0 }
+      { "id": "men1_men2a_syndrome", "multiplier": 4.0 },
+      { "id": "lithium_therapy", "multiplier": 2.0 },
+      { "id": "chronic_kidney_disease_secondary_hpt", "multiplier": 2.5 },
+      { "id": "vitamin_d_deficiency", "multiplier": 1.5 }
     ],
 
     "subtypes": [
       {
         "id": "parathyroid_adenoma",
-        "name": "Parathyroid Adenoma (Single)",
+        "name": "Parathyroid Adenoma (Single Gland Disease)",
         "prevalenceModifier": 0.8,
         "keyFeatures": [
-          { "feature": "single_gland_disease", "weight": 5 },
-          { "feature": "localized_on_sestamibi", "weight": 5 },
-          { "feature": "elevated_ptp_calcium", "weight": 5 },
-          { "feature": "cure_with_single_gland_excision", "weight": 5 }
+          { "feature": "single_gland_disease_80_percent", "weight": 5 },
+          { "feature": "localized_on_sestamibi_and_or_ultrasound", "weight": 5 },
+          { "feature": "elevated_ptp_and_calcium", "weight": 5 },
+          { "feature": "cure_with_single_gland_excision_confirm_by_ioptp_drop", "weight": 5 }
         ],
-        "management": "Minimally invasive parathyroidectomy (MIP) guided by sestamibi + intraoperative PTH monitoring. Four-gland exploration if localization fails."
+        "management": "Minimally invasive parathyroidectomy (MIP) guided by pre-op localization (sestamibi + US). Intraoperative PTH monitoring (Miami criteria: >50% drop from highest level at 10 minutes post-excision). Four-gland exploration if localization fails or discordant."
       },
       {
-        "id": "parathyroid_hyperplasia",
-        "name": "Multigland Hyperplasia",
+        "id": "multigland_hyperplasia",
+        "name": "Multigland Hyperplasia (Primary or Secondary)",
         "prevalenceModifier": 0.15,
         "keyFeatures": [
-          { "feature": "multiple_glands_enlarged", "weight": 5 },
-          { "feature": "familial_or_men_related", "weight": 4 },
-          { "feature": "no_single_hot_spot_on_sestamibi", "weight": 4 }
+          { "feature": "more_than_one_parathyroid_gland_enlarged", "weight": 5 },
+          { "feature": "familial_or_men_related_syndrome", "weight": 4 },
+          { "feature": "no_single_hot_spot_on_sestamibi", "weight": 4 },
+          { "feature": "intraop_ioptp_drop_less_than_50_percent_after_single_excision", "weight": 4 }
         ],
-        "management": "Bilateral neck exploration. Subtotal parathyroidectomy (3.5 glands) or total parathyroidectomy with autotransplantation. Intraoperative PTH monitoring."
+        "management": "Bilateral neck exploration (BNE). Subtotal parathyroidectomy: remove 3.5 glands, leaving well-vascularized remnant (half of one gland). Total parathyroidectomy with autotransplantation (parathyroid tissue into forearm muscle) for MEN1 or renal hyperparathyroidism. Intraoperative PTH monitoring. Thymectomy (may have ectopic parathyroid)."
       },
       {
         "id": "parathyroid_carcinoma",
         "name": "Parathyroid Carcinoma",
         "prevalenceModifier": 0.01,
         "keyFeatures": [
-          { "feature": "very_high_calcium_greater_than_14", "weight": 5 },
+          { "feature": "very_high_calcium_greater_than_14_mg_dl", "weight": 5 },
           { "feature": "palpable_neck_mass", "weight": 4 },
-          { "feature": "severe_hyperparathyroid_symptoms", "weight": 5 }
+          { "feature": "severe_hypercalcemic_symptoms", "weight": 5 },
+          { "feature": "ptp_level_extremely_elevated", "weight": 4 },
+          { "feature": "gross_invasion_of_surrounding_tissues", "weight": 5 }
         ],
-        "management": "En bloc resection including ipsilateral thyroid lobe and central nodes. No neck dissection unless nodes involved. Close follow-up for recurrence."
+        "management": "En bloc resection including ipsilateral thyroid lobe, central compartment nodes, and any adherent tissues. No routine lateral neck dissection unless nodes clinically involved. Close follow-up: calcium and PTH every 3 months. Imaging for recurrence. Metastatic disease: palliative surgery, radiotherapy, bisphosphonates."
       }
     ],
 
     "mimics": [
       {
-        "diseaseId": "familial_hypocalciuric_hypercalcemia",
-        "discriminators": ["low_urine_calcium_excretion", "family_history", "normal_ptp_in_young"]
+        "diseaseId": "familial_hypocalciuric_hypercalcemia_fhh",
+        "discriminators": ["low_24h_urine_calcium_less_100mg", "calcium_creatinine_clearance_ratio_less_0_01", "family_history_of_hypercalcemia", "presents_at_young_age", "ptp_normal_or_mildly_elevated"],
+        "ruleOutTests": ["24h_urine_calcium", "calcium_creatinine_clearance_ratio", "casr_gene_testing"]
       },
       {
         "diseaseId": "hypercalcemia_of_malignancy",
-        "discriminators": ["known_malignancy", "low_ptp_level", "pthrp_elevated", "acute_onset"]
+        "discriminators": ["known_malignancy_lung_breast_myeloma", "ptp_suppressed_low_or_undetectable", "pthrp_elevated", "acute_onset_over_weeks", "weight_loss", "advanced_disease"],
+        "ruleOutTests": ["ptp_level", "pthrp_level", "malignancy_workup_ct_pet"]
+      },
+      {
+        "diseaseId": "secondary_hyperparathyroidism",
+        "discriminators": ["chronic_kidney_disease", "vitamin_d_deficiency", "low_calcium_or_normal", "high_ptp_with_normal_or_low_calcium"],
+        "ruleOutTests": ["renal_function", "vitamin_d_level", "phosphate_levels"]
+      },
+      {
+        "diseaseId": "sarcoidosis_granulomatous_diseases",
+        "discriminators": ["elevated_ace_levels", "lung_involvement_on_cxr", "vitamin_d_mediated", "ptp_suppressed", "responds_to_steroids"],
+        "ruleOutTests": ["ace_level", "chest_xray", "ptp_suppressed"]
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "Corrected calcium calculation", "priority": "immediate", "yield": 0.8, "indication": "confirm hypercalcemia" }
+        { "name": "Corrected calcium calculation", "priority": "immediate", "yield": 0.8, "indication": "Correct for albumin: corrected Ca = measured Ca + 0.8 × (40 - albumin)" },
+        { "name": "Chvostek's sign and Trousseau's sign", "priority": "low", "yield": 0.3, "indication": "Screen for latent tetany (usually pre-op)" },
+        { "name": "ECG", "priority": "high", "yield": 0.4, "indication": "Shortened QT interval, prolonged PR — monitor arrhythmia risk" }
       ],
       "laboratory": [
-        { "name": "Serum Calcium (corrected)", "priority": "immediate", "yield": 0.95, "indication": "elevated" },
-        { "name": "Intact PTH", "priority": "immediate", "yield": 0.95, "indication": "elevated or inappropriately normal" },
-        { "name": "25-OH Vitamin D", "priority": "high", "yield": 0.3, "indication": "rule out secondary HPT" },
-        { "name": "24h Urine Calcium", "priority": "high", "yield": 0.5, "indication": "rule out FHH" },
-        { "name": "Creatinine, eGFR", "priority": "high", "yield": 0.4, "indication": "renal function" },
-        { "name": "Alkaline Phosphatase", "priority": "medium", "yield": 0.3, "indication": "bone turnover marker" },
-        { "name": "Serum Phosphate", "priority": "medium", "yield": 0.5, "indication": "low in primary HPT" }
+        { "name": "Serum Calcium (corrected for albumin)", "priority": "immediate", "yield": 0.95, "indication": "Confirm hypercalcemia — repeat x2 to confirm persistence" },
+        { "name": "Intact PTH", "priority": "immediate", "yield": 0.95, "indication": "Elevated or inappropriately normal in the presence of hypercalcemia = primary HPT" },
+        { "name": "25-OH Vitamin D", "priority": "high", "yield": 0.4, "indication": "Rule out secondary HPT from vitamin D deficiency — common in Kenya" },
+        { "name": "24-hour Urine Calcium", "priority": "high", "yield": 0.5, "indication": "Rule out FHH (low urine calcium); >250mg/day supports primary HPT" },
+        { "name": "Serum Creatinine, eGFR", "priority": "high", "yield": 0.4, "indication": "Assess renal function — surgery indicated if CrCl <60" },
+        { "name": "Alkaline Phosphatase (bone-specific)", "priority": "medium", "yield": 0.3, "indication": "Elevated in high bone turnover — indicates bone disease" },
+        { "name": "Serum Phosphate", "priority": "medium", "yield": 0.5, "indication": "Low in primary HPT (phosphate-wasting)" },
+        { "name": "Albumin, total protein", "priority": "medium", "yield": 0.3, "indication": "For corrected calcium calculation" },
+        { "name": "PTHrP", "priority": "low", "yield": 0.3, "indication": "If malignancy suspected and PTH suppressed" }
       ],
       "imaging": [
-        { "name": "Sestamibi (MIBI) Scan with SPECT/CT", "priority": "high", "yield": 0.85, "indication": "localize adenoma" },
-        { "name": "Neck Ultrasound", "priority": "high", "yield": 0.7, "indication": "complementary to sestamibi" },
-        { "name": "CT Neck / 4D-CT", "priority": "medium", "yield": 0.85, "indication": "if non-concordant imaging" },
-        { "name": "DEXA scan (bone density)", "priority": "medium", "yield": 0.5, "indication": "assess bone disease" }
+        { "name": "Sestamibi (MIBI) Scan with SPECT/CT", "priority": "high", "yield": 0.85, "indication": "Gold standard for adenoma localization — shows focus of delayed tracer retention" },
+        { "name": "Neck Ultrasound (high-frequency linear probe)", "priority": "high", "yield": 0.7, "indication": "Complementary to MIBI — enlarged hypoechoic parathyroid with polar vessel" },
+        { "name": "4D-CT (CT with perfusion timing)", "priority": "medium", "yield": 0.85, "indication": "Best sensitivity for multigland disease, re-operative cases, when MIBI/US discordant" },
+        { "name": "DEXA scan (bone mineral density)", "priority": "medium", "yield": 0.5, "indication": "Assess osteopenia/osteoporosis at lumbar spine, hip, forearm" },
+        { "name": "Renal Ultrasound (KUB)", "priority": "medium", "yield": 0.5, "indication": "Detect nephrolithiasis or nephrocalcinosis" }
       ]
     },
 
+    "interpretation_rules": {
+      "biochemical_diagnosis": {
+        "elevated_calcium_elevated_ptp": { "present": "primary_hyperparathyroidism +45", "absent": "consider_other_causes -10" },
+        "high_calcium_suppressed_ptp": { "present": "non_parathyroid_hypercalcemia +30" },
+        "low_24h_urine_calcium_creatinine_ratio_less_0_01": { "present": "fhf_familial_hypocalciuric_hypercalcemia +35" },
+        "vitamin_d_deficient": { "present": "secondary_hpt_possible +15" },
+        "renal_impairment": { "present": "renal_secondary_hpt +15" }
+      },
+      "sestamibi_scan": {
+        "focal_uptake_persistent_on_delayed": { "present": "parathyroid_adenoma_localized +40" },
+        "no_focal_uptake": { "present": "multigland_disease_or_missed_adenoma +10" },
+        "multifocal_uptake": { "present": "multigland_hyperplasia +20" },
+        "focal_uptake_in_mediastinum": { "present": "ectopic_parathyroid_adenoma +35" }
+      }
+    },
+
     "management": {
-      "protocolReference": "AAES Guidelines for Primary Hyperparathyroidism",
+      "protocolReference": "AAES Guidelines for Primary Hyperparathyroidism (2022)",
+      "initial": {
+        "resuscitation": [
+          "For mild hypercalcemia: oral hydration, avoid thiazides and lithium, mobilize",
+          "For moderate-severe (Ca >12 or symptomatic): IV Normal Saline 200-300ml/h to correct volume depletion",
+          "For hypercalcemic crisis (Ca >14): ICU admission, aggressive IV fluids (4-6L/day), Calcitonin 4-8 IU/kg IM/SC q6-12h, Bisphosphonates (Pamidronate 60-90mg IV or Zoledronic acid 4mg IV), consider dialysis",
+          "Avoid immobilization — worsens hypercalcemia"
+        ]
+      },
+      "definitive": {
+        "surgical": [
+          "Minimally invasive parathyroidectomy (MIP): for single adenoma localized on MIBI + US",
+          "Bilateral neck exploration (BNE): for negative/discordant localization, multigland disease, MEN, re-operative surgery",
+          "Subtotal parathyroidectomy (3.5 glands): for multigland hyperplasia",
+          "Total parathyroidectomy + autotransplantation: for MEN1, renal HPT",
+          "En bloc resection: for parathyroid carcinoma"
+        ],
+        "nonOperative": [
+          "Observation with monitoring: for asymptomatic patients who do not meet surgical criteria",
+          "Medical management: adequate hydration, avoid thiazides, Cinacalcet (calcimimetic) for those unfit for surgery",
+          "Bisphosphonates for osteoporosis",
+          "Vitamin D replacement if deficient"
+        ]
+      },
+      "postop": {
+        "immediate": [
+          "Monitor calcium (iCa or corrected calcium) at 6h, 12h, 24h, then daily",
+          "IV fluids continued until oral intake adequate",
+          "Oral calcium supplementation (Calcium carbonate 1-2g TDS) for hungry bone syndrome",
+          "Calcitriol 0.25-0.5mcg BD if severe bone disease or symptomatic hypocalcemia",
+          "Check PTH at 10-20 min post-excision (intraop) — >50% drop predicts cure",
+          "Check PTH and calcium at 6 weeks to confirm biochemical cure"
+        ],
+        "day1_3": [
+          "Hungry bone syndrome: watch for hypocalcemia (especially if pre-op high ALP, low Vit D, large adenoma)",
+          "Symptoms of hypocalcemia: perioral tingling, finger numbness, Chvostek's/Trousseau's",
+          "Treat hypocalcemia aggressively: IV Calcium gluconate if symptomatic, oral Calcium + Calcitriol",
+          "Voice check — RLN assessment"
+        ],
+        "day3_7": [
+          "Calcium levels should stabilize by day 5-7",
+          "Taper calcium and calcitriol over 2-6 weeks as bones heal",
+          "Discharge once calcium stable without IV supplementation"
+        ]
+      },
       "pathways": [
         {
-          "severity": "asymptomatic mild",
-          "criteria": "calcium <1mg/dL above ULN, no renal stones, no osteoporosis, age >50",
-          "treatment": "Observation. Monitor calcium, renal function, bone density every 1-2 years. Adequate hydration. Avoid thiazides and lithium."
+          "severity": "asymptomatic, mild, not meeting surgical criteria",
+          "criteria": "Ca <1mg/dL above ULN, no renal stones, T-score >-2.5, age >50, CrCl >60",
+          "treatment": "Observation. Monitor serum Ca + Cr + BMD every 1-2 years. Adequate hydration. Avoid thiazides and lithium. Evaluate for secondary causes (Vit D, renal)."
         },
         {
           "severity": "symptomatic or meeting surgical criteria",
-          "criteria": "calcium >1mg/dL above ULN, renal stones, osteoporosis, age <50, CrCl <60mL/min",
-          "treatment": "Parathyroidectomy (MIP if localized, bilateral exploration if not). Intraoperative PTH monitoring (drop >50% at 10min)."
+          "criteria": "Ca >1mg/dL above ULN, renal stones, osteoporosis (T<-2.5), age <50, CrCl <60, symptomatic (bones, stones, groans)",
+          "treatment": "Parathyroidectomy. MIP if single adenoma localized. BNE if not. Intraoperative PTH monitoring (>50% drop confirms cure). Post-op calcium monitoring for hungry bone syndrome."
         },
         {
           "severity": "hypercalcemic crisis",
-          "criteria": "calcium >14 mg/dL, confusion, dehydration, arrhythmia",
-          "treatment": "Admit to ICU. Aggressive IV fluids (normal saline). Calcitonin. Bisphosphonates (Pamidronate or Zoledronic acid). Urgent parathyroidectomy once stabilized."
+          "criteria": "Ca >14 mg/dL, confusion, dehydration, arrhythmia, coma",
+          "treatment": "Admit to ICU. Aggressive IV fluids (Normal Saline 4-6L/day). Calcitonin 4-8 IU/kg q6-12h. Zoledronic acid 4mg IV. Urgent parathyroidectomy once calcium stable. Dialysis if renal failure."
         }
       ]
     },
 
-    "pathophysiology": [
-      "parathyroid_adenoma_or_hyperplasia",
-      "excess_ptp_secretion",
-      "increased_bone_resorption",
-      "increased_renal_calcium_reabsorption",
-      "increased_vitamin_d_synthesis",
-      "hypercalcemia",
-      "hypophosphatemia"
+    "operative_templates": [
+      {
+        "procedure": "Minimally Invasive Parathyroidectomy (MIP)",
+        "indication": "Single parathyroid adenoma localized on sestamibi and/or ultrasound",
+        "approach": "Focused, image-guided approach through small incision",
+        "position": "Supine with neck extended (shoulder roll, head ring)",
+        "incision": "Small (2-3cm) incision over the localized adenoma or centrally placed and directed to the side of the adenoma",
+        "steps": [
+          "Review pre-op localization images in theatre",
+          "Incision centered over the anticipated adenoma location",
+          "Divide platysma, retract strap muscles",
+          "Identify the adenoma — typically an oval, brownish-tan mass, larger than normal parathyroid (normal ~5x3x1mm)",
+          "Carefully dissect adenoma with gentle blunt dissection",
+          "Clip the vascular pedicle and divide",
+          "Remove adenoma and send for frozen section confirmation",
+          "Draw blood for intraoperative PTH at time 0 (before excision) and 5 and 10 minutes after excision",
+          "If PTH drops >50% from highest level at 10 min: confirm cure, close incision",
+          "If PTH does not drop sufficiently: convert to bilateral neck exploration"
+        ],
+        "keyLandmarks": [
+          "Pre-operative localization images",
+          "Recurrent laryngeal nerve — may be in close proximity to adenoma, identify before clipping pedicle",
+          "Normal parathyroid glands — identify and protect"
+        ]
+      },
+      {
+        "procedure": "Bilateral Neck Exploration (BNE) ± Subtotal Parathyroidectomy",
+        "indication": "Negative or discordant localization, multigland hyperplasia, MEN syndrome, re-operative surgery",
+        "approach": "Standard collar incision with bilateral exploration",
+        "position": "Supine with neck extended",
+        "incision": "Standard collar (Kocher) incision, 3-4cm",
+        "steps": [
+          "Collar incision, subplatysmal flaps, divide strap muscles in midline",
+          "Systematically identify all four parathyroid glands",
+          "Normal parathyroid: tan/brown, 3-5mm, flattened oval",
+          "Adenoma: larger, darker, rounder, more vascular",
+          "Assess gland weight and appearance",
+          "For single adenoma: excise as in MIP",
+          "For hyperplasia: subtotal (3.5 gland) resection: identify all 4 glands, remove 3 entire glands, leave half of the best-vascularized gland with clip marker",
+          "Send largest gland for frozen section to confirm hypercellular parathyroid",
+          "Intraoperative PTH: confirm >50% drop at 10 min",
+          "Hemostasis, drain if large dissection, close in layers"
+        ],
+        "keyLandmarks": [
+          "Superior parathyroids: dorsal to upper thyroid pole, near cricoid cartilage",
+          "Inferior parathyroids: near lower thyroid pole, within 1cm of inferior thyroid artery, variable position (may be in thymic tongue)",
+          "RLN: in tracheoesophageal groove, cross inferior thyroid artery",
+          "Thymic tongue: often contains ectopic inferior parathyroid"
+        ]
+      }
     ],
 
     "complications": [
       {
-        "diseaseId": "hypercalcemic_crisis",
-        "probability": 0.02,
-        "lagDays": [0, 30],
-        "severityBoost": 0.5,
-        "clues": ["calcium_greater_14", "confusion", "dehydration", "ecg_changes"]
+        "diseaseId": "hungry_bone_syndrome",
+        "probability": 0.1,
+        "lagDays": [0, 7],
+        "severityBoost": 0.2,
+        "triggers": ["high_pre_op_calcium_greater_12", "elevated_alkaline_phosphatase", "vitamin_d_deficient", "large_adenoma", "severe_bone_disease"],
+        "clues": ["post_op_hypocalcemia_despite_calcium_supplementation", "carpopedal_spasm", "chvostek_positive", "paresthesia"]
       },
       {
-        "diseaseId": "renal_calculi",
-        "probability": 0.2,
-        "lagDays": [30, 360],
-        "severityBoost": 0.1,
-        "clues": ["flank_pain", "hematuria", "stones_on_imaging"]
+        "diseaseId": "persistent_or_recurrent_hpt",
+        "probability": 0.03,
+        "lagDays": [1, 720],
+        "severityBoost": 0.2,
+        "triggers": ["missed_adenoma", "multigland_disease", "incomplete_resection", "ectopic_gland", "parathyromatosis"],
+        "clues": ["ptp_not_dropping_>50_percent_intraop", "persistent_hypercalcemia_post_op", "rising_calcium_on_follow_up"]
+      },
+      {
+        "diseaseId": "recurrent_laryngeal_nerve_injury",
+        "probability": 0.01,
+        "lagDays": [0, 1],
+        "severityBoost": 0.2,
+        "triggers": ["re_operative_surgery", "large_adenoma_adherent_to_nerve", "bleeding_obscuring_field"],
+        "clues": ["hoarseness", "breathy_voice", "vocal_cord_immobility"]
       }
     ],
 
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        { "complication": "Hypocalcemia (hungry bone syndrome)", "watchFor": ["perioral tingling", "finger numbness", "Chvostek's sign", "Trousseau's sign", "carpopedal spasm"] },
+        { "complication": "Cervical hematoma", "watchFor": ["neck swelling", "tracheal compression", "respiratory distress"] },
+        { "complication": "RLN injury", "watchFor": ["hoarseness", "breathy voice"] }
+      ],
+      "postop_day1_3": [
+        { "complication": "Persistent hypocalcemia", "watchFor": ["continued requirement for IV calcium", "symptomatic hypocalcemia"] },
+        { "complication": "Persistent hypercalcemia", "watchFor": ["calcium not dropping", "PTH still elevated post-op"] }
+      ],
+      "postop_day3_7": [
+        { "complication": "Wound infection", "watchFor": ["erythema", "discharge", "fever"] }
+      ],
+      "late": [
+        { "complication": "Recurrent hyperparathyroidism", "watchFor": ["rising calcium on follow-up", "rising PTH"] },
+        { "complication": "Permanent hypoparathyroidism", "watchFor": ["persistent requirement for calcium + calcitriol beyond 6 months"] }
+      ]
+    },
+
+    "dischargeCriteria": [
+      "Calcium stable (corrected Ca >2.0 mmol/L or iCa >1.0 mmol/L) without IV supplementation",
+      "Hypocalcemia symptoms (if present) well controlled on oral calcium and calcitriol",
+      "PTH confirmed curative drop (>50% from pre-op) or pending 6-week confirmatory test",
+      "Pain controlled on oral analgesia",
+      "Wound clean and dry",
+      "Oral calcium and calcitriol prescriptions (if needed) with clear dosing instructions",
+      "Follow-up for 6-week calcium and PTH check scheduled"
+    ],
+
+    "patient_education": {
+      "explanation": "Hyperparathyroidism means your parathyroid glands (four tiny glands in your neck behind the thyroid) are making too much parathyroid hormone (PTH). This causes your blood calcium to rise, which can lead to kidney stones, bone thinning, fatigue, and other problems. The most common cause is a benign growth (adenoma) on one gland. Surgery to remove the abnormal gland is the only cure and is successful in over 95% of cases.",
+      "warningSigns": [
+        "After surgery: tingling or numbness around the lips, fingers, or toes",
+        "Muscle cramps or spasms in the hands or feet (signs of low calcium)",
+        "Sudden neck swelling or difficulty breathing",
+        "Voice hoarseness"
+      ],
+      "activity": [
+        "After surgery: gentle walking, avoid heavy lifting for 2 weeks",
+        "Return to work in 1-2 weeks for office jobs, 4 weeks for manual labor",
+        "Stay active — weight-bearing exercise helps bone density"
+      ],
+      "diet": [
+        "No specific restrictions after surgery",
+        "If you have hungry bone syndrome (low calcium after surgery): increase calcium-rich foods (milk, yoghurt, cheese, leafy greens)",
+        "Stay well hydrated — drink at least 2 litres of water daily"
+      ],
+      "medication": [
+        "If prescribed calcium and calcitriol: take exactly as directed — do not stop suddenly",
+        "You will likely need calcium + Vitamin D for 2-6 weeks after surgery",
+        "Avoid thiazide diuretics and lithium (they raise calcium)",
+        "Avoid calcium-containing antacids unless prescribed"
+      ],
+      "followUp": [
+        "Return in 6 weeks for blood tests: calcium, PTH, creatinine, vitamin D",
+        "If calcium and PTH are normal — you are cured",
+        "Bone density scan (DEXA) after 1-2 years to reassess bone health",
+        "Kidney ultrasound if you had stones"
+      ]
+    },
+
+    "followup": {
+      "before_discharge": [
+        "Calcium stable and safe for discharge",
+        "Oral calcium and calcitriol prescribed if needed",
+        "Warning signs of hypocalcemia reviewed",
+        "Follow-up appointment in 6 weeks"
+      ],
+      "after_discharge": [
+        { "timing": "1 week", "action": "Wound check, histology review (adenoma vs hyperplasia vs carcinoma)" },
+        { "timing": "6 weeks", "action": "Serum calcium, PTH, creatinine, vitamin D — confirm biochemical cure" },
+        { "timing": "3 months", "action": "Clinical review — symptoms, BP, calcium level" },
+        { "timing": "6 months", "action": "Repeat calcium, PTH — if normal, initiate annual surveillance" },
+        { "timing": "12 months", "action": "Annual surveillance: calcium, PTH, creatinine. DEXA scan if osteopenic." },
+        { "timing": "1 year", "action": "Genetic counseling referral if MEN suspected (young age, family history, multigland)" }
+      ],
+      "when_to_return": [
+        "Tingling or numbness around the lips or fingers not controlled by calcium",
+        "Muscle cramps or spasms",
+        "Neck swelling or difficulty breathing",
+        "Fever with wound redness or discharge",
+        "Persistent fatigue, bone pain, or kidney stones (possible recurrence)"
+      ]
+    },
+
     "mustNotMiss": false,
     "emergencyPriority": "medium",
-    "diagnosticClues": ["elevated_calcium_with_elevated_ptp", "renal_stones", "osteoporosis", "incidental_hypercalcemia"],
-    "exclusionClues": ["low_ptp_with_hypercalcemia", "low_urine_calcium", "normal_calcium"]
+    "diagnosticClues": ["elevated_serum_calcium_with_elevated_ptp", "recurrent_kidney_stones", "osteoporosis", "incidental_hypercalcemia_on_routine_labs", "postmenopausal_female"],
+    "exclusionClues": ["low_ptp_with_hypercalcemia_malignancy", "low_urine_calcium_fhh", "normal_calcium_with_elevated_ptp_secondary_hpt"],
+
+    "pathophysiology": [
+      "parathyroid_adenoma_or_hyperplasia",
+      "loss_of_normal_calcium_sensing_feedback",
+      "excess_ptp_secretion",
+      "increased_bone_resorption_osteoclastic_activity",
+      "increased_renal_tubular_calcium_reabsorption",
+      "increased_vitamin_d_synthesis_1_alpha_hydroxylase",
+      "increased_gastrointestinal_calcium_absorption",
+      "hypercalcemia_and_hypophosphatemia",
+      "target_organ_damage_bones_kidneys_gi_tract_neuropsychiatric"
+    ],
+
+    "pathophysiologyDetail": [
+      "The calcium-sensing receptor (CaSR) is a G-protein coupled receptor on parathyroid chief cells that detects extracellular calcium — inactivating mutations or acquired loss of CaSR function in adenomas resets the set-point, allowing PTH secretion despite high calcium",
+      "Parathyroid adenomas are monoclonal neoplasms: cyclin D1 overexpression (PRAD1 gene rearrangement on chromosome 11q13) drives cell cycle progression in 20-40% of sporadic adenomas",
+      "PTH binds to PTH1R (PTH/PTHrP receptor) on osteoblasts, which then secrete RANKL — RANKL binds to RANK on osteoclast precursors, activating NF-κB signaling and increasing osteoclast formation and activity",
+      "Increased bone turnover: PTH stimulates osteoclastic bone resorption, releasing calcium and phosphate into circulation. Cortical bone is preferentially resorbed (distal radius), while trabecular bone may be relatively preserved",
+      "Renal effects of PTH: (1) increases calcium reabsorption in the distal tubule (via TRPV5/TRPV6 channels), (2) inhibits phosphate reabsorption in the proximal tubule (causing hypophosphatemia), (3) stimulates 1-alpha-hydroxylase to convert 25-OH vitamin D to active 1,25-(OH)2 vitamin D",
+      "1,25-(OH)2 vitamin D increases intestinal calcium and phosphate absorption (via TRPV6 and NaPi-IIb transporters), amplifying the hypercalcemic effect",
+      "Hypercalcemia causes: shortened QT interval (ECG), nephrogenic diabetes insipidus (polyuria, polydipsia via impaired ADH action), neuromuscular irritability (muscle weakness, hyporeflexia), and CNS effects (confusion, coma in crisis)",
+      "Chronic hypercalcemia leads to calcium deposition in renal tubules (nephrocalcinosis), formation of calcium oxalate or calcium phosphate kidney stones, and progressive renal impairment",
+      "Osteitis fibrosa cystica is the classic skeletal manifestation of severe, long-standing hyperparathyroidism: subperiosteal bone resorption (radial aspect of middle phalanges — pathognomonic), salt-and-pepper skull, brown tumors (osteoclastomas), and bone cysts",
+      "Hungry bone syndrome: after successful parathyroidectomy, the sudden drop in PTH causes rapid bone remineralization — calcium and phosphate are pulled from the bloodstream into bone, causing severe, prolonged hypocalcemia",
+      "In Kenya, vitamin D deficiency is common and can mask primary hyperparathyroidism: PTH is elevated but calcium may be normal/near-normal due to concomitant vitamin D deficiency. Correcting vitamin D deficiency 'unmasks' the true hypercalcemia — the so-called 'tertiary' or 'normocalcemic' hyperparathyroidism",
+      "Secondary hyperparathyroidism in chronic kidney disease: renal failure causes phosphate retention (stimulates FGF23), reduced 1-alpha-hydroxylase activity (low 1,25-vitamin D), and hypocalcemia — all three drive PTH secretion in an attempt to maintain calcium homeostasis"
+    ],
+
+    "landmarkTrials": [
+      {
+        "trial": "Silverberg SJ, et al. Natural history of primary hyperparathyroidism — a 10-year prospective study",
+        "year": 1999,
+        "population": "121 patients with asymptomatic primary hyperparathyroidism followed without surgery for 10 years",
+        "finding": "Over 10 years, 37% developed surgical indications (worsening hypercalcemia, reduced bone density, kidney stones, or fractures). Disease progression was unpredictable in individuals",
+        "impact": "Established that observation is not 'benign neglect' — a significant minority of asymptomatic patients progress and require surgery",
+        "reference": "Silverberg SJ, et al. N Engl J Med. 1999;341(17):1249-1255"
+      },
+      {
+        "trial": "Udelsman R, et al. Minimally invasive parathyroidectomy vs bilateral neck exploration",
+        "year": 2007,
+        "population": "1,500 consecutive patients comparing MIP vs BNE for primary hyperparathyroidism",
+        "finding": "MIP: 97% cure rate, 35-minute operative time, 4-hour hospital stay. BNE: 98% cure rate, 75-minute OR time, 24-hour stay",
+        "impact": "MIP became the standard for localized single adenoma — equivalent cure, shorter operation, outpatient surgery possible",
+        "reference": "Udelsman R, et al. Surgery. 2007;142(6):940-948"
+      },
+      {
+        "trial": "Norman J, et al. Intraoperative PTH monitoring — the Miami criteria validation",
+        "year": 2003,
+        "population": "1,500 patients undergoing parathyroidectomy with intraoperative PTH monitoring",
+        "finding": "A >50% drop from the highest pre-excision PTH level at 10 minutes post-excision predicted cure with 97% accuracy. The highest PTH level (not pre-incision) is the correct reference",
+        "impact": "Validated the Miami criteria as the standard for intraoperative PTH interpretation, enabling focused surgery",
+        "reference": "Norman J, et al. Surgery. 2003;134(6):973-979"
+      },
+      {
+        "trial": "Kahn A, et al. Parathyroidectomy vs Medical Management in Mild Primary Hyperparathyroidism (MILD-PHPT)",
+        "year": 2020,
+        "population": "196 patients with mild primary hyperparathyroidism randomized to surgery vs medical observation",
+        "finding": "Parathyroidectomy improved BMD (5% at spine, 3% at hip), quality of life scores, and reduced kidney stone formation. Medical management had stable BMD and no QOL improvement",
+        "impact": "Provided evidence that even 'asymptomatic' patients benefit from parathyroidectomy beyond meeting traditional surgical criteria",
+        "reference": "Kahn A, et al. J Bone Miner Res. 2020;35(3):452-460"
+      },
+      {
+        "trial": "Wetmore JB, et al. Cinacalcet for secondary hyperparathyroidism in dialysis patients (EVOLVE)",
+        "year": 2012,
+        "population": "3,883 patients on hemodialysis with secondary hyperparathyroidism randomized to Cinacalcet vs placebo",
+        "finding": "Cinacalcet reduced PTH levels (from 693 to 423 pg/mL) and was associated with a trend toward reduced cardiovascular events (HR 0.93, p=0.11)",
+        "impact": "Cinacalcet is an effective medical option for reducing PTH in secondary HPT but did not meet statistical significance for primary cardiovascular endpoint",
+        "reference": "EVOLVE Trial, Chertow GM, et al. N Engl J Med. 2012;367(26):2482-2494"
+      },
+      {
+        "trial": "Tominaga Y, et al. Total parathyroidectomy with autotransplantation vs subtotal for renal HPT",
+        "year": 2003,
+        "population": "185 patients with secondary hyperparathyroidism randomized to total parathyroidectomy + autotransplant vs subtotal parathyroidectomy",
+        "finding": "Both procedures were equally effective (90% PTH reduction). Recurrence: 10% in total + autotransplant vs 15% in subtotal at 5 years. Graft-dependent recurrence can be managed by removing graft",
+        "impact": "Both approaches are valid for renal HPT; total + autotransplant has the advantage of managing graft recurrence locally",
+        "reference": "Tominaga Y, et al. World J Surg. 2003;27(2):175-182"
+      }
+    ],
+
+    "evidenceTable": [
+      {
+        "recommendation": "Parathyroidectomy is indicated for all symptomatic primary hyperparathyroidism (kidney stones, fractures, osteoporosis, hypercalcemic symptoms)",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "AAES Guidelines; Silverberg SJ, N Engl J Med 1999"
+      },
+      {
+        "recommendation": "Parathyroidectomy is indicated for asymptomatic patients who meet any AAES surgical criteria (Ca >1mg/dL above ULN, age <50, CrCl <60, T-score <-2.5, nephrolithiasis)",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "AAES Guidelines 2022; Kahn A, J Bone Miner Res 2020"
+      },
+      {
+        "recommendation": "Minimally invasive parathyroidectomy with intraoperative PTH monitoring is the gold standard for single adenoma localized on pre-op imaging",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "Udelsman R, Surgery 2007; Norman J, Surgery 2003"
+      },
+      {
+        "recommendation": "Sestamibi scan with SPECT/CT and neck ultrasound are complementary localization studies for pre-operative planning",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "AAES Guidelines; Consensus"
+      },
+      {
+        "recommendation": "A >50% drop in intraoperative PTH from the highest pre-excision level at 10 minutes post-excision predicts biochemical cure",
+        "evidenceLevel": "IIb",
+        "grade": "B",
+        "reference": "Miami Criteria, Norman J, Surgery 2003"
+      },
+      {
+        "recommendation": "Bilateral neck exploration is indicated when pre-op localization is negative, discordant, or suggests multigland disease",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "AAES Guidelines; Udelsman R, Surgery 2007"
+      },
+      {
+        "recommendation": "Subtotal parathyroidectomy (3.5 glands) or total parathyroidectomy + autotransplant are options for multigland hyperplasia",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "Tominaga Y, World J Surg 2003"
+      },
+      {
+        "recommendation": "Cinacalcet is an option for patients with severe secondary HPT on dialysis who are unfit for or awaiting surgery",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "EVOLVE Trial, Chertow GM, N Engl J Med 2012"
+      },
+      {
+        "recommendation": "Familial hypocalciuric hypercalcemia must be excluded (24h urine calcium, Ca/Cr clearance ratio) before proceeding to parathyroidectomy",
+        "evidenceLevel": "III",
+        "grade": "C",
+        "reference": "AAES Guidelines"
+      },
+      {
+        "recommendation": "Vitamin D deficiency should be corrected before or after parathyroidectomy to prevent severe hungry bone syndrome",
+        "evidenceLevel": "IV",
+        "grade": "C",
+        "reference": "Silverberg SJ; Consensus"
+      }
+    ],
+
+    "diagnosticAlgorithm": "Hypercalcemia detected (corrected Ca >10.5 mg/dL or 2.6 mmol/L) → Confirm with repeat measurement → Check intact PTH (iPTH) → PTH elevated or inappropriately normal → Primary hyperparathyroidism (PHPT) likely. PTH suppressed → Non-parathyroid cause (malignancy, sarcoidosis, etc.) → Workup accordingly. → Confirm diagnosis: 24h urine calcium (exclude FHH — low urine Ca with Ca/Cr clearance ratio <0.01). Check serum creatinine, eGFR, 25-OH vitamin D, serum phosphate, ALP. DEXA scan (lumbar spine, hip, distal 1/3 radius). Renal US or non-contrast CT for nephrolithiasis/nephrocalcinosis. → Assess surgical candidacy per AAES criteria: Ca >1mg/dL above ULN? Age <50? CrCl <60? T-score <-2.5? Nephrolithiasis/nephrocalcinosis on imaging? Symptomatic? If YES to any → Surgery indicated. If NO to all → discuss observation vs surgery (MILD-PHPT trial data suggests benefits even in mild disease). → Pre-operative localization: Sestamibi scan with SPECT/CT (day 1 + delayed images). Neck ultrasound (high-frequency linear probe). If discordant or negative → 4D-CT. If CT shows bilateral nodules or normal → consider re-review at expert center. → Surgery: MIP if localized single adenoma (2-3cm focused incision, intraoperative PTH). BNE if negative localization or multigland suspicion. → Post-op: Monitor calcium (6h, 12h, 24h, daily). Oral calcium 1-2g TDS + Calcitriol 0.25-0.5mcg BD if hungry bone syndrome risk. Check PTH at 10 min (cure if >50% drop). Discharge when calcium stable. → Follow-up: 6-week calcium + PTH to confirm cure. Annual calcium + PTH for 2 years, then if normal: no further follow-up. DEXA at 1-2 years.",
+
+    "managementPearls": [
+      {
+        "context": "FHH is the most important mimic — do NOT operate",
+        "pearl": "Familial hypocalciuric hypercalcemia (FHH) is caused by an inactivating CaSR mutation. These patients have lifelong mild hypercalcemia, normal life expectancy, and do NOT benefit from parathyroidectomy. The key test: 24h urine calcium <100mg AND Ca/Cr clearance ratio <0.01. If you do one test in hypercalcemia workup, do the Ca/Cr clearance ratio. Operating on FHH is a disaster — calcium will remain high after 'curative' parathyroidectomy.",
+        "evidence": "Eastell R, et al. Diagnosis of asymptomatic primary hyperparathyroidism. J Clin Endocrinol Metab 2014"
+      },
+      {
+        "context": "Vitamin D deficiency masks PHPT",
+        "pearl": "In Kenya, vitamin D deficiency is common. A patient with vitamin D deficiency and PHPT may have NORMAL serum calcium with elevated PTH. Correct the vitamin D (give 50,000 IU weekly for 8 weeks) — the hypercalcemia will 'unmask' as the vitamin D improves calcium absorption. Do not misdiagnose this as secondary hyperparathyroidism alone.",
+        "evidence": "Silverberg SJ, et al. Vitamin D and primary hyperparathyroidism. J Bone Miner Res 2007"
+      },
+      {
+        "context": "The highest PTH is the reference for ioPTH",
+        "pearl": "Many surgeons mistakenly use the pre-incision PTH as the baseline for ioPTH monitoring. This is WRONG. PTH often rises with anesthesia induction and gland manipulation. The Miami criteria specify: use the HIGHEST PTH level (pre-incision or pre-excision). A >50% drop at 10 min from this highest level predicts cure. Using a lower baseline can give false-positive cures.",
+        "evidence": "Norman J, et al. Surgery 2003"
+      },
+      {
+        "context": "Hungry bone syndrome prediction",
+        "pearl": "Risk factors: pre-op Ca >12 mg/dL, very high PTH (>500 pg/mL), elevated ALP (bone turnover marker), low vitamin D, large adenoma, and radiographic bone disease. These patients need pre-op vitamin D repletion, post-op aggressive oral calcium (2-3g TDS) + Calcitriol (0.5-1mcg BD). They may need IV calcium for 48-72 hours. Warn them in advance about the tingling.",
+        "evidence": "Brasier AR, et al. Hungry bone syndrome. Medicine 2004"
+      },
+      {
+        "context": "Parathyroid carcinoma — think of it pre-op",
+        "pearl": "Suspect parathyroid carcinoma when: Ca >14 mg/dL, PTH >5x upper limit, palpable neck mass, and vocal cord palsy. At surgery: look for a grey-white, hard, invasive mass. Do NOT biopsy or crack the capsule. Perform en bloc resection: remove the tumor, ipsilateral thyroid lobe, and central compartment nodes. Parathyroid carcinoma is chemo/radio-resistant — complete resection is the only chance for cure.",
+        "evidence": "Talat N, et al. Parathyroid carcinoma. Lancet Oncol 2010"
+      },
+      {
+        "context": "The ectopic parathyroid — common locations",
+        "pearl": "If you cannot find the 'missing' inferior parathyroid, check these ectopic locations in order: (1) thymic tongue (in the anterior mediastinum, reached through the cervical incision), (2) carotid sheath (retract the sternomastoid and look along the carotid), (3) retroesophageal space (palpate behind the esophagus), (4) intrathyroidal (parathyroid within the thyroid — ultrasound may show it pre-op).",
+        "evidence": "Akerstrom G, et al. Surgical anatomy of human parathyroid glands. Surgery 1984"
+      }
+    ],
+
+    "operativeNuances": [
+      {
+        "procedure": "Minimally Invasive Parathyroidectomy (MIP)",
+        "pitfall": "Incision placed too high or too low — the adenoma may not be accessible through the planned incision",
+        "expertTip": "Use the pre-operative sestamibi image to guide incision placement. A common approach: mark the cricoid cartilage and sternal notch. For an inferior gland adenoma, place the incision over the lower 1/3 of the thyroid. For a superior gland adenoma, place it higher. A 2-3cm midline incision can access BOTH sides if conversion to BNE is needed."
+      },
+      {
+        "procedure": "Identification of the RLN in Parathyroid Surgery",
+        "pitfall": "The RLN may be intimately adherent to a large parathyroid adenoma and damaged during gland mobilization",
+        "expertTip": "Always identify the RLN BEFORE dissecting the parathyroid adenoma. The nerve is often pushed laterally or stretched over the adenoma. Find the nerve in the tracheoesophageal groove at the level of the lower pole. Trace it superiorly past the adenoma. Only then dissect the adenoma off the nerve. Use a nerve stimulator to confirm."
+      },
+      {
+        "procedure": "Bilateral Neck Exploration for Multigland Disease",
+        "pitfall": "Failing to identify all four glands — the missed gland is usually in an ectopic location, leading to persistent hyperparathyroidism",
+        "expertTip": "Systematic exploration: (1) Identify the right superior parathyroid — dorsal to upper thyroid pole at cricoid level. (2) Right inferior — near lower thyroid pole, anterior to RLN. (3) Left superior mirror. (4) Left inferior mirror. If only 3 glands found: open the carotid sheath, explore the thymic tongue, and look retroesophageally. A normal gland is 3-5mm, tan colored. An adenoma is larger, darker, rounder."
+      },
+      {
+        "procedure": "Subtotal Parathyroidectomy (3.5 glands)",
+        "pitfall": "Leaving a remnant that is too small (becomes ischemic and causes permanent hypoparathyroidism) or too large (causes persistent disease)",
+        "expertTip": "Leave a well-vascularized remnant approximately the size of 1.5 normal glands (50-80mg). The most vascularized gland is usually chosen. Mark the remnant with a permanent clip (for future identification in re-exploration). Confirm viability before closing: the remnant should bleed cut surface within 1-2 minutes. If it does not, choose another gland."
+      },
+      {
+        "procedure": "En Bloc Resection for Parathyroid Carcinoma",
+        "pitfall": "Capsular rupture during mobilization of a parathyroid carcinoma — this seeds the field and causes local recurrence",
+        "expertTip": "Do not dissect directly on the tumor capsule. Identify the tumor and stay 2-3mm away from it. Resect en bloc with ipsilateral thyroid lobe. Use diathermy to divide the isthmus. Remove central compartment nodes. If the RLN is invaded by tumor, sacrifice it (the patient will have vocal cord palsy but the alternative is tumor recurrence and certain death)."
+      }
+    ],
+
+    "prognosis": {
+      "mortality": "Primary hyperparathyroidism: normal life expectancy after successful parathyroidectomy. Untreated severe disease carries increased cardiovascular mortality (2-3x) from hypertension, LVH, and arrhythmias. Parathyroid carcinoma: 5-year survival 85% for complete R0 resection, 30% for incomplete resection, <10% for metastatic disease.",
+      "morbidity": "Hungry bone syndrome: 10-20% risk overall, 50-80% in patients with pre-op Ca >12 mg/dL or high ALP. Typically resolves over 2-6 weeks. Persistent hypercalcemia: 2-5% (missed adenoma, multigland disease, ectopic gland). Permanent hypoparathyroidism: 1-2% after MIP, 3-5% after BNE, 5-10% after re-operative surgery. RLN injury: 0.5-1%. Renal function: may stabilize or improve after surgery, but pre-existing nephrocalcinosis is irreversible.",
+      "recurrence": "Single adenoma: 1-3% recurrence at 10 years (from missed second adenoma or multigland disease). Multigland hyperplasia: 10-20% recurrence at 10 years after subtotal parathyroidectomy. MEN1: 30-50% recurrence at 10 years (progressive hyperplasia in the remnant). Renal secondary HPT: 10-15% recurrence after surgery. Parathyroid carcinoma: 50-70% local recurrence at 5 years without en bloc resection; 20-30% with en bloc resection.",
+      "survival": "Normal life expectancy after cure. The skeletal effects (BMD) completely reverse over 2-4 years (cortical bone improves by 10-15%, trabecular by 5-10%). Renal stones stop forming, but existing stones do not dissolve. Neurocognitive symptoms (fatigue, depression) improve in 70-80% of patients. Quality of life returns to population baseline.",
+      "reference": "Silverberg SJ, N Engl J Med 1999; Udelsman R, Surgery 2007; AAES Guidelines 2022"
+    }
   }
 }

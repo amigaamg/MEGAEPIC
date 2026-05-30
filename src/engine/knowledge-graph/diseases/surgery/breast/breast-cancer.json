@@ -3,32 +3,87 @@
     "id": "breast_cancer",
     "name": "Breast Cancer",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "breast-surgery",
     "agePeak_months": [480, 720],
-    "note": "Most common cancer in women. Presents as breast lump, skin changes, or axillary node. Multidisciplinary management.",
+    "note": "Most common cancer in women worldwide and in Kenya. Late presentation is common — many patients present with large fungating masses or fixed axillary nodes. In Kenya, breast cancer is the leading cancer among women with about 5,000 new cases per year. Health-seeking delays, cultural beliefs, and limited access to mammography contribute to advanced stage at diagnosis. Triple assessment (clinical + imaging + biopsy) is the diagnostic standard.",
     "prevalenceWeight": 0.7,
-    "syndromeTags": ["breast_mass", "breast_change", "axillary_lymphadenopathy"],
+    "syndromeTags": ["breast_mass", "breast_change", "axillary_lymphadenopathy", "cancer"],
+
+    "presentingComplaints": [
+      "Breast lump",
+      "Lump in the armpit",
+      "Nipple discharge (blood-stained)",
+      "Skin changes on the breast — dimpling, orange peel",
+      "Nipple pulled inwards or changed shape",
+      "Breast pain or discomfort",
+      "Sores or wound on the breast that will not heal"
+    ],
 
     "severityAssessment": {
       "immediateDangerSigns": [
         { "sign": "inflammatory_carcinoma", "weight": 8 },
         { "sign": "fungating_mass", "weight": 7 },
         { "sign": "spinal_cord_compression", "weight": 10 },
-        { "sign": "avpu_abnormal", "weight": 10 }
+        { "sign": "avpu_abnormal", "weight": 10 },
+        { "sign": "superior_vena_cava_obstruction", "weight": 9 }
       ],
       "severeCriteria": {
         "anyDangerSign": true,
         "additionalCriteria": [
           { "sign": "distant_metastases", "weight": 9 },
           { "sign": "fixed_axillary_nodes", "weight": 7 },
-          { "sign": "chest_wall_invasion", "weight": 7 }
+          { "sign": "chest_wall_invasion", "weight": 7 },
+          { "sign": "tumor_size_greater_5cm", "weight": 6 }
         ]
       },
       "nonSevereCriteria": {
         "hasIndrawingOrFastBreathing": false,
         "noDangerSigns": true
       },
-      "severityLabel": "Metastatic/fungating/inflammatory -> SEVERE; early localized -> NON-SEVERE"
+      "severityLabel": "Metastatic/fungating/inflammatory/locally advanced -> SEVERE; early localized (T1-T2, N0) -> NON-SEVERE"
     },
+
+    "history_questions": [
+      { "question": "When did you first notice the breast lump?", "weight": 10 },
+      { "question": "Did you notice the lump yourself or was it found during examination?", "weight": 7 },
+      { "question": "Has the lump been growing progressively?", "weight": 8 },
+      { "question": "Do you have any pain in the breast or lump?", "weight": 5 },
+      { "question": "Have you noticed any discharge from the nipple — what colour?", "weight": 7 },
+      { "question": "Has your nipple changed shape or pulled in?", "weight": 6 },
+      { "question": "Have you noticed any skin changes like dimpling or orange peel?", "weight": 7 },
+      { "question": "Do you have a lump in your armpit?", "weight": 8 },
+      { "question": "Have you lost weight unintentionally in the last few months?", "weight": 6 },
+      { "question": "Do you have any bone pain (back, hips, ribs)?", "weight": 7 },
+      { "question": "Have you had any difficulty breathing or cough?", "weight": 5 },
+      { "question": "Do you have headaches or any neurological symptoms?", "weight": 5 },
+      { "question": "Have you ever had a breast biopsy or surgery before?", "weight": 5 },
+      { "question": "Is there any family history of breast or ovarian cancer?", "weight": 8 },
+      { "question": "How old were you when you had your first period?", "weight": 4 },
+      { "question": "How old were you at first pregnancy and delivery?", "weight": 4 },
+      { "question": "Have you breastfed your children — for how long?", "weight": 3 },
+      { "question": "Do you use hormonal contraception or have you used HRT?", "weight": 4 },
+      { "question": "Do you drink alcohol or smoke?", "weight": 4 },
+      { "question": "Have you seen a traditional healer or used herbal treatments?", "weight": 5 },
+      { "question": "How many children have you given birth to and at what age was your first pregnancy?", "weight": 6 },
+      { "question": "Did you breastfeed your children and for how long each?", "weight": 5 },
+      { "question": "Are you currently using hormonal contraception — pills, injectables, or implant?", "weight": 5 },
+      { "question": "Have you ever had a mammogram or breast ultrasound before now?", "weight": 6 },
+      { "question": "What made you decide to come to hospital now rather than earlier?", "weight": 5 },
+      { "question": "Did you consult a traditional healer before coming to hospital?", "weight": 5 },
+      { "question": "Do you have any difficulty breathing, especially when lying flat?", "weight": 6 },
+      { "question": "Do you have any persistent cough or coughing up blood?", "weight": 5 },
+      { "question": "Do you have any headaches, double vision, or fits?", "weight": 5 },
+      { "question": "Have you ever been tested for HIV? What is your status?", "weight": 6 },
+      { "question": "Are you on any long-term medications (including ARVs, steroids, or traditional medicines)?", "weight": 4 },
+      { "question": "Do you have a history of diabetes, hypertension, or any chronic illness?", "weight": 4 },
+      { "question": "How is your appetite and have you lost weight recently?", "weight": 5 },
+      { "question": "Can you still do your daily work or has the illness affected your function?", "weight": 4 },
+      { "question": "Who will support you if you need surgery or hospital stay?", "weight": 4 },
+      { "question": "Do you have any religious or cultural concerns about mastectomy or cancer treatment?", "weight": 5 },
+      { "question": "Have you ever had a biopsy or fine needle aspiration of this lump?", "weight": 7 },
+      { "question": "Do you know anyone in your family or community with breast cancer?", "weight": 5 }
+    ],
 
     "historyFeatures": [
       { "symptomId": "breast_lump", "weight": 5 },
@@ -41,6 +96,38 @@
       { "symptomId": "family_history_of_breast_cancer", "weight": 4 }
     ],
 
+    "examination_findings": [
+      { "finding": "Palpable breast mass — hard, irregular, non-tender", "weight": 10 },
+      { "finding": "Axillary lymphadenopathy — firm, fixed, matted nodes", "weight": 9 },
+      { "finding": "Skin dimpling or tethering", "weight": 8 },
+      { "finding": "Peau d'orange (orange peel) appearance", "weight": 8 },
+      { "finding": "Nipple retraction or deviation", "weight": 7 },
+      { "finding": "Blood-stained nipple discharge on expression", "weight": 7 },
+      { "finding": "Ulceration or fungating mass", "weight": 8 },
+      { "finding": "Mass fixed to chest wall or pectoral muscle", "weight": 7 },
+      { "finding": "Supraclavicular lymphadenopathy", "weight": 6 },
+      { "finding": "Breast asymmetry", "weight": 5 },
+      { "finding": "Edema of the arm (lymphoedema)", "weight": 5 },
+      { "finding": "Hepatomegaly (if liver metastases)", "weight": 4 },
+      { "finding": "Spinal tenderness (if bone metastases)", "weight": 4 },
+      { "finding": "Pleural effusion signs (reduced breath sounds)", "weight": 3 },
+      { "finding": "Contralateral breast mass (bilateral disease)", "weight": 4 },
+      { "finding": "Sign of Leser-Trélat — sudden eruption of multiple seborrheic keratoses (paraneoplastic)", "weight": 3 },
+      { "finding": "Carcinoma erysipeloides — erythematous, erysipelas-like skin infiltration with raised edge", "weight": 6 },
+      { "finding": "Pagetic skin changes on nipple-areola complex — erythematous, eczematous, weeping lesion", "weight": 6 },
+      { "finding": "Nipple retraction — recent onset, unilateral — suggests invasive carcinoma pulling on Cooper's ligaments", "weight": 7 },
+      { "finding": "Chest wall fixation — mass does not move with pectoral muscle contraction (Pectoral fixity test positive)", "weight": 7 },
+      { "finding": "Supraclavicular node (Virchow's node) — left-sided suggests advanced disease with thoracic duct involvement", "weight": 6 },
+      { "finding": "Arm lymphedema — ipsilateral, pitting or non-pitting, suggests axillary involvement or prior surgery", "weight": 5 },
+      { "finding": "Inflammatory skin changes — diffuse erythema, warmth, peau d'orange with no intervening normal skin", "weight": 8 },
+      { "finding": "Dimpling on compression (Cooper's ligament sign) — positive if skin dimples when breast tissue is compressed", "weight": 5 },
+      { "finding": "Satellite skin nodules — intradermal or subcutaneous deposits, confirm metastatic spread", "weight": 6 },
+      { "finding": "Hepatomegaly — firm, nodular liver edge suggests hepatic metastases", "weight": 4 },
+      { "finding": "Pleural effusion — stony dullness, reduced breath sounds suggests pleural metastases", "weight": 4 },
+      { "finding": "Bone tenderness — over spine, ribs, long bones — suggests skeletal metastases", "weight": 4 },
+      { "finding": "Spinal tenderness with neurological deficit — suggests spinal cord compression — EMERGENCY", "weight": 7 }
+    ],
+
     "examFeatures": [
       { "signId": "palpable_breast_mass", "baseWeight": 5, "doubleWeight": true },
       { "signId": "axillary_lymphadenopathy", "baseWeight": 4 },
@@ -51,6 +138,17 @@
       { "signId": "contralateral_breast_exam", "baseWeight": 2 }
     ],
 
+    "bedside_scores": {
+      "name": "NPI (Nottingham Prognostic Index)",
+      "maxPoints": 10,
+      "components": [
+        { "name": "Tumor size (cm) × 0.2", "points": "continuous" },
+        { "name": "Lymph node stage (1-3)", "points": 3 },
+        { "name": "Tumor grade (1-3)", "points": 3 }
+      ],
+      "interpretation": "NPI = (0.2 × size in cm) + node stage + grade. Excellent: <3.4; Good: 3.4-5.4; Moderate: 5.41-6.0; Poor: >6.0. Guides adjuvant therapy decisions."
+    },
+
     "riskFactors": [
       { "id": "age_over_50", "multiplier": 3.0 },
       { "id": "family_history_first_degree", "multiplier": 2.5 },
@@ -60,7 +158,8 @@
       { "id": "hormone_replacement_therapy", "multiplier": 1.5 },
       { "id": "obesity_postmenopausal", "multiplier": 1.5 },
       { "id": "alcohol_consumption", "multiplier": 1.3 },
-      { "id": "previous_breast_cancer", "multiplier": 3.0 }
+      { "id": "previous_breast_cancer", "multiplier": 3.0 },
+      { "id": "dense_breast_tissue", "multiplier": 1.5 }
     ],
 
     "subtypes": [
@@ -110,44 +209,203 @@
           { "feature": "rapid_progression", "weight": 5 }
         ],
         "management": "Neoadjuvant chemotherapy. Modified radical mastectomy. Post-mastectomy radiotherapy. Endocrine therapy and targeted therapy per receptor status."
+      },
+      {
+        "id": "mucinous_colloid_carcinoma",
+        "name": "Mucinous (Colloid) Carcinoma",
+        "prevalenceModifier": 0.02,
+        "keyFeatures": [
+          { "feature": "mucin_production", "weight": 5 },
+          { "feature": "older_patients_>60_years", "weight": 4 },
+          { "feature": "well_circumscribed_mass_mimicking_benign", "weight": 4 },
+          { "feature": "indolent_course_favorable_prognosis", "weight": 4 },
+          { "feature": "er_positive_her2_negative", "weight": 4 }
+        ],
+        "management": "Breast-conserving surgery if possible. Sentinel node biopsy. Endocrine therapy. Generally favorable prognosis with excellent survival."
+      },
+      {
+        "id": "metaplastic_breast_cancer",
+        "name": "Metaplastic Breast Carcinoma",
+        "prevalenceModifier": 0.01,
+        "keyFeatures": [
+          { "feature": "triple_negative_phenotype", "weight": 5 },
+          { "feature": "heterogeneous_sarcomatoid_morphology", "weight": 4 },
+          { "feature": "rapid_growth", "weight": 4 },
+          { "feature": "chemoresistant", "weight": 4 },
+          { "feature": "high_recurrence_rate", "weight": 4 }
+        ],
+        "management": "Surgical resection with clear margins. Neoadjuvant chemotherapy (limited response). Post-mastectomy radiotherapy. Clinical trials for targeted therapy. Close surveillance due to high recurrence risk."
+      },
+      {
+        "id": "male_breast_cancer",
+        "name": "Male Breast Cancer",
+        "prevalenceModifier": 0.01,
+        "keyFeatures": [
+          { "feature": "rare_<1_percent_of_all_breast_cancer", "weight": 5 },
+          { "feature": "er_positive_in_90_percent", "weight": 5 },
+          { "feature": "brca2_mutation_strong_association", "weight": 5 },
+          { "feature": "late_presentation_common_in_kenya", "weight": 4 },
+          { "feature": "gynecomastia_as_risk_factor", "weight": 3 },
+          { "feature": "klinefelter_syndrome_association", "weight": 3 }
+        ],
+        "management": "Modified radical mastectomy (breast-conserving surgery rarely possible due to limited breast tissue). Sentinel node biopsy or ALND. Adjuvant endocrine therapy (Tamoxifen — first-line, not AI). Genetic counseling for BRCA2. Surveillance for contralateral breast cancer."
       }
     ],
 
     "mimics": [
       {
         "diseaseId": "fibroadenoma",
-        "discriminators": ["younger_age", "smooth_mobile", "well_defined", "no_lymphadenopathy"]
+        "discriminators": ["younger_age_15_35", "smooth_mobile", "well_defined", "no_lymphadenopathy", "no_skin_changes"],
+        "ruleOutTests": ["breast_ultrasound", "core_biopsy"]
       },
       {
         "diseaseId": "breast_abscess_mastitis",
-        "discriminators": ["painful", "red_warm", "fever", "responds_to_antibiotics"]
+        "discriminators": ["painful", "red_warm", "fever", "responds_to_antibiotics", "fluctuant"],
+        "ruleOutTests": ["breast_ultrasound", "needle_aspiration", "trial_of_antibiotics"]
       },
       {
         "diseaseId": "phyllodes_tumor",
-        "discriminators": ["rapid_growth", "large_size", "no_lymph_nodes", "cystic_spaces"]
+        "discriminators": ["rapid_growth", "large_size_often_>5cm", "no_lymph_nodes", "cystic_spaces_on_us", "age_40_50"],
+        "ruleOutTests": ["core_biopsy", "histology"]
+      },
+      {
+        "diseaseId": "fat_necrosis",
+        "discriminators": ["history_of_trauma", "no_growth", "may_resolve", "benign_features_on_imaging"],
+        "ruleOutTests": ["breast_ultrasound", "core_biopsy"]
+      },
+      {
+        "diseaseId": "granular_cell_tumor_breast",
+        "discriminators": ["firm_mass_that_mimics_carcinoma", "falsely_hard_on_palpation", "benign_on_core_biopsy", "s100_positive", "no_lymph_nodes"],
+        "ruleOutTests": ["core_biopsy_with_immunohistochemistry", "excision_biopsy"]
+      },
+      {
+        "diseaseId": "breast_lymphoma_primary",
+        "discriminators": ["rapid_growth", "no_skin_tethering_despite_large_size", "multiple_quadrants", "bilateral_possible", "B_symptoms_fever_night_sweats"],
+        "ruleOutTests": ["core_biopsy_with_flow_cytometry", "PET_CT", "systemic_workup"]
+      },
+      {
+        "diseaseId": "diabetic_mastopathy",
+        "discriminators": ["known_type_1_diabetes", "younger_patient", "bilateral_dense_irregular_mass", "no_lymph_nodes", "lymphocytic_lobulitis_on_biopsy"],
+        "ruleOutTests": ["core_biopsy_shows_lymphocytic_lobulitis", "imaging_not_classic"]
+      },
+      {
+        "diseaseId": "pseudoangiomatous_stromal_hyperplasia",
+        "discriminators": ["discrete_mass_in_premenopausal_women", "benign_on_biopsy", "may_be_multiple", "no_malignant_potential"],
+        "ruleOutTests": ["core_biopsy", "excision_biopsy"]
+      },
+      {
+        "diseaseId": "sarcoidosis_breast_involvement",
+        "discriminators": ["known_sarcoidosis", "non_caseating_granulomas", "bilateral_hilar_lymphadenopathy", "elevated_ACE", "no_malignant_cells"],
+        "ruleOutTests": ["core_biopsy", "chest_CT", "ACE_levels"]
+      },
+      {
+        "diseaseId": "metastatic_non_breast_malignancy_to_breast",
+        "discriminators": ["known_primary_cancer_lung_melanoma_ovary_lymphoma", "no_insitu_component", "multiple_masses", "bilateral", "imaging_not_typical_for_primary_breast_cancer"],
+        "ruleOutTests": ["immunohistochemistry_profile_different_from_breast_primary", "PET_CT"]
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "Clinical breast exam", "priority": "immediate", "yield": 0.6, "indication": "TNM clinical staging" }
+        { "name": "Clinical breast examination", "priority": "immediate", "yield": 0.6, "indication": "TNM clinical staging — document size, skin, nodes" },
+        { "name": "Assessment of bilateral breasts and axillae", "priority": "immediate", "yield": 0.4, "indication": "Detect bilaterality, contralateral disease" }
       ],
       "laboratory": [
-        { "name": "CBC, LFTs, ALP", "priority": "high", "yield": 0.3, "indication": "baseline, metastatic screen" },
-        { "name": "Tumor markers (CA 15-3, CEA)", "priority": "low", "yield": 0.3, "indication": "monitoring, not diagnostic" }
+        { "name": "CBC", "priority": "high", "yield": 0.3, "indication": "Baseline — anemia, thrombocytopenia from marrow involvement" },
+        { "name": "LFTs, ALP, GGT", "priority": "high", "yield": 0.4, "indication": "Liver metastases screen — elevated ALP suggests bone/liver mets" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.2, "indication": "Baseline before chemotherapy" },
+        { "name": "Tumor markers (CA 15-3, CEA)", "priority": "low", "yield": 0.3, "indication": "Monitoring response to treatment, not diagnostic" },
+        { "name": "HIV test", "priority": "medium", "yield": 0.1, "indication": "Prevalence in Kenya — affects treatment decisions" }
       ],
       "imaging": [
-        { "name": "Mammogram + US Breast", "priority": "immediate", "yield": 0.85, "indication": "detection and characterization" },
-        { "name": "Core needle biopsy with histology + IHC", "priority": "immediate", "yield": 0.98, "indication": "definitive diagnosis" },
-        { "name": "Breast MRI", "priority": "medium", "yield": 0.9, "indication": "high-risk screening, extent of disease" },
-        { "name": "CT Chest/Abdomen/Pelvis", "priority": "high", "yield": 0.6, "indication": "staging if node positive or symptoms" },
-        { "name": "Bone scan / PET-CT", "priority": "medium", "yield": 0.7, "indication": "if bone pain or advanced disease" },
-        { "name": "Sentinel lymph node biopsy", "priority": "medium", "yield": 0.95, "indication": "axillary staging" }
+        { "name": "Mammogram + Breast Ultrasound", "priority": "immediate", "yield": 0.85, "indication": "First-line imaging — detect, characterize, guide biopsy" },
+        { "name": "Core needle biopsy with histology + IHC (ER, PR, HER2, Ki-67)", "priority": "immediate", "yield": 0.98, "indication": "Definitive diagnosis — tissue diagnosis with receptor status" },
+        { "name": "Breast MRI", "priority": "medium", "yield": 0.9, "indication": "High-risk screening, extent of disease, ILC, occult primary" },
+        { "name": "CT Chest/Abdomen/Pelvis with contrast", "priority": "high", "yield": 0.6, "indication": "Staging if node positive or symptoms of metastasis" },
+        { "name": "Bone scan (Tc-99m MDP)", "priority": "medium", "yield": 0.7, "indication": "Bone metastases if bone pain or elevated ALP" },
+        { "name": "PET/CT", "priority": "medium", "yield": 0.85, "indication": "Advanced disease, equivocal findings, recurrence detection" },
+        { "name": "Sentinel lymph node biopsy", "priority": "medium", "yield": 0.95, "indication": "Axillary staging for clinically node-negative patients" },
+        { "name": "Chest X-Ray", "priority": "medium", "yield": 0.3, "indication": "Baseline — lung metastases, pleural effusion" }
       ]
     },
 
+    "interpretation_rules": {
+      "core_biopsy": {
+        "invasive_carcinoma": { "present": "breast_cancer_confirmed +50" },
+        "ductal_carcinoma_in_situ": { "present": "dcis +30" },
+        "er_positive": { "present": "endocrine_therapy_benefit +30" },
+        "her2_positive": { "present": "her2_targeted_therapy +30" },
+        "triple_negative": { "present": "chemotherapy_mainstay +20" },
+        "benign": { "present": "malignancy -40", "absent": "continued_surveillance +10" }
+      },
+      "mammogram": {
+        "spiculated_mass": { "present": "malignancy +40" },
+        "microcalcifications_pleomorphic": { "present": "malignancy +35" },
+        "architectural_distortion": { "present": "malignancy +25" },
+        "asymmetric_density": { "present": "further_evaluation +15" },
+        "well_defined_round_mass": { "present": "benign_likely -10" },
+        "tirards_5": { "present": "malignancy_highly_suspicious +50" }
+      }
+    },
+
     "management": {
-      "protocolReference": "NCCN/St. Gallen Guidelines for Breast Cancer",
+      "protocolReference": "NCCN / St. Gallen Guidelines for Breast Cancer (Kenya National Cancer Guidelines aligned)",
+      "initial": {
+        "resuscitation": [
+          "Not typically required — outpatient triple assessment",
+          "If fungating: wound care, antibiotic cover, cross-match if bleeding",
+          "If spinal cord compression suspected: high-dose steroids, urgent MRI, oncology referral",
+          "If hypercalcemia: IV fluids, bisphosphonates"
+        ]
+      },
+      "definitive": {
+        "surgical": [
+          "Breast-conserving surgery (lumpectomy + whole breast RT) for early disease",
+          "Simple mastectomy for multifocal/multicentric disease or patient preference",
+          "Modified radical mastectomy (MRM) for node-positive disease",
+          "Sentinel lymph node biopsy for clinically node-negative axilla",
+          "Axillary lymph node dissection (ALND) for positive sentinel node or clinically positive axilla",
+          "Immediate or delayed breast reconstruction options discussed pre-operatively"
+        ],
+        "nonOperative": [
+          "Neoadjuvant chemotherapy for locally advanced, inflammatory, or triple-negative/HER2+",
+          "Adjuvant chemotherapy per molecular subtype and genomic profiling",
+          "Endocrine therapy (Tamoxifen pre-menopausal, Aromatase inhibitors post-menopausal) for ER+",
+          "HER2-targeted therapy (Trastuzumab, Pertuzumab, T-DM1) for HER2+",
+          "Radiotherapy: whole breast after BCS, chest wall after mastectomy if high risk, nodal basins"
+        ]
+      },
+      "postop": {
+        "immediate": [
+          "Monitor wound, drain output (if ALND)",
+          "Arm exercises starting day 1 post-op — avoid abduction >90° for 2 weeks",
+          "Analgesia: Paracetamol + NSAIDs + weak opioids PRN",
+          "Antibiotics: single dose prophylaxis only unless contaminated",
+          "VTE prophylaxis: SC enoxaparin until fully mobile",
+          "Drain removal when output <30ml/day for 2 consecutive days"
+        ],
+        "day1_3": [
+          "Wound inspection daily — check for hematoma, infection",
+          "Continue arm exercises (pendulum, wall climbing)",
+          "Sentinel node biopsy results — plan ALND if positive",
+          "Histology and IHC results — discuss at MDT",
+          "Counsel on adjuvant therapy plan"
+        ],
+        "day3_7": [
+          "Suture removal (if subcuticular) at day 10-14",
+          "Drain removal if criteria met",
+          "Refer to oncology for adjuvant therapy planning",
+          "Brachial plexus assessment — document any nerve injury",
+          "Lymphoedema prevention education"
+        ],
+        "day7_14": [
+          "Wound review — should be healed",
+          "MDT discussion complete — treatment plan communicated",
+          "Start adjuvant chemotherapy if indicated (usually >2-4 weeks post-op)",
+          "Refer for radiotherapy planning if indicated",
+          "Genetic counseling referral if family history or young age"
+        ]
+      },
       "pathways": [
         {
           "severity": "early (T1-T2, N0)",
@@ -157,47 +415,543 @@
         {
           "severity": "locally advanced (T3-T4, N+)",
           "criteria": "tumor >5cm, node positive, or chest wall/skin involvement",
-          "treatment": "Neoadjuvant chemotherapy (anthracycline + taxane). Modified radical mastectomy. Post-mastectomy RT. Adjuvant endocrine therapy + targeted therapy."
+          "treatment": "Neoadjuvant chemotherapy (anthracycline + taxane). Modified radical mastectomy. Post-mastectomy RT. Adjuvant endocrine therapy + targeted therapy per receptors."
         },
         {
           "severity": "metastatic (M1)",
           "criteria": "distant metastases (bone, lung, liver, brain)",
-          "treatment": "Palliative systemic therapy. Endocrine therapy for ER+. Chemotherapy for triple negative. HER2-targeted therapy. Palliative RT. Surgical resection of primary only for symptom control."
+          "treatment": "Palliative systemic therapy. Endocrine therapy for ER+. Chemotherapy for triple negative. HER2-targeted therapy. Palliative RT for bone mets. Surgical resection of primary only for symptom control (fungating, bleeding)."
         }
       ]
     },
 
-    "pathophysiology": [
-      "genetic_mutations",
-      "hormonal_influence",
-      "ductal_lobular_cell_transformation",
-      "in_situ_carcinoma",
-      "invasive_carcinoma",
-      "lymphovascular_invasion",
-      "lymphatic_spread_to_axillary_nodes",
-      "hematogenous_spread_to_bone_lung_liver_brain"
+    "operative_templates": [
+      {
+        "procedure": "Modified Radical Mastectomy (MRM)",
+        "indication": "Locally advanced breast cancer, multicentric disease, patient preference, contraindication to radiotherapy",
+        "approach": "Elliptical incision encompassing nipple-areola complex and biopsy scar",
+        "position": "Supine with ipsilateral arm abducted to 90° on an arm board",
+        "incision": "Transverse (Stewart) or oblique elliptical incision encompassing NAC ± biopsy scar. Extend laterally to axilla for node dissection.",
+        "steps": [
+          "Mark incision and raise skin flaps (thickness: adequate to leave 5mm subcutaneous fat)",
+          "Dissect skin flaps superiorly to clavicle, medially to sternum, laterally to latissimus dorsi, inferiorly to rectus sheath",
+          "Identify and preserve intercostobrachial nerve (sensation to medial arm)",
+          "Dissect pectoral fascia off pectoralis major muscle",
+          "Retract pectoralis major medially — expose axillary contents",
+          "Identify and preserve thoracodorsal neurovascular bundle (latissimus dorsi)",
+          "Identify and preserve long thoracic nerve (serratus anterior) — runs along chest wall",
+          "Dissect axillary contents from lateral to medial — levels I, II, III",
+          "Identify axillary vein — clip and divide tributaries carefully",
+          "Remove specimen en bloc",
+          "Place closed suction drain in axilla and in breast bed",
+          "Close wound in layers — absorbable deep dermal + subcuticular"
+        ],
+        "keyLandmarks": [
+          "Pectoralis major muscle — anterior boundary of dissection",
+          "Axillary vein — superior boundary of node dissection",
+          "Latissimus dorsi — lateral boundary",
+          "Thoracodorsal nerve — runs on latissimus dorsi, preserve",
+          "Long thoracic nerve — on serratus anterior, preserve",
+          "Intercostobrachial nerve — preserve if possible"
+        ]
+      },
+      {
+        "procedure": "Breast-Conserving Surgery (Wide Local Excision / Lumpectomy)",
+        "indication": "Unifocal early breast cancer with favorable breast-to-tumor ratio",
+        "approach": "Direct incision over tumor or periareolar for central tumors",
+        "position": "Supine with arm abducted",
+        "incision": "Curvilinear incision along Langer's lines directly over tumor or periareolar. Incorporate biopsy scar.",
+        "steps": [
+          "Localize tumor with ultrasound-guided wire or radioactive seed",
+          "Incision placed to allow adequate exposure",
+          "Dissect down to tumor with 1-2cm macroscopic margin",
+          "Specimen orientation: 6 sutures (long: lateral, short: superior, inferior deep margin marked)",
+          "Obtain cavity shave margins if grossly close",
+          "Hemostasis with diathermy",
+          "Place clips at cavity margins for RT planning",
+          "Close cavity with absorbable sutures if needed",
+          "Closure in layers without drain"
+        ],
+        "keyLandmarks": [
+          "Pre-operative wire/seed localization",
+          "Tumor margins — aim for >2mm negative margins",
+          "Cavity clips — orient for radiotherapy boost"
+        ]
+      }
     ],
 
     "complications": [
       {
-        "diseaseId": "lymphedema",
+        "diseaseId": "lymphoedema",
         "probability": 0.2,
         "lagDays": [30, 360],
         "severityBoost": 0.1,
-        "clues": ["arm_swelling_post_axillary_surgery", "heavy_feeling"]
+        "triggers": ["axillary_dissection", "radiotherapy_to_axilla", "obesity", "wound_infection"],
+        "clues": ["arm_swelling_post_axillary_surgery", "heavy_feeling_in_arm", "non_pitting_edema"]
       },
       {
         "diseaseId": "bone_metastases",
         "probability": 0.2,
         "lagDays": [180, 720],
         "severityBoost": 0.3,
-        "clues": ["bone_pain", "pathologic_fracture", "hypercalcemia"]
+        "triggers": ["er_positive_disease", "node_positive", "high_grade"],
+        "clues": ["bone_pin", "pathologic_fracture", "hypercalcemia", "elevated_alkaline_phosphatase"]
+      },
+      {
+        "diseaseId": "seroma",
+        "probability": 0.3,
+        "lagDays": [3, 21],
+        "severityBoost": 0.0,
+        "triggers": ["mastectomy", "axillary_dissection", "early_drain_removal"],
+        "clues": ["fluid_collection_under_flaps", "wound_ballotable", "aspiration_confirms_serous_fluid"]
+      },
+      {
+        "diseaseId": "wound_infection",
+        "probability": 0.05,
+        "lagDays": [3, 10],
+        "severityBoost": 0.1,
+        "triggers": ["diabetes", "obesity", "smoking", "long_operative_time", "prior_chemotherapy"],
+        "clues": ["erythema", "purulent_discharge", "fever", "wound_dehiscence"]
+      },
+      {
+        "diseaseId": "axillary_web_syndrome",
+        "probability": 0.3,
+        "lagDays": [3, 30],
+        "severityBoost": 0.0,
+        "triggers": ["axillary_dissection", "sentinel_node_biopsy"],
+        "clues": ["palpable_cord_in_axilla_extending_to_arm", "pain_on_arm_abduction", "restricted_shoulder_movement"]
+      },
+      {
+        "diseaseId": "brachial_plexopathy",
+        "probability": 0.02,
+        "lagDays": [1, 30],
+        "severityBoost": 0.3,
+        "triggers": ["axillary_dissection", "radiotherapy_to_axilla", "direct_tumor_invasion"],
+        "clues": ["arm_weakness_numbness", "paresthesia_in_ulnar_distribution", "wasting_of_intrinsic_hand_muscles", "loss_of_shoulder_function"]
+      },
+      {
+        "diseaseId": "chest_wall_recurrence",
+        "probability": 0.05,
+        "lagDays": [360, 3600],
+        "severityBoost": 0.4,
+        "triggers": ["positive_margins", "no_radiotherapy_post_mastectomy", "aggressive_biology_triple_negative", "lymphovascular_invasion"],
+        "clues": ["palpable_nodule_in_chest_wall", "skin_nodule_near_scar", "pain", "ulceration"]
+      },
+      {
+        "diseaseId": "radiation_pneumonitis",
+        "probability": 0.05,
+        "lagDays": [30, 180],
+        "severityBoost": 0.2,
+        "triggers": ["radiotherapy_to_chest_wall_or_breast", "concurrent_chemotherapy", "large_radiation_field"],
+        "clues": ["dry_cough", "fever", "dyspnea", "ground_glass_opacities_on_ct_in_radiation_field"]
+      },
+      {
+        "diseaseId": "cardiotoxicity_from_chemotherapy",
+        "probability": 0.05,
+        "lagDays": [30, 3600],
+        "severityBoost": 0.3,
+        "triggers": ["anthracycline_use_doxorubicin_epirubicin", "trastuzumab_herceptin", "pre_existing_cardiac_disease", "cumulative_dose_>450mg_m2_doxorubicin"],
+        "clues": ["reduced_ejection_fraction", "congestive_heart_failure", "dyspnea", "edema", "arrhythmia"]
+      },
+      {
+        "diseaseId": "chemotherapy_induced_peripheral_neuropathy",
+        "probability": 0.2,
+        "lagDays": [14, 180],
+        "severityBoost": 0.1,
+        "triggers": ["taxane_use_paclitaxel_docetaxel", "platinum_based_agents", "pre_existing_neuropathy", "diabetes"],
+        "clues": ["numbness_tingling_in_hands_and_feet", "stocking_glove_distribution", "loss_of_vibration_sense", "difficulty_with_fine_motor_tasks"]
       }
     ],
 
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        { "complication": "Hemorrhage", "watchFor": ["excessive drain output >200ml in 4 hours", "expanding hematoma", "tachycardia", "hypotension", "flaps tense"] },
+        { "complication": "Reactionary bleeding", "watchFor": ["drain filling rapidly with blood", "wound swelling"] }
+      ],
+      "postop_day1_3": [
+        { "complication": "Seroma", "watchFor": ["fluctuant swelling under flaps", "drain output still high >50ml/day"] },
+        { "complication": "Flap necrosis", "watchFor": ["skin edge discoloration", "blanching", "delayed capillary refill"] },
+        { "complication": "Axillary web syndrome", "watchFor": ["cord-like structure in axilla", "pain on arm movement"] }
+      ],
+      "postop_day3_7": [
+        { "complication": "Wound infection", "watchFor": ["erythema", "purulent discharge", "fever", "wound breakdown"] },
+        { "complication": "DVT/PE", "watchFor": ["unilateral leg swelling", "sudden dyspnea", "chest pain"] }
+      ],
+      "late": [
+        { "complication": "Lymphoedema", "watchFor": ["arm swelling weeks to months after surgery", "heavy feeling", "jewelry/clothing tightness"] },
+        { "complication": "Recurrence (local)", "watchFor": ["new lump in scar", "skin nodule", "chest wall mass"] },
+        { "complication": "Distant metastases", "watchFor": ["bone pain", "persistent cough", "headaches", "weight loss"] }
+      ],
+      "during_chemotherapy": [
+        { "complication": "Febrile neutropenia", "watchFor": ["temperature >38.3°C during nadir period (days 7-14)", "sore throat", "malaise", "mucositis"] },
+        { "complication": "Nausea and vomiting", "watchFor": ["intractable nausea despite antiemetics", "dehydration", "electrolyte imbalance", "weight loss"] },
+        { "complication": "Hand-foot syndrome (capecitabine/taxanes)", "watchFor": ["palmar-plantar erythema", "desquamation", "painful skin fissures", "difficulty gripping"] },
+        { "complication": "Fatigue (chemotherapy-related)", "watchFor": ["profound exhaustion interfering with ADLs", "failure to recover between cycles"] }
+      ],
+      "during_radiotherapy": [
+        { "complication": "Radiation dermatitis", "watchFor": ["erythema", "dry or moist desquamation", "pain", "pruritus within radiation field"] },
+        { "complication": "Radiation pneumonitis", "watchFor": ["dry cough", "low-grade fever", "dyspnea", "ground-glass opacities on CT"] },
+        { "complication": "Esophagitis (if nodal RT)", "watchFor": ["dysphagia", "odynophagia", "retrosternal discomfort"] }
+      ]
+    },
+
+    "dischargeCriteria": [
+      "Wound clean and dry, no signs of infection or hematoma",
+      "Drain output <30ml/day for 2 consecutive days (if drain in situ) or drain removed",
+      "Pain controlled on oral analgesia",
+      "Able to perform basic arm exercises independently",
+      "Afebrile for 24 hours",
+      "Mobilizing independently",
+      "Understanding of drain care (if applicable) and wound care",
+      "Oncology referral made — appointment scheduled",
+      "Follow-up appointment scheduled within 1-2 weeks",
+      "Patient aware of warning signs to return"
+    ],
+
+    "patient_education": {
+      "explanation": "Breast cancer is an abnormal growth of cells in the breast that can spread to other parts of the body if not treated. Treatment depends on the type, size, and whether it has spread. We will perform surgery to remove the cancer, and you may need additional treatments like chemotherapy, radiotherapy, or hormone therapy. In Kenya, we have treatment guidelines that match international standards.",
+      "warningSigns": [
+        "Fever or chills after surgery",
+        "Wound redness, swelling, or discharge",
+        "Severe pain not controlled by medication",
+        "Sudden shortness of breath or chest pain",
+        "Arm swelling that is new or worsening"
+      ],
+      "activity": [
+        "Start gentle arm exercises from day 1 — pendulum swings, wall climbing",
+        "Avoid heavy lifting (>5kg) on the operated side for 6 weeks",
+        "Avoid blood draws, injections, or BP cuff on the operated arm for life",
+        "Walk daily — gradual return to normal activity",
+        "Return to work in 4-6 weeks depending on type of surgery and adjuvant therapy"
+      ],
+      "diet": [
+        "Eat a balanced diet rich in fruits, vegetables, and protein",
+        "Maintain healthy weight — obesity increases recurrence risk",
+        "Limit alcohol intake",
+        "Stay well hydrated"
+      ],
+      "medication": [
+        "Take all prescribed medications as directed",
+        "If on Tamoxifen: report any abnormal vaginal bleeding or leg pain",
+        "If on Aromatase inhibitors: monitor for joint pain and bone health",
+        "Complete all chemotherapy and radiotherapy sessions as scheduled"
+      ],
+      "followUp": [
+        "Attend all oncology appointments",
+        "Regular follow-up: every 3-6 months for first 2 years, every 6-12 months for years 3-5, then annually",
+        "Annual mammogram of the remaining breast",
+        "Report any new lumps, pain, or symptoms between visits"
+      ]
+    },
+
+    "followup": {
+      "before_discharge": [
+        "Wound care and drain management education",
+        "Arm exercise demonstration and physiotherapy referral",
+        "Oncology referral confirmed and appointment scheduled",
+        "MDT discussion of histology and IHC results",
+        "Psychosocial support — counsellor or breast cancer support group (e.g., Kenya Breast Cancer Network)"
+      ],
+      "after_discharge": [
+        { "timing": "1 week", "action": "Wound check, drain removal if still in situ, histology results discussion" },
+        { "timing": "2 weeks", "action": "Oncology consultation — adjuvant therapy plan" },
+        { "timing": "6 weeks", "action": "Wound healed — start radiotherapy if indicated (after chemotherapy)" },
+        { "timing": "3 months", "action": "Clinical review — response to adjuvant therapy, side effect management" },
+        { "timing": "6 months", "action": "Follow-up mammogram of remaining breast, clinical exam" },
+        { "timing": "Annual", "action": "Surveillance mammogram, clinical exam for 5 years, then continued surveillance" }
+      ],
+      "when_to_return": [
+        "Fever >38°C with wound changes",
+        "Sudden shortness of breath or chest pain",
+        "New lump in the scar or remaining breast",
+        "Arm swelling that does not improve with elevation",
+        "Bone pain that is persistent and worsening",
+        "Severe side effects from chemotherapy or radiotherapy"
+      ]
+    },
+
     "mustNotMiss": true,
     "emergencyPriority": "medium",
-    "diagnosticClues": ["painless_breast_lump", "axillary_node", "skin_changes", "family_history", "age_over_40"],
-    "exclusionClues": ["young_age_with_cyclic_pain", "smooth_mobile_lump_in_young_woman", "normal_imaging_and_biopsy"]
+    "diagnosticClues": ["painless_breast_lump_in_woman_over_40", "axillary_node", "skin_changes_or_peau_dorange", "family_history", "core_biopsy_confirms"],
+    "exclusionClues": ["young_age_with_cyclic_pain", "smooth_mobile_lump_in_young_woman", "normal_imaging_and_benign_biopsy", "acute_inflammatory_features"],
+
+    "pathophysiology": [
+      "genetic_mutations_brca_p53_her2",
+      "hormonal_influence_estrogen_progesterone",
+      "ductal_or_lobular_cell_transformation",
+      "in_situ_carcinoma_precursor_lesion",
+      "progression_to_invasive_carcinoma",
+      "lymphovascular_invasion",
+      "lymphatic_spread_to_axillary_nodes",
+      "hematogenous_spread_to_bone_lung_liver_brain"
+    ],
+
+    "pathophysiologyDetail": [
+      "Estrogen receptor (ER) signaling: estradiol binds ER-alpha, dimerizes, translocates to nucleus, activates ERE-driven transcription of proliferative genes (Cyclin D1, MYC, BCL-2) — this is the basis for endocrine therapy in ER+ disease",
+      "Progesterone receptor (PR) is an estrogen-regulated gene product; PR positivity indicates an intact ER pathway and predicts better response to endocrine therapy",
+      "HER2/neu (ERBB2) amplification occurs in 15-20% of breast cancers; homodimerization causes ligand-independent activation of PI3K/AKT/mTOR and RAS/MAPK pathways driving uncontrolled proliferation — targetable by trastuzumab, pertuzumab, T-DM1",
+      "Triple-negative breast cancer (TNBC) lacks ER/PR/HER2 expression; characterized by basal-like gene expression, high Ki-67, p53 mutations in 80%, and BRCA1 deficiency-related genomic instability",
+      "BRCA1/BRCA2 are tumor suppressor genes involved in homologous recombination repair of double-strand DNA breaks; loss leads to genomic instability and predisposition to breast and ovarian cancer",
+      "PARP inhibitors (Olaparib, Talazoparib) exploit synthetic lethality in BRCA-mutant tumors by blocking base excision repair, causing accumulation of DNA damage",
+      "Tumor microenvironment: cancer-associated fibroblasts (CAFs) secrete growth factors (HGF, FGF, SDF-1) that promote invasion; tumor-associated macrophages (TAMs) suppress anti-tumor immunity via PD-L1 expression",
+      "Lymphatic spread follows a predictable pattern: primary → intramammary lymphatics → sentinel node → axillary levels I→II→III → supraclavicular nodes. Dermal lymphatic invasion causes inflammatory breast cancer",
+      "Hematogenous dissemination occurs through angiogenesis (VEGF-mediated) and lymphovascular invasion; circulating tumor cells (CTCs) home to bone marrow via CXCR4/SDF-1 chemotaxis",
+      "Bone metastases are osteolytic (PTHrP-mediated RANKL activation of osteoclasts) or osteoblastic (ET-1, PDGF-mediated osteoblast stimulation); bisphosphonates and denosumab inhibit osteoclast activity",
+      "PI3K/AKT/mTOR pathway is activated in up to 40% of breast cancers via PIK3CA mutations or PTEN loss; contributes to endocrine resistance and is targetable by alpelisib",
+      "Epigenetic alterations: DNA methylation silences tumor suppressors (BRCA1, CDKN2A, RASSF1A); histone deacetylase (HDAC) overexpression promotes proliferation and invasion",
+      "MicroRNAs (miR-21, miR-155) are oncogenic (oncomiRs) that downregulate PTEN, PDCD4, and other tumor suppressors, promoting metastasis",
+      "Cancer stem cell (CSC) hypothesis: CD44+/CD24−/ALDH1+ cells are therapy-resistant and drive recurrence and metastasis through self-renewal and differentiation",
+      "Immunoediting: tumors evade immune surveillance through PD-L1 upregulation, Treg recruitment, MHC-I downregulation, and defective antigen presentation; checkpoint inhibitors (Pembrolizumab) restore T-cell cytotoxicity in PD-L1+ TNBC",
+      "Obesity-related breast cancer: adipose tissue produces aromatase that converts androgens to estrogen; hyperinsulinemia activates IGF-1R signaling; leptin promotes angiogenesis and inflammation",
+      "In Kenyan patients, late presentation means larger tumors, higher grade, more nodal involvement, and higher proportion of TNBC — likely reflecting both biological aggressiveness and delayed diagnosis"
+    ],
+
+    "landmarkTrials": [
+      {
+        "trial": "NSABP B-06: Lumpectomy vs Total Mastectomy for Invasive Breast Cancer",
+        "year": 1985,
+        "population": "1,851 women with stage I-II invasive breast cancer (<4cm)",
+        "finding": "No difference in overall survival between lumpectomy + RT, lumpectomy alone, and total mastectomy at 20-year follow-up",
+        "impact": "Established breast-conserving surgery as equivalent to mastectomy for early-stage disease, revolutionizing surgical approach",
+        "reference": "Fisher B, Anderson S, Bryant J, et al. Twenty-year follow-up of a randomized trial comparing total mastectomy, lumpectomy, and lumpectomy plus irradiation. N Engl J Med. 2002;347:1233-1241"
+      },
+      {
+        "trial": "NSABP B-31 / NCCTG N9831: Trastuzumab (Herceptin) for HER2+ Breast Cancer",
+        "year": 2005,
+        "population": "3,350 women with HER2+ early breast cancer",
+        "finding": "Addition of trastuzumab to chemotherapy reduced recurrence by 52% and mortality by 33%",
+        "impact": "Established trastuzumab as standard of care for HER2+ early breast cancer, dramatically improving outcomes",
+        "reference": "Romond EH, Perez EA, Bryant J, et al. Trastuzumab plus adjuvant chemotherapy for operable HER2-positive breast cancer. N Engl J Med. 2005;353:1673-1684"
+      },
+      {
+        "trial": "ATAC (Arimidex, Tamoxifen, Alone or in Combination) Trial",
+        "year": 2002,
+        "population": "9,366 postmenopausal women with early-stage ER+ breast cancer",
+        "finding": "Anastrozole (Arimidex) was superior to tamoxifen in disease-free survival with fewer side effects (VTE, endometrial cancer)",
+        "impact": "Established aromatase inhibitors as first-line adjuvant endocrine therapy for postmenopausal ER+ breast cancer",
+        "reference": "Baum M, Budzar AU, Cuzick J, et al. Anastrozole alone or in combination with tamoxifen versus tamoxifen alone for adjuvant treatment of postmenopausal women with early breast cancer. Lancet. 2002;359:2131-2139"
+      },
+      {
+        "trial": "TAILORx: Oncotype DX to Guide Chemotherapy Decisions",
+        "year": 2018,
+        "population": "10,273 women with hormone-receptor-positive, HER2-negative, node-negative breast cancer",
+        "finding": "Women with mid-range Oncotype DX recurrence scores (11-25) derived no benefit from chemotherapy added to endocrine therapy",
+        "impact": "Spared 70% of women with early ER+ breast cancer from unnecessary chemotherapy, personalizing treatment based on genomic profile",
+        "reference": "Sparano JA, Gray RJ, Makower DF, et al. Adjuvant chemotherapy guided by a 21-gene expression assay in breast cancer. N Engl J Med. 2018;379:111-121"
+      },
+      {
+        "trial": "ACOSOG Z0011: Sentinel Node Dissection vs Axillary Dissection in Early Breast Cancer",
+        "year": 2011,
+        "population": "891 women with T1-T2 invasive breast cancer and 1-2 positive sentinel nodes",
+        "finding": "No difference in 10-year overall survival or locoregional recurrence between sentinel node biopsy alone vs complete ALND",
+        "impact": "Spared thousands of women with limited sentinel node involvement from the morbidity of complete axillary dissection",
+        "reference": "Giuliano AE, Hunt KK, Ballman KV, et al. Axillary dissection vs no axillary dissection in women with invasive breast cancer and sentinel node metastasis. JAMA. 2011;305(6):569-575"
+      },
+      {
+        "trial": "EBCTCG Overview: Effects of Radiotherapy after Mastectomy",
+        "year": 2014,
+        "population": "Meta-analysis of 22 randomized trials (8,135 women) of radiotherapy after mastectomy",
+        "finding": "Post-mastectomy RT reduced locoregional recurrence by 2/3 and improved breast cancer mortality in node-positive women",
+        "impact": "Defined risk groups that benefit from post-mastectomy RT (N1-N3, T3-T4, positive margins)",
+        "reference": "EBCTCG. Effect of radiotherapy after mastectomy and axillary surgery on 10-year recurrence and 20-year breast cancer mortality. Lancet. 2014;383:2127-2135"
+      },
+      {
+        "trial": "START Trials (Standardization of Breast Radiotherapy)",
+        "year": 2008,
+        "population": "4,451 women with early breast cancer requiring whole-breast radiotherapy",
+        "finding": "Hypofractionated RT (40 Gy in 15 fractions over 3 weeks) was as effective as standard 50 Gy in 25 fractions with less late toxicity",
+        "impact": "Established hypofractionated whole-breast RT as standard for early breast cancer, reducing treatment burden from 5 weeks to 3",
+        "reference": "START Trialists' Group. The UK Standardisation of Breast Radiotherapy (START) trials. Lancet Oncol. 2008;9(4):331-341"
+      },
+      {
+        "trial": "KEYNOTE-522: Pembrolizumab in Early Triple-Negative Breast Cancer",
+        "year": 2020,
+        "population": "1,174 patients with early TNBC receiving neoadjuvant chemotherapy",
+        "finding": "Addition of Pembrolizumab (anti-PD-1) to neoadjuvant chemotherapy significantly improved pCR rate and event-free survival",
+        "impact": "Established immunotherapy as a new standard component of neoadjuvant therapy for early-stage TNBC",
+        "reference": "Schmid P, Cortes J, Pusztai L, et al. Pembrolizumab for early triple-negative breast cancer. N Engl J Med. 2020;382:810-821"
+      }
+    ],
+
+    "evidenceTable": [
+      {
+        "recommendation": "Breast-conserving surgery (lumpectomy + whole breast RT) is equivalent to mastectomy for early-stage invasive breast cancer",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "NSABP B-06, Fisher B, N Engl J Med 2002; EBCTCG Overview, Lancet 2011"
+      },
+      {
+        "recommendation": "Sentinel node biopsy alone (without axillary dissection) is sufficient for T1-T2 tumors with 1-2 positive sentinel nodes undergoing BCS with whole breast RT",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "ACOSOG Z0011, Giuliano AE, JAMA 2011"
+      },
+      {
+        "recommendation": "Adjuvant endocrine therapy (Tamoxifen or Aromatase Inhibitors) should be offered to all patients with ER+ breast cancer regardless of age, nodal status, or chemotherapy use",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "ATAC Trial, Baum M, Lancet 2002; EBCTCG Overview"
+      },
+      {
+        "recommendation": "Trastuzumab should be added to chemotherapy for all patients with HER2+ early breast cancer (tumor size >1cm or node positive)",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "NSABP B-31, Romond EH, N Engl J Med 2005; HERA Trial, Piccart-Gebhart MJ, N Engl J Med 2005"
+      },
+      {
+        "recommendation": "Neoadjuvant chemotherapy should be considered for all patients with TNBC and HER2+ breast cancer irrespective of tumor size at presentation",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "KEYNOTE-522, Schmid P, N Engl J Med 2020; NeoSphere, Gianni L, Lancet Oncol 2012"
+      },
+      {
+        "recommendation": "Genomic profiling (Oncotype DX) should be used to guide adjuvant chemotherapy decisions in ER+/HER2- node-negative breast cancer",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "TAILORx, Sparano JA, N Engl J Med 2018"
+      },
+      {
+        "recommendation": "Hypofractionated whole-breast radiotherapy (40 Gy in 15 fractions) is as effective as standard fractionation (50 Gy in 25 fractions)",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "START Trials, Lancet Oncol 2008; FAST-Forward, Brunt AM, Lancet 2020"
+      },
+      {
+        "recommendation": "Post-mastectomy RT reduces locoregional recurrence and improves survival in node-positive (≥4 nodes) and high-risk patients",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "EBCTCG Overview, Lancet 2014"
+      },
+      {
+        "recommendation": "PARP inhibitors (Olaparib, Talazoparib) improve outcomes in HER2-negative metastatic breast cancer with germline BRCA mutations",
+        "evidenceLevel": "Ib",
+        "grade": "A",
+        "reference": "OlympiAD, Robson M, N Engl J Med 2017; EMBRACA, Litton JK, N Engl J Med 2018"
+      },
+      {
+        "recommendation": "Adjuvant bisphosphonates (Zoledronic acid or Clodronate) reduce bone metastases and improve survival in postmenopausal women with early breast cancer",
+        "evidenceLevel": "Ia",
+        "grade": "A",
+        "reference": "EBCTCG Overview of bisphosphonates in breast cancer, Lancet 2015"
+      },
+      {
+        "recommendation": "Neoadjuvant endocrine therapy (Aromatase Inhibitor) for 4-8 months can achieve breast-conserving surgery in postmenopausal women with large ER+ tumors",
+        "evidenceLevel": "Ib",
+        "grade": "B",
+        "reference": "IMPACT Trial, Smith IE, J Clin Oncol 2005; POETIC Trial, Johnston S, Lancet Oncol 2019"
+      },
+      {
+        "recommendation": "MRI breast for high-risk screening (BRCA carriers, strong family history) should be performed annually from age 25-30, alternating with mammogram",
+        "evidenceLevel": "IIa",
+        "grade": "B",
+        "reference": "NCCN Guidelines; ACR Guidelines; Kuhl CK, J Clin Oncol 2010"
+      }
+    ],
+
+    "diagnosticAlgorithm": "Patient presents with breast lump or breast change → Urgent triple assessment (same clinic visit if possible) → STEP 1: Clinical breast exam — document size, consistency, skin changes, nipple, axillary/supraclavicular nodes, contralateral breast → STEP 2: Imaging — Age <40: Ultrasound first (complement with mammogram if suspicious). Age ≥40: Bilateral mammogram + targeted US. Assess BI-RADS category. → STEP 3: Core needle biopsy (preferred) or FNA under US guidance → Send for histology + IHC (ER, PR, HER2, Ki-67) → If image-guided biopsy not possible: excisional biopsy → Results integration: Triple assessment concordance check → If concordant benign (clinical benign + BI-RADS 1-2 + benign pathology) → reassure, discharge, teach BSE → If discordant or suspicious (any modality malignant/suspicious) → proceed to definitive management → STAGING if malignancy confirmed: Full blood count, LFTs, ALP, creatinine, calcium. Chest X-ray. CT chest/abdomen/pelvis if node positive or symptoms. Bone scan if bone pain or elevated ALP. Consider PET/CT for advanced disease. → MDT discussion of all cases → Treatment planning per stage, subtype, patient factors → Early (T1-T2, N0): BCS + SLNB vs mastectomy → Locally advanced (T3-T4, N+): Neoadjuvant chemotherapy → Metastatic (M1): Palliative systemic therapy → Genetic counseling if age <50, TNBC, family history, bilateral, or male → Surveillance plan: 3-6 monthly for 2 years, 6-12 monthly years 3-5, then annually → Consider psychosocial support and breast cancer support groups (Faraja Cancer Support, Kenya Breast Cancer Network)",
+
+    "managementPearls": [
+      {
+        "context": "Triple assessment is non-negotiable",
+        "pearl": "Every dominant breast mass requires triple assessment (clinical + imaging + biopsy) regardless of age. Never rely on clinical exam alone. In Kenya, where late presentation is common, a negative clinical exam in the presence of a mammographic abnormality should still be biopsied.",
+        "evidence": "NICE Guidelines for Early Breast Cancer; Kenya National Clinical Guidelines"
+      },
+      {
+        "context": "Axilla management in early breast cancer",
+        "pearl": "SLNB is the standard for clinically node-negative axilla. Do NOT proceed directly to ALND. The Z0011 criteria allow omission of ALND in T1-T2 tumors with 1-2 positive SLNs undergoing BCS + RT. In mastectomy patients with micrometastases, the debate continues — discuss at MDT.",
+        "evidence": "ACOSOG Z0011, Giuliano AE, JAMA 2011"
+      },
+      {
+        "context": "Neoadjuvant chemotherapy benefits",
+        "pearl": "Always consider neoadjuvant chemotherapy for TNBC and HER2+ cancers, even if technically operable. pCR (pathologic complete response) predicts excellent long-term outcomes. Triple-negative pCR rates approach 60-70% with modern regimens. This also allows in-vivo chemosensitivity testing.",
+        "evidence": "KEYNOTE-522, Schmid P, N Engl J Med 2020; CTNeoBC pooled analysis"
+      },
+      {
+        "context": "Endocrine therapy duration",
+        "pearl": "Extended endocrine therapy beyond 5 years reduces late recurrence. For high-risk ER+ disease (node positive, large tumor, high grade), consider an AI for 10 years or switch after 5 years. Tamoxifen for 10 years in premenopausal women reduces recurrence and mortality.",
+        "evidence": "ATLAS Trial, Davies C, Lancet 2013; MA.17R Trial, Goss PE, N Engl J Med 2016"
+      },
+      {
+        "context": "HER2 testing and therapy",
+        "pearl": "All invasive breast cancers must undergo HER2 testing by IHC ± FISH/ISH. IHC 3+ or FISH-amplified (ratio ≥2.0) qualifies for trastuzumab. Dual blockade (trastuzumab + pertuzumab) improves pCR in neoadjuvant setting. T-DM1 is effective in residual disease after neoadjuvant therapy.",
+        "evidence": "ASCO/CAP HER2 Testing Guidelines; KATHERINE Trial, von Minckwitz G, N Engl J Med 2019"
+      },
+      {
+        "context": "Breast cancer in young women in Kenya",
+        "pearl": "Breast cancer in women <40 is more aggressive, more likely to be TNBC, and presents at a later stage in Kenya. Delays in diagnosis are common because clinicians assume 'breast lumps in young women are fibroadenomas'. Biopsy any dominant mass regardless of age.",
+        "evidence": "Kenya National Cancer Registry Data; local epidemiological studies"
+      },
+      {
+        "context": "Post-mastectomy radiation decisions",
+        "pearl": "Post-mastectomy RT is indicated for: T3-T4 tumors, positive margins, ≥4 positive nodes, and select N1 patients (especially with multiple risk factors). The benefit is reduction in locoregional recurrence and improvement in survival. Discuss every case at MDT.",
+        "evidence": "EBCTCG Overview, Lancet 2014; ESTRO/ACROP Guidelines"
+      },
+      {
+        "context": "Bone health management",
+        "pearl": "Aromatase inhibitors cause bone loss through estrogen deprivation. Check baseline DEXA scan before starting an AI. All patients should take Calcium 1,000-1,200mg + Vitamin D 800-1,000 IU daily. Bisphosphonates (Zoledronic acid 4mg IV q6months or Alendronate 70mg weekly) for osteopenia/osteoporosis.",
+        "evidence": "ASCO Bone Health Guidelines; MA.27 Trial, Goss PE, Lancet Oncol 2012"
+      },
+      {
+        "context": "Surgical margins in BCS",
+        "pearl": "A negative margin is defined as 'no tumor on ink' for invasive cancer. For DCIS, a 2mm margin is recommended. Cavity shave margins at the time of initial surgery reduce re-excision rates. Orient the specimen meticulously and discuss with pathology.",
+        "evidence": "SSO-ASTRO Margin Guidelines, Moran MS, Ann Surg Oncol 2014"
+      },
+      {
+        "context": "Lymphedema prevention",
+        "pearl": "Prevention is better than treatment. Avoid axillary RT if SLNB is negative. Avoid venipuncture, BP cuff, and tight clothing on the at-risk arm. Early detection with arm circumference measurement at baseline and follow-up. Refer to physiotherapy at first sign of swelling.",
+        "evidence": "NCCN Survivorship Guidelines; ISL Guidelines for Lymphedema"
+      }
+    ],
+
+    "operativeNuances": [
+      {
+        "procedure": "Modified Radical Mastectomy",
+        "pitfall": "Failing to identify and preserve the intercostobrachial nerve, causing permanent medial arm anesthesia",
+        "expertTip": "The intercostobrachial nerve (T2) exits the 2nd intercostal space through the serratus anterior and courses transversely across the axilla to the medial arm. It can be 3-5mm in diameter. Identify it early in the axillary dissection and gently retract it with a vessel loop to preserve sensation."
+      },
+      {
+        "procedure": "Modified Radical Mastectomy",
+        "pitfall": "Dissecting too superficially on the chest wall and button-holing the skin flaps, causing flap necrosis",
+        "expertTip": "Maintain consistent flap thickness: 5-8mm (thin flaps risk necrosis; thick flaps leave breast tissue behind). Use counter-traction with a swab and diathermy in cutting mode. Well-vascularized flaps should bleed at the edges. Pinch test: flap should blanch and refill."
+      },
+      {
+        "procedure": "Sentinel Lymph Node Biopsy",
+        "pitfall": "Injection of blue dye or radioisotope into the wrong quadrant, leading to failed sentinel node identification",
+        "expertTip": "For non-palpable tumors, inject around the image-guided localization wire. For palpable tumors, inject intradermally/peritumorally (NOT into the tumor). Dual technique (blue dye + radioisotope) gives 97% identification rate. Massage the injection site for 5 minutes before incision."
+      },
+      {
+        "procedure": "Breast-Conserving Surgery (Lumpectomy)",
+        "pitfall": "Closure of the lumpectomy cavity without considering cosmetic outcome, leading to significant breast deformity (bird's beak deformity)",
+        "expertTip": "Use oncoplastic techniques: mobilize adjacent breast tissue (glandular advancement flaps) to fill the defect. Close the cavity in layers with absorbable sutures to reapproximate parenchyma. Do NOT use electrocautery on the skin edges. Consider a cosmesis score at the end."
+      },
+      {
+        "procedure": "Axillary Lymph Node Dissection (Level I-III)",
+        "pitfall": "Injury to the long thoracic nerve during Level II/III dissection, causing winged scapula",
+        "expertTip": "The long thoracic nerve runs on the surface of the serratus anterior, posterior to the axillary vein origin, approximately 2cm from the chest wall. Identify it early: sweep the fibrofatty tissue medially off the chest wall — the nerve will come into view. Pass a vessel loop around it for protection."
+      },
+      {
+        "procedure": "Modified Radical Mastectomy",
+        "pitfall": "Inadequate hemostasis in the axillary apex leading to postoperative hematoma",
+        "expertTip": "After completing the axillary dissection, perform a Valsalva maneuver (or ask the anesthetist to increase thoracic pressure). This reveals venous bleeders that are not visible at low pressure. Use bipolar diathermy for small vessels and clips for larger ones near the axillary vein."
+      },
+      {
+        "procedure": "Axillary Lymph Node Dissection",
+        "pitfall": "Accidental injury to the thoracodorsal nerve during Level II dissection, causing latissimus dorsi weakness",
+        "expertTip": "The thoracodorsal nerve enters the latissimus dorsi muscle high in the axilla, running with the thoracodorsal vessels. Identify the latissimus dorsi edge laterally and trace the neurovascular bundle from proximal to distal. Protect the nerve with a vessel loop."
+      },
+      {
+        "procedure": "Wide Local Excision of Lower Quadrant Tumors",
+        "pitfall": "Incision placement that makes re-excision or mastectomy difficult if margins are positive",
+        "expertTip": "Always plan your incision with the worst-case scenario in mind. For lower quadrant tumors, place the incision so it can be incorporated into a mastectomy incision. Use a curved incision along Langer's lines — never a 'stab' incision in the inframammary fold that cannot be extended."
+      }
+    ],
+
+    "prognosis": {
+      "mortality": "Overall 5-year breast cancer-specific survival: 75-85% in high-income countries, 50-70% in Kenya (African Breast Cancer Registry data). Late-stage presentation is the dominant driver of poorer survival. TNBC has worst 5-year survival (60-70% for early, <20% for metastatic). HER2+ has improved dramatically with targeted therapy (85-90% early-stage survival).",
+      "morbidity": "Lymphedema: 20% after ALND, 5% after SLNB. Arm morbidity: 30% report some degree of functional limitation. Fatigue: 60-90% during treatment, persists in 30% long-term. Chemo-brain (cognitive dysfunction): 15-30%. Sexual dysfunction: 40-70% (vaginal dryness, dyspareunia, loss of libido). Body image issues affect up to 50%.",
+      "recurrence": "Local recurrence: 2-5% at 10 years after BCS + RT, 1-2% after mastectomy. Distant recurrence: ER+ has continued late recurrence risk (2%/year for 15+ years); TNBC and HER2+ have peak recurrence at 2-3 years then decline. Contralateral breast cancer risk: 0.5-1%/year; higher in BRCA carriers (3%/year). Overall recurrence risk at 20 years: 15-25% depending on subtype and stage.",
+      "survival": "5-year relative survival by stage (Kenya data): Stage I: 85-90% (if treated), Stage II: 65-75%, Stage III: 40-50%, Stage IV: 15-20%. Global benchmarks: Stage I 98%, Stage II 92%, Stage III 65%, Stage IV 25%. Disparities reflect late presentation, treatment delays, and limited access to targeted therapies in Kenya.",
+      "reference": "EBCTCG Overviews; Kenya National Cancer Registry 2020; African Breast Cancer Registry; Forouzanfar MH, et al. Breast and cervical cancer in 187 countries. JAMA 2011"
+    }
   }
 }

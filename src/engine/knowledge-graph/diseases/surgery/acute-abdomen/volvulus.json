@@ -1,34 +1,49 @@
 {
   "disease": {
-    "id": "volvulus",
-    "name": "Volvulus",
+    "id": "sigmoid_volvulus",
+    "name": "Sigmoid Volvulus",
     "system": "surgical",
+    "department": "surgery",
+    "unit": "acute-care-surgery",
     "agePeak_months": [600, 960],
-    "note": "Twisting of bowel around its mesentery causing closed-loop obstruction. Sigmoid most common, then cecal volvulus.",
+    "note": "Twisting of sigmoid colon around its mesentery causing closed-loop obstruction. Common in elderly, chronic constipation, high-fibre diets. Endemic in East Africa.",
     "prevalenceWeight": 0.3,
-    "syndromeTags": ["acute_abdomen", "bowel_obstruction", "abdominal_distension"],
+    "syndromeTags": ["acute_abdomen", "bowel_obstruction", "abdominal_distension", "large_bowel_obstruction"],
 
-    "severityAssessment": {
-      "immediateDangerSigns": [
-        { "sign": "generalized_peritonitis", "weight": 10 },
-        { "sign": "septic_shock", "weight": 10 },
-        { "sign": "strangulation_signs", "weight": 10 },
-        { "sign": "avpu_abnormal", "weight": 10 }
-      ],
-      "severeCriteria": {
-        "anyDangerSign": true,
-        "additionalCriteria": [
-          { "sign": "lactate_elevated", "weight": 8 },
-          { "sign": "absent_bowel_sounds", "weight": 7 },
-          { "sign": "guarding_rigidity", "weight": 7 }
-        ]
-      },
-      "nonSevereCriteria": {
-        "hasIndrawingOrFastBreathing": false,
-        "noDangerSigns": true
-      },
-      "severityLabel": "Peritonitis/strangulation -> SEVERE; uncompromised bowel -> NON-SEVERE"
-    },
+    "presentingComplaints": [
+      "Abdominal distension",
+      "Abdominal swelling",
+      "Constipation",
+      "Unable to pass stool",
+      "Unable to pass gas",
+      "Abdominal pain",
+      "Vomiting",
+      "Stomach bloating"
+    ],
+
+    "history_questions": [
+      { "question": "When did the abdominal distension start?", "weight": 8 },
+      { "question": "Is the distension progressive?", "weight": 7 },
+      { "question": "When did you last pass stool?", "weight": 10 },
+      { "question": "When did you last pass gas?", "weight": 10 },
+      { "question": "Is the pain colicky (comes and goes)?", "weight": 8 },
+      { "question": "Did the pain start suddenly or gradually?", "weight": 6 },
+      { "question": "Have you vomited?", "weight": 5 },
+      { "question": "Is the vomiting bilious (yellow/green)?", "weight": 4 },
+      { "question": "Have you had similar episodes before?", "weight": 9 },
+      { "question": "Do you have chronic constipation?", "weight": 7 },
+      { "question": "Do you use laxatives?", "weight": 5 },
+      { "question": "Have you lost weight recently?", "weight": 6 },
+      { "question": "Have you noticed blood in your stool?", "weight": 6 },
+      { "question": "Do you have a history of abdominal surgery?", "weight": 5 },
+      { "question": "What is your typical diet?", "weight": 4 },
+      { "question": "Do you have any neurological conditions (Parkinson's, stroke)?", "weight": 4 },
+      { "question": "Are you on any medications for nerves or pain?", "weight": 3 },
+      { "question": "Have you had any previous abdominal surgeries?", "weight": 5 },
+      { "question": "Do you have fever or chills?", "weight": 6 },
+      { "question": "Has the pain changed character (become constant)?", "weight": 7 },
+      { "question": "Do you feel short of breath?", "weight": 3 }
+    ],
 
     "historyFeatures": [
       { "symptomId": "severe_colicky_abdominal_pain", "weight": 5 },
@@ -37,6 +52,24 @@
       { "symptomId": "nausea_vomiting", "weight": 3, "note": "Late in sigmoid, early in cecal volvulus" },
       { "symptomId": "previous_episodes", "weight": 3, "note": "May have history of recurrent volvulus" },
       { "symptomId": "chronic_constipation", "weight": 4, "note": "Common in elderly with redundant sigmoid" }
+    ],
+
+    "examination_findings": [
+      { "finding": "Gross abdominal distension", "weight": 10 },
+      { "finding": "Asymmetrical distension (dome-shaped)", "weight": 7 },
+      { "finding": "Tympanic percussion (drum-like)", "weight": 8 },
+      { "finding": "High-pitched bowel sounds", "weight": 6 },
+      { "finding": "Absent bowel sounds (late sign)", "weight": 7 },
+      { "finding": "Palpable sigmoid loop", "weight": 8 },
+      { "finding": "Generalized tenderness", "weight": 5 },
+      { "finding": "Guarding or rigidity", "weight": 7 },
+      { "finding": "Empty rectum on DRE", "weight": 6 },
+      { "finding": "Dehydration signs (dry mucosa, sunken eyes)", "weight": 5 },
+      { "finding": "Tachycardia", "weight": 5 },
+      { "finding": "Hypotension", "weight": 6 },
+      { "finding": "Fever", "weight": 5 },
+      { "finding": "Visible peristalsis", "weight": 3 },
+      { "finding": "Scaphoid abdomen (if gastric volvulus)", "weight": 2 }
     ],
 
     "examFeatures": [
@@ -48,26 +81,48 @@
       { "signId": "tachycardia_hypotension", "baseWeight": 3 }
     ],
 
+    "bedside_scores": [
+      "Bowel Obstruction Severity Score"
+    ],
+
     "riskFactors": [
       { "id": "age_over_60", "multiplier": 2.5 },
       { "id": "chronic_constipation", "multiplier": 2.0 },
       { "id": "high_fiber_diet_in_africa", "multiplier": 1.5, "note": "Dietary pattern risk in endemic regions" },
       { "id": "previous_volvulus", "multiplier": 3.0 },
       { "id": "megacolon", "multiplier": 2.5 },
-      { "id": "neurologic_disorders", "multiplier": 1.6 }
+      { "id": "neurologic_disorders", "multiplier": 1.6 },
+      { "id": "institutionalization", "multiplier": 2.0 },
+      { "id": "anticholinergic_medications", "multiplier": 1.5 },
+      { "id": "parkinsons_disease", "multiplier": 2.0 }
     ],
 
     "subtypes": [
       {
-        "id": "sigmoid_volvulus",
-        "name": "Sigmoid Volvulus",
+        "id": "sigmoid_volvulus_non_ischemic",
+        "name": "Sigmoid Volvulus (Non-Ischemic)",
         "prevalenceModifier": 0.7,
         "keyFeatures": [
           { "feature": "massive_abdominal_distension", "weight": 5 },
           { "feature": "coffee_bean_sign_on_xray", "weight": 5 },
-          { "feature": "previous_episodes", "weight": 4 }
+          { "feature": "previous_episodes", "weight": 4 },
+          { "feature": "no_peritonitis", "weight": 5 },
+          { "feature": "lactate_normal", "weight": 4 }
         ],
-        "management": "Endoscopic detorsion (flexible sigmoidoscopy). Rectal tube placement. Elective sigmoid resection after decompression. Emergency surgery if peritonitis or failed endoscopic reduction."
+        "management": "Endoscopic detorsion via flexible sigmoidoscopy. Insert rectal tube for decompression. Admit for observation. Elective sigmoid resection with primary anastomosis during same admission after bowel preparation."
+      },
+      {
+        "id": "sigmoid_volvulus_ischemic",
+        "name": "Sigmoid Volvulus with Ischemia/Gangrene",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "generalized_peritonitis", "weight": 5 },
+          { "feature": "lactic_acidosis", "weight": 5 },
+          { "feature": "absent_bowel_sounds", "weight": 4 },
+          { "feature": "septic_shock", "weight": 5 },
+          { "feature": "rigidity", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy. Resection of gangrenous sigmoid colon. Hartmann procedure (end colostomy + rectal stump closure). Abdominal lavage. ICU admission. IV antibiotics. Delayed stoma reversal in 3-6 months."
       },
       {
         "id": "cecal_volvulus",
@@ -76,9 +131,10 @@
         "keyFeatures": [
           { "feature": "right_lower_quadrant_pain", "weight": 5 },
           { "feature": "distension_less_marked", "weight": 4 },
-          { "feature": "early_vomiting", "weight": 3 }
+          { "feature": "early_vomiting", "weight": 3 },
+          { "feature": "cecal_dilatation_on_xray", "weight": 5 }
         ],
-        "management": "Emergency laparotomy. Right hemicolectomy if non-viable. Cecopexy if viable. Endoscopic reduction less effective."
+        "management": "Emergency laparotomy. Right hemicolectomy if non-viable. Cecopexy if viable. Endoscopic reduction rarely effective."
       },
       {
         "id": "gastric_volvulus",
@@ -95,56 +151,322 @@
 
     "mimics": [
       {
-        "diseaseId": "bowel_obstruction_due_to_tumor",
-        "discriminators": ["gradual_onset", "weight_loss", "rectal_bleeding"]
+        "diseaseId": "colorectal_cancer_obstruction",
+        "diseaseName": "Colorectal Cancer (Obstructing)",
+        "whyMimic": "Can present with large bowel obstruction, distension, constipation",
+        "discriminators": [
+          "gradual_onset_over_weeks_to_months",
+          "weight_loss",
+          "rectal_bleeding",
+          "change_in_bowel_habit",
+          "no_previous_episodes",
+          "night_sweats",
+          "family_history_of_colorectal_cancer",
+          "age_over_50"
+        ],
+        "ruleOutTests": ["CT colonography", "colonoscopy", "CEA"],
+        "negativeImpactOnParentScore": 15
       },
       {
         "diseaseId": "acute_pancreatitis",
-        "discriminators": ["elevated_amylase", "pain_radiating_to_back", "no_coffee_bean_sign"]
+        "diseaseName": "Acute Pancreatitis",
+        "whyMimic": "Can present with abdominal distension, vomiting, pain",
+        "discriminators": [
+          "pain_radiating_to_back",
+          "elevated_amylase_lipase",
+          "epigastric_tenderness",
+          "no_coffee_bean_sign_on_xray",
+          "history_of_gallstones_or_alcohol",
+          "pain_relieved_by_leaning_forward"
+        ],
+        "ruleOutTests": ["serum_amylase", "serum_lipase", "abdominal_us"],
+        "negativeImpactOnParentScore": 12
+      },
+      {
+        "diseaseId": "pseudo_obstruction_ogilvies",
+        "diseaseName": "Acute Colonic Pseudo-Obstruction (Ogilvie's)",
+        "whyMimic": "Presents with massive colonic distension without mechanical obstruction",
+        "discriminators": [
+          "recent_surgery_or_trauma",
+          "electrolyte_imbalance",
+          "bedridden_patient",
+          "opioid_use",
+          "no_coffee_bean_sign",
+          "cecum_dilated_on_xray",
+          "no_mechanical_obstruction_on_ct",
+          "response_to_neostigmine"
+        ],
+        "ruleOutTests": ["CT_abdomen", "electrolytes", "water_soluble_contrast_enema"],
+        "negativeImpactOnParentScore": 18
+      },
+      {
+        "diseaseId": "fecal_impaction",
+        "diseaseName": "Fecal Impaction",
+        "whyMimic": "Elderly constipated patient with abdominal distension",
+        "discriminators": [
+          "palpable_fecal_masses_on_abdominal_exam",
+          "fecal_mass_on_rectal_exam",
+          "history_of_chronic_constipation",
+          "no_vomiting",
+          "mild_distension",
+          "response_to_enemas",
+          "no_coffee_bean_sign"
+        ],
+        "ruleOutTests": ["abdominal_xray", "rectal_exam", "trial_of_enemas"],
+        "negativeImpactOnParentScore": 10
+      },
+      {
+        "diseaseId": "sigmoid_diverticulitis",
+        "diseaseName": "Acute Sigmoid Diverticulitis",
+        "whyMimic": "LLQ pain, fever, altered bowel habit in elderly",
+        "discriminators": [
+          "fever_and_chills_present",
+          "localized_llq_tenderness",
+          "diarrhea_more_common_than_constipation",
+          "no_massive_distension",
+          "elevated_crp_marked",
+          "no_coffee_bean_sign",
+          "periodic_stranding_on_ct"
+        ],
+        "ruleOutTests": ["CT_abdomen_with_contrast", "crp", "wbc"],
+        "negativeImpactOnParentScore": 10
+      },
+      {
+        "diseaseId": "incarcerated_inguinal_hernia",
+        "diseaseName": "Incarcerated/Strangulated Inguinal Hernia",
+        "whyMimic": "Can cause bowel obstruction with distension",
+        "discriminators": [
+          "palpable_groin_mass",
+          "painful_groin_swelling",
+          "inability_to_reduce_hernia",
+          "distension_less_prominent",
+          "previous_known_hernia"
+        ],
+        "ruleOutTests": ["groin_examination", "abdominal_xray", "ultrasound_groin"],
+        "negativeImpactOnParentScore": 12
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "Abdominal X-Ray supine + erect", "priority": "immediate", "yield": 0.85, "indication": "coffee bean sign, bent inner tube sign" },
-        { "name": "Gastrografin enema", "priority": "medium", "yield": 0.9, "indication": "diagnostic and potentially therapeutic for sigmoid volvulus" }
+        { "name": "Abdominal X-Ray supine + erect", "priority": "immediate", "yield": 0.85, "indication": "Coffee bean sign, bent inner tube sign, air-fluid levels" },
+        { "name": "Gastrografin enema", "priority": "immediate", "yield": 0.9, "indication": "Diagnostic and potentially therapeutic for sigmoid volvulus. Shows bird beak sign." },
+        { "name": "Digital Rectal Examination", "priority": "immediate", "yield": 0.5, "indication": "Assess rectal tone, exclude mass, check for blood" },
+        { "name": "Urinary catheter", "priority": "high", "yield": 0.3, "indication": "Monitor urine output in obstruction" },
+        { "name": "NG tube insertion", "priority": "high", "yield": 0.4, "indication": "Gastric decompression" }
       ],
       "laboratory": [
-        { "name": "Lactate", "priority": "high", "yield": 0.75, "indication": "elevated with ischemia" },
-        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "leukocytosis with strangulation" },
-        { "name": "Electrolytes", "priority": "high", "yield": 0.5, "indication": "assess dehydration" }
+        { "name": "WBC count", "priority": "high", "yield": 0.7, "indication": "Leukocytosis suggests ischemia/strangulation. WBC >15 suggests gangrene." },
+        { "name": "Lactate", "priority": "high", "yield": 0.8, "indication": "Lactate >2 mmol/L suggests bowel ischemia. >4 suggests gangrene." },
+        { "name": "CRP", "priority": "high", "yield": 0.6, "indication": "Elevated in inflammation, strangulation" },
+        { "name": "Electrolytes (Na, K, Cl, HCO3)", "priority": "high", "yield": 0.5, "indication": "Assess dehydration, hypokalemia common" },
+        { "name": "Urea and Creatinine", "priority": "high", "yield": 0.5, "indication": "Prerenal azotemia from third-spacing" },
+        { "name": "Blood Group and Crossmatch", "priority": "high", "yield": 0.3, "indication": "Prepare for possible transfusion" },
+        { "name": "Random Blood Sugar", "priority": "medium", "yield": 0.2, "indication": "Stress hyperglycemia" },
+        { "name": "Serum Amylase", "priority": "medium", "yield": 0.4, "indication": "Rule out pancreatitis if epigastric pain" },
+        { "name": "Arterial Blood Gas", "priority": "medium", "yield": 0.5, "indication": "Metabolic acidosis suggests ischemia" },
+        { "name": "LFTs", "priority": "medium", "yield": 0.2, "indication": "Baseline for anesthesia" },
+        { "name": "Coagulation profile", "priority": "medium", "yield": 0.2, "indication": "Pre-operative baseline" }
       ],
       "imaging": [
-        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.95, "indication": "mesenteric swirl sign, bird beak sign" },
-        { "name": "Abdominal X-Ray", "priority": "immediate", "yield": 0.85, "indication": "first-line imaging" }
+        { "name": "Abdominal X-Ray (erect + supine)", "priority": "immediate", "yield": 0.85, "indication": "First-line. Coffee bean sign pathognomonic for sigmoid volvulus. Bent inner tube sign. Air-fluid levels." },
+        { "name": "CT Abdomen with IV contrast", "priority": "high", "yield": 0.95, "indication": "Gold standard. Shows mesenteric swirl sign, bird beak sign, transition point. Assesses bowel viability." },
+        { "name": "Gastrografin enema", "priority": "medium", "yield": 0.9, "indication": "Bird beak stricture at rectosigmoid junction. Can be therapeutic." },
+        { "name": "Chest X-Ray", "priority": "medium", "yield": 0.2, "indication": "Exclude free air under diaphragm" }
       ]
     },
 
+    "interpretation_rules": {
+      "abdominal_xray": {
+        "coffee_bean_sign": { "present": "sigmoid_volvulus +40", "absent": "sigmoid_volvulus -10" },
+        "air_fluid_levels": { "present": "bowel_obstruction +15" },
+        "free_air": { "present": "perforation — emergency +50" }
+      },
+      "ct_abdomen": {
+        "mesenteric_swirl_sign": { "present": "volvulus +45" },
+        "bird_beak_sign": { "present": "sigmoid_volvulus +45" },
+        "transition_point": { "present": "mechanical_obstruction +20" },
+        "pneumatosis_intestinalis": { "present": "bowel_ischemia +50 — emergency" },
+        "portal_venous_gas": { "present": "bowel_infarction +60 — critical" },
+        "free_fluid": { "present": "peritonitis_perforation +20" },
+        "colonic_wall_thickening": { "present": "diverticulitis_cancer -10 for volvulus" },
+        "periodic_stranding": { "present": "diverticulitis -15 for volvulus" }
+      }
+    },
+
     "management": {
-      "protocolReference": "WSES Guidelines for Volvulus Management",
+      "protocolReference": "WSES Guidelines for Acute Left-Sided Colonic Obstruction (2025)",
+      "initial": {
+        "resuscitation": [
+          "NBM (nil by mouth)",
+          "Large bore IV access ×2 (14G or 16G)",
+          "IV fluids — Hartmann's solution or Normal Saline 1-2 L stat, then 125 mL/hr",
+          "Urinary catheter — monitor output, target >0.5 mL/kg/hr",
+          "NG tube — free drainage, gastric decompression",
+          "Fluid balance chart — strict input/output",
+          "Blood cultures if febrile",
+          "Type and crossmatch — 2 units PRBC on standby"
+        ],
+        "analgesia": [
+          "IV Paracetamol 1 g 6-hourly",
+          "IV Morphine 2.5-5 mg titrated to pain (caution: may mask peritonitis)",
+          "Avoid NSAIDs if elderly or renal impairment"
+        ],
+        "antibiotics": [
+          "IV Ceftriaxone 2 g daily (or Cefuroxime 750 mg 8-hourly)",
+          "IV Metronidazole 500 mg 8-hourly",
+          "Duration: 5-7 days if gangrene, 24h if non-ischemic"
+        ],
+        "monitoring": [
+          "Hourly vitals (BP, HR, RR, SpO2)",
+          "4-hourly temperature",
+          "Urine output hourly",
+          "Abdominal girth measurement 6-hourly",
+          "Pain score 4-hourly",
+          "Lactate clearance (repeat in 4-6 hours)"
+        ]
+      },
+      "definitive": {
+        "non_ischemic": {
+          "description": "Endoscopic detorsion then elective resection",
+          "step1": "Urgent flexible sigmoidoscopy + detorsion + rectal tube insertion (48-72 hours)",
+          "step2": "Decompression — leave rectal tube for 24-48 hours",
+          "step3": "Bowel preparation (2 days) — PEG/Phospho-soda",
+          "step4": "Elective sigmoid resection with primary anastomosis (during same admission)",
+          "approach": "Laparoscopic or open sigmoid colectomy",
+          "rationale": "Recurrence rate >50% without resection"
+        },
+        "ischemic": {
+          "description": "Emergency laparotomy + Hartmann procedure",
+          "step1": "Emergency midline laparotomy",
+          "step2": "Identify and reduce volvulus",
+          "step3": "Assess bowel viability (color, peristalsis, pulsations, Wood's lamp fluorescein)",
+          "step4": "Resect gangrenous sigmoid colon",
+          "step5": "Mature proximal end as end colostomy (descending/sigmoid colostomy)",
+          "step6": "Close rectal stump (Hartmann's pouch)",
+          "step7": "Abdominal lavage with warm saline",
+          "step8": "Place pelvic drain if contamination",
+          "step9": "Close abdomen in layers",
+          "step5_alt": "If viable: sigmoid resection + primary anastomosis ± covering loop ileostomy"
+        }
+      },
+      "postop": {
+        "general": [
+          "IV fluids until bowel function returns",
+          "NG tube on free drainage — remove when output <500 mL/day",
+          "Antibiotics for 5-7 days (if gangrene) or 24 hours",
+          "VTE prophylaxis — SC heparin/enoxaparin",
+          "Early mobilization — out of bed day 1",
+          "Chest physiotherapy — incentive spirometry",
+          "Pain control — multimodal (paracetamol + NSAIDs + morphine PRN)",
+          "Wound care — observe for infection, keep dry for 48 hours"
+        ],
+        "stoma_care": [
+          "Mark stoma site pre-operatively if possible",
+          "Apply transparent stoma bag immediately post-op",
+          "Document stoma type (end colostomy), location, color (should be pink/red)",
+          "Monitor stoma hourly for first 24 hours: color, edema, output",
+          "Normal stoma output begins day 2-5: starts as mucus, then liquid stool",
+          "Stoma should be: pink/red, moist, slightly raised, non-tender",
+          "Emergency signs: dark/purple/black color = ischemia, excessive bleeding, retraction, parastomal hernia",
+          "Stoma nurse referral within 24 hours",
+          "Patient education: how to change bag, skin care, diet, when to seek help",
+          "Supply stoma starter pack at discharge"
+        ],
+        "diet_advancement": [
+          "Day 0-1: NBM, NG tube",
+          "Day 1-2: Sips of water if bowel sounds return",
+          "Day 2-3: Clear fluids (water, tea, clear soup)",
+          "Day 3-4: Soft diet (porridge, yoghurt, mashed potatoes, bananas)",
+          "Day 4-5: Full diet as tolerated — low residue initially",
+          "Avoid: beans, cabbage, nuts, seeds, maize in first 2 weeks"
+        ],
+        "discharge_criteria": [
+          "Tolerating soft diet without vomiting",
+          "Passing stool via colostomy or per rectum",
+          "Pain controlled on oral analgesia",
+          "Afebrile for 24 hours",
+          "Mobilizing independently",
+          "Stoma functioning and patient/carer confident with stoma care",
+          "Wound clean and dry, no signs of infection",
+          "Hb stable, lactate normal, WBC trending down",
+          "Follow-up appointment confirmed"
+        ]
+      },
       "pathways": [
         {
           "severity": "non-severe",
-          "criteria": "no peritonitis, no ischemia, sigmoid volvulus",
+          "criteria": "no peritonitis, no ischemia, sigmoid volvulus, lactate <2, no acidosis",
           "treatment": "Endoscopic detorsion + rectal tube. Elective sigmoid resection within same admission. Bowel prep and single-stage resection with anastomosis."
         },
         {
           "severity": "severe",
-          "criteria": "peritonitis, ischemia, gangrene, failed endoscopic reduction",
+          "criteria": "peritonitis, ischemia, gangrene, failed endoscopic reduction, lactate >2, acidosis, WBC >15",
           "treatment": "Emergency laparotomy. Resection of non-viable bowel. Hartmann procedure for sigmoid (if unprepared). Primary anastomosis if viable and prepared. ICU care."
         }
       ]
     },
 
-    "pathophysiology": [
-      "bowel_torsion",
-      "closed_loop_obstruction",
-      "venous_compression",
-      "arterial_compromise",
-      "ischemia",
-      "gangrene",
-      "perforation"
-    ],
+    "operative_templates": {
+      "hartmann_procedure": {
+        "title": "Emergency Laparotomy + Sigmoid Resection + Hartmann's Procedure (End Colostomy)",
+        "preOpDiagnosis": "Sigmoid Volvulus — likely gangrenous",
+        "postOpDiagnosis": "Gangrenous Sigmoid Volvulus / Ischemic Sigmoid Colon",
+        "procedure": "Emergency midline laparotomy, sigmoid colectomy, Hartmann's procedure, end colostomy formation",
+        "steps": [
+          "Patient positioned supine, under general anaesthesia",
+          "Urinary catheter inserted",
+          "Midline laparotomy incision from xiphisternum to pubis",
+          "Entry into peritoneal cavity — note any free fluid, pus, or blood",
+          "Abdominal exploration — identify dilated sigmoid loop",
+          "Identify volvulus — note degree of twist (typically 180-720 degrees)",
+          "Assess bowel viability — colour, peristalsis, mesenteric pulsations",
+          "If non-viable: proceed with resection",
+          "Mobilize sigmoid colon — divide lateral peritoneal attachments",
+          "Identify left ureter — protect throughout",
+          "Identify proximal resection margin — descending colon, viable with good blood supply",
+          "Identify distal resection margin — rectosigmoid junction",
+          "Divide mesentery between clamps — ligate with 2-0 silk",
+          "Divide bowel at proximal and distal margins — using GIA stapler or between clamps",
+          "Send resected specimen for histology",
+          "Mature end colostomy: bring proximal descending colon through left rectus sheath at pre-marked site",
+          "Close rectal stump (Hartmann's pouch) with 3-0 PDS suture or stapler",
+          "Irrigate abdominal cavity with warm saline — at least 3 litres",
+          "Achieve haemostasis",
+          "Place pelvic drain if contaminated",
+          "Close abdomen in layers — PDS loop for rectus sheath, staples/sutures for skin",
+          "Apply transparent stoma bag"
+        ],
+        "keyLandmarks": [
+          "Left ureter — identified and protected throughout",
+          "Inferior mesenteric artery — ligated at origin if oncologic, otherwise preserve",
+          "Rectosigmoid junction — distal resection margin",
+          "Descending colon — proximal resection margin, viable with good pulsations",
+          "Pre-marked stoma site — through left rectus abdominis"
+        ]
+      },
+      "elective_resection": {
+        "title": "Elective Sigmoid Colectomy with Primary Anastomosis",
+        "preOpDiagnosis": "Sigmoid Volvulus (post-decompression)",
+        "postOpDiagnosis": "Sigmoid Volvulus — redundant sigmoid colon",
+        "procedure": "Laparoscopic/Open sigmoid colectomy with primary anastomosis",
+        "steps": [
+          "Bowel preparation completed",
+          "Prophylactic antibiotics at induction",
+          "Laparoscopic approach: 4 ports (umbilical camera, right iliac, left flank, suprapubic)",
+          "Identify dilated/elongated sigmoid colon",
+          "Mobilize sigmoid by dividing lateral peritoneal reflection",
+          "Identify and protect left ureter",
+          "Divide mesentery with LigaSure/harmonic scalpel",
+          "Divide proximal margin (descending colon) and distal margin (upper rectum)",
+          "Extract specimen via Pfannenstiel or enlarged port site",
+          "Create end-to-end anastomosis using circular stapler (EEA 29-33 mm)",
+          "Test anastomosis — air leak test under saline",
+          "Close mesenteric defect",
+          "Close port sites"
+        ]
+      }
+    },
 
     "complications": [
       {
@@ -152,20 +474,159 @@
         "probability": 0.2,
         "lagDays": [0, 2],
         "severityBoost": 0.5,
-        "clues": ["peritonitis", "lactic_acidosis", "bloody_peritoneal_fluid"]
+        "triggers": ["lactate >2", "wbc >15", "peritonitis", "acidosis", "fever >38.5"],
+        "clues": ["peritonitis", "lactic_acidosis", "bloody_peritoneal_fluid", "fever", "tachycardia_out_of_proportion"]
       },
       {
         "diseaseId": "bowel_perforation",
         "probability": 0.1,
         "lagDays": [1, 3],
         "severityBoost": 0.5,
-        "clues": ["free_air", "worsening_sepsis", "generalized_peritonitis"]
+        "triggers": ["free_air_on_xray", "septic_shock", "generalized_peritonitis"],
+        "clues": ["sudden_worsening_pain", "free_air", "worsening_sepsis", "generalized_peritonitis", "rigidity"]
+      },
+      {
+        "diseaseId": "anastomotic_leak",
+        "probability": 0.05,
+        "lagDays": [3, 7],
+        "severityBoost": 0.4,
+        "triggers": ["fever_day3_7", "tachycardia", "peritonitis", "drain_fluid_feculent"],
+        "clues": ["fever", "tachycardia", "oliguria", "peritonitis", "feculent_drain_output", "ileus_persistent"]
+      },
+      {
+        "diseaseId": "stoma_ischemia",
+        "probability": 0.03,
+        "lagDays": [0, 1],
+        "severityBoost": 0.5,
+        "triggers": ["stoma_dark", "stoma_purple", "stoma_black", "stoma_retraction"],
+        "clues": ["stoma_color_change", "stoma_pain", "decreased_output", "mucocutaneous_separation"]
+      },
+      {
+        "diseaseId": "wound_infection",
+        "probability": 0.15,
+        "lagDays": [3, 7],
+        "severityBoost": 0.2,
+        "triggers": ["wound_erythema", "wound_discharge", "fever", "wound_pain"],
+        "clues": ["wound_erythema", "wound_discharge_purulent", "wound_dehiscence", "fever"]
+      },
+      {
+        "diseaseId": "parastomal_hernia",
+        "probability": 0.3,
+        "lagDays": [90, 365],
+        "severityBoost": 0.1,
+        "triggers": ["bulge_around_stoma", "difficulty_bagging", "obstruction"],
+        "clues": ["bulge_around_stoma_when_coughing", "difficulty_applying_bag", "intermittent_obstruction"]
       }
+    ],
+
+    "complicationTrigers": {
+      "immediate_postop_24h": [
+        { "complication": "Stoma ischemia", "watchFor": ["stoma colour change to dark/purple/black", "excessive edema", "bleeding from stoma", "no output >12h"] },
+        { "complication": "Haemorrhage", "watchFor": ["tachycardia", "hypotension", "falling Hb", "excessive drain output >200 mL bloody"] },
+        { "complication": "Reperfusion injury", "watchFor": ["lactate spike", "acidosis", "arrhythmia", "hyperkalemia"] }
+      ],
+      "postop_day1_3": [
+        { "complication": "Anastomotic leak (if primary anastomosis)", "watchFor": ["fever", "tachycardia", "peritonitis", "oliguria", "feculent drain"] },
+        { "complication": "Ileus", "watchFor": ["persistent NG output >1L/day", "abdominal distension", "no bowel sounds"] },
+        { "complication": "Wound infection", "watchFor": ["wound erythema", "warmth", "discharge", "fever"] }
+      ],
+      "postop_day3_7": [
+        { "complication": "Anastomotic leak", "watchFor": ["fever day 5-7", "sepsis", "peritonitis", "drain feculent"] },
+        { "complication": "UTI", "watchFor": ["fever", "dysuria after catheter removal", "cloudy urine"] },
+        { "complication": "DVT/PE", "watchFor": ["unilateral leg swelling", "chest pain", "sudden dyspnea", "hypoxia"] }
+      ],
+      "late": [
+        { "complication": "Parastomal hernia", "watchFor": ["bulge", "difficulty bagging", "obstruction"] },
+        { "complication": "Stoma stenosis", "watchFor": ["narrowing", "thin stool", "difficulty passing flatus"] },
+        { "complication": "Incisional hernia", "watchFor": ["bulge at midline scar", "pain on straining"] }
+      ]
+    },
+
+    "followup": {
+      "before_discharge": [
+        "Stoma care teaching — patient and family must demonstrate changing bag independently",
+        "Dietician review — low residue diet teaching",
+        "Physiotherapy — breathing exercises, mobilization",
+        "Social work — home assessment if elderly living alone",
+        "Colostomy association contact information",
+        "Stoma supplier information"
+      ],
+      "after_discharge": [
+        { "timing": "1 week", "action": "Surgical clinic review — wound check, stoma assessment, histology results" },
+        { "timing": "2 weeks", "action": "Stoma therapist follow-up" },
+        { "timing": "6 weeks", "action": "Surgical clinic — assess for stoma reversal candidacy" },
+        { "timing": "3 months", "action": "If planned: colostomy reversal surgery (colonoscopy + water-soluble enema first)" },
+        { "timing": "6 months", "action": "Final follow-up after reversal — bowel function assessment" },
+        { "timing": "Annual", "action": "Colonoscopy surveillance (if history of diverticulitis or family history of CRC)" }
+      ],
+      "when_to_return": [
+        "Fever >38°C",
+        "Vomiting and unable to tolerate fluids",
+        "Stoma stops functioning (no output >12 hours)",
+        "Stoma becomes dark, purple, or black",
+        "Stoma bleeds heavily",
+        "Wound discharge, redness, or separation",
+        "Increasing abdominal pain or distension",
+        "Not opening bowels for >3 days (stoma or per rectum)"
+      ]
+    },
+
+    "patient_education": {
+      "diagnosis_explanation": "Your large intestine (sigmoid colon) has twisted on itself like a knot. This blocks stool and gas from passing and can cut off blood supply to the bowel. We need to untwist it, either with a camera through the back passage or with an operation.",
+      "hartmann_procedure_explanation": "Because part of your bowel had lost its blood supply, we had to remove that section. The healthy end of the bowel has been brought out through your tummy wall as a stoma (colostomy). The remaining lower end has been stitched closed inside. This is a temporary situation — in 3-6 months, we can consider reversing the stoma and reconnecting the bowel.",
+      "stoma_explanation": "Your stoma is the end of your bowel coming through your tummy wall. It will pass stool into a bag that sticks to your skin around it. It has no nerve endings so it doesn't hurt. The stoma nurse will teach you how to care for it before you go home.",
+      "diet_advice": "Eat small, frequent meals. Chew food well. Avoid gas-forming foods (beans, cabbage, onions, carbonated drinks) in the first weeks. Drink plenty of water. Add new foods one at a time to see how your stoma responds.",
+      "activity_advice": "Avoid heavy lifting (>5 kg) for 6 weeks after surgery. Gentle walking is encouraged. You can shower with your stoma bag on. Avoid contact sports until cleared by your surgeon."
+    },
+
+    "dischargeCriteria": [
+      "Tolerating soft diet without vomiting or significant distension",
+      "Passing flatus or stool (via stoma or per rectum)",
+      "Pain controlled on oral analgesia (paracetamol, ibuprofen)",
+      "Afebrile for 24 hours (temp <37.5°C)",
+      "Heart rate <100 bpm",
+      "White cell count trending down or normal",
+      "Lactate <2 mmol/L",
+      "Mobilizing independently (with assistance if elderly)",
+      "Stoma: pink/red, functioning, patient/carer confident with care (if applicable)",
+      "Wound: clean, dry, no signs of infection",
+      "Urine output adequate without catheter",
+      "Follow-up appointment scheduled",
+      "Home situation assessed — safe discharge"
     ],
 
     "mustNotMiss": true,
     "emergencyPriority": "high",
-    "diagnosticClues": ["massive_distension", "coffee_bean_sign", "previous_episodes", "elderly_constipated_patient"],
-    "exclusionClues": ["diarrhea", "pain_relieved_by_flatus", "mild_distension"]
+    "diagnosticClues": [
+      "massive_distension_out_of_proportion_to_pain",
+      "coffee_bean_sign_on_xray",
+      "previous_similar_episodes",
+      "elderly_constipated_patient",
+      "high_fibre_diet_african_context",
+      "dramatic_response_to_rectal_tube"
+    ],
+    "exclusionClues": [
+      "diarrhea",
+      "pain_relieved_by_passing_flatus",
+      "mild_distension",
+      "hematochezia",
+      "gradual_onset_over_weeks"
+    ],
+
+    "pathophysiology": [
+      "redundant_sigmoid_colon",
+      "narrow_mesenteric_attachment",
+      "chronic_constipation_leading_to_elongation",
+      "high_fibre_diet_causing_bulkier_stool",
+      "twisting_around_mesenteric_axis",
+      "closed_loop_obstruction",
+      "venous_compression_first",
+      "arterial_compromise",
+      "ischemia",
+      "gangrene",
+      "perforation",
+      "peritonitis",
+      "sepsis"
+    ]
   }
 }
