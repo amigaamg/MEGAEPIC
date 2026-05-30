@@ -462,7 +462,7 @@ export default function AuthRegisterPage() {
       >
         Already have an account?{" "}
         <a
-          href="/auth/login"
+            href="/login"
           className="font-medium no-underline hover:underline"
           style={{ color: "var(--teal)" }}
         >

@@ -291,7 +291,7 @@ export default function AuthLoginPage() {
       >
         Don&apos;t have an account?{" "}
         <a
-          href="/auth/register"
+            href="/register"
           className="font-medium no-underline hover:underline"
           style={{ color: "var(--teal)" }}
         >
