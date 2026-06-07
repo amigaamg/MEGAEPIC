@@ -56,11 +56,11 @@ function buildPlanText(differentials: DDXResult[]): string {
   const lines: string[] = [];
   if (differentials.length > 0) {
     const top = differentials[0];
-    if (top.recommendedActions.length > 0) {
+    if (top.recommendedActions && top.recommendedActions.length > 0) {
       lines.push('Recommended actions:');
       lines.push(...top.recommendedActions.map(a => `- ${a}`));
     }
-    if (top.suggestedInvestigations.length > 0) {
+    if (top.suggestedInvestigations && top.suggestedInvestigations.length > 0) {
       lines.push('Suggested investigations:');
       lines.push(...top.suggestedInvestigations.map(i => `- ${i}`));
     }
