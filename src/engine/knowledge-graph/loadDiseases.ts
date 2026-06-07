@@ -67,6 +67,7 @@ import cnsDiseases from './diseases/cns.json';
 import infectiousDiseases from './diseases/infectious.json';
 import obstetricDiseases from './diseases/obstetrics.json';
 import surgicalDiseases from './diseases/surgical.json';
+import largeBowelObstructionRaw from './diseases/surgical/large_bowel_obstruction.json';
 import endocrineDiseases from './diseases/endocrine.json';
 import psychiatricDiseases from './diseases/psychiatry.json';
 import oncologyDiseases from './diseases/oncology.json';
@@ -77,6 +78,7 @@ ALL_DISEASES.push(
   ...(infectiousDiseases as unknown as DiseaseNode[]),
   ...(obstetricDiseases as unknown as DiseaseNode[]),
   ...(surgicalDiseases as unknown as DiseaseNode[]),
+  largeBowelObstructionRaw as unknown as DiseaseNode,
   ...(endocrineDiseases as unknown as DiseaseNode[]),
   ...(psychiatricDiseases as unknown as DiseaseNode[]),
   ...(oncologyDiseases as unknown as DiseaseNode[]),

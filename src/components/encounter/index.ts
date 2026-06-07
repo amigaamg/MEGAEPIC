@@ -1,6 +1,7 @@
 export { RegistrationPhase } from './RegistrationPhase';
 export { ComplaintPhase } from './ComplaintPhase';
 export { HPIPhase } from './HPIPhase';
+export { IntelligentHPI } from './IntelligentHPI';
 export { ExaminationPhase } from './ExaminationPhase';
 export { BedsideScorePhase } from './BedsideScorePhase';
 export { DDXPhase } from './DDXPhase';
@@ -10,4 +11,7 @@ export { TreatmentPhase } from './TreatmentPhase';
 export { OperativeNotePhase } from './OperativeNotePhase';
 export { WardRoundPhase } from './WardRoundPhase';
 export { DispositionPhase } from './DispositionPhase';
+export { HandoverPhase } from './HandoverPhase';
+export { DischargeSummaryPhase } from './DischargeSummaryPhase';
+export { FullClerkingPhase } from './FullClerkingPhase';
 export { TimelineViewer } from './TimelineViewer';

@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useCallback } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useCallback, useMemo } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { useEncounter } from '@/src/hooks/useEncounter';
 import { useEncounterFacts } from '@/src/hooks/useEncounterFacts';
 import { useTimeline } from '@/src/hooks/useTimeline';
@@ -9,6 +9,7 @@ import {
   RegistrationPhase,
   ComplaintPhase,
   HPIPhase,
+  IntelligentHPI,
   ExaminationPhase,
   BedsideScorePhase,
   DDXPhase,
@@ -18,11 +19,15 @@ import {
   OperativeNotePhase,
   WardRoundPhase,
   DispositionPhase,
+  HandoverPhase,
+  DischargeSummaryPhase,
+  FullClerkingPhase,
   TimelineViewer,
 } from '@/src/components/encounter';
+import { ClinicalIntelligencePanel } from '@/src/components/surgery/ClinicalIntelligencePanel';
 import { Stepper } from '@/src/components/shared/Stepper';
 import { getPresentingComplaintsForUnit } from '@/src/engine/knowledge-graph';
-import { addSubcollectionItem } from '@/src/services/encounterService';
+import { addSubcollectionItem, updateSubcollectionItem } from '@/src/services/encounterService';
 import type {
   RegistrationData,
   PresentingComplaintData,
@@ -36,25 +41,75 @@ import type {
   InvestigationEntry,
 } from '@/src/types/encounter';
 
-const PHASES = [
-  { id: 'registration', label: 'Registration', icon: '📋' },
-  { id: 'presenting_complaint', label: 'Complaint', icon: '🗣️' },
-  { id: 'hpi', label: 'History (HPI)', icon: '📝' },
-  { id: 'examination', label: 'Examination', icon: '🩺' },
-  { id: 'bedside_scores', label: 'Scores', icon: '📊' },
-  { id: 'ddx', label: 'Differential DX', icon: '🧠' },
-  { id: 'investigations', label: 'Investigations', icon: '🧪' },
-  { id: 'imaging', label: 'Imaging', icon: '📡' },
-  { id: 'treatment', label: 'Treatment', icon: '💉' },
-  { id: 'operative_note', label: 'Operative Note', icon: '🔪' },
-  { id: 'ward_rounds', label: 'Ward Rounds', icon: '👨‍⚕️' },
-  { id: 'disposition', label: 'Disposition', icon: '🚪' },
+type WorkspaceType = 'admission' | 'full-clerking' | 'ward-round' | 'operative-note' | 'handover' | 'discharge';
+
+interface WorkspaceConfig {
+  id: WorkspaceType;
+  label: string;
+  icon: string;
+  description: string;
+  phases: { id: string; label: string; icon: string }[];
+}
+
+const WORKSPACES: WorkspaceConfig[] = [
+  {
+    id: 'admission',
+    label: 'Admission',
+    icon: '🚑',
+    description: 'Emergency admission — initial assessment, differentials, and management plan',
+    phases: [
+      { id: 'registration', label: 'Registration', icon: '📋' },
+      { id: 'presenting_complaint', label: 'Complaint', icon: '🗣️' },
+      { id: 'hpi', label: 'History (HPI)', icon: '📝' },
+      { id: 'examination', label: 'Examination', icon: '🩺' },
+      { id: 'bedside_scores', label: 'Scores', icon: '📊' },
+      { id: 'ddx', label: 'Differential DX', icon: '🧠' },
+      { id: 'investigations', label: 'Investigations', icon: '🧪' },
+      { id: 'imaging', label: 'Imaging', icon: '📡' },
+      { id: 'treatment', label: 'Treatment', icon: '💉' },
+      { id: 'disposition', label: 'Disposition', icon: '🚪' },
+    ],
+  },
+  {
+    id: 'full-clerking',
+    label: 'Full Clerking',
+    icon: '📋',
+    description: 'Comprehensive 9-phase clerking — biodata through post-op plan',
+    phases: [{ id: 'clerking', label: 'Full Clerking', icon: '📋' }],
+  },
+  {
+    id: 'ward-round',
+    label: 'Ward Round',
+    icon: '👨‍⚕️',
+    description: 'SOAP ward round — daily assessment and plan',
+    phases: [{ id: 'ward_round', label: 'Ward Round', icon: '👨‍⚕️' }],
+  },
+  {
+    id: 'operative-note',
+    label: 'Operative Note',
+    icon: '🔪',
+    description: 'Post-operative documentation with auto-population',
+    phases: [{ id: 'operative_note', label: 'Operative Note', icon: '🔪' }],
+  },
+  {
+    id: 'handover',
+    label: 'Handover',
+    icon: '🔄',
+    description: 'Shift change handover — current status, pending items, escalation',
+    phases: [{ id: 'handover', label: 'Handover', icon: '🔄' }],
+  },
+  {
+    id: 'discharge',
+    label: 'Discharge',
+    icon: '🏠',
+    description: 'Discharge summary — LOS, medications, follow-up, instructions',
+    phases: [{ id: 'discharge', label: 'Discharge Summary', icon: '🏠' }],
+  },
 ];
 
 export default function SurgeryEncounterPage() {
   const params = useParams();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const hospitalId = params?.hospitalId as string;
   const unitSlug = params?.unitSlug as string;
   const encounterId = params?.encounterId as string;
@@ -72,13 +127,17 @@ export default function SurgeryEncounterPage() {
     encounterId, deptSlug, unitSlug, debounceMs: 800,
   });
 
+  const [activeWorkspace, setActiveWorkspace] = useState<WorkspaceType>('admission');
   const [activePhase, setActivePhase] = useState<string>('registration');
   const phaseEncounter = encounter?.activePhase || 'registration';
   const completedPhases: string[] = encounter?.completedPhases || [];
   const unitComplaints = getPresentingComplaintsForUnit(unitSlug);
 
+  const workspaceConfig = useMemo(() => WORKSPACES.find((w) => w.id === activeWorkspace)!, [activeWorkspace]);
+
   const topDiseaseIds = ddxResults.slice(0, 3).map((d) => d.diseaseId);
   const topDiseaseNames = ddxResults.slice(0, 5).map((d) => d.diseaseName);
+  const admissionProcedures = treatmentItems.filter((t) => t.planType === 'definitive').flatMap((t) => t.definitiveProcedure ? [t.definitiveProcedure] : []);
 
   const triggerDDX = useCallback(() => {
     if (!encounter) return;
@@ -96,6 +155,10 @@ export default function SurgeryEncounterPage() {
       scores: [],
     });
   }, [encounter, unitSlug, hpiItems, examItems, investigationItems, imagingItems, computeDDX]);
+
+  const triggerDDXAfterSettle = useCallback(() => {
+    setTimeout(() => triggerDDX(), 100);
+  }, [triggerDDX]);
 
   const handleCompletePhase = async (phaseId: string) => {
     await completePhase(phaseId, 'dr_current', 'Dr. Current');
@@ -153,13 +216,9 @@ export default function SurgeryEncounterPage() {
     const flag = value > refHigh ? 'abnormal' : value < refLow ? 'abnormal' : 'normal';
     const items = investigationItems.filter((i) => i.testName === testName);
     for (const item of items) {
-      await updateEncounterSub(item.id!, { status: 'resulted', result: value, flag, interpretation: `${testName}: ${value} ${unit} (${flag})` });
+      await updateSubcollectionItem(encounterId, deptSlug, unitSlug, 'investigations', item.id!, { status: 'resulted', result: value, flag, interpretation: `${testName}: ${value} ${unit} (${flag})` });
     }
     triggerDDX();
-  };
-  const updateEncounterSub = async (itemId: string, updates: any) => {
-    const { updateSubcollectionItem } = await import('@/src/services/encounterService');
-    await updateSubcollectionItem(encounterId, deptSlug, unitSlug, 'investigations', itemId, updates);
   };
 
   const handleImagingOrder = async (studyName: string) => {
@@ -173,13 +232,9 @@ export default function SurgeryEncounterPage() {
     const items = imagingItems.filter((i) => i.studyName === studyName);
     const ddxImpact = positive ? 15 : -5;
     for (const item of items) {
-      await updateEncounterSubImg(item.id!, { status: 'completed', finding, impression, ddxImpact });
+      await updateSubcollectionItem(encounterId, deptSlug, unitSlug, 'imaging', item.id!, { status: 'completed', finding, impression, ddxImpact });
     }
     triggerDDX();
-  };
-  const updateEncounterSubImg = async (itemId: string, updates: any) => {
-    const { updateSubcollectionItem } = await import('@/src/services/encounterService');
-    await updateSubcollectionItem(encounterId, deptSlug, unitSlug, 'imaging', itemId, updates);
   };
 
   const handleTreatmentSave = async (planType: string, items: string[], definitiveProcedure?: string) => {
@@ -204,6 +259,28 @@ export default function SurgeryEncounterPage() {
   const handleDispositionSave = async (data: DispositionData) => {
     await addSubcollectionItem(encounterId, deptSlug, unitSlug, 'disposition', data as any);
     await update({ status: data.decision === 'discharge' ? 'discharged' : data.decision === 'admit' ? 'admitted' : data.decision });
+  };
+
+  const handleHandoverSave = async (data: any) => {
+    await update({ handoverData: data });
+    await addEvent('Handover completed', 'Shift handover documented', 'dr_current', 'Dr. Current');
+  };
+
+  const handleDischargeSave = async (data: any) => {
+    await addSubcollectionItem(encounterId, deptSlug, unitSlug, 'dischargeSummary', data as any);
+    await update({ status: 'discharged' });
+    await addEvent('Patient discharged', 'Discharge summary completed', 'dr_current', 'Dr. Current');
+  };
+
+  const handleClerkingSave = async (data: any) => {
+    await addSubcollectionItem(encounterId, deptSlug, unitSlug, 'clerkingNotes', { ...data, timestamp: Date.now() } as any);
+    await addEvent('Full clerking completed', 'Clerking note generated', 'dr_current', 'Dr. Current');
+  };
+
+  const switchWorkspace = async (ws: WorkspaceType) => {
+    setActiveWorkspace(ws);
+    const cfg = WORKSPACES.find((w) => w.id === ws)!;
+    setActivePhase(cfg.phases[0]?.id || 'registration');
   };
 
   if (loading) {
@@ -244,12 +321,14 @@ export default function SurgeryEncounterPage() {
         );
       case 'hpi':
         return (
-          <HPIPhase
-            topDiseaseIds={topDiseaseIds}
+          <IntelligentHPI
+            patientName={encounter.patientName}
+            unitSlug={unitSlug}
+            presentingComplaint={encounter.presentingComplaint?.complaint || ''}
+            complaintDuration={encounter.presentingComplaint?.duration || ''}
             existingAnswers={hpiItems}
             onAnswer={handleHPIAnswer}
             onComplete={() => handleCompletePhase('hpi')}
-            unitSlug={unitSlug}
           />
         );
       case 'examination':
@@ -311,35 +390,73 @@ export default function SurgeryEncounterPage() {
             onComplete={() => handleCompletePhase('treatment')}
           />
         );
-      case 'operative_note':
-        return (
-          <OperativeNotePhase
-            topDiseaseIds={topDiseaseIds}
-            onSave={handleOperativeNoteSave}
-            onComplete={() => handleCompletePhase('operative_note')}
-          />
-        );
-      case 'ward_rounds':
-        return (
-          <WardRoundPhase
-            existingRounds={wardRoundItems}
-            onSave={handleWardRoundSave}
-            onComplete={() => handleCompletePhase('ward_rounds')}
-            patientName={encounter.patientName}
-            patientId={encounter.patientId}
-            unitSlug={unitSlug}
-          />
-        );
       case 'disposition':
         return (
           <DispositionPhase
             topDiseaseNames={topDiseaseNames}
-            proceduresPerformed={treatmentItems.filter((t) => t.planType === 'definitive').flatMap((t) => t.definitiveProcedure ? [t.definitiveProcedure] : [])}
+            proceduresPerformed={admissionProcedures}
             onSave={handleDispositionSave}
             onComplete={() => handleCompletePhase('disposition')}
             patientName={encounter.patientName}
             patientId={encounter.patientId}
             unitSlug={unitSlug}
+          />
+        );
+      case 'operative_note':
+        return (
+          <OperativeNotePhase
+            topDiseaseIds={topDiseaseIds}
+            patientName={encounter.patientName}
+            patientId={encounter.patientId}
+            unitSlug={unitSlug}
+            onSave={handleOperativeNoteSave}
+            onComplete={() => handleCompletePhase('operative_note')}
+          />
+        );
+      case 'ward_round':
+        return (
+          <WardRoundPhase
+            existingRounds={wardRoundItems}
+            onSave={handleWardRoundSave}
+            onComplete={() => handleCompletePhase('ward_round')}
+            patientName={encounter.patientName}
+            patientId={encounter.patientId}
+            unitSlug={unitSlug}
+          />
+        );
+      case 'handover':
+        return (
+          <HandoverPhase
+            patientName={encounter.patientName}
+            patientId={encounter.patientId}
+            unitSlug={unitSlug}
+            diagnosis={topDiseaseNames[0] || ''}
+            encounterStatus={encounter.status}
+            onSave={handleHandoverSave}
+            onComplete={() => handleCompletePhase('handover')}
+          />
+        );
+      case 'discharge':
+        return (
+          <DischargeSummaryPhase
+            patientName={encounter.patientName}
+            patientId={encounter.patientId}
+            unitSlug={unitSlug}
+            diagnosis={topDiseaseNames[0] || ''}
+            procedures={admissionProcedures}
+            admissionDate={encounter.registration?.timestamp || Date.now()}
+            onSave={handleDischargeSave}
+            onComplete={() => handleCompletePhase('discharge')}
+          />
+        );
+      case 'clerking':
+        return (
+          <FullClerkingPhase
+            patientName={encounter.patientName}
+            patientId={encounter.patientId}
+            unitSlug={unitSlug}
+            onSave={handleClerkingSave}
+            onComplete={() => handleCompletePhase('clerking')}
           />
         );
       default:
@@ -362,8 +479,27 @@ export default function SurgeryEncounterPage() {
             {encounter.status}
           </span>
         </div>
+        <div className="p-2 border-b">
+          <p className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Workspace</p>
+          <div className="space-y-1">
+            {WORKSPACES.map((ws) => (
+              <button
+                key={ws.id}
+                onClick={() => switchWorkspace(ws.id)}
+                className={`w-full text-left px-2 py-1.5 rounded text-xs transition-colors ${
+                  activeWorkspace === ws.id
+                    ? 'bg-blue-100 text-blue-700 font-medium'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <span className="mr-1.5">{ws.icon}</span>
+                {ws.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <Stepper
-          steps={PHASES}
+          steps={workspaceConfig.phases}
           activeStep={activePhase}
           completedSteps={completedPhases}
           onStepClick={(id) => setActivePhase(id)}
@@ -373,10 +509,14 @@ export default function SurgeryEncounterPage() {
       <main className="flex-1 overflow-y-auto p-6">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-800 capitalize">
-              {PHASES.find((p) => p.id === activePhase)?.label || activePhase}
-            </h2>
-            <p className="text-xs text-gray-400">{unitSlug.replace(/-/g, ' ')} · SURG</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-800 capitalize">
+                  {workspaceConfig.label}: {workspaceConfig.phases.find((p) => p.id === activePhase)?.label || activePhase}
+                </h2>
+                <p className="text-xs text-gray-400">{workspaceConfig.description}</p>
+              </div>
+            </div>
           </div>
 
           <div className="bg-white border rounded-lg p-6">
@@ -386,33 +526,24 @@ export default function SurgeryEncounterPage() {
       </main>
 
       <aside className="w-72 border-l bg-gray-50 overflow-y-auto">
-        <div className="p-3 border-b">
-          <h3 className="text-sm font-semibold text-gray-700">Timeline</h3>
+        <ClinicalIntelligencePanel
+          encounterId={encounterId}
+          deptSlug={deptSlug}
+          unitSlug={unitSlug}
+          ddxResults={ddxResults}
+          isComputing={isComputing}
+          factCount={factCount}
+          encounterStatus={encounter.status}
+          topDiseaseIds={topDiseaseIds}
+        />
+        <div className="border-t">
+          <div className="p-3 border-b">
+            <h3 className="text-sm font-semibold text-gray-700">Timeline</h3>
+          </div>
+          <div className="p-3">
+            <TimelineViewer encounterId={encounterId} deptSlug={deptSlug} unitSlug={unitSlug} />
+          </div>
         </div>
-        <div className="p-3">
-          <TimelineViewer encounterId={encounterId} deptSlug={deptSlug} unitSlug={unitSlug} />
-        </div>
-
-        {ddxResults.length > 0 && (
-          <>
-            <div className="p-3 border-t border-b">
-              <h3 className="text-sm font-semibold text-gray-700">Top Diagnoses</h3>
-            </div>
-            <div className="p-3 space-y-2">
-              {ddxResults.slice(0, 5).map((d) => (
-                <div key={d.diseaseId}>
-                  <div className="flex justify-between text-xs mb-0.5">
-                    <span className="text-gray-700 truncate">{d.diseaseName}</span>
-                    <span className="text-blue-600 font-medium">{d.probability}%</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${d.probability}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
       </aside>
     </div>
   );

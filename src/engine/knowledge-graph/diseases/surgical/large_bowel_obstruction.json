@@ -1,0 +1,276 @@
+{
+  "id": "large_bowel_obstruction",
+  "name": "Large Bowel Obstruction (LBO)",
+  "system": "surgical",
+  "agePeak": [480, 1080],
+  "prevalenceWeight": 0.7,
+  "historyFeatures": [
+    { "symptomId": "abdominal_distension", "weight": 10 },
+    { "symptomId": "constipation", "weight": 9 },
+    { "symptomId": "abdominal_pain", "weight": 8, "condition": "colicky" },
+    { "symptomId": "vomiting", "weight": 6, "condition": "bilious or faeculent" },
+    { "symptomId": "anorexia", "weight": 4 },
+    { "symptomId": "weight_loss", "weight": 4, "condition": "if cancer" },
+    { "symptomId": "rectal_bleeding", "weight": 5, "condition": "if cancer" },
+    { "symptomId": "change_bowel_habit", "weight": 4, "condition": "if cancer" }
+  ],
+  "examFeatures": [
+    { "signId": "abdominal_distension_exam", "baseWeight": 10, "doubleWeight": true },
+    { "signId": "tympany", "baseWeight": 7 },
+    { "signId": "tenderness", "baseWeight": 5 },
+    { "signId": "guarding", "baseWeight": 8, "doubleWeight": true },
+    { "signId": "rigidity", "baseWeight": 9, "doubleWeight": true },
+    { "signId": "high_pitched_bowel_sounds", "baseWeight": 7 },
+    { "signId": "absent_bowel_sounds", "baseWeight": 6 },
+    { "signId": "empty_rectum", "baseWeight": 6 },
+    { "signId": "rectal_mass", "baseWeight": 8 },
+    { "signId": "visible_peristalsis", "baseWeight": 5 }
+  ],
+  "riskFactors": [
+    { "id": "age_above_60", "multiplier": 2.5 },
+    { "id": "chronic_constipation", "multiplier": 2.0 },
+    { "id": "high_fibre_diet", "multiplier": 1.8 },
+    { "id": "previous_volvulus", "multiplier": 3.5 },
+    { "id": "colorectal_cancer_history", "multiplier": 2.8 },
+    { "id": "family_history_colorectal_cancer", "multiplier": 2.0 },
+    { "id": "parkinsons_disease", "multiplier": 1.5 },
+    { "id": "anticholinergic_medications", "multiplier": 1.4 },
+    { "id": "previous_abdominal_surgery", "multiplier": 1.8 }
+  ],
+  "complications": [
+    { "diseaseId": "bowel_ischemia", "probability": 0.15, "severityBoost": 0.5, "clues": ["constant pain", "rising lactate", "acidosis", "fever", "tachycardia"] },
+    { "diseaseId": "bowel_perforation", "probability": 0.05, "severityBoost": 0.6, "clues": ["sudden severe pain", "generalised peritonitis", "free air on imaging"] },
+    { "diseaseId": "anastomotic_leak", "probability": 0.05, "severityBoost": 0.5, "lagDays": [3, 7], "clues": ["fever day 3-7", "tachycardia", "drain fluid feculent", "wound infection"] },
+    { "diseaseId": "wound_infection", "probability": 0.15, "severityBoost": 0.2, "lagDays": [3, 7], "clues": ["wound erythema", "purulent discharge", "wound pain", "fever"] },
+    { "diseaseId": "stoma_complication", "probability": 0.2, "severityBoost": 0.3, "clues": ["stoma dark", "stoma purple", "stoma black", "stoma retraction"] },
+    { "diseaseId": "ileus", "probability": 0.1, "severityBoost": 0.2, "lagDays": [5, 10], "clues": ["absent bowel sounds", "persistent NG output", "abdominal distension"] },
+    { "diseaseId": "akI_prerenal", "probability": 0.25, "severityBoost": 0.3, "clues": ["oliguria", "rising creatinine", "dehydration"] }
+  ],
+  "syndromeTags": ["bowel_obstruction", "surgical_abdomen", "surgical_emergency"],
+  "mustNotMiss": true,
+  "emergencyPriority": "high",
+  "diagnosticClues": [
+    "massive abdominal distension out of proportion to pain",
+    "absolute constipation for >48 hours",
+    "coffee bean sign on AXR",
+    "elderly patient with chronic constipation",
+    "high-fibre diet history (East African context)"
+  ],
+  "exclusionClues": [
+    "normal bowel habit without distension",
+    "absence of dilated colon on imaging",
+    "diarrhoea predominant (think pseudo-obstruction or IBS)",
+    "no transition point on CT"
+  ],
+  "investigations": {
+    "bedside": [
+      { "name": "Erect + Supine Abdominal X-ray", "priority": "immediate", "yield": 0.85, "indication": "first-line — diagnose obstruction, detect free air" },
+      { "name": "NG tube insertion", "priority": "immediate", "yield": 0.9, "indication": "gastric decompression, measure output" },
+      { "name": "Urinary catheter", "priority": "immediate", "yield": 0.8, "indication": "monitor urine output" }
+    ],
+    "laboratory": [
+      { "name": "Full blood count", "priority": "immediate", "yield": 0.7, "indication": "leukocytosis suggests ischemia; anaemia suggests cancer" },
+      { "name": "Serum lactate", "priority": "immediate", "yield": 0.85, "indication": "key ischemia marker — >2 mmol/L raises concern" },
+      { "name": "Urea and electrolytes", "priority": "immediate", "yield": 0.6, "indication": "dehydration, AKI, electrolyte disturbance" },
+      { "name": "CRP", "priority": "urgent", "yield": 0.7, "indication": "inflammation marker" },
+      { "name": "Blood cultures (2 sets)", "priority": "if febrile", "yield": 0.5, "indication": "bacteraemia in sepsis" },
+      { "name": "Arterial blood gas", "priority": "immediate", "yield": 0.75, "indication": "acidosis suggests ischemia" },
+      { "name": "Crossmatch (Group and Save)", "priority": "preoperative", "yield": 0.9, "indication": "prepare for potential emergency surgery" },
+      { "name": "Coagulation profile", "priority": "preoperative", "yield": 0.4, "indication": "preoperative assessment" }
+    ],
+    "imaging": [
+      { "name": "CT Abdomen + Pelvis with IV contrast", "priority": "immediate", "yield": 0.95, "indication": "gold standard — confirm cause, assess ischemia, guide surgery" },
+      { "name": "CT Abdomen without contrast", "priority": "if renal failure", "yield": 0.85, "indication": "alternative if contrast contraindicated" },
+      { "name": "Gastrografin enema", "priority": "diagnostic+therapeutic", "yield": 0.9, "indication": "diagnose and treat sigmoid volvulus if CT unavailable" }
+    ],
+    "advanced": [
+      { "name": "Flexible sigmoidoscopy + detorsion", "indication": "therapeutic for non-ischemic sigmoid volvulus", "priority": "urgent" },
+      { "name": "Colonoscopy (post-op)", "indication": "if obstructing cancer suspected, after recovery", "priority": "elective" }
+    ]
+  },
+  "management": {
+    "protocolReference": "WSES Guidelines for Large Bowel Obstruction 2024",
+    "pathways": [
+      {
+        "severity": "resuscitation",
+        "criteria": "All patients with suspected LBO on arrival",
+        "treatment": [
+          "NBM — nil by mouth immediately",
+          "Large-bore IV access x2 (16G minimum)",
+          "IV crystalloid 30 mL/kg bolus then 125 mL/hr",
+          "NG tube on free drainage",
+          "Urinary catheter — hourly output monitoring",
+          "Bloods: FBC, U&E, CRP, Lactate, ABG, Crossmatch, Coagulation",
+          "Blood cultures if febrile",
+          "IV antibiotics: Ceftriaxone 2g + Metronidazole 500mg",
+          "Analgesia: IV Paracetamol 1g; avoid morphine until surgical assessment"
+        ],
+        "counselling": "Explain NBM status, planned investigations, and potential need for emergency surgery."
+      },
+      {
+        "severity": "non_ischemic_volvulus",
+        "criteria": "CT confirms sigmoid volvulus, no pneumatosis, lactate <2.5, no peritonitis",
+        "treatment": [
+          "Urgent flexible sigmoidoscopy + detorsion",
+          "Insert flatus/rectal tube — leave in situ for 48 hours",
+          "Serial abdominal X-rays to confirm decompression",
+          "Bowel preparation (PEG) over 2 days",
+          "Elective sigmoid resection with primary anastomosis (same admission — recurrence >50% without resection)"
+        ],
+        "counselling": "Explain that detorsion is temporising; definitive resection needed during same admission."
+      },
+      {
+        "severity": "ischemic_or_perforated",
+        "criteria": "Lactate >4, peritonitis, pneumatosis, free air, septic shock",
+        "treatment": [
+          "Emergency midline laparotomy",
+          "Resection of non-viable bowel segment",
+          "Hartmann's procedure (end colostomy + mucous fistula) if gangrenous/contaminated",
+          "Sigmoid resection with primary anastomosis if viable and clean",
+          "Abdominal lavage with warm saline",
+          "Pelvic drain",
+          "ICU admission post-operatively"
+        ],
+        "counselling": "Explain life-saving nature of surgery, high likelihood of stoma, ICU stay expected."
+      },
+      {
+        "severity": "obstructing_cancer",
+        "criteria": "CT shows obstructing colonic mass, no perforation, no metastases or potentially curable",
+        "treatment": [
+          "Resuscitation as per protocol",
+          "Stenting as bridge to surgery (if suitable) OR emergency resection",
+          "Right hemicolectomy (for right-sided obstruction)",
+          "Left hemicolectomy with primary anastomosis (for left-sided, if viable)",
+          "Hartmann's procedure (if unsafe for anastomosis)",
+          "Stoma counselling pre-operatively if possible"
+        ],
+        "counselling": "Discuss cancer diagnosis, staging, MDT referral, stoma possibility, adjuvant therapy plan."
+      }
+    ],
+    "specialConsiderations": {
+      "wheeze_branch": "Elderly patients may have COPD — optimise respiratory function pre-op",
+      "HIV_exposed": "Check HIV status in endemic areas; manage perioperative ART",
+      "SAM": "Malnourished patients need nutritional support; consider TPN if prolonged ileus"
+    }
+  },
+  "subtypes": [
+    {
+      "id": "sigmoid_volvulus",
+      "name": "Sigmoid Volvulus",
+      "typicalOrganisms": ["E. coli", "Bacteroides fragilis", "Enterococcus"],
+      "prevalenceModifier": 0.45,
+      "agePeak": [480, 960],
+      "riskFactors": ["chronic constipation", "high-fibre diet", "redundant sigmoid", "male"],
+      "keyFeatures": [
+        { "feature": "massive_distension_out_of_proportion", "weight": 10 },
+        { "feature": "previous_similar_episodes", "weight": 7 },
+        { "feature": "empty_rectum_on_dre", "weight": 6 },
+        { "feature": "coffee_bean_sign_on_axr", "weight": 9 },
+        { "feature": "elderly_male_chronic_constipation", "weight": 7 }
+      ],
+      "negativePredictors": [
+        { "feature": "gradual_onset_weeks", "weightReduction": 5 },
+        { "feature": "rectal_bleeding", "weightReduction": 4 },
+        { "feature": "weight_loss", "weightReduction": 4 }
+      ],
+      "imagingFeatures": ["coffee bean sign AXR", "mesenteric swirl sign CT", "bird beak sign CT"],
+      "management": "Endoscopic detorsion + elective sigmoid resection"
+    },
+    {
+      "id": "obstructing_colorectal_cancer",
+      "name": "Obstructing Colorectal Cancer",
+      "prevalenceModifier": 0.25,
+      "agePeak": [600, 1080],
+      "riskFactors": ["age", "family history", "IBD", "smoking", "obesity", "diet"],
+      "keyFeatures": [
+        { "feature": "gradual_onset_weeks_to_months", "weight": 8 },
+        { "feature": "weight_loss", "weight": 7 },
+        { "feature": "rectal_bleeding", "weight": 7 },
+        { "feature": "change_in_bowel_habit", "weight": 6 },
+        { "feature": "family_history_crc", "weight": 5 }
+      ],
+      "negativePredictors": [
+        { "feature": "sudden_onset", "weightReduction": 6 },
+        { "feature": "previous_similar_episodes", "weightReduction": 4 }
+      ],
+      "imagingFeatures": ["apple core lesion on CT", "shouldering", "wall thickening", "transition point at mass"],
+      "management": "Stent + elective resection OR emergency resection; MDT; adjuvant therapy"
+    },
+    {
+      "id": "pseudo_obstruction_ogilvies",
+      "name": "Pseudo-obstruction (Ogilvie's Syndrome)",
+      "prevalenceModifier": 0.10,
+      "agePeak": [480, 960],
+      "riskFactors": ["recent surgery", "bedridden", "electrolyte imbalance", "medications", "trauma"],
+      "keyFeatures": [
+        { "feature": "painless_distension", "weight": 8 },
+        { "feature": "recent_surgery_or_trauma", "weight": 7 },
+        { "feature": "bedridden_patient", "weight": 6 },
+        { "feature": "electrolyte_imbalance", "weight": 5 },
+        { "feature": "no_mechanical_cause_on_imaging", "weight": 9 }
+      ],
+      "negativePredictors": [
+        { "feature": "colicky_abdominal_pain", "weightReduction": 5 },
+        { "feature": "previous_volvulus", "weightReduction": 4 }
+      ],
+      "imagingFeatures": ["dilated colon without transition point", "no mechanical obstruction on CT"],
+      "management": "Conservative: NBM, correct electrolytes, mobilise; neostigmine if no improvement; colonoscopic decompression if neostigmine fails"
+    }
+  ],
+  "adaptiveQuestioning": {
+    "initialCoreQuestions": [
+      "abdominal_distension?",
+      "constipation?",
+      "abdominal_pain_colicky?",
+      "vomiting?",
+      "flatus_passing?"
+    ],
+    "branching": [
+      {
+        "if": "abdominal_distension_present",
+        "ask": [
+          "onset_sudden_or_gradual?",
+          "duration_days?",
+          "progressive?",
+          "previous_similar_episodes?"
+        ]
+      },
+      {
+        "if": "constipation_present",
+        "ask": [
+          "days_since_last_bowel_movement?",
+          "absolute_constipation?",
+          "chronic_constipation_history?"
+        ]
+      },
+      {
+        "if": "abdominal_pain_colicky_present",
+        "ask": [
+          "pain_constant_now?",
+          "severity_1_10?",
+          "radiation?",
+          "what_relieves?"
+        ]
+      },
+      {
+        "if": "vomiting_present",
+        "ask": [
+          "billous_or_faeculent?",
+          "frequency_24h?",
+          "projectile?",
+          "relieved_by_vomiting?"
+        ]
+      }
+    ]
+  },
+  "pathophysiology": [
+    "mechanical_obstruction_of_large_intestine",
+    "accumulation_of_gas_and_fluid_proximal_to_obstruction",
+    "distension_of_colon_proximal_to_transition_point",
+    "increased_intraluminal_pressure",
+    "venous_compromise_and_oedema",
+    "arterial_compromise_and_ischemia",
+    "bacterial_translocation_and_sepsis",
+    "perforation_and_peritonitis_if_untreated"
+  ]
+}

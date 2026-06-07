@@ -32,8 +32,9 @@ export default function ClinicalWorkspaceLayout({ children }: { children: React.
       if (seg === hospitalId) { crumbs.push({ label: hospitalId === 'default' ? 'Hospital' : hospitalId, href: `/clinical-workspace/${hospitalId}` }); }
       else if (seg === 'clinical-workspace') continue;
       else if (seg === 'departments') crumbs.push({ label: 'Departments', href: `/clinical-workspace/${hospitalId}/departments` });
-      else if (DEPARTMENTS[seg.toUpperCase() as DepartmentKey]) {
-        const dept = DEPARTMENTS[seg.toUpperCase() as DepartmentKey];
+      else if (DEPARTMENTS[({ surgery: 'SURG' }[seg] || seg).toUpperCase() as DepartmentKey]) {
+        const effectiveKey = ({ surgery: 'SURG' }[seg] || seg).toUpperCase();
+        const dept = DEPARTMENTS[effectiveKey as DepartmentKey];
         crumbs.push({ label: dept?.label || seg, href: cum });
       } else {
         crumbs.push({ label: seg.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), href: cum });

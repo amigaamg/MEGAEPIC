@@ -135,10 +135,12 @@ export default function UnitPage() {
         <div className="content">
           <div className="quick-actions">
             <span className="qa-btn patients" onClick={() => router.push('/patients')}>📁 Patient Records</span>
-            <span className="qa-btn primary">+ New Encounter</span>
-            {unit.encounterTypes.slice(0, 3).map(et => (
-              <span key={et.type} className="qa-btn" onClick={() => router.push(`/workspace/${deptKey}/${unitId}/${et.type}`)}>{et.icon} {et.label}</span>
-            ))}
+            <span className="qa-btn primary" onClick={() => router.push(unitId === 'lbo-intelligence' ? '/clinical-workspace/default/departments/surgery/lbo-intelligence' : '#')}>+ New Encounter</span>
+            {unit.encounterTypes.slice(0, 3).map(et => {
+              const isLbo = unitId === 'lbo-intelligence';
+              const path = isLbo ? `/clinical-workspace/default/departments/surgery/lbo-intelligence` : `/workspace/${deptKey}/${unitId}/${et.type}`;
+              return <span key={et.type} className="qa-btn" onClick={() => router.push(path)}>{et.icon} {et.label}</span>;
+            })}
           </div>
 
           <div className="section-label">
@@ -147,15 +149,19 @@ export default function UnitPage() {
           </div>
 
           <div className="enc-type-grid">
-            {unit.encounterTypes.length > 0 ? unit.encounterTypes.map(et => (
-              <div key={et.type} className="enc-type-card" onClick={() => router.push(`/workspace/${deptKey}/${unitId}/${et.type}`)}>
+            {unit.encounterTypes.length > 0 ? unit.encounterTypes.map(et => {
+              const isLbo = unitId === 'lbo-intelligence';
+              const path = isLbo ? `/clinical-workspace/default/departments/surgery/lbo-intelligence` : `/workspace/${deptKey}/${unitId}/${et.type}`;
+              return (
+              <div key={et.type} className="enc-type-card" onClick={() => router.push(path)}>
                 <span className="enc-type-icon">{et.icon}</span>
                 <div className="enc-type-info">
                   <div className="enc-type-name" style={{ color: et.color }}>{et.label}</div>
                 </div>
                 <span className="enc-type-arrow">→</span>
               </div>
-            )) : (
+            );
+            }) : (
               <div className="empty-state" style={{ gridColumn: '1 / -1' }}>
                 <div className="empty-icon">📋</div>
                 <div>No encounter types configured for this unit.</div>

@@ -256,6 +256,9 @@ export const DISEASE_CATALOGUE: Record<string, DiseaseEntry[]> = {
     { id: 'bowel_obstruction', name: 'Bowel Obstruction', departmentKey: 'SURG', section: 'general-surgery', prevalence: 'common', emergency: true, mustNotMiss: true },
     { id: 'hernia', name: 'Hernia', departmentKey: 'SURG', section: 'general-surgery', prevalence: 'very_common', emergency: false, mustNotMiss: false },
   ],
+  'lbo-intelligence': [
+    { id: 'large_bowel_obstruction', name: 'Large Bowel Obstruction (LBO)', departmentKey: 'SURG', section: 'lbo-intelligence', prevalence: 'common', emergency: true, mustNotMiss: true },
+  ],
   'trauma': [
     { id: 'polytrauma', name: 'Polytrauma', departmentKey: 'SURG', section: 'trauma', prevalence: 'uncommon', emergency: true, mustNotMiss: true },
   ],

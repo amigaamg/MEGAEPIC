@@ -54,7 +54,7 @@ export const Sidebar: React.FC = () => {
       }}>
         <div style={{padding:"18px 16px", borderBottom:`1px solid ${theme.colors.sidebarBorder}`}}>
           <div style={{fontSize:13, fontWeight:800, color:theme.colors.accent, letterSpacing:"-0.02em"}}>AMEXAN</div>
-          <div style={{fontSize:10, color:theme.colors.textMuted, marginTop:1, textTransform:"uppercase", letterSpacing:"0.08em"}}>Paediatric Tool</div>
+          <div style={{fontSize:10, color:theme.colors.textMuted, marginTop:1, textTransform:"uppercase", letterSpacing:"0.08em"}}>Clinical History</div>
         </div>
         <div style={{flex:1, overflow:"auto", padding:"8px 0"}}>
           {PHASES.map((ph, i) => {

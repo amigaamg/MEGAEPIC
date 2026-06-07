@@ -11,9 +11,13 @@ export default function DepartmentHomePage() {
   const hospitalId = params?.hospitalId as string;
   const deptKey = params?.departmentSlug as string;
 
-  const deptDef = getDepartment(deptKey.toUpperCase());
-  const registry = DEPARTMENTS[deptKey.toUpperCase()];
-  const { activeCases, todayEncounters, avgWaitMinutes, loading } = useSingleDepartmentStats(deptKey.toUpperCase());
+  const SLUG_TO_KEY: Record<string, string> = {
+    surgery: 'SURG',
+  };
+  const effectiveKey = SLUG_TO_KEY[deptKey] || deptKey.toUpperCase();
+  const deptDef = getDepartment(effectiveKey);
+  const registry = DEPARTMENTS[effectiveKey];
+  const { activeCases, todayEncounters, avgWaitMinutes, loading } = useSingleDepartmentStats(effectiveKey);
 
   if (!deptDef) {
     return (
@@ -89,7 +93,7 @@ export default function DepartmentHomePage() {
         <h2 style={{ fontSize: 14, fontWeight: 600, color: '#E2E8F0', marginBottom: 12 }}>Clinical Sections ({deptDef.units.length})</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {deptDef.units.map(unit => (
-            <SectionCard key={unit.id} unit={unit} departmentKey={deptKey.toUpperCase()} hospitalId={hospitalId} />
+            <SectionCard key={unit.id} unit={unit} departmentKey={effectiveKey} hospitalId={hospitalId} />
           ))}
         </div>
       </div>

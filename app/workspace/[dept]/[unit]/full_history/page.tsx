@@ -225,6 +225,25 @@ export default function FullHistoryPage() {
 
   const isPaed = deptKey === 'PAED';
 
+  useEffect(() => {
+    if (deptKey === 'SURG') {
+      router.replace(`/clinical-workspace/default/departments/surgery/${unitId}/encounter/new`);
+    }
+  }, [deptKey, unitId, router]);
+
+  if (deptKey === 'SURG') {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#0B0F19', color: '#94A3B8', fontFamily: 'Inter, sans-serif', flexDirection: 'column', gap: 16 }}>
+        <div style={{ fontSize: 48 }}>🚑</div>
+        <div style={{ fontSize: 18, fontWeight: 600, color: '#E2E8F0' }}>Redirecting to Surgical Workspace...</div>
+        <div style={{ fontSize: 13, color: '#64748B' }}>The new surgical encounter system is at the clinical workspace.</div>
+        <a href={`/clinical-workspace/default/departments/surgery/${unitId}`} style={{ fontSize: 13, color: '#818cf8', textDecoration: 'underline' }}>
+          Click here if not redirected
+        </a>
+      </div>
+    );
+  }
+
   return (
     <ThemeProvider>
       <MainLayout>

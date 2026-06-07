@@ -104,6 +104,8 @@ export const WORKSPACE_DATA: DepartmentInfo[] = [
         encounterTypes: withFullHistory(pickEncounters(['inpatient','ward_round','procedure'])) },
       { id: 'surgical-hdu', label: 'Surgical High Dependency Unit', description: 'Post-operative monitoring, step-down care', icon: '💓', activeCases: 0, pathways: [],
         encounterTypes: withFullHistory(pickEncounters(['inpatient','ward_round','icu_review'])) },
+      { id: 'lbo-intelligence', label: 'Large Bowel Obstruction (LBO) Unit', description: 'LBO clinical reasoning, scoring, management, and operative decision support', icon: '🔪', activeCases: 0, pathways: ['acute-abdomen'],
+        encounterTypes: withFullHistory(pickEncounters(['emergency','inpatient','operative_note','ward_round','discharge_summary','mdt_review'])) },
     ],
   },
   {
