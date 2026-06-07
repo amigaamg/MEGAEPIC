@@ -750,7 +750,7 @@ export function IntelligentHPI({
                           <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{group.label}</p>
                           <div className="space-y-2">
                             {group.fields.map((field) => {
-                              const isRadio = 'options' in field && Array.isArray(field.options) && 'value' in (field.options[0] ?? {});
+                              const isRadio = 'options' in field && Array.isArray(field.options) && typeof field.options[0] !== 'string' && 'value' in (field.options[0] ?? {});
                               const isMulti = 'options' in field && Array.isArray(field.options) && typeof field.options[0] === 'string';
                               const isSlider = 'min' in field && 'max' in field;
                               const isActuallyYesNo = field.id === 'similarEpisodes';
