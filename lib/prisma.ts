@@ -2,11 +2,11 @@ let prisma: any = null;
 
 export async function getPrisma(): Promise<any> {
   if (prisma) return prisma;
+  if (!process.env.DATABASE_URL) return null;
   try {
-    if (process.env.DATABASE_URL) {
-      const { PrismaClient } = await import('@prisma/client');
-      prisma = new PrismaClient();
-    }
+    const modName = '@prisma/client';
+    const { PrismaClient } = require(modName);
+    prisma = new PrismaClient();
   } catch {
     prisma = null;
   }

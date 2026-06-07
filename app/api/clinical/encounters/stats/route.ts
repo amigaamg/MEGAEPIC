@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { getPrisma } from '@/lib/prisma';
 import { WORKSPACE_DATA } from '@/lib/workspaceData';
 
 export interface DepartmentStats {
@@ -12,6 +12,7 @@ export interface DepartmentStats {
 
 export async function GET(_req: NextRequest) {
   try {
+    const prisma = await getPrisma();
     if (!prisma) throw new Error('Prisma not available');
 
     const today = new Date();
