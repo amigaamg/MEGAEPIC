@@ -1,0 +1,15 @@
+export {
+  loadDiseaseLibrary,
+  getDiseasesByUnit,
+  getDiseaseById,
+  getAllDiseases,
+  getDiseaseCountByUnit,
+  getUnitsForDepartment,
+  getPresentingComplaintsForUnit,
+  extractHistoryQuestions,
+  extractExaminationFindings,
+  findDisease,
+  getDiseasesByDepartment,
+  getDiseasesBySymptom,
+  ALL_DISEASES,
+} from '@/src/engine/knowledge-graph';
