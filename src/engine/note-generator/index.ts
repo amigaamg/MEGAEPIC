@@ -1,4 +1,4 @@
-import type { DdxResult } from '../ddx-engine';
+import type { DDXResult } from '../ddx-engine';
 import { phraseDifferential, phraseAssessment, formatMedicalText } from './language-engine';
 import { getTemplateBySpecialty } from './templates';
 
@@ -27,7 +27,7 @@ export interface NoteGenerator {
     pmh: string;
     medications: string;
     examFindings: string;
-    differentials: DdxResult[];
+    differentials: DDXResult[];
   }): Promise<GeneratedNote>;
 
   generateDischargeSummary(params: {
@@ -42,17 +42,17 @@ export interface NoteGenerator {
   }): Promise<GeneratedNote>;
 }
 
-function buildDifferentialText(differentials: DdxResult[]): string[] {
+function buildDifferentialText(differentials: DDXResult[]): string[] {
   return differentials.map(d => phraseDifferential(d.diseaseName, d.probability));
 }
 
-function buildAssessmentText(differentials: DdxResult[]): string {
+function buildAssessmentText(differentials: DDXResult[]): string {
   const names = differentials.map(d => d.diseaseName);
   const topSeverity = differentials[0]?.severityLevel || 'mild';
   return phraseAssessment(names, topSeverity);
 }
 
-function buildPlanText(differentials: DdxResult[]): string {
+function buildPlanText(differentials: DDXResult[]): string {
   const lines: string[] = [];
   if (differentials.length > 0) {
     const top = differentials[0];

@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { listenSubcollection, addSubcollectionItem, updateSubcollectionItem } from '@/services/encounterService';
 
-export function useEncounterFacts<T>(
+export function useEncounterFacts<T extends { id?: string }>(
   encounterId: string,
   deptSlug: string,
   unitSlug: string,

@@ -17,6 +17,10 @@ export interface DDXResult {
   probability: number;
   keyFactors: string[];
   subtype?: string;
+  severityLevel?: string;
+  recommendedActions?: string[];
+  suggestedInvestigations?: string[];
+  confidence?: string;
 }
 
 export interface VitalsData {
