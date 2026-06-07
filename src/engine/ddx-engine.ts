@@ -19,6 +19,15 @@ export interface DDXResult {
   subtype?: string;
 }
 
+export interface VitalsData {
+  oxygenSaturation?: number;
+  heartRate?: number;
+  bloodPressureSystolic?: number;
+  bloodPressureDiastolic?: number;
+  respiratoryRate?: number;
+  temperature?: number;
+}
+
 function normalize(v: string): string {
   return v.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
