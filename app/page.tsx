@@ -839,8 +839,9 @@ export default function Home() {
             <h1 className="hero-h1">The Operating System<br />for <em>Lifelong Healthcare.</em></h1>
             <p className="hero-p">Connecting patients, clinicians, and healthcare systems through intelligent clinical infrastructure. A unified platform for chronic condition management, consultant-level clinical reasoning, and lifelong health records.</p>
             <div className="hero-actions">
-              <Link href="/clinical-auth" className="btn-g">Enter Clinical Workspace <span className="arrow">→</span></Link>
-              <Link href="/register" className="btn-o">Build Your Lifetime Record <span className="arrow">→</span></Link>
+              <Link href="/history-engine" className="btn-g"><span style={{background:'rgba(255,255,255,0.15)',borderRadius:'50%',width:'20px',height:'20px',display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:'11px'}}>⚕</span> Try History Engine <span className="arrow">→</span></Link>
+              <Link href="/clinical-auth" className="btn-o">Clinical Workspace <span className="arrow">→</span></Link>
+              <Link href="/register" className="btn-o">Patient Record <span className="arrow">→</span></Link>
             </div>
             <div className="hero-note">
               <span className="hero-note-item"><span className="check">✓</span> For patients: lifelong health story</span>

@@ -1,5 +1,6 @@
-import { getDiseasesByUnit } from './knowledge-graph';
+import { getDiseasesByUnit, getAllDiseases } from './knowledge-graph';
 import type { DiseaseNode } from './knowledge-graph/types';
+import { getKgId, getSymptomId } from '../../lib/history-engine/diseaseIdMap';
 
 export interface EncounterFacts {
   unitSlug: string;
@@ -37,7 +38,10 @@ function normalize(v: string): string {
 }
 
 export function calculateDDX(facts: EncounterFacts): DDXResult[] {
-  const candidates = getDiseasesByUnit(facts.unitSlug);
+  let candidates = getDiseasesByUnit(facts.unitSlug);
+  if (candidates.length === 0) {
+    candidates = getAllDiseases();
+  }
   if (candidates.length === 0) return [];
 
   const results: DDXResult[] = [];
@@ -68,8 +72,12 @@ export function calculateDDX(facts: EncounterFacts): DDXResult[] {
     for (const hq of allHpi) {
       const hpiWeight = hq.weight || 5;
       maxScore += hpiWeight;
-      const qId = hq.symptomId || hq.id || '';
-      const matched = facts.hpi.find((h) => normalize(h.questionId).includes(normalize(qId)));
+      let qId = hq.symptomId || hq.id || '';
+      const mappedId = getKgId(qId);
+      const matched = facts.hpi.find((h) =>
+        normalize(h.questionId).includes(normalize(qId)) ||
+        normalize(h.questionId).includes(normalize(mappedId))
+      );
       if (matched && (matched.answer === true || (typeof matched.answer === 'string' && matched.answer.length > 0))) {
         score += hpiWeight;
         keyFactors.push((hq as any).question || hq.symptomId?.replace(/_/g, ' ') || qId);
