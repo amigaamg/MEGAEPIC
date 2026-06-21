@@ -155,7 +155,7 @@ export class HistoryOrchestrator {
         chiefComplaintText: '', hpiNarrative: '', pastHistoryNarrative: '',
         birthHistoryNarrative: '', immunizationNarrative: '', growthDevNarrative: '',
         nutritionNarrative: '', obstetricHistoryNarrative: '', gynecologyHistoryNarrative: '',
-        familySocialNarrative: '', rosNarrative: '',
+        familySocialNarrative: '', rosNarrative: '', impactOnLifeNarrative: '',
         generalExaminationNarrative: '', systemExaminationNarrative: '',
         localExaminationNarrative: '', obstetricExamNarrative: '', newbornExamNarrative: '',
         clinicalReasoningNarrative: '',
