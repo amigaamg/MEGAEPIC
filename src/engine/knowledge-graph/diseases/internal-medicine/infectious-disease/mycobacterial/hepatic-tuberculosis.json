@@ -1,0 +1,140 @@
+{
+  "disease": {
+    "id": "hepatic_tuberculosis",
+    "name": "Hepatic Tuberculosis",
+    "system": "infectious_disease",
+    "agePeak_months": [],
+    "note": "Hepatic involvement in TB: miliary TB (most common), tuberculous granulomatous hepatitis, tuberculoma/abscess, TB cholangitis. Also consider granulomatous hepatitis from BCG therapy, M. bovis.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["liver", "hepatitis", "jaundice", "granulomatous", "mycobacterial", "infection"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "sepsis_hemodynamic_instability", "weight": 10 },
+        { "sign": "disseminated_tuberculosis_multiorgan", "weight": 10 },
+        { "sign": "tuberculous_meningitis", "weight": 9 },
+        { "sign": "acute_liver_failure_coagulopathy", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "Isolated hepatic TB -> TREAT; Miliary TB -> URGENT; TB meningitis/sepsis -> EMERGENCY"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "weight_loss", "weight": 5 },
+      { "symptomId": "fatigue_malaise", "weight": 4 },
+      { "symptomId": "night_sweats", "weight": 4 },
+      { "symptomId": "appetite_changes", "weight": 4 },
+      { "symptomId": "abdominal_pain_right_upper_quadrant", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 3, "note": "Mild to moderate" },
+      { "symptomId": "hepatomegaly_sensation", "weight": 3 },
+      { "symptomId": "pruritus", "weight": 2, "note": "From cholestasis" }
+    ],
+    "examFeatures": [
+      { "signId": "hepatomegaly", "baseWeight": 5, "doubleWeight": true, "note": "Often tender" },
+      { "signId": "splenomegaly", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "fever", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "jaundice", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "ascites", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "lymphadenopathy", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "abdominal_tenderness_ruq", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "liver_tenderness", "baseWeight": 3, "doubleWeight": false }
+    ],
+    "riskFactors": [
+      { "id": "tb_endemic_area", "multiplier": 4.0 },
+      { "id": "hiv_coinfection", "multiplier": 5.0 },
+      { "id": "immunodeficiency", "multiplier": 4.0 },
+      { "id": "pulmonary_tb_contact", "multiplier": 3.0 },
+      { "id": "miliary_tb_disseminated", "multiplier": 3.0 },
+      { "id": "bcg_therapy_intravesical_for_bladder_cancer", "multiplier": 2.0 },
+      { "id": "corticosteroid_or_tnf_inhibitor_therapy", "multiplier": 3.0 }
+    ],
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "sarcoidosis_hepatic",
+        "discriminators": ["non_caseating_granulomas", "pulmonary_involvement_bilateral_hilar_lymphadenopathy", "afb_stain_culture_negative", "tb_pcr_negative", "ace_level_elevated"]
+      },
+      {
+        "diseaseId": "primary_biliary_cholangitis",
+        "discriminators": ["anti_mitochondrial_antibody_positive", "non_caseating_granulomas", "female_predominance", "pruritus_prominent", "tb_pcr_negative"]
+      },
+      {
+        "diseaseId": "drug_induced_granulomatous_hepatitis",
+        "discriminators": ["temporal_relation_to_drug", "eosinophilia", "granulomas_on_biopsy", "tb_pcr_negative", "afb_negative"]
+      },
+      {
+        "diseaseId": "fungal_infection_histoplasma",
+        "discriminators": ["histoplasma_antigen_positive", "pulmonary_infiltrates", "endemic_area_ohio_mississippi_valley", "tb_pcr_negative"]
+      },
+      {
+        "diseaseId": "liver_abscess_pyogenic_or_amoebic",
+        "discriminators": ["aspiration_pus", "bacterial_culture_positive", "entamoeba_histolytica_serology", "tb_pcr_negative"]
+      }
+    ],
+    "investigations": {
+      "firstLine": [
+        { "test": "CXR", "weight": 9 },
+        { "test": "LFTs_ALP_bilirubin_ALT_AST", "weight": 8 },
+        { "test": "abdominal_US_CT", "weight": 9 },
+        { "test": "TB_PCR_blood_or_tissue", "weight": 10 },
+        { "test": "Quantiferon_TB_Gold_or_TST", "weight": 8 },
+        { "test": "liver_biopsy", "weight": 10, "note": "Caseating granulomata with AFB stain" }
+      ],
+      "secondLine": ["sputum_AFB_smear_and_culture", "TB_culture_from_liver_tissue", "ascitic_fluid_ADA_measurement", "bronchoscopy_BAL_if_pulmonary", "GeneXpert_MTB_RIF"],
+      "goldStandard": "Liver_biopsy_with_caseating_granulomas_and_positive_TB_culture_or_PCR"
+    },
+    "management": {
+      "emergency": [
+        { "action": "Treat disseminated TB with prompt 4-drug therapy" },
+        { "action": "ICU supportive care for miliary TB with sepsis" },
+        { "action": "Corticosteroids if TB meningitis or severe granulomatous hepatitis with obstructive jaundice" }
+      ],
+      "inpatient": [
+        { "action": "Standard 4-drug anti-TB therapy: rifampin, isoniazid, pyrazinamide, ethambutol (RIPE)" },
+        { "action": "Monitor LFTs closely (drug-induced hepatitis from anti-TB drugs)" },
+        { "action": "Prednisone 20-40 mg/day for severe granulomatous hepatitis (after ruling out other causes)" },
+        { "action": "Vitamin B6 (pyridoxine) 25-50 mg/day to prevent INH neuropathy" }
+      ],
+      "outpatient": [
+        { "action": "Continue RIPE for 2 months (intensive phase)" },
+        { "action": "Then rifampin + isoniazid for 4-7 months (continuation phase)" },
+        { "action": "Monitor LFTs monthly during treatment" },
+        { "action": "DOT (directly observed therapy) recommended" }
+      ],
+      "refractory": [
+        { "action": "Drug susceptibility testing for multidrug-resistant TB" },
+        { "action": "Second-line agents: fluoroquinolones, injectables, linezolid, bedaquiline" },
+        { "action": "Surgical drainage of TB abscess if large and non-responsive to medical therapy" }
+      ],
+      "preventive": [
+        { "action": "INH prophylaxis for latent TB in high-risk individuals" },
+        { "action": "BCG vaccination in endemic areas" },
+        { "action": "TB infection control measures" }
+      ]
+    },
+    "pathophysiology": "Hematogenous dissemination of M. tuberculosis from primary pulmonary focus (Ghon focus) to liver via hepatic artery. Organisms engulfed by Kupffer cells; if cell-mediated immunity inadequate, organisms multiply within macrophages forming caseating granulomas. Granulomas consist of central caseous necrosis surrounded by epithelioid histiocytes, Langhans giant cells, and lymphocytes. Cholestasis results from bile duct compression by granulomas and periportal inflammation. Hepatocyte injury arises from surrounding granulomatous inflammation and cytotoxic T-cell response. In miliary TB, countless small granulomas throughout liver parenchyma.",
+    "complications": [
+      { "diseaseId": "portal_hypertension", "probability": 0.1, "severityBoost": 0.3, "clues": ["extensive_granulomatous_inflammation", "ascites", "splenomegaly", "esophageal_varices"] },
+      { "diseaseId": "obstructive_jaundice_tb_cholangitis", "probability": 0.05, "severityBoost": 0.4, "clues": ["predominant_ALP_elevation", "bile_duct_strictures_on_imaging", "granulomas_in_portal_tracts"] },
+      { "diseaseId": "anti_tb_drug_induced_liver_injury", "probability": 0.1, "severityBoost": 0.5, "clues": ["rising_lfts_during_treatment", "symptoms_improving_then_worsening", "isoniazid_rifampin_as_cause"] }
+    ],
+    "mustNotMiss": ["hepatic_tb_in_patient_with_fever_of_unknown_origin_and_hepatomegaly", "tb_drug_induced_hepatitis_mimicking_worsening_disease", "miliary_tb_presenting_as_acute_hepatitis"],
+    "emergencyPriority": "medium",
+    "diagnosticClues": [
+      { "clue": "Prolonged fever, weight loss, night sweats with hepatomegaly and elevated ALP", "weight": 9 },
+      { "clue": "Liver biopsy showing caseating granulomas with AFB-positive organisms", "weight": 10 },
+      { "clue": "Positive Quantiferon/TST in patient with compatible hepatic picture", "weight": 7 },
+      { "clue": "Elevated ascitic fluid ADA (>30 U/L) in patient with TB peritonitis", "weight": 7 },
+      { "clue": "History of pulmonary TB or exposure with hepatic involvement", "weight": 8 }
+    ],
+    "exclusionClues": [
+      { "clue": "Alternative diagnosis confirmed on liver biopsy (sarcoidosis, PBC, fungal)", "weight": 10 },
+      { "clue": "Negative TB PCR and culture from liver tissue", "weight": 10 },
+      { "clue": "Negative Quantiferon/TST with no TB risk factors", "weight": 7 }
+    ]
+  }
+}

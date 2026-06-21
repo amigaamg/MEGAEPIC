@@ -1,0 +1,144 @@
+{
+  "disease": {
+    "id": "babesiosis",
+    "name": "Babesiosis",
+    "system": "infectious_disease",
+    "agePeak_months": [240, 840],
+    "note": "Tick-borne parasitic infection of red blood cells caused by Babesia (primarily B. microti and B. divergens). Endemic in northeastern and midwestern US, and parts of Europe. Causes hemolytic anemia, fever, and jaundice. Can be severe in asplenic, elderly, and immunocompromised patients. Transmitted by Ixodes scapularis ticks (same vector as Lyme disease).",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["tick_borne", "hemolysis", "fever", "jaundice", "parasitic"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_hemolysis_hb_less_than_7", "weight": 8 },
+        { "sign": "acute_kidney_injury", "weight": 7 },
+        { "sign": "disseminated_intravascular_coagulation", "weight": 8 },
+        { "sign": "shock_hypotension", "weight": 9 },
+        { "sign": "respiratory_failure_ards", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "parasitemia_greater_than_10_percent": true,
+        "asplenic_host": true,
+        "immunocompromised": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "parasitemia_less_than_10": true,
+        "immunocompetent": true
+      },
+      "severityLabel": "Severe (parasitemia >10%, asplenic, immunocompromised) -> URGENT combination therapy; Mild-moderate -> STANDARD therapy"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5, "note": "High fever, may be intermittent" },
+      { "symptomId": "fatigue_profound", "weight": 4 },
+      { "symptomId": "myalgia_arthralgia", "weight": 3 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 3, "note": "Hemolytic jaundice" },
+      { "symptomId": "dark_urine", "weight": 3 },
+      { "symptomId": "chills_rigors", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "known_tick_bite_or_exposure", "weight": 4 },
+      { "symptomId": "outdoor_activity_in_endemic_area", "weight": 3 },
+      { "symptomId": "splenectomy_history", "weight": 4, "note": "Highest risk for severe disease" },
+      { "symptomId": "immunosuppressed_state", "weight": 3 },
+      { "symptomId": "blood_transfusion_recent", "weight": 2, "note": "Transfusion-transmitted babesiosis" }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "tachycardia", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "asplenia_anatomical_or_functional", "multiplier": 10.0 },
+      { "id": "tick_bite_in_endemic_area_northeast_us_upper_midwest", "multiplier": 5.0 },
+      { "id": "outdoor_occupation_or_recreation", "multiplier": 2.0 },
+      { "id": "age_greater_than_50", "multiplier": 2.0 },
+      { "id": "hiv_infection_or_other_immunosuppression", "multiplier": 3.0 },
+      { "id": "blood_transfusion_received", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "malaria",
+        "discriminators": ["exposure_endemic_area", "different_parasite_on_film", "malaria_rapid_test_positive"]
+      },
+      {
+        "diseaseId": "autoimmune_hemolytic_anemia",
+        "discriminators": ["positive_coombs", "no_parasites_on_film", "no_tick_exposure"]
+      },
+      {
+        "diseaseId": "dengue_fever",
+        "discriminators": ["thrombocytopenia_marked", "rash", "no_hemolytic_anemia", "dengue_serology"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Thin and thick blood films (Giemsa stain)", "priority": "immediate", "yield": 0.9, "indication": "intraerythrocytic parasites: ring forms ('Maltese cross' tetrads pathognomonic for Babesia)" },
+        { "name": "Babesia PCR (whole blood)", "priority": "high", "yield": 0.98, "indication": "highly sensitive; species identification" },
+        { "name": "FBC", "priority": "high", "yield": 0.7, "indication": "anemia (hemolytic), thrombocytopenia" },
+        { "name": "Reticulocyte count", "priority": "high", "yield": 0.6, "indication": "elevated" },
+        { "name": "LDH", "priority": "high", "yield": 0.8, "indication": "elevated" },
+        { "name": "Bilirubin (total and indirect)", "priority": "high", "yield": 0.7, "indication": "elevated unconjugated" },
+        { "name": "Haptoglobin", "priority": "high", "yield": 0.7, "indication": "low" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.5, "indication": "monitor for AKI" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "CDC Treatment Guidelines for Babesiosis; IDSA Guidelines",
+      "pathways": [
+        {
+          "severity": "mild_to_moderate",
+          "criteria": "Immunocompetent, parasitemia <10%, no severe symptoms, no organ failure",
+          "treatment": "Atovaquone 750mg PO q12h + azithromycin 500mg IV/PO q24h (or 250mg PO x 3 then 250mg daily) x 7-10 days. Alternative: clindamycin 600mg PO q8h + quinine 650mg PO q8h x 7-10 days (higher side effects)."
+        },
+        {
+          "severity": "severe_life_threatening",
+          "criteria": "Parasitemia >10%, Hb <7, organ failure, asplenic, immunocompromised, elderly",
+          "treatment": "Clindamycin IV 600mg q6h + quinine PO/IV 650mg q6-8h (or atovaquone + azithromycin IV). Exchange transfusion if parasitemia >10% and severe disease (Hb <7, pulmonary failure, organ failure). IV fluids, transfusion support. Treat minimum 7-10 days; longer until parasitemia cleared."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "babesia_sporozoites_inoculated_by_tick_bite",
+      "invasion_of_red_blood_cells",
+      "asexual_replication_within_erythrocytes",
+      "rbc_lysis_and_release_of_merozoites",
+      "intravascular_and_extravascular_hemolysis",
+      "hemolytic_anemia_and_jaundice",
+      "hemoglobinuria_and_acute_kidney_injury",
+      "proinflammatory_cytokine_response"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["oliguria", "rising_creatinine", "hemoglobinuria"]
+      },
+      {
+        "diseaseId": "ards_respiratory_failure",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["dyspnea", "hypoxia", "bilateral_infiltrates"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if severe",
+    "diagnosticClues": ["fever_hemolytic_anemia_in_endemic_area", "tick_bite_or_exposure", "maltese_cross_on_blood_film", "asplenic_host_severe"],
+    "exclusionClues": ["malaria_parasite_confirmed", "no_parasites_on_film", "negative_pcr"]
+  }
+}

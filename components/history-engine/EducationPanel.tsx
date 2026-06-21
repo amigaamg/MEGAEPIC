@@ -3,11 +3,7 @@ import { useState, useMemo } from 'react';
 import { useHistoryStore } from '@/lib/history-engine/useHistoryStore';
 import { getEducation, type DiseaseEducation } from '@/lib/history-engine/educationRegistry';
 
-interface Props {
-  onClose: () => void;
-}
-
-export default function EducationPanel({ onClose }: Props) {
+export default function EducationPanel() {
   const [selectedDisease, setSelectedDisease] = useState<string | null>(null);
   const ddx = useHistoryStore(s => s.ddx);
   const provisional = useHistoryStore(s => s.provisionalDiagnosis);
@@ -23,34 +19,27 @@ export default function EducationPanel({ onClose }: Props) {
 
   if (educations.length === 0 && !provisional) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-        onClick={e => e.target === e.currentTarget && onClose()}>
-        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl w-[90vw] max-w-lg p-8 text-center">
-          <div className="text-4xl mb-3">📚</div>
-          <p className="text-[var(--text-primary)] font-medium">No educational content available yet.</p>
-          <p className="text-xs text-[var(--text-muted)] mt-1">Complete the history and clinical reasoning to see relevant case education.</p>
-          <button onClick={onClose} className="mt-4 px-4 py-2 rounded-lg text-xs bg-[var(--accent-dim)] text-[var(--accent)]">Close</button>
-        </div>
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-8 text-center">
+        <div className="text-4xl mb-3">📚</div>
+        <p className="text-[var(--text-primary)] font-medium">No educational content available yet.</p>
+        <p className="text-xs text-[var(--text-muted)] mt-1">Complete the history and clinical reasoning to see relevant case education.</p>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-      onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl w-[95vw] max-w-5xl max-h-[85vh] flex flex-col shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
-          <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-[var(--accent)]">📚 Case Education</h2>
-            {provisional && (
-              <span className="text-[10px] px-2 py-0.5 rounded bg-[var(--accent-dim)] text-[var(--accent)]">
-                {provisional.diagnosis}
-              </span>
-            )}
-          </div>
-          <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-xl">&times;</button>
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
+        <div className="flex items-center gap-3">
+          <h2 className="text-lg font-bold text-[var(--accent)]">📚 Case Education</h2>
+          {provisional && (
+            <span className="text-[10px] px-2 py-0.5 rounded bg-[var(--accent-dim)] text-[var(--accent)]">
+              {provisional.diagnosis}
+            </span>
+          )}
         </div>
+      </div>
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar — Disease list */}
@@ -93,7 +82,6 @@ export default function EducationPanel({ onClose }: Props) {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 

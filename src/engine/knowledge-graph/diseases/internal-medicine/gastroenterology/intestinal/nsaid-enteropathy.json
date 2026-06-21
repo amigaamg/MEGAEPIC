@@ -1,0 +1,186 @@
+{
+  "disease": {
+    "id": "nsaid_enteropathy",
+    "name": "NSAID Enteropathy",
+    "system": "gastroenterology",
+    "agePeak_months": [480, 960],
+    "note": "Small bowel mucosal injury from NSAIDs (especially COX-1 non-selective: aspirin, ibuprofen, naproxen, diclofenac, indomethacin). Spectrum: increased intestinal permeability → microscopic erosions → macroscopic ulcers → bleeding → perforation → diaphragm-like strictures. Increasingly recognized as major cause of obscure-overt GI bleeding.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["obscure_gi_bleeding", "small_bowel_disease", "drug_induced_enteropathy", "iron_deficiency_anemia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hematochezia_with_hypotension", "weight": 9 },
+        { "sign": "acute_abdomen_perforation", "weight": 10 },
+        { "sign": "obstructive_symptoms_from_diaphragm_strictures", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Massive bleeding/perforation/obstruction -> EMERGENCY; chronic occult blood loss with anemia -> OUTPATIENT workup"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "iron_deficiency_anemia_symptoms", "weight": 5, "note": "chronic occult blood loss" },
+      { "symptomId": "hematemesis_melena", "weight": 3, "note": "intermittent" },
+      { "symptomId": "rectal_bleeding", "weight": 2, "note": "if acute massive NSAID ulcer" },
+      { "symptomId": "abdominal_pain", "weight": 3, "note": "crampy, intermittent" },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 2, "note": "protein-losing enteropathy" },
+      { "symptomId": "fatigue", "weight": 3, "note": "from chronic anemia" },
+      { "symptomId": "appetite_changes", "weight": 2 },
+      { "symptomId": "dyspnea", "weight": 2, "note": "from anemia" },
+      { "symptomId": "palpitations", "weight": 1, "note": "from anemia" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4, "doubleWeight": true, "note": "chronic blood loss" },
+      { "signId": "abdominal_tenderness_diffuse_mild", "baseWeight": 2 },
+      { "signId": "koilonychia", "baseWeight": 2, "note": "chronic iron deficiency" },
+      { "signId": "signs_of_arthritis", "baseWeight": 2, "note": "primary pain condition" },
+      { "signId": "glossitis", "baseWeight": 1, "note": "iron deficiency" }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_nsaid_use", "multiplier": 5.0, "note": "Especially high dose, multiple agents, long-acting" },
+      { "id": "age_over_60", "multiplier": 2.5 },
+      { "id": "female_gender", "multiplier": 1.5 },
+      { "id": "prior_peptic_ulcer_or_gi_bleeding", "multiplier": 2.0 },
+      { "id": "anticoagulant_antiplatelet_use", "multiplier": 2.0 },
+      { "id": "h_pylori_infection", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "alcohol_use", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "nsaid_microerosions_and_permeability",
+        "name": "NSAID-Induced Increased Permeability and Microerosions",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "increased_intestinal_permeability", "weight": 3 },
+          { "feature": "microscopic_erosions_on_capsule_endoscopy", "weight": 3 },
+          { "feature": "asymptomatic_or_mild_bloating", "weight": 2 },
+          { "feature": "normal_routine_endoscopy", "weight": 3 }
+        ],
+        "management": "Stop NSAIDs. Substitute with acetaminophen or COX-2 selective. Iron supplementation. PPI (limited evidence). Consider misoprostol."
+      },
+      {
+        "id": "nsaid_ulcers_and_bleeding",
+        "name": "NSAID-Induced Small Bowel Ulcers and Bleeding",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [
+          { "feature": "overt_gi_bleeding_melena_or_hematochezia", "weight": 5 },
+          { "feature": "iron_deficiency_anemia", "weight": 4 },
+          { "feature": "visible_ulcers_on_capsule_endoscopy_enteroscopy", "weight": 5 },
+          { "feature": "hemoglobin_drop_on_nsaids", "weight": 4 }
+        ],
+        "management": "Stop NSAIDs. IV PPI. Endoscopic hemostasis if accessible. Iron supplementation. Blood transfusion if Hb <8. If refractory: sulfasalazine/5-ASA."
+      },
+      {
+        "id": "nsaid_diaphragm_disease_strictures",
+        "name": "NSAID-Induced Diaphragm-Like Strictures",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "intermittent_subacute_obstruction", "weight": 5 },
+          { "feature": "abdominal_pain_and_bloating", "weight": 4 },
+          { "feature": "diaphragm_like_septae_on_enteroscopy_cte", "weight": 5 },
+          { "feature": "chronic_nsaid_use_long_term", "weight": 5 }
+        ],
+        "management": "Stop NSAIDs. Endoscopic balloon dilation for strictures. Surgical resection for refractory or multiple strictures. Iron supplementation."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "celiac_disease",
+        "discriminators": ["positive_serology_anti_tissue_transglutaminase", "villous_atrophy_on_duodenal_biopsy", "no_nsaid_history", "gluten_dependent"]
+      },
+      {
+        "diseaseId": "crohns_disease",
+        "discriminators": ["chronic_relapsing_course", "extraintestinal_manifestations_arthritis_eye_skin", "skip_lesions_and_transmural_inflammation", "no_nsaid_correlation"]
+      },
+      {
+        "diseaseId": "angiodyplasia",
+        "discriminators": ["no_nsaid_history", "angiodysplastic_lesions_on_capsule_endoscopy", "older_age_no_nsaid"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.6, "indication": "Iron deficiency anemia (microcytic, hypochromic)" },
+        { "name": "Ferritin, Iron, TIBC", "priority": "high", "yield": 0.8, "indication": "Confirm iron deficiency" },
+        { "name": "Fecal Calprotectin", "priority": "medium", "yield": 0.5, "indication": "Elevated in NSAID enteropathy" },
+        { "name": "Fecal Occult Blood Test", "priority": "medium", "yield": 0.4, "indication": "Detect occult GI bleeding" }
+      ],
+      "imaging": [
+        { "name": "Video Capsule Endoscopy", "priority": "gold_standard", "yield": 0.85, "indication": "Best test — visualize erosions, ulcers, red spots, diaphragm strictures in small bowel" },
+        { "name": "Balloon Enteroscopy (double/single balloon)", "priority": "therapeutic", "yield": 0.8, "indication": "Diagnostic and therapeutic — can biopsy, dilate strictures, cauterize bleeding" },
+        { "name": "CT Enterography", "priority": "medium", "yield": 0.6, "indication": "For diaphragm strictures, bowel wall thickening" },
+        { "name": "Colonoscopy with Ileoscopy", "priority": "medium", "yield": 0.3, "indication": "Exclude colonic source" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BSG / ACG Guidelines for NSAID-Associated GI Injury",
+      "pathways": [
+        {
+          "severity": "chronic occult bleeding with anemia",
+          "criteria": "Iron deficiency anemia + chronic NSAID use + negative EGD/colonoscopy",
+          "treatment": "STOP NSAIDs. Substitute acetaminophen or COX-2 selective inhibitor if needed. Iron supplementation. PPI (limited evidence). Capsule endoscopy to confirm diagnosis."
+        },
+        {
+          "severity": "acute overt bleeding from NSAID ulcer",
+          "criteria": "Melena/hematochezia, Hb drop, on NSAIDs, visible ulcer on enteroscopy",
+          "treatment": "Stop NSAIDs. IV fluids and blood transfusion if significant. Endoscopic hemostasis (APC, hemoclips). IV PPI. If refractory: sulfasalazine/5-ASA."
+        },
+        {
+          "severity": "diaphragm strictures with obstructive symptoms",
+          "criteria": "Subacute obstruction with confirmed diaphragm-like strictures",
+          "treatment": "Endoscopic balloon dilation. Surgical resection (segmental bowel resection) if multiple/strictures refractory to dilation. Stop NSAIDs permanently."
+        }
+      ]
+    },
+
+    "diagnosticClues": ["chronic_nsaid_use_plus_iron_deficiency_anemia_plus_negative_egd_colonoscopy", "diaphragm_like_strictures_or_erosions_on_capsule_endoscopy_enteroscopy", "obscure_gi_bleeding_in_patient_with_arthritis"],
+    "exclusionClues": ["celiac_disease_positive_serology", "crohns_disease_transmural_skip_lesions", "angiodyplasia_no_nsaid_history"],
+
+    "pathophysiology": [
+      "nsaids_inhibit_cox_1_leading_to_reduced_prostaglandins_pge2_pgi2",
+      "loss_of_mucosal_cytoprotection_in_small_bowel",
+      "increased_intestinal_permeability",
+      "direct_mitochondrial_toxicity_uncoupling_of_oxidative_phosphorylation",
+      "mucosal_injury_erosion_and_ulceration",
+      "bleeding_leading_to_chronic_iron_deficiency_or_acute_overt_bleeding",
+      "cicatricial_healing_leading_to_diaphragm_like_strictures"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "iron_deficiency_anemia_severe",
+        "probability": 0.4,
+        "severityBoost": 0.2,
+        "clues": ["hb_below_10", "low_ferritin", "fatigue", "pallor"]
+      },
+      {
+        "diseaseId": "small_bowel_perforation",
+        "probability": 0.02,
+        "severityBoost": 0.5,
+        "clues": ["acute_severe_abdominal_pain", "peritonitis", "free_air_on_xray"]
+      },
+      {
+        "diseaseId": "small_bowel_obstruction_from_diaphragm_disease",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["intermittent_crampy_abdominal_pain", "vomiting", "dilated_small_bowel_loops"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low"
+  }
+}

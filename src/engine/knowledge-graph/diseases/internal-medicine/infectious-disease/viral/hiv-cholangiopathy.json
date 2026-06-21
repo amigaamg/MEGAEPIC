@@ -1,0 +1,127 @@
+{
+  "disease": {
+    "id": "hiv_cholangiopathy",
+    "name": "HIV Cholangiopathy (AIDS Cholangiopathy)",
+    "system": "infectious_disease",
+    "agePeak_months": [240, 600],
+    "note": "Biliary tract disease in HIV/AIDS patients caused by opportunistic infections (CMV, Cryptosporidium, Microsporidia, Cyclospora). Characterized by papillary stenosis, biliary strictures, and sclerosing cholangitis-like changes. Presents with right upper quadrant pain, elevated ALP, and dilated bile ducts. CD4 count typically <100 cells/uL. ERCP with sphincterotomy provides symptomatic relief. Prognosis depends on immune recovery with ART.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["hiv", "aids", "biliary", "cholangitis", "opportunistic_infection"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_cholangitis_with_sepsis", "weight": 9 },
+        { "sign": "biliary_obstruction_complete", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "cd4_less_than_50": true,
+        "refractory_to_sphincterotomy": true
+      },
+      "nonSevereCriteria": {
+        "mild_disease": true,
+        "response_to_art": true,
+        "cd4_above_100": true
+      },
+      "severityLabel": "Cholangitis -> EMERGENCY ERCP; Papillary stenosis -> ERCP sphincterotomy; Responding to ART -> MONITOR"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "right_upper_quadrant_pain", "weight": 5, "note": "Severe, constant pain" },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 2, "note": "Often mild or absent; ALP elevation disproportionate to bilirubin" },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "chronic_diarrhea", "weight": 3, "note": "Cryptosporidium coinfection" },
+      { "symptomId": "hiv_positive_with_low_cd4", "weight": 5 },
+      { "symptomId": "not_on_art_or_poor_adherence", "weight": 3 },
+      { "symptomId": "history_of_aids_defining_illness", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 2 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "wasting_cachexia", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "hiv_aids_with_cd4_less_than_100", "multiplier": 10.0 },
+      { "id": "cryptosporidium_parvum_infection", "multiplier": 5.0 },
+      { "id": "cmv_infection", "multiplier": 3.0 },
+      { "id": "microsporidiosis_enterocytozoon_bieneusi", "multiplier": 3.0 },
+      { "id": "not_on_antiretroviral_therapy", "multiplier": 4.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_cholecystitis",
+        "discriminators": ["gallstones", "murphy_sign", "no_hiv_aids", "thickened_gallbladder_wall"]
+      },
+      {
+        "diseaseId": "primary_sclerosing_cholangitis",
+        "discriminators": ["hiv_negative", "ibd_association", "anca_positive", "no_opportunistic_infections"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "ALP and GGT", "priority": "immediate", "yield": 0.9, "indication": "markedly elevated ALP (often 2-10x ULN); hallmark" },
+        { "name": "ALT and AST", "priority": "high", "yield": 0.5, "indication": "mild elevation" },
+        { "name": "Bilirubin", "priority": "high", "yield": 0.4, "indication": "mild elevation; disproportionate to ALP" },
+        { "name": "CD4 count", "priority": "high", "yield": 0.8, "indication": "low (<100)" },
+        { "name": "Stool microscopy for Cryptosporidium, Microsporidia", "priority": "high", "yield": 0.5, "indication": "identify underlying pathogen" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "immediate", "yield": 0.7, "indication": "dilated bile ducts, thickened bile duct walls, gallbladder distension" },
+        { "name": "MRCP", "priority": "high", "yield": 0.9, "indication": "multifocal strictures, beading, papillary stenosis" },
+        { "name": "ERCP", "priority": "selected", "yield": 0.95, "indication": "therapeutic: sphincterotomy for papillary stenosis; dilation for strictures; brushings for cytology/microbiology" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "HIV/AIDS Guidelines; IDSA Guidelines for HIV Cholangiopathy",
+      "pathways": [
+        {
+          "severity": "all_cases",
+          "criteria": "HIV cholangiopathy on imaging",
+          "treatment": "Antiretroviral therapy (ART) to restore immune function (CD4 goal >200). ERCP with sphincterotomy for papillary stenosis (relieves pain and improves bile drainage). Biliary stent for dominant stricture. Treat underlying opportunistic infection: CMV (ganciclovir/valganciclovir), Cryptosporidium (nitazoxanide + ART, optimize immune recovery), Microsporidia (albendazole for E. bieneusi, fumagillin for E. cuniculi). Pain management. Ursodeoxycholic acid (UDCA) 13-15mg/kg/day for cholestasis. Prognosis: poor in advanced AIDS; improved with effective ART."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "hiv_related_immunosuppression_cd4_less_than_100",
+      "opportunistic_infection_of_biliary_epithelium",
+      "cryptosporidium_attachment_to_bile_duct_cells",
+      "cmv_induced_vasculitis_and_ischemia",
+      "bile_duct_inflammation_and_fibrosis",
+      "papillary_stenosis_and_multifocal_strictures",
+      "bile_duct_dilation_proximal_to_strictures",
+      "cholestasis_and_elevated_alp"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_cholangitis",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["fever", "ruq_pain", "worsening_lfts"]
+      },
+      {
+        "diseaseId": "secondary_biliary_cirrhosis",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["chronic_obstruction", "portal_hypertension"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium (high if cholangitis)",
+    "diagnosticClues": ["hiv_with_low_cd4", "ruq_pain", "elevated_alp_disproportionate_to_bilirubin", "dilated_bile_ducts", "papillary_stenosis_on_ercp"],
+    "exclusionClues": ["hiv_negative", "cd4_above_200", "gallstones", "normal_bile_ducts"]
+  }
+}

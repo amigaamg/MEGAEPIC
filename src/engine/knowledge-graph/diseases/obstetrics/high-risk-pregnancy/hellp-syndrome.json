@@ -2,196 +2,234 @@
   "disease": {
     "id": "hellp_syndrome",
     "name": "HELLP Syndrome",
-    "system": "OB",
+    "system": "obstetrics",
+    "department": "obstetrics",
+    "unit": "high-risk-pregnancy",
     "agePeak_months": [240, 360],
-    "note": "Hemolysis, Elevated Liver enzymes, Low Platelets variant of severe preeclampsia. Life-threatening condition with significant maternal and perinatal mortality.",
-    "prevalenceWeight": 0.003,
-    "syndromeTags": ["hypertensive_disorder_pregnancy", "maternal_emergency"],
+    "note": "Life-threatening pregnancy complication characterized by Hemolysis, Elevated Liver enzymes, and Low Platelets. Variant of severe preeclampsia. Usually occurs in third trimester or postpartum. High maternal and perinatal mortality if unrecognized. Prompt delivery is definitive treatment. Can present without hypertension or proteinuria (20% of cases).",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["pregnancy", "hypertensive_disorder", "liver", "thrombocytopenia", "microangiopathy", "emergency_obstetric"],
 
     "severityAssessment": {
       "immediateDangerSigns": [
-        { "sign": "hepatic_rupture", "weight": 10 },
+        { "sign": "maternal_seizure_eclampsia", "weight": 10 },
+        { "sign": "hepatic_rupture_or_hematoma", "weight": 10 },
+        { "sign": "pulmonary_edema", "weight": 9 },
+        { "sign": "acute_renal_failure", "weight": 9 },
         { "sign": "disseminated_intravascular_coagulation", "weight": 10 },
-        { "sign": "cerebral_hemorrhage", "weight": 10 }
+        { "sign": "placental_abruption", "weight": 9 },
+        { "sign": "severe_right_upper_quadrant_or_epigastric_pain", "weight": 9 },
+        { "sign": "visual_disturbance_or_severe_headache", "weight": 8 },
+        { "sign": "thrombocytopenia_severe_platelets_less_than_50000", "weight": 8 }
       ],
       "severeCriteria": {
         "anyDangerSign": true,
-        "additionalCriteria": [
-          { "sign": "platelets_below_50000", "weight": 9 },
-          { "sign": "ast_alt_over_1000", "weight": 8 },
-          { "sign": "epigastric_pain_severe", "weight": 8 },
-          { "sign": "hemoglobin_falling", "weight": 7 },
-          { "sign": "renal_failure", "weight": 8 },
-          { "sign": "pulmonary_edema", "weight": 8 }
-        ]
+        "platelets_less_than_100000": true,
+        "ldh_greater_than_600": true,
+        "ast_greater_than_70": true,
+        "mississippi_class_1": true
       },
       "nonSevereCriteria": {
-        "hasIndrawingOrFastBreathing": false,
-        "noDangerSigns": true
+        "noDangerSigns": true,
+        "mild_lab_abnormalities": true,
+        "mississippi_class_2": true,
+        "gestational_age_less_than_34_weeks": true
       },
-      "severityLabel": "All HELLP is high-risk; Mississippi class 1 (platelets <50,000) is most severe"
+      "severityLabel": "Mississippi Class 1 (platelets <50K, AST/ALT >70, LDH >600) -> DELIVER within 24h; Class 2 (platelets 50-100K) -> DELIVER within 48h; Class 3 (platelets 100-150K) -> DELIVER after steroids if <34w"
     },
 
+    "presentingComplaints": [
+      "Right upper abdominal or epigastric pain",
+      "Nausea and vomiting",
+      "Headache",
+      "Visual disturbances",
+      "Swelling of face and hands",
+      "Yellowing of skin and eyes"
+    ],
+
     "historyFeatures": [
-      { "symptomId": "epigastric_or_right_upper_quadrant_pain", "weight": 5 },
+      { "symptomId": "right_upper_quadrant_epigastric_pain", "weight": 5, "note": "Classic presenting symptom; often severe and constant" },
+      { "symptomId": "jaundice", "weight": 3, "note": "Often mild or late; may be absent" },
       { "symptomId": "nausea_vomiting", "weight": 4 },
-      { "symptomId": "malaise_fatigue", "weight": 4 },
-      { "symptomId": "headache", "weight": 3 },
-      { "symptomId": "visual_disturbances", "weight": 3 },
-      { "symptomId": "jaundice", "weight": 2 },
-      { "symptomId": "bleeding_tendency", "weight": 3 },
-      { "symptomId": "dark_urine", "weight": 2 },
-      { "symptomId": "fever", "weight": 1 },
-      { "symptomId": "known_preeclampsia_or_eclampsia", "weight": 4 }
+      { "symptomId": "headache_severe", "weight": 3, "note": "Preeclampsia symptom" },
+      { "symptomId": "visual_disturbance_blurred_vision_scotomata", "weight": 3 },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "peripheral_edema_facial_swelling", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 2, "note": "Pulmonary edema" },
+      { "symptomId": "bleeding_gingival_or_easy_bruising", "weight": 2, "note": "Thrombocytopenia" },
+      { "symptomId": "oliguria", "weight": 2 },
+      { "symptomId": "dark_urine", "weight": 2, "note": "Hemoglobinuria" },
+      { "symptomId": "history_of_preeclampsia_or_gestational_hypertension", "weight": 3 },
+      { "symptomId": "known_thrombophilia_or_previous_hellp", "weight": 3 }
     ],
 
     "examFeatures": [
-      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 5, "doubleWeight": true },
-      { "signId": "hypertension", "baseWeight": 4 },
-      { "signId": "jaundice_pallor", "baseWeight": 3 },
-      { "signId": "edema", "baseWeight": 2 },
-      { "signId": "hepatomegaly", "baseWeight": 3 },
-      { "signId": "petechiae_or_bruising", "baseWeight": 3 },
-      { "signId": "altered_mental_status", "baseWeight": 3 },
-      { "signId": "fetal_distress_signs", "baseWeight": 3 }
+      { "signId": "hypertension_systolic_140_160_or_higher", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "proteinuria_on_dipstick_or_24h", "baseWeight": 4 },
+      { "signId": "right_upper_quadrant_tenderness_to_palpation", "baseWeight": 5 },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 3 },
+      { "signId": "peripheral_edema_pitting", "baseWeight": 3 },
+      { "signId": "hepatomegaly_tender", "baseWeight": 2 },
+      { "signId": "fundal_height_consistent_with_gestational_age", "baseWeight": 2 },
+      { "signId": "petechiae_or_easy_bruising", "baseWeight": 2, "note": "Thrombocytopenia" },
+      { "signId": "pulmonary_crackles", "baseWeight": 2, "note": "Pulmonary edema" },
+      { "signId": "clonus_or_hyperreflexia", "baseWeight": 3, "note": "Preeclampsia CNS irritability" },
+      { "signId": "seizure_activity", "baseWeight": 5, "note": "Eclampsia" },
+      { "signId": "abdominal_guarding_or_peritoneal_signs", "baseWeight": 3, "note": "Hepatic hematoma or rupture" }
     ],
 
     "riskFactors": [
-      { "id": "previous_HELLP_syndrome", "multiplier": 5.0 },
-      { "id": "preeclampsia", "multiplier": 10.0 },
-      { "id": "family_history_of_HELLP", "multiplier": 2.0 },
-      { "id": "nulliparity", "multiplier": 2.0 },
-      { "id": "age_over_35", "multiplier": 2.0 }
-    ],
-
-    "subtypes": [
-      {
-        "id": "mississippi_class_1",
-        "name": "HELLP Class 1 (Severe)",
-        "prevalenceModifier": 0.2,
-        "keyFeatures": [
-          { "feature": "platelets_below_50000", "weight": 5 },
-          { "feature": "AST_or_ALT_over_70", "weight": 4 },
-          { "feature": "hemolysis_evidence", "weight": 5 },
-          { "feature": "severe_epigastric_pain", "weight": 4 }
-        ],
-        "management": "Immediate delivery regardless of gestational age. ICU admission. Platelet transfusion if <20,000 or before surgery. Dexamethasone 10mg IV q12h. Plasma exchange if refractory."
-      },
-      {
-        "id": "mississippi_class_2",
-        "name": "HELLP Class 2 (Moderate)",
-        "prevalenceModifier": 0.4,
-        "keyFeatures": [
-          { "feature": "platelets_50000_to_100000", "weight": 4 },
-          { "feature": "AST_or_ALT_over_70", "weight": 4 },
-          { "feature": "hemolysis_evidence", "weight": 4 }
-        ],
-        "management": "Delivery within 24-48h after corticosteroid course if <34 weeks. Magnesium sulfate. Antihypertensives. Close monitoring of platelets and LFTs."
-      },
-      {
-        "id": "mississippi_class_3",
-        "name": "HELLP Class 3 (Mild)",
-        "prevalenceModifier": 0.4,
-        "keyFeatures": [
-          { "feature": "platelets_100000_to_150000", "weight": 3 },
-          { "feature": "AST_or_ALT_over_40", "weight": 3 },
-          { "feature": "hemolysis_evidence", "weight": 3 }
-        ],
-        "management": "Delivery at 37 weeks or earlier if deteriorates. Monitor labs every 12h. Conservative management only if very preterm and stable."
-      }
+      { "id": "preeclampsia_or_gestational_hypertension", "multiplier": 5.0 },
+      { "id": "previous_hellp_or_preeclampsia", "multiplier": 4.0 },
+      { "id": "multiple_gestation", "multiplier": 3.0 },
+      { "id": "nulliparity", "multiplier": 2.5 },
+      { "id": "age_greater_than_35", "multiplier": 2.0 },
+      { "id": "chronic_hypertension", "multiplier": 2.5 },
+      { "id": "obesity_bmi_greater_than_30", "multiplier": 2.0 },
+      { "id": "diabetes_mellitus_gestational_or_pregestational", "multiplier": 2.0 },
+      { "id": "thrombophilia_antiphospholipid_syndrome", "multiplier": 3.0 },
+      { "id": "african_or_afro_caribbean_ethnicity", "multiplier": 2.0 },
+      { "id": "family_history_of_preeclampsia_or_hellp", "multiplier": 2.0 }
     ],
 
     "mimics": [
       {
         "diseaseId": "acute_fatty_liver_of_pregnancy",
-        "discriminators": ["hypoglycemia", "coagulopathy_without_thrombocytopenia", "encephalopathy"]
+        "discriminators": ["hypoglycemia", "elevated_uric_acid", "no_hypertension_in_50_percent", "no_or_mild_proteinuria", "ultrasound_fatty_liver"]
       },
       {
-        "diseaseId": "thrombotic_thrombocytopenic_purpura",
-        "discriminators": ["fever", "neurological_symptoms", "renal_failure", "normal_lft"]
+        "diseaseId": "thrombotic_thrombocytopenic_purpura_ttp",
+        "discriminators": ["severe_thrombocytopenia_less_than_30000", "neurologic_symptoms_out_of_proportion", "fever", "no_hypertension", "adamts13_deficiency"]
       },
       {
-        "diseaseId": "hemolytic_uremic_syndrome",
-        "discriminators": ["acute_kidney_injury", "normal_lft", "postpartum_onset"]
+        "diseaseId": "acute_viral_hepatitis_in_pregnancy",
+        "discriminators": ["positive_viral_serology", "no_hypertension", "no_thrombocytopenia", "no_microangiopathic_hemolysis"]
+      },
+      {
+        "diseaseId": "systemic_lupus_erythematosus_flare",
+        "discriminators": ["multi_system_lupus_features", "positive_autoantibodies", "no_hypertension", "low_complement"]
+      },
+      {
+        "diseaseId": "disseminated_intravascular_coagulation",
+        "discriminators": ["underlying_cause_sepsis_abruption", "prolonged_pt_ptt", "elevated_d_dimer", "no_hypertension", "no_proteinuria"]
       }
     ],
 
     "investigations": {
       "bedside": [
-        { "name": "Blood pressure", "priority": "immediate", "yield": 0.8, "indication": "hypertension common" }
+        { "name": "Blood pressure measurement (automated or manual)", "priority": "immediate", "yield": 0.9, "indication": "hypertension (systolic >=140 or diastolic >=90) in most cases" },
+        { "name": "Urine dipstick for protein", "priority": "immediate", "yield": 0.7, "indication": "proteinuria (1+ or more) in 80% of HELLP; may be absent" },
+        { "name": "Patellar reflex and clonus assessment", "priority": "high", "yield": 0.6, "indication": "hyperreflexia from CNS irritability; clonus indicates severe preeclampsia" }
       ],
       "laboratory": [
-        { "name": "Complete blood count with smear", "priority": "immediate", "yield": 0.95, "indication": "thrombocytopenia, schistocytes" },
-        { "name": "Liver function tests", "priority": "immediate", "yield": 0.95, "indication": "AST, ALT, bilirubin" },
-        { "name": "LDH", "priority": "immediate", "yield": 0.9, "indication": "marker of hemolysis" },
-        { "name": "Coagulation profile", "priority": "high", "yield": 0.8, "indication": "DIC assessment" },
-        { "name": "Serum creatinine", "priority": "high", "yield": 0.7, "indication": "renal function" },
-        { "name": "Haptoglobin", "priority": "medium", "yield": 0.7, "indication": "low in hemolysis" },
-        { "name": "Urine protein or protein/creatinine ratio", "priority": "high", "yield": 0.7, "indication": "quantify proteinuria" }
+        { "name": "FBC with platelet count", "priority": "immediate", "yield": 0.95, "indication": "thrombocytopenia: platelets <100,000 defines HELLP; severity grading per Mississippi classification" },
+        { "name": "Peripheral blood smear", "priority": "high", "yield": 0.85, "indication": "microangiopathic hemolytic anemia: schistocytes, helmet cells, spherocytes; hallmark finding" },
+        { "name": "LDH", "priority": "immediate", "yield": 0.95, "indication": "elevated >600 U/L due to hemolysis; correlates with disease severity" },
+        { "name": "AST and ALT", "priority": "immediate", "yield": 0.9, "indication": "elevated >70 IU/L; indicates hepatic injury; AST > ALT typically" },
+        { "name": "Total and direct bilirubin", "priority": "high", "yield": 0.7, "indication": "elevated bilirubin (unconjugated from hemolysis, also conjugated from liver dysfunction)" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.6, "indication": "elevated in acute kidney injury; monitor for deterioration" },
+        { "name": "Uric acid", "priority": "medium", "yield": 0.5, "indication": "elevated in preeclampsia; helps distinguish from AFLP" },
+        { "name": "INR/PT/PTT", "priority": "high", "yield": 0.6, "indication": "coagulation profile; prolonged if DIC develops; platelet count <50K may have prolonged bleeding time" },
+        { "name": "Haptoglobin", "priority": "high", "yield": 0.8, "indication": "low/absent in hemolysis" },
+        { "name": "Glucose", "priority": "high", "yield": 0.5, "indication": "hypoglycemia more suggestive of acute fatty liver of pregnancy" },
+        { "name": "24-hour urine protein (if feasible)", "priority": "medium", "yield": 0.7, "indication": "quantify proteinuria; >300mg in 24h supports preeclampsia diagnosis" }
       ],
       "imaging": [
-        { "name": "Liver ultrasound or CT", "priority": "medium", "yield": 0.4, "indication": "if hepatic rupture or hematoma suspected" }
+        { "name": "Obstetric ultrasound with fetal assessment", "priority": "high", "yield": 0.5, "indication": "fetal well-being, growth, amniotic fluid, placental appearance; rule out abruption" },
+        { "name": "Abdominal ultrasound", "priority": "medium", "yield": 0.4, "indication": "liver: subcapsular hematoma, hepatic rupture; rule out gallstones" },
+        { "name": "CT abdomen (if hepatic rupture suspected)", "priority": "selected", "yield": 0.9, "indication": "confirm hepatic hematoma or rupture; urgent surgical planning" }
       ]
     },
 
     "management": {
-      "protocolReference": "ACOG / RCOG Guidelines for HELLP Syndrome",
+      "protocolReference": "ACOG Practice Bulletin: HELLP Syndrome; NICE Guideline: Hypertensive Disorders in Pregnancy; WHO Recommendations: Preeclampsia and Eclampsia",
       "pathways": [
         {
-          "severity": "all_cases",
-          "criteria": "confirmed HELLP syndrome",
-          "treatment": "Stabilize: Magnesium sulfate for seizure prophylaxis. Antihypertensives for BP >160/110. Corticosteroids (Dexamethasone 10mg IV q12h) to improve platelet count (controversial). Delivery: the definitive treatment. Timing: Class 1: deliver immediately; Class 2: deliver within 24-48h; Class 3: deliver at 37w or if deteriorates. Anesthesia: avoid regional if platelets <75,000. Transfuse platelets if <20,000 or before surgical intervention."
+          "severity": "mississippi_class_3_mild",
+          "criteria": "Platelets 100,000-150,000; AST/ALT elevated; LDH >600; no severe features; gestational age <34 weeks",
+          "treatment": "Admit to high-dependency unit. Complete course of antenatal corticosteroids (betamethasone 12mg IM q24h x 2 doses) if <34 weeks. Magnesium sulfate for seizure prophylaxis: 4g IV loading over 20 min + 1g/h IV infusion x 24h. Antihypertensives if BP >160/105: labetalol 200mg PO, or nifedipine MR 10-20mg PO, or hydralazine 5-10mg IV. Monitor platelets, AST, LDH, Cr q6h. If improving after steroids and <34w, consider expectant management (very cautiously). Deliver by 34 weeks."
         },
         {
-          "severity": "postpartum_persistent",
-          "criteria": "HELLP persisting >72h postpartum",
-          "treatment": "Consider plasma exchange if not improving. Monitor for complications. Continue supportive care."
+          "severity": "mississippi_class_2_moderate",
+          "criteria": "Platelets 50,000-100,000; AST >70; LDH >600; gestational age >34 weeks or <34w after steroid course",
+          "treatment": "Admit to ICU/HDU. Deliver within 48h after steroid course if <34w; if >34w or fetal distress, deliver within 24h. Magnesium sulfate IV as above for seizure prophylaxis (continue for 24h postpartum). Antihypertensives as needed. Corticosteroids for fetal lung maturity if <34w. Mode of delivery: vaginal if favorable cervical status and no fetal distress; cesarean for usual obstetric indications. Careful anesthetic planning: avoid regional anesthesia if platelets <70,000."
+        },
+        {
+          "severity": "mississippi_class_1_severe",
+          "criteria": "Platelets <50,000; AST >70; LDH >600; any severe feature (hepatic hematoma, DIC, renal failure, pulmonary edema, eclampsia)",
+          "treatment": "URGENT ICU admission. Stabilize before delivery: magnesium sulfate IV, antihypertensives for BP control. Deliver within 24h regardless of gestational age (may need to deliver within hours if maternal instability). Correct coagulopathy if needed: platelet transfusion if platelets <20,000 for cesarean or <50,000 for surgery; FFP if DIC. Cesarean is usually required due to maternal instability. Avoid general anesthesia if possible (airway edema, hypertensive response). If hepatic hematoma: conservative if stable; embolization or surgical repair if expanding or ruptured. Postpartum: continue magnesium x 24h; monitor platelets, LFTs, BP; HELLP may transiently worsen postpartum before improving."
+        },
+        {
+          "severity": "postpartum_hellp",
+          "criteria": "HELLP syndrome diagnosed after delivery (25-30% of HELLP presents postpartum; may worsen before improving)",
+          "treatment": "Same principles as antepartum. Magnesium sulfate for 24h postpartum. Antihypertensives. Monitor labs until improving. Platelet count typically nadirs at 24-48h postpartum. If not improving within 72h, reconsider alternative diagnoses (TTP, aHUS, SLE flare). Most recover fully within 48-72h. Counsel about recurrence risk (5-10%) and need for low-dose aspirin 75-150mg daily in future pregnancies from 12 weeks."
         }
       ]
     },
 
     "pathophysiology": [
-      "endothelial_injury",
-      "microangiopathic_hemolytic_anemia",
-      "hepatic_ischemia",
-      "platelet_consumption",
-      "complement_activation"
+      "abnormal_placentation_and_placental_ischemia",
+      "endothelial_dysfunction_and_activation",
+      "imbalance_of_angiogenic_factors_sflt1_plgf_vegf",
+      "systemic_inflammatory_response",
+      "microvascular_endothelial_injury",
+      "platelet_activation_and_consumption_thrombocytopenia",
+      "microangiopathic_hemolytic_anemia_schistocytes",
+      "fibrin_deposition_in_hepatic_sinusoids",
+      "hepatic_ischemia_and_hepatocellular_necrosis",
+      "elevated_liver_enzymes_from_hepatocyte_injury",
+      "subcapsular_hepatic_hematoma_risk",
+      "multiorgan_dysfunction_kidney_brain_lungs"
     ],
 
     "complications": [
       {
-        "diseaseId": "disseminated_intravascular_coagulation",
-        "probability": 0.2,
-        "lagDays": [0, 2],
-        "severityBoost": 0.9,
-        "clues": ["bleeding", "falling_fibrinogen", "elevated_d_dimer"]
+        "diseaseId": "eclampsia_seizures",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["severe_hypertension", "headache_visual_symptoms", "hyperreflexia_clonus", "cns_irritability"]
       },
       {
-        "diseaseId": "hepatic_rupture_or_hematoma",
+        "diseaseId": "hepatic_rupture_subcapsular_hematoma",
         "probability": 0.02,
-        "lagDays": [0, 2],
         "severityBoost": 1.0,
-        "clues": ["severe_ruq_pain", "hypotension", "distended_abdomen"]
+        "clues": ["severe_ruq_pain", "shock_hypotension", "falling_hb", "right_upper_quadrant_guarding"]
       },
       {
-        "diseaseId": "acute_kidney_injury",
+        "diseaseId": "disseminated_intravascular_coagulation_dic",
+        "probability": 0.15,
+        "severityBoost": 0.7,
+        "clues": ["severe_thrombocytopenia_less_than_50000", "prolonged_pt_ptt", "elevated_d_dimer", "bleeding_from_multiple_sites"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury_renal_failure",
         "probability": 0.1,
-        "lagDays": [0, 5],
-        "severityBoost": 0.6,
-        "clues": ["oliguria", "rising_creatinine"]
+        "severityBoost": 0.5,
+        "clues": ["oliguria", "rising_creatinine", "microangiopathic_hemolysis", "acute_tubular_necrosis"]
       },
       {
         "diseaseId": "pulmonary_edema",
+        "probability": 0.08,
+        "severityBoost": 0.5,
+        "clues": ["dyspnea", "crackles_on_auscultation", "chest_xray_pulmonary_congestion", "fluid_overload"]
+      },
+      {
+        "diseaseId": "placental_abruption",
         "probability": 0.1,
-        "lagDays": [0, 3],
         "severityBoost": 0.6,
-        "clues": ["dyspnea", "crackles", "hypoxia"]
+        "clues": ["vaginal_bleeding", "abdominal_pain", "uterine_hypertonus", "fetal_distress"]
+      },
+      {
+        "diseaseId": "maternal_death",
+        "probability": 0.01,
+        "severityBoost": 1.0,
+        "clues": ["multiorgan_failure", "hepatic_rupture", "severe_dic", "intracerebral_hemorrhage"]
       }
     ],
 
     "mustNotMiss": true,
     "emergencyPriority": "high",
-    "diagnosticClues": ["epigastric_pain", "thrombocytopenia", "hemolysis", "elevated_lfts"],
-    "exclusionClues": ["normal_platelets", "normal_lft", "no_hemolysis"]
+    "diagnosticClues": ["pregnancy_third_trimester_or_postpartum", "right_upper_quadrant_pain", "hypertension_proteinuria", "thrombocytopenia_less_than_100000", "microangiopathic_hemolysis_schistocytes"],
+    "exclusionClues": ["no_pregnancy", "normal_platelets", "no_hemolysis_markers", "normal_liver_enzymes", "no_hypertension"]
   }
 }

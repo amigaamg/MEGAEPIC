@@ -1,0 +1,156 @@
+{
+  "disease": {
+    "id": "paroxysmal_nocturnal_hemoglobinuria",
+    "name": "Paroxysmal Nocturnal Hemoglobinuria (PNH)",
+    "system": "hematology",
+    "agePeak_months": [360, 600],
+    "note": "Acquired clonal hematopoietic stem cell disorder caused by PIG-A gene mutation, leading to deficient GPI-anchored proteins (CD55, CD59) on RBC surface. Results in complement-mediated intravascular hemolysis. Classic triad: hemolytic anemia, hemoglobinuria (especially nocturnal), and venous thrombosis. Jaundice is common from hemolysis. Can present with abdominal pain, dysphagia, and erectile dysfunction. Associated with aplastic anemia and MDS.",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["anemia", "hemolysis", "jaundice", "thrombosis", "complement"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "venous_thrombosis_life_threatening", "weight": 10 },
+        { "sign": "cerebral_venous_sinus_thrombosis", "weight": 10 },
+        { "sign": "splanchnic_vein_thrombosis_budd_chiari", "weight": 10 },
+        { "sign": "hemolytic_crisis_hb_drop_less_than_6", "weight": 8 },
+        { "sign": "acute_kidney_injury", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "thrombosis": true,
+        "transfusion_dependent": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "mild_hemolysis": true,
+        "no_thrombosis": true,
+        "ldh_less_than_2x_uln": true
+      },
+      "severityLabel": "Thrombosis -> EMERGENCY anticoagulation + eculizumab; Hemolytic crisis -> URGENT; Mild -> OUTPATIENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "dark_urine_red_brown", "weight": 5, "note": "Hemoglobinuria; classically in morning (nocturnal), but may be variable" },
+      { "symptomId": "jaundice", "weight": 3 },
+      { "symptomId": "dyspnea", "weight": 3 },
+      { "symptomId": "abdominal_pain", "weight": 3, "note": "From smooth muscle dystonia; nitric oxide depletion" },
+      { "symptomId": "swallowing_difficulty", "weight": 2, "note": "NO depletion causes esophageal spasm" },
+      { "symptomId": "erectile_dysfunction", "weight": 2 },
+      { "symptomId": "thrombosis_history", "weight": 4, "note": "Unusual sites: hepatic, portal, mesenteric, cerebral, dermal" },
+      { "symptomId": "back_pain", "weight": 3, "note": "From hemolysis" },
+      { "symptomId": "history_of_aplastic_anemia_or_mds", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 2 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "signs_of_deep_vein_thrombosis", "baseWeight": 2, "note": "Extremity swelling, tenderness" },
+      { "signId": "signs_of_budd_chiari_syndrome", "baseWeight": 2, "note": "Ascites, tender hepatomegaly" },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "skin_necrosis_from_dermal_thrombosis", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "piga_mutation_in_hematopoietic_stem_cell", "multiplier": 10.0 },
+      { "id": "aplastic_anemia_association", "multiplier": 5.0 },
+      { "id": "myelodysplastic_syndrome", "multiplier": 2.0 },
+      { "id": "young_adults_and_middle_age", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "autoimmune_hemolytic_anemia",
+        "discriminators": ["positive_coombs", "spherocytes", "no_hemoglobinuria_pattern", "responds_to_steroids"]
+      },
+      {
+        "diseaseId": "g6pd_deficiency",
+        "discriminators": ["trigger_specific_hemolysis", "g6pd_low", "x_linked", "no_thrombosis_risk"]
+      },
+      {
+        "diseaseId": "hemolytic_uremic_syndrome_ttp",
+        "discriminators": ["thrombocytopenia", "schistocytes", "renal_failure", "fever", "neurologic"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "FBC with reticulocyte count", "priority": "immediate", "yield": 0.85, "indication": "anemia, reticulocytosis" },
+        { "name": "LDH", "priority": "immediate", "yield": 0.95, "indication": "markedly elevated; correlates with hemolysis severity and treatment response" },
+        { "name": "Haptoglobin", "priority": "high", "yield": 0.9, "indication": "low/absent" },
+        { "name": "Bilirubin (total and indirect)", "priority": "high", "yield": 0.7, "indication": "elevated unconjugated" },
+        { "name": "Flow cytometry for CD55/CD59 on RBCs and granulocytes", "priority": "immediate", "yield": 0.99, "indication": "DIAGNOSTIC: deficient GPI-anchored proteins; clone size correlates with severity" },
+        { "name": "FLAER (fluorescent aerolysin) by flow cytometry", "priority": "high", "yield": 0.99, "indication": "gold standard; detects GPI-deficient cells" },
+        { "name": "Urine hemosiderin", "priority": "medium", "yield": 0.7, "indication": "positive in chronic hemoglobinuria" },
+        { "name": "Direct Coombs test", "priority": "high", "yield": 0.4, "indication": "negative (to exclude AIHA)" },
+        { "name": "Iron studies (ferritin, iron, TIBC)", "priority": "medium", "yield": 0.4, "indication": "iron deficiency from chronic hemoglobinuria" },
+        { "name": "Bone marrow biopsy", "priority": "selected", "yield": 0.5, "indication": "if associated with aplastic anemia or MDS suspected" }
+      ],
+      "imaging": [
+        { "name": "Doppler ultrasound of abdomen", "priority": "high", "yield": 0.5, "indication": "rule out hepatic/portal/splenic vein thrombosis" },
+        { "name": "CT/MR venography", "priority": "selected", "yield": 0.9, "indication": "if thrombosis suspected at unusual sites" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BSH Guidelines for PNH; International PNH Interest Group",
+      "pathways": [
+        {
+          "severity": "mild_no_thrombosis",
+          "criteria": "No thrombosis, LDH <3x ULN, Hb >10, mild symptoms",
+          "treatment": "Observation. Folic acid 5mg PO daily. Iron supplementation if iron deficient. Vaccinations (meningococcal, pneumococcal, Hib) if eculizumab anticipated. Avoid oral contraceptives (increases thrombosis risk). Monitor clone size and LDH q3-6 months."
+        },
+        {
+          "severity": "moderate_to_severe_or_thrombosis",
+          "criteria": "LDH >3x ULN, Hb <9, fatigue, hemoglobinuria, thrombosis, or any complication",
+          "treatment": "First-line: eculizumab (C5 inhibitor) IV: 600mg weekly x4, then 900mg q2 weeks. Meningococcal vaccination required before start (plus penicillin prophylaxis). Reduces hemolysis, transfusion need, and thrombosis risk. Ravulizumab (long-acting C5 inhibitor) is alternative: 300kg loading, then 600mg q8 weeks. If thrombosis: anticoagulation (warfarin or DOAC) + eculizumab. Supportive: blood transfusion, folic acid, iron. Hematopoietic stem cell transplant: only curative option; reserved for severe, refractory, or PNH-aplastic anemia syndrome."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "piga_gene_mutation_in_hematopoietic_stem_cell",
+      "deficiency_of_gpi_anchored_proteins_cd55_cd59",
+      "cd55_daf_decay_accelerating_factor_deficiency",
+      "cd59_protectin_membrane_attack_complex_inhibitor_deficiency",
+      "unregulated_complement_activation_on_rbc_surface",
+      "c5b_9_membrane_attack_complex_formation",
+      "intravascular_hemolysis",
+      "hemoglobinuria_and_iron_loss",
+      "nitric_oxide_scavenging_by_free_hemoglobin",
+      "smooth_muscle_dystonia_pain_dysphagia_ed",
+      "endothelial_dysfunction_and_thrombosis",
+      "venous_thrombosis_at_unusual_sites"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "venous_thrombosis_budd_chiari_cerebral_vein",
+        "probability": 0.15,
+        "severityBoost": 0.8,
+        "clues": ["clone_size_greater_than_50_percent", "ldh_greater_than_3x_uln", "thrombophilia", "abdominal_pain_ascites"]
+      },
+      {
+        "diseaseId": "chronic_kidney_disease_from_hemosiderin_deposition",
+        "probability": 0.2,
+        "severityBoost": 0.3,
+        "clues": ["chronic_hemoglobinuria", "rising_creatinine", "proteinuria"]
+      },
+      {
+        "diseaseId": "pulmonary_hypertension",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["dyspnea", "right_heart_strain", "no_scavenging_hemoglobin"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if thrombosis",
+    "diagnosticClues": ["intravascular_hemolysis_with_hemoglobinuria", "unusual_site_thrombosis", "abdominal_pain_dysphagia_ed", "negative_coombs", "pnH_clone_on_flow_cytometry"],
+    "exclusionClues": ["positive_coombs", "normal_flow_cytometry", "no_thrombosis_tendency", "drug_triggered_hemolysis"]
+  }
+}

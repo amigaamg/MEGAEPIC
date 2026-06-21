@@ -1,3 +1,5 @@
+import type { Biodata } from './types';
+
 export type QuestionPurpose = 'characterize' | 'rule_in' | 'rule_out' | 'risk' | 'complication' | 'severity';
 
 export interface SocratesQuestion {
@@ -11,6 +13,10 @@ export interface SocratesQuestion {
   weight: number;
   purpose?: QuestionPurpose;
   targetDiagnoses?: string[];
+  /** 1 = triage/red flag, 2 = broad localizer, 3 = syndrome confirmer, 4 = risk factor, 5 = review */
+  priority?: number;
+  /** Clinical rationale shown to the clinician — why this question matters now */
+  rationale?: string;
 }
 
 const COMPLICATION_FIELDS = new Set([
@@ -182,34 +188,133 @@ const DYSPNEA_QUESTIONS: SocratesQuestion[] = [
 
 // â”€â”€ ABDOMINAL PAIN â”€â”€
 const ABDOMINAL_PAIN_QUESTIONS: SocratesQuestion[] = [
-  ...SHARED_CLINICAL_QUESTIONS,
-  { id: 'ap_onset', field: 'onset', label: 'When did the pain start?', type: 'text', weight: 2 },
-  { id: 'ap_duration', field: 'duration', label: 'Duration of pain (in days)', type: 'number', weight: 2 },
-  { id: 'ap_location', field: 'location', label: 'Location of pain', type: 'select', options: ['Right upper quadrant', 'Epigastrium', 'Left upper quadrant', 'Periumbilical', 'Right lower quadrant', 'Suprapubic', 'Left lower quadrant', 'Diffuse/generalized', 'Flank'], weight: 4 },
-  { id: 'ap_radiation', field: 'radiation', label: 'Radiation of pain', type: 'select', options: ['Back', 'Shoulder (right)', 'Shoulder (left)', 'Groin', 'No radiation'], weight: 3 },
-  { id: 'ap_quality', field: 'quality', label: 'Quality of pain', type: 'select', options: ['Sharp/stabbing', 'Cramping/colicky', 'Burning', 'Ache', 'Dull', 'Gnawing'], weight: 2 },
-  { id: 'ap_severity', field: 'severity', label: 'Severity (0-10)', type: 'number', weight: 1 },
-  { id: 'ap_onset_type', field: 'onset_type', label: 'How did the pain start?', type: 'select', options: ['Gradual (over hours)', 'Sudden (over minutes)', 'Very sudden (like a burst)'], weight: 4 },
-  { id: 'ap_timing', field: 'timing', label: 'When does the pain occur?', type: 'select', options: ['Continuous', 'Intermittent', 'After meals', 'Before meals', 'At night', 'Unpredictable'], weight: 2 },
-  { id: 'ap_aggravating', field: 'aggravating_factors', label: 'What aggravates pain?', type: 'multi_select', options: ['Eating', 'Movement', 'Passing stool', 'Coughing', 'Lying still', 'Deep breathing', 'Alcohol'], weight: 2 },
-  { id: 'ap_relieving', field: 'relieving_factors', label: 'What relieves pain?', type: 'multi_select', options: ['Nothing', 'Rest', 'Antacids', 'Vomiting', 'Passing flatus/stool', 'Flexing knees', 'Emptying stomach'], weight: 2 },
-  { id: 'ap_nausea', field: 'associated_nausea', label: 'Associated nausea?', type: 'boolean', weight: 3 },
-  { id: 'ap_vomiting', field: 'associated_vomiting', label: 'Associated vomiting?', type: 'boolean', weight: 3 },
-  { id: 'ap_vomitus', field: 'vomitus_character', label: 'Character of vomitus', type: 'select', options: ['Undigested food', 'Bilious', 'Blood (hematemesis)', 'Feculent', 'Coffee-ground'], condition: 'ap_vomiting=true', weight: 3 },
-  { id: 'ap_fever', field: 'associated_fever', label: 'Associated fever?', type: 'boolean', weight: 3 },
-  { id: 'ap_bowel_change', field: 'associated_change_in_bowel', label: 'Change in bowel habit?', type: 'select', options: ['No change', 'Constipation', 'Diarrhoea', 'Blood in stool', 'Mucus'], weight: 3 },
-  { id: 'ap_blood_stool', field: 'associated_blood_in_stool', label: 'Blood in stool (hematochezia)?', type: 'boolean', weight: 4 },
-  { id: 'ap_melaena', field: 'associated_melaena', label: 'Black/tarry stools (melaena)?', type: 'boolean', weight: 4 },
-  { id: 'ap_urinary', field: 'associated_urinary', label: 'Associated urinary symptoms?', type: 'select', options: ['None', 'Dysuria', 'Frequency', 'Hematuria', 'Retention'], weight: 2 },
-  { id: 'ap_distension', field: 'associated_distension', label: 'Abdominal distension?', type: 'boolean', weight: 2 },
-  { id: 'ap_weight_loss', field: 'associated_weight_loss', label: 'Associated weight loss?', type: 'boolean', weight: 3 },
-  { id: 'ap_jaundice', field: 'associated_jaundice', label: 'Yellowing of eyes/skin (jaundice)?', type: 'boolean', weight: 3 },
-  { id: 'ap_peritonism', field: 'associated_peritonism', label: 'Guarding or rigidity of abdomen?', type: 'boolean', weight: 5 },
-  { id: 'ap_alcohol', field: 'risk_alcohol', label: 'Do you drink alcohol?', type: 'boolean', weight: 3 },
-  { id: 'ap_nsaids', field: 'risk_nsaids', label: 'Take NSAIDs / painkillers regularly?', type: 'boolean', weight: 3 },
-  { id: 'ap_travel', field: 'risk_travel_diarrhoea', label: 'Recent travel / change in diet?', type: 'boolean', weight: 2 },
-  { id: 'ap_surgery_history', field: 'risk_previous_surgery', label: 'Previous abdominal surgery?', type: 'boolean', weight: 3 },
-  { id: 'ap_pregnancy', field: 'risk_pregnancy', label: 'Could you be pregnant? (if applicable)', type: 'boolean', weight: 3 },
+  // ═══════════════════════════════════════════════════════════
+  // ROUND 1: TRIAGE + BROAD LOCALIZATION — The first 4 questions
+  // narrow the differential from "any acute abdomen" to a specific
+  // region and urgency level.
+  // ═══════════════════════════════════════════════════════════
+  { id: 'ap_peritonism', field: 'associated_peritonism', type: 'boolean', weight: 5,
+    label: 'Does the abdomen feel stiff or tender when you press on it?',
+    priority: 1, purpose: 'complication', targetDiagnoses: ['perforated_ulcer', 'appendicitis', 'pancreatitis', 'cholecystitis'],
+    rationale: 'Peritoneal irritation means inflammation has reached the parietal peritoneum — this is a surgical abdomen. The single most important red flag.' },
+
+  { id: 'ap_initial_location', field: 'initial_location', type: 'select', weight: 4,
+    label: 'Where did the pain FIRST begin?', options: ['Periumbilical (around the navel)', 'Epigastrium (upper middle)', 'Right upper quadrant', 'Left upper quadrant', 'Right lower quadrant', 'Left lower quadrant', 'Suprapubic (lower middle)', 'Flank or back', 'Diffuse — all over'],
+    priority: 1, purpose: 'rule_in', targetDiagnoses: ['appendicitis', 'pancreatitis', 'cholecystitis', 'ureteric_colic', 'diverticulitis'],
+    rationale: 'The initial pain site points to the organ where inflammation started. Midgut (appendix, small bowel) → periumbilical. Foregut (stomach, pancreas, biliary) → epigastric. Hindgut and kidney → lateralized.' },
+
+  { id: 'ap_onset_type', field: 'onset_type', type: 'select', weight: 4,
+    label: 'How quickly did the pain develop?', options: ['Gradual — increased over hours', 'Sudden — peaked over minutes', 'Instant — like a bomb exploding'],
+    priority: 1, purpose: 'rule_in', targetDiagnoses: ['perforated_ulcer', 'pancreatitis', 'ureteric_colic', 'appendicitis'],
+    rationale: 'Onset speed distinguishes surgical catastrophes from inflammation. Instantaneous → perforation or rupture. Gradual → inflammation (appendicitis, cholecystitis).' },
+
+  // ═══════════════════════════════════════════════════════════
+  // ROUND 2: PAIN EVOLUTION + CHARACTER — 5 questions that trace
+  // the natural history and point to specific organs.
+  // ═══════════════════════════════════════════════════════════
+  { id: 'ap_location', field: 'location', type: 'select', weight: 4,
+    label: 'Where is the pain NOW?', options: ['Right lower quadrant', 'Epigastrium', 'Right upper quadrant', 'Left upper quadrant', 'Left lower quadrant', 'Periumbilical', 'Suprapubic', 'Diffuse — whole abdomen', 'Flank or back'],
+    priority: 2, purpose: 'rule_in', targetDiagnoses: ['appendicitis', 'cholecystitis', 'pancreatitis', 'ureteric_colic', 'diverticulitis'],
+    rationale: 'Current location reveals which organ is now involved. Comparing it with the initial site reveals the disease\'s progression. Periumbilical→RLQ is pathognomonic for appendicitis.' },
+
+  { id: 'ap_migration', field: 'migration', type: 'select', weight: 5,
+    label: 'Has the pain moved or spread since it started?', options: ['No — stayed where it began', 'Started around the navel — moved to lower right', 'Started in the upper abdomen — spread all over', 'Started in the flank — moved to the groin', 'Started in the chest — moved to the abdomen'],
+    priority: 2, purpose: 'rule_in', targetDiagnoses: ['appendicitis', 'perforated_ulcer', 'ureteric_colic'],
+    rationale: 'Pain migration patterns are pathognomonic. Periumbilical→RLQ = appendicitis (visceral→parietal). Upper→generalized = perforation. Flank→groin = ureteric colic.' },
+
+  { id: 'ap_quality', field: 'quality', type: 'select', weight: 2,
+    label: 'How would you describe the pain?', options: ['Sharp or stabbing', 'Cramping — comes in waves', 'Burning', 'Dull ache', 'Gnawing', 'Tearing or ripping'],
+    priority: 2, purpose: 'characterize',
+    rationale: 'Colicky (wavelike) pain = hollow viscus obstruction (bowel, ureter). Constant sharp pain = inflammation or ischaemia. Tearing pain = vascular catastrophe (AAA dissection).' },
+
+  { id: 'ap_radiation', field: 'radiation', type: 'select', weight: 3,
+    label: 'Does the pain spread anywhere else?', options: ['No radiation', 'To the back', 'To the right shoulder', 'To the left shoulder', 'To the groin or genitals'],
+    priority: 2, purpose: 'rule_in', targetDiagnoses: ['pancreatitis', 'cholecystitis', 'ureteric_colic'],
+    rationale: 'Radiation follows the affected organ\'s nerve supply. Epigastric→back = pancreatitis (retroperitoneal). RUQ→right shoulder = biliary (phrenic nerve). Flank→groin = ureter.' },
+
+  { id: 'ap_progression', field: 'progression', type: 'select', weight: 2,
+    label: 'How has the pain changed overall?', options: ['Steadily getting worse', 'Stayed the same', 'Comes and goes in waves', 'Sudden onset, then constant'],
+    priority: 2, purpose: 'severity',
+    rationale: 'Worsening pain suggests progressive inflammation or complications. Colicky waves suggest intermittent obstruction. Sudden catastrophic onset suggests perforation or rupture.' },
+
+  // ═══════════════════════════════════════════════════════════
+  // ROUND 3: SYNDROME CONFIRMATION — 6 questions that confirm
+  // the specific syndrome and detect complications.
+  // ═══════════════════════════════════════════════════════════
+  { id: 'ap_vomiting', field: 'associated_vomiting', type: 'boolean', weight: 3,
+    label: 'Have you vomited?', priority: 3, purpose: 'rule_in', targetDiagnoses: ['appendicitis', 'pancreatitis', 'intestinal_obstruction', 'gastroenteritis'],
+    rationale: 'Vomiting after the onset of pain suggests surgical pathology. Vomiting before pain suggests gastroenteritis. The character of vomitus further localizes the obstruction level.' },
+
+  { id: 'ap_anorexia', field: 'associated_anorexia', type: 'boolean', weight: 2,
+    label: 'Have you lost your appetite?', priority: 3, purpose: 'rule_in', targetDiagnoses: ['appendicitis', 'pancreatitis', 'cholecystitis'],
+    rationale: 'Anorexia is a hallmark of acute surgical inflammation (Alvarado criterion). Its absence should raise suspicion for non-inflammatory mimics.' },
+
+  { id: 'ap_obstipation', field: 'associated_obstipation', type: 'select', weight: 4,
+    label: 'Passed any gas or stool in the last 24 hours?', options: ['Yes — both gas and stool', 'Gas only, no stool', 'No gas and no stool', 'Not sure'],
+    priority: 3, purpose: 'rule_in', targetDiagnoses: ['intestinal_obstruction'],
+    rationale: 'Failure to pass flatus and stool (obstipation) indicates mechanical obstruction until proven otherwise. Passage of both gas and stool makes obstruction unlikely.' },
+
+  { id: 'ap_fever', field: 'associated_fever', type: 'boolean', weight: 3,
+    label: 'Have you had a fever or chills?', priority: 3, purpose: 'rule_in', targetDiagnoses: ['appendicitis', 'cholecystitis', 'pancreatitis', 'pneumonia', 'gastroenteritis', 'pid'],
+    rationale: 'Fever indicates inflammation or infection. Low-grade fever early in appendicitis; high fever with rigors suggests complicated disease (perforation, cholangitis, abscess).' },
+
+  { id: 'ap_jaundice', field: 'associated_jaundice', type: 'boolean', weight: 4,
+    label: 'Have you noticed yellowing of your eyes or dark urine?', priority: 3, purpose: 'rule_in', targetDiagnoses: ['cholecystitis', 'pancreatitis'],
+    rationale: 'Jaundice with RUQ pain = common bile duct obstruction (choledocholithiasis). Also seen in gallstone pancreatitis. Mandates urgent biliary decompression.' },
+
+  { id: 'ap_vomiting_relief', field: 'vomiting_relief', type: 'boolean', weight: 2,
+    label: 'Does vomiting relieve the pain?', condition: 'ap_vomiting=true', priority: 3, purpose: 'rule_in', targetDiagnoses: ['pancreatitis'],
+    rationale: 'Pain relief after vomiting is characteristic of pancreatitis. In appendicitis or obstruction, vomiting does not relieve the pain.' },
+
+  { id: 'ap_rigors', field: 'rigors', type: 'boolean', weight: 4,
+    label: 'Shaking chills (rigors)?', condition: 'ap_fever=true', priority: 3, purpose: 'complication', targetDiagnoses: ['cholecystitis', 'pancreatitis', 'appendicitis'],
+    rationale: 'Rigors = bacteraemia or endotoxaemia. With RUQ pain and jaundice (Charcot\'s triad), this is ascending cholangitis until proven otherwise.' },
+
+  { id: 'ap_urinary', field: 'associated_urinary', type: 'multi_select', weight: 3,
+    label: 'Any urinary symptoms?', options: ['None', 'Pain or burning when urinating', 'Urinating more often', 'Blood in urine', 'Difficulty urinating'],
+    priority: 3, purpose: 'rule_in', targetDiagnoses: ['ureteric_colic', 'uti'],
+    rationale: 'Urinary symptoms distinguish renal/ureteric pathology from abdominal causes. Dysuria = UTI. Haematuria with flank pain = ureteric colic.' },
+
+  { id: 'ap_cough', field: 'associated_cough', type: 'boolean', weight: 3,
+    label: 'Any cough or chest congestion?', priority: 3, purpose: 'rule_out', targetDiagnoses: ['pneumonia'],
+    rationale: 'Basal pneumonia presents as upper abdominal pain, especially in children and the elderly. A cough redirects to chest X-ray before abdominal imaging.' },
+
+  { id: 'ap_syncope', field: 'dizziness_syncope', type: 'boolean', weight: 5,
+    label: 'Felt faint, dizzy, or passed out?', priority: 3, purpose: 'complication', targetDiagnoses: ['perforated_ulcer', 'ectopic_pregnancy', 'pancreatitis'],
+    rationale: 'Syncope with abdominal pain = haemodynamic compromise from ruptured ectopic, perforated viscus, or severe pancreatitis with third-spacing. Surgical emergency.' },
+
+  // ═══════════════════════════════════════════════════════════
+  // ROUND 4: RISK FACTORS + CONTEXT — 6 questions that assess
+  // predisposition for specific diseases.
+  // ═══════════════════════════════════════════════════════════
+  { id: 'ap_surgery_history', field: 'risk_previous_surgery', type: 'boolean', weight: 3,
+    label: 'Previous abdominal surgery?', priority: 4, purpose: 'risk', targetDiagnoses: ['intestinal_obstruction'],
+    rationale: 'Previous abdominal surgery is the most common cause of adhesional SBO. Pain + distension + prior laparotomy = obstruction until proven otherwise.' },
+
+  { id: 'ap_alcohol', field: 'risk_alcohol', type: 'boolean', weight: 3,
+    label: 'Do you drink alcohol?', priority: 4, purpose: 'risk', targetDiagnoses: ['pancreatitis', 'peptic_ulcer_disease'],
+    rationale: 'Alcohol is the most common cause of acute pancreatitis and a major risk factor for peptic ulcer disease.' },
+
+  { id: 'ap_nsaids', field: 'risk_nsaids', type: 'boolean', weight: 3,
+    label: 'Taken NSAIDs (ibuprofen, diclofenac, aspirin)?', priority: 4, purpose: 'risk', targetDiagnoses: ['perforated_ulcer', 'peptic_ulcer_disease'],
+    rationale: 'NSAIDs inhibit mucosal prostaglandins — the most common iatrogenic cause of peptic ulcer perforation and upper GI bleeding.' },
+
+  { id: 'ap_gallstones', field: 'risk_gallstones', type: 'boolean', weight: 3,
+    label: 'Known gallstones or gallbladder disease?', priority: 4, purpose: 'risk', targetDiagnoses: ['cholecystitis', 'pancreatitis'],
+    rationale: 'Gallstones are the most common cause of cholecystitis and the second most common cause of acute pancreatitis.' },
+
+  { id: 'ap_travel', field: 'risk_travel_diarrhoea', type: 'boolean', weight: 2,
+    label: 'Recent travel or possible food poisoning?', priority: 4, purpose: 'risk', targetDiagnoses: ['gastroenteritis'],
+    rationale: 'Recent travel raises the probability of infectious enterocolitis — a common mimic of surgical abdomen.' },
+
+  { id: 'ap_pregnancy', field: 'risk_pregnancy', type: 'boolean', weight: 4,
+    label: 'Could you be pregnant?', priority: 4, purpose: 'risk', targetDiagnoses: ['ectopic_pregnancy'],
+    rationale: 'Pregnancy + abdominal pain = ectopic pregnancy until proven otherwise. Time-critical gynaecological emergency.' },
+
+  // ═══════════════════════════════════════════════════════════
+  // ROUND 5: TREATMENT & IMPACT — always asked last
+  // ═══════════════════════════════════════════════════════════
+  ...SHARED_CLINICAL_QUESTIONS.map(q => ({ ...q, priority: 5 })),
 ];
 
 // â”€â”€ HEADACHE â”€â”€
@@ -1494,4 +1599,157 @@ export function getFilteredQuestions(
     const answerStr = String(parentAnswer).toLowerCase();
     return answerStr === expectedValue.toLowerCase();
   });
+}
+
+/** Clinical rounds metadata — label + goal shown to the clinician */
+export const CLINICAL_ROUNDS: Record<number, { label: string; goal: string }> = {
+  1: { label: 'Triage & Localization', goal: 'Is the patient sick? Where did the problem start?' },
+  2: { label: 'Pain Evolution & Character', goal: 'How has the pain progressed? Which organ is involved?' },
+  3: { label: 'Syndrome Confirmation', goal: 'Which specific disease fits best? Are there complications?' },
+  4: { label: 'Risk Factors & Context', goal: 'What predisposes this patient to specific diseases?' },
+  5: { label: 'Treatment & Impact', goal: 'What has been done so far? How is the patient affected?' },
+};
+
+// ── Region mapping: targetDiagnosis → anatomical region ──
+// Used to filter questions by suspected disease location
+const DIAGNOSIS_REGIONS: Record<string, string[]> = {
+  appendicitis: ['periumbilical', 'right lower quadrant', 'rlq'],
+  cholecystitis: ['right upper quadrant', 'ruq', 'epigastrium'],
+  pancreatitis: ['epigastrium', 'epigastric'],
+  ureteric_colic: ['flank', 'flank/back'],
+  intestinal_obstruction: ['diffuse', 'generalized', 'periumbilical'],
+  perforated_ulcer: ['epigastrium', 'diffuse', 'generalized'],
+  diverticulitis: ['left lower quadrant', 'llq'],
+  ectopic_pregnancy: ['right lower quadrant', 'suprapubic', 'rlq'],
+  pid: ['suprapubic', 'right lower quadrant', 'left lower quadrant', 'rlq'],
+  pneumonia: [], // medical mimic — always relevant
+  gastroenteritis: ['periumbilical', 'diffuse', 'generalized'],
+  mi: [], // medical mimic — always relevant
+  dka: [], // medical mimic — always relevant
+  peptic_ulcer_disease: ['epigastrium'],
+  colorectal_cancer: ['right lower quadrant', 'left lower quadrant', 'rlq', 'llq'],
+  uti: ['suprapubic'],
+};
+
+/** Infer likely anatomical region from pain location answers */
+function inferRegion(answers: Record<string, string | boolean | string[]>): string {
+  const initialLoc = (answers['ap_initial_location'] as string) || '';
+  const currLoc = (answers['ap_location'] as string) || '';
+  const migration = (answers['ap_migration'] as string) || '';
+
+  // Match migration patterns (exact option text from question bank)
+  const m = migration.toLowerCase();
+  if (m.includes('navel') && m.includes('lower right')) return 'right lower quadrant';
+  if (m.includes('flank') && m.includes('groin')) return 'flank';
+  if (m.includes('upper') && m.includes('all over')) return 'generalized';
+
+  // Match location option text
+  const loc = (currLoc || initialLoc).toLowerCase();
+  if (loc.includes('periumbilical') || loc.includes('navel')) return 'periumbilical';
+  if (loc.includes('right lower quadrant') || loc.includes('rlq')) return 'right lower quadrant';
+  if (loc.includes('left lower quadrant') || loc.includes('llq')) return 'left lower quadrant';
+  if (loc.includes('right upper quadrant') || loc.includes('ruq')) return 'right upper quadrant';
+  if (loc.includes('left upper quadrant') || loc.includes('luq')) return 'left upper quadrant';
+  if (loc.includes('epigastrium') || loc.includes('upper middle')) return 'epigastrium';
+  if (loc.includes('flank') || loc.includes('back')) return 'flank';
+  if (loc.includes('suprapubic') || loc.includes('lower middle')) return 'suprapubic';
+  if (loc.includes('diffuse') || loc.includes('all over') || loc.includes('whole abdomen')) return 'generalized';
+  return 'unknown';
+}
+
+/** Get top likely diagnoses based on inferred region */
+function inferLikelyDiagnoses(answers: Record<string, string | boolean | string[]>): string[] {
+  const region = inferRegion(answers);
+  if (region === 'unknown') return []; // no location data yet — show all
+
+  const matches: string[] = [];
+  for (const [diagnosis, regions] of Object.entries(DIAGNOSIS_REGIONS)) {
+    if (regions.some(r => region.includes(r) || r.includes(region))) {
+      matches.push(diagnosis);
+    }
+  }
+  return matches.length > 0 ? matches : ['appendicitis', 'intestinal_obstruction', 'gastroenteritis', 'ureteric_colic', 'cholecystitis', 'pancreatitis', 'perforated_ulcer'];
+}
+
+/** Filter questions to only those relevant for the inferred region/DDX */
+export function getAdaptiveQuestions(
+  symptomId: string,
+  answeredOrIds: string[] | SocratesStoredAnswer[],
+  biodata?: Partial<Biodata>
+): { round: number; questions: SocratesQuestion[] }[] {
+  // Get all unanswered questions
+  const all = getFilteredQuestionsForPatient(symptomId, answeredOrIds, biodata);
+
+  // Build answer map from stored answers
+  const answerMap: Record<string, string | boolean | string[]> = {};
+  const answeredIds = new Set<string>();
+  for (const a of answeredOrIds) {
+    if (typeof a !== 'string') {
+      answerMap[a.questionId] = a.answer;
+      answeredIds.add(a.questionId);
+    } else {
+      answeredIds.add(a);
+    }
+  }
+
+  // Infer likely region + diagnoses from location answers
+  const likelyDiagnoses = inferLikelyDiagnoses(answerMap);
+
+  // Filter questions to region-relevant ones (but always show Round 1 triage)
+  const filtered = all.filter(q => {
+    // Always show Round 1 (triage) and Round 2 (character) — they're universal
+    if ((q.priority ?? 5) <= 2) return true;
+    // Round 5 (treatment/impact) is always relevant
+    if (q.priority === 5) return true;
+    // No target diagnosis = generic, always show
+    if (!q.targetDiagnoses || q.targetDiagnoses.length === 0) return true;
+    // No location info yet = show everything
+    if (likelyDiagnoses.length === 0) return true;
+    // Show only if at least one target diagnosis is still plausible
+    return q.targetDiagnoses.some(td =>
+      likelyDiagnoses.includes(td) || DIAGNOSIS_REGIONS[td]?.length === 0
+    );
+  });
+
+  // Group by round
+  const byRound = new Map<number, SocratesQuestion[]>();
+  for (const q of filtered) {
+    const r = q.priority ?? 5;
+    if (!byRound.has(r)) byRound.set(r, []);
+    byRound.get(r)!.push(q);
+  }
+
+  return Array.from(byRound.entries())
+    .sort(([a], [b]) => a - b)
+    .map(([round, questions]) => ({ round, questions }));
+}
+
+/** (Legacy) Returns questions grouped by clinical round without DDX filtering */
+export function getQuestionsByRound(
+  symptomId: string,
+  answeredOrIds: string[] | SocratesStoredAnswer[],
+  biodata?: Partial<Biodata>
+): { round: number; questions: SocratesQuestion[] }[] {
+  return getAdaptiveQuestions(symptomId, answeredOrIds, biodata);
+}
+
+// ── Biodata-aware filtering — hides gender-inappropriate questions ──
+const MALE_FILTER_IDS = new Set([
+  'ap_pregnancy', 'ap_vaginal_discharge', 'ap_vaginal_bleeding',
+  'ap_last_menstrual', 'ap_contraception', 'ap_iud',
+  'nv_pregnancy', 'ls_pregnancy', 'jd_pregnancy',
+  'vb_pregnancy', 'dy_pregnancy', 'am_pregnancy',
+  'pp_pregnancy', 'vd_pregnancy', 'uf_pregnancy',
+]);
+
+export function getFilteredQuestionsForPatient(
+  symptomId: string,
+  answeredOrIds: string[] | SocratesStoredAnswer[],
+  biodata?: Partial<Biodata>
+): SocratesQuestion[] {
+  const filtered = getFilteredQuestions(symptomId, answeredOrIds);
+  if (biodata?.sex === 'male') {
+    return filtered.filter(q => !MALE_FILTER_IDS.has(q.id));
+  }
+  return filtered;
 }

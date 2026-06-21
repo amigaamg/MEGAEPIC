@@ -1,0 +1,129 @@
+{
+  "disease": {
+    "id": "hepatitis_d",
+    "name": "Hepatitis D (Delta Virus)",
+    "system": "infectious_disease",
+    "agePeak_months": [],
+    "note": "HDV (delta virus): defective RNA virus requiring HBV surface antigen (HBsAg) for entry and assembly. Most severe form of viral hepatitis; accelerates cirrhosis and HCC. Highest prevalence in Amazon basin, Mediterranean, Middle East, Central Africa.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["liver", "hepatitis", "jaundice", "viral_hepatitis", "chronic_hepatitis"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure_coagulopathy", "weight": 10 },
+        { "sign": "hepatic_encephalopathy_any_grade", "weight": 10 },
+        { "sign": "rapidly_deepening_jaundice", "weight": 8 },
+        { "sign": "protracted_vomiting_inability_to_maintain_hydration", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "Superinfection -> HIGH risk of fulminant/chronic; Coinfection -> moderate risk; Fulminant hepatic failure -> EMERGENCY ICU"
+    },
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 4 },
+      { "symptomId": "dark_urine", "weight": 4 },
+      { "symptomId": "fatigue_malaise", "weight": 4 },
+      { "symptomId": "abdominal_pain_right_upper_quadrant", "weight": 3 },
+      { "symptomId": "arthralgia", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "appetite_changes", "weight": 3 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "pruritus", "weight": 2 }
+    ],
+    "examFeatures": [
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "abdominal_tenderness_ruq", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "splenomegaly", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "spider_angiomata", "baseWeight": 3, "doubleWeight": false, "note": "Chronic HDV with cirrhosis" },
+      { "signId": "ascites", "baseWeight": 3, "doubleWeight": false, "note": "Decompensated chronic HDV" },
+      { "signId": "asterixis", "baseWeight": 4, "doubleWeight": true, "note": "Signs of hepatic encephalopathy" }
+    ],
+    "riskFactors": [
+      { "id": "hbv_carrier", "multiplier": 5.0 },
+      { "id": "iv_drug_use", "multiplier": 4.0 },
+      { "id": "blood_products_transfusion", "multiplier": 2.5 },
+      { "id": "sexual_contact_hbv_carrier", "multiplier": 2.0 },
+      { "id": "endemic_area_amazon_mediterranean_middle_east_africa", "multiplier": 3.0 }
+    ],
+    "subtypes": [
+      { "id": "hdv_hbv_coinfection", "name": "HDV-HBV Coinfection", "note": "Simultaneous HDV and HBV acquisition. Often self-limited (similar to acute HBV). Risk of fulminant hepatitis ~5%." },
+      { "id": "hdv_superinfection", "name": "HDV Superinfection", "note": "HDV acquired in chronic HBV carrier. Often severe, leads to chronic HDV in 70-80%. Accelerated progression to cirrhosis and HCC." }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "hepatitis_b",
+        "discriminators": ["hdv_serology_negative", "hbsag_positive_alone", "less_severe_course_in_acute", "lower_risk_of_fulminant"]
+      },
+      {
+        "diseaseId": "hepatitis_e",
+        "discriminators": ["hbsag_negative", "travel_history", "anti_hev_positive", "self_limited_except_pregnancy"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["temporal_relation_to_drug", "hbsag_negative", "eosinophilia", "no_viral_serology"]
+      }
+    ],
+    "investigations": {
+      "firstLine": [
+        { "test": "anti_HDV_IgG_IgM", "weight": 10 },
+        { "test": "HBsAg", "weight": 10 },
+        { "test": "HBV_DNA", "weight": 9 },
+        { "test": "HDV_RNA_PCR", "weight": 10 },
+        { "test": "LFTs_ALT_AST_bilirubin_ALP", "weight": 9 },
+        { "test": "INR", "weight": 8 },
+        { "test": "abdominal_ultrasound", "weight": 7 }
+      ],
+      "secondLine": ["liver_biopsy", "fibroscan_transient_elastography"],
+      "goldStandard": "HDV_RNA_PCR_quantitative"
+    },
+    "management": {
+      "emergency": [
+        { "action": "Admit to ICU if fulminant hepatic failure (encephalopathy, coagulopathy)" },
+        { "action": "IV fluids and supportive care for acute severe hepatitis" },
+        { "action": "Evaluate for liver transplant in decompensated liver failure" }
+      ],
+      "inpatient": [
+        { "action": "Pegylated interferon alpha 180 mcg/week for 48 weeks for chronic HDV (responders)" },
+        { "action": "Monitor LFTs, HDV RNA, HBV DNA, INR closely" },
+        { "action": "N-acetylcysteine IV for fulminant hepatitis (limited evidence)" }
+      ],
+      "outpatient": [
+        { "action": "Pegylated interferon alpha continuation if responding" },
+        { "action": "HCC surveillance: US + AFP q6m in chronic HDV with cirrhosis" },
+        { "action": "Monitor HDV RNA q3-6m during treatment" }
+      ],
+      "refractory": [
+        { "action": "Liver transplant evaluation for decompensated cirrhosis" },
+        { "action": "Clinical trials for novel antivirals (bulevirtide, lonafarnib, REP 2139)" }
+      ],
+      "preventive": [
+        { "action": "HBV vaccination (prevents HDV by preventing HBV)" },
+        { "action": "Avoid sharing needles, safe sex practices" },
+        { "action": "Screen blood products for HBV/HDV" }
+      ]
+    },
+    "pathophysiology": "HDV enters hepatocytes via HBsAg attachment to NTCP receptor. Direct cytopathic effect of HDV (delta antigen inhibits host RNA polymerase) combined with immune-mediated CD8+ T-cell injury. In coinfection, both HBV and HDV resolve simultaneously. In superinfection, HDV outcompetes HBV leading to suppression of HBV replication but severe HDV-driven liver injury. Accelerated fibrogenesis through stellate cell activation.",
+    "complications": [
+      { "diseaseId": "cirrhosis", "probability": 0.6, "lagYears": [2, 10], "severityBoost": 0.6, "clues": ["chronic_hdv", "superinfection_pattern", "persistent_hdv_rna", "rapid_fibrosis_progression"] },
+      { "diseaseId": "hepatocellular_carcinoma", "probability": 0.2, "severityBoost": 0.8, "clues": ["cirrhosis", "chronic_hdv", "coexisting_hbv", "rising_afp"] },
+      { "diseaseId": "acute_liver_failure_fulminant", "probability": 0.05, "severityBoost": 0.9, "clues": ["superinfection_pattern", "rapidly_rising_bilirubin", "coagulopathy", "encephalopathy"] }
+    ],
+    "mustNotMiss": ["hdv_superinfection_in_hbsag_positive_patient_with_acute_deterioration", "hdv_in_endemic_region_or_ivdu_with_hbv"],
+    "emergencyPriority": "high",
+    "diagnosticClues": [
+      { "clue": "HBsAg positive patient with severe acute hepatitis or acute-on-chronic deterioration", "weight": 10 },
+      { "clue": "Rapidly progressive course compared to typical HBV", "weight": 8 },
+      { "clue": "Anti-HDV antibodies detected", "weight": 10 },
+      { "clue": "Low or undetectable HBV DNA with severe hepatitis in HBsAg carrier", "weight": 7 }
+    ],
+    "exclusionClues": [
+      { "clue": "HBsAg negative (HDV impossible without HBsAg)", "weight": 10 },
+      { "clue": "Anti-HDV IgG/IgM negative", "weight": 10 },
+      { "clue": "Isolated HBV infection with expected course", "weight": 7 }
+    ]
+  }
+}

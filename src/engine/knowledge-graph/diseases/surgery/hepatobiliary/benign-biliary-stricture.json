@@ -1,0 +1,166 @@
+{
+  "disease": {
+    "id": "benign_biliary_stricture",
+    "name": "Benign Biliary Stricture",
+    "system": "surgical",
+    "department": "surgery",
+    "unit": "hepatobiliary",
+    "agePeak_months": [240, 720],
+    "note": "Non-malignant narrowing of the bile duct, most commonly due to iatrogenic injury during cholecystectomy (80%). Other causes: PSC, chronic pancreatitis, anastomotic stricture post-liver transplant, IgG4-related disease, and trauma. Presents with obstructive jaundice, pruritus, cholangitis. Diagnosis requires ruling out malignancy. Endoscopic or surgical management depending on type, location, and cause.",
+    "prevalenceWeight": 0.08,
+    "syndromeTags": ["biliary_obstruction", "jaundice", "benign_stricture", "post_cholecystectomy"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_cholangitis_fever_ruq_pain_jaundice", "weight": 9 },
+        { "sign": "biliary_cirrhosis_with_portal_hypertension", "weight": 8 },
+        { "sign": "secondary_biliary_cirrhosis_decompensation", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "stricture_bismuth_iii_iv": true,
+        "recurrent_cholangitis": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "bismuth_i_ii": true,
+        "dilated_ducts_no_cholangitis": true
+      },
+      "severityLabel": "With cholangitis -> EMERGENCY; High stricture -> URGENT referral; Low stricture -> ELECTIVE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 4, "note": "May be intermittent or progressive" },
+      { "symptomId": "pruritus", "weight": 3 },
+      { "symptomId": "dark_urine", "weight": 3 },
+      { "symptomId": "pale_clay_colored_stools", "weight": 3 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3 },
+      { "symptomId": "fever", "weight": 3, "note": "Cholangitis" },
+      { "symptomId": "history_of_cholecystectomy", "weight": 5, "note": "Most common cause; symptoms may present weeks to years after surgery" },
+      { "symptomId": "history_of_liver_transplant", "weight": 3, "note": "Anastomotic stricture" },
+      { "symptomId": "history_of_chronic_pancreatitis", "weight": 3, "note": "Intrapancreatic CBD stricture" },
+      { "symptomId": "history_of_primary_sclerosing_cholangitis", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 2, "note": "Often mild; helps distinguish from malignant" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4 },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 2, "note": "Portal hypertension if secondary biliary cirrhosis" },
+      { "signId": "ascites", "baseWeight": 1, "note": "If decompensated cirrhosis" },
+      { "signId": "excoriations", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "laparoscopic_cholecystectomy_injury_rate_0_3_0_5_percent", "multiplier": 5.0 },
+      { "id": "open_cholecystectomy_injury_rate_0_1_0_2_percent", "multiplier": 3.0 },
+      { "id": "primary_sclerosing_cholangitis", "multiplier": 5.0 },
+      { "id": "chronic_pancreatitis", "multiplier": 3.0 },
+      { "id": "liver_transplantation", "multiplier": 4.0 },
+      { "id": "ig_g4_related_disease", "multiplier": 3.0 },
+      { "id": "abdominal_trauma_blunt_or_penetrating", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "post_cholecystectomy_stricture",
+        "name": "Post-Cholecystectomy Biliary Stricture",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [{ "feature": "history_of_cholecystectomy", "weight": 5 }, { "feature": "short_segment_stricture_at_chd_or_cbd", "weight": 4 }],
+        "management": "Endoscopic dilation + multiple plastic stents (sequential ERCP with increasing number/size of stents over 6-12 months) for low strictures. Hepaticojejunostomy Roux-en-Y for high (Bismuth III-V) strictures or failed endoscopic therapy."
+      },
+      {
+        "id": "chronic_pancreatitis_stricture",
+        "name": "Chronic Pancreatitis CBD Stricture",
+        "keyFeatures": [{ "feature": "long_smooth_tapering_stricture_of_intrapancreatic_cbd", "weight": 5 }, { "feature": "pancreatic_calcifications", "weight": 4 }],
+        "management": "Endoscopic metal stent (FCSEMS) for benign distal stricture. If failed: surgical biliary-enteric bypass (hepaticojejunostomy)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cholangiocarcinoma_perihilar_or_distal",
+        "discriminators": ["shouldered_irregular_stricture", "mass_lesion", "elevated_ca19_9", "progressive_deterioration", "weight_loss"]
+      },
+      {
+        "diseaseId": "pancreatic_head_cancer",
+        "discriminators": ["mass_in_pancreatic_head", "double_duct_sign", "courvoisier_gallbladder", "ca19_9_greater_than_1000"]
+      },
+      {
+        "diseaseId": "choledocholithiasis",
+        "discriminators": ["hyperechoic_stone_with_acoustic_shadow", "fluctuating_jaundice", "colicky_pain"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "LFTs (bilirubin, ALP, GGT, ALT, AST)", "priority": "immediate", "yield": 0.85, "indication": "obstructive pattern: elevated conjugated bilirubin, ALP, GGT" },
+        { "name": "CA 19-9", "priority": "high", "yield": 0.4, "indication": "may be elevated even in benign stricture if cholangitis present; difficult to interpret" },
+        { "name": "CRP and WBC", "priority": "high", "yield": 0.4, "indication": "elevated if cholangitis" },
+        { "name": "IgG4", "priority": "high", "yield": 0.5, "indication": "elevated in IgG4-related disease" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "immediate", "yield": 0.7, "indication": "dilated bile ducts proximal to stricture; level of obstruction; exclude gallstones" },
+        { "name": "MRCP", "priority": "high", "yield": 0.9, "indication": "non-invasive: stricture location, length, character (smooth/tapered vs irregular/shouldered); Bismuth classification" },
+        { "name": "ERCP with brushings + FISH", "priority": "selected", "yield": 0.85, "indication": "therapeutic (dilation, stenting) + diagnostic (brush cytology, FISH to exclude malignancy)" },
+        { "name": "CT abdomen", "priority": "high", "yield": 0.7, "indication": "assess for mass, vascular involvement, chronic pancreatitis" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASGE Guidelines for Biliary Strictures; SAGES Guidelines",
+      "pathways": [
+        {
+          "severity": "post_cholecystectomy_low_stricture_bismuth_i_ii",
+          "criteria": "Short segment stricture of CBD or CHD >2cm from hilum; Bismuth I or II",
+          "treatment": "ERCP with balloon dilation + multiple plastic stents (sequential ERCP q3-4 months with increasing number/size of stents; total stenting period 6-12 months). Covered self-expanding metal stents (FCSEMS) are alternative with similar efficacy. Success rates: 70-90% with endoscopic therapy. Stricture recurrence: 10-30%."
+        },
+        {
+          "severity": "post_cholecystectomy_high_stricture_bismuth_iii_v",
+          "criteria": "Hilar stricture, Bismuth III-V, or failed endoscopic therapy",
+          "treatment": "Roux-en-Y hepaticojejunostomy is definitive. Bile duct reconstruction with mucosal apposition. Percutaneous transhepatic biliary drainage (PTBD) as bridge or if endoscopic inaccessible. Surgical success: >90%. Recurrence: 10-20%."
+        },
+        {
+          "severity": "chronic_pancreatitis_stricture",
+          "criteria": "Distal CBD stricture from chronic pancreatitis",
+          "treatment": "Endoscopic: FCSEMS (fully covered self-expanding metal stent) for 6-12 months. If failed: surgical biliary bypass (hepaticojejunostomy or choledochoduodenostomy). Treat underlying chronic pancreatitis (pain management, pancreatic enzyme replacement, endoscopic therapy for PD stricture)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "iatrogenic_bile_duct_injury_during_surgery",
+      "ischemic_injury_to_duct_wall_from_surgical_dissection",
+      "scar_formation_and_fibrotic_contracture",
+      "stricture_narrowing_of_bile_duct_lumen",
+      "impaired_bile_flow",
+      "proximal_bile_duct_dilation",
+      "bile_stasis_and_conjugated_hyperbilirubinemia",
+      "risk_of_cholangitis_and_secondary_biliary_cirrhosis",
+      "chronic_obstruction_leads_to_hepatic_fibrosis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "recurrent_cholangitis",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["fever_ruq_pain_jaundice", "dilated_ducts", "stricture_present"]
+      },
+      {
+        "diseaseId": "secondary_biliary_cirrhosis",
+        "probability": 0.05,
+        "severityBoost": 0.7,
+        "clues": ["chronic_untreated_stricture", "portal_hypertension", "jaundice_persistent"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["obstructive_jaundice_after_cholecystectomy", "smooth_tapering_stricture_on_imaging", "no_mass", "stable_or_slow_progression"],
+    "exclusionClues": ["irregular_shouldered_stricture", "mass_lesion", "rapid_progression", "weight_loss_and_ca19_9_greater_than_1000"]
+  }
+}

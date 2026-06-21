@@ -1,4 +1,4 @@
-import { PresentingComplaintPhase, HpiPhase, PmhPhase, DdxPhase, TreatmentPhase } from './phases';
+import { PresentingComplaintPhase, HpiPhase, AdaptiveHpiPhase, PmhPhase, DdxPhase, TreatmentPhase } from './phases';
 import type { EncounterState } from './useEncounterState';
 
 interface PhaseRendererProps {
@@ -12,7 +12,7 @@ export function PhaseRenderer({ phaseId, store, departmentColor }: PhaseRenderer
     case 'presenting_complaint':
       return <PresentingComplaintPhase form={store.form} setField={store.setField} toggleArray={store.toggleArray} addEvent={store.addEvent} addInsight={store.addInsight} deptColor={departmentColor} />;
     case 'hpi':
-      return <HpiPhase form={store.form} setField={store.setField} addEvent={store.addEvent} addInsight={store.addInsight} deptColor={departmentColor} />;
+      return <AdaptiveHpiPhase form={store.form} setField={store.setField} addEvent={store.addEvent} addInsight={store.addInsight} deptColor={departmentColor} />;
     case 'pmh':
       return <PmhPhase form={store.form} setField={store.setField} addEvent={store.addEvent} deptColor={departmentColor} />;
     case 'ddx':

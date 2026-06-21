@@ -1,0 +1,187 @@
+{
+  "disease": {
+    "id": "aortoenteric_fistula",
+    "name": "Aortoenteric Fistula",
+    "system": "surgical",
+    "department": "surgery",
+    "unit": "vascular-surgery",
+    "agePeak_months": [600, 960],
+    "note": "Communication between aorta (native or graft) and bowel lumen — CATASTROPHIC cause of GI bleeding. Primary (native aorta into duodenum) vs Secondary (post AAA repair graft into duodenum, 95% of cases). Sentinel bleed is classic: self-limiting bleed hours to days before exsanguination.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["upper_gi_bleeding", "vascular_emergency", "catastrophic_gi_bleeding", "graft_complication"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hematemesis_with_shock", "weight": 10 },
+        { "sign": "exsanguinating_hemorrhage", "weight": 10 },
+        { "sign": "cardiac_arrest", "weight": 10 },
+        { "sign": "hemodynamic_instability_from_gi_bleed", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "sentinel_bleed_followed_by_massive_bleed", "weight": 9 },
+          { "sign": "known_aaa_or_aortic_graft", "weight": 8 },
+          { "sign": "pulsatile_mass_on_exam", "weight": 7 },
+          { "sign": "signs_of_infected_graft_fever_elevated_crp", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Any active bleeding with AAA/graft history -> EMERGENCY; sentinel bleed -> HIGH INDEX OF SUSPICION despite stability"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hematemesis_melena", "weight": 5, "note": "sentinel bleed then massive" },
+      { "symptomId": "hematemesis_melena", "weight": 4, "note": "may be the sentinel presentation" },
+      { "symptomId": "rectal_bleeding", "weight": 3, "note": "in massive rapid bleeding" },
+      { "symptomId": "syncope", "weight": 4, "note": "from acute blood loss" },
+      { "symptomId": "abdominal_pain", "weight": 3, "note": "back pain or epigastric pain" },
+      { "symptomId": "back_pain", "weight": 3, "note": "may herald fistulization" },
+      { "symptomId": "fever", "weight": 2, "note": "if infected graft" },
+      { "symptomId": "night_sweats", "weight": 1, "note": "if infected graft" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pulsatile_abdominal_mass", "baseWeight": 5, "doubleWeight": true, "note": "primary AEF" },
+      { "signId": "surgical_scar_with_palpable_graft", "baseWeight": 4, "note": "secondary AEF" },
+      { "signId": "hypotension_tachycardia", "baseWeight": 5, "note": "if active bleeding" },
+      { "signId": "abdominal_tenderness", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 3, "note": "if infected graft" },
+      { "signId": "signs_of_sepsis", "baseWeight": 3, "note": "if infected graft" },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "groin_pseudoaneurysm", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "prior_aaa_repair", "multiplier": 10.0, "note": "Secondary AEF — open > EVAR" },
+      { "id": "aortic_graft_especially_with_infection", "multiplier": 5.0 },
+      { "id": "radiation_therapy_to_abdomen", "multiplier": 2.0 },
+      { "id": "penetrating_aortic_ulcer", "multiplier": 2.0 },
+      { "id": "mycotic_aneurysm", "multiplier": 2.0 },
+      { "id": "pancreatic_cancer_erosion_into_aorta", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "primary_aortoenteric_fistula",
+        "name": "Primary Aortoenteric Fistula",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "native_abdominal_aortic_aneurysm", "weight": 5 },
+          { "feature": "no_prior_aortic_surgery", "weight": 5 },
+          { "feature": "erosion_into_duodenum", "weight": 4 },
+          { "feature": "back_pain_and_gi_bleed", "weight": 4 }
+        ],
+        "management": "Emergency open surgical repair: aortic graft placement with exclusion of fistula and primary duodenal repair. Extra-anatomic bypass if gross contamination."
+      },
+      {
+        "id": "secondary_aortoenteric_fistula_graft_enteric_erosion",
+        "name": "Secondary Aortoenteric Fistula (Graft-Enteric Erosion)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "prior_aortic_graft_repair", "weight": 5 },
+          { "feature": "graft_exposed_but_no_contamination", "weight": 3 },
+          { "feature": "sentinel_bleed_then_massive", "weight": 5 },
+          { "feature": "ct_shows_gas_around_graft", "weight": 4 }
+        ],
+        "management": "Emergency surgery: graft preservation with duodenal repair and omental wrap if no infection. If infected: graft excision, extra-anatomic bypass (axillofemoral), bowel repair."
+      },
+      {
+        "id": "secondary_aortoenteric_fistula_graft_enteric_fistula",
+        "name": "Secondary Aortoenteric Fistula (Graft-Enteric Fistula)",
+        "prevalenceModifier": 0.35,
+        "keyFeatures": [
+          { "feature": "prior_aortic_graft_repair", "weight": 5 },
+          { "feature": "graft_lumen_communicates_with_bowel", "weight": 5 },
+          { "feature": "gross_contamination", "weight": 4 },
+          { "feature": "sepsis_and_massive_bleeding", "weight": 5 }
+        ],
+        "management": "Emergency surgery: graft excision, extra-anatomic bypass (axillofemoral), bowel repair, omental interposition. Broad-spectrum IV antibiotics. Massive transfusion protocol."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["epigastric_pain_related_to_meals", "no_aortic_graft_or_aaa_history", "normal_ct_aorta", "no_gas_around_graft"]
+      },
+      {
+        "diseaseId": "esophageal_varices",
+        "discriminators": ["known_cirrhosis_or_chronic_liver_disease", "no_aortic_graft", "endoscopy_shows_varices", "ct_normal_aorta"]
+      },
+      {
+        "diseaseId": "mallory_weiss_syndrome",
+        "discriminators": ["history_of_vomiting_or_retching", "no_aaa_or_graft", "tear_at_ge_junction_on_egd"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.5, "indication": "Assess blood loss" },
+        { "name": "Type and Crossmatch", "priority": "immediate", "yield": 0.5, "indication": "Prepare for massive transfusion" },
+        { "name": "Blood cultures (aerobic + anaerobic)", "priority": "high", "yield": 0.4, "indication": "If infected graft suspected" },
+        { "name": "CRP / Procalcitonin", "priority": "high", "yield": 0.4, "indication": "Assess for infection" },
+        { "name": "Coagulation profile", "priority": "high", "yield": 0.3, "indication": "DIC from massive hemorrhage" }
+      ],
+      "imaging": [
+        { "name": "CT Angiography (aorta with IV contrast)", "priority": "immediate", "yield": 0.9, "indication": "Gas around graft, pseudoaneurysm, focal bowel wall thickening adherent to aorta, contrast extravasation into bowel" },
+        { "name": "EGD", "priority": "immediate", "yield": 0.6, "indication": "Pulsatile mass in 3rd/4th part duodenum, active bleeding from erosion. CAREFUL — could precipitate massive bleed. May be negative if not actively bleeding." }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "SVS / ESVS Guidelines for Aortoenteric Fistula Management",
+      "pathways": [
+        {
+          "severity": "active massive bleeding",
+          "criteria": "Massive hematemesis/melena with hemodynamic instability, known AAA or graft",
+          "treatment": "EMERGENCY SURGERY — graft excision, extra-anatomic bypass (axillofemoral), bowel repair. Massive transfusion protocol (1:1:1). Broad-spectrum IV antibiotics. Do NOT delay for extensive imaging if unstable."
+        },
+        {
+          "severity": "sentinel bleed (stable patient)",
+          "criteria": "Self-limited sentinel bleed, currently stable, known AAA or graft",
+          "treatment": "Urgent CT angiography. EGD (with extreme caution). If confirmed: planned urgent surgery or endovascular stent-graft as bridge. Do NOT discharge — impending exsanguination."
+        }
+      ]
+    },
+
+    "diagnosticClues": ["prior_aaa_repair_plus_sentinel_bleed_plus_massive_hematemesis", "egd_shows_bleeding_from_3rd_4th_part_duodenum_with_adherent_graft", "ct_shows_gas_around_graft_with_focal_bowel_wall_thickening"],
+    "exclusionClues": ["normal_ct_aorta_does_not_exclude_fistula", "negative_egd_can_miss_if_not_actively_bleeding", "peptic_ulcer_lacks_aortic_graft_history", "varices_lack_aaa_gra"],
+
+    "pathophysiology": [
+      "mechanical_erosion_of_aortic_graft_or_aneurysm_into_adjacent_bowel",
+      "third_and_fourth_part_duodenum_fixed_in_retroperitoneum_most_common_site",
+      "initial_small_sentinel_hemorrhage_from_communication",
+      "clot_formation_provides_temporary_hemostasis",
+      "eventual_clot_dislodgement_leads_to_massive_arterial_hemorrhage_into_gi_tract",
+      "exsanguination_without_emergent_surgical_intervention"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "exsanguination",
+        "probability": 0.5,
+        "severityBoost": 0.5,
+        "clues": ["massive_hematemesis", "hemodynamic_collapse", "massive_transfusion_required"]
+      },
+      {
+        "diseaseId": "graft_infection_sepsis",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["fever", "elevated_crp", "positive_blood_cultures", "gas_around_graft"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["oliguria", "rising_creatinine", "hypotensive_episode"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high"
+  }
+}

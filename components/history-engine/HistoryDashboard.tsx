@@ -7,7 +7,7 @@ import {
 } from '@/lib/history-engine/userStorage';
 import { generatePDF } from '@/lib/history-engine/pdfGenerator';
 
-export default function HistoryDashboard({ onClose }: { onClose: () => void }) {
+export default function HistoryDashboard() {
   const [encounters, setEncounters] = useState<EncounterRecord[]>([]);
   const [userId, setUserId] = useState('');
   const [search, setSearch] = useState('');
@@ -32,7 +32,6 @@ export default function HistoryDashboard({ onClose }: { onClose: () => void }) {
     const store = useHistoryStore.getState();
     store.orchestrator.loadState(encounter.state);
     useHistoryStore.setState(store.orchestrator.getState());
-    onClose();
   }
 
   function handleDownloadPDF(encounter: EncounterRecord) {
@@ -54,17 +53,14 @@ export default function HistoryDashboard({ onClose }: { onClose: () => void }) {
   );
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-      onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl w-[95vw] max-w-4xl max-h-[85vh] flex flex-col shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
-          <div>
-            <h2 className="text-lg font-bold text-[var(--accent)]">History Dashboard</h2>
-            <p className="text-[10px] text-[var(--text-muted)]">User: {userId.slice(0, 12)}...</p>
-          </div>
-          <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-xl">&times;</button>
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
+        <div>
+          <h2 className="text-lg font-bold text-[var(--accent)]">History Dashboard</h2>
+          <p className="text-[10px] text-[var(--text-muted)]">User: {userId.slice(0, 12)}...</p>
         </div>
+      </div>
 
         {/* Search */}
         <div className="px-4 py-2 border-b border-[var(--border)]">
@@ -127,6 +123,5 @@ export default function HistoryDashboard({ onClose }: { onClose: () => void }) {
           {encounters.length} encounter(s) saved locally on this device
         </div>
       </div>
-    </div>
   );
 }

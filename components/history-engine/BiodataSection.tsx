@@ -101,8 +101,9 @@ export default function BiodataSection() {
         </div>
         <div>
           <label className="text-xs text-[var(--text-secondary)] mb-1 block">Informant</label>
-          <select value={biodata.informant || 'patient'} onChange={e => setBiodata({ ...biodata, informant: e.target.value as any })}
+          <select value={biodata.informant} onChange={e => setBiodata({ ...biodata, informant: e.target.value as any })}
             className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]">
+            <option value="">-- Select --</option>
             {INFORMANT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
@@ -111,11 +112,24 @@ export default function BiodataSection() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
           <label className="text-xs text-[var(--text-secondary)] mb-1 block">History Reliability</label>
-          <select value={biodata.reliability || 'reliable'} onChange={e => setBiodata({ ...biodata, reliability: e.target.value as any })}
+          <select value={biodata.reliability} onChange={e => setBiodata({ ...biodata, reliability: e.target.value as any })}
             className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]">
+            <option value="">-- Select --</option>
             {RELIABILITY_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
+        {biodata.sex === 'female' && biodata.age && biodata.age >= 12 && biodata.age <= 55 && (
+          <div>
+            <label className="text-xs text-[var(--text-secondary)] mb-1 block">Pregnancy / OBGYN Status</label>
+            <select value={biodata.obstetric?.isPregnant !== undefined ? (biodata.obstetric?.isPregnant ? 'pregnant' : 'not_pregnant') : ''}
+              onChange={e => setBiodata({ ...biodata, obstetric: { ...biodata.obstetric, isPregnant: e.target.value === 'pregnant' ? true : e.target.value === 'not_pregnant' ? false : undefined as any } as any })}
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]">
+              <option value="">-- Select --</option>
+              <option value="pregnant">Currently Pregnant</option>
+              <option value="not_pregnant">Not Pregnant (GYN visit)</option>
+            </select>
+          </div>
+        )}
       </div>
 
       <button onClick={() => completeSection('biodata')}

@@ -1,0 +1,177 @@
+{
+  "disease": {
+    "id": "yellow_fever",
+    "name": "Yellow Fever",
+    "system": "infectious_disease",
+    "agePeak_months": [12, 600],
+    "note": "Acute viral hemorrhagic disease caused by yellow fever virus (flavivirus), transmitted by Aedes mosquitoes. Endemic in tropical Africa and South America. Characterized by three phases: infection, remission, and intoxication (hepatorenal failure). Jaundice is a hallmark of severe disease. High case fatality rate (20-50%) in severe cases. Vaccine-preventable.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["viral_hemorrhagic_fever", "jaundice", "liver", "mosquito_borne", "vaccine_preventable"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemorrhagic_disease_bleeding", "weight": 9 },
+        { "sign": "hepatic_encephalopathy", "weight": 10 },
+        { "sign": "acute_kidney_injury_anuria", "weight": 9 },
+        { "sign": "shock_hypotension", "weight": 9 },
+        { "sign": "multiorgan_failure", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "bilirubin_greater_than_10": true,
+        "renal_failure": true,
+        "hemorrhage": true
+      },
+      "nonSevereCriteria": {
+        "mild_disease": true,
+        "phase_1_only": true,
+        "no_jaundice": true,
+        "recovered": true
+      },
+      "severityLabel": "Intoxication phase (jaundice, hemorrhage, renal failure) -> ICU; Mild disease -> OBSERVE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever_high_grade_sudden_onset", "weight": 5, "note": "Abrupt onset; first phase" },
+      { "symptomId": "headache_severe", "weight": 4 },
+      { "symptomId": "myalgia_severe_backache", "weight": 4, "note": "Classic 'saddle back' pain" },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 5, "note": "Hallmark of intoxication phase; appears after brief remission" },
+      { "symptomId": "dark_urine", "weight": 3 },
+      { "symptomId": "vomiting_coffee_ground_or_hematemesis", "weight": 4, "note": "Black vomit is classic" },
+      { "symptomId": "bleeding_gums_nose_gi_tract", "weight": 4 },
+      { "symptomId": "oliguria_or_anuria", "weight": 3 },
+      { "symptomId": "confusion_altered_mental_status", "weight": 3 },
+      { "symptomId": "mosquito_bite_exposure", "weight": 4 },
+      { "symptomId": "travel_to_endemic_area_africa_south_america", "weight": 5 },
+      { "symptomId": "not_vaccinated_against_yellow_fever", "weight": 4 },
+      { "symptomId": "outbreak_during_rainy_season", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5 },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly_tender", "baseWeight": 3 },
+      { "signId": "relative_bradycardia_faget_sign", "baseWeight": 3, "note": "High fever with bradycardia" },
+      { "signId": "conjunctival_injection", "baseWeight": 2 },
+      { "signId": "facial_flushing", "baseWeight": 2 },
+      { "signId": "petechiae_ecchymoses", "baseWeight": 3 },
+      { "signId": "hematemesis_or_melena", "baseWeight": 3 },
+      { "signId": "epistaxis_gingival_bleeding", "baseWeight": 2 },
+      { "signId": "oliguria_anuria", "baseWeight": 3 },
+      { "signId": "asterixis_or_confusion", "baseWeight": 2, "note": "Encephalopathy" },
+      { "signId": "splenomegaly", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "unvaccinated_traveler_to_endemic_area", "multiplier": 5.0 },
+      { "id": "residence_in_endemic_area_tropical_africa_south_america", "multiplier": 4.0 },
+      { "id": "mosquito_exposure_in_forest_or_rural_area", "multiplier": 3.0 },
+      { "id": "rainy_season_increased_mosquito_density", "multiplier": 2.0 },
+      { "id": "occupational_exposure_forestry", "multiplier": 2.0 },
+      { "id": "no_prior_vaccination", "multiplier": 5.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "severe_malaria_cerebral_malaria",
+        "discriminators": ["blood_film_parasites", "splenomegaly_more_prominent", "normally_no_hemorrhagic_diathesis"]
+      },
+      {
+        "diseaseId": "leptospirosis_weil_syndrome",
+        "discriminators": ["calf_tenderness", "conjunctival_suffusion", "occupational_exposure_water", "cultured_leptospira"]
+      },
+      {
+        "diseaseId": "viral_hepatitis_fulminant",
+        "discriminators": ["no_hemorrhagic_feature", "marked_transaminitis", "viral_serology_positive", "no_fever_in_icteric_phase"]
+      },
+      {
+        "diseaseId": "dengue_hemorrhagic_fever",
+        "discriminators": ["severe_thrombocytopenia", "plasma_leakage", "rash_maculopapular", "no_or_mild_jaundice"]
+      },
+      {
+        "diseaseId": "ebola_virus_disease",
+        "discriminators": ["profound_hypovolemia", "high_secondary_attack_rate", "severe_gi_losses", "more_hemorrhagic"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Yellow fever virus RNA by RT-PCR (serum)", "priority": "immediate", "yield": 0.95, "indication": "diagnostic in acute phase (first 5 days)" },
+        { "name": "Yellow fever IgM by MAC-ELISA", "priority": "high", "yield": 0.9, "indication": "positive from day 5; requires PRNT confirmation" },
+        { "name": "LFTs (ALT, AST, bilirubin)", "priority": "immediate", "yield": 0.85, "indication": "AST > ALT (often 2:1); marked elevation 1000-10000; hyperbilirubinemia" },
+        { "name": "INR/PT", "priority": "high", "yield": 0.7, "indication": "prolonged in severe disease" },
+        { "name": "FBC", "priority": "high", "yield": 0.7, "indication": "leukopenia, thrombocytopenia" },
+        { "name": "Serum creatinine", "priority": "high", "yield": 0.7, "indication": "rising in renal failure phase" },
+        { "name": "Urinalysis", "priority": "high", "yield": 0.6, "indication": "proteinuria, bilirubinuria" },
+        { "name": "Blood film for malaria", "priority": "high", "yield": 0.3, "indication": "rule out malaria" },
+        { "name": "Leptospira serology/PCR", "priority": "medium", "yield": 0.2, "indication": "if leptospirosis suspected" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Yellow Fever; CDC Yellow Book",
+      "pathways": [
+        {
+          "severity": "mild_phase_1",
+          "criteria": "Fever, myalgia, headache, no jaundice, no hemorrhage",
+          "treatment": "Supportive care: antipyretics (avoid aspirin and NSAIDs due to bleeding risk), IV fluids, monitor for progression to intoxication phase. No specific antiviral therapy. Report to public health authorities. Mosquito precautions to prevent further transmission."
+        },
+        {
+          "severity": "severe_intoxication_phase",
+          "criteria": "Jaundice, hemorrhage (hematemesis, petechiae), renal failure, encephalopathy, shock",
+          "treatment": "ICU admission. Aggressive supportive care: IV fluids for shock; blood product transfusion for hemorrhage (PRBC, platelets, FFP); renal replacement therapy for AKI; manage encephalopathy. Avoid hepatotoxic drugs. No specific antiviral. Ribavirin has no proven benefit. Passive immunization with YFV immune globulin not available. Case fatality rate 20-50%. Report to WHO under International Health Regulations."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "yellow_fever_virus_flavivirus_mosquito_transmitted",
+      "incubation_3_6_days",
+      "initial_viral_replication_in_lymph_nodes",
+      "viremia_and_hematogenous_spread",
+      "infection_of_hepatocytes_especially_midzone",
+      "hepatocyte_apoptosis_and_necrosis",
+      "councilman_bodies_acidophilic_apoptotic_hepatocytes",
+      "impaired_coagulation_factor_synthesis",
+      "disseminated_intravascular_coagulation",
+      "acute_tubular_necrosis_renal_failure",
+      "cytokine_storm_and_multiorgan_failure",
+      "immune_clearance_survival_with_lifelong_immunity"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_liver_failure",
+        "probability": 0.3,
+        "severityBoost": 0.8,
+        "clues": ["jaundice", "coagulopathy", "encephalopathy"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "severityBoost": 0.6,
+        "clues": ["oliguria", "rising_creatinine", "proteinuria"]
+      },
+      {
+        "diseaseId": "hemorrhagic_diathesis_dic",
+        "probability": 0.3,
+        "severityBoost": 0.7,
+        "clues": ["bleeding", "thrombocytopenia", "prolonged_inr"]
+      },
+      {
+        "diseaseId": "death",
+        "probability": 0.2,
+        "severityBoost": 1.0,
+        "clues": ["multiorgan_failure", "shock", "severe_hemorrhage"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["fever_jaundice_hemorrhage_in_endemic_traveler", "ast_greater_than_alt", "relative_bradycardia", "black_vomit", "leukopenia_thrombocytopenia"],
+    "exclusionClues": ["vaccinated", "negative_yfv_pcr_and_serology", "malaria_positive", "leptospira_positive"]
+  }
+}

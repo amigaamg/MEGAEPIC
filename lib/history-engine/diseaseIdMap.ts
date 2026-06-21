@@ -192,6 +192,16 @@ export const SYMPTOM_TO_KG: Record<string, string> = {
   'hallucinations': 'hallucinations',
   'low_mood': 'low_mood',
   'substance_abuse': 'substance_abuse',
+  // Jaundice disease mappings
+  'gilbert_syndrome': 'gilbert_syndrome',
+  'dubin_johnson_syndrome': 'dubin_johnson_syndrome',
+  // GI Bleeding disease mappings (symptom library ID → KG ID)
+  'mallory_weiss': 'mallory_weiss_syndrome',
+  'ischemic_colitis': 'ischemic_colitis',
+  'infectious_colitis': 'infectious_colitis_gi_bleed',
+  'colonic_polyp': 'colonic_polyps_gi_bleed',
+  'radiation_proctitis': 'radiation_enteritis_colitis',
+  'meckel_diverticulitis': 'meckel_diverticulum',
 };
 
 export const KG_TO_SYMPTOM: Record<string, string> = {
@@ -376,6 +386,16 @@ export const KG_TO_SYMPTOM: Record<string, string> = {
   'hallucinations': 'hallucinations',
   'low_mood': 'low_mood',
   'substance_abuse': 'substance_abuse',
+  // Jaundice reverse mappings
+  'gilbert_syndrome': 'gilbert_syndrome',
+  'dubin_johnson_syndrome': 'dubin_johnson_syndrome',
+  // GI Bleeding reverse mappings (KG ID → symptom library ID)
+  'mallory_weiss_syndrome': 'mallory_weiss',
+  'ischemic_colitis': 'ischemic_colitis',
+  'infectious_colitis_gi_bleed': 'infectious_colitis',
+  'colonic_polyps_gi_bleed': 'colonic_polyp',
+  'radiation_enteritis_colitis': 'radiation_proctitis',
+  'meckel_diverticulum': 'meckel_diverticulitis',
 };
 
 export function getKgId(symptomId: string): string {

@@ -1,6 +1,5 @@
 import type { DdxResult, DdxSnapshot, ClinicalReasoningTrace, ChiefComplaint, FeatureRegistry } from './types';
 import { aggregateDifferentials } from './symptomLibrary';
-import HISTORY_FEATURE_REGISTRY from './historyFeatureRegistry';
 import { enrichWithKgDifferentials } from './kgDifferentialBridge';
 
 export interface DdxInput {
@@ -17,11 +16,29 @@ export function computeDdx(input: DdxInput): DdxResult {
   for (const [, entry] of Object.entries(input.featureRegistry)) {
     if (entry.present === true) {
       for (const [did, w] of Object.entries(entry.diseaseWeights)) {
+        if (w <= 0) continue;
         const existing = aggregated.get(did);
         if (existing) {
           existing.totalWeight += w;
         } else {
           aggregated.set(did, { diseaseName: did.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), totalWeight: w, matchedSymptoms: [] });
+        }
+      }
+      if (entry.modifier?.weightBoost) {
+        for (const [did, w] of Object.entries(entry.diseaseWeights)) {
+          if (w <= 0) continue;
+          const existing = aggregated.get(did);
+          if (existing) {
+            existing.totalWeight += entry.modifier.weightBoost;
+          }
+        }
+      }
+    }
+    if (entry.present === false) {
+      for (const [did, reduction] of Object.entries(entry.negativeDiseaseWeights)) {
+        const existing = aggregated.get(did);
+        if (existing) {
+          existing.totalWeight = Math.max(0, existing.totalWeight - reduction);
         }
       }
     }
@@ -43,30 +60,18 @@ export function computeDdx(input: DdxInput): DdxResult {
     const against: string[] = [];
     const keyFindings: string[] = [];
 
-    input.complaints.forEach(c => {
-      const entry = HISTORY_FEATURE_REGISTRY[c.symptomId];
-      if (entry?.diseaseWeights[p.diseaseId] && entry.diseaseWeights[p.diseaseId] > 0) {
-        supporting.push(`${c.label} present`);
-      }
-    });
-
     for (const [, fe] of Object.entries(input.featureRegistry)) {
       if (fe.present === true) {
-        const featureDef = HISTORY_FEATURE_REGISTRY[fe.id];
         const weight = fe.diseaseWeights[p.diseaseId];
         if (weight && weight > 0) {
-          supporting.push(featureDef?.label || fe.id.replace(/_/g, ' '));
-          keyFindings.push(featureDef?.label || fe.id.replace(/_/g, ' '));
+          supporting.push(fe.id.replace(/_/g, ' '));
+          keyFindings.push(fe.id.replace(/_/g, ' '));
         }
       }
       if (fe.present === false) {
-        const featureDef = HISTORY_FEATURE_REGISTRY[fe.id];
-        const weight = fe.diseaseWeights[p.diseaseId];
-        if (weight && weight < 0) {
-          supporting.push(`${featureDef?.label || fe.id.replace(/_/g, ' ')} absent (negative predictor)`);
-        }
-        if (featureDef?.negativePredictorFor?.some(np => np.diseaseId === p.diseaseId)) {
-          against.push(`${featureDef.label || fe.id.replace(/_/g, ' ')} absent (reduces likelihood)`);
+        const negReduction = fe.negativeDiseaseWeights[p.diseaseId];
+        if (negReduction && negReduction > 0) {
+          against.push(`${fe.id.replace(/_/g, ' ')} absent (reduces likelihood by ${negReduction})`);
         }
       }
     }

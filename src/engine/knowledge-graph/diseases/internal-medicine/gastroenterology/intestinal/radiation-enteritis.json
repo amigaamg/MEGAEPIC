@@ -1,0 +1,139 @@
+{
+  "disease": {
+    "id": "radiation_enteritis_colitis",
+    "name": "Radiation Enteritis/Colitis",
+    "system": "gastroenterology",
+    "agePeak_months": [480, 960],
+    "note": "Acute or chronic GI injury from ionizing radiation (pelvic/abdominal radiotherapy). Acute: self-limited during RT. Chronic (6mo-5yr post-RT): progressive obliterative endarteritis → ischemia → telangiectasias → bleeding, stricture, fistula. Pelvic RT (prostate, cervix, bladder, rectal cancer) most commonly causes radiation proctitis with hematochezia.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["radiation_proctitis", "rectal_bleeding", "hematochezia", "radiation_injury", "lower_gi_bleeding"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_rectal_bleeding_with_hypotension", "weight": 10 },
+        { "sign": "perforation_signs", "weight": 10 },
+        { "sign": "sepsis_from_fistula", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "noDangerSigns": true, "mild_intermittent_bleeding": true },
+      "severityLabel": "Massive bleed -> URGENT endoscopy/intervention; mild chronic -> APC ablation"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "prior_pelvic_abdominal_radiation", "weight": 5 },
+      { "symptomId": "rectal_bleeding", "weight": 5 },
+      { "symptomId": "mucus_in_stool", "weight": 3 },
+      { "symptomId": "tenesmus", "weight": 3 },
+      { "symptomId": "fecal_urgency", "weight": 3 },
+      { "symptomId": "diarrhea", "weight": 3 },
+      { "symptomId": "abdominal_pain_crampy", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "rectal_exam_reveals_blood", "baseWeight": 4 },
+      { "signId": "abdominal_tenderness", "baseWeight": 2 },
+      { "signId": "pallor", "baseWeight": 2 },
+      { "signId": "fistula_signs_pneumaturia_fecal_vaginal", "baseWeight": 5 },
+      { "signId": "signs_of_bowel_obstruction", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "pelvic_radiation_prostate_cervix_bladder_rectal", "multiplier": 4.0 },
+      { "id": "total_radiation_dose_over_45_gy", "multiplier": 3.0 },
+      { "id": "prior_abdominal_surgery_adhesions", "multiplier": 2.0 },
+      { "id": "concurrent_chemotherapy_radiosensitizer", "multiplier": 2.5 },
+      { "id": "hypertension", "multiplier": 1.5 },
+      { "id": "diabetes", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.5 },
+      { "id": "inflammatory_bowel_disease", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      { "id": "acute_radiation_proctitis", "name": "Acute Radiation Proctitis", "prevalenceModifier": 0.7, "notes": "Onset during RT, self-limited, resolves 2-6wk post-RT" },
+      { "id": "chronic_radiation_proctitis", "name": "Chronic Radiation Proctitis", "prevalenceModifier": 0.25, "notes": "Onset 6mo-5yr post-RT, telangiectasias, bleeding, may progress to stricture/fistula" },
+      { "id": "radiation_enteritis_small_bowel", "name": "Radiation Enteritis (Small Bowel)", "prevalenceModifier": 0.15, "notes": "More common with abdominal RT, malabsorption, obstruction" },
+      { "id": "radiation_colitis", "name": "Radiation Colitis", "prevalenceModifier": 0.1, "notes": "Right/transverse colon involvement less common" }
+    ],
+
+    "mimics": [
+      { "diseaseId": "infectious_colitis", "discriminators": ["stool_culture_positive", "no_rt_history"], "ruleOutTests": ["stool_culture"] },
+      { "diseaseId": "ischemic_colitis", "discriminators": ["no_rt_history", "vascular_risk_factors"], "ruleOutTests": ["ct_abdomen"] },
+      { "diseaseId": "colorectal_cancer", "discriminators": ["mass_on_imaging", "no_rt_history"], "ruleOutTests": ["colonoscopy_biopsy"] },
+      { "diseaseId": "ibd_ulcerative_colitis", "discriminators": ["chronic_course", "no_rt_history"], "ruleOutTests": ["colonoscopy_biopsy"] }
+    ],
+
+    "investigations": {
+      "firstLine": [
+        { "test": "Colonoscopy/flexible sigmoidoscopy (telangiectasias, friable mucosa, pallor, ulceration)", "weight": 10 },
+        { "test": "CBC (anemia)", "weight": 7 },
+        { "test": "CRP", "weight": 5 }
+      ],
+      "secondLine": [
+        { "test": "CT abdomen (bowel wall thickening, stricture, fistula)", "weight": 7 },
+        { "test": "MR enterography (small bowel radiation damage)", "weight": 6 },
+        { "test": "Biopsy (obliterative endarteritis, fibrosis, atypical fibroblasts - no malignancy)", "weight": 8 }
+      ],
+      "goldStandard": "Endoscopy with characteristic telangiectasias and friable mucosa in radiation field"
+    },
+
+    "management": {
+      "emergency": [
+        "IV fluids and transfusion if massive bleed",
+        "Endoscopic hemostasis (APC, gold probe, hemoclip)"
+      ],
+      "inpatient": [
+        "APC (argon plasma coagulation) - most effective for bleeding telangiectasias, multiple sessions",
+        "Sucralfate enemas BID",
+        "Hyperbaric oxygen therapy (promotes angiogenesis, improves healing)",
+        "Formalin instillation (4%) for refractory bleeding"
+      ],
+      "outpatient": [
+        "APC ablation for chronic bleeding telangiectasias",
+        "Topical sucralfate or short-chain fatty acid enemas",
+        "Vitamin E + C (antioxidant therapy)",
+        "Fiber supplements, anti-diarrheals as needed",
+        "Endoscopic dilation for strictures"
+      ],
+      "refractory": [
+        "Surgical resection for fistula, refractory bleeding, or obstruction",
+        "Diverting stoma for severe refractory proctitis"
+      ],
+      "preventive": [
+        "IMRT (intensity-modulated RT) to reduce bowel dose",
+        "Belly board/prone positioning for pelvic RT",
+        "Hydrogel spacers between prostate and rectum"
+      ]
+    },
+
+    "pathophysiology": "Ionizing radiation → acute: DNA damage to crypt cells → mucosal denudation → acute inflammation → self-limited bleeding. Chronic: progressive obliterative endarteritis (endothelial swelling → subendothelial fibrosis → intimal narrowing) → chronic ischemia → mucosal telangiectasias (fragile, bleed easily) → fibrosis → stricture/fistula formation. Telangiectasias are dilated thin-walled vessels that bleed with minimal trauma from stool passage.",
+
+    "complications": [
+      { "complication": "Chronic iron deficiency anemia from telangiectasia bleeding", "severity": "moderate" },
+      { "complication": "Colorectal stricture/obstruction", "severity": "moderate" },
+      { "complication": "Fistula (rectovaginal, rectovesical, enterocutaneous)", "severity": "high" },
+      { "complication": "Radiation-induced cancer (secondary malignancy)", "severity": "high" }
+    ],
+
+    "mustNotMiss": [
+      "Telangiectasias are fragile - even diagnostic biopsies can cause significant bleeding",
+      "Biopsy is still essential to exclude recurrent malignancy masquerading as radiation change",
+      "APC is first-line treatment for bleeding telangiectasias but requires multiple sessions",
+      "Hyperbaric oxygen is effective but requires 20-40 sessions and insurance pre-authorization",
+      "Chronic radiation enteritis is progressive - fibrosis can develop years after RT"
+    ],
+
+    "emergencyPriority": "low",
+    "diagnosticClues": [
+      { "clue": "Prior pelvic RT + painless hematochezia with urgency", "weight": 10 },
+      { "clue": "Multiple rectal telangiectasias on endoscopy in radiation field", "weight": 10 },
+      { "clue": "Obliterative endarteritis with atypical fibroblasts on biopsy", "weight": 8 },
+      { "clue": "Temporal relationship: 6 months to 5 years post-radiation", "weight": 7 }
+    ],
+    "exclusionClues": [
+      { "clue": "No history of radiation exposure", "weight": 10 },
+      { "clue": "Acute illness with fever and positive stool culture (infectious)", "weight": 7 },
+      { "clue": "Mass lesion on imaging (recurrent cancer)", "weight": 8 }
+    ]
+  }
+}

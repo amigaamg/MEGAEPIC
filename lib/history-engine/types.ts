@@ -2,8 +2,8 @@ export type Sex = 'male' | 'female' | 'unknown';
 export type SymptomId = string;
 export type DiseaseId = string;
 export type OccupationType = 'farmer' | 'miner' | 'healthcare' | 'teacher' | 'driver' | 'office' | 'student' | 'retired' | 'unemployed' | 'other';
-export type Reliability = 'reliable' | 'partially_reliable' | 'poor_historian' | 'obtained_from_relative' | 'obtained_from_caregiver' | 'unavailable';
-export type Informant = 'patient' | 'spouse' | 'parent' | 'child' | 'sibling' | 'friend' | 'caregiver' | 'ems' | 'other';
+export type Reliability = '' | 'reliable' | 'partially_reliable' | 'poor_historian' | 'obtained_from_relative' | 'obtained_from_caregiver' | 'unavailable';
+export type Informant = '' | 'patient' | 'spouse' | 'parent' | 'child' | 'sibling' | 'friend' | 'caregiver' | 'ems' | 'other';
 export type PatientProfile = 'adult' | 'pediatric' | 'newborn' | 'obstetric' | 'gynecologic';
 
 export interface ObstetricBiodata {
@@ -85,6 +85,13 @@ export interface FeatureEntry {
   present: boolean | null;
   weight: number;
   diseaseWeights: Record<string, number>;
+  negativeDiseaseWeights: Record<string, number>;
+  source?: 'history' | 'exam' | 'vital' | 'lab' | 'imaging' | 'score';
+  modifier?: {
+    key: string;
+    value: string | number | boolean;
+    weightBoost?: number;
+  };
 }
 
 export interface FeatureRegistry {
@@ -140,30 +147,30 @@ export interface PastHistory {
   chronicDiseases: ChronicDisease[];
   allergies: string[];
   longTermMeds: string[];
-  tbHistory: 'none' | 'treated' | 'on_treatment' | 'defaulted';
+  tbHistory: '' | 'none' | 'treated' | 'on_treatment' | 'defaulted';
   foodAllergies: string[];
   drugAllergies: string[];
 }
 
 export interface FamilySocial {
-  maritalStatus: 'single' | 'married' | 'divorced' | 'widowed' | 'separated';
+  maritalStatus: '' | 'single' | 'married' | 'divorced' | 'widowed' | 'separated';
   numberOfSpouses?: number;
-  education: 'none' | 'primary' | 'secondary' | 'tertiary' | 'postgraduate';
-  incomeLevel: 'low' | 'middle' | 'high';
-  housing: 'owned' | 'rented' | 'informal' | 'homeless';
-  water: 'piped' | 'well' | 'river' | 'bottled';
-  sanitation: 'flush' | 'pit' | 'ventilated_pit' | 'none';
-  smoking: 'never' | 'former' | 'current';
+  education: '' | 'none' | 'primary' | 'secondary' | 'tertiary' | 'postgraduate';
+  incomeLevel: '' | 'low' | 'middle' | 'high';
+  housing: '' | 'owned' | 'rented' | 'informal' | 'homeless';
+  water: '' | 'piped' | 'well' | 'river' | 'bottled';
+  sanitation: '' | 'flush' | 'pit' | 'ventilated_pit' | 'none';
+  smoking: '' | 'never' | 'former' | 'current';
   smokingPackYears?: number;
-  alcohol: 'never' | 'occasional' | 'moderate' | 'heavy' | 'former';
+  alcohol: '' | 'never' | 'occasional' | 'moderate' | 'heavy' | 'former';
   alcoholAmount?: string;
   substanceUse: string[];
   familyHistory: string[];
   familyDiseases: string[];
   occupationExposure: string[];
   travelHistory: string[];
-  transportAccess: 'private' | 'public' | 'walking' | 'none';
-  healthInsurance: boolean;
+  transportAccess: '' | 'private' | 'public' | 'walking' | 'none';
+  healthInsurance: boolean | null;
 }
 
 export interface RosSystem {
@@ -183,11 +190,11 @@ export interface RosSymptom {
 export type RosFindings = RosSystem[];
 
 export interface ImpactOnLife {
-  work: 'no_impact' | 'reduced' | 'unable';
-  walking: 'no_impact' | 'reduced' | 'unable';
-  eating: 'no_impact' | 'reduced' | 'unable';
-  sleeping: 'no_impact' | 'disturbed' | 'severely_disturbed';
-  adl: 'independent' | 'needs_assistance' | 'dependent';
+  work: '' | 'no_impact' | 'reduced' | 'unable';
+  walking: '' | 'no_impact' | 'reduced' | 'unable';
+  eating: '' | 'no_impact' | 'reduced' | 'unable';
+  sleeping: '' | 'no_impact' | 'disturbed' | 'severely_disturbed';
+  adl: '' | 'independent' | 'needs_assistance' | 'dependent';
   description: string;
 }
 
@@ -231,6 +238,7 @@ export interface GeneratedDocuments {
   gynecologyHistoryNarrative: string;
   familySocialNarrative: string;
   rosNarrative: string;
+  impactOnLifeNarrative: string;
   generalExaminationNarrative: string;
   systemExaminationNarrative: string;
   localExaminationNarrative: string;
@@ -275,7 +283,7 @@ export interface OverallAppearance {
 
 // STEP D — Hydration
 export interface HydrationStatus {
-  status: 'normal' | 'mild_dehydration' | 'moderate_dehydration' | 'severe_dehydration';
+  status: '' | 'normal' | 'mild_dehydration' | 'moderate_dehydration' | 'severe_dehydration';
   dryMucosa: boolean;
   sunkenEyes: boolean;
   reducedSkinTurgor: boolean;
@@ -283,12 +291,12 @@ export interface HydrationStatus {
 
 // STEP E — Nutrition
 export interface NutritionalStatus {
-  status: 'normal' | 'underweight' | 'wasted' | 'obese';
+  status: '' | 'normal' | 'underweight' | 'wasted' | 'obese';
 }
 
 // STEP F — Consciousness
 export interface ConsciousnessLevel {
-  level: 'alert' | 'drowsy' | 'confused' | 'unresponsive';
+  level: '' | 'alert' | 'drowsy' | 'confused' | 'unresponsive';
   gcs: number | null;
 }
 
@@ -487,7 +495,7 @@ export interface TreatmentItem {
 export interface TreatmentPlan {
   items: TreatmentItem[];
   followUp: string;
-  disposition: 'home' | 'admit_ward' | 'admit_icu' | 'refer' | 'emergency';
+  disposition: '' | 'home' | 'admit_ward' | 'admit_icu' | 'refer' | 'emergency';
   dispositionRationale: string;
 }
 
@@ -546,7 +554,7 @@ export interface FollowUpEntry {
 // ═══════════════════════════════════════════════════════════════
 
 export interface AntenatalHistory {
-  antenatalCare: 'yes' | 'no' | 'unknown';
+  antenatalCare: '' | 'yes' | 'no' | 'unknown';
   ancVisits: number;
   placeOfDelivery: string;
   maternalIllness: string[]; // hypertension, diabetes, infections, etc.
@@ -554,25 +562,25 @@ export interface AntenatalHistory {
   ultrasounds: string;
   complications: string[];
   tetanusToxoid: boolean;
-  hivStatus: 'positive' | 'negative' | 'unknown';
+  hivStatus: '' | 'positive' | 'negative' | 'unknown';
   syphilisScreen: boolean;
   malariaProphylaxis: boolean;
 }
 
 export interface NatalHistory {
   placeOfDelivery: string;
-  deliveryType: 'svd' | 'assisted_breach' | 'vacuum' | 'forceps' | 'c_section_elective' | 'c_section_emergency';
-  presentation: 'cephalic' | 'breech' | 'transverse' | 'other';
+  deliveryType: '' | 'svd' | 'assisted_breach' | 'vacuum' | 'forceps' | 'c_section_elective' | 'c_section_emergency';
+  presentation: '' | 'cephalic' | 'breech' | 'transverse' | 'other';
   cordProlapse: boolean;
   birthWeight: number;
   gestationalAgeWeeks: number;
   resuscitation: string;
-  cry: 'immediate' | 'delayed' | 'none';
-  color: 'pink' | 'blue' | 'pale';
+  cry: '' | 'immediate' | 'delayed' | 'none';
+  color: '' | 'pink' | 'blue' | 'pale';
 }
 
 export interface PostnatalHistory {
-  immediateFeeding: 'breastfeeding' | 'formula' | 'mixed' | 'none';
+  immediateFeeding: '' | 'breastfeeding' | 'formula' | 'mixed' | 'none';
   vitaminK: boolean;
   bcgGiven: boolean;
   opvGiven: boolean;
@@ -581,8 +589,8 @@ export interface PostnatalHistory {
   neonatalSepsis: boolean;
   nicuAdmission: boolean;
   nicuDays: number;
-  meconiumPassed: 'within_24h' | 'after_24h' | 'unknown';
-  urinePassed: 'within_24h' | 'after_24h' | 'unknown';
+  meconiumPassed: '' | 'within_24h' | 'after_24h' | 'unknown';
+  urinePassed: '' | 'within_24h' | 'after_24h' | 'unknown';
 }
 
 export interface BirthHistory {
@@ -665,14 +673,14 @@ export interface GrowthDevelopment {
 // ═══════════════════════════════════════════════════════════════
 
 export interface NutritionHistory {
-  currentFeeding: 'exclusive_breastfeeding' | 'mixed' | 'formula' | 'complementary' | 'family_diet';
+  currentFeeding: '' | 'exclusive_breastfeeding' | 'mixed' | 'formula' | 'complementary' | 'family_diet';
   breastfeedingDuration: string;
   formulaType: string;
   complementaryFoodsStarted: string;
   mealsPerDay: number;
   foodGroups: string[];
   supplements: string[];
-  appetite: 'good' | 'fair' | 'poor';
+  appetite: '' | 'good' | 'fair' | 'poor';
   feedingDifficulty: string;
   pica: boolean;
 }
@@ -685,7 +693,7 @@ export interface ObstetricHistoryEntry {
   year: number;
   outcome: 'live_birth' | 'stillbirth' | 'miscarriage' | 'ectopic' | 'termination';
   gestationalAgeWeeks: number;
-  deliveryType: 'svd' | 'c_section' | 'vacuum' | 'forceps' | 'assisted_breech';
+  deliveryType: '' | 'svd' | 'c_section' | 'vacuum' | 'forceps' | 'assisted_breech';
   placeOfDelivery: string;
   complications: string[];
   babyWeight: number;
@@ -703,10 +711,10 @@ export interface ObstetricHistory {
   cesareanSections: number;
   pregnancies: ObstetricHistoryEntry[];
   currentPregnancy: {
-    trimester: 'first' | 'second' | 'third';
+    trimester: '' | 'first' | 'second' | 'third';
     weeksGestation: number;
     antenatalCare: string;
-    fetalMovements: 'present' | 'absent' | 'reduced';
+    fetalMovements: '' | 'present' | 'absent' | 'reduced';
     complications: string[];
   };
 }
@@ -719,9 +727,9 @@ export interface MenstrualHistory {
   menarche: number; // age
   cycleLength: number; // days
   duration: number; // days
-  regularity: 'regular' | 'irregular' | 'amenorrhea';
-  flow: 'light' | 'moderate' | 'heavy';
-  dysmenorrhea: 'none' | 'mild' | 'moderate' | 'severe';
+  regularity: '' | 'regular' | 'irregular' | 'amenorrhea';
+  flow: '' | 'light' | 'moderate' | 'heavy';
+  dysmenorrhea: '' | 'none' | 'mild' | 'moderate' | 'severe';
   intermenstrualBleeding: boolean;
   postcoitalBleeding: boolean;
   postmenopausalBleeding: boolean;
@@ -733,7 +741,7 @@ export interface ContraceptionHistory {
   currentMethod: string;
   previousMethods: string[];
   duration: string;
-  compliance: 'good' | 'fair' | 'poor';
+  compliance: '' | 'good' | 'fair' | 'poor';
   sideEffects: string;
 }
 

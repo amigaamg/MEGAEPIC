@@ -1,0 +1,135 @@
+{
+  "disease": {
+    "id": "stress_related_mucosal_disease",
+    "name": "Stress-Related Mucosal Disease (SRMD)",
+    "system": "critical_care",
+    "agePeak_months": [0, 1200],
+    "note": "Stress-related mucosal injury in ICU patients leading to upper GI bleeding from gastritis/erosions/ulcers. Major risk factors: mechanical ventilation >48h and coagulopathy (INR >1.5 or platelets <50k). Pathophysiology involves splanchnic hypoperfusion, breakdown of mucosal barrier, and acid back-diffusion. Curling ulcers from burns, Cushing ulcers from TBI. Prophylaxis standard with PPI.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["upper_gi_bleeding", "icu_complication", "stress_ulcer", "hematemesis", "melena", "icu_gastritis"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "overt_gi_bleeding_with_hypotension", "weight": 10 },
+        { "sign": "massive_hematemesis", "weight": 10 },
+        { "sign": "hemodynamic_instability_despite_resuscitation", "weight": 9 },
+        { "sign": "drop_in_hb_greater_than_2g_dl_in_24h", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "noDangerSigns": true, "occult_blood_only": true },
+      "severityLabel": "Overt bleeding with instability -> EMERGENCY endoscopy; occult -> optimize prophylaxis"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "icu_admission_for_critical_illness", "weight": 5 },
+      { "symptomId": "mechanical_ventilation", "weight": 5 },
+      { "symptomId": "hematemesis_melena", "weight": 5 },
+      { "symptomId": "hematemesis_melena", "weight": 3 },
+      { "symptomId": "hemoglobin_drop", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "coffee_ground_or_blood_in_ng_tube", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "melena", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "mechanical_ventilation_more_than_48_hours", "multiplier": 4.0 },
+      { "id": "coagulopathy_inr_greater_than_1.5_or_platelets_less_than_50k", "multiplier": 4.0 },
+      { "id": "severe_sepsis_septic_shock", "multiplier": 3.0 },
+      { "id": "traumatic_brain_injury", "multiplier": 3.0 },
+      { "id": "burns_greater_than_35_percent_bsa", "multiplier": 3.0 },
+      { "id": "major_surgery", "multiplier": 2.0 },
+      { "id": "hypotension_shock", "multiplier": 2.0 },
+      { "id": "renal_failure", "multiplier": 2.0 },
+      { "id": "high_dose_corticosteroids", "multiplier": 2.0 },
+      { "id": "spinal_cord_injury", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      { "id": "superficial_erosive_gastritis", "name": "Superficial Erosive Gastritis (most common)", "prevalenceModifier": 0.7, "notes": "Multiple shallow erosions in gastric fundus/body, usually not bleeding" },
+      { "id": "acute_bleeding_ulcer", "name": "Acute Bleeding Ulcer", "prevalenceModifier": 0.2, "notes": "Deeper ulcers with active bleeding, associated with coagulopathy" },
+      { "id": "curling_ulcer", "name": "Curling Ulcer (burns)", "prevalenceModifier": 0.05, "notes": "Duodenal or gastric ulcers in burn patients >35% BSA" },
+      { "id": "cushing_ulcer", "name": "Cushing Ulcer (TBI)", "prevalenceModifier": 0.05, "notes": "Gastric/duodenal ulcers in TBI, high perforation risk" }
+    ],
+
+    "mimics": [
+      { "diseaseId": "peptic_ulcer_disease", "discriminators": ["pre_icu_history_of_pud", "h_pylori_positive"], "ruleOutTests": ["egd", "h_pylori_testing"] },
+      { "diseaseId": "esophageal_varices", "discriminators": ["known_cirrhosis", "portal_hypertension_signs"], "ruleOutTests": ["egd"] }
+    ],
+
+    "investigations": {
+      "firstLine": [
+        { "test": "CBC (hemoglobin drop)", "weight": 9 },
+        { "test": "INR/PTT (coagulopathy assessment)", "weight": 9 },
+        { "test": "Platelet count", "weight": 8 },
+        { "test": "NG lavage (if tube in place - coffee ground or bright red)", "weight": 7 },
+        { "test": "Upper endoscopy (EGD) - diagnostic and therapeutic", "weight": 10 }
+      ],
+      "secondLine": [
+        { "test": "BUN/Cr (BUN/Cr ratio >20 suggests upper GI bleed)", "weight": 5 }
+      ],
+      "goldStandard": "EGD showing gastric erosions/ulcers in fundus/body, sparing antrum in early disease"
+    },
+
+    "management": {
+      "emergency": [
+        "IV PPI bolus (80mg pantoprazole) followed by continuous infusion (8mg/h)",
+        "EGD for diagnosis and endoscopic therapy (epinephrine injection, cautery, hemoclips)",
+        "Angiography with embolization if endoscopic fails",
+        "PRBC transfusion for Hb <7-8 g/dL (restrictive strategy in ICU)",
+        "Correct coagulopathy (FFP, vitamin K, platelets)"
+      ],
+      "inpatient": [
+        "Stress ulcer prophylaxis for ALL at-risk ICU patients",
+        "IV PPI preferred (pantoprazole 40mg daily for prophylaxis, 40mg BID for high risk)",
+        "NG decompression if ileus present",
+        "Enteral nutrition as soon as feasible (protective against SRMD)",
+        "Serial Hb monitoring"
+      ],
+      "outpatient": [],
+      "refractory": [
+        "Surgical: gastrotomy with under-running of bleeding ulcers (last resort)",
+        "Vagotomy and antrectomy (rarely needed)"
+      ],
+      "preventive": [
+        "Stress ulcer prophylaxis for MV >48h or coagulopathy",
+        "PPI preferred over H2RA for prevention",
+        "Enteral nutrition as soon as tolerated",
+        "Avoid high-dose corticosteroids if possible",
+        "Maintain adequate tissue perfusion"
+      ]
+    },
+
+    "pathophysiology": "Critical illness → splanchnic hypoperfusion (shock, vasopressors, reduced cardiac output) → gastric mucosal ischemia → impaired mucus/bicarbonate/prostaglandin production → breakdown of protective mucosal barrier → H+ back-diffusion into mucosa → intracellular acidosis → neutrophil infiltration → inflammatory mediator release → mucosal erosion/ulceration → bleeding. Compounded by coagulopathy from consumption, dilution, and DIC.",
+
+    "complications": [
+      { "complication": "Overt GI bleeding requiring transfusion", "severity": "high" },
+      { "complication": "Hemorrhagic shock", "severity": "high" },
+      { "complication": "Mortality increased in ICU patients who develop overt GI bleeding", "severity": "high" }
+    ],
+
+    "mustNotMiss": [
+      "Mechanical ventilation >48h + coagulopathy are the TWO strongest risk factors - prophylaxis is mandatory",
+      "Enteral nutrition is protective against SRMD and should be started early",
+      "Overt bleeding in ICU has increased mortality - early EGD is essential",
+      "NG tube FALSE NEGATIVE: 15% of UGIB have clear NG aspirate due to intermittent bleeding or pyloric closure"
+    ],
+
+    "emergencyPriority": "high",
+    "diagnosticClues": [
+      { "clue": "ICU patient on mechanical ventilation with coffee-ground NG output + Hb drop", "weight": 10 },
+      { "clue": "Multiple shallow erosions in gastric fundus/body sparing antrum on EGD", "weight": 9 },
+      { "clue": "Coagulopathy (INR >1.5, platelets <50k) in ventilated ICU patient", "weight": 8 },
+      { "clue": "TBI or burn patient with acute GI bleeding", "weight": 7 }
+    ],
+    "exclusionClues": [
+      { "clue": "Known pre-existing PUD with H. pylori (not stress-related)", "weight": 7 },
+      { "clue": "Cirrhosis with varices (portal hypertension, not stress)", "weight": 7 },
+      { "clue": "Normal EGD in fundus/body (suggests non-gastric source)", "weight": 6 }
+    ]
+  }
+}

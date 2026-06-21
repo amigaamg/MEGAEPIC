@@ -1,18 +1,355 @@
 {
   "disease": {
     "id": "bronchitis",
-    "name": "Bronchitis",
+    "name": "Acute Bronchitis",
     "system": "respiratory",
-    "prevalenceWeight": 0.5,
-    "syndromeTags": [
-      "respiratory"
+    "agePeak_months": [12, 960],
+    "note": "Acute bronchitis occurs across all ages except neonates. Viral aetiology dominates (>90%). Antibiotics are NOT indicated in uncomplicated cases. Key clinical challenge: distinguishing from pneumonia.",
+    "prevalenceWeight": 0.85,
+    "syndromeTags": ["acute_cough", "bronchial_inflammation", "viral_respiratory"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hypoxia_spo2_less_than_92", "weight": 10 },
+        { "sign": "high_fever_above_39_point_5_with_rigors", "weight": 9 },
+        { "sign": "respiratory_distress_at_rest", "weight": 10 },
+        { "sign": "hemoptysis", "weight": 8 },
+        { "sign": "toxic_appearance", "weight": 10 }
+      ],
+      "mildCriteria": {
+        "cough_only": true,
+        "no_fever_or_low_grade": true,
+        "normal_activity": true
+      },
+      "moderateCriteria": {
+        "cough_and_fever": true,
+        "chest_discomfort": true,
+        "no_danger_signs": true
+      },
+      "suspectedPneumoniaCriteria": {
+        "anyOf": ["focal_crackles", "bronchial_breathing", "high_fever_toxic", "hypoxia"],
+        "action": "Obtain CXR. If confirmed pneumonia, treat per pneumonia protocol."
+      },
+      "severityLabel": "Danger signs/focal signs -> SUSPECT PNEUMONIA (CXR); fever + chest discomfort -> MODERATE; else -> MILD"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "acute_cough", "weight": 5, "modifiers": [
+          { "condition": "duration_less_than_3_weeks", "weightBoost": 2 },
+          { "condition": "duration_more_than_3_weeks", "weightBoost": -1, "note": "Consider pertussis, asthma, GERD, post-infectious cough" }
+        ]
+      },
+      { "symptomId": "sputum_production", "weight": 4, "contextualWeights": [
+          { "condition": "clear_or_mucoid_sputum", "weightBoost": 2, "note": "Typical of viral bronchitis" },
+          { "condition": "purulent_sputum", "weightBoost": 0, "note": "Does NOT indicate bacterial infection in acute bronchitis; purulence alone is not an antibiotic indication" }
+        ]
+      },
+      { "symptomId": "fever_low_grade", "weight": 3 },
+      { "symptomId": "chest_discomfort", "weight": 3, "note": "Retrosternal burning or pressure sensation" },
+      { "symptomId": "sore_throat", "weight": 2, "note": "Preceding or concurrent URTI symptoms" },
+      { "symptomId": "malaise", "weight": 2 },
+      { "symptomId": "dyspnea_mild", "weight": 2, "contextualWeights": [
+          { "condition": "exertional_only", "weightBoost": 1 },
+          { "condition": "dyspnea_at_rest", "weightBoost": -3, "favorsAlternative": ["pneumonia"] }
+        ]
+      },
+      { "symptomId": "sick_contact", "weight": 2, "note": "Household or close contact with acute respiratory illness" },
+      { "symptomId": "coryza", "weight": 2, "note": "Preceding nasal congestion, rhinorrhoea" },
+      { "symptomId": "myalgia", "weight": 1 },
+      { "symptomId": "high_fever_above_39_point_5", "weight": 0, "negativePredictor": {
+          "description": "High fever with rigors suggests pneumonia or influenza, not typical bronchitis",
+          "scoreReduction": 4,
+          "considerMimic": ["pneumonia", "influenza"]
+        }
+      },
+      { "symptomId": "focal_chest_pain", "weight": 0, "negativePredictor": {
+          "description": "Focal pleuritic chest pain suggests pneumonia or pleurisy",
+          "scoreReduction": 3,
+          "considerMimic": ["pneumonia"]
+        }
+      },
+      { "symptomId": "dyspnea_at_rest", "weight": 0, "negativePredictor": {
+          "description": "Rest dyspnea not typical of bronchitis; suggests pneumonia",
+          "scoreReduction": 3,
+          "considerMimic": ["pneumonia"]
+        }
+      }
     ],
+
+    "examFeatures": [
+      { "signId": "normal_respiratory_rate", "baseWeight": 3 },
+      { "signId": "mild_tachypnea", "baseWeight": 2 },
+      { "signId": "clear_chest_auscultation", "baseWeight": 5 },
+      { "signId": "scattered_rhonchi", "baseWeight": 3 },
+      { "signId": "rhonchi_and_wheeze", "baseWeight": 2 },
+      { "signId": "pharyngeal_erythema", "baseWeight": 2 },
+      { "signId": "crackles", "baseWeight": 0, "negativePredictor": { "scoreReduction": 5, "considerMimic": ["pneumonia"] } },
+      { "signId": "bronchial_breathing", "baseWeight": 0, "excludeDiagnosis": true },
+      { "signId": "egophony", "baseWeight": 0, "excludeDiagnosis": true },
+      { "signId": "high_fever", "baseWeight": 0, "negativePredictor": { "scoreReduction": 4, "considerMimic": ["pneumonia", "influenza"] } }
+    ],
+
+    "riskFactors": [
+      { "id": "recent_viral_urti", "multiplier": 1.5 },
+      { "id": "smoking", "multiplier": 1.4 },
+      { "id": "asthma", "multiplier": 1.3 },
+      { "id": "copd", "multiplier": 1.4 },
+      { "id": "immunosuppression", "multiplier": 1.3 },
+      { "id": "exposure_to_irritants", "multiplier": 1.2, "examples": ["air_pollution", "occupational_dust", "chemical_fumes"] },
+      { "id": "age_extremes_young_old", "multiplier": 1.2 },
+      { "id": "crowded_living_conditions", "multiplier": 1.2 }
+    ],
+
+    "differentialCompetition": {
+      "pneumonia": {
+        "discriminators": ["focal_crackles", "bronchial_breathing", "high_fever_above_39_point_5", "hypoxia", "toxic_appearance", "dyspnea_at_rest"],
+        "negativeImpactOnBronchitis": 5
+      },
+      "asthma": {
+        "discriminators": ["recurrent_wheeze_episodes", "nocturnal_cough", "family_atopy", "personal_eczema", "bronchodilator_response", "exercise_trigger"],
+        "negativeImpactOnBronchitis": 4
+      },
+      "urti": {
+        "discriminators": ["predominantly_nasal_symptoms", "minimal_cough", "sneezing", "watery_eyes"],
+        "negativeImpactOnBronchitis": 3
+      },
+      "pertussis": {
+        "discriminators": ["paroxysmal_cough", "post_tussive_vomiting", "inspiratory_whoop", "apnea_in_infants", "no_fever", "cough_more_than_2_weeks"],
+        "negativeImpactOnBronchitis": 3
+      },
+      "covid_19": {
+        "discriminators": ["anosmia", "ageusia", "known_exposure", "bilateral_pneumonia_on_imaging"],
+        "negativeImpactOnBronchitis": 2
+      },
+      "influenza": {
+        "discriminators": ["high_fever", "severe_myalgia", "sudden_onset", "seasonal_pattern", "headache"],
+        "negativeImpactOnBronchitis": 2
+      },
+      "gerd": {
+        "discriminators": ["chronic_cough", "worse_when_supine", "heartburn", "regurgitation", "no_fever", "morning_cough"],
+        "negativeImpactOnBronchitis": 3
+      },
+      "post_infectious_cough": {
+        "discriminators": ["cough_persisting_after_resolved_infection", "non_productive", "airway_hyperreactivity", "no_fever"],
+        "negativeImpactOnBronchitis": 2
+      },
+      "acute_exacerbation_of_copd": {
+        "discriminators": ["known_copd", "chronic_cough_baseline", "chronic_sputum", "progressive_worsening", "older_age_smoker"],
+        "negativeImpactOnBronchitis": 3
+      },
+      "bronchiectasis": {
+        "discriminators": ["chronic_cough", "daily_purulent_sputum", "clubbing", "recurrent_pneumonia", "hemoptysis", "known_bronchiectasis"],
+        "negativeImpactOnBronchitis": 3
+      }
+    },
+
+    "investigations": {
+      "bedside": [
+        { "name": "Pulse oximetry", "priority": "moderate", "yield": 0.6, "indication": "if dyspnoea present or comorbid lung disease" },
+        { "name": "Temperature measurement", "priority": "immediate", "yield": 0.8, "indication": "all patients" },
+        { "name": "Respiratory rate", "priority": "immediate", "yield": 0.7, "indication": "all patients" }
+      ],
+      "laboratory": [
+        { "name": "CRP or Procalcitonin", "priority": "moderate", "yield": 0.5, "indication": "if concerned for pneumonia (focal signs, high fever, comorbid disease)", "note": "Do NOT use routinely; PCT <0.25 ng/mL supports viral aetiology" },
+        { "name": "Respiratory viral panel", "priority": "low", "yield": 0.7, "indication": "influenza season or immunocompromised", "note": "Not routine in primary care" },
+        { "name": "Pertussis PCR", "priority": "indicated_if_suspected", "yield": 0.9, "indication": "cough >2 weeks with paroxysms, post-tussive vomiting, known exposure" }
+      ],
+      "imaging": [
+        {
+          "name": "Chest X-ray PA & lateral",
+          "priority": "low",
+          "yield": 0.3,
+          "cost": "moderate",
+          "indication": "ONLY if pneumonia suspected: focal chest signs, hypoxia, high fever >39.5°C, comorbid lung disease, or failure to improve after 2-3 weeks",
+          "typicalFindings": "Normal or increased bronchovascular markings; no consolidation",
+          "overuseWarning": "Routine CXR in uncomplicated acute bronchitis is NOT recommended"
+        },
+        { "name": "Chest ultrasound", "priority": "low", "yield": 0.4, "indication": "alternative to CXR when pneumonia suspected", "note": "Operator-dependent; useful in resource-limited settings" }
+      ],
+      "advanced": [
+        { "name": "Pulmonary function tests", "priority": "not_indicated_acute", "indication": "Only if cough persists >8 weeks and alternative diagnoses considered" }
+      ],
+      "overuseWarning": "Clinical diagnosis. Routine CXR or lab testing discouraged. Reserve for suspected pneumonia (focal signs, high fever, hypoxia, prolonged cough)."
+    },
+
+    "management": {
+      "protocolReference": "NICE Guideline CG191: Cough (Acute), AAFP Guidelines for Acute Bronchitis, CDC Antibiotic Stewardship Principles",
+      "antibioticStewardship": {
+        "strongRecommendation": "Antibiotics are NOT indicated for uncomplicated acute bronchitis, regardless of sputum colour or purulence.",
+        "rationale": "Viral in >90% of cases. No reduction in symptom duration, but increased adverse effects and resistance.",
+        "exceptions": [
+          "Prolonged fever (>5 days) AND purulent sputum AND comorbid lung disease (COPD, bronchiectasis)",
+          "Suspected pertussis: Macrolide if within 3 weeks of cough onset",
+          "Suspected influenza with high-risk features: Consider neuraminidase inhibitor"
+        ],
+        "patientCounselling": "Explain bronchitis is viral and self-limiting. Antibiotics do not help. Cough may last 2-3 weeks."
+      },
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "Cough only, no fever/low-grade, normal activity, no dyspnoea",
+          "treatment": [
+            "Supportive care: rest, hydration",
+            "Honey 1-2 tsp (adults and children >1yr; NOT in infants <12mo due to botulism risk)",
+            "OTC cough suppressants PRN for adults; limited evidence in children",
+            "Steam inhalation, warm fluids",
+            "Avoid smoking and irritants"
+          ],
+          "followUp": "Not required if improving. Expect resolution in 1-3 weeks."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "Cough + fever (≤39.5°C) + chest discomfort, no danger signs, no focal findings",
+          "treatment": [
+            "Supportive care as per mild pathway",
+            "Antipyretics PRN for fever and chest discomfort",
+            "No antibiotics indicated",
+            "Reassess in 48-72h if not improving"
+          ],
+          "reassessment": "If worsening or >5 days, re-evaluate for pneumonia, pertussis, COVID-19."
+        },
+        {
+          "severity": "suspected_pneumonia",
+          "criteria": "Fever >39.5°C OR focal crackles/bronchial breathing OR hypoxia (SpO2 <92%) OR toxic appearance OR dyspnoea at rest",
+          "treatment": [
+            "Obtain urgent CXR",
+            "If CXR confirms pneumonia: treat per pneumonia protocol",
+            "If CXR normal: supportive care; continue monitoring",
+            "Consider admission if hypoxia, toxic appearance, or significant comorbidity"
+          ],
+          "note": "These features are atypical for bronchitis. Pneumonia must be excluded."
+        }
+      ],
+      "specialConsiderations": {
+        "cough_persistent_3_weeks": "Re-evaluate for pertussis (PCR), asthma (PFTs/bronchodilator trial), GERD (PPI trial), post-nasal drip, post-infectious cough. Do NOT repeat antibiotics.",
+        "pregnant_patients": "Avoid honey, dextromethorphan, NSAIDs in third trimester. Paracetamol is safe.",
+        "paediatric": "No OTC cough medications <6 years. Honey safe >12 months. Monitor for respiratory distress.",
+        "elderly_or_frail": "Lower threshold for CXR and SpO2 due to atypical pneumonia presentation.",
+        "copd_or_bronchiectasis": "May trigger exacerbation. Manage per GOLD/ bronchiectasis guidelines. Antibiotics indicated per exacerbation criteria (↑ sputum volume, purulence, dyspnoea)."
+      },
+      "returnPrecautions": [
+        "Fever persisting >5 days",
+        "Worsening dyspnoea or new-onset dyspnoea at rest",
+        "Chest pain, especially pleuritic",
+        "Hemoptysis",
+        "Inability to maintain oral intake",
+        "Worsening cough or cough persisting >3 weeks"
+      ]
+    },
+
+    "pathophysiology": [
+      "viral_infection_of_bronchial_mucosa",
+      "mucosal_inflammation_and_edema",
+      "increased_mucus_production",
+      "bronchial_hyperreactivity",
+      "ciliary_dysfunction",
+      "cough_reflex_activation",
+      "self_limiting_inflammation",
+      "reversible_airway_obstruction_in_susceptible_individuals"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "post_infectious_cough",
+        "probability": 0.3,
+        "lagDays": [14, 60],
+        "severityBoost": 0.1,
+        "clues": ["persistent_cough_after_symptoms_resolve", "non_productive", "airway_hyperreactivity"],
+        "note": "Cough may persist 2-6 weeks after infection due to residual inflammation and bronchial hyperreactivity. Reassure; no antibiotics needed."
+      },
+      {
+        "diseaseId": "bacterial_superinfection_pneumonia",
+        "probability": 0.05,
+        "lagDays": [5, 14],
+        "severityBoost": 0.3,
+        "clues": ["worsening_cough", "new_fever", "focal_chest_signs", "purulent_sputum_increase"],
+        "note": "Rare complication. Suspect if symptoms initially improved then worsened."
+      },
+      {
+        "diseaseId": "acute_asthma_exacerbation",
+        "probability": 0.2,
+        "lagDays": [1, 7],
+        "severityBoost": 0.2,
+        "clues": ["known_asthma", "worsening_wheeze", "bronchodilator_use_escalating", "nocturnal_waking"],
+        "note": "Viral bronchitis is a common trigger for asthma exacerbations. Manage per asthma protocol."
+      },
+      {
+        "diseaseId": "acute_copd_exacerbation",
+        "probability": 0.15,
+        "lagDays": [1, 7],
+        "severityBoost": 0.3,
+        "clues": ["known_copd", "increased_sputum_purulence", "increased_sputum_volume", "worsening_dyspnoea", "smoking_history"],
+        "note": "Manage per GOLD criteria; antibiotics may be indicated if sputum purulence + increased volume + dyspnoea all present."
+      },
+      {
+        "diseaseId": "acute_sinusitis",
+        "probability": 0.1,
+        "lagDays": [3, 10],
+        "severityBoost": 0.1,
+        "clues": ["facial_pain", "nasal_congestion_worsening", "purulent_nasal_discharge", "fever"],
+        "note": "Viral URTI may extend to sinuses. Most cases are viral; antibiotics only if severe or persistent >10 days."
+      },
+      {
+        "diseaseId": "acute_otitis_media",
+        "probability": 0.08,
+        "associatedAgeRange": [2, 60],
+        "clues": ["ear_pain", "fever", "hearing_loss", "otoscopic_findings"]
+      }
+    ],
+
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["cough_duration?", "sputum_production?", "fever?", "dyspnea?", "chest_pain?", "sore_throat?"],
+      "branching": [
+        { "if": "fever_above_39_and_focal_signs", "ask": ["crackles?", "hypoxia?", "toxic_appearance?"], "action": "Suspect pneumonia. Obtain CXR." },
+        { "if": "wheeze_present", "ask": ["previous_wheeze?", "family_atopy?", "nocturnal_cough?", "exercise_trigger?"], "action": "If recurrent + afebrile, increase asthma probability." },
+        { "if": "cough_more_than_3_weeks", "ask": ["paroxysmal_cough?", "post_tussive_vomiting?", "whoop?", "pertussis_exposure?"], "action": "Consider pertussis, post-infectious cough, asthma, GERD." },
+        { "if": "dyspnea_at_rest_or_hypoxia", "ask": ["focal_chest_signs?", "high_fever?", "chest_pain?"], "action": "Suspect pneumonia. Urgent CXR, consider admission." },
+        { "if": "hemoptysis", "ask": ["quantity?", "duration?", "chest_pain?", "weight_loss?", "smoking_history?"], "action": "Urgent evaluation for TB, pneumonia, PE, bronchiectasis." },
+        { "if": "sick_contact", "ask": ["household_symptoms?", "outbreak?", "covid_exposure?"], "action": "Supports viral aetiology. Consider COVID-19/influenza testing." },
+        { "if": "anosmia_or_ageusia", "ask": ["covid_exposure?", "loss_taste_smell?"], "action": "Suspect COVID-19. Arrange testing." },
+        { "if": "purulent_sputum_and_prolonged_fever", "ask": ["fever_>5_days?", "comorbid_lung_disease?"], "action": "Rare bacterial superinfection. Consider CXR, PCT." }
+      ]
+    },
+
+    "treatmentResponseLogic": {
+      "expected": { "timeframe": "1-3 weeks", "trajectory": "Gradual improvement; cough may persist after other symptoms resolve." },
+      "noImprovementAfter2Weeks": {
+        "actions": [
+          "Re-evaluate for pertussis, asthma, GERD, post-nasal drip, post-infectious cough",
+          "Review chest imaging if not done",
+          "Consider pertussis PCR if paroxysmal cough",
+          "Do NOT prescribe antibiotics unless clear bacterial indication"
+        ]
+      },
+      "worsening": {
+        "actions": [
+          "Re-evaluate for pneumonia: CXR, SpO2",
+          "Assess complications: bacterial superinfection, asthma/COPD exacerbation",
+          "Consider referral if hypoxia, toxic appearance, significant comorbidity"
+        ]
+      },
+      "antibioticFailure": {
+        "note": "If antibiotics already given with no improvement, diagnosis may be incorrect or antibiotics were not indicated. Re-evaluate alternatives rather than escalating."
+      }
+    },
+
     "mustNotMiss": false,
+    "emergencyPriority": "Usually low. Immediate attention required if hypoxia, high fever with toxic appearance, or focal chest signs (suggests pneumonia).",
     "diagnosticClues": [
-      "Bronchitis - suspected based on clinical presentation"
+      "acute_cough_following_urti",
+      "productive_cough_clear_or_mucoid",
+      "normal_chest_auscultation_or_scattered_rhonchi",
+      "no_signs_of_pneumonia",
+      "fever_low_grade_if_present",
+      "self_limiting_trajectory"
     ],
     "exclusionClues": [
-      "Alternative diagnosis more likely"
+      "focal_crackles_or_bronchial_breathing",
+      "high_fever_toxic_appearance",
+      "hypoxia_spo2_below_92",
+      "dyspnea_at_rest",
+      "hemoptysis",
+      "chronic_cough_more_than_8_weeks"
     ]
   }
 }

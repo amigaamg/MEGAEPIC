@@ -15,13 +15,8 @@
         { "sign": "airway_obstruction_stridor", "weight": 9 },
         { "sign": "spinal_cord_compression", "weight": 10 }
       ],
-      "severeCriteria": {
-        "anyDangerSign": true
-      },
-      "nonSevereCriteria": {
-        "hasIndrawingOrFastBreathing": false,
-        "noDangerSigns": true
-      },
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
       "severityLabel": "Stage I-IV determines treatment approach"
     },
 
@@ -61,9 +56,19 @@
         "prevalenceModifier": 0.4,
         "keyFeatures": [
           { "feature": "peripheral_lesion", "weight": 4 },
-          { "feature": "non_smoker_possible", "weight": 2 }
+          { "feature": "non_smoker_possible", "weight": 2 },
+          { "feature": "acinar_pattern", "weight": 3 },
+          { "feature": "lepidic_growth", "weight": 3 },
+          { "feature": "micropapillary_features", "weight": 2 },
+          { "feature": "signet_ring_cells", "weight": 2 }
         ],
-        "management": "Molecular testing (EGFR, ALK, ROS1, PD-L1). Early stage: surgery. Advanced: targeted therapy or immunotherapy."
+        "negativePredictors": [
+          { "feature": "pure_squamous_morphology", "weightReduction": 4 },
+          { "feature": "central_lesion_with_cavitation", "weightReduction": 3 },
+          { "feature": "strong_smoking_link_only", "weightReduction": 2 }
+        ],
+        "geneticMarkers": ["EGFR", "ALK", "ROS1", "BRAF_V600E", "MET_exon14", "RET", "NTRK", "KRAS_G12C"],
+        "management": "Molecular testing (EGFR, ALK, ROS1, PD-L1, NGS panel). Early: surgery. Advanced: targeted therapy (osimertinib if EGFR, alectinib if ALK) or immunotherapy (pembrolizumab if PD-L1 >= 50%)."
       },
       {
         "id": "nsclc_squamous",
@@ -72,9 +77,18 @@
         "keyFeatures": [
           { "feature": "central_lesion", "weight": 4 },
           { "feature": "strong_smoking_link", "weight": 4 },
-          { "feature": "cavitation", "weight": 3 }
+          { "feature": "cavitation", "weight": 3 },
+          { "feature": "keratinization", "weight": 3 },
+          { "feature": "intercellular_bridges", "weight": 3 },
+          { "feature": "endobronchial_growth", "weight": 3 }
         ],
-        "management": "Early: surgery. Advanced: chemoimmunotherapy. PD-1 inhibitors."
+        "negativePredictors": [
+          { "feature": "peripheral_lesion_without_cavitation", "weightReduction": 3 },
+          { "feature": "non_smoker", "weightReduction": 3 },
+          { "feature": "pure_lepidic_pattern", "weightReduction": 4 }
+        ],
+        "geneticMarkers": ["PD-L1", "PIK3CA", "FGFR1"],
+        "management": "Early: surgery. Advanced: chemoimmunotherapy (carboplatin/paclitaxel + pembrolizumab). Avoid bevacizumab due to hemorrhage risk."
       },
       {
         "id": "sclc",
@@ -84,9 +98,38 @@
           { "feature": "rapid_growth", "weight": 5 },
           { "feature": "early_metastasis", "weight": 5 },
           { "feature": "strong_smoking_link", "weight": 5 },
-          { "feature": "paraneoplastic_syndromes", "weight": 3 }
+          { "feature": "central_lesion", "weight": 4 },
+          { "feature": "s_i_a_d_h_hyponatremia", "weight": 3 },
+          { "feature": "lambert_eaton_myasthenic_syndrome", "weight": 3 },
+          { "feature": "cushing_syndrome_ectopic_acth", "weight": 3 },
+          { "feature": "sensorimotor_neuropathy", "weight": 2 }
         ],
-        "management": "Chemotherapy (platinum + etoposide) first-line. Prophylactic cranial irradiation if limited stage. Immunotherapy."
+        "negativePredictors": [
+          { "feature": "peripheral_lesion_with_indolent_growth", "weightReduction": 5 },
+          { "feature": "non_smoker", "weightReduction": 4 },
+          { "feature": "negative_paraneoplastic_antibodies", "weightReduction": 2 }
+        ],
+        "paraneoplasticSyndromes": ["SIADH", "Lambert-Eaton", "ectopic_ACTH_Cushing", "sensorimotor_neuropathy", "limbic_encephalitis"],
+        "management": "Chemotherapy (platinum + etoposide) first-line. PCI if limited stage. Immunotherapy (atezolizumab). Topotecan for relapsed."
+      },
+      {
+        "id": "carcinoid_tumor",
+        "name": "Carcinoid Tumor (Lung)",
+        "prevalenceModifier": 0.02,
+        "keyFeatures": [
+          { "feature": "slow_growth", "weight": 5 },
+          { "feature": "central_endobronchial_lesion", "weight": 4 },
+          { "feature": "recurrent_pneumonia_same_lobe", "weight": 3 },
+          { "feature": "hemoptysis", "weight": 3 },
+          { "feature": "carcinoid_syndrome_rare", "weight": 2 },
+          { "feature": "younger_age", "weight": 3 }
+        ],
+        "negativePredictors": [
+          { "feature": "rapid_growth", "weightReduction": 4 },
+          { "feature": "heavy_smoking_history", "weightReduction": 3 },
+          { "feature": "extensive_mediastinal_adenopathy", "weightReduction": 2 }
+        ],
+        "management": "Surgical resection (bronchial sleeve). Excellent prognosis. Octreotide for metastatic disease."
       }
     ],
 
@@ -98,7 +141,18 @@
       {
         "diseaseId": "benign_lung_nodule",
         "discriminators": ["stable_over_time", "calcified", "no_risk_factors"]
+      },
+      {
+        "diseaseId": "pneumonia",
+        "discriminators": ["acute_fever", "purulent_sputum", "crackles", "response_to_antibiotics"]
       }
+    ],
+
+    "negativePredictors": [
+      { "feature": "complete_resolution_with_antibiotics", "scoreReduction": 5, "rationale": "Resolution after antibiotics suggests infection over malignancy." },
+      { "feature": "stable_nodule_2_years", "scoreReduction": 6, "rationale": "Nodule stable on CT for 2 years is highly likely benign." },
+      { "feature": "calcified_lesion_on_CT", "scoreReduction": 5, "rationale": "Calcified nodules are almost always benign (granuloma/hamartoma)." },
+      { "feature": "age_under_30_non_smoker", "scoreReduction": 4, "rationale": "Lung cancer below age 30 in non-smokers is exceedingly rare." }
     ],
 
     "investigations": {
@@ -107,33 +161,135 @@
       ],
       "laboratory": [
         { "name": "FBC, U&E, LFT, Calcium, ALP", "priority": "high", "yield": 0.5, "indication": "baseline and metastatic screen" },
-        { "name": "Tumor markers (CEA, CYFRA, NSE)", "priority": "medium", "yield": 0.5, "indication": "monitoring" }
+        { "name": "Tumor markers (CEA, CYFRA, NSE, ProGRP)", "priority": "medium", "yield": 0.5, "indication": "monitoring" }
       ],
       "imaging": [
         { "name": "CT Chest + Abdomen with contrast", "priority": "high", "yield": 0.9, "indication": "staging" },
         { "name": "PET-CT", "priority": "high", "yield": 0.85, "indication": "metastatic workup" },
         { "name": "MRI Brain", "priority": "high", "yield": 0.8, "indication": "brain metastases, especially SCLC" },
-        { "name": "Bronchoscopy with biopsy", "priority": "gold_standard", "yield": 0.9, "indication": "tissue diagnosis" }
+        { "name": "Bronchoscopy with biopsy", "priority": "gold_standard", "yield": 0.9, "indication": "tissue diagnosis and molecular sampling" },
+        { "name": "CT-guided core needle biopsy", "priority": "high", "yield": 0.9, "indication": "peripheral lesions not reachable by bronchoscopy" }
+      ],
+      "pathology": [
+        { "name": "Histopathology (H&E, IHC)", "priority": "essential", "yield": 1.0, "indication": "confirm subtype", "interpretationNote": "IHC panel: TTF-1, Napsin A (adeno), p40, CK5/6 (squamous), chromogranin, synaptophysin (SCLC/carcinoid)." },
+        { "name": "NGS molecular panel", "priority": "essential", "yield": 0.9, "indication": "all non-squamous NSCLC", "interpretationNote": "Covers EGFR, ALK, ROS1, BRAF, MET, RET, NTRK, KRAS. Tissue or liquid biopsy." },
+        { "name": "PD-L1 IHC", "priority": "essential", "yield": 0.9, "indication": "all advanced NSCLC", "interpretationNote": "TPS reported. >=50% predicts pembrolizumab response." }
       ]
     },
 
     "management": {
-      "protocolReference": "NCCN Guidelines for Non-Small Cell Lung Cancer",
+      "protocolReference": "NCCN Guidelines for Non-Small Cell Lung Cancer and Small Cell Lung Cancer",
       "pathways": [
         {
-          "severity": "early stage (I-II)",
-          "criteria": "localized disease, node negative",
-          "treatment": "Surgical resection (lobectomy). SABR if not surgical candidate. Adjuvant chemotherapy if node positive."
+          "severity": "early (I-II)",
+          "criteria": "localized, node negative",
+          "treatment": "Surgical resection (lobectomy/segmentectomy). SABR if not surgical candidate. Adjuvant chemo if node positive. Adjuvant osimertinib if EGFR-mutated.",
+          "surveillance": "CT chest every 6-12 months for 3 years, then annually."
         },
         {
           "severity": "locally advanced (III)",
-          "criteria": "mediastinal node involvement",
-          "treatment": "Chemoradiotherapy. Immunotherapy consolidation (durvalumab) after CRT. Consider surgery for selected cases."
+          "criteria": "mediastinal node involvement (N2/N3)",
+          "treatment": "Chemoradiotherapy (cisplatin/etoposide). Durvalumab consolidation for 12 months post-CRT. Selected cases surgery."
         },
         {
-          "severity": "metastatic (IV)",
-          "criteria": "distant metastases",
-          "treatment": "Molecular testing for targeted therapy (EGFR, ALK, ROS1, BRAF). Immunotherapy if PD-L1 high. Palliative radiotherapy. Best supportive care."
+          "severity": "metastatic NSCLC adeno (IV)",
+          "criteria": "distant mets, non-squamous",
+          "treatment": "Targeted therapy if driver mutation (osimertinib for EGFR, alectinib for ALK, entrectinib for ROS1). Pembrolizumab if PD-L1 >= 50%. Chemoimmunotherapy (cisplatin/pemetrexed + pembrolizumab) if PD-L1 < 50% and no driver mutation."
+        },
+        {
+          "severity": "metastatic NSCLC squamous (IV)",
+          "criteria": "distant mets, squamous histology",
+          "treatment": "Chemoimmunotherapy (carboplatin/paclitaxel + pembrolizumab). Avoid pemetrexed/bevacizumab. Palliative RT."
+        },
+        {
+          "severity": "SCLC limited stage",
+          "criteria": "confined to one hemithorax",
+          "treatment": "Concurrent CRT (platinum + etoposide). Prophylactic cranial irradiation if good response."
+        },
+        {
+          "severity": "SCLC extensive stage",
+          "criteria": "distant mets beyond one hemithorax",
+          "treatment": "Platinum + etoposide + atezolizumab/durvalumab. Topotecan for relapse. Palliative RT."
+        },
+        {
+          "severity": "palliative",
+          "criteria": "ECOG >= 3 or not amenable to curative treatment",
+          "treatment": "Best supportive care. Palliative RT for symptoms. Pain management. Pleural drainage. Palliative care referral."
+        }
+      ],
+      "postTreatmentSurveillance": {
+        "stageI_II": "CT chest q6mo x2yr then annually. Clinical eval q3-6mo x3yr then q6-12mo.",
+        "stageIII_IV": "CT chest q3-6mo x3yr then q6-12mo. MRI brain annually for SCLC."
+      }
+    },
+
+    "treatmentResponseLogic": {
+      "triggers": [
+        {
+          "timePoint": "48h post-initiation",
+          "trigger": "no clinical improvement",
+          "actions": [
+            "Re-evaluate for malignant pleural effusion progression",
+            "Assess for atelectasis from endobronchial obstruction",
+            "Rule out superimposed infection (sputum culture, CBC, CRP)",
+            "Consider repeat imaging if clinically indicated"
+          ]
+        },
+        {
+          "timePoint": "post-biopsy",
+          "trigger": "procedure performed",
+          "actions": [
+            "Monitor for pneumothorax (CXR post-procedure)",
+            "Monitor for hemoptysis and bleeding complications",
+            "Check coagulation status if bleeding suspected",
+            "Chest tube drainage if significant pneumothorax"
+          ]
+        },
+        {
+          "timePoint": "on treatment (6-12 weeks)",
+          "trigger": "first response assessment",
+          "actions": [
+            "CT chest per RECIST 1.1 criteria",
+            "Assess target lesion response (CR, PR, SD, PD)",
+            "If progression: re-biopsy if feasible, consider resistance mutations",
+            "If response/SD: continue current therapy, reassess q6-12 weeks",
+            "Re-evaluate performance status and symptoms"
+          ]
+        }
+      ]
+    },
+
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["chronic_cough?", "hemoptysis?", "weight_loss?", "smoking_history?", "age_over_40?"],
+      "branching": [
+        {
+          "if": "hemoptysis_present",
+          "ask": ["quantity_of_blood?", "frequency_episodes?", "associated_clots?", "provoked_by_coughing_or_spontaneous?"]
+        },
+        {
+          "if": "chest_pain_present",
+          "ask": ["pleuritic_vs_dull_ache?", "location_and_radiation?", "relationship_to_breathing?", "nocturnal_worsening?"],
+          "note": "Dull persistent pain suggests chest wall invasion. Pleuritic suggests pleural involvement."
+        },
+        {
+          "if": "weight_loss_present",
+          "ask": ["timeframe_months?", "appetite_changes?", "night_sweats?", "fever?", "fatigue_severity?"],
+          "note": "Unintentional weight loss >5% over 6 months is concerning for malignancy."
+        },
+        {
+          "if": "hoarseness_present",
+          "ask": ["duration_weeks?", "associated_dysphagia?", "aspiration_symptoms?", "prior_laryngeal_examination?"],
+          "note": "Suggests recurrent laryngeal nerve involvement, typically left-sided from aortopulmonary window lymphadenopathy."
+        },
+        {
+          "if": "smoking_history_positive",
+          "ask": ["pack_years?", "quit_attempts?", "age_started?", "years_since_quit?"],
+          "note": "Pack-years = packs/day x years smoked. >30 pack-years is high risk."
+        },
+        {
+          "if": "recurrent_pneumonia_same_lobe",
+          "ask": ["prior_imaging_results?", "prior_bronchoscopy?", "endobronchial_lesion_identified?", "sputum_cytology_done?"],
+          "action": "Activate lung cancer workup including bronchoscopy to evaluate for obstructing lesion."
         }
       ]
     },
@@ -152,12 +308,49 @@
         "diseaseId": "malignant_pleural_effusion",
         "probability": 0.3,
         "severityBoost": 0.3,
-        "clues": ["dyspnea", "dullness_to_percussion"]
+        "clues": ["dyspnea", "dullness_to_percussion", "pleuritic_chest_pain", "tracheal_deviation"],
+        "management": "Thoracentesis for cytology. Pleurodesis or indwelling catheter for recurrent effusion."
+      },
+      {
+        "diseaseId": "svc_obstruction",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["facial_swelling", "distended_neck_veins", "upper_extremity_edema", "headache"],
+        "management": "Urgent radiotherapy or SVC stenting."
+      },
+      {
+        "diseaseId": "malignant_pericardial_effusion",
+        "probability": 0.03,
+        "severityBoost": 0.4,
+        "clues": ["muffled_heart_sounds", "hypotension", "jugular_venous_distension", "pulsus_paradoxus"],
+        "management": "Echocardiogram for diagnosis. Pericardiocentesis or pericardial window if tamponade."
+      },
+      {
+        "diseaseId": "brain_metastases",
+        "probability": 0.2,
+        "subtypeProbabilities": { "sclc": 0.2, "nsclc_adenocarcinoma": 0.15, "nsclc_squamous": 0.1 },
+        "severityBoost": 0.5,
+        "clues": ["headache", "neurological_deficit", "seizure", "cognitive_change"],
+        "management": "WBRT. SRS for limited lesions. MRI brain for surveillance."
+      },
+      {
+        "diseaseId": "spinal_cord_compression",
+        "probability": 0.02,
+        "severityBoost": 0.7,
+        "clues": ["back_pain", "lower_extremity_weakness", "sensory_level", "bladder_bowel_dysfunction"],
+        "management": "Urgent MRI spine. High-dose dexamethasone. Urgent RT or surgical decompression."
+      },
+      {
+        "diseaseId": "massive_hemoptysis",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["large_volume_blood", "airway_compromise", "hemodynamic_instability", "preexisting_cavitary_lesion"],
+        "management": "Immediate airway protection. Bronchial artery embolization. Resection if localized."
       }
     ],
 
     "mustNotMiss": true,
-    "diagnosticClues": ["chronic_cough_hemoptysis", "weight_loss", "smoking_history", "pulmonary_nodule_mass"],
+    "diagnosticClues": ["chronic_cough_hemoptysis", "weight_loss", "smoking_history", "pulmonary_nodule_mass", "recurrent_same_lobe_pneumonia", "hoarseness_with_smoking"],
     "exclusionClues": ["resolved_infection", "stable_nodule_2_years", "calcified_lesion"]
   }
 }

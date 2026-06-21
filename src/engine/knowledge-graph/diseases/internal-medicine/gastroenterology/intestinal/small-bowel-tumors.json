@@ -1,0 +1,252 @@
+{
+  "disease": {
+    "id": "small_bowel_tumors",
+    "name": "Small Bowel Tumors",
+    "system": "gastroenterology",
+    "agePeak_months": [600, 1080],
+    "note": "Small bowel accounts for only 5% of GI tumors but disproportionate cause of obscure GI bleeding. Types: adenocarcinoma (40% — duodenum most common), carcinoid/NET (35% — ileum), lymphoma (15% — ileum), GIST (10%), sarcoma, metastases (melanoma).",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["obscure_gi_bleeding", "small_bowel_malignancy", "iron_deficiency_anemia", "abdominal_mass"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_acute_gi_bleed", "weight": 9 },
+        { "sign": "bowel_obstruction", "weight": 10 },
+        { "sign": "perforation", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "obstructive_symptoms", "weight": 7 },
+          { "sign": "palpable_abdominal_mass", "weight": 6 },
+          { "sign": "carcinoid_syndrome_flushing_diarrhea_wheezing", "weight": 5 },
+          { "sign": "unexplained_weight_loss_and_anemia", "weight": 5 },
+          { "sign": "metastatic_disease_on_imaging", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Acute bleeding/obstruction/perforation -> EMERGENCY; obscure bleeding with negative scopes -> URGENT capsule endoscopy"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hematemesis_melena", "weight": 4, "note": "obscure GI bleeding — recurrent with negative scopes" },
+      { "symptomId": "rectal_bleeding", "weight": 2, "note": "if massive" },
+      { "symptomId": "iron_deficiency_anemia_symptoms", "weight": 5, "note": "most common presentation" },
+      { "symptomId": "abdominal_pain", "weight": 3, "note": "crampy, intermittent" },
+      { "symptomId": "abdominal_pain_periumbilical", "weight": 2, "note": "mid-abdominal pain" },
+      { "symptomId": "weight_loss", "weight": 4, "note": "malignancy" },
+      { "symptomId": "nausea_vomiting", "weight": 3, "note": "if obstructive" },
+      { "symptomId": "appetite_changes", "weight": 2 },
+      { "symptomId": "fatigue", "weight": 3, "note": "from anemia" },
+      { "symptomId": "abdominal_mass", "weight": 3, "note": "palpable mass" },
+      { "symptomId": "fever", "weight": 2, "note": "if lymphoma" },
+      { "symptomId": "night_sweats", "weight": 2, "note": "if lymphoma" },
+      { "symptomId": "dyspnea", "weight": 1, "note": "from anemia" },
+      { "symptomId": "palpitations", "weight": 1, "note": "from anemia" },
+      { "symptomId": "early_satiety", "weight": 1, "note": "if duodenal mass" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4, "doubleWeight": true, "note": "chronic blood loss" },
+      { "signId": "abdominal_mass_movable", "baseWeight": 5, "note": "palpable mass" },
+      { "signId": "abdominal_distension", "baseWeight": 3, "note": "if obstructive" },
+      { "signId": "high_pitched_bowel_sounds", "baseWeight": 3, "note": "if obstruction" },
+      { "signId": "lymphadenopathy", "baseWeight": 3, "note": "if lymphoma or metastases" },
+      { "signId": "hepatomegaly", "baseWeight": 3, "note": "if NET metastases" },
+      { "signId": "flushing", "baseWeight": 2, "note": "carcinoid syndrome" },
+      { "signId": "cachexia", "baseWeight": 2, "note": "advanced disease" }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 4.0 },
+      { "id": "crohns_disease", "multiplier": 3.0, "note": "Adenocarcinoma in inflamed segment" },
+      { "id": "celiac_disease", "multiplier": 3.0, "note": "Lymphoma and adenocarcinoma" },
+      { "id": "familial_adenomatous_polyposis_fap", "multiplier": 4.0, "note": "Duodenal adenomas" },
+      { "id": "peutz_jeghers_syndrome", "multiplier": 3.0 },
+      { "id": "lynch_syndrome", "multiplier": 2.5 },
+      { "id": "nf1_neurofibromatosis", "multiplier": 2.0 },
+      { "id": "ileostomy", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "duodenal_adenocarcinoma",
+        "name": "Duodenal Adenocarcinoma",
+        "prevalenceModifier": 0.3,
+        "agePeak": [660, 960],
+        "keyFeatures": [
+          { "feature": "duodenal_location_most_common_ampullary", "weight": 5 },
+          { "feature": "obstructive_jaundice_if_ampullary", "weight": 4 },
+          { "feature": "melena_or_hematemesis", "weight": 4 },
+          { "feature": "vomiting_and_early_satiety", "weight": 3 }
+        ],
+        "management": "Pancreaticoduodenectomy (Whipple) for localized disease. Palliative stenting for obstructive jaundice. Chemotherapy (FOLFOX/CAPOX)."
+      },
+      {
+        "id": "jejunal_ileal_adenocarcinoma",
+        "name": "Jejunal/Ileal Adenocarcinoma",
+        "prevalenceModifier": 0.1,
+        "agePeak": [660, 960],
+        "keyFeatures": [
+          { "feature": "obscure_gi_bleeding_and_anemia", "weight": 5 },
+          { "feature": "intermittent_obstruction", "weight": 4 },
+          { "feature": "abdominal_mass", "weight": 3 },
+          { "feature": "associated_with_crohns_or_coeliac", "weight": 3 }
+        ],
+        "management": "Segmental small bowel resection with lymphadenectomy. Adjuvant chemotherapy (FOLFOX) for node-positive disease. Prognosis poor — often late presentation."
+      },
+      {
+        "id": "small_bowel_carcinoid_net",
+        "name": "Small Bowel Carcinoid (Neuroendocrine Tumor)",
+        "prevalenceModifier": 0.35,
+        "agePeak": [600, 840],
+        "keyFeatures": [
+          { "feature": "ileal_location_most_common_site", "weight": 5 },
+          { "feature": "obscure_gi_bleeding", "weight": 3 },
+          { "feature": "intermittent_obstruction_from_mesenteric_fibrosis", "weight": 4 },
+          { "feature": "carcinoid_syndrome_flushing_diarrhea_wheezing_with_metastases", "weight": 5 },
+          { "feature": "multi_focal_small_tumors_in_terminal_ileum", "weight": 4 }
+        ],
+        "management": "Segmental small bowel resection with mesenteric lymphadenectomy. Cholecystectomy (for future somatostatin analog therapy). Somatostatin analogs (octreotide/lanreotide) for metastatic disease. Everolimus, PRRT (Lu-177 dotatate) for progressive disease."
+      },
+      {
+        "id": "small_bowel_lymphoma",
+        "name": "Small Bowel Lymphoma",
+        "prevalenceModifier": 0.15,
+        "agePeak": [480, 840],
+        "keyFeatures": [
+          { "feature": "ileum_most_common_site", "weight": 4 },
+          { "feature": "associated_with_celiac_disease", "weight": 4 },
+          { "feature": "abdominal_pain_and_weight_loss", "weight": 4 },
+          { "feature": "night_sweats_and_fever", "weight": 3 },
+          { "feature": "obstruction_or_perforation", "weight": 3 },
+          { "feature": "palpable_abdominal_mass", "weight": 3 }
+        ],
+        "management": "Chemotherapy (R-CHOP for DLBCL). Surgical resection for localized disease or complications (obstruction, perforation). EATL (enteropathy-associated T-cell lymphoma) in celiac: poor prognosis, CHOP-based chemo."
+      },
+      {
+        "id": "small_bowel_metastasis",
+        "name": "Small Bowel Metastases",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "known_primary_melanoma_lung_breast_most_common", "weight": 5 },
+          { "feature": "obscure_gi_bleeding_or_obstruction", "weight": 4 },
+          { "feature": "multiple_bowel_lesions", "weight": 4 },
+          { "feature": "acute_bleeding_from_metastatic_melanoma", "weight": 4 }
+        ],
+        "management": "Palliative surgical resection if bleeding or obstruction. Systemic therapy for primary malignancy. Immunotherapy for melanoma."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "angiodyplasia",
+        "discriminators": ["angiodysplastic_lesions_only", "no_mass_on_capsule_or_cte", "no_obstructive_symptoms", "biopsy_negative"]
+      },
+      {
+        "diseaseId": "nsaid_enteropathy",
+        "discriminators": ["chronic_nsaid_use", "no_mass_lesion", "diaphragm_strictures", "resolution_on_stopping_nsaids"]
+      },
+      {
+        "diseaseId": "crohns_disease",
+        "discriminators": ["chronic_relapsing_course", "skip_lesions_with_strictures", "extraintestinal_manifestations", "no_mass_on_imaging"]
+      },
+      {
+        "diseaseId": "tuberculous_enteritis",
+        "discriminators": ["younger_age_in_endemic_area", "pulmonary_tb_or_exposure", "positive_quantiferon", "response_to_antitubercular_therapy"]
+      }
+    ],
+
+    "investigations": {
+      "imaging": [
+        { "name": "CT Enterography / MR Enterography", "priority": "high", "yield": 0.75, "indication": "Best initial imaging — detect mass, wall thickening, lymphadenopathy, mesenteric stranding" },
+        { "name": "Video Capsule Endoscopy", "priority": "gold_standard", "yield": 0.7, "indication": "Best for bleeding source detection — 60-70% yield in obscure bleeding" },
+        { "name": "Balloon Enteroscopy (single/double)", "priority": "therapeutic", "yield": 0.85, "indication": "Diagnostic and therapeutic — can biopsy, tattoo, treat bleeding" },
+        { "name": "Colonoscopy with Ileoscopy", "priority": "high", "yield": 0.3, "indication": "Visualize terminal ileum for carcinoid, lymphoma, adenocarcinoma" },
+        { "name": "Push Enteroscopy", "priority": "medium", "yield": 0.4, "indication": "Proximal jejunum visualization" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "Lymphoma staging, metastatic workup" },
+        { "name": "Octreotide Scan / Ga-68 DOTATATE PET", "priority": "high", "yield": 0.9, "indication": "For neuroendocrine tumors — highly sensitive and specific" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.6, "indication": "Iron deficiency anemia" },
+        { "name": "Ferritin, Iron, TIBC", "priority": "high", "yield": 0.6, "indication": "Confirm iron deficiency" },
+        { "name": "Chromogranin A", "priority": "medium", "yield": 0.7, "indication": "Elevated in NET/carcinoid" },
+        { "name": "5-HIAA (24h urine)", "priority": "medium", "yield": 0.8, "indication": "For carcinoid syndrome" },
+        { "name": "LDH", "priority": "medium", "yield": 0.3, "indication": "Elevated in lymphoma" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESMO / NCCN Guidelines for Small Bowel Tumors",
+      "pathways": [
+        {
+          "severity": "localized small bowel tumor (any type)",
+          "criteria": "Localized disease, no metastases, resectable",
+          "treatment": "Segmental small bowel resection with lymphadenectomy. Endoscopic resection for select duodenal adenomas. Tissue diagnosis (IHC) essential pre-op for neoadjuvant planning."
+        },
+        {
+          "severity": "metastatic carcinoid/NET",
+          "criteria": "Liver or peritoneal metastases from small bowel NET",
+          "treatment": "Somatostatin analogs (octreotide LAR 30mg or lanreotide 120mg monthly). Surgical debulking if feasible. PRRT (Lu-177 dotatate) for progressive disease. Everolimus for refractory disease."
+        },
+        {
+          "severity": "advanced adenocarcinoma",
+          "criteria": "Unresectable or metastatic small bowel adenocarcinoma",
+          "treatment": "Palliative chemotherapy (FOLFOX or FOLFIRI). Palliative stenting for obstruction. Best supportive care."
+        },
+        {
+          "severity": "small bowel lymphoma",
+          "criteria": "Confirmed lymphoma on biopsy",
+          "treatment": "R-CHOP for DLBCL. Surgical resection only for complications (obstruction, perforation, bleeding not controlled endoscopically). EATL: CHOP-based chemotherapy."
+        }
+      ]
+    },
+
+    "diagnosticClues": ["obscure_gi_bleeding_recurrent_melena_with_negative_egd_colonoscopy", "iron_deficiency_anemia_with_negative_scopes", "abdominal_mass_with_obstructive_symptoms_in_elderly", "carcinoid_syndrome_flushing_diarrhea_wheezing_with_ileal_primary", "known_celiac_disease_or_crohns_with_new_anemia_or_weight_loss"],
+    "exclusionClues": ["angiodyplasia_no_mass", "nsaid_enteropathy_temporal_correlation_with_nsaid_use", "crohns_disease_chronic_relapsing_no_mass", "tubercular_enteritis_younger_age_positive_quantiferon"],
+
+    "pathophysiology": [
+      "small_bowel_only_5_percent_of_gi_tract_length_but_disproportionate_bleeding_source",
+      "adenocarcinoma_most_common_in_duodenum_often_from_adenoma_carcinoma_sequence",
+      "carcinoid_nets_arise_from_enterochromaffin_cells_secrete_serotonin_and_other_vasoactive_substances",
+      "lymphoma_associated_with_celiac_disease_and_immunosuppression",
+      "gist_arises_from_interstitial_cells_of_cajal_mult",
+      "metastases_most_commonly_from_melanoma_to_small_bowel_via_hematogenous_spread",
+      "tumors_cause_bleeding_via_mucosal_ulceration_or_central_necrosis",
+      "obstruction_due_to_intraluminal_growth_or_mesenteric_involvement"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "small_bowel_obstruction",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["vomiting", "abdominal_distension", "obstructive_series", "history_of_tumor"]
+      },
+      {
+        "diseaseId": "massive_gi_bleeding",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["hematochezia", "melena", "hemodynamic_instability"]
+      },
+      {
+        "diseaseId": "perforation",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["acute_severe_abdominal_pain", "peritonitis", "free_air_on_xray"]
+      },
+      {
+        "diseaseId": "carcinoid_crisis",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["severe_flushing", "hypotension", "bronchospasm", "triggered_by_anesthesia_or_tumor_manipulation"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium"
+  }
+}

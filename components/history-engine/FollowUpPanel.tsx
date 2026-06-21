@@ -3,12 +3,7 @@ import { useState, useEffect } from 'react';
 import { useHistoryStore } from '@/lib/history-engine/useHistoryStore';
 import { addFollowUp, loadAllEncounters, updateEncounter, type EncounterRecord, type FollowUpRecord } from '@/lib/history-engine/userStorage';
 
-interface Props {
-  encounterId: string;
-  onClose: () => void;
-}
-
-export default function FollowUpPanel({ encounterId, onClose }: Props) {
+export default function FollowUpPanel({ encounterId }: { encounterId: string }) {
   const [encounter, setEncounter] = useState<EncounterRecord | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
@@ -53,10 +48,7 @@ export default function FollowUpPanel({ encounterId, onClose }: Props) {
 
   if (!encounter) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-        onClick={e => e.target === e.currentTarget && onClose()}>
-        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-8">Loading...</div>
-      </div>
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-8">Loading...</div>
     );
   }
 
@@ -65,17 +57,14 @@ export default function FollowUpPanel({ encounterId, onClose }: Props) {
   const totalFU = encounter.followUp.length;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-      onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl w-[95vw] max-w-2xl max-h-[85vh] flex flex-col shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
-          <div>
-            <h2 className="text-lg font-bold text-[var(--accent)]">📋 Follow-Up</h2>
-            <p className="text-[10px] text-[var(--text-muted)]">{encounter.patientName} — {encounter.provisionalDiagnosis}</p>
-          </div>
-          <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-xl">&times;</button>
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
+        <div>
+          <h2 className="text-lg font-bold text-[var(--accent)]">📋 Follow-Up</h2>
+          <p className="text-[10px] text-[var(--text-muted)]">{encounter.patientName} — {encounter.provisionalDiagnosis}</p>
         </div>
+      </div>
 
         {/* Stats */}
         <div className="flex gap-3 px-4 py-3 border-b border-[var(--border)]">
@@ -189,6 +178,5 @@ export default function FollowUpPanel({ encounterId, onClose }: Props) {
           )}
         </div>
       </div>
-    </div>
   );
 }

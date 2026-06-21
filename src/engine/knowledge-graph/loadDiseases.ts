@@ -111,6 +111,7 @@ import ent_peritonsillar_abscess from './diseases/ent/peritonsillar_abscess.json
 import ent_presbycusis from './diseases/ent/presbycusis.json';
 import ent_rhinology_allergic_rhinitis from './diseases/ent/rhinology/allergic-rhinitis.json';
 import ent_rhinology_nasal_polyps from './diseases/ent/rhinology/nasal-polyps.json';
+import ent_rhinology_post_nasal_drip from './diseases/ent/rhinology/post-nasal-drip.json';
 import ent_rhinology_sinusitis from './diseases/ent/rhinology/sinusitis.json';
 import ent_sleep_obstructive_sleep_apnea from './diseases/ent/sleep/obstructive-sleep-apnea.json';
 import ent_sore_throat from './diseases/ent/sore-throat.json';
@@ -764,6 +765,7 @@ import radiology_netro_imaging_brain_tumor_imaging from './diseases/radiology/ne
 import radiology_netro_imaging_head_trauma_imaging from './diseases/radiology/netro-imaging/head-trauma-imaging.json';
 import radiology_neuro_imaging_stroke_imaging from './diseases/radiology/neuro-imaging/stroke-imaging.json';
 import respiratory_bronchitis from './diseases/respiratory/bronchitis.json';
+import respiratory_urti from './diseases/respiratory/urti.json';
 import rheumatology_enteropathic_arthritis from './diseases/rheumatology/enteropathic_arthritis.json';
 import rheumatology_polymyositis from './diseases/rheumatology/polymyositis.json';
 import surgery_acute_abdomen_appendicitis from './diseases/surgery/acute-abdomen/appendicitis.json';
@@ -894,6 +896,78 @@ import internal_medicine_respiratory_foreign_body_aspiration from './diseases/in
 import internal_medicine_respiratory_pleural_effusion from './diseases/internal-medicine/respiratory/pleural_effusion.json';
 import internal_medicine_respiratory_pneumothorax from './diseases/internal-medicine/respiratory/pneumothorax.json';
 import surgical_large_bowel_obstruction from './diseases/surgical/large_bowel_obstruction.json';
+import internal_medicine_hepatology_gilbert_syndrome from './diseases/internal-medicine/hepatology/gilbert-syndrome.json';
+import internal_medicine_hepatology_drug_induced_liver_injury from './diseases/internal-medicine/hepatology/drug-induced-liver-injury.json';
+import infectious_disease_viral_hepatitis_a from './diseases/internal-medicine/infectious-disease/viral/hepatitis-a.json';
+import infectious_disease_viral_hepatitis_e from './diseases/internal-medicine/infectious-disease/viral/hepatitis-e.json';
+import surgical_hepatobiliary_cholangiocarcinoma from './diseases/surgery/hepatobiliary/cholangiocarcinoma.json';
+import internal_medicine_hematology_anemias_g6pd_deficiency from './diseases/internal-medicine/hematology/anemias/g6pd-deficiency.json';
+import obstetrics_high_risk_pregnancy_acute_fatty_liver_of_pregnancy from './diseases/obstetrics/high-risk-pregnancy/acute-fatty-liver-of-pregnancy.json';
+import obstetrics_high_risk_pregnancy_intrahepatic_cholestasis_of_pregnancy from './diseases/obstetrics/high-risk-pregnancy/intrahepatic-cholestasis-of-pregnancy.json';
+import internal_medicine_hematology_anemias_hereditary_spherocytosis from './diseases/internal-medicine/hematology/anemias/hereditary-spherocytosis.json';
+import pediatrics_neonatology_crigler_najjar_syndrome from './diseases/pediatrics/neonatology/crigler-najjar-syndrome.json';
+import internal_medicine_hepatology_dubin_johnson_syndrome from './diseases/internal-medicine/hepatology/dubin-johnson-syndrome.json';
+import internal_medicine_hepatology_rotor_syndrome from './diseases/internal-medicine/hepatology/rotor-syndrome.json';
+import surgical_hepatobiliary_mirizzi_syndrome from './diseases/surgery/hepatobiliary/mirizzi-syndrome.json';
+import internal_medicine_hepatology_ischemic_hepatitis from './diseases/internal-medicine/hepatology/ischemic-hepatitis.json';
+import internal_medicine_hematology_anemias_pyruvate_kinase_deficiency from './diseases/internal-medicine/hematology/anemias/pyruvate-kinase-deficiency.json';
+import infectious_disease_viral_yellow_fever from './diseases/internal-medicine/infectious-disease/viral/yellow-fever.json';
+import critical_care_sepsis_associated_cholestasis from './diseases/critical-care/sepsis-associated-cholestasis.json';
+import surgical_hepatobiliary_benign_biliary_stricture from './diseases/surgery/hepatobiliary/benign-biliary-stricture.json';
+import infectious_disease_parasitic_parasitic_biliary_obstruction from './diseases/internal-medicine/infectious-disease/parasitic/parasitic-biliary-obstruction.json';
+import internal_medicine_hematology_anemias_paroxysmal_nocturnal_hemoglobinuria from './diseases/internal-medicine/hematology/anemias/paroxysmal-nocturnal-hemoglobinuria.json';
+import infectious_disease_parasitic_babesiosis from './diseases/internal-medicine/infectious-disease/parasitic/babesiosis.json';
+import surgical_acute_abdomen_gallstone_ileus from './diseases/surgery/acute-abdomen/gallstone-ileus.json';
+import infectious_disease_viral_hiv_cholangiopathy from './diseases/internal-medicine/infectious-disease/viral/hiv-cholangiopathy.json';
+import internal_medicine_hepatology_benign_recurrent_intrahepatic_cholestasis from './diseases/internal-medicine/hepatology/benign-recurrent-intrahepatic-cholestasis.json';
+import surgical_hepatobiliary_gallbladder_cancer from './diseases/surgery/hepatobiliary/gallbladder-cancer.json';
+import surgical_hepatobiliary_ampullary_carcinoma from './diseases/surgery/hepatobiliary/ampullary-carcinoma.json';
+import internal_medicine_hematology_anemias_hereditary_elliptocytosis from './diseases/internal-medicine/hematology/anemias/hereditary-elliptocytosis.json';
+import internal_medicine_hematology_anemias_alpha_thalassemia from './diseases/internal-medicine/hematology/anemias/alpha-thalassemia.json';
+import internal_medicine_hematology_anemias_warm_autoimmune_hemolytic_anemia from './diseases/internal-medicine/hematology/anemias/warm-autoimmune-hemolytic-anemia.json';
+import internal_medicine_hematology_anemias_cold_agglutinin_disease from './diseases/internal-medicine/hematology/anemias/cold-agglutinin-disease.json';
+import internal_medicine_hematology_coagulation_thrombotic_thrombocytopenic_purpura from './diseases/internal-medicine/hematology/coagulation/thrombotic-thrombocytopenic-purpura.json';
+import pediatrics_nephrology_hemolytic_uremic_syndrome from './diseases/pediatrics/pediatric-nephrology/hemolytic-uremic-syndrome.json';
+import internal_medicine_hematology_anemias_mechanical_hemolysis from './diseases/internal-medicine/hematology/anemias/mechanical-hemolysis.json';
+import internal_medicine_hematology_anemias_drug_induced_hemolytic_anemia from './diseases/internal-medicine/hematology/anemias/drug-induced-hemolytic-anemia.json';
+import infectious_disease_viral_hepatitis_d from './diseases/internal-medicine/infectious-disease/viral/hepatitis-d.json';
+import infectious_disease_viral_ebv_hepatitis from './diseases/internal-medicine/infectious-disease/viral/ebv-hepatitis.json';
+import infectious_disease_viral_cmv_hepatitis from './diseases/internal-medicine/infectious-disease/viral/cmv-hepatitis.json';
+import infectious_disease_viral_hsv_hepatitis from './diseases/internal-medicine/infectious-disease/viral/hsv-hepatitis.json';
+import infectious_disease_mycobacterial_hepatic_tuberculosis from './diseases/internal-medicine/infectious-disease/mycobacterial/hepatic-tuberculosis.json';
+import critical_care_clostridial_sepsis from './diseases/critical-care/clostridial-sepsis.json';
+import internal_medicine_hepatology_hepatic_amyloidosis from './diseases/internal-medicine/hepatology/hepatic-amyloidosis.json';
+import internal_medicine_rheumatology_autoimmune_igg4_related_disease from './diseases/internal-medicine/rheumatology/autoimmune/igg4-related-disease.json';
+import internal_medicine_cardiology_congestive_hepatopathy from './diseases/internal-medicine/cardiology/heart-failure/congestive-hepatopathy.json';
+import internal_medicine_oncology_metastatic_liver_disease from './diseases/internal-medicine/oncology/solid-tumors/metastatic-liver-disease.json';
+import internal_medicine_hematology_malignant_myelofibrosis from './diseases/internal-medicine/hematology/malignant/myelofibrosis.json';
+import surgical_hepatobiliary_gallstone_pancreatitis from './diseases/surgery/hepatobiliary/gallstone-pancreatitis.json';
+import surgical_hepatobiliary_pancreatic_pseudocyst from './diseases/surgery/hepatobiliary/pancreatic-pseudocyst.json';
+import pediatrics_neonatology_physiological_jaundice from './diseases/pediatrics/neonatology/physiological-jaundice.json';
+import pediatrics_neonatology_neonatal_hepatitis from './diseases/pediatrics/neonatology/neonatal-hepatitis.json';
+import pediatrics_infectious_disease_congenital_torch_infections from './diseases/pediatrics/pediatric-infectious-disease/congenital-torch-infections.json';
+import pediatrics_neonatology_breastfeeding_jaundice from './diseases/pediatrics/neonatology/breastfeeding-jaundice.json';
+import pediatrics_neonatology_breast_milk_jaundice from './diseases/pediatrics/neonatology/breast-milk-jaundice.json';
+import surgery_upper_gi_mallory_weiss from './diseases/surgery/upper-gi/mallory-weiss-syndrome.json';
+import surgery_upper_gi_boerhaave from './diseases/surgery/upper-gi/boerhaave-syndrome.json';
+import surgery_upper_gi_dieulafoy from './diseases/surgery/upper-gi/dieulafoy-lesion.json';
+import surgery_upper_gi_cameron_ulcers from './diseases/surgery/upper-gi/cameron-ulcers.json';
+import internal_medicine_hepatology_phg from './diseases/internal-medicine/hepatology/portal-hypertensive-gastropathy.json';
+import internal_medicine_gastroenterology_stomach_gave from './diseases/internal-medicine/gastroenterology/stomach/gastric-antral-vascular-ectasia.json';
+import pediatrics_gastroenterology_meckel from './diseases/pediatrics/pediatric-gastroenterology/meckel-diverticulum.json';
+import surgery_vascular_aortoenteric_fistula from './diseases/surgery/vascular-surgery/aortoenteric-fistula.json';
+import surgery_hepatobiliary_hemobilia from './diseases/surgery/hepatobiliary/hemobilia.json';
+import internal_medicine_gastroenterology_intestinal_nsaid_enteropathy from './diseases/internal-medicine/gastroenterology/intestinal/nsaid-enteropathy.json';
+import internal_medicine_oncology_gist from './diseases/internal-medicine/oncology/solid-tumors/gastrointestinal-stromal-tumor.json';
+import internal_medicine_gastroenterology_intestinal_small_bowel_tumors from './diseases/internal-medicine/gastroenterology/intestinal/small-bowel-tumors.json';
+import surgery_colorectal_ischemic_colitis from './diseases/surgery/colorectal/ischemic-colitis.json';
+import infectious_disease_bacterial_infectious_colitis from './diseases/internal-medicine/infectious-disease/bacterial/infectious-colitis.json';
+import surgery_colorectal_colonic_polyps from './diseases/surgery/colorectal/colonic-polyps.json';
+import internal_medicine_gastroenterology_intestinal_radiation_enteritis from './diseases/internal-medicine/gastroenterology/intestinal/radiation-enteritis.json';
+import critical_care_stress_mucosal_disease from './diseases/critical-care/stress-related-mucosal-disease.json';
+import pediatrics_neonatology_vkdb from './diseases/pediatrics/neonatology/vitamin-k-deficiency-bleeding.json';
+import pediatrics_neonatology_swallowed_maternal_blood from './diseases/pediatrics/neonatology/swallowed-maternal-blood.json';
+
 
 function unwrap(raw: any): DiseaseNode {
   return (raw.disease || raw) as DiseaseNode;
@@ -1008,6 +1082,7 @@ export const ALL_DISEASES: DiseaseNode[] = [
   unwrap(ent_presbycusis),
   unwrap(ent_rhinology_allergic_rhinitis),
   unwrap(ent_rhinology_nasal_polyps),
+  unwrap(ent_rhinology_post_nasal_drip),
   unwrap(ent_rhinology_sinusitis),
   unwrap(ent_sleep_obstructive_sleep_apnea),
   unwrap(ent_sore_throat),
@@ -1661,6 +1736,7 @@ export const ALL_DISEASES: DiseaseNode[] = [
   unwrap(radiology_netro_imaging_head_trauma_imaging),
   unwrap(radiology_neuro_imaging_stroke_imaging),
   unwrap(respiratory_bronchitis),
+  unwrap(respiratory_urti),
   unwrap(rheumatology_enteropathic_arthritis),
   unwrap(rheumatology_polymyositis),
   unwrap(surgery_acute_abdomen_appendicitis),
@@ -1776,6 +1852,77 @@ export const ALL_DISEASES: DiseaseNode[] = [
   unwrap(urology_torsion_of_appendix_testis),
   unwrap(urology_urethral_stricture),
   unwrap(urology_urinary_retention),
+  unwrap(internal_medicine_hepatology_gilbert_syndrome),
+  unwrap(internal_medicine_hepatology_drug_induced_liver_injury),
+  unwrap(infectious_disease_viral_hepatitis_a),
+  unwrap(infectious_disease_viral_hepatitis_e),
+  unwrap(surgical_hepatobiliary_cholangiocarcinoma),
+  unwrap(internal_medicine_hematology_anemias_g6pd_deficiency),
+  unwrap(obstetrics_high_risk_pregnancy_acute_fatty_liver_of_pregnancy),
+  unwrap(obstetrics_high_risk_pregnancy_intrahepatic_cholestasis_of_pregnancy),
+  unwrap(internal_medicine_hematology_anemias_hereditary_spherocytosis),
+  unwrap(pediatrics_neonatology_crigler_najjar_syndrome),
+  unwrap(internal_medicine_hepatology_dubin_johnson_syndrome),
+  unwrap(internal_medicine_hepatology_rotor_syndrome),
+  unwrap(surgical_hepatobiliary_mirizzi_syndrome),
+  unwrap(internal_medicine_hepatology_ischemic_hepatitis),
+  unwrap(internal_medicine_hematology_anemias_pyruvate_kinase_deficiency),
+  unwrap(infectious_disease_viral_yellow_fever),
+  unwrap(critical_care_sepsis_associated_cholestasis),
+  unwrap(surgical_hepatobiliary_benign_biliary_stricture),
+  unwrap(infectious_disease_parasitic_parasitic_biliary_obstruction),
+  unwrap(internal_medicine_hematology_anemias_paroxysmal_nocturnal_hemoglobinuria),
+  unwrap(infectious_disease_parasitic_babesiosis),
+  unwrap(surgical_acute_abdomen_gallstone_ileus),
+  unwrap(infectious_disease_viral_hiv_cholangiopathy),
+  unwrap(internal_medicine_hepatology_benign_recurrent_intrahepatic_cholestasis),
+  unwrap(surgical_hepatobiliary_gallbladder_cancer),
+  unwrap(surgical_hepatobiliary_ampullary_carcinoma),
+  unwrap(internal_medicine_hematology_anemias_hereditary_elliptocytosis),
+  unwrap(internal_medicine_hematology_anemias_alpha_thalassemia),
+  unwrap(internal_medicine_hematology_anemias_warm_autoimmune_hemolytic_anemia),
+  unwrap(internal_medicine_hematology_anemias_cold_agglutinin_disease),
+  unwrap(internal_medicine_hematology_coagulation_thrombotic_thrombocytopenic_purpura),
+  unwrap(pediatrics_nephrology_hemolytic_uremic_syndrome),
+  unwrap(internal_medicine_hematology_anemias_mechanical_hemolysis),
+  unwrap(internal_medicine_hematology_anemias_drug_induced_hemolytic_anemia),
+  unwrap(infectious_disease_viral_hepatitis_d),
+  unwrap(infectious_disease_viral_ebv_hepatitis),
+  unwrap(infectious_disease_viral_cmv_hepatitis),
+  unwrap(infectious_disease_viral_hsv_hepatitis),
+  unwrap(infectious_disease_mycobacterial_hepatic_tuberculosis),
+  unwrap(critical_care_clostridial_sepsis),
+  unwrap(internal_medicine_hepatology_hepatic_amyloidosis),
+  unwrap(internal_medicine_rheumatology_autoimmune_igg4_related_disease),
+  unwrap(internal_medicine_cardiology_congestive_hepatopathy),
+  unwrap(internal_medicine_oncology_metastatic_liver_disease),
+  unwrap(internal_medicine_hematology_malignant_myelofibrosis),
+  unwrap(surgical_hepatobiliary_gallstone_pancreatitis),
+  unwrap(surgical_hepatobiliary_pancreatic_pseudocyst),
+  unwrap(pediatrics_neonatology_physiological_jaundice),
+  unwrap(pediatrics_neonatology_neonatal_hepatitis),
+  unwrap(pediatrics_infectious_disease_congenital_torch_infections),
+  unwrap(pediatrics_neonatology_breastfeeding_jaundice),
+  unwrap(pediatrics_neonatology_breast_milk_jaundice),
+  unwrap(surgery_upper_gi_mallory_weiss),
+  unwrap(surgery_upper_gi_boerhaave),
+  unwrap(surgery_upper_gi_dieulafoy),
+  unwrap(surgery_upper_gi_cameron_ulcers),
+  unwrap(internal_medicine_hepatology_phg),
+  unwrap(internal_medicine_gastroenterology_stomach_gave),
+  unwrap(pediatrics_gastroenterology_meckel),
+  unwrap(surgery_vascular_aortoenteric_fistula),
+  unwrap(surgery_hepatobiliary_hemobilia),
+  unwrap(internal_medicine_gastroenterology_intestinal_nsaid_enteropathy),
+  unwrap(internal_medicine_oncology_gist),
+  unwrap(internal_medicine_gastroenterology_intestinal_small_bowel_tumors),
+  unwrap(surgery_colorectal_ischemic_colitis),
+  unwrap(infectious_disease_bacterial_infectious_colitis),
+  unwrap(surgery_colorectal_colonic_polyps),
+  unwrap(internal_medicine_gastroenterology_intestinal_radiation_enteritis),
+  unwrap(critical_care_stress_mucosal_disease),
+  unwrap(pediatrics_neonatology_vkdb),
+  unwrap(pediatrics_neonatology_swallowed_maternal_blood),
 ];
 
 ALL_DISEASES.push(...(cardiovascular as unknown as DiseaseNode[]));

@@ -1,598 +1,386 @@
 'use client';
-import { useEffect, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useHistoryStore } from '@/lib/history-engine/useHistoryStore';
-import { getQuestionsForSymptom, getFilteredQuestions, type SocratesQuestion } from '@/lib/history-engine/socratesQuestions';
-import { getAllSymptoms } from '@/lib/history-engine/symptomLibrary';
-import HISTORY_FEATURE_REGISTRY from '@/lib/history-engine/historyFeatureRegistry';
+import type { SocratesQuestion } from '@/lib/history-engine/socratesQuestions';
+import { getQuestionsByRound, CLINICAL_ROUNDS, getAdaptiveQuestions } from '@/lib/history-engine/socratesQuestions';
+import type { ChiefComplaint } from '@/lib/history-engine/types';
 
-const ASSOC_MAP: Record<string, string> = {
-  dyspnea: 'dyspnea', chest_pain: 'chest_pain', cough: 'cough',
-  fever: 'fever', headache: 'headache', wheeze: 'wheeze',
-  nausea: 'nausea_vomiting', vomiting: 'nausea_vomiting',
-  diarrhoea: 'diarrhoea', weight_loss: 'weight_loss',
-  palpitations: 'palpitations', rash: 'skin_rash',
-  joint_pain: 'joint_pain', night_sweats: 'night_sweats',
-  leg_swelling: 'leg_swelling', hemoptysis: 'hemoptysis',
-  cyanosis: 'cyanosis', jaundice: 'jaundice', dizziness: 'dizziness',
-  syncope: 'syncope', seizure: 'seizure', neck_stiffness: 'neck_stiffness',
-  abdominal_pain: 'abdominal_pain', fatigue: 'fatigue',
-  orthopnea: 'dyspnea', pnd: 'dyspnea',
-  visual_change: 'headache',
-};
-
-const CHARACTERIZE_FIELDS = new Set([
-  'onset', 'duration', 'severity', 'location', 'quality', 'pattern',
-  'timing', 'onset_type', 'productive', 'sputum_color', 'sputum_amount',
-  'sputum_blood', 'temperature', 'rigors', 'chills', 'night_sweats',
-  'orthopnea', 'pnd', 'positional', 'frequency', 'consistency',
-  'radiation', 'diurnal_variation', 'response_to_antipyretics',
-  'aggravating_factors', 'relieving_factors', 'triggers',
-  'night_cough', 'exercise_induced', 'vomitus_character',
-  'blood_in_stool', 'tenesmus', 'urgency', 'type', 'exercise_tolerance',
-  'sleep_quality', 'appetite', 'amount', 'percentage', 'intentional',
-  'nausea_only', 'chronic_condition',
-]);
-
-const RISK_FACTOR_CONFIG: { field: string; label: string; type: 'boolean' | 'select'; options?: string[] }[] = [
-  { field: 'risk_hiv', label: 'Known HIV positive?', type: 'boolean' },
-  { field: 'risk_tb_contact', label: 'Known contact with TB patient?', type: 'boolean' },
-  { field: 'risk_mosquito_exposure', label: 'Recent mosquito exposure?', type: 'boolean' },
-  { field: 'risk_recent_travel', label: 'Recent travel to malaria-endemic area?', type: 'boolean' },
-  { field: 'risk_sick_contact', label: 'Contact with someone who had fever?', type: 'boolean' },
-  { field: 'risk_animal_contact', label: 'Recent contact with sick animals?', type: 'boolean' },
-  { field: 'risk_occupational_dust', label: 'Work in dusty environment?', type: 'boolean' },
-  { field: 'risk_crowded_living', label: 'Live in crowded conditions?', type: 'boolean' },
-  { field: 'risk_nsaids', label: 'Take NSAIDs/painkillers regularly?', type: 'boolean' },
-  { field: 'risk_dvt', label: 'Recent prolonged sitting/flights?', type: 'boolean' },
-  { field: 'risk_recent_surgery', label: 'Recent chest or abdominal surgery?', type: 'boolean' },
-  { field: 'risk_pregnancy', label: 'Could you be pregnant? (if applicable)', type: 'boolean' },
-  { field: 'risk_travel_diarrhoea', label: 'Recent travel or change in diet?', type: 'boolean' },
-  { field: 'risk_food_poisoning', label: 'Ate questionable/spoiled food recently?', type: 'boolean' },
-  { field: 'risk_medication', label: 'Started any new medication?', type: 'boolean' },
-  { field: 'risk_antibiotics', label: 'Recently taken antibiotics?', type: 'boolean' },
-  { field: 'risk_head_trauma', label: 'Recent head trauma?', type: 'boolean' },
-  { field: 'risk_anticoagulants', label: 'On blood thinners (anticoagulants)?', type: 'boolean' },
-];
-
-const GLOBAL_FIELD_MAP: Record<string, string> = {
-  seenByAnyone: 'seen_by_anyone',
-  treatmentTaken: 'treatment_received',
-  treatmentResponse: 'response_to_treatment',
-  functionalImpact: 'functional_impact',
-};
-
-const GLOBAL_QUESTION_CONFIG = [
-  { key: 'flow', label: 'Overall progression of symptoms', type: 'select' as const, options: ['Worsening', 'Improving', 'Static', 'Fluctuating'] },
-  { key: 'seenByAnyone', label: 'Have you seen anyone for this problem?', type: 'text' as const, guide: 'e.g. GP, nurse, hospital, traditional healer, pharmacist' },
-  { key: 'treatmentTaken', label: 'What treatment have you taken?', type: 'text' as const, guide: 'List any medications, herbs, or remedies tried' },
-  { key: 'treatmentResponse', label: 'How was the response to treatment?', type: 'select' as const, options: ['Good improvement', 'Partial improvement', 'No improvement', 'Worsened', 'Not applicable'] },
-  { key: 'functionalImpact', label: 'How does this affect your daily activities?', type: 'text' as const, guide: 'Work, walking, eating, sleeping, self-care' },
-];
-
-function BooleanInput({ value, onChange }: { value: string | boolean | string[] | undefined; onChange: (v: boolean) => void }) {
-  const isYes = value === true || value === 'true' || value === 'Yes';
-  const isNo = value === false || value === 'false' || value === 'No';
-  return (
-    <div className="flex gap-2">
-      {['Yes', 'No'].map(opt => {
-        const selected = opt === 'Yes' ? isYes : isNo;
-        return (
-          <button key={opt} onClick={() => onChange(opt === 'Yes')}
-            className={`px-3 py-1.5 text-xs rounded-lg border transition-colors ${selected
-              ? 'bg-teal-500/20 border-teal-500/40 text-teal-400'
-              : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-teal-500/30'}`}>
-            {opt}
-          </button>
-        );
-      })}
-    </div>
-  );
+// ── Display helpers ──────────────────────────────────────────────────────────
+function formatAnswer(value: string | boolean | string[] | undefined): string {
+  if (value === undefined || value === null || value === '') return '';
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+  if (Array.isArray(value)) return value.join(', ');
+  return String(value);
 }
 
-function SelectInput({ value, options, onChange }: { value: string | undefined; options?: string[]; onChange: (v: string) => void }) {
-  return (
-    <select onChange={e => onChange(e.target.value)}
-      value={typeof value === 'string' ? value : ''}
-      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-teal-500">
-      <option value="">Select...</option>
-      {options?.map(o => <option key={o} value={o}>{o}</option>)}
-    </select>
-  );
+function getAnswersForSymptom(hpi: Record<string, any>, symptomId: string): Record<string, string | boolean | string[]> {
+  const answers: Record<string, string | boolean | string[]> = {};
+  const entry = hpi[symptomId];
+  if (!entry?.socrates) return answers;
+  for (const sa of entry.socrates) answers[sa.questionId] = sa.answer;
+  return answers;
 }
 
+const ROUND_COLORS: Record<number, string> = { 1: '#DC2626', 2: '#7C3AED', 3: '#2563EB', 4: '#059669', 5: '#4F46E5' };
+const ROUND_NEXT_LABELS: Record<number, string> = { 1: 'Round 1: Triage', 2: 'Round 2: Evolution', 3: 'Round 3: Confirmation', 4: 'Round 4: Risk Factors', 5: 'Impact' };
+
+// ── Mini DDX indicator ──────────────────────────────────────────────────────
+const DIAGNOSIS_NAMES: Record<string, string> = {
+  appendicitis: 'Appendicitis', cholecystitis: 'Cholecystitis', pancreatitis: 'Pancreatitis',
+  ureteric_colic: 'Ureteric Colic', intestinal_obstruction: 'Obstruction', perforated_ulcer: 'Perforated Ulcer',
+  diverticulitis: 'Diverticulitis', ectopic_pregnancy: 'Ectopic', pid: 'PID', pneumonia: 'Pneumonia',
+  gastroenteritis: 'Gastroenteritis', mi: 'MI', dka: 'DKA', peptic_ulcer_disease: 'PUD', uti: 'UTI', colorectal_cancer: 'Colon Ca',
+};
+
+interface DdxHint {
+  region: string;
+  diagnoses: string[];
+}
+
+function getDdxHint(answers: Record<string, string | boolean | string[]>): DdxHint | null {
+  // Import the infer function inline (it's the same logic as in socratesQuestions)
+  const loc = ((answers['ap_location'] as string) || (answers['ap_initial_location'] as string) || '').toLowerCase();
+  const migration = (answers['ap_migration'] as string) || '';
+
+  if (!loc && !migration) return null;
+
+  const m = migration.toLowerCase();
+  let region = 'abdomen';
+  if (m.includes('navel') && m.includes('lower right')) region = 'right lower quadrant';
+  else if (m.includes('flank') && m.includes('groin')) region = 'flank';
+  else if (m.includes('upper') && m.includes('all over')) region = 'generalized';
+  else if (loc.includes('periumbilical')) region = 'periumbilical';
+  else if (loc.includes('right lower quadrant')) region = 'right lower quadrant';
+  else if (loc.includes('left lower quadrant')) region = 'left lower quadrant';
+  else if (loc.includes('right upper quadrant')) region = 'right upper quadrant';
+  else if (loc.includes('epigastrium') || loc.includes('upper middle')) region = 'epigastrium';
+  else if (loc.includes('flank') || loc.includes('back')) region = 'flank';
+  else if (loc.includes('suprapubic') || loc.includes('lower middle')) region = 'suprapubic';
+  else if (loc.includes('diffuse') || loc.includes('all over')) region = 'generalized';
+
+  const regionDiagMap: Record<string, string[]> = {
+    'right lower quadrant': ['appendicitis', 'ectopic_pregnancy', 'pid', 'diverticulitis', 'colorectal_cancer'],
+    'left lower quadrant': ['diverticulitis', 'colorectal_cancer', 'pid'],
+    'periumbilical': ['appendicitis', 'intestinal_obstruction', 'gastroenteritis'],
+    'right upper quadrant': ['cholecystitis', 'pancreatitis', 'peptic_ulcer_disease'],
+    'epigastrium': ['pancreatitis', 'cholecystitis', 'peptic_ulcer_disease', 'perforated_ulcer', 'mi'],
+    'flank': ['ureteric_colic', 'appendicitis'],
+    'suprapubic': ['ectopic_pregnancy', 'pid', 'uti', 'intestinal_obstruction'],
+    'generalized': ['perforated_ulcer', 'intestinal_obstruction', 'pancreatitis', 'gastroenteritis'],
+  };
+
+  const diagnoses = regionDiagMap[region] || [];
+  return { region, diagnoses };
+}
+
+// ── Component ────────────────────────────────────────────────────────────────
 export default function HpiSection() {
-  const complaints = useHistoryStore(s => s.chiefComplaints);
-  const hpi = useHistoryStore(s => s.hpi);
-  const timeline = useHistoryStore(s => s.timeline);
-  const redFlags = useHistoryStore(s => s.redFlags);
-  const ddx = useHistoryStore(s => s.ddx);
-  const featureRegistry = useHistoryStore(s => s.featureRegistry);
-  const confirmedSymptoms = useHistoryStore(s => s.confirmedSymptoms);
-  const globalAnswers = useHistoryStore(s => s.globalAnswers);
-  const setFeature = useHistoryStore(s => s.setFeature);
+  const chiefComplaints = useHistoryStore(s => s.chiefComplaints);
+  const biodata = useHistoryStore(s => s.biodata);
+  const hpi = useHistoryStore(s => s.hpi as Record<string, any>);
   const setSocratesAnswer = useHistoryStore(s => s.setSocratesAnswer);
-  const setGlobalAnswer = useHistoryStore(s => s.setGlobalAnswer);
-  const ensureHpiEntry = useHistoryStore(s => s.ensureHpiEntry);
   const completeSection = useHistoryStore(s => s.completeSection);
-  const completedSections = useHistoryStore(s => s.completedSections);
-  const isComplete = completedSections.includes('hpi');
-  const allSymptoms = useMemo(() => getAllSymptoms(), []);
 
-  useEffect(() => {
-    for (const [, hpiEntry] of Object.entries(hpi)) {
-      for (const ans of hpiEntry.socrates) {
-        const field = ans.field || ans.questionId.replace(`${hpiEntry.symptomId}_`, '');
-        if (field.startsWith('associated_') && (ans.answer === true || ans.answer === 'true' || ans.answer === 'Yes')) {
-          const mappedId = ASSOC_MAP[field.replace('associated_', '')];
-          if (mappedId && !hpi[mappedId] && !complaints.find(c => c.symptomId === mappedId)) {
-            const symptom = allSymptoms.find(s => s.id === mappedId);
-            if (symptom) ensureHpiEntry(mappedId, symptom.label, hpiEntry.symptomId);
-          }
-        }
+  const [phaseDone, setPhaseDone] = useState(false);
+  const [showNarrative, setShowNarrative] = useState(false);
+
+  const handleAnswer = useCallback((symptomId: string, question: SocratesQuestion, value: string | boolean | string[]) => {
+    setSocratesAnswer(symptomId, question.id, question.label, value, question.weight, question.field);
+  }, [setSocratesAnswer]);
+
+  // ── Compute rounds per complaint ─────────────────────────────────────────
+  const complaintsWithRounds = useMemo(() => {
+    return chiefComplaints.map(cc => {
+      const answered = getAnswersForSymptom(hpi, cc.symptomId);
+      const stored = Object.keys(answered).map(qId => ({ questionId: qId, answer: answered[qId] }));
+      const rounds = getAdaptiveQuestions(cc.symptomId, stored, biodata);
+
+      // Find active round (first with unanswered questions)
+      let activeRound = 5;
+      for (const r of rounds) {
+        if (r.questions.length > 0) { activeRound = r.round; break; }
       }
-    }
-  });
 
-  // ── Known fields ──
-  const knownFields = useMemo(() => {
-    const k = new Set<string>();
-    for (const [, e] of Object.entries(hpi)) for (const a of e.socrates) if (a.field) k.add(a.field);
-    for (const [fid, fe] of Object.entries(featureRegistry)) if (fe.present !== undefined) k.add(fid);
-    for (const sid of confirmedSymptoms) k.add(sid);
-    for (const [gk, gv] of Object.entries(globalAnswers)) {
-      if (gv) {
-        k.add(gk);
-        const mapped = GLOBAL_FIELD_MAP[gk];
-        if (mapped) k.add(mapped);
-      }
-    }
-    return k;
-  }, [hpi, featureRegistry, confirmedSymptoms, globalAnswers]);
+      const allAnswered = rounds.every(r => r.questions.length === 0);
+      const doneQ = Object.keys(answered).length;
+      // allQ = total questions in this symptom's bank (unfiltered max)
+      const allRounds = getAdaptiveQuestions(cc.symptomId, [], biodata);
+      const allQ = allRounds.reduce((s, r) => s + r.questions.length, 0);
 
-  const isKnown = (field: string) => knownFields.has(field) || (field.startsWith('associated_') && confirmedSymptoms.includes(ASSOC_MAP[field.replace('associated_', '')] || ''));
+      const ddxHint = getDdxHint(answered);
 
-  // ── Symptom timeline entries ──
-  const symptomEntries = useMemo(() => {
-    const e: { symptomId: string; label: string; daysAgo: number; isChief: boolean }[] = [];
-    for (const c of complaints) {
-      const entry = hpi[c.symptomId];
-      let da = c.durationDays;
-      if (da <= 0 && entry) { const d = entry.socrates.find(a => a.field === 'duration')?.answer; if (d && typeof d === 'string') da = parseInt(d) || 0; }
-      e.push({ symptomId: c.symptomId, label: c.label, daysAgo: da || 0, isChief: true });
-    }
-    for (const [, entry] of Object.entries(hpi)) {
-      if (e.some(x => x.symptomId === entry.symptomId)) continue;
-      const d = entry.socrates.find(a => a.field === 'duration')?.answer;
-      e.push({ symptomId: entry.symptomId, label: entry.label, daysAgo: d && typeof d === 'string' ? parseInt(d) || 0 : 0, isChief: false });
-    }
-    e.sort((a, b) => b.daysAgo - a.daysAgo);
-    return e;
-  }, [complaints, hpi]);
-
-  const allHpiSymptomIds = new Set(Object.keys(hpi));
-
-  // ── STAGE 1: Characterize questions per symptom ──
-  const getCharacterizeQuestions = (symptomId: string) => {
-    const entry = hpi[symptomId];
-    if (!entry) return [];
-    const allQ = getQuestionsForSymptom(symptomId);
-    return allQ.filter(q => {
-      if (q.purpose !== 'characterize') return false;
-      if (isKnown(q.field)) return false;
-      const remaining = getFilteredQuestions(symptomId, entry.socrates);
-      if (!remaining.some(r => r.id === q.id)) return false;
-      return CHARACTERIZE_FIELDS.has(q.field);
+      return { ...cc, rounds, activeRound, allAnswered, answered, doneQ, allQ, ddxHint };
     });
-  };
+  }, [chiefComplaints, hpi, biodata]);
 
-  // ── STAGE 2-3: Rule-in/Rule-out diagnostic screening ──
-  const diagnosticScreenQuestions = useMemo(() => {
-    const topDiseases = ddx.probabilities.slice(0, 5);
-    if (topDiseases.length === 0) return [];
+  const allDone = complaintsWithRounds.every(c => c.allAnswered);
 
-    const items: { diseaseId: string; diseaseName: string; probability: number; questions: { q: SocratesQuestion; symptomId: string; field: string; currentAnswer: string | boolean | string[] | undefined }[] }[] = [];
+  // ── Resume logic: show narrative when done ──
+  const handleFinish = useCallback(() => setShowNarrative(true), []);
+  const handleNarrativeDone = useCallback(() => {
+    setPhaseDone(true);
+    completeSection('hpi');
+  }, [completeSection]);
 
-    for (const dd of topDiseases) {
-      const allQ: { q: SocratesQuestion; symptomId: string; field: string; currentAnswer: string | boolean | string[] | undefined }[] = [];
-      for (const symptomId of allHpiSymptomIds) {
-        const entry = hpi[symptomId];
-        if (!entry) continue;
-        const questions = getQuestionsForSymptom(symptomId);
-        for (const q of questions) {
-          if (isKnown(q.field)) continue;
-          const remaining = getFilteredQuestions(symptomId, entry.socrates);
-          if (!remaining.some(r => r.id === q.id)) continue;
-          if (q.targetDiagnoses && q.targetDiagnoses.length > 0 && q.targetDiagnoses.includes(dd.diseaseId)) {
-            allQ.push({ q, symptomId, field: q.field, currentAnswer: entry.socrates.find(a => a.questionId === q.id)?.answer });
-          }
-        }
-      }
-      // Also check historyFeatureRegistry for this disease
-      for (const [fid, fdef] of Object.entries(HISTORY_FEATURE_REGISTRY)) {
-        if (isKnown(fid)) continue;
-        const w = Math.abs(fdef.diseaseWeights?.[dd.diseaseId] || 0);
-        if (w >= 3) {
-          allQ.push({
-            q: { id: fid, field: fid, label: fdef.label, type: 'boolean', weight: w, purpose: 'rule_in', targetDiagnoses: [dd.diseaseId] },
-            symptomId: 'registry',
-            field: fid,
-            currentAnswer: featureRegistry[fid]?.present === true ? true : featureRegistry[fid]?.present === false ? false : undefined,
-          });
-        }
-      }
-      if (allQ.length > 0) {
-        items.push({ diseaseId: dd.diseaseId, diseaseName: dd.diseaseName, probability: dd.probability, questions: allQ.slice(0, 6) });
-      }
-    }
-    return items;
-  }, [ddx, hpi, featureRegistry, knownFields, allHpiSymptomIds]);
-
-  // ── STAGE 4: Complication questions ──
-  const complicationQuestions = useMemo(() => {
-    const topDisease = ddx.probabilities[0];
-    if (!topDisease) return [];
-    const items: { q: SocratesQuestion; symptomId: string; field: string; currentAnswer: string | boolean | string[] | undefined }[] = [];
-    for (const symptomId of allHpiSymptomIds) {
-      const entry = hpi[symptomId];
-      if (!entry) continue;
-      const questions = getQuestionsForSymptom(symptomId);
-      for (const q of questions) {
-        if (isKnown(q.field)) continue;
-        const remaining = getFilteredQuestions(symptomId, entry.socrates);
-        if (!remaining.some(r => r.id === q.id)) continue;
-        if (q.purpose === 'complication') {
-          items.push({ q, symptomId, field: q.field, currentAnswer: entry.socrates.find(a => a.questionId === q.id)?.answer });
-        }
-      }
-    }
-    return items;
-  }, [ddx, hpi, knownFields, allHpiSymptomIds]);
-
-  // ── STAGE 5: Risk factors (patient-level, not yet answered) ──
-  const unansweredRiskFactors = useMemo(() => {
-    return RISK_FACTOR_CONFIG.filter(r => !isKnown(r.field));
-  }, [knownFields]);
-
-  // ── STAGE 6: Severity/function questions ──
-  const severityQuestions = useMemo(() => {
-    const items: { q: SocratesQuestion; symptomId: string; field: string; currentAnswer: string | boolean | string[] | undefined }[] = [];
-    for (const symptomId of allHpiSymptomIds) {
-      const entry = hpi[symptomId];
-      if (!entry) continue;
-      const questions = getQuestionsForSymptom(symptomId);
-      for (const q of questions) {
-        if (isKnown(q.field)) continue;
-        const remaining = getFilteredQuestions(symptomId, entry.socrates);
-        if (!remaining.some(r => r.id === q.id)) continue;
-        if (q.purpose === 'severity') {
-          items.push({ q, symptomId, field: q.field, currentAnswer: entry.socrates.find(a => a.questionId === q.id)?.answer });
-        }
-      }
-    }
-    return items;
-  }, [hpi, knownFields, allHpiSymptomIds]);
-
-  // ── Handlers ──
-  const handleAnswer = (symptomId: string, qid: string, label: string, answer: string | boolean | string[], field: string) => {
-    setSocratesAnswer(symptomId, qid, label, answer, 1, field);
-    if (field.startsWith('associated_') && (answer === true || answer === 'Yes')) {
-      const mappedId = ASSOC_MAP[field.replace('associated_', '')];
-      if (mappedId && !hpi[mappedId] && !complaints.find(c => c.symptomId === mappedId)) {
-        const symptom = allSymptoms.find(s => s.id === mappedId);
-        if (symptom) ensureHpiEntry(mappedId, symptom.label, symptomId);
-      }
-    }
-  };
-
-  const handleRiskAnswer = (field: string, value: string | boolean) => {
-    setFeature(field, value === true || value === 'Yes' || value === 'true');
-  };
-
-  const handleGlobalAnswer = (key: string, value: string) => setGlobalAnswer(key, value);
-
-  // ── Render helper ──
-  const renderQuestion = (symptomId: string, q: SocratesQuestion, currentAnswer: string | boolean | string[] | undefined) => {
-    const field = q.field || q.id.replace(`${symptomId}_`, '');
-    if (q.type === 'boolean') return <BooleanInput value={currentAnswer} onChange={v => handleAnswer(symptomId, q.id, q.label, v, field)} />;
-    if (q.type === 'select') return <SelectInput value={typeof currentAnswer === 'string' ? currentAnswer : undefined} options={q.options} onChange={v => handleAnswer(symptomId, q.id, q.label, v, field)} />;
-    if (q.type === 'multi_select') {
-      return (
-        <div className="flex flex-wrap gap-1.5">
-          {q.options?.map(opt => {
-            const selected = Array.isArray(currentAnswer) ? currentAnswer.includes(opt) : currentAnswer === opt;
-            return (
-              <button key={opt} onClick={() => handleAnswer(symptomId, q.id, q.label, opt, field)}
-                className={`px-2 py-1 text-[10px] rounded-lg border transition-colors ${selected ? 'bg-teal-500/20 border-teal-500/40 text-teal-400' : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-teal-500/30'}`}>
-                {opt}
-              </button>
-            );
-          })}
-        </div>
-      );
-    }
-    if (q.type === 'number') {
-      return (
-        <input type="number" onChange={e => handleAnswer(symptomId, q.id, q.label, String(parseInt(e.target.value) || 0), field)}
-          value={typeof currentAnswer === 'number' ? currentAnswer : typeof currentAnswer === 'string' ? currentAnswer : ''}
-          className="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-teal-500" />
-      );
-    }
+  if (phaseDone) {
     return (
-      <input type="text" onBlur={e => { if (e.target.value !== (typeof currentAnswer === 'string' ? currentAnswer : '')) handleAnswer(symptomId, q.id, q.label, e.target.value, field); }}
-        defaultValue={typeof currentAnswer === 'string' ? currentAnswer : ''}
-        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-teal-500"
-        placeholder={q.clinicalGuide || 'Type here...'} />
-    );
-  };
-
-  const sectionLabel = (label: string, sub: string, color: string) => (
-    <div className={`px-3 py-2 bg-gradient-to-r from-${color}-500/10 to-transparent border-b border-gray-700/30 flex items-center justify-between`}>
-      <div className="flex items-center gap-2">
-        <span className={`text-xs font-semibold text-${color}-400 uppercase`}>{label}</span>
-        <span className="text-[10px] text-gray-500">{sub}</span>
+      <div className="text-center py-16">
+        <div className="text-4xl mb-4">✓</div>
+        <div className="text-lg font-semibold text-gray-800 mb-2">HPI Complete</div>
       </div>
-    </div>
-  );
+    );
+  }
 
-  const hasAnyData = symptomEntries.length > 0 || diagnosticScreenQuestions.length > 0 || complicationQuestions.length > 0 || unansweredRiskFactors.length > 0 || severityQuestions.length > 0;
-
-  if (isComplete) {
+  if (showNarrative) {
     return (
-      <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-4">
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-green-400">HPI exploration completed</span>
-          <button onClick={() => useHistoryStore.getState().uncompleteSection('hpi')}
-            className="text-xs text-blue-400 hover:text-blue-300 underline">Edit</button>
+      <div className="min-h-[400px]">
+        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Symptom Story</div>
+        <div className="p-5 rounded-lg bg-blue-50 border border-blue-100 text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
+          {chiefComplaints.map(cc => {
+            const a = getAnswersForSymptom(hpi, cc.symptomId);
+            const pos = Object.entries(a).filter(([,v]) => v === true || v === 'Yes').map(([k]) => k);
+            return `• ${cc.label} (${cc.duration || ''}): ${pos.length > 0 ? pos.join(', ') : 'details recorded'}`;
+          }).join('\n')}
+        </div>
+        <div className="mt-4 flex gap-3">
+          <button onClick={handleNarrativeDone} className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">Accept & Complete HPI →</button>
+          <button onClick={() => setShowNarrative(false)} className="px-6 py-2.5 border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-50">Back</button>
         </div>
       </div>
     );
   }
-  if (complaints.length === 0) {
-    return <div className="p-6 text-center text-gray-500 text-sm">Add chief complaints first to begin HPI exploration.</div>;
-  }
 
+  // ── Main UI: Clinical rounds ──────────────────────────────────────────────
   return (
-    <div className="space-y-5">
-      <div className="flex items-center gap-2">
-        <div className="w-1 h-6 bg-teal-400 rounded-full" />
-        <h2 className="text-sm font-semibold text-white uppercase tracking-wider">HPI — Clinical Reasoning</h2>
-      </div>
-
-      {redFlags.filter(r => r.severity === 'critical' || r.severity === 'high').length > 0 && (
-        <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-          <div className="text-xs font-semibold text-red-400 mb-1 uppercase tracking-wider">Red Flags</div>
-          {redFlags.filter(r => r.severity === 'critical' || r.severity === 'high').slice(0, 4).map(r => (
-            <div key={r.id} className="text-xs text-red-300/80 py-0.5">{r.message}</div>
-          ))}
-        </div>
-      )}
-
-      {/* ── STAGE 0: Timeline ── */}
-      {timeline.length > 0 && (
-        <div className="p-3 bg-[#12193a] border border-gray-700/50 rounded-lg">
-          <div className="text-xs text-gray-500 mb-2 uppercase tracking-wider">Timeline</div>
-          <div className="space-y-1">
-            {symptomEntries.map(s => {
-              const cc = complaints.find(c => c.symptomId === s.symptomId);
-              const answered = hpi[s.symptomId]?.socrates.filter(a => {
-                const q = getQuestionsForSymptom(s.symptomId).find(v => v.id === a.questionId);
-                return q && q.purpose === 'characterize';
-              }).length || 0;
-              return (
-                <div key={s.symptomId} className="flex items-center gap-2 text-xs py-1">
-                  <span className="text-teal-400 shrink-0">●</span>
-                  <span className="text-gray-500 w-20 shrink-0">
-                    {s.daysAgo > 0 ? `Day -${s.daysAgo}` : 'Present'}
-                  </span>
-                  <span className="text-gray-300">{s.label}</span>
-                  {cc && <span className="text-gray-600">({cc.duration})</span>}
-                  {!s.isChief && <span className="text-[10px] text-amber-400/60">associated</span>}
-                  <span className="text-[10px] text-gray-600">{answered > 0 ? `${answered} characterized` : 'pending'}</span>
-                </div>
-              );
-            })}
+    <div className="min-h-[400px]">
+      {/* Patient header */}
+      <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-200">
+        <div>
+          <div className="text-sm font-semibold text-gray-900">
+            {biodata?.name || 'Patient'} · {biodata?.age || ''}y · {biodata?.sex || ''}
+          </div>
+          <div className="text-xs text-gray-500">
+            {chiefComplaints.map(c => c.label).join(', ')}
           </div>
         </div>
-      )}
+      </div>
 
-      {/* ── Symptom Inventory ── */}
-      <div className="flex flex-wrap gap-1.5">
-        {symptomEntries.map(s => {
-          const charQs = getCharacterizeQuestions(s.symptomId);
-          const done = charQs.length === 0;
+      <div className="space-y-4">
+        {complaintsWithRounds.map(cc => {
+          const pct = cc.allQ > 0 ? Math.round((cc.doneQ / cc.allQ) * 100) : 0;
           return (
-            <span key={s.symptomId} className={`text-[10px] px-2 py-0.5 rounded-full border ${s.isChief
-              ? done ? 'bg-teal-500/10 border-teal-500/30 text-teal-400' : 'bg-teal-500/5 border-teal-500/20 text-teal-400/70'
-              : done ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-gray-800 border-gray-700 text-gray-400'}`}>
-              {s.label} {done ? '✓' : '...'}
-            </span>
+            <div key={cc.id} className="border border-gray-200 rounded-lg overflow-hidden">
+              {/* Complaint header */}
+              <div className="px-4 py-2 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                <span className="text-sm font-semibold text-gray-800">{cc.label} <span className="text-xs text-gray-400 font-normal">· {cc.duration}</span></span>
+                <span className="text-xs text-gray-400">{cc.doneQ}/{cc.allQ} ({pct}%)</span>
+              </div>
+
+              {/* DDX hint — shows narrowed differential based on location */}
+              {cc.ddxHint && !cc.allAnswered && (
+                <div className="px-4 py-1.5 bg-amber-50 border-b border-amber-100 flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-semibold text-amber-700 uppercase tracking-wider">Narrowed DDX:</span>
+                  <span className="text-[10px] text-amber-600">{cc.ddxHint.region.replace(/_/g, ' ')} →</span>
+                  {cc.ddxHint.diagnoses.map(d => (
+                    <span key={d} className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">{DIAGNOSIS_NAMES[d] || d}</span>
+                  ))}
+                </div>
+              )}
+
+              <div className="px-4 py-3 space-y-3">
+                {cc.rounds.map(({ round, questions }) => {
+                  const meta = CLINICAL_ROUNDS[round];
+                  const isActive = round === cc.activeRound && !cc.allAnswered;
+                  const isComplete = questions.length === 0;
+                  const roundColor = ROUND_COLORS[round] || '#6B7280';
+
+                  // Show first unanswered round as active, others as collapsed
+                  return (
+                    <div key={round} className={`rounded-md border overflow-hidden ${isActive ? 'border-l-4 ring-1 ring-gray-100' : ''}`}
+                      style={isActive ? { borderLeftColor: roundColor } : { opacity: isComplete ? 0.6 : 1 }}>
+                      
+                      {/* Round header */}
+                      <div className="px-3 py-2 flex items-center justify-between bg-white"
+                        style={isActive ? { background: `${roundColor}08` } : {}}>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full" style={{ background: roundColor }} />
+                          <span className="text-xs font-semibold text-gray-800">
+                            {meta.label}
+                          </span>
+                          {isComplete && <span className="text-xs text-green-600">✓ Complete</span>}
+                        </div>
+                        {isActive && !isComplete && (
+                          <span className="text-xs text-gray-400">{questions.length} remaining</span>
+                        )}
+                      </div>
+
+                      {/* Round goal — shown only when active */}
+                      {isActive && !isComplete && (
+                        <div className="px-3 py-1.5 bg-gray-50 border-t border-b border-gray-100">
+                          <span className="text-xs text-gray-500 italic">{meta.goal}</span>
+                        </div>
+                      )}
+
+                      {/* Questions */}
+                      {isActive && !isComplete && (
+                        <div className="px-3 py-2 space-y-2">
+                          {questions.map(q => (
+                            <div key={q.id}>
+                              <QuestionRow
+                                symptomId={cc.symptomId}
+                                question={q}
+                                answered={cc.answered[q.id] !== undefined}
+                                currentValue={cc.answered[q.id]}
+                                onAnswer={(v) => handleAnswer(cc.symptomId, q, v)}
+                              />
+                              {q.rationale && (
+                                <div className="mt-0.5 ml-1">
+                                  <span className="text-[10px] text-gray-400 italic leading-tight">{q.rationale}</span>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {!hasAnyData && (
-        <div className="text-center text-gray-500 text-xs py-4">
-          Answer the characterizing questions below to begin diagnostic reasoning.
+      {/* Generate story button */}
+      {allDone && chiefComplaints.length > 0 && (
+        <div className="mt-6 text-center">
+          <button onClick={handleFinish}
+            className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">
+            Generate Symptom Story →
+          </button>
         </div>
       )}
-
-      {/* ── STAGE 1: Characterize Symptoms ── */}
-      {symptomEntries.length > 0 && (
-        <div className="rounded-xl border border-teal-500/15 bg-[#0b1230] overflow-hidden">
-          {sectionLabel('Stage 1: Characterize Symptoms', 'essential SOCRATES for each symptom', 'teal')}
-          <div className="divide-y divide-gray-800">
-            {symptomEntries.map(s => {
-              const entry = hpi[s.symptomId];
-              if (!entry) return null;
-              const qs = getCharacterizeQuestions(s.symptomId);
-              return (
-                <div key={s.symptomId} className="p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={`text-xs font-medium ${s.isChief ? 'text-white' : 'text-amber-300'}`}>{s.label}</span>
-                    {s.daysAgo > 0 && <span className="text-[10px] text-gray-500">Day -{s.daysAgo}</span>}
-                    {!s.isChief && <span className="text-[10px] text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">Associated</span>}
-                    {qs.length === 0 && <span className="text-[10px] text-green-400/70">Characterized ✓</span>}
-                  </div>
-                  {qs.length > 0 && (
-                    <div className="space-y-2.5">
-                      {qs.map(q => {
-                        const field = q.field || q.id.replace(`${s.symptomId}_`, '');
-                        const currentAnswer = entry.socrates.find(a => a.questionId === q.id)?.answer;
-                        return (
-                          <div key={q.id} className="space-y-1">
-                            <label className="text-xs text-gray-400">{q.label}</label>
-                            {renderQuestion(s.symptomId, q, currentAnswer)}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ── STAGE 2-3: Rule-in / Rule-out (Diagnostic Screening) ── */}
-      {diagnosticScreenQuestions.length > 0 && (
-        <div className="rounded-xl border border-purple-500/15 bg-[#0b1230] overflow-hidden">
-          {sectionLabel('Stage 2-3: Diagnostic Screening', 'rule-in & rule-out questions by diagnosis', 'purple')}
-          <div className="divide-y divide-gray-800">
-            {diagnosticScreenQuestions.map(ds => (
-              <div key={ds.diseaseId} className="p-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-medium text-purple-300">{ds.diseaseName}</span>
-                  <span className="text-[10px] text-purple-400/70 bg-purple-500/10 px-1.5 py-0.5 rounded">{Math.round(ds.probability)}%</span>
-                </div>
-                <div className="space-y-2">
-                  {ds.questions.map(({ q, symptomId, currentAnswer }) => {
-                    const field = q.field || q.id.replace(`${symptomId}_`, '');
-                    return (
-                      <div key={`${symptomId}_${q.id}`} className="flex items-center justify-between gap-2 py-1 border-b border-gray-800 last:border-0">
-                        <span className="text-xs text-gray-400 flex-1">{q.label}</span>
-                        <div className="flex gap-1 shrink-0">
-                          {['Yes', 'No'].map(opt => {
-                            const val = opt === 'Yes';
-                            const selected = currentAnswer === true || currentAnswer === 'true' || currentAnswer === 'Yes' ? opt === 'Yes' : currentAnswer === false || currentAnswer === 'false' || currentAnswer === 'No' ? opt === 'No' : false;
-                            return (
-                              <button key={opt} onClick={() => handleAnswer(symptomId, q.id, q.label, val, field)}
-                                className={`px-2.5 py-1 text-[10px] font-medium rounded border transition-colors ${selected ? 'bg-purple-500/20 border-purple-500/30 text-purple-400' : 'bg-gray-800 border-gray-700 text-gray-500 hover:border-purple-500/30'}`}>
-                                {opt}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── STAGE 4: Complications ── */}
-      {complicationQuestions.length > 0 && (
-        <div className="rounded-xl border border-red-500/15 bg-[#0b1230] overflow-hidden">
-          {sectionLabel('Stage 4: Complication Screening', `for ${ddx.probabilities[0]?.diseaseName || 'leading diagnosis'}`, 'red')}
-          <div className="p-3 space-y-2">
-            {complicationQuestions.map(({ q, symptomId, currentAnswer }) => {
-              const field = q.field || q.id.replace(`${symptomId}_`, '');
-              return (
-                <div key={`${symptomId}_${q.id}`} className="flex items-center justify-between gap-2 py-1.5 border-b border-gray-800 last:border-0">
-                  <div className="flex-1">
-                    <span className="text-xs text-gray-300">{q.label}</span>
-                    {q.clinicalGuide && <div className="text-[10px] text-gray-500 italic">{q.clinicalGuide}</div>}
-                  </div>
-                  <div className="flex gap-1 shrink-0">
-                    {['Yes', 'No'].map(opt => {
-                      const val = opt === 'Yes';
-                      const selected = currentAnswer === true || currentAnswer === 'true' || currentAnswer === 'Yes' ? opt === 'Yes' : currentAnswer === false || currentAnswer === 'false' || currentAnswer === 'No' ? opt === 'No' : false;
-                      return (
-                        <button key={opt} onClick={() => handleAnswer(symptomId, q.id, q.label, val, field)}
-                          className={`px-2.5 py-1 text-[10px] font-medium rounded border transition-colors ${selected ? 'bg-red-500/20 border-red-500/30 text-red-400' : 'bg-gray-800 border-gray-700 text-gray-500 hover:border-red-500/30'}`}>
-                          {opt}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ── STAGE 5: Risk Factors ── */}
-      {unansweredRiskFactors.length > 0 && (
-        <div className="rounded-xl border border-orange-500/15 bg-[#0b1230] overflow-hidden">
-          {sectionLabel('Stage 5: Illness-Specific Risk Factors', 'exposure & medication history for current DDX', 'orange')}
-          <div className="p-3 space-y-3">
-            {unansweredRiskFactors.map(rf => (
-              <div key={rf.field} className="space-y-1.5">
-                <label className="text-xs text-gray-300">{rf.label}</label>
-                <BooleanInput value={featureRegistry[rf.field]?.present === true ? true : featureRegistry[rf.field]?.present === false ? false : undefined} onChange={v => handleRiskAnswer(rf.field, v)} />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── STAGE 6: Severity & Function ── */}
-      {severityQuestions.length > 0 && (
-        <div className="rounded-xl border border-yellow-500/15 bg-[#0b1230] overflow-hidden">
-          {sectionLabel('Stage 6: Severity & Function', 'assessing impact and severity', 'yellow')}
-          <div className="p-3 space-y-3">
-            {severityQuestions.map(({ q, symptomId, currentAnswer }) => {
-              const field = q.field || q.id.replace(`${symptomId}_`, '');
-              return (
-                <div key={`${symptomId}_${q.id}`} className="space-y-1.5">
-                  <label className="text-xs text-gray-300">{q.label}</label>
-                  {renderQuestion(symptomId, q, currentAnswer)}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ── Overall Assessment ── */}
-      <div className="rounded-xl border border-gray-700/50 bg-[#12193a] overflow-hidden">
-        {sectionLabel('Overall Assessment', 'progression, treatment, impact', 'gray')}
-        <div className="p-3 space-y-3">
-          {GLOBAL_QUESTION_CONFIG.map(qc => {
-            const value = globalAnswers[qc.key as keyof typeof globalAnswers] || '';
-            return (
-              <div key={qc.key} className="space-y-1.5">
-                <label className="text-xs text-gray-300">{qc.label}</label>
-                {qc.type === 'select'
-                  ? <SelectInput value={typeof value === 'string' ? value : undefined} options={qc.options} onChange={v => handleGlobalAnswer(qc.key, v)} />
-                  : (
-                    <div>
-                      <input type="text" onBlur={e => { if (e.target.value !== value) handleGlobalAnswer(qc.key, e.target.value); }}
-                        defaultValue={typeof value === 'string' ? value : ''}
-                        className="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-teal-500"
-                        placeholder={qc.guide || 'Type here...'} />
-                    </div>
-                  )
-                }
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="flex justify-between items-center pt-2">
-        <span className="text-[10px] text-gray-500">
-          {symptomEntries.length} symptoms · {diagnosticScreenQuestions.reduce((s, d) => s + d.questions.length, 0)} diagnostic qs · {complicationQuestions.length} complication qs · {unansweredRiskFactors.length} risk qs · {severityQuestions.length} severity qs
-        </span>
-        <button onClick={() => completeSection('hpi')}
-          className="px-5 py-2 bg-teal-600 hover:bg-teal-500 text-white text-sm font-medium rounded-lg transition-colors">
-          Complete HPI
-        </button>
-      </div>
     </div>
   );
+}
+
+// ── Single question row ────────────────────────────────────────────────────
+function QuestionRow({ symptomId, question, answered, currentValue, onAnswer }: {
+  symptomId: string;
+  question: SocratesQuestion;
+  answered: boolean;
+  currentValue: string | boolean | string[] | undefined;
+  onAnswer: (value: string | boolean | string[]) => void;
+}) {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  if (answered) {
+    return (
+      <div className="flex items-center justify-between py-1.5 px-3 bg-gray-50 rounded-md">
+        <span className="text-xs text-gray-600">{question.label}</span>
+        <span className="text-xs font-medium text-blue-600">{formatAnswer(currentValue)}</span>
+      </div>
+    );
+  }
+
+  if (question.type === 'boolean') {
+    return (
+      <div className="flex items-center justify-between py-1.5">
+        <span className="text-xs text-gray-700 flex-1">{question.label}</span>
+        <div className="flex gap-1.5">
+          <button
+            type="button"
+            onClick={() => onAnswer(true)}
+            className="px-3 py-1 text-xs rounded-md border border-gray-200 hover:border-blue-400 hover:text-blue-600 text-gray-600 transition-colors"
+          >Yes</button>
+          <button
+            type="button"
+            onClick={() => onAnswer(false)}
+            className="px-3 py-1 text-xs rounded-md border border-gray-200 hover:border-gray-300 text-gray-600 transition-colors"
+          >No</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (question.type === 'select' && question.options) {
+    return (
+      <div className="py-1.5">
+        <div className="text-xs text-gray-700 mb-1.5">{question.label}</div>
+        <div className="flex flex-wrap gap-1">
+          {question.options.map(opt => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => onAnswer(opt)}
+              className="px-2.5 py-1 text-xs rounded-full border border-gray-200 hover:border-blue-400 hover:text-blue-600 text-gray-600 transition-colors"
+            >{opt}</button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (question.type === 'multi_select' && question.options) {
+    return (
+      <div className="py-1.5">
+        <div className="text-xs text-gray-700 mb-1.5">{question.label}</div>
+        <div className="flex flex-wrap gap-1 mb-2">
+          {question.options.map(opt => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => {
+                setSelected(prev =>
+                  prev.includes(opt) ? prev.filter(x => x !== opt) : [...prev, opt]
+                );
+              }}
+              className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
+                selected.includes(opt)
+                  ? 'border-blue-400 bg-blue-50 text-blue-600'
+                  : 'border-gray-200 text-gray-600 hover:border-blue-400 hover:text-blue-600'
+              }`}
+            >{opt}</button>
+          ))}
+        </div>
+        {selected.length > 0 && (
+          <button
+            type="button"
+            onClick={() => { onAnswer(selected); setSelected([]); }}
+            className="text-xs text-blue-600 hover:underline"
+          >Confirm</button>
+        )}
+      </div>
+    );
+  }
+
+  if (question.type === 'number') {
+    return (
+      <div className="py-1.5">
+        <div className="text-xs text-gray-700 mb-1.5">{question.label}</div>
+        <input
+          type="number"
+          min={0}
+          onChange={e => onAnswer(e.target.value)}
+          className="w-24 px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:border-blue-400"
+        />
+      </div>
+    );
+  }
+
+  if (question.type === 'text') {
+    return (
+      <div className="py-1.5">
+        <div className="text-xs text-gray-700 mb-1.5">{question.label}</div>
+        <input
+          type="text"
+          onChange={e => onAnswer(e.target.value)}
+          className="w-full px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:border-blue-400"
+          placeholder={question.clinicalGuide || ''}
+        />
+      </div>
+    );
+  }
+
+  return null;
 }

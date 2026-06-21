@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "infectious_colitis_gi_bleed",
+    "name": "Infectious Colitis (GI Bleeding)",
+    "system": "infectious_disease",
+    "agePeak_months": [12, 720],
+    "note": "Bacterial enterocolitis presenting with bloody diarrhea/hematochezia. Key pathogens: Shigella, Salmonella, Campylobacter jejuni, E. coli O157:H7 (EHEC), Yersinia, C. difficile, Entamoeba histolytica. EHEC carries risk of HUS. C. diff can progress to toxic megacolon.",
+    "prevalenceWeight": 0.5,
+    "syndromeTags": ["bloody_diarrhea", "infectious_colitis", "lower_gi_bleeding", "hematochezia", "febrile_diarrhea"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "toxic_megacolon", "weight": 9 },
+        { "sign": "hemolytic_uremic_syndrome_signs", "weight": 10 },
+        { "sign": "peritonitis", "weight": 10 },
+        { "sign": "severe_dehydration", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "noDangerSigns": true, "mild_to_moderate_symptoms": true },
+      "severityLabel": "Toxic megacolon/sepsis/HUS -> EMERGENCY; mild colitis -> supportive care"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "rectal_bleeding", "weight": 5 },
+      { "symptomId": "abdominal_cramps", "weight": 4 },
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "tenesmus", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "recent_food_exposure", "weight": 3 },
+      { "symptomId": "recent_antibiotic_use", "weight": 3 },
+      { "symptomId": "travel_history", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "abdominal_tenderness_diffuse", "baseWeight": 3 },
+      { "signId": "hyperactive_bowel_sounds", "baseWeight": 3 },
+      { "signId": "tenesmus", "baseWeight": 2 },
+      { "signId": "signs_of_dehydration", "baseWeight": 3 },
+      { "signId": "blood_on_rectal_exam", "baseWeight": 4 }
+    ],
+
+    "riskFactors": [
+      { "id": "foodborne_exposure_undercooked_meat", "multiplier": 3.0 },
+      { "id": "recent_antibiotics", "multiplier": 3.0 },
+      { "id": "healthcare_exposure", "multiplier": 2.0 },
+      { "id": "travel_to_endemic_area", "multiplier": 2.5 },
+      { "id": "daycare_contact", "multiplier": 2.0 },
+      { "id": "immunosuppression", "multiplier": 2.0 },
+      { "id": "hiv", "multiplier": 2.5 }
+    ],
+
+    "subtypes": [
+      { "id": "shigellosis", "name": "Shigellosis (Shigella)", "prevalenceModifier": 0.15, "notes": "High fever, tenesmus, small-volume bloody stools, fecal leukocytes" },
+      { "id": "salmonella_enterocolitis", "name": "Salmonella Enterocolitis", "prevalenceModifier": 0.15, "notes": "Nontyphoidal, moderate fever, bloody diarrhea" },
+      { "id": "campylobacter_enterocolitis", "name": "Campylobacter Enterocolitis", "prevalenceModifier": 0.2, "notes": "Frequently precedes Guillain-Barre, severe abdominal pain" },
+      { "id": "ehec_o157_h7", "name": "EHEC O157:H7", "prevalenceModifier": 0.1, "notes": "Hemorrhagic colitis, risk of HUS, NO antibiotics" },
+      { "id": "c_difficile_colitis", "name": "C. Difficile Colitis", "prevalenceModifier": 0.25, "notes": "Post-antibiotics, pseudomembranes on colonoscopy" },
+      { "id": "amoebic_colitis", "name": "Amoebic Colitis (E. histolytica)", "prevalenceModifier": 0.05, "notes": "Flask-shaped ulcers, liver abscess risk" }
+    ],
+
+    "mimics": [
+      { "diseaseId": "ulcerative_colitis", "discriminators": ["chronic_symptoms", "extra_intestinal_manifestations"], "ruleOutTests": ["colonoscopy_biopsy"] },
+      { "diseaseId": "ischemic_colitis", "discriminators": ["elderly", "vascular_risk_factors", "watershed_distribution"], "ruleOutTests": ["ct_abdomen"] },
+      { "diseaseId": "diverticulitis", "discriminators": ["focal_llq_pain", "no_diarrhea_early"], "ruleOutTests": ["ct_abdomen"] }
+    ],
+
+    "investigations": {
+      "firstLine": [
+        { "test": "Stool culture (Shigella, Salmonella, Campylobacter, Yersinia)", "weight": 10 },
+        { "test": "Stool C. difficile toxin + PCR", "weight": 9 },
+        { "test": "Stool O&P (amoebiasis)", "weight": 7 },
+        { "test": "CBC (leukocytosis, HUS: anemia + thrombocytopenia)", "weight": 8 },
+        { "test": "CRP / ESR", "weight": 7 },
+        { "test": "Electrolytes, creatinine (dehydration, HUS monitoring)", "weight": 8 }
+      ],
+      "secondLine": [
+        { "test": "CT abdomen with IV contrast (colonic wall thickening, pancolitis)", "weight": 7 },
+        { "test": "Flexible sigmoidoscopy with biopsy (C. diff pseudomembranes, CMV if immunocompromised)", "weight": 6 },
+        { "test": "Blood cultures (if febrile)", "weight": 5 },
+        { "test": "Free light chains / IgA (HUS workup if atypical)", "weight": 3 }
+      ],
+      "goldStandard": "Stool culture plus molecular testing (PCR) for pathogen identification"
+    },
+
+    "management": {
+      "emergency": [
+        "Aggressive IV fluids and electrolyte repletion",
+        "IV antibiotics if severe/immunocompromised (ceftriaxone + metronidazole for severe)",
+        "Oral vancomycin (125mg QID) or fidaxomicin for C. diff",
+        "Surgical consult if toxic megacolon/perforation"
+      ],
+      "inpatient": [
+        "Supportive care - IV fluids, electrolyte monitoring",
+        "Antibiotics for Shigella (azithromycin), Campylobacter (azithromycin), Salmonella (if severe/immunocompromised)",
+        "AVOID antimotility agents (loperamide) - increase toxin retention",
+        "AVOID antibiotics for EHEC - increase HUS risk",
+        "Metronidazole + paromomycin for amoebiasis",
+        "Contact isolation"
+      ],
+      "outpatient": [
+        "Oral rehydration for mild cases",
+        "Follow-up stool culture to document clearance (Salmonella/Shigella)",
+        "Food safety education",
+        "Probiotics (limited evidence)"
+      ],
+      "refractory": [],
+      "preventive": [
+        "Hand hygiene and food safety",
+        "Vaccination (typhoid, cholera where indicated)",
+        "Antibiotic stewardship to prevent C. diff"
+      ]
+    },
+
+    "pathophysiology": "Pathogen invades colonic mucosa (Shigella, Salmonella, Campylobacter, E. coli, amoeba) → inflammatory response → mucosal edema, ulceration, microabscesses → friable mucosa bleeds → hematochezia. EHEC produces Shiga toxin → endothelial damage → hemorrhagic colitis + risk of HUS. C. diff toxins A/B cause tight junction disruption, neutrophil infiltration, and pseudomembrane formation.",
+
+    "complications": [
+      { "complication": "Hemolytic uremic syndrome (EHEC)", "severity": "high" },
+      { "complication": "Toxic megacolon (C. diff, Shigella)", "severity": "high" },
+      { "complication": "Colonic perforation", "severity": "high" },
+      { "complication": "Guillain-Barre syndrome (Campylobacter)", "severity": "high" },
+      { "complication": "Reactive arthritis (Shigella, Salmonella, Yersinia)", "severity": "low" },
+      { "complication": "Amoebic liver abscess (E. histolytica)", "severity": "moderate" }
+    ],
+
+    "mustNotMiss": [
+      "EHEC: NO antibiotics (increase HUS risk), monitor for HUS (thrombocytopenia, microangiopathic hemolytic anemia, AKI)",
+      "C. diff: NO antimotility agents, contact isolation, oral vancomycin is superior to metronidazole for severe",
+      "Toxic megacolon: abdominal XR for colonic diameter >6cm, immediate surgical consult",
+      "First episode of colitis may be IBD, not infectious - colonoscopy with biopsy if recurrent/atypical"
+    ],
+
+    "emergencyPriority": "medium",
+    "diagnosticClues": [
+      { "clue": "Acute bloody diarrhea + fever + recent food/travel/antibiotic exposure", "weight": 10 },
+      { "clue": "Positive stool culture/PCR for specific pathogen", "weight": 10 },
+      { "clue": "Pseudomembranes on endoscopy (C. diff)", "weight": 8 },
+      { "clue": "Flask-shaped ulcers on colonoscopy (amoebiasis)", "weight": 7 }
+    ],
+    "exclusionClues": [
+      { "clue": "Chronic symptoms with growth failure, extra-intestinal manifestations (IBD)", "weight": 7 },
+      { "clue": "Negative stool cultures and C. diff toxin", "weight": 8 },
+      { "clue": "Watershed distribution of colitis on CT (ischemic)", "weight": 7 }
+    ]
+  }
+}

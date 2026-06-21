@@ -1,0 +1,141 @@
+{
+  "disease": {
+    "id": "gallbladder_cancer",
+    "name": "Gallbladder Cancer",
+    "system": "surgical",
+    "department": "surgery",
+    "unit": "hepatobiliary",
+    "agePeak_months": [600, 960],
+    "note": "Relatively rare but highly aggressive malignancy of the gallbladder. Strongly associated with gallstones (70-90% of cases). Often diagnosed incidentally on cholecystectomy histology. Advanced presentation with jaundice (from biliary invasion), right upper quadrant mass, and weight loss. Poor prognosis; 5-year survival <5% for advanced disease. Early stage (T1a) can be cured by cholecystectomy alone.",
+    "prevalenceWeight": 0.03,
+    "syndromeTags": ["gallbladder", "malignancy", "jaundice", "biliary_obstruction", "gallstone_complication"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "obstructive_jaundice_with_cholangitis", "weight": 8 },
+        { "sign": "portal_vein_invasion", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "t_stage_3_4": true,
+        "metastatic": true,
+        "jaundice_at_presentation": true
+      },
+      "nonSevereCriteria": {
+        "incidental_t1a": true,
+        "no_jaundice": true,
+        "confined_to_gallbladder": true
+      },
+      "severityLabel": "Jaundice at presentation = advanced (T3-4) -> PALLIATIVE; Incidental T1a -> CURATIVE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "right_upper_quadrant_pain", "weight": 4 },
+      { "symptomId": "jaundice", "weight": 4, "note": "Late sign; indicates biliary invasion or metastatic nodes" },
+      { "symptomId": "weight_loss_unintentional", "weight": 4 },
+      { "symptomId": "appetite_changes", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "fever", "weight": 2, "note": "If cholangitis" },
+      { "symptomId": "dark_urine", "weight": 2 },
+      { "symptomId": "pale_clay_colored_stools", "weight": 2 },
+      { "symptomId": "history_of_gallstones", "weight": 4, "note": "Present in 70-90% of cases" },
+      { "symptomId": "chronic_cholecystitis_recurrent", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4 },
+      { "signId": "right_upper_quadrant_mass", "baseWeight": 4, "note": "Palpable gallbladder mass" },
+      { "signId": "hepatomegaly", "baseWeight": 3 },
+      { "signId": "courvoisier_gallbladder", "baseWeight": 3, "note": "Non-tender palpable gallbladder" },
+      { "signId": "ascites", "baseWeight": 2, "note": "Peritoneal disease" },
+      { "signId": "cachexia_muscle_wasting", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "chronic_gallstone_disease", "multiplier": 5.0 },
+      { "id": "porcelain_gallbladder", "multiplier": 10.0 },
+      { "id": "gallbladder_polyp_greater_than_10_mm", "multiplier": 5.0 },
+      { "id": "female_gender", "multiplier": 2.5 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "advanced_age_over_65", "multiplier": 3.0 },
+      { "id": "chronic_typhoid_carrier_salmonella_typhi", "multiplier": 3.0 },
+      { "id": "primary_sclerosing_cholangitis", "multiplier": 3.0 },
+      { "id": "indian_or_native_american_ancestry", "multiplier": 2.0 },
+      { "id": "choledochal_cyst", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cholecystitis_acute_or_chronic",
+        "discriminators": ["acute_pain_fever", "murphy_sign", "no_weight_loss", "no_jaundice_in_uncomplicated"]
+      },
+      {
+        "diseaseId": "cholangiocarcinoma",
+        "discriminators": ["no_gallbladder_mass", "bile_duct_stricture_primary", "intraductal_growth"]
+      },
+      {
+        "diseaseId": "hepatocellular_carcinoma",
+        "discriminators": ["cirrhosis_background", "afp_elevated", "arterial_hyperenhancement_on_ct"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "LFTs", "priority": "immediate", "yield": 0.7, "indication": "obstructive pattern if biliary obstruction" },
+        { "name": "CA 19-9 and CEA", "priority": "high", "yield": 0.6, "indication": "may be elevated" },
+        { "name": "FBC", "priority": "medium", "yield": 0.3, "indication": "anemia of chronic disease" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "immediate", "yield": 0.8, "indication": "gallbladder mass, wall thickening, gallstones, biliary dilation, liver invasion" },
+        { "name": "CT abdomen triphasic", "priority": "high", "yield": 0.9, "indication": "tumor staging: T stage, vascular invasion, lymph nodes, metastases" },
+        { "name": "MRI/MRCP", "priority": "high", "yield": 0.9, "indication": "better soft tissue characterization; biliary involvement assessment" },
+        { "name": "EUS with FNA", "priority": "selected", "yield": 0.85, "indication": "tissue diagnosis and regional node staging" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines: Hepatobiliary Cancers; ESMO Guidelines",
+      "pathways": [
+        {
+          "severity": "incidental_t1a",
+          "criteria": "Incidentally found on cholecystectomy; confined to mucosa (T1a)",
+          "treatment": "Simple cholecystectomy alone is sufficient (5-year survival >95%). No further surgery or adjuvant therapy needed."
+        },
+        {
+          "severity": "t1b_or_higher_resectable",
+          "criteria": "T1b (invades muscularis) or T2-3, N0-1, M0, no portal vein involvement",
+          "treatment": "Radical cholecystectomy: extended cholecystectomy + liver resection (segment IVb+V) + porta hepatis lymphadenectomy. Adjuvant capecitabine or gemcitabine-based chemo."
+        },
+        {
+          "severity": "advanced_unresectable_or_metastatic",
+          "criteria": "T4 (portal vein/hepatic artery invasion) or M1 (distant metastases)",
+          "treatment": "Palliative: biliary drainage if jaundiced (ERCP + metal stent or PTBD). Systemic therapy: gemcitabine + cisplatin (ABC-02). Palliative RT for pain. Pain management, nutritional support. Prognosis: median survival 6-12 months."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_inflammation_from_gallstones",
+      "dysplasia_carcinoma_sequence",
+      "gallbladder_epithelial_malignant_transformation",
+      "direct_liver_invasion_common",
+      "lymphatic_spread_to_porta_hepatis_nodes",
+      "bile_duct_invasion_causing_jaundice",
+      "peritoneal_and_distant_metastasis"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "obstructive_jaundice_from_biliary_invasion",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["jaundice", "dilated_bile_ducts", "gallbladder_mass"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["gallbladder_mass_on_imaging", "wall_thickening_irregular", "gallstones", "weight_loss", "jaundice_as_late_sign"]
+  }
+}

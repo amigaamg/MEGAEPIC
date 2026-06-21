@@ -1,0 +1,174 @@
+{
+  "disease": {
+    "id": "hereditary_spherocytosis",
+    "name": "Hereditary Spherocytosis",
+    "system": "hematology",
+    "agePeak_months": [0, 480],
+    "note": "Common inherited hemolytic anemia due to defects in RBC membrane proteins (spectrin, ankyrin, band 3, protein 4.2). Autosomal dominant in 75%, autosomal recessive in 25%. Variable severity: asymptomatic to severe transfusion-dependent. Presents with anemia, jaundice, splenomegaly, and gallstones. Diagnosis confirmed by eosin-5-maleimide (EMA) binding test.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["anemia", "hemolysis", "jaundice", "spherocytosis", "genetic"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemolytic_crisis_with_rapid_hb_drop", "weight": 9 },
+        { "sign": "aplastic_crisis_parvovirus_b19", "weight": 9 },
+        { "sign": "severe_neonatal_hyperbilirubinemia", "weight": 8 },
+        { "sign": "acute_splenic_sequestration", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "hb_less_than_7": true,
+        "severe_transfusion_dependent": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "mild_hemolysis": true,
+        "hb_above_10": true,
+        "compensated_hemolysis": true
+      },
+      "severityLabel": "Severe (Hb <7, transfusion-dependent) -> URGENT; Mild-moderate -> OUTPATIENT; Aplastic crisis -> EMERGENCY"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 4, "note": "Often intermittent; triggered by infection" },
+      { "symptomId": "fatigue", "weight": 3 },
+      { "symptomId": "pallor", "weight": 3 },
+      { "symptomId": "splenic_discomfort_or_left_upper_quadrant_pain", "weight": 2 },
+      { "symptomId": "dark_urine", "weight": 2 },
+      { "symptomId": "gallstone_symptoms", "weight": 2, "note": "Biliary colic from pigmented gallstones; common in older children and adults" },
+      { "symptomId": "neonatal_jaundice_phototherapy", "weight": 4, "note": "50% of affected neonates require phototherapy" },
+      { "symptomId": "family_history_of_anemia_jaundice_or_splenectomy", "weight": 5, "note": "Autosomal dominant in 75%" },
+      { "symptomId": "aplastic_crisis_history", "weight": 3, "note": "Parvovirus B19 triggered; severe anemia with reticulocytopenia" },
+      { "symptomId": "gallstones_at_young_age", "weight": 3, "note": "Pigmented gallstones common even in children" },
+      { "symptomId": "history_suggestive_of_multiple_family_members", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 4, "doubleWeight": true, "note": "Very common; may be massive in severe cases" },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "tachycardia", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "family_history_first_degree_relative", "multiplier": 5.0 },
+      { "id": "autosomal_dominant_inheritance", "multiplier": 4.0 },
+      { "id": "northern_european_ancestry", "multiplier": 2.0 },
+      { "id": "ankyrin_ank1_mutation", "multiplier": 3.0 },
+      { "id": "spectrin_sptb_or_spta1_mutation", "multiplier": 3.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "autoimmune_hemolytic_anemia",
+        "discriminators": ["positive_direct_coombs_test", "acute_onset_later_in_life", "no_family_history", "no_chronic_hemolysis_from_birth"]
+      },
+      {
+        "diseaseId": "g6pd_deficiency",
+        "discriminators": ["x_linked_male_gender", "trigger_specific_drug_fava", "bite_cells_instead_of_spherocytes", "g6pd_assay_low"]
+      },
+      {
+        "diseaseId": "sickle_cell_disease",
+        "discriminators": ["sickle_cells_on_film", "hb_s_on_hplc", "ethnic_predominance", "pain_crisis_as_feature"]
+      },
+      {
+        "diseaseId": "pyruvate_kinase_deficiency",
+        "discriminators": ["autosomal_recessive", "prickle_cells_echinocytes_on_film", "normal_ema_binding", "low_pk_activity"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "FBC with reticulocyte count", "priority": "immediate", "yield": 0.9, "indication": "anemia (variable severity); elevated MCV (reticulocytosis); reticulocyte count elevated (unless aplastic crisis)" },
+        { "name": "Peripheral blood film", "priority": "immediate", "yield": 0.9, "indication": "spherocytes (small, dense RBCs without central pallor); hallmark finding; also polychromasia" },
+        { "name": "Eosin-5-maleimide (EMA) binding test by flow cytometry", "priority": "high", "yield": 0.95, "indication": "gold standard diagnostic test; reduced fluorescence indicates reduced band 3 protein" },
+        { "name": "Osmotic fragility test (fresh and incubated)", "priority": "medium", "yield": 0.8, "indication": "increased osmotic fragility (classic but less sensitive than EMA; false negative in 10-20%)" },
+        { "name": "Direct Coombs test (DAT)", "priority": "high", "yield": 0.5, "indication": "negative (to rule out autoimmune hemolytic anemia)" },
+        { "name": "Bilirubin (total and indirect)", "priority": "high", "yield": 0.8, "indication": "elevated unconjugated bilirubin" },
+        { "name": "LDH", "priority": "high", "yield": 0.7, "indication": "elevated in hemolysis" },
+        { "name": "Haptoglobin", "priority": "high", "yield": 0.8, "indication": "low/absent" },
+        { "name": "Serum folate (or RBC folate)", "priority": "medium", "yield": 0.4, "indication": "may be low if chronic hemolysis without supplementation" },
+        { "name": "Gallbladder ultrasound", "priority": "high", "yield": 0.6, "indication": "detect pigmented gallstones (present in 40-80% by adulthood)" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.7, "indication": "splenomegaly; gallstones; liver assessment" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "BSH Guidelines for Hereditary Spherocytosis; AHS Guidelines for Hemolytic Anemias",
+      "pathways": [
+        {
+          "severity": "mild_to_moderate",
+          "criteria": "Hb 10-12, mild jaundice, compensated hemolysis, no splenomegaly symptoms",
+          "treatment": "No specific treatment needed. Folic acid 5mg PO daily (or 1mg in children) to prevent folate deficiency from increased RBC turnover. Monitor Hb and reticulocytes annually. Avoid hemolytic triggers (infections). Gallbladder surveillance (US q2-3 years). Patient education: family screening. Parvovirus B19 precautions (avoid contact with slapped cheek syndrome). Annual influenza and pneumococcal vaccines."
+        },
+        {
+          "severity": "severe_transfusion_dependent_or_problematic_splenomegaly",
+          "criteria": "Hb <8, significant symptoms, growth failure in children, or splenomegaly causing discomfort/sequestration",
+          "treatment": "Splenectomy is definitive treatment for severe HS. Indications: transfusion-dependent, significant symptoms, growth delay, severe splenomegaly with pain/sequestration. Timing: ideally after age 5-6 years to minimize post-splenectomy infection risk. Pre-splenectomy: pneumococcal, meningococcal, Hib, and influenza vaccines at least 2 weeks before. Post-splenectomy: penicillin V prophylaxis (250mg BID for children, 500mg BID for adults) lifelong or at least 5 years; educate about fever/sick day management; malaria prophylaxis if traveling. After splenectomy: anemia and jaundice resolve; gallstones may still develop. Partial splenectomy may be considered to preserve immune function."
+        },
+        {
+          "severity": "aplastic_crisis",
+          "criteria": "Parvovirus B19 infection: rapid Hb drop, reticulocytopenia (<1%), fever, ± rash",
+          "treatment": "Hospital admission. Blood transfusion support as needed (Hb typically drops to 4-6). Supportive care. Most recover spontaneously within 7-10 days. Isolation to prevent spread to other HS family members (risk of crisis in multiple household members)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "mutation_in_rbc_membrane_protein_spectrin_ankyrin_band_3_or_protein_4_2",
+      "defective_vertical_linkage_between_membrane_skeleton_and_lipid_bilayer",
+      "loss_of_membrane_surface_area_and_lipid_vesiculation",
+      "formation_of_small_dense_spherical_red_cells_spherocytes",
+      "reduced_deformability_of_spherocytes",
+      "splenic_entrapment_in_red_pulp_cords",
+      "macrophage_phagocytosis_of_spherocytes",
+      "extravascular_hemolysis_predominant",
+      "compensatory_bone_marrow_reticulocytosis",
+      "splenomegaly_from_splenic_work_hypertrophy",
+      "unconjugated_hyperbilirubinemia_and_jaundice",
+      "increased_bilirubin_excretion_and_pigmented_gallstones"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "pigmented_gallstones_cholelithiasis",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["chronic_hemolysis", "elevated_bilirubin", "right_upper_quadrant_pain", "gallstones_on_ultrasound"]
+      },
+      {
+        "diseaseId": "aplastic_crisis_parvovirus_b19",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["rapid_hb_drop", "reticulocytopenia", "fever", "exposure_to_parvovirus"]
+      },
+      {
+        "diseaseId": "hemolytic_crisis",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["infection_trigger", "increased_jaundice", "worsening_anemia", "elevated_ldh"]
+      },
+      {
+        "diseaseId": "megaloblastic_crisis_folate_deficiency",
+        "probability": 0.02,
+        "severityBoost": 0.3,
+        "clues": ["no_folate_supplementation", "macrocytosis", "hypersegmented_neutrophils", "low_folate_levels"]
+      },
+      {
+        "diseaseId": "post_splenectomy_sepsis_overwhelming",
+        "probability": 0.01,
+        "severityBoost": 0.8,
+        "clues": ["splenectomy_history", "fever_rigors", "rapid_deterioration", "encapsulated_organism"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium (high if aplastic crisis)",
+    "diagnosticClues": ["spherocytes_on_blood_film", "family_history_autosomal_dominant", "splenomegaly", "neonatal_jaundice", "gallstones_at_young_age", "increased_osmotic_fragility"],
+    "exclusionClues": ["spherocytes_absent", "negative_family_history", "normal_ema_binding", "positive_direct_coombs"]
+  }
+}

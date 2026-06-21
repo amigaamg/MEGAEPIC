@@ -1,0 +1,151 @@
+{
+  "disease": {
+    "id": "ischemic_hepatitis",
+    "name": "Ischemic Hepatitis (Shock Liver)",
+    "system": "hepatology",
+    "agePeak_months": [480, 960],
+    "note": "Acute hepatocyte injury due to reduced hepatic perfusion, typically from systemic hypotension (cardiogenic, hemorrhagic, or septic shock). Characterized by dramatic, rapid elevation of transaminases (often >10,000 IU/L) with rapid normalization upon hemodynamic restoration. Usually subclinical; jaundice is mild and transient. Prognosis determined by underlying cause, not liver injury itself.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["liver", "acute_hepatitis", "shock", "hypoperfusion", "multiorgan_dysfunction"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "ongoing_hypotension_shock", "weight": 10 },
+        { "sign": "acute_liver_failure_inr_greater_than_2_and_encephalopathy", "weight": 9 },
+        { "sign": "multiorgan_dysfunction", "weight": 9 },
+        { "sign": "hepatic_encephalopathy", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "ast_alt_greater_than_5000": true,
+        "inr_greater_than_1_5": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "rapid_improvement_of_transaminases": true,
+        "hemodynamic_stability_restored": true
+      },
+      "severityLabel": "Shock unresolved -> ICU; Liver injury resolving -> MONITOR; Pre-existing liver disease + shock -> HIGH risk of decompensation"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hypotension_or_cardiac_event", "weight": 5, "note": "Any hemodynamic compromise: cardiac arrest, MI, arrhythmia, hemorrhage, sepsis" },
+      { "symptomId": "jaundice", "weight": 2, "note": "Mild; appears 24-72h after insult" },
+      { "symptomId": "right_upper_quadrant_discomfort", "weight": 1 },
+      { "symptomId": "confusion_altered_behavior", "weight": 2, "note": "Encephalopathy from underlying shock or liver failure" },
+      { "symptomId": "oliguria", "weight": 2, "note": "Prerenal AKI or hepatorenal" },
+      { "symptomId": "dyspnea", "weight": 2, "note": "Cardiogenic or septic shock" },
+      { "symptomId": "chest_pain_or_palpitations", "weight": 2, "note": "If cardiogenic cause" },
+      { "symptomId": "history_of_heart_failure", "weight": 3, "note": "Most common predisposing condition" },
+      { "symptomId": "history_of_sepsis", "weight": 3 },
+      { "symptomId": "history_of_hemorrhage", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 2, "note": "Mild" },
+      { "signId": "hypotension", "baseWeight": 5 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "signs_of_congestive_heart_failure", "baseWeight": 3, "note": "JVD, peripheral edema, crackles if cardiogenic" },
+      { "signId": "hepatomegaly_tender", "baseWeight": 2 },
+      { "signId": "signs_of_sepsis", "baseWeight": 3, "note": "Fever, vasodilation if septic" },
+      { "signId": "signs_of_hypoperfusion", "baseWeight": 3, "note": "Cool extremities, delayed capillary refill" },
+      { "signId": "asterixis", "baseWeight": 2, "note": "Encephalopathy" },
+      { "signId": "ascites", "baseWeight": 1, "note": "If severe or chronic liver disease background" },
+      { "signId": "signs_of_bleeding", "baseWeight": 2, "note": "If coagulopathy" }
+    ],
+
+    "riskFactors": [
+      { "id": "acute_cardiogenic_shock_mi_arrhythmia", "multiplier": 5.0 },
+      { "id": "septic_shock", "multiplier": 4.0 },
+      { "id": "hemorrhagic_shock_trauma_gi_bleed", "multiplier": 4.0 },
+      { "id": "pre_existing_chronic_liver_disease_cirrhosis", "multiplier": 3.0 },
+      { "id": "congestive_heart_failure_low_output_state", "multiplier": 3.0 },
+      { "id": "cardiac_surgery_with_cardiopulmonary_bypass", "multiplier": 2.5 },
+      { "id": "heat_stroke", "multiplier": 2.0 },
+      { "id": "trauma_major", "multiplier": 2.0 },
+      { "id": "acute_respiratory_failure_with_hypoxia", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acetaminophen_overdose_drug_induced_liver_injury",
+        "discriminators": ["drug_history", "no_hypotension_episode", "temporal_relation_to_drug", "eosinophilia_if_hypersensitivity"]
+      },
+      {
+        "diseaseId": "acute_viral_hepatitis",
+        "discriminators": ["positive_viral_serology", "no_hypotension", "slower_evolution", "more_jaundice_prominent"]
+      },
+      {
+        "diseaseId": "budd_chiari_syndrome",
+        "discriminators": ["hepatic_vein_thrombosis_on_doppler", "ascites", "tender_hepatomegaly", "no_hypotension"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "AST and ALT", "priority": "immediate", "yield": 0.99, "indication": "dramatic elevation (often >10,000 IU/L) within 24h of insult; AST > ALT; rapid decline (50% drop in 72h) if hemodynamics restored" },
+        { "name": "LDH", "priority": "high", "yield": 0.9, "indication": "dramatically elevated; correlates with AST; often >10,000" },
+        { "name": "Total and direct bilirubin", "priority": "high", "yield": 0.6, "indication": "mild elevation (usually <5 mg/dL); appears after AST peak" },
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.8, "indication": "prolonged (synthetic dysfunction); may worsen before improving" },
+        { "name": "Serum creatinine and electrolytes", "priority": "high", "yield": 0.6, "indication": "AKI commonly associated from same underlying shock" },
+        { "name": "Arterial blood gas", "priority": "high", "yield": 0.5, "indication": "lactic acidosis from hypoperfusion" },
+        { "name": "Troponin, ECG, echocardiogram", "priority": "high", "yield": 0.5, "indication": "if cardiogenic cause suspected" },
+        { "name": "Blood cultures", "priority": "high", "yield": 0.3, "indication": "if sepsis suspected" },
+        { "name": "Viral hepatitis serology", "priority": "medium", "yield": 0.2, "indication": "rule out viral cause if pattern atypical" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound with Doppler", "priority": "high", "yield": 0.5, "indication": "rule out biliary obstruction; assess hepatic vasculature; evaluate for pre-existing liver disease" },
+        { "name": "Echocardiogram", "priority": "high", "yield": 0.6, "indication": "if cardiogenic shock suspected; assess LV function" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Guidelines: Acute Liver Failure; Critical Care Hepatology",
+      "pathways": [
+        {
+          "severity": "all_cases",
+          "criteria": "Ischemic hepatitis from any cause of hemodynamic compromise",
+          "treatment": "TREAT THE UNDERLYING CAUSE — this is the most important intervention. Restore hemodynamic stability: fluids, vasopressors, inotropes as indicated. Treat the underlying shock state (cardiogenic, septic, hemorrhagic). Liver-specific treatment is generally not needed. Monitor AST/ALT, INR, bilirubin daily. The transaminases will fall rapidly once perfusion is restored (50% reduction within 48-72h). Prognosis is determined by the underlying condition, not the transaminase elevation."
+        },
+        {
+          "severity": "severe_with_acute_liver_failure",
+          "criteria": "INR >1.5 + encephalopathy, or decompensation of pre-existing cirrhosis",
+          "treatment": "ICU management. NAC IV may have benefit in severe cases (extrapolated from DILI, limited evidence in ischemic hepatitis). Monitor for hepatic encephalopathy (lactulose if indicated). Correct coagulopathy only if actively bleeding. Avoid hepatotoxic drugs. Renal replacement therapy if AKI. Transplant evaluation rarely indicated (most recover if underlying shock resolves; prognosis primarily determined by underlying illness)."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "sudden_reduction_in_hepatic_blood_flow",
+      "decreased_oxygen_delivery_to_hepatocytes",
+      "centrilobular_necrosis_zone_3_most_vulnerable",
+      "hepatocyte_ischemia_and_membrane_damage",
+      "massive_release_of_ast_alt_and_ldh",
+      "impaired_synthetic_function_inr_elevation",
+      "mild_hyperbilirubinemia",
+      "rapid_recovery_if_oxygenation_restored",
+      "regeneration_of_hepatocytes_within_days"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_liver_failure",
+        "probability": 0.05,
+        "severityBoost": 0.8,
+        "clues": ["prolonged_hypotension", "pre_existing_liver_disease", "encephalopathy", "inr_greater_than_2"]
+      },
+      {
+        "diseaseId": "acute_kidney_injury",
+        "probability": 0.3,
+        "severityBoost": 0.4,
+        "clues": ["same_hypoperfusion_cause", "oliguria", "rising_creatinine"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "high (underlying shock)",
+    "diagnosticClues": ["preceding_hypotension_or_cardiac_event", "dramatic_ast_alt_elevation_5000_100000", "rapid_improvement_of_transaminases", "mild_jaundice", "elevated_ldh"],
+    "exclusionClues": ["no_hypotension", "viral_hepatitis_positive", "drug_induced_pattern", "persistent_transaminitis"]
+  }
+}

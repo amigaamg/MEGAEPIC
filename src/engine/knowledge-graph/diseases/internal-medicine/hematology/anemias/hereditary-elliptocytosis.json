@@ -1,0 +1,115 @@
+{
+  "disease": {
+    "id": "hereditary_elliptocytosis",
+    "name": "Hereditary Elliptocytosis",
+    "system": "hematology",
+    "agePeak_months": [0, 480],
+    "note": "Hereditary hemolytic anemia characterized by elliptical/oval-shaped RBCs on blood film. Autosomal dominant inheritance; caused by mutations in spectrin (SPTB, SPTA1). Severity ranges from asymptomatic carrier to severe transfusion-dependent hemolysis (especially hereditary pyropoikilocytosis). Presents with jaundice, gallstones, and splenomegaly.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["anemia", "hemolysis", "elliptocytes", "genetic", "autosomal_dominant"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_neonatal_hemolysis", "weight": 8 },
+        { "sign": "aplastic_crisis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "transfusion_dependent": true,
+        "symptomatic_anemia": true
+      },
+      "nonSevereCriteria": {
+        "asymptomatic": true,
+        "compensated_hemolysis": true,
+        "normal_hb": true
+      },
+      "severityLabel": "Symptomatic -> URGENT; Asymptomatic -> OUTPATIENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 3, "note": "Intermittent; triggered by infection" },
+      { "symptomId": "fatigue", "weight": 2 },
+      { "symptomId": "gallstone_symptoms", "weight": 2 },
+      { "symptomId": "family_history", "weight": 5 },
+      { "symptomId": "neonatal_jaundice", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 1 }
+    ],
+
+    "riskFactors": [
+      { "id": "sptb_or_spta1_mutation_autosomal_dominant", "multiplier": 10.0 },
+      { "id": "family_history_first_degree_relative", "multiplier": 5.0 },
+      { "id": "african_or_mediterranean_ancestry", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hereditary_spherocytosis",
+        "discriminators": ["spherocytes_not_elliptocytes", "increased_osmotic_fragility", "ema_binding_reduced"]
+      },
+      {
+        "diseaseId": "iron_deficiency_anemia",
+        "discriminators": ["elliptocytes_are_mild", "low_ferritin", "low_mcv_mch", "responds_to_iron"]
+      },
+      {
+        "diseaseId": "megaloblastic_anemia",
+        "discriminators": ["macrocytosis", "hypersegmented_neutrophils", "low_b12_or_folate", "responds_to_replacement"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "FBC", "priority": "immediate", "yield": 0.8, "indication": "anemia variable; elliptocytes on automated differential" },
+        { "name": "Blood film", "priority": "immediate", "yield": 0.95, "indication": "elliptocytes >15-25% is diagnostic (ovalocytes); also poikilocytes in pyropoikilocytosis" },
+        { "name": "EMA binding test", "priority": "high", "yield": 0.7, "indication": "may show reduced band 3 (similar to HS in some cases)" },
+        { "name": "Eosin-5-maleimide binding (EMA)", "priority": "high", "yield": 0.7, "indication": "can be reduced in hereditary elliptocytosis" },
+        { "name": "Genetic testing (SPTB, SPTA1)", "priority": "selected", "yield": 0.98, "indication": "confirmatory" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "BSH Guidelines for Hemolytic Anemias",
+      "pathways": [
+        {
+          "severity": "asymptomatic_or_mild",
+          "criteria": "No anemia or compensated, no symptoms",
+          "treatment": "No treatment needed. Folic acid 5mg PO daily. Avoid oxidative drugs (less critical than G6PD but still advisable). Gallbladder surveillance."
+        },
+        {
+          "severity": "severe_symptomatic",
+          "criteria": "Anemia with symptoms, growth failure, splenomegaly symptoms",
+          "treatment": "Splenectomy (curative in many cases). Vaccinate pre-splenectomy. Post-splenectomy penicillin prophylaxis. Partial splenectomy to preserve immune function."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "spectrin_mutation_spta1_or_sptb",
+      "defective_rbc_membrane_skeleton",
+      "formation_of_elliptical_rbc_shapes",
+      "reduced_membrane_deformability",
+      "splenic_entrapment_and_hemolysis",
+      "variable_severity_depending_on_mutation",
+      "homozygous_or_compound_heterozygous_pyropoikilocytosis_severe"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "gallstones",
+        "probability": 0.2,
+        "severityBoost": 0.2,
+        "clues": ["chronic_hemolysis", "right_upper_quadrant_pain"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": ["elliptocytes_on_blood_film", "family_history_autosomal_dominant", "mild_hemolytic_anemia", "splenomegaly"]
+  }
+}

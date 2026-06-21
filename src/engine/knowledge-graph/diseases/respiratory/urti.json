@@ -1,0 +1,519 @@
+{
+  "disease": {
+    "id": "urti",
+    "name": "Upper Respiratory Tract Infection (Viral URTI / Common Cold)",
+    "system": "respiratory",
+    "agePeak_months": [0, 960],
+    "note": "URTI is the most common acute illness worldwide. It is predominantly viral in aetiology (>200 serotypes: rhinovirus, coronavirus, adenovirus, RSV, parainfluenza, enterovirus). Self-limiting in immunocompetent hosts with peak symptom intensity at 48-72 hours and resolution within 7-10 days. Antibiotics are NEVER indicated for uncomplicated URTI.",
+    "prevalenceWeight": 0.95,
+    "syndromeTags": ["viral_respiratory_infection", "upper_airway_infection", "self_limiting"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [],
+      "note": "URTI is inherently mild. Danger signs are absent in simple URTI; their presence should prompt re-evaluation for alternative diagnoses (influenza, bacterial tracheitis, epiglottitis, pneumonia).",
+      "redFlagCriteria": [
+        { "sign": "temp_over_39", "weight": 0, "action": "suspect_influenza_orserious_bacterial_infection" },
+        { "sign": "stridor_at_rest", "weight": 0, "action": "suspect_croup_epiglottitis_bacterial_tracheitis" },
+        { "sign": "drooling_trismus_dysphonia", "weight": 0, "action": "suspect_epiglottitis_emergency" },
+        { "sign": "chest_pain_dyspnoea_tachypnoea", "weight": 0, "action": "suspect_pneumonia_or_bronchitis" },
+        { "sign": "symptoms_persisting_more_than_10_days", "weight": 0, "action": "suspect_sinusitis" },
+        { "sign": "severe_unilateral_throat_pain_trismus", "weight": 0, "action": "suspect_peritonsillar_abscess" }
+      ],
+      "severityLabel": "URTI is a mild self-limiting illness. Absence of danger signs is expected. Presence of red flags requires re-evaluation for alternative diagnoses."
+    },
+
+    "historyFeatures": [
+      {
+        "symptomId": "coryza",
+        "weight": 5,
+        "note": "Nasal congestion and rhinorrhoea are the hallmark symptoms of URTI. Clear, watery discharge initially, may become thicker/mucoid by day 3-5 (does NOT indicate bacterial superinfection).",
+        "modifiers": [
+          { "condition": "purulent_discharge >10 days", "suspectSinusitis": true }
+        ]
+      },
+      {
+        "symptomId": "sore_throat",
+        "weight": 4,
+        "note": "Typically mild-to-moderate, worse on swallowing. If severe, unilateral, or exudative, consider GAS pharyngitis.",
+        "contextualWeights": [
+          { "condition": "exudate_plus_anterior_cervical_nodes_plus_fever", "weightBoost": -3, "considerMimic": "group_a_strep_pharyngitis" },
+          { "condition": "no_cough", "weightBoost": -2, "note": "Absence of cough increases strep probability (Centor criteria)" }
+        ]
+      },
+      {
+        "symptomId": "sneezing",
+        "weight": 3,
+        "note": "Prominent in early rhinitis phase. If paroxysmal without fever, consider allergic rhinitis."
+      },
+      {
+        "symptomId": "cough",
+        "weight": 3,
+        "note": "Typically mild-to-moderate, dry or mildly productive of clear sputum. Cough may persist 2-3 weeks after other symptoms resolve (post-viral cough).",
+        "modifiers": [
+          { "condition": "productive_purulent_sputum", "suspectBronchitis": true },
+          { "condition": "duration >14_days", "suspectPostInfectiousCoughPertussisAsthma": true }
+        ]
+      },
+      {
+        "symptomId": "low_grade_fever",
+        "weight": 2,
+        "note": "Temperature <38.5°C. Higher fever suggests influenza or bacterial infection.",
+        "contextualWeights": [
+          { "condition": "temp >= 39", "weightBoost": -3, "favorsSubtype": "influenza", "note": "High fever with abrupt onset is atypical for simple URTI" }
+        ]
+      },
+      {
+        "symptomId": "headache",
+        "weight": 2,
+        "note": "Mild frontal headache from sinus congestion. If severe or facial pressure predominant, consider acute sinusitis.",
+        "contextualWeights": [
+          { "condition": "facial_pain_pressure_plus_purulent_nasal_discharge", "weightBoost": -2, "considerMimic": "acute_bacterial_sinusitis" }
+        ]
+      },
+      {
+        "symptomId": "malaise",
+        "weight": 2,
+        "note": "Mild fatigue and generalised malaise. If profound myalgia/prostration, consider influenza."
+      },
+      {
+        "symptomId": "sick_contact",
+        "weight": 3,
+        "note": "Household or close contact with similar symptoms strongly supports viral URTI. Incubation period 1-3 days for rhinovirus."
+      },
+      {
+        "symptomId": "watery_eyes",
+        "weight": 1,
+        "note": "Mild conjunctival injection and lacrimation may accompany early URTI. If predominant with pruritus, consider allergic rhinitis."
+      },
+      {
+        "symptomId": "hoarseness",
+        "weight": 1,
+        "note": "Laryngeal involvement causing mild dysphonia. Resolves spontaneously."
+      },
+      {
+        "symptomId": "myalgia",
+        "weight": 1,
+        "negativePredictor": {
+          "description": "Mild myalgia may occur but severe or generalised myalgia with abrupt onset strongly suggests influenza.",
+          "scoreReduction": 2,
+          "considerMimic": "influenza"
+        }
+      }
+    ],
+
+    "examFeatures": [
+      {
+        "signId": "nasal_mucosa_erythema",
+        "baseWeight": 4,
+        "note": "Erythematous, oedematous nasal mucosa with clear or mucoid discharge."
+      },
+      {
+        "signId": "pharyngeal_erythema",
+        "baseWeight": 3,
+        "note": "Mild-to-moderate diffuse pharyngeal erythema without exudate. If exudative, consider GAS pharyngitis or EBV."
+      },
+      {
+        "signId": "clear_rhinorrhea",
+        "baseWeight": 4,
+        "note": "Anterior rhinoscopy reveals clear or whitish mucoid discharge. Purulent discharge alone does not indicate bacterial infection unless persistent >10 days."
+      },
+      {
+        "signId": "conjunctival_injection",
+        "baseWeight": 1,
+        "note": "Mild injection without exudate. More prominent in adenoviral infections."
+      },
+      {
+        "signId": "cervical_lymphadenopathy_mild",
+        "baseWeight": 2,
+        "note": "Small (<1 cm), non-tender, mobile anterior cervical nodes. Tender or large (>1 cm) nodes favour bacterial pharyngitis."
+      },
+      {
+        "signId": "normal_chest_auscultation",
+        "baseWeight": 5,
+        "note": "Clear breath sounds bilaterally without crackles, wheeze, or bronchial breathing. This is a key negative finding that differentiates URTI from lower respiratory tract involvement.",
+        "negativePredictorForLowerDisease": true
+      },
+      {
+        "signId": "no_crackles",
+        "baseWeight": 4,
+        "note": "Absence of crackles effectively rules out pneumonia in immunocompetent patients (negative likelihood ratio ~0.1).",
+        "excludePneumonia": true
+      },
+      {
+        "signId": "normal_respiratory_rate",
+        "baseWeight": 4,
+        "note": "No tachypnoea for age. Age-appropriate respiratory rate effectively rules out significant lower respiratory infection.",
+        "excludePneumonia": true
+      },
+      {
+        "signId": "mild_tonsillar_enlargement",
+        "baseWeight": 1,
+        "note": "If present, symmetrical and without exudate or petechiae."
+      },
+      {
+        "signId": "tympanic_membrane_normal",
+        "baseWeight": 2,
+        "note": "Normal TM appearance and mobility. If bulging, opacified, or immobile, consider acute otitis media as complication."
+      }
+    ],
+
+    "riskFactors": [
+      { "id": "daycare_attendance", "multiplier": 2.0, "note": "Children in daycare have 6-10 URTIs per year vs 2-4 for home-raised children." },
+      { "id": "school_age", "multiplier": 1.8, "note": "School-aged children are the primary reservoir for viral URTIs and introduce infection into households." },
+      { "id": "sick_contact", "multiplier": 1.9, "note": "Household contact with URTI increases risk 2-4 fold. Attack rate ~30-50% in household contacts." },
+      { "id": "season_winter", "multiplier": 1.6, "note": "Peak incidence in winter months in temperate climates. Rhinovirus peaks in early autumn and spring; coronavirus and RSV in winter." },
+      { "id": "immunosuppression", "multiplier": 1.5, "note": "Immunocompromised patients may have more severe or prolonged symptoms but URTI remains self-limiting in most." },
+      { "id": "crowded_living", "multiplier": 1.4, "note": "Overcrowding increases transmission risk." },
+      { "id": "smoking_exposure", "multiplier": 1.3, "note": "Passive smoking increases susceptibility and severity of URTI in children." },
+      { "id": "age_under_5", "multiplier": 1.5, "note": "Highest incidence in children <5 years due to naïve immune system." },
+      { "id": "stress_and_sleep_deprivation", "multiplier": 1.2, "note": "Psychological stress and inadequate sleep increase susceptibility to viral URTIs." }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "influenza",
+        "discriminators": ["high_fever_39_to_40C", "sudden_abrupt_onset", "severe_myalgia", "prostration", "dry_cough", "headache_severe", "no_coryza_prominent"],
+        "negativeImpactOnURTI": 4,
+        "note": "Influenza has abrupt onset with high fever and prostration; URTI has gradual onset with prominent nasal symptoms. Rapid influenza testing during season can differentiate."
+      },
+      {
+        "diseaseId": "allergic_rhinitis",
+        "discriminators": ["itchy_eyes_nose_palate", "sneezing_paroxysms", "clear_rhinorrhea_watery", "no_fever", "seasonal_or_perennial_pattern", "symptom_worsens_with_allergen_exposure", "relief_with_antihistamines"],
+        "negativeImpactOnURTI": 3,
+        "note": "Allergic rhinitis lacks fever, sore throat, and malaise. Symptoms persist >2 weeks without worsening. Itchy eyes and palate are characteristic."
+      },
+      {
+        "diseaseId": "acute_bronchitis",
+        "discriminators": ["productive_cough_dominant", "chest_discomfort", "wheeze_possible", "cough_persists_>5_days", "no_prominent_nasal_symptoms"],
+        "negativeImpactOnURTI": 3,
+        "note": "Bronchitis primarily affects lower airways with productive cough as the dominant symptom; nasal symptoms are minimal. Cough in URTI is secondary to nasal congestion and improves once congestion resolves."
+      },
+      {
+        "diseaseId": "bacterial_sinusitis",
+        "discriminators": ["facial_pain_pressure", "purulent_nasal_discharge_>10_days", "maxillary_toothache", "doubles_symptom_worsening_after_initial_improvement", "fever_persistent"],
+        "negativeImpactOnURTI": 3,
+        "note": "Acute bacterial sinusitis is suspected when symptoms persist >10 days or worsen after 5-7 days (double sickening). URTI symptoms typically peak at days 2-3 and then improve."
+      },
+      {
+        "diseaseId": "group_a_strep_pharyngitis",
+        "discriminators": ["exudative_tonsillitis", "anterior_cervical_nodes_tender_enlarged", "fever_>38.5", "no_cough", "scarlatiniform_rash", "age_5_to_15"],
+        "negativeImpactOnURTI": 4,
+        "note": "GAS pharyngitis typically presents with fever, exudative pharyngitis, and tender lymphadenopathy WITHOUT cough or coryza (Centor criteria). A positive Centor score >= 3 warrants rapid strep testing."
+      },
+      {
+        "diseaseId": "covid_19",
+        "discriminators": ["anosmia_ageusia", "fever", "dry_cough", "fatigue_prominent", "dyspnoea_in_severe_cases", "known_contact"],
+        "negativeImpactOnURTI": 3,
+        "note": "COVID-19 may present identically to URTI in mild cases. Anosmia/ageusia is a distinguishing feature. Testing is indicated during outbreaks or for high-risk contacts."
+      },
+      {
+        "diseaseId": "pertussis",
+        "discriminators": ["paroxysmal_cough_with_whoop", "post_tussive_vomiting", "cyanosis_apnea_in_infants", "no_fever", "prolonged_cough_>2_weeks", "vaccination_status"],
+        "negativeImpactOnURTI": 2,
+        "note": "Pertussis has a catarrhal phase that mimics URTI for 1-2 weeks, followed by paroxysmal cough phase. Suspect when cough is the dominant symptom with paroxysms and post-tussive emesis, especially in unvaccinated infants."
+      },
+      {
+        "diseaseId": "infectious_mononucleosis_ebv",
+        "discriminators": ["severe_fatigue", "generalised_lymphadenopathy", "exudative_pharyngitis", "splenomegaly", "age_15_to_24", "persistent_fever"],
+        "negativeImpactOnURTI": 2,
+        "note": "EBV pharyngitis has a more prolonged course (2-4 weeks) with severe fatigue, generalised lymphadenopathy, and often exudative tonsillitis. Posterior cervical chain involvement is characteristic."
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        {
+          "name": "Temperature measurement",
+          "priority": "routine",
+          "yield": 0.8,
+          "indication": "all patients with respiratory symptoms",
+          "relevance": "differentiate low-grade URTI fever from high fever suggesting influenza or bacterial infection"
+        },
+        {
+          "name": "Throat inspection",
+          "priority": "routine",
+          "yield": 0.7,
+          "indication": "all patients complaining of sore throat",
+          "relevance": "assess for exudate, tonsillar asymmetry, peritonsillar swelling, palatal petechiae"
+        },
+        {
+          "name": "Pulse oximetry",
+          "priority": "if_comorbid_or_red_flag",
+          "yield": 0.3,
+          "indication": "only if comorbid conditions (asthma, COPD, immunosuppression) or red flags present",
+          "note": "SpO2 should be normal (>95%) in uncomplicated URTI. Hypoxia suggests lower respiratory involvement."
+        },
+        {
+          "name": "Centor score assessment",
+          "priority": "if_sore_throat_dominant",
+          "yield": 0.8,
+          "indication": "sore throat without coryza, especially age 5-15",
+          "components": ["fever >38.5", "tonsillar exudate", "tender anterior cervical nodes", "no cough"],
+          "relevance": "score ≥3 warrants rapid strep testing"
+        }
+      ],
+      "laboratory": [
+        {
+          "name": "CRP or Procalcitonin",
+          "priority": "low_selective",
+          "yield": 0.4,
+          "indication": "only if fever persists >5 days or red flags present to rule out bacterial superinfection",
+          "limitations": "CRP may be mildly elevated (10-40 mg/L) in viral URTI; PCT remains low (<0.25 ng/mL) in pure viral infection. Neither is routinely indicated.",
+          "note": "CRP >40 and PCT >0.5 suggest bacterial aetiology and warrant investigation for bacterial sinusitis, bronchitis, or pneumonia."
+        },
+        {
+          "name": "Rapid influenza/COVID-19 testing",
+          "priority": "if_outbreak_or_high_risk",
+          "yield": 0.7,
+          "indication": "during influenza/COVID season, high-risk patients, hospitalised patients, outbreak settings",
+          "note": "May guide antiviral therapy (oseltamivir for influenza) and isolation precautions."
+        },
+        {
+          "name": "Rapid strep test or throat culture",
+          "priority": "if_centor_score >= 3",
+          "yield": 0.85,
+          "indication": "Centor score ≥3 or high clinical suspicion for GAS pharyngitis",
+          "note": "Only indicated if sore throat is the dominant symptom without coryza/cough. Positive test warrants antibiotics to prevent rheumatic fever."
+        }
+      ],
+      "imaging": [
+        {
+          "name": "None routinely indicated",
+          "priority": "not_indicated",
+          "indication": "uncomplicated URTI: imaging is never indicated",
+          "note": "Chest X-ray should not be performed for simple URTI. Sinus X-rays are not diagnostic for sinusitis in children <6 years and are generally not recommended for uncomplicated cases."
+        },
+        {
+          "name": "Sinus CT (limited)",
+          "priority": "low_reserved",
+          "indication": "suspected complicated sinusitis with intraorbital/intracranial extension; recurrent sinusitis refractory to medical therapy",
+          "note": "Never indicated in acute uncomplicated URTI. Mucosal thickening on CT is a common incidental finding and may be misleading."
+        }
+      ],
+      "advanced": []
+    },
+
+    "management": {
+      "protocolReference": "WHO/CDC Guidelines for Acute Upper Respiratory Tract Infection; NICE Guideline NG120 (Sore throat, acute); Antibiotic Stewardship Guidelines",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "typical URTI symptoms <7 days, no red flags, no comorbidities",
+          "treatment": [
+            "Symptomatic management ONLY",
+            "Rest and adequate hydration",
+            "Saline nasal spray or drops for nasal congestion",
+            "Paracetamol 15 mg/kg/dose q4-6h (max 60 mg/kg/day) OR Ibuprofen 5-10 mg/kg/dose q6-8h for fever or discomfort",
+            "Honey 2.5-5 mL at bedtime for cough in children >1 year (NOT in infants <12 months due to botulism risk)",
+            "Decongestants (pseudoephedrine, oxymetazoline nasal spray) for short-term relief in adults — NOT recommended in children <6 years",
+            "Steam inhalation and warm saline gargles for symptomatic relief"
+          ],
+          "counselling": "Self-limiting illness expected to resolve in 5-7 days. Return if: fever persists >5 days, chest pain or difficulty breathing develops, symptoms worsen after initial improvement, severe headache, ear pain, facial swelling."
+        },
+        {
+          "severity": "persistent",
+          "criteria": "symptoms >7 days but <10 days, no red flags, mild symptoms",
+          "treatment": [
+            "Continue supportive care as above",
+            "Re-evaluate for alternative diagnoses if plateau or worsening",
+            "If cough is predominant symptom >10 days without improvement, evaluate for pertussis, asthma, or post-viral cough"
+          ],
+          "counselling": "Most URTIs resolve by day 10. If symptoms persist >10 days or worsen after day 7, return for re-evaluation. Consider bacterial sinusitis if nasal discharge >10 days."
+        },
+        {
+          "severity": "red_flag",
+          "criteria": "any red flag present (fever >39, stridor, chest pain, dyspnoea, drooling, severe headache, worsening after initial improvement)",
+          "action": "Re-evaluate thoroughly for alternative diagnosis. Do not attribute red flags to URTI.",
+          "note": "URTI is a diagnosis of exclusion. Red flags indicate a more serious condition (influenza, pneumonia, epiglottitis, bacterial tracheitis, peritonsillar abscess, sinusitis with complications)."
+        }
+      ],
+      "antibioticStewardship": {
+        "antibioticsNotIndicated": true,
+        "rationale": "Antibiotics are NOT indicated for uncomplicated URTI. They do not reduce duration or severity of symptoms, do not prevent complications, and contribute to antimicrobial resistance. URTI is viral in >95% of cases. Patient education and symptomatic management are the mainstays of treatment.",
+        "exceptions": [
+          "Suspected GAS pharyngitis (confirmed by rapid test or culture) — treat with Penicillin V or Amoxicillin for 10 days",
+          "Suspected acute bacterial sinusitis with persistent symptoms >10 days or double sickening — treat with Amoxicillin-clavulanate for 5-7 days",
+          "Influenza with high-risk features or within 48 hours of symptom onset — consider oseltamivir"
+        ],
+        "providerNotes": [
+          "Discuss natural history of viral URTI with patient: symptoms peak at day 2-3 and resolve over 5-7 days",
+          "Explain that green/yellow nasal discharge is normal in viral URTI (sloughed epithelial cells and neutrophils, NOT pus)",
+          "Offer delayed antibiotic prescription only for specific alternative diagnoses, not for URTI",
+          "Provide written information on symptom management and return precautions"
+        ]
+      },
+      "specialConsiderations": {
+        "asthma_comorbidity": "URTI is the most common trigger for asthma exacerbations. Ensure asthma action plan is up to date. Inhaled bronchodilators may be needed.",
+        "copd_comorbidity": "URTI is a common trigger for COPD exacerbations. Monitor for increased sputum purulence, volume, and dyspnoea.",
+        "immunocompromised": "May have prolonged course. Lower threshold for influenza/COVID testing. Monitor for secondary bacterial infection.",
+        "pregnancy": "Avoid decongestants and NSAIDs. Paracetamol is the antipyretic/analgesic of choice. Saline nasal spray and honey are safe.",
+        "paediatric": "Avoid over-the-counter cough and cold medications in children <6 years (lack of evidence of efficacy and risk of adverse effects). Honey for cough in children >1 year is the only evidence-based non-pharmacological intervention."
+      }
+    },
+
+    "treatmentResponseLogic": {
+      "triggers": [
+        {
+          "timePoint": "Day 5-7",
+          "expectedCourse": "Symptoms should be improving or resolved. Fever should have resolved by day 3-5.",
+          "ifPersistent": {
+            "actions": [
+              "Re-assess thoroughly for alternative diagnoses",
+              "If fever persists >5 days with no improvement: consider influenza, check CRP/PCT, consider testing",
+              "If nasal discharge persists >10 days: consider acute bacterial sinusitis"
+            ]
+          },
+          "ifWorsening": {
+            "actions": [
+              "Re-evaluate for secondary bacterial infection (otitis media, sinusitis, bronchitis, pneumonia)",
+              "Check for red flags: high fever, chest pain, dyspnoea, facial pain, ear pain",
+              "Consider chest X-ray if lower respiratory tract symptoms develop"
+            ]
+          }
+        },
+        {
+          "timePoint": "Day 10-14",
+          "expectedCourse": "Most symptoms resolved. Mild cough may persist.",
+          "ifStillSymptomatic": {
+            "actions": [
+              "Cough persistent >14 days: evaluate for pertussis (PCR), asthma (spirometry), PND (allergic rhinitis/sinusitis), GERD",
+              "If fatigue predominant: consider EBV mononucleosis, post-viral fatigue",
+              "If nasal congestion persistent >14 days: consider allergic rhinitis"
+            ]
+          }
+        }
+      ]
+    },
+
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": [
+        "cough?",
+        "fever?",
+        "nasal_congestion?",
+        "sore_throat?",
+        "duration?"
+      ],
+      "branching": [
+        {
+          "if": "fever_present",
+          "ask": ["maximum_temperature?", "duration_of_fever?", "chills_or_rigors?", "response_to_antipyretics?"],
+          "note": "If temp ≥39°C, consider influenza or bacterial infection and reduce URTI probability."
+        },
+        {
+          "if": "sore_throat_dominant_without_coryza",
+          "ask": ["exudate_seen?", "anterior_cervical_adenopathy?", "age_5_to_15?", "scarlatiniform_rash?", "Centor_score_calculate?"],
+          "action": "If Centor ≥3, test for GAS and consider antibiotic therapy."
+        },
+        {
+          "if": "nasal_congestion_and_discharge",
+          "ask": ["clear_or_purulent?", "duration >10_days?", "facial_pain_or_pressure?", "maxillary_toothache?", "worsening_after_initial_improvement?"],
+          "action": "If purulent discharge >10 days or double sickening, consider bacterial sinusitis."
+        },
+        {
+          "if": "cough_prominent",
+          "ask": ["dry_or_productive?", "sputum_colour?", "chest_discomfort?", "dyspnoea?", "wheeze?", "duration_of_cough?"],
+          "note": "If productive purulent cough with chest discomfort, consider bronchitis. If dyspnoea or wheeze, consider lower airway involvement."
+        },
+        {
+          "if": "symptoms >7_days",
+          "ask": ["plateaued_or_worsening?", "new_symptoms?", "any_red_flags?", "treatment_tried?"],
+          "note": "Prolonged course raises possibility of alternative diagnosis or secondary bacterial complication."
+        },
+        {
+          "if": "sick_contact_with_confirmed_influenza_or_covid",
+          "ask": ["testing_done?", "vaccination_status?", "high_risk_for_severe_disease?"],
+          "action": "Consider testing and antiviral therapy if within 48 hours of symptom onset."
+        },
+        {
+          "if": "recurrent_episodes_more_than_6_per_year",
+          "ask": ["underlying_immunodeficiency?", "allergic_rhinitis?", "asthma?", "daycare_attendance?", "smoking_exposure?"],
+          "note": "Frequent URTIs (>6/year in children, >4/year in adults) warrant investigation for atopy, immunodeficiency, or anatomical abnormality."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "viral_inoculation_upper_respiratory_epithelium",
+      "viral_attachment_to_icam_1_receptors_rhinovirus_or_other_receptors",
+      "mucosal_inflammation_and_edema",
+      "increased_mucus_production",
+      "ciliary_dysfunction",
+      "neutrophil_and_lymphocyte_infiltration",
+      "cytokine_release_il6_il8_tnf_alpha",
+      "systemic_immune_response_low_grade",
+      "self_limiting_course_3_to_7_days",
+      "post_viral_mucociliary_clearance_recovery_over_2_to_4_weeks"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_bronchitis",
+        "probability": 0.15,
+        "lagDays": [3, 7],
+        "clues": ["productive_cough", "chest_discomfort", "wheeze_possible"],
+        "note": "Extension of viral inflammation to the lower airways. Usually self-limiting and does not require antibiotics unless pertussis suspected."
+      },
+      {
+        "diseaseId": "acute_otitis_media",
+        "probability": 0.1,
+        "lagDays": [2, 7],
+        "agePredilection": "children_under_5",
+        "clues": ["earache", "fever_recurrence", "tugging_at_ear", "bulging_opacified_tympanic_membrane", "hearing_loss"],
+        "note": "Eustachian tube dysfunction from mucosal oedema leads to middle ear fluid accumulation and secondary bacterial infection most commonly with S. pneumoniae, H. influenzae, or M. catarrhalis."
+      },
+      {
+        "diseaseId": "acute_sinusitis",
+        "probability": 0.1,
+        "lagDays": [7, 10],
+        "clues": ["persistent_purulent_nasal_discharge", "facial_pain_pressure", "maxillary_toothache", "fever", "double_sickening"],
+        "note": "Sinus ostia obstruction from mucosal inflammation leads to secondary bacterial sinusitis. Viral sinusitis (self-limiting) is far more common than bacterial; bacterial disease is defined by persistence >10 days or worsening after initial improvement."
+      },
+      {
+        "diseaseId": "secondary_bacterial_pneumonia",
+        "probability": 0.02,
+        "lagDays": [5, 10],
+        "clues": ["fever_recurrence_after_improvement", "productive_purulent_cough", "crackles", "tachypnoea", "hypoxia", "chest_pain"],
+        "note": "Post-viral bacterial pneumonia is uncommon but well-described, most often with S. pneumoniae or S. aureus following influenza. Risk is increased in elderly, immunocompromised, and COPD patients."
+      },
+      {
+        "diseaseId": "acute_laryngitis_or_croup",
+        "probability": 0.05,
+        "lagDays": [1, 3],
+        "agePredilection": "children_6_months_to_3_years",
+        "clues": ["barking_cough", "hoarseness", "stridor_agitation", "mild_respiratory_distress"],
+        "note": "Viral inflammation extends to the larynx and subglottic region causing characteristic croup syndrome. Typically self-limiting but may require steroids in moderate-to-severe cases."
+      },
+      {
+        "diseaseId": "exacerbation_of_asthma_or_copd",
+        "probability": 0.12,
+        "lagDays": [1, 3],
+        "clues": ["worsening_dyspnoea", "wheeze", "increased_cough", "reduced_peak_flow"],
+        "note": "URTI is the most common trigger for asthma and COPD exacerbations. Viral-induced airway inflammation increases bronchial hyperresponsiveness."
+      }
+    ],
+
+    "exclusionClues": [
+      "high_fever_with_myalgia_sudden_onset (influenza)",
+      "productive_purulent_cough_with_chest_pain (bronchitis/pneumonia)",
+      "focal_chest_signs_crackles_bronchial_breathing (pneumonia)",
+      "facial_pain_purulent_nasal_discharge_>10_days_double_sickening (sinusitis)",
+      "exudative_pharyngitis_tender_cervical_nodes_high_fever_no_cough (GAS pharyngitis)",
+      "paroxysmal_cough_with_whoop_post_tussive_vomiting (pertussis)",
+      "itchy_eyes_paroxysmal_sneezing_no_fever_recurrent_seasonal (allergic rhinitis)"
+    ],
+
+    "diagnosticClues": [
+      "coryza_nasal_congestion_rhinorrhea (hallmark symptom)",
+      "sore_throat_with_mild_pharyngeal_erythema",
+      "mild_cough_with_clear_or_mucoid_sputum",
+      "low_grade_fever_under_38.5C",
+      "sick_contact_with_similar_illness",
+      "normal_chest_auscultation_and_normal_respiratory_rate",
+      "gradual_onset_over_24_to_48_hours",
+      "self_limiting_course_with_peaks_at_days_2_to_3"
+    ],
+
+    "mustNotMiss": false,
+    "antibioticStewardshipNote": "Antibiotics are NEVER indicated for uncomplicated URTI. They do not change outcomes, do not prevent complications, and contribute to antimicrobial resistance. Patient education on the natural history of viral URTI and symptomatic management is the cornerstone of care."
+  }
+}

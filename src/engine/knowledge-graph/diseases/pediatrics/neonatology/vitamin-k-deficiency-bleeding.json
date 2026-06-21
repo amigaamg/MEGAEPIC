@@ -1,0 +1,148 @@
+{
+  "disease": {
+    "id": "vitamin_k_deficiency_bleeding_vkdb",
+    "name": "Vitamin K Deficiency Bleeding (VKDB)",
+    "system": "neonatology",
+    "agePeak_months": [0, 3],
+    "note": "Formerly 'hemorrhagic disease of newborn'. Vitamin K deficiency bleeding due to low stores at birth, low breast milk content, and sterile neonatal gut. Three patterns: Early (birth-24h, severe, maternal drugs), Classic (day 2-7, spontaneous GI bleeding, umbilical stump bleeding), Late (week 2-12, intracranial bleed, exclusively breastfed, cholestasis). PREVENTABLE with IM vitamin K prophylaxis at birth.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["neonatal_bleeding", "melena_neonatorum", "vitamin_k_deficiency", "coagulopathy_neonatal", "hematemesis_neonatal"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "intracranial_hemorrhage_signs", "weight": 10 },
+        { "sign": "massive_gi_bleeding_with_shock", "weight": 10 },
+        { "sign": "seizures_bulging_fontanelles", "weight": 10 },
+        { "sign": "continued_bleeding_despite_resuscitation", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "noDangerSigns": true, "mild_bleeding_normal_vitals": true },
+      "severityLabel": "Late-onset with intracranial bleed -> EMERGENCY; classic VKDB -> URGENT vitamin K + workup"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "no_vitamin_k_prophylaxis_at_birth", "weight": 10 },
+      { "symptomId": "hematemesis_melena", "weight": 3 },
+      { "symptomId": "umbilical_stump_bleeding", "weight": 4 },
+      { "symptomId": "bruising_petechiae", "weight": 3 },
+      { "symptomId": "circumcision_bleeding_prolonged", "weight": 3 },
+      { "symptomId": "exclusive_breastfeeding", "weight": 4 },
+      { "symptomId": "lethargy_irritability", "weight": 3 },
+      { "symptomId": "seizures", "weight": 4 },
+      { "symptomId": "vomiting", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "melena", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hematemesis", "baseWeight": 5 },
+      { "signId": "umbilical_bleeding", "baseWeight": 4 },
+      { "signId": "bruising_petechiae", "baseWeight": 4 },
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "bulging_fontanelles", "baseWeight": 5 },
+      { "signId": "jaundice", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "no_vitamin_k_prophylaxis_at_birth", "multiplier": 10.0 },
+      { "id": "exclusive_breastfeeding", "multiplier": 3.0 },
+      { "id": "preterm_birth", "multiplier": 2.0 },
+      { "id": "maternal_anticonvulsants_phenytoin_phenobarbital", "multiplier": 3.0 },
+      { "id": "maternal_antituberculosis_drugs_rifampicin_isoniazid", "multiplier": 3.0 },
+      { "id": "maternal_warfarin", "multiplier": 3.0 },
+      { "id": "cholestatic_liver_disease_biliary_atresia", "multiplier": 5.0 },
+      { "id": "cystic_fibrosis", "multiplier": 3.0 },
+      { "id": "alpha_1_antitrypsin_deficiency", "multiplier": 3.0 },
+      { "id": "prolonged_antibiotic_use", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      { "id": "early_onset_vkdb", "name": "Early Onset VKDB (birth-24h)", "prevalenceModifier": 0.05, "notes": "Maternal drugs (anticonvulsants, warfarin, TB drugs); severe, cephalohematoma, intracranial" },
+      { "id": "classic_vkdb", "name": "Classic VKDB (day 2-7)", "prevalenceModifier": 0.7, "notes": "No prophylaxis given; GI bleeding, umbilical stump, circumcision; most common form" },
+      { "id": "late_onset_vkdb", "name": "Late Onset VKDB (week 2-12)", "prevalenceModifier": 0.25, "notes": "Breastfed + underlying cholestasis; INTRACRANIAL BLEEDING; mortality 50%" }
+    ],
+
+    "mimics": [
+      { "diseaseId": "swallowed_maternal_blood", "discriminators": ["apt_test_positive_for_adult_hb", "normal_pt_ptt", "well_appearing"], "ruleOutTests": ["apt_test", "pt_ptt"] },
+      { "diseaseId": "hemophilia_a", "discriminators": ["prolonged_ptt_normal_pt", "family_history", "males"], "ruleOutTests": ["factor_viii_level", "ptt_mixing_study"] },
+      { "diseaseId": "dic", "discriminators": ["low_platelets", "elevated_d_dimer", "sick_neonate"], "ruleOutTests": ["cbc", "d_dimer", "fibrinogen"] },
+      { "diseaseId": "necrotizing_enterocolitis", "discriminators": ["abdominal_distension", "pneumatosis_on_xr", "sick_neonate"], "ruleOutTests": ["abdominal_xr"] }
+    ],
+
+    "investigations": {
+      "firstLine": [
+        { "test": "PT/INR (markedly prolonged - hallmark)", "weight": 10 },
+        { "test": "PTT (prolonged but less than PT)", "weight": 9 },
+        { "test": "CBC with platelet count (normal platelets)", "weight": 8 },
+        { "test": "Fibrinogen (normal - differentiates from DIC)", "weight": 8 },
+        { "test": "Apt test (differentiate from swallowed maternal blood)", "weight": 9 }
+      ],
+      "secondLine": [
+        { "test": "Factors II, VII, IX, X (low levels - vitamin K-dependent)", "weight": 8 },
+        { "test": "PIVKA-II (elevated - protein induced by vitamin K absence)", "weight": 7 },
+        { "test": "Head US/CT (if neurological signs - late onset VKDB)", "weight": 9 }
+      ],
+      "goldStandard": "Markedly prolonged PT with normal platelet count and normal fibrinogen, plus PIVKA-II elevated"
+    },
+
+    "management": {
+      "emergency": [
+        "IV vitamin K 1mg (may repeat in 4-6h if still bleeding - up to 3 doses)",
+        "FFP 10-20mL/kg IV if life-threatening bleed (provides clotting factors immediately)",
+        "rFVIIa (recombinant factor VIIa) 15-30 mcg/kg if no response to FFP",
+        "PRBC transfusion if Hb low",
+        "Treat seizures if intracranial bleed (phenobarbital)"
+      ],
+      "inpatient": [
+        "IV vitamin K 1mg immediately",
+        "Monitor PT/INR q6-12h until normalized",
+        "Head imaging if neurological symptoms",
+        "Workup for underlying cause (cholestasis in late onset)"
+      ],
+      "outpatient": [
+        "Ensure vitamin K prophylaxis at birth for future siblings",
+        "Breastfeeding mothers can take oral vitamin K supplements (controversial benefit)",
+        "Monitor development if intracranial bleed occurred"
+      ],
+      "refractory": [],
+      "preventive": [
+        "IM vitamin K 1mg at birth for ALL neonates (standard of care, prevents ALL forms)",
+        "Oral vitamin K (2mg at birth, then weekly for 12 weeks) if parents refuse IM",
+        "Prenatal counseling for mothers on anticonvulsants/anticoagulants",
+        "Maternal oral vitamin K 10-20mg daily in last 4 weeks of pregnancy if on anticonvulsants"
+      ]
+    },
+
+    "pathophysiology": "Vitamin K is a cofactor for gamma-glutamyl carboxylase which converts inactive precursors to active clotting factors II, VII, IX, X (and proteins C, S). Without vitamin K, liver produces PIVKA (protein induced by vitamin K absence) - biologically inactive. PT prolonged first (Factor VII half-life 4-6h shortest). Poor placental transfer (cord blood 30-50% adult levels). Breast milk low in vitamin K (1-4 mcg/L). Newborn gut sterile (no bacterial menaquinone synthesis). Late onset: underlying cholestasis prevents absorption of oral vitamin K.",
+
+    "complications": [
+      { "complication": "Intracranial hemorrhage with neurological sequelae", "severity": "high" },
+      { "complication": "Massive GI bleed with hypovolemic shock", "severity": "high" },
+      { "complication": "Death (50% in late-onset VKDB)", "severity": "high" },
+      { "complication": "Neurodevelopmental delay after intracranial bleed", "severity": "high" }
+    ],
+
+    "mustNotMiss": [
+      "VKDB is PREVENTABLE - IV vitamin K at birth is mandatory",
+      "Late-onset VKDB presents with seizures/intracranial bleed at 2-12 weeks - think of it",
+      "Classic VKDB: day 2-7, GI + umbilical bleeding, NO vitamin K given",
+      "Apt test is CRITICAL to differentiate VKDB from swallowed maternal blood",
+      "Late-onset almost always has underlying cholestasis - investigate further"
+    ],
+
+    "emergencyPriority": "high",
+    "diagnosticClues": [
+      { "clue": "Neonate with spontaneous GI bleeding + NO vitamin K prophylaxis + markedly prolonged PT", "weight": 10 },
+      { "clue": "Normal platelet count and fibrinogen (differentiates from DIC)", "weight": 8 },
+      { "clue": "PIVKA-II elevated", "weight": 8 },
+      { "clue": "Infant 2-12 weeks with seizures + exclusively breastfed + cholestasis (late onset)", "weight": 9 }
+    ],
+    "exclusionClues": [
+      { "clue": "Apt test positive for adult Hb (swallowed maternal blood)", "weight": 9 },
+      { "clue": "Prolonged PTT alone with normal PT (hemophilia)", "weight": 8 },
+      { "clue": "Low platelets + prolonged PT/PTT + elevated D-dimer (DIC)", "weight": 8 },
+      { "clue": "Vitamin K already given at birth (consider other coagulopathy)", "weight": 9 }
+    ]
+  }
+}

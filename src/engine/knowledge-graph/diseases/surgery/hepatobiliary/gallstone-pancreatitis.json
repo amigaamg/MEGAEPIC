@@ -1,0 +1,90 @@
+{
+  "disease": {
+    "id": "gallstone_pancreatitis",
+    "name": "Gallstone Pancreatitis (Acute Biliary Pancreatitis)",
+    "system": "GI",
+    "agePeak_months": [360, 720],
+    "note": "Acute pancreatitis caused by gallstone obstruction at the ampulla of Vater. Jaundice indicates persistent CBD stone, ampullary impaction, or severe pancreatic head edema. ALT >150 U/L is highly specific for gallstone etiology.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["acute_pancreatitis", "biliary_pancreatitis", "gallstone_disease", "obstructive_jaundice_amylase"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_pancreatitis_with_necrosis", "weight": 10 },
+        { "sign": "acute_cholangitis_sepsis", "weight": 10 },
+        { "sign": "multiorgan_failure_renal_respiratory_cv", "weight": 9 },
+        { "sign": "hemorrhagic_pancreatitis_cullen_grey_turner", "weight": 9 },
+        { "sign": "persistent_hypotension_not_responding_to_fluids", "weight": 8 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "noDangerSigns": true },
+      "severityLabel": "Mild: self-limited pancreatitis without organ failure. Severe: organ failure >48h, necrosis, or cholangitis (mortality 15-30%)."
+    },
+    "historyFeatures": [
+      { "symptomId": "epigastric_pain", "weight": 5, "note": "Acute severe, radiating to back" },
+      { "symptomId": "back_pain", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 4, "note": "If CBD obstructed or pancreatic head edema" },
+      { "symptomId": "dark_urine", "weight": 3 },
+      { "symptomId": "pale_stools", "weight": 3, "note": "If persistent obstruction" },
+      { "symptomId": "dyspepsia", "weight": 2 },
+      { "symptomId": "heartburn", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "epigastric_tenderness", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "abdominal_tenderness_ruq", "baseWeight": 4 },
+      { "signId": "jaundice", "baseWeight": 4 },
+      { "signId": "scleral_icterus", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "abdominal_mass", "baseWeight": 2, "note": "Pancreatic phlegmon or pseudocyst" },
+      { "signId": "ascites", "baseWeight": 2 }
+    ],
+    "riskFactors": [
+      { "id": "gallstones_small_less_than_5mm", "multiplier": 3.5 },
+      { "id": "female_sex", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 2.0 },
+      { "id": "pregnancy", "multiplier": 2.5 },
+      { "id": "rapid_weight_loss", "multiplier": 1.5 },
+      { "id": "family_history_of_gallstones", "multiplier": 1.5 }
+    ],
+    "investigations": {
+      "firstLine": ["lfts_alt_greater_than_150_highly_specific", "lipase_3x_uln_diagnostic", "amylase", "cbc_hemoconcentration", "crp", "abdominal_us_gallstones_cbd_dilation", "mrcp_for_cbd_stones"],
+      "secondLine": ["ercp_therapeutic_sphincterotomy_stone_extraction", "ct_abdomen_pancreatic_necrosis_fluid_collections", "eus"],
+      "goldStandard": "Elevated lipase >3x ULN + imaging showing gallstones + ALT >150 U/L (high specificity for biliary etiology) + ERCP confirming CBD stone"
+    },
+    "management": {
+      "emergency": ["iv_fluids_lactated_ringers_250_300_ml_per_hour_goal_directed", "ercp_with_sphincterotomy_within_24_to_48_hours_if_cbd_stone_and_jaundice_or_cholangitis", "broad_spectrum_antibiotics_if_cholangitis"],
+      "inpatient": ["analgesia", "npo_initially", "ng_tube_if_ileus", "monitor_for_necrosis", "nutritional_support_enteral_preferred"],
+      "outpatient": ["cholecystectomy_during_index_admission_after_pancreatitis_resolves", "low_fat_diet_until_surgery", "stone_analysis_if_passed"],
+      "refractory": ["necrosectomy_for_infected_necrosis", "percutaneous_drainage_of_fluid_collections", "endoscopic_drainage_of_walled_off_necrosis"],
+      "preventive": ["cholecystectomy_to_prevent_recurrence", "avoidance_of_heavy_alcohol", "ursodeoxycholic_acid_if_not_surgical_candidate"]
+    },
+    "pathophysiology": "A small gallstone passes from the gallbladder through the cystic duct into the common bile duct. It transiently or persistently occludes the pancreatic duct at the ampulla of Vater. This obstructs pancreatic exocrine secretion, leading to activation of trypsinogen within the pancreas (premature activation). The activated trypsin triggers autodigestion of pancreatic tissue, causing inflammation, edema, and potentially necrosis. The CBD may remain obstructed by the impacted stone or by edema from the inflamed pancreatic head, producing jaundice. Passage of the stone can cause jaundice to fluctuate.",
+    "complications": [
+      { "diseaseId": "acute_cholangitis", "probability": 0.1, "severityBoost": 0.5, "clues": ["fever_jaundice_ruq_pain_charcot", "elevated_bilirubin", "positive_blood_culture"] },
+      { "diseaseId": "pancreatic_necrosis_infection", "probability": 0.15, "severityBoost": 0.6, "clues": ["persistent_fever_after_week", "worsening_ct_findings", "positive_fna_culture"] },
+      { "diseaseId": "pseudocyst_formation", "probability": 0.1, "severityBoost": 0.3, "clues": ["persistent_or_recurrent_pain", "cystic_lesion_on_ct_after_4_weeks", "elevated_lipase_persistent"] },
+      { "diseaseId": "chronic_pancreatitis", "probability": 0.05, "severityBoost": 0.2, "clues": ["recurrent_attacks", "pancreatic_calcifications", "steatorrhea"] },
+      { "diseaseId": "acute_respiratory_distress_syndrome", "probability": 0.1, "severityBoost": 0.7, "clues": ["hypoxia", "bilateral_infiltrates", "progressive_respiratory_failure"] }
+    ],
+    "mustNotMiss": ["acute_cholangitis", "pancreatic_necrosis", "severe_pancreatitis_with_organ_failure"],
+    "emergencyPriority": "high",
+    "diagnosticClues": [
+      { "clue": "Acute severe epigastric pain radiating to back", "weight": 9 },
+      { "clue": "Gallstones on ultrasound with CBD dilation", "weight": 9 },
+      { "clue": "ALT >150 IU/L (highly specific for biliary etiology)", "weight": 9 },
+      { "clue": "Lipase >3x upper limit of normal", "weight": 10 },
+      { "clue": "Jaundice that may fluctuate with stone passage", "weight": 7 },
+      { "clue": "Elevated bilirubin, ALP, and GGT with the ALT rise", "weight": 7 },
+      { "clue": "Small gallstones (<5mm) on imaging", "weight": 7 }
+    ],
+    "exclusionClues": [
+      { "clue": "Hypertriglyceridemia >1000 mg/dL (causes pancreatitis independent of gallstones)", "weight": 8 },
+      { "clue": "Serum calcium >13 mg/dL (hypercalcemic pancreatitis)", "weight": 7 },
+      { "clue": "Heavy alcohol history (alcoholic pancreatitis)", "weight": 7 },
+      { "clue": "Viral prodrome with mumps/Coxsackie serologies", "weight": 5 },
+      { "clue": "Drug-induced (azathioprine, valproate, thiazides, etc.)", "weight": 6 },
+      { "clue": "Normal gallbladder and CBD on imaging with no sludge", "weight": 8 }
+    ]
+  }
+}

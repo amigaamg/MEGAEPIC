@@ -1,0 +1,202 @@
+{
+  "disease": {
+    "id": "drug_induced_liver_injury",
+    "name": "Drug-Induced Liver Injury (DILI)",
+    "system": "hepatology",
+    "agePeak_months": [240, 720],
+    "note": "Liver injury caused by prescription medications, OTC drugs, or herbal supplements. Accounts for >50% of acute liver failure in developed countries. Acetaminophen (paracetamol) overdose is the single most common cause. Idiosyncratic DILI is unpredictable and can occur at therapeutic doses. Early recognition and drug cessation are critical.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["liver", "acute_hepatitis", "liver_failure", "drug_reaction", "hepatotoxicity"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure_coagulopathy_inr_greater_than_1_5_with_encephalopathy", "weight": 10 },
+        { "sign": "hepatic_encephalopathy_any_grade", "weight": 10 },
+        { "sign": "jaundice_severe_bilirubin_greater_than_10", "weight": 8 },
+        { "sign": "prolonged_inr_greater_than_2", "weight": 9 },
+        { "sign": "hy_rule_positive_bilirubin_greater_than_2_times_uln_and_alt_greater_than_3_times_uln", "weight": 9, "note": "Hy's Law: high risk of acute liver failure" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "acute_liver_failure": true,
+        "hy_law_criteria_met": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "mild_transaminitis": true,
+        "normal_inr": true,
+        "normal_bilirubin": true
+      },
+      "severityLabel": "Acute liver failure (encephalopathy, INR >1.5) -> EMERGENCY ICU; Hy's Law positive -> URGENT hepatology; Mild transaminitis -> DRUG STOP + OBSERVE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 4 },
+      { "symptomId": "dark_urine", "weight": 3 },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "fatigue_profound", "weight": 4 },
+      { "symptomId": "decreased_appetite", "weight": 3 },
+      { "symptomId": "fever", "weight": 2 },
+      { "symptomId": "rash", "weight": 2, "note": "Drug hypersensitivity" },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "confusion_altered_behavior", "weight": 4, "note": "Hepatic encephalopathy if acute liver failure" },
+      { "symptomId": "new_or_changed_medication_weeks_months", "weight": 5, "note": "Key history: any new drug, OTC, supplement, or herbal in past 6 months" },
+      { "symptomId": "acetaminophen_paracetamol_ingestion", "weight": 5, "note": "Intentional overdose or unintentional exceeding max daily dose" },
+      { "symptomId": "herbal_or_traditional_medicine_use", "weight": 3, "note": "Common culprits: kava, green tea extract, ma huang, chaparral" },
+      { "symptomId": "antibiotic_use_recent_amoxicillin_clavulanate", "weight": 4, "note": "Amoxicillin-clavulanate is most common antibiotic cause" },
+      { "symptomId": "anti_tb_medication_isoniazid_rifampicin_pyrazinamide", "weight": 4, "note": "INH is common cause; peaks at 2-3 months" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5 },
+      { "signId": "hepatomegaly_tender", "baseWeight": 3 },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 3 },
+      { "signId": "rash_morbilliform_or_urticarial", "baseWeight": 2, "note": "Hypersensitivity reaction" },
+      { "signId": "fever", "baseWeight": 2 },
+      { "signId": "ascites", "baseWeight": 2, "note": "If acute liver failure" },
+      { "signId": "asterixis", "baseWeight": 4, "note": "Encephalopathy" },
+      { "signId": "lymphadenopathy", "baseWeight": 1, "note": "Drug hypersensitivity with eosinophilia" }
+    ],
+
+    "riskFactors": [
+      { "id": "acetaminophen_overdose_7_5g_per_day_adults", "multiplier": 10.0 },
+      { "id": "alcohol_use_disorder", "multiplier": 2.5, "note": "Increases acetaminophen toxicity risk" },
+      { "id": "pre_existing_liver_disease", "multiplier": 2.0 },
+      { "id": "female_gender", "multiplier": 1.5 },
+      { "id": "advanced_age_over_60", "multiplier": 1.5 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "multi_drug_therapy_polypharmacy", "multiplier": 2.0 },
+      { "id": "hla_genetic_susceptibility_alleles", "multiplier": 2.0 },
+      { "id": "hiv_infection", "multiplier": 1.5 },
+      { "id": "malnutrition_or_fasting", "multiplier": 1.5, "note": "Depletes glutathione, increases acetaminophen toxicity" }
+    ],
+
+    "subtypes": [
+      {
+        "id": "acetaminophen_paracetamol_dili",
+        "name": "Acetaminophen (Paracetamol) Hepatotoxicity",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [{ "feature": "dose_dependent", "weight": 5 }, { "feature": "acute_onset_12_48h", "weight": 4 }, { "feature": "markedly_elevated_ast_alt_often_1000_10000", "weight": 5 }],
+        "management": "N-acetylcysteine (NAC) IV protocol; NAC most effective within 8h of ingestion but beneficial up to 24h+"
+      },
+      {
+        "id": "idiosyncratic_dili",
+        "name": "Idiosyncratic DILI",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [{ "feature": "unpredictable", "weight": 4 }, { "feature": "latency_5_90_days_from_drug_start", "weight": 4 }, { "feature": "variable_pattern_hepatocellular_cholestatic_mixed", "weight": 3 }],
+        "management": "Immediate drug cessation; supportive care; corticosteroids considered for DRESS or immuno-allergic DILI"
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_hepatitis_a_b_c_e",
+        "discriminators": ["positive_viral_serology", "exposure_history", "no_temporal_relation_to_drug"]
+      },
+      {
+        "diseaseId": "alcoholic_hepatitis",
+        "discriminators": ["heavy_alcohol_use_history", "ast_alt_ratio_greater_than_2", "elevated_ggt", "no_offending_drug"]
+      },
+      {
+        "diseaseId": "autoimmune_hepatitis",
+        "discriminators": ["a_na_anti_smooth_muscle_positive", "igg_elevated", "female", "interface_hepatitis_on_biopsy", "responds_to_steroids"]
+      },
+      {
+        "diseaseId": "ischemic_hepatitis_shock_liver",
+        "discriminators": ["precipitating_hypotension_or_cardiac_event", "ast_alt_elevation_100x_upper_normal", "rapid_improvement_with_hemodynamic_restoration", "no_offending_drug"]
+      },
+      {
+        "diseaseId": "biliary_obstruction",
+        "discriminators": ["dilated_bile_ducts_on_ultrasound", "alp_elevated_disproportionate", "right_upper_quadrant_pain_colicky", "no_drug_exposure"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "ALT and AST", "priority": "immediate", "yield": 0.95, "indication": "key for pattern recognition: hepatocellular (ALT >> ALP), cholestatic (ALP >> ALT), or mixed pattern" },
+        { "name": "ALP and GGT", "priority": "immediate", "yield": 0.9, "indication": "cholestatic markers; R value = (ALT/ULN) / (ALP/ULN); R>5 hepatocellular, R<2 cholestatic, 2-5 mixed" },
+        { "name": "Total and direct bilirubin", "priority": "immediate", "yield": 0.85, "indication": "jaundice severity; Hy's Law: bilirubin >2x ULN + ALT >3x ULN predicts severe DILI" },
+        { "name": "INR/PT", "priority": "immediate", "yield": 0.85, "indication": "synthetic function; prolonged INR signals severe injury" },
+        { "name": "FBC with eosinophil count", "priority": "high", "yield": 0.5, "indication": "eosinophilia suggests hypersensitivity/allergic DILI" },
+        { "name": "Acetaminophen/paracetamol level", "priority": "immediate", "yield": 0.98, "indication": "if overdose suspected; Rumack-Matthew nomogram for timing of NAC" },
+        { "name": "Viral hepatitis serology (HAV, HBV, HCV, HEV)", "priority": "high", "yield": 0.3, "indication": "rule out alternative causes" },
+        { "name": "Serum ceruloplasmin and copper studies", "priority": "medium", "yield": 0.1, "indication": "rule out Wilson disease especially in young patients" },
+        { "name": "ANA, ASMA, anti-LKM, IgG", "priority": "medium", "yield": 0.2, "indication": "rule out autoimmune hepatitis" },
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.5, "indication": "rule out biliary obstruction; assess liver parenchyma" },
+        { "name": "Liver biopsy", "priority": "selected", "yield": 0.95, "indication": "indicated when: persistent elevation despite drug stop, diagnostic uncertainty, suspected AIH or Wilson overlap, or for clinical trials" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound with Doppler", "priority": "high", "yield": 0.5, "indication": "rule out biliary obstruction; assess hepatic vasculature; steatosis or fibrosis signs" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "AASLD Practice Guidelines: Drug-Induced Liver Injury; ACG Clinical Guideline: DILI",
+      "pathways": [
+        {
+          "severity": "all_suspected_dili",
+          "criteria": "Elevated LFTs with temporal relation to drug",
+          "treatment": "IMMEDIATE cessation of suspected offending drug/toxin. Assess causality using RUCAM (Roussel Uclaf Causality Assessment Method) or Maria & Victorino scale. Monitor LFTs, INR, bilirubin twice weekly until improving. Admit if INR >1.5, bilirubin >5, or encephalopathy. Avoid hepatotoxins. The majority of DILI resolves spontaneously within weeks to months after drug stop."
+        },
+        {
+          "severity": "acetaminophen_overdose",
+          "criteria": "Acetaminophen ingestion >7.5g (adult) or >150mg/kg (child) within 24h; or therapeutic doses in at-risk patients with high NAC levels",
+          "treatment": "N-acetylcysteine (NAC) IV protocol: 150mg/kg in 200mL D5W over 1h, then 50mg/kg in 500mL D5W over 4h, then 100mg/kg in 1000mL D5W over 16h. Start within 8h of ingestion for best outcome; benefit extends to 24h+ even if late. NAC also beneficial in non-acetaminophen DILI with acute liver failure. Activated charcoal 1g/kg PO if within 4h of ingestion. Monitor liver enzymes, INR, glucose, renal function. Transplant evaluation if progressive despite NAC."
+        },
+        {
+          "severity": "idiosyncratic_dili_severe_hy_law_positive",
+          "criteria": "Bilirubin >2x ULN + ALT >3x ULN (Hy's Law), or INR >1.5, or signs of liver failure",
+          "treatment": "Immediate hospital admission. Drug cessation. NAC IV (same protocol as acetaminophen — may benefit even non-acetaminophen DILI). Monitor closely: daily LFTs, INR, creatinine, glucose, lactate. Evaluate for acute liver failure. Consider transplant evaluation if progressive. If features of DRESS syndrome or immuno-allergic DILI (rash, eosinophilia, fever): consider corticosteroids (prednisolone 0.5-1mg/kg/day with slow taper). Liver biopsy if uncertain diagnosis."
+        },
+        {
+          "severity": "acute_liver_failure_due_to_dili",
+          "criteria": "INR >1.5 + any grade hepatic encephalopathy within 26 weeks of jaundice onset",
+          "treatment": "ICU admission. NAC IV. Hepatology + transplant team consultation. King's College Criteria for transplant: acetaminophen: pH <7.3 (arterial) OR INR >6.5 + Cr >3.4mg/dL + encephalopathy grade 3-4. Non-acetaminophen: INR >6.5 OR any 3 of: age <10 or >40, jaundice >7 days before encephalopathy, INR >3.5, bilirubin >17.4mg/dL, unfavorable cause (idiosyncratic DILI). Supportive care: intracranial pressure monitoring if encephalopathy, vasopressors, renal replacement therapy, avoid hepatotoxins."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "acetaminophen_metabolism_via_cyp2e1_to_napqi",
+      "napqi_depletes_glutathione_and_binds_to_cellular_proteins",
+      "mitochondrial_dysfunction_and_atp_depletion",
+      "hepatocyte_necrosis_centrilobular",
+      "idiosyncratic_drug_metabolism_to_reactive_metabolites",
+      "haptenation_and_immune_mediated_hypersensitivity",
+      "t_cell_mediated_hepatocyte_killing",
+      "mitochondrial_permeability_transition_pore_opening",
+      "apoptosis_and_necrosis_of_hepatocytes",
+      "bile_canalicular_injury_in_cholestatic_dili",
+      "inhibition_of_bile_salt_export_pump_bsep",
+      "progressive_injury_if_drug_continued"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_liver_failure",
+        "probability": 0.05,
+        "severityBoost": 1.0,
+        "clues": ["inr_greater_than_1_5", "hepatic_encephalopathy", "hy_law_positive", "rapidly_rising_bilirubin"]
+      },
+      {
+        "diseaseId": "hepatorenal_syndrome",
+        "probability": 0.03,
+        "severityBoost": 0.8,
+        "clues": ["oliguria", "rising_creatinine", "acute_liver_failure_setting"]
+      },
+      {
+        "diseaseId": "fulminant_hepatic_failure_requiring_transplant",
+        "probability": 0.02,
+        "severityBoost": 1.0,
+        "clues": ["progressive_encephalopathy", "inr_greater_than_6", "meets_king_college_criteria"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["temporal_relation_between_drug_and_liver_injury", "acute_hepatitis_pattern_or_cholestatic_pattern", "exclusion_of_other_causes", "improvement_after_drug_cessation"],
+    "exclusionClues": ["viral_hepatitis_positive_serology", "autoimmune_markers_present", "no_offending_drug_history"]
+  }
+}

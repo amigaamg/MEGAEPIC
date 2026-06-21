@@ -17,7 +17,7 @@ export default function FamilySocialSection() {
   const biodata = useHistoryStore(s => s.biodata);
   const setFamilySocial = useHistoryStore(s => s.setFamilySocial);
   const completeSection = useHistoryStore(s => s.completeSection);
-  const completedSections = useHistoryStore(s => s.completedSections);
+  const isAdult = (biodata.age || 99) >= 18;
 
   const toggleExposure = (exp: string) => {
     const updated = fs.occupationExposure.includes(exp)
@@ -45,6 +45,7 @@ export default function FamilySocialSection() {
           <label className="text-xs text-gray-400 mb-1 block">Marital Status</label>
           <select value={fs.maritalStatus} onChange={e => setFamilySocial({ maritalStatus: e.target.value as any })}
             className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="">-- Select --</option>
             <option value="single">Single</option>
             <option value="married">Married</option>
             <option value="divorced">Divorced</option>
@@ -56,6 +57,7 @@ export default function FamilySocialSection() {
           <label className="text-xs text-gray-400 mb-1 block">Education Level</label>
           <select value={fs.education} onChange={e => setFamilySocial({ education: e.target.value as any })}
             className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="">-- Select --</option>
             <option value="none">None</option>
             <option value="primary">Primary</option>
             <option value="secondary">Secondary</option>
@@ -67,6 +69,7 @@ export default function FamilySocialSection() {
           <label className="text-xs text-gray-400 mb-1 block">Income Level</label>
           <select value={fs.incomeLevel} onChange={e => setFamilySocial({ incomeLevel: e.target.value as any })}
             className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="">-- Select --</option>
             <option value="low">Low</option>
             <option value="middle">Middle</option>
             <option value="high">High</option>
@@ -76,6 +79,7 @@ export default function FamilySocialSection() {
           <label className="text-xs text-gray-400 mb-1 block">Housing</label>
           <select value={fs.housing} onChange={e => setFamilySocial({ housing: e.target.value as any })}
             className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="">-- Select --</option>
             <option value="owned">Owned</option>
             <option value="rented">Rented</option>
             <option value="informal">Informal</option>
@@ -86,6 +90,7 @@ export default function FamilySocialSection() {
           <label className="text-xs text-gray-400 mb-1 block">Water Source</label>
           <select value={fs.water} onChange={e => setFamilySocial({ water: e.target.value as any })}
             className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="">-- Select --</option>
             <option value="piped">Piped Water</option>
             <option value="well">Well Water</option>
             <option value="river">River/Stream</option>
@@ -96,6 +101,7 @@ export default function FamilySocialSection() {
           <label className="text-xs text-gray-400 mb-1 block">Sanitation</label>
           <select value={fs.sanitation} onChange={e => setFamilySocial({ sanitation: e.target.value as any })}
             className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="">-- Select --</option>
             <option value="flush">Flush Toilet</option>
             <option value="pit">Pit Latrine</option>
             <option value="ventilated_pit">VIP Latrine</option>
@@ -104,39 +110,41 @@ export default function FamilySocialSection() {
         </div>
       </div>
 
-      {/* Smoking & Alcohol */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div>
-          <label className="text-xs text-gray-400 mb-1 block">Smoking</label>
-          <select value={fs.smoking} onChange={e => setFamilySocial({ smoking: e.target.value as any })}
-            className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
-            <option value="never">Never</option>
-            <option value="former">Former</option>
-            <option value="current">Current</option>
-          </select>
-          {(fs.smoking === 'current' || fs.smoking === 'former') && (
-            <input type="number" placeholder="Pack-years" value={fs.smokingPackYears || ''}
-              onChange={e => setFamilySocial({ smokingPackYears: parseInt(e.target.value) || 0 })}
-              className="w-full mt-1 bg-gray-800 border border-gray-700 rounded px-2 py-1 text-[11px] text-white" />
-          )}
+      {/* Smoking & Alcohol — only for adults (≥18) */}
+      {isAdult && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label className="text-xs text-gray-400 mb-1 block">Smoking</label>
+            <select value={fs.smoking} onChange={e => setFamilySocial({ smoking: e.target.value as any })}
+              className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+              <option value="never">Never</option>
+              <option value="former">Former</option>
+              <option value="current">Current</option>
+            </select>
+            {(fs.smoking === 'current' || fs.smoking === 'former') && (
+              <input type="number" placeholder="Pack-years" value={fs.smokingPackYears || ''}
+                onChange={e => setFamilySocial({ smokingPackYears: parseInt(e.target.value) || 0 })}
+                className="w-full mt-1 bg-gray-800 border border-gray-700 rounded px-2 py-1 text-[11px] text-white" />
+            )}
+          </div>
+          <div>
+            <label className="text-xs text-gray-400 mb-1 block">Alcohol</label>
+            <select value={fs.alcohol} onChange={e => setFamilySocial({ alcohol: e.target.value as any })}
+              className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+              <option value="never">Never</option>
+              <option value="occasional">Occasional</option>
+              <option value="moderate">Moderate</option>
+              <option value="heavy">Heavy</option>
+              <option value="former">Former</option>
+            </select>
+            {fs.alcohol !== 'never' && (
+              <input type="text" placeholder="Amount & frequency" value={fs.alcoholAmount || ''}
+                onChange={e => setFamilySocial({ alcoholAmount: e.target.value })}
+                className="w-full mt-1 bg-gray-800 border border-gray-700 rounded px-2 py-1 text-[11px] text-white" />
+            )}
+          </div>
         </div>
-        <div>
-          <label className="text-xs text-gray-400 mb-1 block">Alcohol</label>
-          <select value={fs.alcohol} onChange={e => setFamilySocial({ alcohol: e.target.value as any })}
-            className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
-            <option value="never">Never</option>
-            <option value="occasional">Occasional</option>
-            <option value="moderate">Moderate</option>
-            <option value="heavy">Heavy</option>
-            <option value="former">Former</option>
-          </select>
-          {fs.alcohol !== 'never' && (
-            <input type="text" placeholder="Amount & frequency" value={fs.alcoholAmount || ''}
-              onChange={e => setFamilySocial({ alcoholAmount: e.target.value })}
-              className="w-full mt-1 bg-gray-800 border border-gray-700 rounded px-2 py-1 text-[11px] text-white" />
-          )}
-        </div>
-      </div>
+      )}
 
       {/* Occupation Exposures */}
       <div className="p-3 bg-[#12193a] rounded-lg border border-gray-700/50">
@@ -182,6 +190,7 @@ export default function FamilySocialSection() {
           <label className="text-xs text-gray-400 mb-1 block">Transport Access</label>
           <select value={fs.transportAccess} onChange={e => setFamilySocial({ transportAccess: e.target.value as any })}
             className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="">-- Select --</option>
             <option value="private">Private</option>
             <option value="public">Public</option>
             <option value="walking">Walking</option>

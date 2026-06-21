@@ -1,0 +1,147 @@
+{
+  "disease": {
+    "id": "pyruvate_kinase_deficiency",
+    "name": "Pyruvate Kinase Deficiency",
+    "system": "hematology",
+    "agePeak_months": [0, 120],
+    "note": "Rare autosomal recessive disorder causing chronic nonspherocytic hemolytic anemia due to PKLR gene mutation. Second most common RBC enzyme defect after G6PD deficiency. Variable severity: from severe neonatal jaundice requiring exchange transfusion to mild compensated hemolysis diagnosed in adulthood. Gallstones and aplastic crises are common complications. Splenectomy partially effective.",
+    "prevalenceWeight": 0.01,
+    "syndromeTags": ["anemia", "hemolysis", "jaundice", "genetic", "enzyme_deficiency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "severe_neonatal_hyperbilirubinemia", "weight": 8 },
+        { "sign": "aplastic_crisis_parvovirus_b19", "weight": 9 },
+        { "sign": "hemolytic_crisis_with_hb_less_than_5", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "transfusion_dependent": true,
+        "hgb_less_than_7": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "compensated_hemolysis": true,
+        "hgb_above_9": true
+      },
+      "severityLabel": "Neonate with severe jaundice -> URGENT phototherapy/exchange; Aplastic crisis -> EMERGENCY; Severe anemia -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 5, "note": "Neonatal jaundice often severe; chronic jaundice in older children/adults" },
+      { "symptomId": "fatigue", "weight": 4 },
+      { "symptomId": "pallor", "weight": 4 },
+      { "symptomId": "dyspnea_on_exertion", "weight": 3 },
+      { "symptomId": "dark_urine", "weight": 2 },
+      { "symptomId": "splenic_discomfort", "weight": 3 },
+      { "symptomId": "gallstone_symptoms", "weight": 2, "note": "Pigmented gallstones from chronic hemolysis" },
+      { "symptomId": "family_history", "weight": 4, "note": "Autosomal recessive; consanguinity" },
+      { "symptomId": "consanguinity", "weight": 3 },
+      { "symptomId": "neonatal_jaundice_phototherapy_or_exchange", "weight": 4 },
+      { "symptomId": "aplastic_crisis_with_parvovirus", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5 },
+      { "signId": "pallor", "baseWeight": 4 },
+      { "signId": "splenomegaly", "baseWeight": 4 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "tachycardia", "baseWeight": 2 },
+      { "signId": "skeletal_changes_from_chronic_hemolysis", "baseWeight": 1, "note": "Bone deformities in severe cases" }
+    ],
+
+    "riskFactors": [
+      { "id": "pklr_gene_mutation_autosomal_recessive", "multiplier": 10.0 },
+      { "id": "family_history", "multiplier": 5.0 },
+      { "id": "consanguinity", "multiplier": 3.0 },
+      { "id": "northern_european_ancestry", "multiplier": 1.5 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "g6pd_deficiency",
+        "discriminators": ["x_linked", "trigger_related_hemolysis", "bite_cells", "low_g6pd_assay"]
+      },
+      {
+        "diseaseId": "hereditary_spherocytosis",
+        "discriminators": ["spherocytosis", "increased_osmotic_fragility", "autosomal_dominant_often", "positive_ema_binding"]
+      },
+      {
+        "diseaseId": "autoimmune_hemolytic_anemia",
+        "discriminators": ["positive_coombs", "acute_onset", "no_family_history", "spherocytes"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "FBC with reticulocyte count", "priority": "immediate", "yield": 0.9, "indication": "anemia, reticulocytosis" },
+        { "name": "Blood film", "priority": "high", "yield": 0.7, "indication": "prickle cells/echinocytes; no spherocytes; polychromasia" },
+        { "name": "PK enzyme assay (quantitative)", "priority": "high", "yield": 0.98, "indication": "low pyruvate kinase activity; diagnostic gold standard" },
+        { "name": "PKLR gene sequencing", "priority": "high", "yield": 0.99, "indication": "confirmatory; >200 mutations known" },
+        { "name": "Bilirubin (total and indirect)", "priority": "high", "yield": 0.8, "indication": "elevated unconjugated" },
+        { "name": "LDH", "priority": "high", "yield": 0.7, "indication": "elevated" },
+        { "name": "Haptoglobin", "priority": "high", "yield": 0.8, "indication": "low" }
+      ],
+      "imaging": []
+    },
+
+    "management": {
+      "protocolReference": "BSH Guidelines for Hereditary Hemolytic Anemias",
+      "pathways": [
+        {
+          "severity": "mild_to_moderate",
+          "criteria": "Hb 8-12, compensated, no transfusion need",
+          "treatment": "Folic acid 5mg PO daily. Avoid hemolytic triggers. Monitor Hb, reticulocytes. Annual influenza and pneumococcal vaccines. Gallbladder ultrasound surveillance. Avoid oxidative drugs (less critical than G6PD but still advisable)."
+        },
+        {
+          "severity": "severe_transfusion_dependent",
+          "criteria": "Hb <7, transfusion-dependent, growth failure, severe splenomegaly",
+          "treatment": "Splenectomy is beneficial (reduces transfusion needs by 50-70%). Timing: after age 5 if possible. Vaccinate pre-splenectomy: pneumococcal, meningococcal, Hib. Post-splenectomy penicillin prophylaxis. Partial splenectomy may preserve immune function. Chronic transfusion may cause iron overload: monitor ferritin, consider chelation. Hematopoietic stem cell transplant: curative but reserved for severe cases (transfusion-dependent, no splenectomy response)."
+        },
+        {
+          "severity": "aplastic_crisis",
+          "criteria": "Parvovirus B19: rapid Hb drop, reticulocytopenia",
+          "treatment": "Transfusion support. Supportive care. Most recover."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "pklr_gene_mutation_autosomal_recessive",
+      "pyruvate_kinase_enzyme_deficiency",
+      "block_in_glycolysis_below_phosphoenolpyruvate",
+      "atp_depletion_in_red_blood_cells",
+      "loss_of_rbc_membrane_ion_homeostasis",
+      "premature_rbc_destruction_in_spleen",
+      "extravascular_hemolysis",
+      "chronic_hemolytic_anemia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "gallstones_cholelithiasis",
+        "probability": 0.3,
+        "severityBoost": 0.3,
+        "clues": ["chronic_hemolysis", "elevated_bilirubin"]
+      },
+      {
+        "diseaseId": "aplastic_crisis",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["parvovirus_b19", "reticulocytopenia"]
+      },
+      {
+        "diseaseId": "iron_overload_from_transfusion",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["multiple_transfusions", "elevated_ferritin"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium",
+    "diagnosticClues": ["chronic_nonspherocytic_hemolytic_anemia", "neonatal_jaundice", "autosomal_recessive", "prickle_cells_on_film", "low_pk_activity"],
+    "exclusionClues": ["g6pd_deficiency_confirmed", "spherocytosis", "positive_coombs"]
+  }
+}

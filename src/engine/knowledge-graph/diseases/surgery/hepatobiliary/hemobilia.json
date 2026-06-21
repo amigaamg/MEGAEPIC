@@ -1,0 +1,197 @@
+{
+  "disease": {
+    "id": "hemobilia",
+    "name": "Hemobilia",
+    "system": "surgical",
+    "department": "surgery",
+    "unit": "hepatobiliary",
+    "agePeak_months": [360, 840],
+    "note": "Bleeding into the biliary tract presenting as GI bleeding. Classic Quincke triad: RUQ pain + jaundice + GI bleeding (only 30% have all three). Most common causes: iatrogenic (post-liver biopsy, PTBD, ERCP with sphincterotomy ~60%), trauma, tumors, gallstones eroding into hepatic artery, hepatic artery aneurysm.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["upper_gi_bleeding", "biliary_tract_disease", "hepatobiliary_emergency", "obstructive_jaundice"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hematemesis_with_hypotension", "weight": 10 },
+        { "sign": "septic_shock_from_cholangitis", "weight": 9 },
+        { "sign": "rapidly_expanding_pseudoaneurysm", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "quincke_triad_full_ruq_pain_jaundice_gi_bleed", "weight": 8 },
+          { "sign": "known_hepatic_tumor_or_biopsy", "weight": 6 },
+          { "sign": "pseudoaneurysm_on_imaging", "weight": 7 },
+          { "sign": "obstructive_jaundice_with_gi_bleed", "weight": 6 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Any bleeding with biliary obstruction signs or pseudoaneurysm -> URGENT angiography; Quincke triad -> EMERGENCY"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hematemesis_melena", "weight": 4, "note": "blood from ampulla into duodenum" },
+      { "symptomId": "hematemesis_melena", "weight": 4, "note": "most common GI presentation" },
+      { "symptomId": "rectal_bleeding", "weight": 2, "note": "if massive rapid bleeding" },
+      { "symptomId": "abdominal_pain", "weight": 4, "note": "RUQ/epigastric — biliary colic from clots" },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "fever", "weight": 2, "note": "if cholangitis" },
+      { "symptomId": "fatigue", "weight": 2, "note": "from anemia" },
+      { "symptomId": "syncope", "weight": 1, "note": "if significant bleeding" }
+    ],
+
+    "examFeatures": [
+      { "signId": "ruq_tenderness", "baseWeight": 4, "note": "biliary colic from clots" },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "pulsatile_mass_ruq", "baseWeight": 3, "note": "if hepatic artery aneurysm" },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 2, "note": "if cholangitis" },
+      { "signId": "signs_of_chronic_liver_disease", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "recent_liver_biopsy", "multiplier": 5.0, "note": "Most common iatrogenic cause" },
+      { "id": "recent_ercp_with_sphincterotomy", "multiplier": 3.0 },
+      { "id": "recent_ptbd", "multiplier": 4.0 },
+      { "id": "liver_trauma_blunt_or_penetrating", "multiplier": 3.0 },
+      { "id": "hepatic_tumors_hcc_metastases", "multiplier": 3.0 },
+      { "id": "acute_cholecystitis_pseudoaneurysm", "multiplier": 1.5 },
+      { "id": "hepatic_artery_aneurysm", "multiplier": 3.0 },
+      { "id": "gallstones_eroding_into_hepatic_artery", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "iatrogenic_hemobilia_post_procedure",
+        "name": "Iatrogenic Hemobilia (Post-Procedure)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "recent_liver_biopsy_or_ptbd_or_ercp", "weight": 5 },
+          { "feature": "bleeding_within_days_of_procedure", "weight": 4 },
+          { "feature": "ruq_pain_and_jaundice_following_procedure", "weight": 4 },
+          { "feature": "pseudoaneurysm_on_doppler", "weight": 4 }
+        ],
+        "management": "Angiography with transcatheter arterial embolization (TAE) — treatment of choice. If embolization fails: surgical ligation. ERCP with sphincterotomy for clot extraction."
+      },
+      {
+        "id": "hemobilia_from_tumor",
+        "name": "Hemobilia from Hepatic Tumor",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "known_liver_tumor_hcc_or_metastasis", "weight": 5 },
+          { "feature": "spontaneous_ruq_pain_and_bleeding", "weight": 4 },
+          { "feature": "tumor_pseudoaneurysm_on_imaging", "weight": 4 },
+          { "feature": "tumor_erosion_into_biliary_tree", "weight": 4 }
+        ],
+        "management": "Angiography with TAE. If tumor resectable: surgical resection of tumor. Treat underlying malignancy. For HCC: TACE, sorafenib/atezolizumab-bevacizumab."
+      },
+      {
+        "id": "hemobilia_from_trauma",
+        "name": "Traumatic Hemobilia",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [
+          { "feature": "blunt_or_penetrating_liver_trauma", "weight": 5 },
+          { "feature": "delayed_bleeding_days_to_weeks_after_trauma", "weight": 4 },
+          { "feature": "pseudoaneurysm_or_biloma_on_ct", "weight": 4 },
+          { "feature": "right_upper_quadrant_pain_and_jaundice", "weight": 3 }
+        ],
+        "management": "Angiography with TAE. If failed: surgical ligation or liver resection. Drain biloma if present."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "peptic_ulcer_disease",
+        "discriminators": ["no_ruq_pain_or_jaundice", "no_recent_hepatobiliary_instrumentation", "epigastric_pain_related_to_meals", "egd_shows_ulcer"]
+      },
+      {
+        "diseaseId": "esophageal_varices",
+        "discriminators": ["known_cirrhosis_and_portal_hypertension", "no_ruq_pain", "varices_on_egd", "no_pseudoaneurysm"]
+      },
+      {
+        "diseaseId": "choledocholithiasis",
+        "discriminators": ["ruq_pain_and_jaundice_but_no_gi_bleeding", "cbd_stones_on_imaging", "no_pseudoaneurysm", "no_history_of_procedure"]
+      },
+      {
+        "diseaseId": "acute_cholangitis",
+        "discriminators": ["fever_and_jaundice_prominent", "gi_bleeding_unusual_in_early_stages", "no_pseudoaneurysm"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "LFTs (ALP, GGT, bilirubin, ALT/AST)", "priority": "immediate", "yield": 0.8, "indication": "Obstructive jaundice pattern" },
+        { "name": "CBC", "priority": "immediate", "yield": 0.5, "indication": "Assess anemia from blood loss" },
+        { "name": "INR/PT", "priority": "high", "yield": 0.4, "indication": "Assess synthetic function" }
+      ],
+      "imaging": [
+        { "name": "RUQ Ultrasound with Doppler", "priority": "immediate", "yield": 0.7, "indication": "May show intraductal clots, pseudoaneurysm, tumor" },
+        { "name": "CT Abdomen with IV contrast", "priority": "immediate", "yield": 0.85, "indication": "Pseudoaneurysm, tumor, trauma, active extravasation" },
+        { "name": "EGD", "priority": "high", "yield": 0.5, "indication": "Blood from ampulla of Vater — visible bleeding or clot" },
+        { "name": "Angiography", "priority": "gold_standard", "yield": 0.95, "indication": "DIAGNOSTIC AND THERAPEUTIC — identifies pseudoaneurysm, active extravasation; allows embolization" },
+        { "name": "ERCP", "priority": "therapeutic", "yield": 0.7, "indication": "Can see blood from ampulla, cholangiogram shows clots; therapeutic sphincterotomy for clot extraction" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "EASL / AASLD Guidelines for Hemobilia Management",
+      "pathways": [
+        {
+          "severity": "active hemobilia (arterial)",
+          "criteria": "Active bleeding from pseudoaneurysm or iatrogenic injury, hemodynamic instability",
+          "treatment": "Angiography with transcatheter arterial embolization (TAE) — treatment of choice. If TAE fails: surgical ligation of hepatic artery branch. IV fluids and blood transfusion as needed."
+        },
+        {
+          "severity": "hemobilia with intraductal clots",
+          "criteria": "Stable patient, obstructive jaundice from intraductal clots, visible blood from ampulla",
+          "treatment": "ERCP with sphincterotomy and clot extraction. Consider nasobiliary drain. Angiography if ongoing bleeding."
+        },
+        {
+          "severity": "traumatic hemobilia",
+          "criteria": "Post-traumatic, delayed bleeding with pseudoaneurysm",
+          "treatment": "Angiography with TAE. Drain biloma. Surgical resection if embolization fails. Treat liver injury per AAST grade."
+        }
+      ]
+    },
+
+    "diagnosticClues": ["classic_quincke_triad_ruq_pain_jaundice_gi_bleed_especially_post_liver_biopsy_ercp", "blood_from_ampulla_of_vater_on_egd_visible_bleeding_or_clot", "pseudoaneurysm_on_angiography_or_doppler_us", "obstructive_jaundice_with_gi_bleed"],
+    "exclusionClues": ["pud_and_varices_no_ruq_pain_or_jaundice_or_recent_hepatobiliary_instrumentation", "choledocholithiasis_no_bleeding", "acute_cholangitis_no_gi_bleeding"],
+
+    "pathophysiology": [
+      "communication_between_blood_vessel_hepatic_artery_most_common_portal_vein_less_and_biliary_tree",
+      "traumatic_iatrogenic_tumor_erosion_or_inflammation_creates_fistula",
+      "blood_enters_bile_ducts_and_forms_clots",
+      "clots_obstruct_bile_flow_causing_ruq_pain_and_obstructive_jaundice",
+      "clots_pass_via_ampulla_into_duodenum_causing_gi_bleeding_melena_hematochezia_hematemesis",
+      "pseudoaneurysm_may_rupture_causing_massive_arterial_hemobilia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "cholangitis",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["fever", "increasing_jaundice", "elevated_wbc", "blood_culture_positive"]
+      },
+      {
+        "diseaseId": "massive_hemorrhage",
+        "probability": 0.15,
+        "severityBoost": 0.5,
+        "clues": ["hematemesis_and_melena", "hypotension", "falling_hb"]
+      },
+      {
+        "diseaseId": "hepatic_artery_pseudoaneurysm_rupture",
+        "probability": 0.1,
+        "severityBoost": 0.5,
+        "clues": ["sudden_severe_ruq_pain", "hypotension", "expanding_hematoma_on_ct"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high"
+  }
+}

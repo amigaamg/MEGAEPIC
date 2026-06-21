@@ -1,0 +1,135 @@
+{
+  "disease": {
+    "id": "ebv_hepatitis",
+    "name": "EBV Hepatitis (Infectious Mononucleosis with Hepatic Involvement)",
+    "system": "infectious_disease",
+    "agePeak_months": [180, 360],
+    "note": "EBV/Infectious mononucleosis with hepatic involvement. Nearly universal infection; abnormal LFTs in 80-90% of acute IM cases, clinical jaundice in ~5%. Usually self-limited.",
+    "prevalenceWeight": 0.6,
+    "syndromeTags": ["liver", "hepatitis", "jaundice", "viral", "mononucleosis", "lymphadenopathy"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "splenic_rupture_hemodynamic_instability", "weight": 10 },
+        { "sign": "airway_compromise_from_pharyngeal_edema", "weight": 10 },
+        { "sign": "acute_liver_failure_coagulopathy", "weight": 9 },
+        { "sign": "severe_neurologic_involvement_encephalitis", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "Uncomplicated IM -> OBSERVE outpatient; Hepatic involvement -> OBSERVE; Splenic rupture or airway compromise -> EMERGENCY; Immunocompromised severe EBV -> URGENT"
+    },
+    "historyFeatures": [
+      { "symptomId": "fatigue_malaise", "weight": 5 },
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "pharyngitis", "weight": 5 },
+      { "symptomId": "lymphadenopathy", "weight": 4 },
+      { "symptomId": "headache", "weight": 3 },
+      { "symptomId": "myalgia", "weight": 2 },
+      { "symptomId": "jaundice", "weight": 2, "note": "Mild jaundice in ~5%" },
+      { "symptomId": "abdominal_pain_right_upper_quadrant", "weight": 2 },
+      { "symptomId": "appetite_changes", "weight": 2 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "arthralgia", "weight": 1 }
+    ],
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5, "doubleWeight": false },
+      { "signId": "pharyngeal_exudate", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "lymphadenopathy", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "splenomegaly", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "hepatomegaly", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "jaundice", "baseWeight": 2, "doubleWeight": false, "note": "Mild if present" },
+      { "signId": "petechiae", "baseWeight": 2, "doubleWeight": false, "note": "Palatal petechiae pathognomonic" }
+    ],
+    "riskFactors": [
+      { "id": "adolescent_young_adult_15_30_years", "multiplier": 3.0 },
+      { "id": "close_contact_kissing_disease", "multiplier": 3.0 },
+      { "id": "shared_utensils_drinks", "multiplier": 1.5 },
+      { "id": "immunocompromised_transplant_hiv", "multiplier": 2.0 },
+      { "id": "college_dormitory_military_barracks", "multiplier": 2.0 }
+    ],
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "cmv_hepatitis",
+        "discriminators": ["cmv_pcr_positive_ebv_serology_negative", "less_severe_pharyngitis", "older_population_often", "monospot_negative"]
+      },
+      {
+        "diseaseId": "acute_hiv_seroconversion",
+        "discriminators": ["hiv_rna_p24_antigen_positive", "monospot_negative", "rash_more_prominent", "mucosal_ulcers"]
+      },
+      {
+        "diseaseId": "toxoplasmosis",
+        "discriminators": ["toxoplasma_igg_igm_positive", "lymphadenopathy_posterior_cervical", "cats_exposure", "monospot_negative"]
+      },
+      {
+        "diseaseId": "viral_hepatitis_a_b_c",
+        "discriminators": ["specific_viral_serology_positive", "no_pharyngitis_or_lymphadenopathy", "no_atypical_lymphocytosis"]
+      },
+      {
+        "diseaseId": "streptococcal_pharyngitis",
+        "discriminators": ["group_a_strep_rapid_positive", "no_splenomegaly", "no_atypical_lymphocytosis", "monospot_negative"]
+      }
+    ],
+    "investigations": {
+      "firstLine": [
+        { "test": "CBC_with_differential", "weight": 9, "note": "Atypical lymphocytosis >20%" },
+        { "test": "Monospot_heterophile_antibody", "weight": 9 },
+        { "test": "EBV_VCA_IgM", "weight": 10 },
+        { "test": "LFTs_ALT_AST_ALP_bilirubin", "weight": 8 },
+        { "test": "EBV_VCA_IgG", "weight": 8, "note": "Past infection differentiation" }
+      ],
+      "secondLine": ["EBV_EA_IgG", "EBV_EBNA_IgG", "abdominal_ultrasound", "EBV_PCR_quantitative"],
+      "goldStandard": "EBV_VCA_IgM_positive_with_atypical_lymphocytosis"
+    },
+    "management": {
+      "emergency": [
+        { "action": "Splenic rupture: emergent splenectomy or splenic embolization with resuscitation" },
+        { "action": "Airway compromise: IV corticosteroids, ENT evaluation for impending obstruction" },
+        { "action": "Acute liver failure: ICU, supportive care, consider liver transplant evaluation" }
+      ],
+      "inpatient": [
+        { "action": "IV fluids and supportive care if unable to tolerate oral" },
+        { "action": "Avoid NSAIDs (risk of bleeding), avoid contact sports (splenic rupture risk)" },
+        { "action": "Corticosteroids only for impending airway compromise or severe hemolytic anemia" }
+      ],
+      "outpatient": [
+        { "action": "Rest and supportive care (antipyretics, hydration)" },
+        { "action": "Avoid contact sports for 4-6 weeks (splenic rupture risk)" },
+        { "action": "Acetaminophen cautiously (max 2g/day) for fever/myalgia" },
+        { "action": "No routine antiviral therapy (valacyclovir/ganciclovir not indicated in immunocompetent)" }
+      ],
+      "refractory": [
+        { "action": "Consider valganciclovir/ganciclovir in severe EBV in immunocompromised" },
+        { "action": "Rituximab for EBV-driven lymphoproliferative disease in transplant recipients" }
+      ],
+      "preventive": [
+        { "action": "Avoid sharing utensils, toothbrushes, intimate contact during acute illness" },
+        { "action": "No vaccine available" }
+      ]
+    },
+    "pathophysiology": "EBV infects B-lymphocytes via CD21 receptor. Polyclonal B-cell activation triggers vigorous cytotoxic CD8+ T-cell response producing characteristic atypical lymphocytes (Downey cells). Hepatic involvement: EBV infects hepatocytes and biliary epithelium; immune-mediated injury causes mild self-limited hepatitis with ALT elevation typically 2-5x ULN. Hepatitis results from both direct viral infection and T-cell mediated inflammation targeting infected cells in the liver.",
+    "complications": [
+      { "diseaseId": "splenic_rupture", "probability": 0.005, "severityBoost": 0.9, "clues": ["acute_abdominal_pain_left_upper_quadrant", "hemodynamic_instability", "referred_shoulder_pain_kehr_sign"] },
+      { "diseaseId": "airway_obstruction", "probability": 0.01, "severityBoost": 0.8, "clues": ["severe_pharyngeal_edema", "stridor", "dysphagia", "tonsillar_hypertrophy_midline"] },
+      { "diseaseId": "autoimmune_hemolytic_anemia", "probability": 0.01, "severityBoost": 0.4, "clues": ["positive_direct_coombs", "falling_hemoglobin", "elevated_ldh_low_haptoglobin"] }
+    ],
+    "mustNotMiss": ["splenic_rupture_in_young_patient_with_abdominal_pain_and_im_history", "airway_compromise_from_severe_pharyngeal_edema", "ebv_associated_lymphoproliferative_disorder_in_transplant"],
+    "emergencyPriority": "low",
+    "diagnosticClues": [
+      { "clue": "Classic triad: fever, pharyngitis, lymphadenopathy in adolescent/young adult", "weight": 10 },
+      { "clue": "Atypical lymphocytosis >20% on peripheral smear", "weight": 9 },
+      { "clue": "Positive Monospot test in appropriate age group", "weight": 8 },
+      { "clue": "EBV VCA-IgM positive confirming acute infection", "weight": 10 },
+      { "clue": "Palatal petechiae on exam", "weight": 7 }
+    ],
+    "exclusionClues": [
+      { "clue": "Negative Monospot and negative EBV VCA-IgM", "weight": 10 },
+      { "clue": "Alternative viral serology positive (CMV, HIV, toxoplasma)", "weight": 8 },
+      { "clue": "EBV VCA-IgG positive with negative IgM (past infection)", "weight": 9 }
+    ]
+  }
+}

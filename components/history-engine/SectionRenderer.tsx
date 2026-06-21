@@ -2,7 +2,7 @@
 import type { PatientProfile } from '@/lib/history-engine/types';
 import BiodataSection from './BiodataSection';
 import ChiefComplaintSection from './ChiefComplaintSection';
-import HpiSection from './HpiSection';
+import AmexanHpiSection from './AmexanHpiSection';
 import PastHistorySection from './PastHistorySection';
 import FamilySocialSection from './FamilySocialSection';
 import RosSection from './RosSection';
@@ -35,7 +35,7 @@ export function SectionRenderer({ sectionId, profile }: Props) {
     case 'chief_complaints':
       return <ChiefComplaintSection />;
     case 'hpi':
-      return <HpiSection />;
+      return <AmexanHpiSection />;
     case 'past_history':
       return <PastHistorySection />;
     case 'family_social':

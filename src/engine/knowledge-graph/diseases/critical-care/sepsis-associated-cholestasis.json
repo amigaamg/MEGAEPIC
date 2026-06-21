@@ -1,0 +1,133 @@
+{
+  "disease": {
+    "id": "sepsis_associated_cholestasis",
+    "name": "Sepsis-Associated Cholestasis",
+    "system": "critical_care",
+    "agePeak_months": [0, 1080],
+    "note": "Jaundice occurring in the setting of severe infection or sepsis without direct hepatic infection. Caused by inflammatory cytokines impairing bile acid transport at the canalicular membrane. Frequently seen in ICU patients. Early jaundice in sepsis is a marker of severity and is associated with higher mortality. Resolves with treatment of the underlying infection. Also called 'septic jaundice' or 'cholestasis of sepsis'.",
+    "prevalenceWeight": 0.15,
+    "syndromeTags": ["sepsis", "cholestasis", "jaundice", "icu", "liver_dysfunction"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "septic_shock_persistent_hypotension", "weight": 10 },
+        { "sign": "multiorgan_dysfunction", "weight": 10 },
+        { "sign": "rapidly_rising_bilirubin_greater_than_5", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "icu_admission": true,
+        "vasopressor_requirement": true
+      },
+      "nonSevereCriteria": {
+        "mild_sepsis": true,
+        "no_organ_failure": true,
+        "mild_hyperbilirubinemia": true
+      },
+      "severityLabel": "Sepsis severity determines outcome; cholestasis is a marker of severity"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 4 },
+      { "symptomId": "jaundice", "weight": 3, "note": "Appears 2-5 days after sepsis onset; often mild" },
+      { "symptomId": "dark_urine", "weight": 2 },
+      { "symptomId": "symptoms_of_underlying_infection", "weight": 5, "note": "Pneumonia, UTI, intra-abdominal, skin, etc." },
+      { "symptomId": "hypotension_or_shock", "weight": 3 },
+      { "symptomId": "confusion_altered_mental_status", "weight": 2 },
+      { "symptomId": "oliguria", "weight": 2 }
+    ],
+
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 4 },
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 1 },
+      { "signId": "signs_of_sepsis", "baseWeight": 4, "note": "Tachycardia, tachypnea, hypotension, altered mental status" },
+      { "signId": "signs_of_underlying_infection", "baseWeight": 4 },
+      { "signId": "hypotension", "baseWeight": 3 }
+    ],
+
+    "riskFactors": [
+      { "id": "severe_sepsis_or_septic_shock", "multiplier": 5.0 },
+      { "id": "gram_negative_infection", "multiplier": 3.0 },
+      { "id": "intra_abdominal_infection", "multiplier": 3.0 },
+      { "id": "pneumonia_especially_gram_negative", "multiplier": 2.0 },
+      { "id": "pre_existing_liver_disease", "multiplier": 3.0 },
+      { "id": "prolonged_icu_stay", "multiplier": 2.0 },
+      { "id": "multiple_organ_dysfunction", "multiplier": 3.0 },
+      { "id": "parenteral_nutrition", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "acute_viral_hepatitis",
+        "discriminators": ["marked_transaminitis", "positive_viral_serology", "no_source_of_sepsis", "less_severe_systemic_illness"]
+      },
+      {
+        "diseaseId": "obstructive_jaundice_cholangitis",
+        "discriminators": ["dilated_bile_ducts_on_us", "alp_ggt_elevated_disproportionate", "fever_ruq_pain_typical_cholangitis"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury_in_icu",
+        "discriminators": ["offending_drug_in_icu_antibiotics", "eosinophilia", "hepatocellular_pattern"]
+      },
+      {
+        "diseaseId": "ischemic_hepatitis_shock_liver",
+        "discriminators": ["dramatic_ast_alt_elevation_10000", "preceding_hypotension", "rapid_improvement"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Bilirubin (total and direct)", "priority": "immediate", "yield": 0.9, "indication": "elevated conjugated bilirubin; key diagnostic marker" },
+        { "name": "ALP and GGT", "priority": "high", "yield": 0.8, "indication": "elevated; cholestatic pattern" },
+        { "name": "ALT and AST", "priority": "high", "yield": 0.7, "indication": "mildly elevated (often <500)" },
+        { "name": "INR/PT", "priority": "high", "yield": 0.5, "indication": "may be prolonged from sepsis or liver impairment" },
+        { "name": "CRP and procalcitonin", "priority": "high", "yield": 0.6, "indication": "elevated in infection" },
+        { "name": "Blood cultures and cultures from infection source", "priority": "high", "yield": 0.4, "indication": "identify causative organism" },
+        { "name": "Viral hepatitis serology (HAV, HBV, HCV, HEV)", "priority": "medium", "yield": 0.2, "indication": "rule out viral hepatitis" },
+        { "name": "Lactate", "priority": "high", "yield": 0.5, "indication": "tissue hypoperfusion marker" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "high", "yield": 0.4, "indication": "rule out biliary obstruction or abscess as source of sepsis" },
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.4, "indication": "pneumonia as source" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "Surviving Sepsis Campaign Guidelines; Critical Care Hepatology",
+      "pathways": [
+        {
+          "severity": "all_cases",
+          "criteria": "Sepsis-associated cholestasis at any severity",
+          "treatment": "Treat the underlying infection: appropriate antibiotics per cultures and source control (drainage of abscess, removal of infected catheter, etc.). Resuscitate per sepsis guidelines (fluids, vasopressors). No specific treatment for cholestasis itself. Jaundice improves as infection resolves. Avoid hepatotoxic drugs. Biliary drainage not indicated. UDCA has no proven role. Monitor bilirubin as a marker of sepsis resolution — falling bilirubin indicates resolving infection and improving organ function."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "endotoxin_lps_mediated_inflammatory_cascade",
+      "tnf_alpha_il_1_beta_il_6_release_from_kupffer_cells",
+      "downregulation_of_canalicular_bile_acid_transporters_bsep_mrp2",
+      "impaired_bile_acid_excretion",
+      "intrahepatic_cholestasis",
+      "conjugated_hyperbilirubinemia",
+      "jaundice_as_marker_of_sepsis_severity",
+      "reverses_with_resolution_of_infection"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "multiorgan_dysfunction_syndrome",
+        "probability": 0.3,
+        "severityBoost": 0.6,
+        "clues": ["bilirubin_rising", "sepsis_persistent", "organ_failures"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "high (based on sepsis severity)",
+    "diagnosticClues": ["jaundice_in_sepsis_icu_patient", "conjugated_hyperbilirubinemia", "mild_transaminitis", "no_biliary_obstruction", "resolves_with_infection_treatment"],
+    "exclusionClues": ["dilated_bile_ducts_on_us", "viral_hepatitis_positive", "drug_induced_pattern_dominant", "normal_bilirubin"]
+  }
+}

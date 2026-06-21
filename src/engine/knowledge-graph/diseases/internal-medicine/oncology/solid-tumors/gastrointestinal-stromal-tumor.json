@@ -1,0 +1,207 @@
+{
+  "disease": {
+    "id": "gastrointestinal_stromal_tumor_gist",
+    "name": "Gastrointestinal Stromal Tumor (GIST)",
+    "system": "oncology",
+    "agePeak_months": [600, 960],
+    "note": "Most common mesenchymal tumor of GI tract, arising from interstitial cells of Cajal. 60% in stomach, 30% small intestine, 10% elsewhere. Bleeding is 2nd most common presentation after mass effect. KIT (CD117) mutation in 85%, PDGFRA mutation in 5-10%.",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["gi_bleeding", "mesenchymal_tumor", "submucosal_mass", "tyrosine_kinase_driven"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_acute_gi_hemorrhage", "weight": 10 },
+        { "sign": "obstructive_symptoms", "weight": 7 },
+        { "sign": "tumor_rupture_with_hemoperitoneum", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "large_tumor_more_than_5cm", "weight": 6 },
+          { "sign": "metastatic_disease_liver_peritoneum", "weight": 6 },
+          { "sign": "high_mitotic_rate_more_than_5_per_50_hpf", "weight": 5 },
+          { "sign": "palpable_abdominal_mass", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Active bleeding/obstruction/rupture -> EMERGENCY; incidental small GIST -> OUTPATIENT EUS"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "hematemesis_melena", "weight": 3, "note": "if gastric GIST" },
+      { "symptomId": "hematemesis_melena", "weight": 4, "note": "if small bowel GIST" },
+      { "symptomId": "rectal_bleeding", "weight": 2, "note": "if colorectal GIST or massive bleeding" },
+      { "symptomId": "abdominal_pain", "weight": 3, "note": "fullness or discomfort" },
+      { "symptomId": "abdominal_mass", "weight": 4, "condition": "palpable mass" },
+      { "symptomId": "early_satiety", "weight": 3, "note": "gastric GIST" },
+      { "symptomId": "weight_loss", "weight": 2, "note": "uncommon unless large or metastatic" },
+      { "symptomId": "nausea_vomiting", "weight": 2, "note": "if obstructing" },
+      { "symptomId": "fatigue", "weight": 3, "note": "from anemia" },
+      { "symptomId": "iron_deficiency_anemia_symptoms", "weight": 3, "note": "chronic blood loss" }
+    ],
+
+    "examFeatures": [
+      { "signId": "palpable_abdominal_mass", "baseWeight": 5, "doubleWeight": true, "note": "if large" },
+      { "signId": "pallor", "baseWeight": 3 },
+      { "signId": "epigastric_tenderness", "baseWeight": 2 },
+      { "signId": "hepatomegaly", "baseWeight": 3, "note": "if liver metastases" },
+      { "signId": "cachexia", "baseWeight": 2, "note": "advanced disease" }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_50", "multiplier": 4.0 },
+      { "id": "male_gender", "multiplier": 1.5 },
+      { "id": "carney_triad", "multiplier": 5.0, "note": "Gastric GIST + paraganglioma + pulmonary chondroma" },
+      { "id": "nf1_neurofibromatosis_type_1", "multiplier": 4.0, "note": "Multiple jejunal/ileal GISTs" },
+      { "id": "familial_gist_syndrome_germline_kit_mutation", "multiplier": 5.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "gastric_gist",
+        "name": "Gastric GIST",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [
+          { "feature": "stomach_location_most_common_site", "weight": 5 },
+          { "feature": "hematemesis_or_melena", "weight": 4 },
+          { "feature": "early_satiety", "weight": 3 },
+          { "feature": "submucosal_mass_on_egd", "weight": 4 },
+          { "feature": "exophytic_growth_from_gastric_wall", "weight": 4 }
+        ],
+        "management": "Surgical resection (wedge gastrectomy or partial gastrectomy with R0 margins). Imatinib if metastatic/unresectable/adjuvant high risk."
+      },
+      {
+        "id": "small_bowel_gist",
+        "name": "Small Bowel GIST",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "obscure_gi_bleeding", "weight": 5 },
+          { "feature": "abdominal_pain_and_mass", "weight": 4 },
+          { "feature": "jejunal_or_ileal_location", "weight": 4 },
+          { "feature": "exophytic_mass_on_ct_enterography", "weight": 4 }
+        ],
+        "management": "Segmental small bowel resection with R0 margins. Imatinib for metastatic/high risk."
+      },
+      {
+        "id": "colorectal_gist",
+        "name": "Colorectal GIST",
+        "prevalenceModifier": 0.05,
+        "keyFeatures": [
+          { "feature": "rectal_bleeding", "weight": 4 },
+          { "feature": "rectal_mass_or_tenesmus", "weight": 3 },
+          { "feature": "submucosal_mass_on_colonoscopy", "weight": 4 }
+        ],
+        "management": "Surgical resection (low anterior resection or abdominoperineal resection for rectal). Imatinib if metastatic/unresectable."
+      },
+      {
+        "id": "metastatic_gist",
+        "name": "Metastatic GIST",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "liver_metastases_most_common", "weight": 5 },
+          { "feature": "peritoneal_dissemination", "weight": 4 },
+          { "feature": "weight_loss_and_cachexia", "weight": 3 },
+          { "feature": "abdominal_pain_from_bulk", "weight": 3 }
+        ],
+        "management": "Imatinib 400mg daily first-line. Sunitinib for imatinib-resistant. Regorafenib third-line. Surgical resection of residual disease if good response."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "leiomyoma",
+        "discriminators": ["desmin_positive", "cd117_negative", "dog1_negative", "no_kit_mutation"]
+      },
+      {
+        "diseaseId": "leiomyosarcoma",
+        "discriminators": ["desmin_positive", "cd117_negative", "different_morphology", "higher_grade"]
+      },
+      {
+        "diseaseId": "schwannoma",
+        "discriminators": ["s100_positive", "cd117_negative", "peripheral_lymphoid_cuff"]
+      },
+      {
+        "diseaseId": "carcinoid_tumor",
+        "discriminators": ["synaptophysin_chromogranin_positive", "cd117_negative", "submucosal_well_circumscribed"]
+      },
+      {
+        "diseaseId": "lymphoma",
+        "discriminators": ["cd45_positive", "cd117_negative", "lymph_node_involvement", "systemic_symptoms"]
+      }
+    ],
+
+    "investigations": {
+      "imaging": [
+        { "name": "CT Abdomen with IV contrast", "priority": "immediate", "yield": 0.85, "indication": "Exophytic well-circumscribed enhancing mass arising from bowel wall, no adenopathy, liver metastases" },
+        { "name": "EGD/EUS", "priority": "high", "yield": 0.9, "indication": "Submucosal mass, FNA core biopsy for CD117/DOG1 stains" },
+        { "name": "PET-CT", "priority": "medium", "yield": 0.8, "indication": "If metastatic or for treatment response assessment" },
+        { "name": "MRI Liver", "priority": "medium", "yield": 0.85, "indication": "Characterize liver metastases" }
+      ],
+      "laboratory": [
+        { "name": "CBC", "priority": "high", "yield": 0.5, "indication": "Anemia from bleeding" },
+        { "name": "Mutation analysis (KIT/PDGFRA)", "priority": "high", "yield": 0.95, "indication": "Guide tyrosine kinase inhibitor selection — exons 9, 11, 13, 17 for KIT; exons 12, 14, 18 for PDGFRA" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ESMO / NCCN Guidelines for GIST Management",
+      "pathways": [
+        {
+          "severity": "localized resectable GIST",
+          "criteria": "Localized tumor, R0 resection achievable, no metastases",
+          "treatment": "Surgical resection with R0 margins. No routine lymphadenectomy (rare nodal mets). Minimally invasive if feasible. Risk stratification based on size, mitotic rate, and site."
+        },
+        {
+          "severity": "high risk localized GIST (adjuvant)",
+          "criteria": "High risk features: >5cm, mitotic rate >5/50 HPF, non-gastric site, rupture",
+          "treatment": "Surgical resection + adjuvant imatinib 400mg daily for 3 years (high risk) or 36 months."
+        },
+        {
+          "severity": "metastatic or unresectable GIST",
+          "criteria": "Liver/peritoneal metastases or locally advanced unresectable",
+          "treatment": "First-line: Imatinib 400mg daily (increase to 800mg for KIT exon 9 mutation). Assess response at 3 months with CT. Second-line: Sunitinib 50mg daily 4 weeks on/2 weeks off. Third-line: Regorafenib 160mg daily 3 weeks on/1 week off. Surgical resection of residual disease after maximal response."
+        }
+      ]
+    },
+
+    "diagnosticClues": ["submucosal_exophytic_mass_on_ct", "cd117_positive_dog1_positive_on_biopsy", "kit_mutation_identified", "60_percent_gastric_30_percent_small_bowel"],
+    "exclusionClues": ["leiomyoma_desmin_positive_cd117_negative", "leiomyosarcoma_desmin_positive", "schwannoma_s100_positive", "carcinoid_synaptophysin_chromogranin_positive", "lymphoma_cd45_positive"],
+
+    "pathophysiology": [
+      "activating_mutation_in_kit_or_pdgfra_tyrosine_kinase_receptor",
+      "constitutive_activation_of_tyrosine_kinase_signaling_pathways",
+      "uncontrolled_proliferation_of_interstitial_cells_of_cajal",
+      "tumor_growth_as_exophytic_mass_from_bowel_wall",
+      "central_necrosis_and_ulceration_of_overlying_mucosa",
+      "gi_bleeding_from_ulcerated_mucosa",
+      "risk_stratification_by_tumor_size_mitotic_rate_and_site"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_gi_bleeding",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["hematemesis", "melena", "hematochezia", "hemodynamic_instability"]
+      },
+      {
+        "diseaseId": "tumor_rupture_with_hemoperitoneum",
+        "probability": 0.05,
+        "severityBoost": 0.5,
+        "clues": ["sudden_severe_abdominal_pain", "hypotension", "free_fluid_on_ct"]
+      },
+      {
+        "diseaseId": "small_bowel_obstruction",
+        "probability": 0.1,
+        "severityBoost": 0.3,
+        "clues": ["vomiting", "abdominal_distension", "obstructive_series"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium"
+  }
+}

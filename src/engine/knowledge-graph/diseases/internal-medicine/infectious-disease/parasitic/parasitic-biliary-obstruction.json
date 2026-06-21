@@ -1,0 +1,161 @@
+{
+  "disease": {
+    "id": "parasitic_biliary_obstruction",
+    "name": "Parasitic Biliary Obstruction",
+    "system": "infectious_disease",
+    "agePeak_months": [60, 720],
+    "note": "Biliary obstruction caused by parasitic infections, primarily Ascaris lumbricoides (roundworm) migrating into the bile ducts, and liver flukes (Clonorchis sinensis, Opisthorchis viverrini). Endemic in tropical and subtropical regions with poor sanitation. Ascaris causes acute biliary colic, cholangitis, and pancreatitis. Clonorchis causes chronic cholestasis and predisposes to cholangiocarcinoma. Diagnosis by stool microscopy, ultrasound, and ERCP.",
+    "prevalenceWeight": 0.05,
+    "syndromeTags": ["biliary_obstruction", "parasitic", "jaundice", "tropical", "ascariasis", "liver_fluke"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_cholangitis_severe", "weight": 9 },
+        { "sign": "acute_pancreatitis_severe", "weight": 8 },
+        { "sign": "biliary_peritonitis_from_duct_perforation", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "recurrent_cholangitis": true,
+        "worm_burden_high_multiple": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "single_worm": true,
+        "mild_jaundice": true
+      },
+      "severityLabel": "Cholangitis or pancreatitis -> EMERGENCY ERCP; Simple biliary ascariasis -> ENDOSCOPIC extraction"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 4, "note": "May be intermittent as worm moves" },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 5, "note": "Colicky or constant; severe" },
+      { "symptomId": "fever", "weight": 3, "note": "If cholangitis" },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "epigastric_pain_radiation_to_back", "weight": 2, "note": "If pancreatitis" },
+      { "symptomId": "history_of_passing_worms_in_stool", "weight": 4, "note": "Classic for ascariasis" },
+      { "symptomId": "living_in_or_travel_to_endemic_area", "weight": 4, "note": "Poor sanitation, tropical regions" },
+      { "symptomId": "consumption_of_raw_or_undercooked_fish", "weight": 4, "note": "Risk factor for Clonorchis/Opisthorchis" },
+      { "symptomId": "history_of_recurrent_biliary_colic", "weight": 2 },
+      { "symptomId": "weight_loss", "weight": 2, "note": "Chronic fluke infection" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 4 },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "splenomegaly", "baseWeight": 1 },
+      { "signId": "epigastric_tenderness", "baseWeight": 2, "note": "If pancreatitis" }
+    ],
+
+    "riskFactors": [
+      { "id": "living_in_tropical_region_poor_sanitation", "multiplier": 5.0 },
+      { "id": "ascaris_lumbricoides_infestation_intestinal", "multiplier": 5.0 },
+      { "id": "consumption_of_raw_undercooked_freshwater_fish", "multiplier": 5.0 },
+      { "id": "children_2_10_years_ascariasis", "multiplier": 3.0 },
+      { "id": "southeast_asia_clonorchis_endemic", "multiplier": 4.0 },
+      { "id": "scavenging_or_pig_farming_ascaris", "multiplier": 2.0 },
+      { "id": "previous_biliary_surgery_or_sphincterotomy", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "biliary_ascariasis",
+        "name": "Biliary Ascariasis",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [{ "feature": "acute_onset_ruq_colicky_pain", "weight": 5 }, { "feature": "worm_migration_from_duodenum_into_cbd", "weight": 5 }, { "feature": "can_cause_acute_pancreatitis", "weight": 4 }],
+        "management": "Endoscopic extraction via ERCP (sphincterotomy + worm removal with basket). Antihelminthic: albendazole 400mg PO x 3 days (for coexisting intestinal worms). ERCP success >90%. Worm may spontaneously exit."
+      },
+      {
+        "id": "clonorchiasis_opisthorchiasis",
+        "name": "Liver Fluke Infection (Clonorchis/Opisthorchis)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [{ "feature": "chronic_biliary_inflammation", "weight": 5 }, { "feature": "biliary_epithelial_hyperplasia", "weight": 4 }, { "feature": "predisposition_to_cholangiocarcinoma", "weight": 5 }],
+        "management": "Praziquantel 25mg/kg PO TID x 2 days. ERCP for acute obstruction (fluke extraction, stricture dilation). Surveillance ultrasound and CA19-9 for cholangiocarcinoma in endemic areas."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "choledocholithiasis",
+        "discriminators": ["hyperechoic_stone_on_us", "no_worm_visible", "no_stool_parasites", "non_endemic"]
+      },
+      {
+        "diseaseId": "cholangiocarcinoma",
+        "discriminators": ["mass_lesion", "irregular_stricture", "elevated_ca19_9", "no_worm_on_ercp"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "Stool microscopy (direct and concentration)", "priority": "high", "yield": 0.7, "indication": "Ascaris ova (fertilized/unfertilized); Clonorchis/Opisthorchis ova (operculated)" },
+        { "name": "FBC with differential", "priority": "high", "yield": 0.5, "indication": "eosinophilia in fluke infections; may be normal in ascariasis" },
+        { "name": "LFTs (bilirubin, ALP, ALT, AST, GGT)", "priority": "immediate", "yield": 0.8, "indication": "obstructive pattern" },
+        { "name": "Amylase and lipase", "priority": "high", "yield": 0.5, "indication": "elevated if acute pancreatitis" },
+        { "name": "Serology for Clonorchis/Opisthorchis", "priority": "medium", "yield": 0.85, "indication": "ELISA for specific antibodies" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "immediate", "yield": 0.8, "indication": "Ascaris: tubular echogenic structure in CBD with central anechoic lumen (double tube sign). Clonorchis: dilated intrahepatic ducts with periductal echogenicity; flukes may be visible as small echogenic foci" },
+        { "name": "MRCP", "priority": "high", "yield": 0.9, "indication": "non-invasive biliary mapping; identifies worm or flukes in duct" },
+        { "name": "ERCP", "priority": "selected", "yield": 0.95, "indication": "therapeutic: worm extraction (ascaris), fluke removal, stricture dilation, stenting. Diagnostic confirmation." }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines: Intestinal Helminths; Tropical Medicine Guidelines",
+      "pathways": [
+        {
+          "severity": "biliary_ascariasis_acute",
+          "criteria": "Ascaris worm in CBD causing obstruction, pain, or cholangitis",
+          "treatment": "ERCP with sphincterotomy + worm extraction using Dormia basket or extraction balloon. Conservative: some worms spontaneously exit (analgesia + antispasmodics). If no ERCP available: conservative with antibiotics if cholangitis (ceftriaxone + metronidazole). Antihelminthic: albendazole 400mg PO x 3 days (to clear intestinal worms and prevent recurrence). Avoid antihelminthics during acute phase (dying worm may worsen obstruction). Recurrence prevention: deworming q6 months, improved sanitation."
+        },
+        {
+          "severity": "clonorchiasis_opisthorchiasis",
+          "criteria": "Chronic fluke infection with or without acute obstruction",
+          "treatment": "Praziquantel 25mg/kg PO TID x 2 days (total dose 150mg/kg). For acute obstruction: ERCP with extraction and stricture management. Long-term surveillance with ultrasound q6-12m and CA19-9 due to cholangiocarcinoma risk. Avoid raw freshwater fish. Family screening in endemic areas."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "ascaris_migration_from_small_intestine_into_ampulla_of_vater",
+      "worm_enters_cbd_causing_mechanical_obstruction",
+      "bile_stasis_and_bacterial_cholangitis",
+      "worm_may_enter_cystic_or_pancreatic_duct",
+      "acute_pancreatitis_from_pancreatic_duct_obstruction",
+      "clonorchis_adult_flukes_in_intrahepatic_bile_ducts",
+      "chronic_biliary_inflammation_and_epithelial_hyperplasia",
+      "bile_duct_fibrosis_and_stricture_formation",
+      "predisposition_to_cholangiocarcinoma"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_cholangitis",
+        "probability": 0.3,
+        "severityBoost": 0.5,
+        "clues": ["fever", "ruq_pain", "jaundice"]
+      },
+      {
+        "diseaseId": "acute_pancreatitis",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["epigastric_pain", "elevated_amylase_lipase", "worm_in_pancreatic_duct"]
+      },
+      {
+        "diseaseId": "cholangiocarcinoma",
+        "probability": 0.02,
+        "severityBoost": 0.8,
+        "clues": ["chronic_clonorchis_infection", "weight_loss", "biliary_stricture", "elevated_ca19_9"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium (high if cholangitis or pancreatitis)",
+    "diagnosticClues": ["endemic_area_tropical", "acute_ruq_pain_colicky", "history_of_passing_worms", "tubular_structure_in_cbd_on_us", "eosinophilia_in_fluke"],
+    "exclusionClues": ["non_endemic", "stone_on_us", "no_worm_on_ercp", "negative_stool_parasitology"]
+  }
+}

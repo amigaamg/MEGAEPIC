@@ -1,0 +1,210 @@
+{
+  "disease": {
+    "id": "hepatitis_e",
+    "name": "Hepatitis E",
+    "system": "infectious_disease",
+    "agePeak_months": [180, 600],
+    "note": "Acute viral hepatitis caused by HEV (hepevirus). Fecal-oral transmission via contaminated water. Highest attack rate in young adults (15-30 years). Particularly dangerous in pregnancy: 15-25% mortality in third trimester. Chronic HEV occurs in immunocompromised (organ transplant, HIV, hematologic malignancy).",
+    "prevalenceWeight": 0.2,
+    "syndromeTags": ["liver", "viral_hepatitis", "acute_hepatitis", "pregnancy_high_risk", "waterborne"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "pregnant_third_trimester_with_jaundice", "weight": 10, "note": "High mortality: 15-25% risk of fulminant hepatic failure" },
+        { "sign": "acute_liver_failure_inr_greater_than_1_5_and_encephalopathy", "weight": 10 },
+        { "sign": "hepatic_encephalopathy_any_grade", "weight": 10 },
+        { "sign": "prolonged_inr_greater_than_2", "weight": 9 },
+        { "sign": "postpartum_hemorrhage", "weight": 8, "note": "Coagulopathy from acute liver failure" }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "pregnant_with_jaundice": true,
+        "acute_liver_failure": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "non_pregnant": true,
+        "uncomplicated_acute_hepatitis": true
+      },
+      "severityLabel": "Pregnant patient with jaundice -> EMERGENCY; Acute liver failure -> ICU; Non-pregnant with mild hepatitis -> SUPPORTIVE care"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 3 },
+      { "symptomId": "fatigue_malaise", "weight": 4 },
+      { "symptomId": "jaundice", "weight": 5 },
+      { "symptomId": "dark_urine_tea_colored", "weight": 4 },
+      { "symptomId": "right_upper_quadrant_abdominal_pain", "weight": 3 },
+      { "symptomId": "nausea_vomiting_anorexia", "weight": 4 },
+      { "symptomId": "pale_clay_colored_stools", "weight": 2 },
+      { "symptomId": "arthralgia", "weight": 2 },
+      { "symptomId": "pruritus", "weight": 2 },
+      { "symptomId": "pregnancy_current", "weight": 5, "note": "Third trimester most dangerous" },
+      { "symptomId": "drinking_contaminated_water", "weight": 4, "note": "Fecal-oral waterborne; endemic in areas with poor sanitation" },
+      { "symptomId": "travel_to_endemic_region", "weight": 3, "note": "South Asia, Africa, Middle East, Mexico" },
+      { "symptomId": "immunosuppressed_state_transplant_hiv", "weight": 3, "note": "Risk of chronic HEV" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 2 },
+      { "signId": "hepatomegaly_tender", "baseWeight": 3 },
+      { "signId": "right_upper_quadrant_tenderness_to_palpation", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 1 },
+      { "signId": "ascites", "baseWeight": 2, "note": "May develop in severe cases" },
+      { "signId": "signs_of_pregnancy", "baseWeight": 3, "note": "Pregnant uterus; check gestational age" }
+    ],
+
+    "riskFactors": [
+      { "id": "pregnancy_especially_third_trimester", "multiplier": 5.0, "note": "15-25% mortality in third trimester" },
+      { "id": "travel_to_or_residence_in_endemic_area_south_asia_africa", "multiplier": 4.0 },
+      { "id": "consumption_of_contaminated_drinking_water", "multiplier": 3.5 },
+      { "id": "poor_sanitation_and_hygiene", "multiplier": 3.0 },
+      { "id": "organ_transplant_recipient", "multiplier": 3.0, "note": "Risk of chronic HEV and cirrhosis" },
+      { "id": "hiv_infection_with_low_cd4", "multiplier": 2.5 },
+      { "id": "hematologic_malignancy_chemotherapy", "multiplier": 2.0 },
+      { "id": "consumption_of_undercooked_pork_or_wild_game", "multiplier": 2.0, "note": "HEV genotype 3 zoonotic transmission" },
+      { "id": "blood_transfusion_in_endemic_area", "multiplier": 1.5 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "hepatitis_e_genotype_1_and_2",
+        "name": "HEV Genotype 1 and 2 (Waterborne)",
+        "prevalenceModifier": 0.7,
+        "keyFeatures": [{ "feature": "fecal_oral_waterborne_transmission", "weight": 5 }, { "feature": "endemic_in_asia_africa_mexico", "weight": 5 }, { "feature": "affects_young_adults", "weight": 3 }],
+        "management": "Supportive care; ribavirin may be used in severe acute cases; pregnant patients with severe disease should be referred to tertiary center"
+      },
+      {
+        "id": "hepatitis_e_genotype_3_and_4",
+        "name": "HEV Genotype 3 and 4 (Zoonotic)",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [{ "feature": "zoonotic_transmission_from_pigs", "weight": 4 }, { "feature": "developed_countries", "weight": 4 }, { "feature": "chronic_infection_in_immunocompromised", "weight": 4 }],
+        "management": "Reduce immunosuppression if possible; ribavirin 600-800mg PO daily x 12 weeks for chronic HEV; pegylated interferon in transplant recipients if ribavirin fails"
+      },
+      {
+        "id": "chronic_hepatitis_e",
+        "name": "Chronic Hepatitis E",
+        "prevalenceModifier": 0.1,
+        "keyFeatures": [{ "feature": "persistent_hev_rna_greater_than_3_months", "weight": 5 }, { "feature": "immunocompromised_host", "weight": 5 }, { "feature": "can_progress_to_cirrhosis", "weight": 4 }],
+        "management": "First: reduce immunosuppression if possible. Second: ribavirin 600-800mg PO daily x 12 weeks. Monitor HEV RNA. Pegylated interferon if ribavirin fails or contraindicated (in transplant recipients)."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatitis_a",
+        "discriminators": ["igm_anti_hav_positive", "usually_milder_course_in_pregnancy", "no_chronic_infection"]
+      },
+      {
+        "diseaseId": "acute_hepatitis_b",
+        "discriminators": ["hbsag_positive", "igm_anti_hbc_positive", "sexual_or_needle_exposure"]
+      },
+      {
+        "diseaseId": "acute_fatty_liver_of_pregnancy",
+        "discriminators": ["third_trimester", "hypoglycemia", "elevated_uric_acid", "normal_viral_serology", "ultrasound_fatty_liver"]
+      },
+      {
+        "diseaseId": "hellp_syndrome",
+        "discriminators": ["hypertension", "proteinuria", "thrombocytopenia", "microangiopathic_hemolysis", "epigastric_pain"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["temporal_relation_to_drug", "no_hev_markers", "eosinophilia"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "IgM anti-HEV antibody", "priority": "immediate", "yield": 0.95, "indication": "diagnostic for acute HEV infection; sensitivity and specificity >95%" },
+        { "name": "HEV RNA by PCR (serum or stool)", "priority": "high", "yield": 0.98, "indication": "confirmatory testing; essential in immunocompromised for diagnosis and monitoring treatment response" },
+        { "name": "ALT and AST", "priority": "immediate", "yield": 0.9, "indication": "marked elevation (1000-3000 IU/L) in acute hepatitis" },
+        { "name": "Total and direct bilirubin", "priority": "immediate", "yield": 0.8, "indication": "elevated in icteric phase" },
+        { "name": "ALP and GGT", "priority": "high", "yield": 0.5, "indication": "mild to moderate elevation" },
+        { "name": "INR/PT", "priority": "high", "yield": 0.8, "indication": "synthetic function; prolonged in severe disease" },
+        { "name": "FBC with platelets", "priority": "medium", "yield": 0.4, "indication": "thrombocytopenia may occur in severe cases" },
+        { "name": "Serum albumin", "priority": "medium", "yield": 0.5, "indication": "low in severe or prolonged disease" },
+        { "name": "Anti-HEV IgG (serology)", "priority": "medium", "yield": 0.8, "indication": "past infection indicator; positive IgG with negative IgM indicates prior infection" },
+        { "name": "Liver biopsy", "priority": "selected", "yield": 0.9, "indication": "reserved for diagnostic uncertainty or chronic HEV assessment; cholestatic hepatitis pattern" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "medium", "yield": 0.3, "indication": "rule out biliary obstruction; assess liver and spleen" },
+        { "name": "Obstetric ultrasound", "priority": "high", "yield": 0.6, "indication": "fetal assessment if pregnant; check fetal viability and growth" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Hepatitis E; EASL Clinical Practice Guidelines: Hepatitis E",
+      "pathways": [
+        {
+          "severity": "uncomplicated_acute_hepatitis_e_non_pregnant",
+          "criteria": "IgM anti-HEV+, moderate ALT, no coagulopathy, no encephalopathy, non-pregnant",
+          "treatment": "Supportive care: rest, adequate nutrition, hydration. Avoid alcohol and hepatotoxic drugs. Monitor LFTs and INR weekly. Most recover fully within 4-6 weeks. No antiviral therapy required for acute genotype 1/2 in immunocompetent."
+        },
+        {
+          "severity": "acute_hepatitis_e_in_pregnancy",
+          "criteria": "Pregnant (especially third trimester) with acute HEV",
+          "treatment": "URGENT hospital admission. Multidisciplinary care (hepatology, obstetrics, critical care, neonatology). Monitor for signs of acute liver failure (INR, encephalopathy, hypoglycemia). No specific antiviral established for pregnancy (ribavirin is teratogenic, contraindicated in pregnancy). Early delivery may be considered if fulminant. Supportive care: vitamin K, fresh frozen plasma if coagulopathic. High risk of postpartum hemorrhage. Maternal mortality 15-25%, fetal mortality 30-50%. Transplant evaluation if worsening."
+        },
+        {
+          "severity": "fulminant_hepatitis_e",
+          "criteria": "HEV with INR >1.5, hepatic encephalopathy, acute liver failure",
+          "treatment": "ICU admission. Transplant center evaluation. NAC IV (limited evidence in HEV). King's College Criteria for transplant listing. Consider ribavirin 600-800mg PO daily in severe acute HEV (non-pregnant). Manage encephalopathy, coagulopathy, renal function, and nutrition."
+        },
+        {
+          "severity": "chronic_hepatitis_e_immunocompromised",
+          "criteria": "HEV RNA persisting >3 months in immunocompromised (transplant, HIV, chemotherapy)",
+          "treatment": "First: reduce immunosuppression (especially T-cell depleting agents like tacrolimus, cyclosporine). Second-line: ribavirin 600-800mg PO daily x 12 weeks (adjusted for renal function and Hb). Monitor HEV RNA monthly. Pegylated interferon 135mcg/week SC x 12 weeks if ribavirin fails (risk of graft rejection in transplant). Monitor liver fibrosis (FibroScan). HEV RNA should be undetectable at end of treatment and 6 months post-treatment for cure."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "fecal_oral_transmission_of_hev",
+      "oral_ingestion_and_primary_replication_in_gi_tract",
+      "hematogenous_spread_to_liver",
+      "hev_replication_in_hepatocyte_cytoplasm",
+      "immune_mediated_hepatocellular_injury",
+      "severe_in_pregnancy_hormonal_and_immune_alterations",
+      "decreased_cell_mediated_immunity_in_pregnancy",
+      "increased_hev_replication_due_to_high_steroid_levels",
+      "hepatocyte_necrosis_and_inflammation",
+      "hyperbilirubinemia_and_jaundice",
+      "self_limited_in_immunocompetent",
+      "persistent_infection_in_immunocompromised"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_liver_failure_fulminant",
+        "probability": 0.02,
+        "severityBoost": 1.0,
+        "clues": ["pregnancy", "rapid_onset_jaundice", "coagulopathy_inr_greater_than_1_5", "encephalopathy"]
+      },
+      {
+        "diseaseId": "maternal_mortality",
+        "probability": 0.15,
+        "severityBoost": 1.0,
+        "clues": ["third_trimester_pregnancy", "fulminant_hepatic_failure", "coagulopathy", "postpartum_hemorrhage"]
+      },
+      {
+        "diseaseId": "fetal_loss_and_preterm_birth",
+        "probability": 0.3,
+        "severityBoost": 0.7,
+        "clues": ["maternal_jaundice", "preterm_labor", "intrauterine_fetal_death"]
+      },
+      {
+        "diseaseId": "chronic_hepatitis_e_with_cirrhosis",
+        "probability": 0.05,
+        "severityBoost": 0.6,
+        "clues": ["immunocompromised_host", "persistent_hev_rna", "rising_fibroscan_values", "genotype_3_infection"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high if pregnant; medium otherwise",
+    "diagnosticClues": ["acute_hepatitis_with_jaundice_in_young_adult", "pregnancy_third_trimester_with_jaundice", "fecal_oral_waterborne_exposure", "anti_hev_igm_positive", "high_mortality_in_pregnancy"],
+    "exclusionClues": ["negative_hev_markers", "positive_hav_hbv_serology", "negative_hev_rna_in_immunocompromised"]
+  }
+}

@@ -4,11 +4,7 @@ import { useHistoryStore } from '@/lib/history-engine/useHistoryStore';
 import { saveEncounter } from '@/lib/history-engine/userStorage';
 import { generatePDF } from '@/lib/history-engine/pdfGenerator';
 
-interface Props {
-  onClose: () => void;
-}
-
-export default function DocumentEditor({ onClose }: Props) {
+export default function DocumentEditor() {
   const store = useHistoryStore();
   const documents = store.documents;
   const biodata = store.biodata;
@@ -44,17 +40,14 @@ export default function DocumentEditor({ onClose }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-      onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl w-[95vw] max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
-          <div>
-            <h2 className="text-lg font-bold text-[var(--accent)]">Edit Full Documentation</h2>
-            <p className="text-[10px] text-[var(--text-muted)]">Edit the clinical note freely. Changes are saved locally.</p>
-          </div>
-          <button onClick={onClose} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-xl">&times;</button>
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
+        <div>
+          <h2 className="text-lg font-bold text-[var(--accent)]">Edit Full Documentation</h2>
+          <p className="text-[10px] text-[var(--text-muted)]">Edit the clinical note freely. Changes are saved locally.</p>
         </div>
+      </div>
 
         {/* Editor */}
         <div className="flex-1 overflow-y-auto p-4">
@@ -68,7 +61,7 @@ export default function DocumentEditor({ onClose }: Props) {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-between p-4 border-t border-[var(--border)]">
+        <div className="flex items-center p-4 border-t border-[var(--border)]">
           <div className="flex gap-2">
             <button onClick={handleSave}
               className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${saved ? 'bg-green-500/20 text-green-400' : 'bg-[var(--accent-dim)] text-[var(--accent)] hover:bg-[var(--accent)]/20'}`}>
@@ -83,11 +76,6 @@ export default function DocumentEditor({ onClose }: Props) {
               📋 Copy
             </button>
           </div>
-          <button onClick={onClose}
-            className="px-4 py-2 rounded-lg text-xs font-medium bg-gray-500/10 text-[var(--text-secondary)] hover:bg-gray-500/20">
-            Close
-          </button>
-        </div>
       </div>
     </div>
   );

@@ -32,9 +32,9 @@ interface HistoryStore extends HistoryState {
 
   setVital: (key: keyof Vitals, value: number) => void;
   setAppearance: (appearance: string) => void;
-  setHydrationStatus: (status: 'normal' | 'mild_dehydration' | 'moderate_dehydration' | 'severe_dehydration', dryMucosa: boolean, sunkenEyes: boolean, reducedSkinTurgor: boolean) => void;
-  setNutritionalStatus: (status: 'normal' | 'underweight' | 'wasted' | 'obese') => void;
-  setConsciousness: (level: 'alert' | 'drowsy' | 'confused' | 'unresponsive', gcs: number | null) => void;
+  setHydrationStatus: (status: '' | 'normal' | 'mild_dehydration' | 'moderate_dehydration' | 'severe_dehydration', dryMucosa: boolean, sunkenEyes: boolean, reducedSkinTurgor: boolean) => void;
+  setNutritionalStatus: (status: '' | 'normal' | 'underweight' | 'wasted' | 'obese') => void;
+  setConsciousness: (level: '' | 'alert' | 'drowsy' | 'confused' | 'unresponsive', gcs: number | null) => void;
   setDistress: (pain: boolean, respiratory: boolean, cardiovascular: boolean, neurological: boolean) => void;
   setGeneralSign: (signId: string, label: string, present: boolean, details: string) => void;
   setGeneralExamNotes: (notes: string) => void;

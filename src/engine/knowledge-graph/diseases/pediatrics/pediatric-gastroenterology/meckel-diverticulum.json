@@ -1,0 +1,186 @@
+{
+  "disease": {
+    "id": "meckel_diverticulum",
+    "name": "Meckel's Diverticulum",
+    "system": "pediatrics",
+    "department": "pediatrics",
+    "unit": "pediatric-gastroenterology",
+    "agePeak_months": [12, 120],
+    "note": "True diverticulum (all 3 layers) on antimesenteric border of ileum — 2ft from ileocecal valve, 2in long, 2% of population (Rule of 2s). MOST COMMON cause of LGIB in children presenting with painless hematochezia. Ectopic gastric mucosa in 50% → acid secretion → ulceration in adjacent ileal mucosa → bleeding.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["lower_gi_bleeding", "pediatric_surgical_emergency", "diverticulum", "congenital_gastrointestinal"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "massive_hematochezia_with_shock", "weight": 10 },
+        { "sign": "hypovolemic_shock", "weight": 10 },
+        { "sign": "peritonitis_signs", "weight": 9 },
+        { "sign": "severe_anemia_hb_less_than_7", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "tachycardia_out_of_proportion_to_fever", "weight": 7 },
+          { "sign": "pallor_and_signs_of_acute_blood_loss", "weight": 6 },
+          { "sign": "recurrent_episodes_of_painless_bleeding", "weight": 5 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "hasIndrawingOrFastBreathing": false,
+        "noDangerSigns": true
+      },
+      "severityLabel": "Massive bleeding/shock/peritonitis -> EMERGENCY; painless hematochezia in stable child -> URGENT Meckel scan"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "rectal_bleeding", "weight": 5, "condition": "painless, dark red/maroon/currant-jelly stool" },
+      { "symptomId": "abdominal_pain", "weight": 2, "note": "intermittent, not always present" },
+      { "symptomId": "nausea_vomiting", "weight": 1, "note": "if diverticulitis or obstruction" },
+      { "symptomId": "fatigue", "weight": 2, "note": "from chronic blood loss" },
+      { "symptomId": "iron_deficiency_anemia_symptoms", "weight": 2, "note": "recurrent bleeding episodes" },
+      { "symptomId": "syncope", "weight": 1, "note": "if significant acute blood loss" },
+      { "symptomId": "dyspnea", "weight": 1, "note": "from anemia" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pallor", "baseWeight": 3, "note": "if significant blood loss" },
+      { "signId": "tachycardia", "baseWeight": 3, "note": "if significant bleed" },
+      { "signId": "blood_on_rectal_exam", "baseWeight": 4, "doubleWeight": true },
+      { "signId": "abdominal_tenderness", "baseWeight": 2, "note": "if inflamed or obstructed" },
+      { "signId": "signs_of_iron_deficiency", "baseWeight": 2 },
+      { "signId": "normal_abdominal_exam_between_bleeds", "baseWeight": 2, "note": "typical presentation" }
+    ],
+
+    "riskFactors": [
+      { "id": "age_under_2_years", "multiplier": 4.0, "note": "Most common presentation age" },
+      { "id": "male_gender", "multiplier": 3.0, "note": "Male:Female 3:1" },
+      { "id": "age_under_10", "multiplier": 3.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "bleeding_meckel_due_to_ectopic_gastric_mucosa",
+        "name": "Bleeding Meckel's Diverticulum (Ectopic Gastric Mucosa)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "painless_hematochezia_maroon_currant_jelly", "weight": 5 },
+          { "feature": "recurrent_episodes", "weight": 4 },
+          { "feature": "positive_meckel_scan", "weight": 5 },
+          { "feature": "ectopic_gastric_mucosa_on_pathology", "weight": 5 }
+        ],
+        "management": "Laparoscopic diverticulectomy or segmental small bowel resection with anastomosis. Pre-operative localization with Meckel scan. IV fluids and blood transfusion if significant bleed."
+      },
+      {
+        "id": "inflamed_meckel_diverticulitis",
+        "name": "Inflamed Meckel's Diverticulitis",
+        "prevalenceModifier": 0.25,
+        "keyFeatures": [
+          { "feature": "abdominal_pain_rlq_similar_to_appendicitis", "weight": 5 },
+          { "feature": "fever", "weight": 3 },
+          { "feature": "tenderness_on_exam", "weight": 4 },
+          { "feature": "elevated_wbc_crp", "weight": 3 }
+        ],
+        "management": "IV antibiotics. Laparoscopic diverticulectomy or segmental small bowel resection. If perforation: emergency laparotomy with resection."
+      },
+      {
+        "id": "obstructing_meckel_literal_band",
+        "name": "Obstructing Meckel's Diverticulum (Littre's Band)",
+        "prevalenceModifier": 0.15,
+        "keyFeatures": [
+          { "feature": "vomiting_bilious", "weight": 5 },
+          { "feature": "abdominal_distension", "weight": 4 },
+          { "feature": "obstructive_symptoms", "weight": 5 },
+          { "feature": "band_connecting_diverticulum_to_abdominal_wall", "weight": 4 }
+        ],
+        "management": "Emergency laparotomy/ laparoscopy. Division of band ± diverticulectomy. Resection of non-viable bowel if strangulated."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "anal_fissure",
+        "discriminators": ["pain_with_defecation", "streak_of_blood_on_stool_surface", "small_volume_bleeding", "visible_fissure"]
+      },
+      {
+        "diseaseId": "juvenile_polyps",
+        "discriminators": ["painless_but_smaller_blood_volume", "age_2_to_10", "polyps_on_colonoscopy"]
+      },
+      {
+        "diseaseId": "intussusception",
+        "discriminators": ["paroxysmal_abdominal_pain_alternating_with_lethargy", "sausage_shaped_mass", "red_currant_jelly_stool_but_with_pain"]
+      },
+      {
+        "diseaseId": "inflammatory_bowel_disease",
+        "discriminators": ["chronic_symptoms", "growth_failure", "extraintestinal_manifestations", "chronic_diarrhea"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "CBC", "priority": "immediate", "yield": 0.5, "indication": "Assess anemia from blood loss" },
+        { "name": "Iron studies (ferritin, iron, TIBC)", "priority": "high", "yield": 0.4, "indication": "If chronic occult bleeding" }
+      ],
+      "imaging": [
+        { "name": "Meckel scan (Tc-99m pertechnetate)", "priority": "gold_standard", "yield": 0.85, "indication": "Detects ectopic gastric mucosa — focal uptake in RLQ near midline. Sensitivity 85-90% in children. Give cimetidine to enhance uptake." },
+        { "name": "Abdominal Ultrasound", "priority": "high", "yield": 0.4, "indication": "May show inflamed diverticulum, rule out intussusception" },
+        { "name": "EGD/Colonoscopy", "priority": "medium", "yield": 0.3, "indication": "To exclude other sources of upper/LGI bleeding" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "APSNA / BAPS Guidelines for Meckel's Diverticulum Management",
+      "pathways": [
+        {
+          "severity": "bleeding Meckel's (stable)",
+          "criteria": "Painless hematochezia, hemodynamically stable, positive Meckel scan",
+          "treatment": "Laparoscopic diverticulectomy or segmental small bowel resection with primary anastomosis. Pre-operative localization with Meckel scan. IV fluids. Blood transfusion if Hb <8."
+        },
+        {
+          "severity": "bleeding Meckel's (unstable / massive bleeding)",
+          "criteria": "Massive hematochezia, hemodynamic instability, tachycardia, hypotension",
+          "treatment": "IV fluids and blood transfusion. Emergency laparotomy/laparoscopy with small bowel resection. Pre-operative localization if feasible but do not delay surgery."
+        },
+        {
+          "severity": "incidental Meckel's diverticulum",
+          "criteria": "Found incidentally at laparotomy/laparoscopy for another indication",
+          "treatment": "Resect if: palpable ectopic tissue, male, age <50, diverticulum length >2cm, narrow neck, or fibrous band present. Otherwise, leave in situ."
+        }
+      ]
+    },
+
+    "diagnosticClues": ["painless_maroon_currant_jelly_rectal_bleeding_in_child", "positive_meckel_scan_focal_uptake_in_rlq", "rule_of_2s_2_percent_2_inches_2_feet_from_icv", "male_age_under_10", "recurrent_episodes_with_normal_exam_between"],
+    "exclusionClues": ["anal_fissure_pain_with_defecation", "juvenile_polyps_smaller_volume_bleeding", "intussusception_sausage_mass_and_pain", "ibd_chronic_symptoms_growth_failure"],
+
+    "pathophysiology": [
+      "remnant_of_omphalomesenteric_duct_vitelline_duct_fails_to_obliterate_by_week_7_8_of_fetal_development",
+      "true_diverticulum_from_antimesenteric_border_of_distal_ileum_all_three_layers",
+      "ectopic_gastric_mucosa_most_common_heterotopia_secretes_acid",
+      "acid_damages_adjacent_ileal_mucosa_causing_ulceration",
+      "bleeding_from_ulcer_base_into_bowel_lumen_resulting_in_painless_hematochezia"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "massive_lower_gi_hemorrhage",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["painless_maroon_blood", "tachycardia", "hypotension", "falling_hb"]
+      },
+      {
+        "diseaseId": "diverticulitis_with_perforation",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["rlq_pain", "fever", "peritonitis", "elevated_wbc"]
+      },
+      {
+        "diseaseId": "intestinal_obstruction_from_littres_band",
+        "probability": 0.1,
+        "severityBoost": 0.4,
+        "clues": ["bilious_vomiting", "abdominal_distension", "obstructive_series"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high"
+  }
+}

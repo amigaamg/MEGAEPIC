@@ -35,7 +35,7 @@ export default function HistoryEnginePage() {
     return encounterId || `enc_${biodata.name || 'unnamed'}_${Date.now()}`;
   }, [encounterId, biodata.name]);
 
-  const sections = useMemo(() => getSectionsForProfile(profile), [profile]);
+  const sections = useMemo(() => getSectionsForProfile(profile, biodata.sex, biodata.age), [profile, biodata.sex, biodata.age]);
 
   // Auto-save every state change
   useEffect(() => {
@@ -204,11 +204,11 @@ export default function HistoryEnginePage() {
         </div>
       </div>
 
-      {/* Modals */}
-      {showDashboard && <HistoryDashboard onClose={() => setShowDashboard(false)} />}
-      {showDocument && <DocumentEditor onClose={() => setShowDocument(false)} />}
-      {showEducation && <EducationPanel onClose={() => setShowEducation(false)} />}
-      {showFollowUp && <FollowUpPanel encounterId={encId} onClose={() => setShowFollowUp(false)} />}
+      {/* Inline Panels */}
+      {showDashboard && <div className="max-w-7xl mx-auto px-4 pb-4"><HistoryDashboard /></div>}
+      {showDocument && <div className="max-w-7xl mx-auto px-4 pb-4"><DocumentEditor /></div>}
+      {showEducation && <div className="max-w-7xl mx-auto px-4 pb-4"><EducationPanel /></div>}
+      {showFollowUp && <div className="max-w-7xl mx-auto px-4 pb-4"><FollowUpPanel encounterId={encId} /></div>}
     </div>
   );
 }

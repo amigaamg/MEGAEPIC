@@ -1,0 +1,107 @@
+{
+  "disease": {
+    "id": "gallstone_ileus",
+    "name": "Gallstone Ileus",
+    "system": "surgical",
+    "department": "surgery",
+    "unit": "acute-abdomen",
+    "agePeak_months": [600, 960],
+    "note": "Rare surgical cause of mechanical small bowel obstruction caused by a gallstone passing through a cholecystenteric fistula (usually cholecystoduodenal) and becoming impacted in the distal ileum. Typically affects elderly females with long-standing gallstone disease. Classic radiographic triad: pneumobilia, small bowel obstruction, and ectopic gallstone (Rigler triad). High morbidity and mortality (15-20%) due to advanced age and delayed diagnosis.",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["intestinal_obstruction", "gallstone", "elderly", "surgical_emergency"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "bowel_ischemia_or_perforation", "weight": 10 },
+        { "sign": "sepsis_hypotension", "weight": 9 },
+        { "sign": "severe_dehydration_electrolyte_abnormalities", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "complete_small_bowel_obstruction": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "stable": true
+      },
+      "severityLabel": "Bowel obstruction -> EMERGENCY surgery; Stable -> URGENT"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_pain_colicky", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "abdominal_distension", "weight": 4 },
+      { "symptomId": "constipation_and_obstipation", "weight": 3 },
+      { "symptomId": "history_of_gallstones", "weight": 4 },
+      { "symptomId": "intermittent_symptoms", "weight": 3, "note": "Tumbling stone phenomenon: stone moves and obstruction temporarily relieves" },
+      { "symptomId": "jaundice", "weight": 1, "note": "Uncommon; fistula usually decompresses biliary tree" },
+      { "symptomId": "weight_loss", "weight": 2 },
+      { "symptomId": "elderly_female_patient", "weight": 3 }
+    ],
+
+    "examFeatures": [
+      { "signId": "abdominal_distension", "baseWeight": 5 },
+      { "signId": "tenderness_diffuse_or_localized", "baseWeight": 3 },
+      { "signId": "high_pitched_bowel_sounds_or_tinkling", "baseWeight": 3 },
+      { "signId": "signs_of_dehydration", "baseWeight": 3 },
+      { "signId": "fever", "baseWeight": 2, "note": "If strangulation or perforation" },
+      { "signId": "peritoneal_signs", "baseWeight": 3, "note": "If perforation or ischemia" }
+    ],
+
+    "riskFactors": [
+      { "id": "female_gender", "multiplier": 3.0 },
+      { "id": "age_greater_than_65", "multiplier": 4.0 },
+      { "id": "long_standing_gallstone_disease", "multiplier": 3.0 },
+      { "id": "large_gallstone_greater_than_2_5_cm", "multiplier": 4.0 },
+      { "id": "recurrent_acute_cholecystitis", "multiplier": 3.0 }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "FBC", "priority": "immediate", "yield": 0.5, "indication": "leukocytosis suggests strangulation" },
+        { "name": "Electrolytes, creatinine, urea", "priority": "immediate", "yield": 0.5, "indication": "dehydration, AKI from vomiting" },
+        { "name": "CRP", "priority": "high", "yield": 0.4, "indication": "elevated if inflammation/perforation" }
+      ],
+      "imaging": [
+        { "name": "Abdominal X-ray (erect + supine)", "priority": "immediate", "yield": 0.7, "indication": "Rigler triad: pneumobilia, SBO with dilated loops, radio-opaque gallstone (only 10-20% of stones are visible)" },
+        { "name": "CT abdomen with IV contrast", "priority": "high", "yield": 0.95, "indication": "definitive: SBO with transition point, gallstone at transition, cholecystoduodenal fistula, pneumobilia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WSES Guidelines for Gallstone Ileus; SAGES Guidelines",
+      "pathways": [
+        {
+          "severity": "gallstone_ileus",
+          "criteria": "Small bowel obstruction + gallstone at transition point + pneumobilia",
+          "treatment": "Resuscitation: IV fluids, NG tube decompression, correct electrolytes, antibiotics (ceftriaxone + metronidazole). Surgery is definitive: enterolithotomy alone (stone extraction through enterotomy) vs one-stage surgery (enterolithotomy + cholecystectomy + fistula closure). Enterolithotomy alone is preferred for elderly/unstable (lower morbidity and mortality). One-stage reserved for young/fit patients. Stone typically impacted at terminal ileum (narrowest part of small bowel). Milk stone proximally and remove via longitudinal enterotomy. Check for second stone (10% have multiple). Postoperative: monitor for bile leak, sepsis, recurrence."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "large_gallstone_erodes_through_gallbladder_wall",
+      "cholecystoduodenal_fistula_forms",
+      "gallstone_passes_into_duodenum",
+      "stone_travels_through_small_bowel",
+      "impacted_at_distal_ileum_narrowest_point",
+      "mechanical_small_bowel_obstruction",
+      "proximal_bowel_dilation",
+      "risk_of_ischemia_and_perforation"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "bowel_ischemia_and_perforation",
+        "probability": 0.05,
+        "severityBoost": 0.7,
+        "clues": ["peritonitis", "fever", "sepsis", "progressive_pain"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["elderly_female", "sbo", "pneumobilia_on_xray", "ectopic_gallstone_on_ct", "history_of_gallstones"]
+  }
+}

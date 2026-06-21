@@ -1,0 +1,133 @@
+{
+  "disease": {
+    "id": "ampullary_carcinoma",
+    "name": "Ampullary Carcinoma",
+    "system": "surgical",
+    "department": "surgery",
+    "unit": "hepatobiliary",
+    "agePeak_months": [600, 960],
+    "note": "Malignancy arising at the ampulla of Vater (duodenal papilla). Presents earlier than pancreatic head cancer due to early biliary obstruction. Classically causes intermittent, 'fluctuating' jaundice (necrosis and sloughing of tumor temporarily relieves obstruction). Better prognosis than pancreatic cancer (5-year survival 40-60% after resection) due to earlier presentation and lower incidence of nodal metastasis.",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["jaundice", "ampullary", "biliary_obstruction", "malignancy", "periampullary"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_cholangitis", "weight": 8 },
+        { "sign": "severe_obstructive_jaundice", "weight": 6 },
+        { "sign": "unresectable_disease", "weight": 7 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "metastatic": true,
+        "vascular_invasion": true
+      },
+      "nonSevereCriteria": {
+        "resectable": true,
+        "node_negative": true,
+        "good_performance_status": true
+      },
+      "severityLabel": "Resectable -> URGENT Whipple; Metastatic -> PALLIATIVE stent + chemo"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 5, "note": "Classic presentation; may be intermittent/fluctuating (patency of biliary orifice varies)" },
+      { "symptomId": "pruritus", "weight": 3 },
+      { "symptomId": "dark_urine", "weight": 3 },
+      { "symptomId": "pale_clay_colored_stools", "weight": 3 },
+      { "symptomId": "weight_loss", "weight": 3 },
+      { "symptomId": "appetite_changes", "weight": 3 },
+      { "symptomId": "right_upper_quadrant_epigastric_pain", "weight": 2 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "fever", "weight": 2, "note": "Cholangitis" },
+      { "symptomId": "gi_bleeding_melena_or_occult", "weight": 2, "note": "Tumor may ulcerate and bleed" },
+      { "symptomId": "intermittent_jaundice", "weight": 4, "note": "Key distinguishing feature from pancreatic cancer" },
+      { "symptomId": "steatorrhea", "weight": 1, "note": "Pancreatic duct obstruction" },
+      { "symptomId": "history_of_fap_or_gardner_syndrome", "weight": 3, "note": "Familial adenomatous polyposis" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5 },
+      { "signId": "courvoisier_gallbladder", "baseWeight": 3, "note": "Non-tender palpable gallbladder" },
+      { "signId": "hepatomegaly", "baseWeight": 2 },
+      { "signId": "epigastric_mass", "baseWeight": 1, "note": "Late sign" },
+      { "signId": "cachexia", "baseWeight": 2 },
+      { "signId": "excoriations", "baseWeight": 2 }
+    ],
+
+    "riskFactors": [
+      { "id": "familial_adenomatous_polyposis_fap", "multiplier": 10.0 },
+      { "id": "gardner_syndrome", "multiplier": 10.0 },
+      { "id": "age_over_60", "multiplier": 3.0 },
+      { "id": "chronic_pancreatitis", "multiplier": 2.0 },
+      { "id": "smoking", "multiplier": 2.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "pancreatic_head_adenocarcinoma",
+        "discriminators": ["progressive_jaundice_unrelenting", "double_duct_sign", "no_intermittent_pattern", "ca19_9_very_high"]
+      },
+      {
+        "diseaseId": "distal_cholangiocarcinoma",
+        "discriminators": ["progressive_jaundice", "bile_duct_stricture_on_mrcp", "no_ampullary_mass_on_endoscopy"]
+      },
+      {
+        "diseaseId": "choledocholithiasis",
+        "discriminators": ["colicky_pain", "gallstone_on_us_mrcp", "resolves_after_stone_extraction", "no_mass"]
+      }
+    ],
+
+    "investigations": {
+      "laboratory": [
+        { "name": "LFTs", "priority": "immediate", "yield": 0.85, "indication": "obstructive pattern: conjugated hyperbilirubinemia, elevated ALP, GGT" },
+        { "name": "CA 19-9", "priority": "high", "yield": 0.6, "indication": "elevated but less than pancreatic cancer" },
+        { "name": "Fecal occult blood or Hb", "priority": "medium", "yield": 0.3, "indication": "may be positive from ampullary bleeding" }
+      ],
+      "imaging": [
+        { "name": "CT abdomen (pancreatic protocol)", "priority": "immediate", "yield": 0.7, "indication": "small ampullary mass; may be subtle; dilated CBD and pancreatic duct; no pancreatic head mass" },
+        { "name": "MRCP", "priority": "high", "yield": 0.8, "indication": "dilated CBD and PD (double duct sign); may visualize tumor at ampulla" },
+        { "name": "Upper GI endoscopy (EGD) with side-viewing duodenoscope", "priority": "high", "yield": 0.9, "indication": "direct visualization of ampulla: protruding, ulcerated, or friable ampullary mass" },
+        { "name": "EUS with FNA", "priority": "selected", "yield": 0.9, "indication": "tissue diagnosis; T and N staging; assess relationship to SMV/PV" },
+        { "name": "ERCP with biopsy", "priority": "selected", "yield": 0.85, "indication": "biliary decompression (stenting) + tissue biopsy" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "NCCN Guidelines: Pancreatic Adenocarcinoma (including periampullary)",
+      "pathways": [
+        {
+          "severity": "resectable",
+          "criteria": "No distant metastases, no vascular invasion, good PS",
+          "treatment": "Pancreaticoduodenectomy (Whipple procedure). Prognosis significantly better than pancreatic head cancer: 5-year survival 40-60% for node-negative, 20-30% for node-positive. Adjuvant chemotherapy: gemcitabine or 5-FU based."
+        },
+        {
+          "severity": "advanced_unresectable_or_metastatic",
+          "criteria": "M1, vascular invasion, poor PS",
+          "treatment": "Biliary drainage (ERCP + metal stent). Palliative systemic therapy. Prognosis better than pancreatic cancer but median survival still <12 months."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "adenocarcinoma_of_ampullary_mucosa",
+      "intestinal_vs_pancreaticobiliary_subtype",
+      "early_biliary_obstruction_due_to_ampullary_location",
+      "fluctuating_jaundice_from_tumor_necrosis",
+      "pancreatic_duct_obstruction",
+      "lymphatic_spread_to_peripancreatic_nodes"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_cholangitis",
+        "probability": 0.2,
+        "severityBoost": 0.4,
+        "clues": ["fever", "ruq_pain", "jaundice"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "high",
+    "diagnosticClues": ["intermittent_fluctuating_jaundice", "courvoisier_gallbladder", "double_duct_sign_on_imaging", "ampullary_mass_on_endoscopy", "better_prognosis_than_pancreatic_cancer"]
+  }
+}

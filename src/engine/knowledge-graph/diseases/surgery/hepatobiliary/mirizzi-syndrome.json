@@ -1,0 +1,151 @@
+{
+  "disease": {
+    "id": "mirizzi_syndrome",
+    "name": "Mirizzi Syndrome",
+    "system": "surgical",
+    "department": "surgery",
+    "unit": "hepatobiliary",
+    "agePeak_months": [480, 840],
+    "note": "Rare complication of chronic gallstone disease where a stone impacted in the cystic duct or gallbladder neck causes extrinsic compression of the common hepatic duct, leading to obstructive jaundice. Type I: external compression without fistula. Type II-V: cholecystobiliary fistula with varying degrees of common bile duct erosion. Can mimic cholangiocarcinoma on imaging. Surgical management is challenging with high bile duct injury risk.",
+    "prevalenceWeight": 0.02,
+    "syndromeTags": ["jaundice", "biliary_obstruction", "gallstone_complication", "cholecystitis", "surgical"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_cholangitis", "weight": 9 },
+        { "sign": "biliary_peritonitis_from_fistula_rupture", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "type_ii_v_with_fistula": true,
+        "severe_obstructive_jaundice": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "type_i_no_fistula": true,
+        "mild_jaundice": true
+      },
+      "severityLabel": "With cholangitis -> EMERGENCY; Type II-V -> URGENT surgical referral; Type I -> ELECTIVE"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "jaundice", "weight": 5, "note": "Obstructive pattern; conjugated hyperbilirubinemia" },
+      { "symptomId": "right_upper_quadrant_pain", "weight": 4, "note": "Chronic recurrent biliary colic; then persistent pain" },
+      { "symptomId": "fever", "weight": 3, "note": "If cholangitis" },
+      { "symptomId": "pruritus", "weight": 3 },
+      { "symptomId": "dark_urine", "weight": 4 },
+      { "symptomId": "pale_clay_colored_stools", "weight": 4 },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "history_of_gallstones_or_cholecystitis", "weight": 5, "note": "Almost universal; long-standing gallstone disease" },
+      { "symptomId": "weight_loss", "weight": 1, "note": "Minimal; distinguishes from malignancy" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5 },
+      { "signId": "right_upper_quadrant_tenderness", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3, "note": "Cholangitis" },
+      { "signId": "gallbladder_non_palpable_or_tender_mass", "baseWeight": 3 },
+      { "signId": "murphy_sign", "baseWeight": 2, "note": "May be positive" }
+    ],
+
+    "riskFactors": [
+      { "id": "long_standing_gallstone_disease", "multiplier": 5.0 },
+      { "id": "multiple_small_gallstones", "multiplier": 3.0 },
+      { "id": "narrow_cystic_duct_insertion", "multiplier": 2.0 },
+      { "id": "female_gender", "multiplier": 2.0 },
+      { "id": "obesity", "multiplier": 1.5 },
+      { "id": "advanced_age_over_65", "multiplier": 2.0 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "mirizzi_type_i",
+        "name": "Mirizzi Syndrome Type I (Extrinsic Compression)",
+        "prevalenceModifier": 0.6,
+        "keyFeatures": [{ "feature": "external_compression_of_chd_by_stone_and_inflammation", "weight": 5 }, { "feature": "no_fistula_formation", "weight": 5 }],
+        "management": "Laparoscopic cholecystectomy with careful dissection. High conversion rate to open. Intraoperative cholangiogram essential. Partial cholecystectomy if dense inflammation."
+      },
+      {
+        "id": "mirizzi_type_ii_v",
+        "name": "Mirizzi Syndrome Type II-V (With Cholecystobiliary Fistula)",
+        "prevalenceModifier": 0.4,
+        "keyFeatures": [{ "feature": "fistula_between_gallbladder_and_chd_cbd", "weight": 5 }, { "feature": "bile_duct_erosion_by_gallstone", "weight": 5 }],
+        "management": "Open approach recommended. Cholecystectomy + fistula repair. Type II: primary repair of CBD defect over T-tube. Type III: Roux-en-Y hepaticojejunostomy. Type IV: hepaticojejunostomy. Type V: hepaticojejunostomy + enterolithotomy."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "cholangiocarcinoma_perihilar_klatskin",
+        "discriminators": ["progressive_painless_jaundice", "weight_loss", "mass_on_imaging", "elevated_ca19_9", "no_acute_inflammation"]
+      },
+      {
+        "diseaseId": "choledocholithiasis",
+        "discriminators": ["stone_in_cbd_not_cystic_duct_impaction", "dilated_cbd", "stone_visible_on_mrcp_in_cbd"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "LFTs (ALT, AST, ALP, GGT, bilirubin)", "priority": "immediate", "yield": 0.9, "indication": "obstructive pattern: elevated conjugated bilirubin, ALP, GGT" },
+        { "name": "FBC", "priority": "high", "yield": 0.5, "indication": "leukocytosis if cholecystitis/cholangitis" },
+        { "name": "CRP", "priority": "high", "yield": 0.5, "indication": "elevated in acute inflammation" },
+        { "name": "CA 19-9", "priority": "medium", "yield": 0.3, "indication": "may be mildly elevated; not reliable to distinguish from malignancy" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "immediate", "yield": 0.7, "indication": "gallbladder stones; contracted gallbladder; dilated intrahepatic ducts; narrowed CHD; impacted stone in gallbladder neck" },
+        { "name": "MRCP", "priority": "high", "yield": 0.9, "indication": "non-invasive: extrinsic compression of CHD by impacted cystic duct stone; may show fistula; distinguishes from cholangiocarcinoma" },
+        { "name": "ERCP", "priority": "selected", "yield": 0.85, "indication": "therapeutic and diagnostic: stent placement to relieve jaundice before surgery; identifies fistula; can place plastic stent" },
+        { "name": "CT abdomen", "priority": "high", "yield": 0.6, "indication": "gallstone in cystic duct/neck; dilated IHBD; normal CBD caliber; rule out mass" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "ASGE Guidelines for Mirizzi Syndrome; SAGES Guidelines",
+      "pathways": [
+        {
+          "severity": "type_i",
+          "criteria": "Extrinsic compression of CHD by stone in cystic duct/gallbladder neck; no fistula",
+          "treatment": "Cholecystectomy (laparoscopic with low threshold for conversion). Intraoperative cholangiogram essential. Partial cholecystectomy if Calot's triangle is hostile (dense inflammation). Preoperative ERCP with stent if jaundice severe or cholangitis. Postoperative: T-tube if CHD injury suspected."
+        },
+        {
+          "severity": "type_ii_v_with_fistula",
+          "criteria": "Cholecystobiliary fistula present, type determined by degree of CBD erosion",
+          "treatment": "Open cholecystectomy preferred. Fistula repair: Type II (erosion <33% CBD) -> primary closure over T-tube. Type III (33-50%) -> Roux-en-Y hepaticojejunostomy. Type IV (complete CBD destruction) -> hepaticojejunostomy. Type V (fistula + gallstone ileus) -> hepaticojejunostomy + enterolithotomy. Preoperative ERCP with stent to define anatomy and relieve jaundice. Postoperative: drain; antibiotics; monitor for bile leak."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "chronic_gallstone_disease",
+      "large_gallstone_impacted_in_cystic_duct_or_gallbladder_neck",
+      "pericystic_inflammation_and_fibrosis",
+      "extrinsic_compression_of_common_hepatic_duct",
+      "obstructive_jaundice",
+      "progressive_inflammation_leads_to_bile_duct_wall_ischemia",
+      "erosion_of_gallstone_into_bile_duct_forming_fistula",
+      "cholecystobiliary_fistula_type_ii_v",
+      "gallstone_may_pass_into_cbd_and_cause_obstruction"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_cholangitis",
+        "probability": 0.2,
+        "severityBoost": 0.5,
+        "clues": ["fever", "ruq_pain", "jaundice", "elevated_wbc_crp"]
+      },
+      {
+        "diseaseId": "bile_duct_injury_during_cholecystectomy",
+        "probability": 0.1,
+        "severityBoost": 0.6,
+        "clues": ["dense_inflammation", "distorted_anatomy", "difficult_dissection"]
+      }
+    ],
+
+    "mustNotMiss": true,
+    "emergencyPriority": "medium (high if cholangitis)",
+    "diagnosticClues": ["gallstone_history", "obstructive_jaundice", "impacted_cystic_duct_stone_on_imaging", "narrowed_common_hepatic_duct", "absence_of_mass"]
+  }
+}

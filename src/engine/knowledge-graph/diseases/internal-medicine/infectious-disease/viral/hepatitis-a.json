@@ -1,0 +1,173 @@
+{
+  "disease": {
+    "id": "hepatitis_a",
+    "name": "Hepatitis A",
+    "system": "infectious_disease",
+    "agePeak_months": [60, 480],
+    "note": "Acute self-limited viral hepatitis caused by HAV (picornavirus). Fecal-oral transmission. Incubation 15-50 days. Common in regions with poor sanitation. No chronic carrier state. Fulminant in <1% but higher risk in adults >50 and pre-existing liver disease.",
+    "prevalenceWeight": 0.3,
+    "syndromeTags": ["liver", "viral_hepatitis", "acute_hepatitis", "fecal_oral"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure_inr_greater_than_1_5_and_encephalopathy", "weight": 10 },
+        { "sign": "hepatic_encephalopathy_any_grade", "weight": 10 },
+        { "sign": "prolonged_inr_greater_than_2", "weight": 9 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "acute_liver_failure": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true,
+        "uncomplicated_acute_hepatitis": true,
+        "igm_anti_hav_positive": true
+      },
+      "severityLabel": "Acute liver failure -> EMERGENCY; Acute hepatitis -> SUPPORTIVE care (usually outpatient); Pregnant or elderly -> OBSERVE more closely"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 4, "note": "Prodromal phase: fever, malaise, anorexia" },
+      { "symptomId": "fatigue_malaise", "weight": 5 },
+      { "symptomId": "jaundice", "weight": 4, "note": "Appears after prodromal phase; dark urine precedes jaundice" },
+      { "symptomId": "dark_urine_tea_colored", "weight": 4 },
+      { "symptomId": "right_upper_quadrant_abdominal_pain", "weight": 3 },
+      { "symptomId": "nausea_vomiting_anorexia", "weight": 4 },
+      { "symptomId": "pale_clay_colored_stools", "weight": 2 },
+      { "symptomId": "arthralgia_myalgia", "weight": 2 },
+      { "symptomId": "pruritus", "weight": 1 },
+      { "symptomId": "exposure_to_suspected_food_water_outbreak", "weight": 4, "note": "Fecal-oral: contaminated food/water, shellfish, travel to endemic area" },
+      { "symptomId": "contact_with_jaundiced_person", "weight": 3, "note": "Household or close contact with known case" },
+      { "symptomId": "travel_to_endemic_region_recent", "weight": 4, "note": "Africa, Asia, Central/South America" },
+      { "symptomId": "childcare_or_institutional_outbreak", "weight": 3, "note": "Daycare centers, schools, institutions" }
+    ],
+
+    "examFeatures": [
+      { "signId": "jaundice_scleral_icterus", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "hepatomegaly_tender", "baseWeight": 3 },
+      { "signId": "right_upper_quadrant_tenderness_to_palpation", "baseWeight": 3 },
+      { "signId": "splenomegaly", "baseWeight": 1, "note": "Mild and uncommon" },
+      { "signId": "rash", "baseWeight": 1, "note": "Urticarial rash in prodrome" }
+    ],
+
+    "riskFactors": [
+      { "id": "travel_to_endemic_area_developing_country", "multiplier": 4.0 },
+      { "id": "household_contact_with_hav_infected_person", "multiplier": 3.5 },
+      { "id": "consumption_of_contaminated_food_or_water", "multiplier": 3.0 },
+      { "id": "eating_raw_or_undercooked_shellfish", "multiplier": 2.5 },
+      { "id": "childcare_attendance_or_employment", "multiplier": 2.0 },
+      { "id": "men_who_have_sex_with_men", "multiplier": 2.0 },
+      { "id": "injection_drug_use", "multiplier": 1.5 },
+      { "id": "homelessness_or_institutionalization", "multiplier": 2.0 },
+      { "id": "chronic_liver_disease", "multiplier": 3.0, "note": "Increased risk of severe/fatal HAV" },
+      { "id": "not_vaccinated", "multiplier": 3.0 }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "hepatitis_b_acute",
+        "discriminators": ["hbsag_positive", "igm_anti_hbc_positive", "sexual_or_needle_exposure", "possible_chronic_carrier_state"]
+      },
+      {
+        "diseaseId": "hepatitis_e",
+        "discriminators": ["anti_hev_igm_positive", "high_mortality_in_pregnancy_15_25_percent", "endemic_in_asia_africa", "waterborne_outbreaks"]
+      },
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["temporal_relation_to_drug", "no_viral_serology_positive", "eosinophilia"]
+      },
+      {
+        "diseaseId": "leptospirosis_weil_disease",
+        "discriminators": ["fever_rigors_myalgia", "conjunctival_suffusion", "calf_tenderness", "renal_involvement", "occupational_exposure_water_farm"]
+      },
+      {
+        "diseaseId": "yellow_fever",
+        "discriminators": ["high_fever_hemorrhage", "epidemiology_tropical_south_america_africa", "elevated_ast_alt", "vaccination_history"]
+      }
+    ],
+
+    "investigations": {
+      "bedside": [],
+      "laboratory": [
+        { "name": "IgM anti-HAV antibody", "priority": "immediate", "yield": 0.99, "indication": "diagnostic for acute/recent HAV infection; positive at symptom onset, remains positive 4-6 months" },
+        { "name": "Total anti-HAV IgG (serology)", "priority": "high", "yield": 0.9, "indication": "past infection or vaccination; IgG-positive, IgM-negative indicates immunity" },
+        { "name": "ALT and AST", "priority": "immediate", "yield": 0.9, "indication": "marked elevation (500-5000 IU/L); ALT > AST in typical acute hepatitis" },
+        { "name": "Total and direct bilirubin", "priority": "high", "yield": 0.8, "indication": "elevated in icteric phase; mixed conjugated and unconjugated" },
+        { "name": "ALP and GGT", "priority": "high", "yield": 0.5, "indication": "mildly elevated; if markedly elevated, consider cholestatic variant" },
+        { "name": "INR/PT", "priority": "high", "yield": 0.7, "indication": "prolonged in severe disease; marker of synthetic dysfunction" },
+        { "name": "HAV RNA by PCR", "priority": "low", "yield": 0.95, "indication": "confirmatory; used for outbreak investigation and research" }
+      ],
+      "imaging": [
+        { "name": "Abdominal ultrasound", "priority": "medium", "yield": 0.4, "indication": "hepatomegaly; gallbladder wall thickening; rule out obstruction" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "WHO Guidelines for Hepatitis A; CDC Recommendations for HAV; AASLD Practice Guidelines",
+      "pathways": [
+        {
+          "severity": "uncomplicated_acute_hepatitis_a",
+          "criteria": "IgM anti-HAV+, moderate ALT elevation, no coagulopathy, no encephalopathy",
+          "treatment": "Supportive care: rest as needed, adequate nutrition, maintain hydration, avoid alcohol and hepatotoxic medications. Most recover fully within 4-8 weeks. No specific antiviral therapy. Monitor LFTs and INR weekly initially. Isolation: standard and contact precautions for 2 weeks after onset of jaundice (or 1 week after symptom onset). Case reporting to public health authorities."
+        },
+        {
+          "severity": "severe_or_prolonged_hepatitis_a",
+          "criteria": "Prolonged jaundice >8 weeks, bilirubin >10, INR >1.5, or cholestatic pattern",
+          "treatment": "Hospital admission for monitoring. Supportive care. Monitor for acute liver failure. Cholestatic variant may benefit from ursodeoxycholic acid (UDCA) 13-15mg/kg/day. Transplant evaluation if fulminant. Most still recover fully."
+        },
+        {
+          "severity": "fulminant_hepatitis_a",
+          "criteria": "INR >1.5 + encephalopathy; <1% of cases; higher risk in adults >50 and pre-existing liver disease",
+          "treatment": "ICU admission. Transplant center consultation. King's College Criteria for liver transplant. NAC IV may be considered (limited evidence). Supportive intensive care. Survival with transplant is excellent (>80%). Spontaneous recovery possible even with encephalopathy in young patients."
+        },
+        {
+          "severity": "post_exposure_prophylaxis",
+          "criteria": "Unvaccinated person exposed to HAV within past 14 days",
+          "treatment": "HAV vaccine single dose (if ≤40 years, healthy) OR immune globulin 0.02 mL/kg IM (if >40 years, immunocompromised, chronic liver disease, or <12 months). Give within 14 days of exposure. Household contacts, sexual contacts, and childcare contacts of confirmed case should receive PEP."
+        }
+      ]
+    },
+
+    "pathophysiology": [
+      "fecal_oral_transmission_of_hav",
+      "oral_ingestion_and_replication_in_gastrointestinal_tract",
+      "hematogenous_spread_to_liver",
+      "hav_replication_in_hepatocyte_cytoplasm",
+      "immune_mediated_hepatocyte_injury_cd8_t_cells",
+      "hepatocyte_necrosis_and_inflammation",
+      "elevation_of_serum_transaminases",
+      "impaired_bilirubin_conjugation_and_excretion",
+      "jaundice_from_hyperbilirubinemia",
+      "igm_antibody_response_in_acute_phase",
+      "igg_antibody_development_and_lifelong_immunity",
+      "viral_clearance_and_full_recovery_self_limited"
+    ],
+
+    "complications": [
+      {
+        "diseaseId": "acute_liver_failure_fulminant_hepatitis",
+        "probability": 0.01,
+        "severityBoost": 1.0,
+        "clues": ["encephalopathy", "coagulopathy_inr_greater_than_1_5", "age_greater_than_50", "pre_existing_liver_disease"]
+      },
+      {
+        "diseaseId": "cholestatic_hepatitis_a",
+        "probability": 0.05,
+        "severityBoost": 0.3,
+        "clues": ["prolonged_jaundice", "markedly_elevated_alp_ggt", "pruritus", "protracted_course_8_12_weeks"]
+      },
+      {
+        "diseaseId": "relapsing_hepatitis_a",
+        "probability": 0.05,
+        "severityBoost": 0.2,
+        "clues": ["initial_improvement_then_relapse", "recurrent_jaundice_and_lft_elevation", "second_peak_weeks_after_initial_illness"]
+      }
+    ],
+
+    "mustNotMiss": false,
+    "emergencyPriority": "medium if uncomplicated; high if fulminant",
+    "diagnosticClues": ["acute_onset_jaundice_with_prodromal_fever_malaise", "marked_transaminitis_500_5000", "igm_anti_hav_positive", "fecal_oral_exposure_history", "self_limited_course_with_recovery"],
+    "exclusionClues": ["negative_igm_anti_hav", "hbsag_or_igm_anti_hbc_positive", "chronic_liver_disease_markers", "drug_related_temporal_pattern"]
+  }
+}

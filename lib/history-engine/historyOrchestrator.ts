@@ -19,7 +19,7 @@ import { calculateRosPriority } from './rosPriorityEngine';
 import HISTORY_FEATURE_REGISTRY from './historyFeatureRegistry';
 import { getSymptom, aggregateDifferentials } from './symptomLibrary';
 import { computeClinicalReasoning } from './clinicalReasoningEngine';
-import { detectProfile, calculateEDD, calculateGestationalAge, getSectionsForProfile } from './patientProfileEngine';
+import { detectProfile, detectProfileWithComplaints, calculateEDD, calculateGestationalAge, getSectionsForProfile } from './patientProfileEngine';
 import { getInvestigationsForDiseases } from './investigations/investigationRegistry';
 import { getTreatmentsForDiseases } from './treatment/treatmentRegistry';
 
@@ -35,7 +35,7 @@ export class HistoryOrchestrator {
       encounterId: '',
       biodata: {
         name: '', age: 0, sex: 'unknown', occupation: '', residence: '',
-        informant: 'patient', reliability: 'reliable',
+        informant: '', reliability: '',
         profile: 'adult',
       },
       chiefComplaints: [],
@@ -45,32 +45,32 @@ export class HistoryOrchestrator {
       pastHistory: {
         admissions: [], surgeries: [], transfusions: [],
         chronicDiseases: [], allergies: [], longTermMeds: [],
-        tbHistory: 'none', foodAllergies: [], drugAllergies: [],
+        tbHistory: '', foodAllergies: [], drugAllergies: [],
       },
       familySocial: {
-        maritalStatus: 'single', education: 'none', incomeLevel: 'low',
-        housing: 'owned', water: 'piped', sanitation: 'flush',
-        smoking: 'never', alcohol: 'never', substanceUse: [],
+        maritalStatus: '', education: '', incomeLevel: '',
+        housing: '', water: '', sanitation: '',
+        smoking: '', alcohol: '', substanceUse: [],
         familyHistory: [], familyDiseases: [], occupationExposure: [],
-        travelHistory: [], transportAccess: 'public', healthInsurance: false,
+        travelHistory: [], transportAccess: '', healthInsurance: null,
       },
       birthHistory: {
         antenatal: {
-          antenatalCare: 'no', ancVisits: 0, placeOfDelivery: '',
+          antenatalCare: '', ancVisits: 0, placeOfDelivery: '',
           maternalIllness: [], medications: [], ultrasounds: '',
-          complications: [], tetanusToxoid: false, hivStatus: 'unknown',
+          complications: [], tetanusToxoid: false, hivStatus: '',
           syphilisScreen: false, malariaProphylaxis: false,
         },
         natal: {
-          placeOfDelivery: '', deliveryType: 'svd', presentation: 'cephalic',
+          placeOfDelivery: '', deliveryType: '', presentation: '',
           cordProlapse: false, birthWeight: 0, gestationalAgeWeeks: 0,
-          resuscitation: '', cry: 'immediate', color: 'pink',
+          resuscitation: '', cry: '', color: '',
         },
         postnatal: {
-          immediateFeeding: 'breastfeeding', vitaminK: false, bcgGiven: false,
+          immediateFeeding: '', vitaminK: false, bcgGiven: false,
           opvGiven: false, neonatalJaundice: false, phototherapy: false,
           neonatalSepsis: false, nicuAdmission: false, nicuDays: 0,
-          meconiumPassed: 'within_24h', urinePassed: 'within_24h',
+          meconiumPassed: '', urinePassed: '',
         },
       },
       immunizationHistory: {
@@ -108,23 +108,23 @@ export class HistoryOrchestrator {
         concerns: '',
       },
       nutritionHistory: {
-        currentFeeding: 'family_diet', breastfeedingDuration: '', formulaType: '',
-        complementaryFoodsStarted: '', mealsPerDay: 3, foodGroups: [],
-        supplements: [], appetite: 'good', feedingDifficulty: '', pica: false,
+        currentFeeding: '', breastfeedingDuration: '', formulaType: '',
+        complementaryFoodsStarted: '', mealsPerDay: 0, foodGroups: [],
+        supplements: [], appetite: '', feedingDifficulty: '', pica: false,
       },
       obstetricHistory: {
         totalPregnancies: 0, totalDeliveries: 0, liveChildren: 0,
         stillbirths: 0, miscarriages: 0, ectopics: 0, cesareanSections: 0,
         pregnancies: [],
-        currentPregnancy: { trimester: 'first', weeksGestation: 0, antenatalCare: '', fetalMovements: 'present', complications: [] },
+        currentPregnancy: { trimester: '', weeksGestation: 0, antenatalCare: '', fetalMovements: '', complications: [] },
       },
       gynecologicHistory: {
-        menstrual: { menarche: 0, cycleLength: 28, duration: 5, regularity: 'regular', flow: 'moderate', dysmenorrhea: 'none', intermenstrualBleeding: false, postcoitalBleeding: false, postmenopausalBleeding: false, menopauseAge: null, lmp: '' },
-        contraception: { currentMethod: 'none', previousMethods: [], duration: '', compliance: 'good', sideEffects: '' },
+        menstrual: { menarche: 0, cycleLength: 0, duration: 0, regularity: '', flow: '', dysmenorrhea: '', intermenstrualBleeding: false, postcoitalBleeding: false, postmenopausalBleeding: false, menopauseAge: null, lmp: '' },
+        contraception: { currentMethod: '', previousMethods: [], duration: '', compliance: '', sideEffects: '' },
         papSmears: '', stdHistory: [], gynecologicSurgery: [], fertilityConcerns: '', breastSymptoms: '',
       },
       ros: [],
-      impactOnLife: { work: 'no_impact', walking: 'no_impact', eating: 'no_impact', sleeping: 'no_impact', adl: 'independent', description: '' },
+      impactOnLife: { work: '', walking: '', eating: '', sleeping: '', adl: '', description: '' },
       redFlags: [],
       ddx: { probabilities: [], snapshots: [], traces: [] },
       generalExamination: {
@@ -133,9 +133,9 @@ export class HistoryOrchestrator {
           respiratoryRate: null, oxygenSaturation: null, bloodSugar: null, weight: null, height: null, bmi: null, painScore: null,
         },
         appearance: { appearance: '' },
-        hydration: { status: 'normal', dryMucosa: false, sunkenEyes: false, reducedSkinTurgor: false },
-        nutrition: { status: 'normal' },
-        consciousness: { level: 'alert', gcs: 15 },
+        hydration: { status: '', dryMucosa: false, sunkenEyes: false, reducedSkinTurgor: false },
+        nutrition: { status: '' },
+        consciousness: { level: '', gcs: null },
         distress: { pain: false, respiratory: false, cardiovascular: false, neurological: false, painScore: null },
         generalSigns: [],
         notes: '',
@@ -149,7 +149,7 @@ export class HistoryOrchestrator {
       differentialWithReasoning: [],
       investigationPlan: { investigations: [], notes: '' },
       investigationInterpretation: { items: [], overallInterpretation: '' },
-      treatmentPlan: { items: [], followUp: '', disposition: 'home', dispositionRationale: '' },
+      treatmentPlan: { items: [], followUp: '', disposition: '', dispositionRationale: '' },
       monitoringPlan: { vitalMonitoring: [], labMonitoring: [], complicationPrevention: [], escalationCriteria: '', reviewPlan: '' },
       documents: {
         chiefComplaintText: '', hpiNarrative: '', pastHistoryNarrative: '',
@@ -240,7 +240,7 @@ export class HistoryOrchestrator {
     this.state.chiefComplaints = [...this.state.chiefComplaints, complaint];
 
     // Add to feature registry
-    this.state.featureRegistry = { ...this.state.featureRegistry, [symptomId]: { id: symptomId, present: true, weight: 1, diseaseWeights: {} } };
+    this.state.featureRegistry = { ...this.state.featureRegistry, [symptomId]: { id: symptomId, present: true, weight: 1, diseaseWeights: {}, negativeDiseaseWeights: {} } };
 
     // Rebuild timeline
     this.state.timeline = buildTimeline(this.state.chiefComplaints).events;
@@ -283,10 +283,18 @@ export class HistoryOrchestrator {
   }
 
   // ── FEATURE REGISTRY ──
-  setFeature(featureId: string, present: boolean | null): void {
+  setFeature(featureId: string, present: boolean | null, source?: 'history' | 'exam' | 'vital' | 'lab' | 'imaging' | 'score'): void {
     const featureDef = HISTORY_FEATURE_REGISTRY[featureId];
     const existing = this.state.featureRegistry[featureId];
     const diseaseWeights = featureDef?.diseaseWeights || existing?.diseaseWeights || {};
+
+    // Convert negativePredictorFor array to Record<string, number>
+    const negativeDiseaseWeights: Record<string, number> = {};
+    if (featureDef?.negativePredictorFor) {
+      for (const np of featureDef.negativePredictorFor) {
+        negativeDiseaseWeights[np.diseaseId] = np.reduction;
+      }
+    }
 
     this.state.featureRegistry = {
       ...this.state.featureRegistry,
@@ -295,10 +303,24 @@ export class HistoryOrchestrator {
         present,
         weight: present ? (featureDef ? Math.max(...Object.values(featureDef.diseaseWeights), 0) : 1) : 0,
         diseaseWeights,
+        negativeDiseaseWeights,
+        source: source || (featureDef?.category === 'exam_finding' ? 'exam' : 'history'),
       },
     };
 
     this.recomputeAll();
+  }
+
+  setFeatureWithModifier(featureId: string, present: boolean | null, modifier: { key: string; value: string | number | boolean; weightBoost?: number }): void {
+    this.setFeature(featureId, present);
+    const entry = this.state.featureRegistry[featureId];
+    if (entry) {
+      this.state.featureRegistry = {
+        ...this.state.featureRegistry,
+        [featureId]: { ...entry, modifier },
+      };
+      this.recomputeAll();
+    }
   }
 
   setFeatureValue(featureId: string, value: string | boolean): void {
@@ -312,7 +334,7 @@ export class HistoryOrchestrator {
         ...this.state.hpi,
         [symptomId]: { symptomId, label, socrates: [], positives: [], negatives: [], parentSymptomId }
       };
-      this.state.featureRegistry = { ...this.state.featureRegistry, [symptomId]: { id: symptomId, present: true, weight: 1, diseaseWeights: {} } };
+      this.state.featureRegistry = { ...this.state.featureRegistry, [symptomId]: { id: symptomId, present: true, weight: 1, diseaseWeights: {}, negativeDiseaseWeights: {} } };
       if (!this.state.confirmedSymptoms.includes(symptomId)) {
         this.state.confirmedSymptoms = [...this.state.confirmedSymptoms, symptomId];
       }
@@ -402,9 +424,24 @@ export class HistoryOrchestrator {
     this.recomputeAll();
   }
 
+  // ── Count total user-answered Socrates questions across all HPI entries ──
+  private totalSocratesAnswered(): number {
+    let count = 0;
+    for (const entry of Object.values(this.state.hpi)) {
+      count += entry.socrates.length;
+    }
+    return count;
+  }
+
   // ── CORE: Recompute everything ──
   recomputeAll(): void {
     const { biodata, chiefComplaints, featureRegistry } = this.state;
+
+    // Re-detect profile with chief complaints (only gyn/obstetric when complaints warrant it)
+    const updatedProfile = detectProfileWithComplaints(biodata, chiefComplaints);
+    if (updatedProfile !== biodata.profile) {
+      this.state.biodata = { ...biodata, profile: updatedProfile };
+    }
 
     // Risk factor contribution (used internally)
     assessRiskFactors(biodata, featureRegistry);
@@ -426,17 +463,22 @@ export class HistoryOrchestrator {
       this.setRosPrioritized(topDiseaseIds);
     }
 
-    // Clinical reasoning (history + exam)
-    this.state.clinicalReasoning = computeClinicalReasoning({
-      complaints: chiefComplaints,
-      featureRegistry,
-      ddx: this.state.ddx,
-      generalExamination: this.state.generalExamination,
-      systemExaminations: this.state.systemExaminations,
-    });
+    // ── Data threshold: only generate reasoning/investigations after ≥3 answers ──
+    const enoughData = this.totalSocratesAnswered() >= 3;
 
-    // Auto-populate investigation & treatment plans from registries based on top diagnoses
-    if (topDiseaseIds.length > 0) {
+    // Clinical reasoning (history + exam)
+    this.state.clinicalReasoning = enoughData
+      ? computeClinicalReasoning({
+          complaints: chiefComplaints,
+          featureRegistry,
+          ddx: this.state.ddx,
+          generalExamination: this.state.generalExamination,
+          systemExaminations: this.state.systemExaminations,
+        })
+      : [];
+
+    // Auto-populate investigation & treatment plans only when enough data collected
+    if (enoughData && topDiseaseIds.length > 0) {
       const invRecs = getInvestigationsForDiseases(topDiseaseIds);
       this.state.investigationPlan = {
         investigations: invRecs.map(r => ({
@@ -465,10 +507,15 @@ export class HistoryOrchestrator {
         disposition: 'home',
         dispositionRationale: 'Disposition depends on severity and response to initial management.',
       };
+    } else {
+      // Clear plans when insufficient data
+      this.state.investigationPlan = { investigations: [], notes: '' };
+      this.state.treatmentPlan = { items: [], followUp: '', disposition: 'home', dispositionRationale: '' };
     }
 
     // Documents
     this.state.documents = generateDocuments({
+      completedSections: this.state.completedSections,
       biodata,
       chiefComplaints,
       hpi: this.state.hpi,
@@ -572,6 +619,50 @@ export class HistoryOrchestrator {
   }
 
   // ═══════════════════════════════════════════════════════════════
+  // EXAM → FEATURE REGISTRY BRIDGE
+  // ═══════════════════════════════════════════════════════════════
+  bridgeExamToFeatureRegistry(systemId: string, findingId: string, finding: 'normal' | 'abnormal' | 'not_examined'): void {
+    const featureId = `exam_${systemId}_${findingId}`;
+    this.setFeature(
+      featureId,
+      finding === 'abnormal' ? true : finding === 'normal' ? false : null,
+      'exam'
+    );
+  }
+
+  bridgeAllExamFindingsToRegistry(): void {
+    for (const system of this.state.systemExaminations) {
+      for (const finding of system.findings) {
+        this.bridgeExamToFeatureRegistry(system.systemId, finding.id, finding.finding);
+      }
+    }
+  }
+
+  bridgeGeneralSignToRegistry(signId: string, label: string, present: boolean): void {
+    const featureId = `gen_sign_${signId}`;
+    const featureDef = HISTORY_FEATURE_REGISTRY[featureId] || HISTORY_FEATURE_REGISTRY[signId];
+    this.setFeature(featureId, present, 'exam');
+    if (!featureDef) {
+      // Register ephemeral entry with label-based disease mapping
+      const entry = this.state.featureRegistry[featureId];
+      if (entry) {
+        this.state.featureRegistry = {
+          ...this.state.featureRegistry,
+          [featureId]: { ...entry, diseaseWeights: {} },
+        };
+      }
+    }
+  }
+
+  bridgeLocalExamToRegistry(examId: string, findings: Record<string, string>): void {
+    for (const [findingKey, findingValue] of Object.entries(findings)) {
+      const featureId = `local_exam_${examId}_${findingKey}`;
+      const present = findingValue !== 'normal' && findingValue !== 'absent' && findingValue !== '';
+      this.setFeature(featureId, present || null, 'exam');
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
   // DIAGNOSIS
   // ═══════════════════════════════════════════════════════════════
   setProvisionalDiagnosis(diagnosis: string, diagnosisId: string, probability: number, fromHistory: string[], fromExamination: string[]): void {
@@ -606,7 +697,7 @@ export class HistoryOrchestrator {
     };
   }
 
-  setHydrationStatus(status: 'normal' | 'mild_dehydration' | 'moderate_dehydration' | 'severe_dehydration',
+  setHydrationStatus(status: '' | 'normal' | 'mild_dehydration' | 'moderate_dehydration' | 'severe_dehydration',
     dryMucosa: boolean, sunkenEyes: boolean, reducedSkinTurgor: boolean): void {
     this.state.generalExamination = {
       ...this.state.generalExamination,
@@ -614,14 +705,14 @@ export class HistoryOrchestrator {
     };
   }
 
-  setNutritionalStatus(status: 'normal' | 'underweight' | 'wasted' | 'obese'): void {
+  setNutritionalStatus(status: '' | 'normal' | 'underweight' | 'wasted' | 'obese'): void {
     this.state.generalExamination = {
       ...this.state.generalExamination,
       nutrition: { status },
     };
   }
 
-  setConsciousness(level: 'alert' | 'drowsy' | 'confused' | 'unresponsive', gcs: number | null): void {
+  setConsciousness(level: '' | 'alert' | 'drowsy' | 'confused' | 'unresponsive', gcs: number | null): void {
     this.state.generalExamination = {
       ...this.state.generalExamination,
       consciousness: { level, gcs },
@@ -642,6 +733,7 @@ export class HistoryOrchestrator {
       ? this.state.generalExamination.generalSigns.map((s, i) => i === existingIdx ? sign : s)
       : [...this.state.generalExamination.generalSigns, sign];
     this.state.generalExamination = { ...this.state.generalExamination, generalSigns: updatedSigns };
+    this.bridgeGeneralSignToRegistry(signId, label, present);
   }
 
   setExamNotes(notes: string): void {
@@ -860,7 +952,7 @@ export class HistoryOrchestrator {
   // SECTION MANAGEMENT — with adaptive pipeline
   // ═══════════════════════════════════════════════════════════════
   getProfileSections(): string[] {
-    return getSectionsForProfile(this.state.biodata.profile).map(s => s.id);
+    return getSectionsForProfile(this.state.biodata.profile, this.state.biodata.sex, this.state.biodata.age).map(s => s.id);
   }
 
   completeSection(section: string): void {

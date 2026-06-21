@@ -1,0 +1,139 @@
+{
+  "disease": {
+    "id": "cmv_hepatitis",
+    "name": "CMV Hepatitis",
+    "system": "infectious_disease",
+    "agePeak_months": [],
+    "note": "CMV hepatitis in immunocompetent (mononucleosis-like syndrome) and immunocompromised (transplant, HIV - more severe). Congenital CMV: leading infectious cause of neonatal jaundice with sensorineural hearing loss.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["liver", "hepatitis", "jaundice", "viral", "congenital", "immunocompromised"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure_coagulopathy", "weight": 10 },
+        { "sign": "disseminated_cmv_with_multiorgan_failure", "weight": 10 },
+        { "sign": "severe_pneumonitis_hypoxemia", "weight": 9 },
+        { "sign": "retinitis_with_vision_threat", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "Immunocompetent mild -> OBSERVE; Immunocompromised -> URGENT treatment; Congenital -> SPECIALIST; Disseminated -> EMERGENCY"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "fatigue_malaise", "weight": 5 },
+      { "symptomId": "myalgia", "weight": 3 },
+      { "symptomId": "jaundice", "weight": 3 },
+      { "symptomId": "abdominal_pain_right_upper_quadrant", "weight": 3 },
+      { "symptomId": "pharyngitis", "weight": 2, "note": "Less prominent than EBV" },
+      { "symptomId": "nausea_vomiting", "weight": 2 },
+      { "symptomId": "headache", "weight": 2 },
+      { "symptomId": "lymphadenopathy", "weight": 1, "note": "Mild if present" }
+    ],
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5, "doubleWeight": false },
+      { "signId": "hepatomegaly", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "splenomegaly", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "jaundice", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "lymphadenopathy", "baseWeight": 1, "doubleWeight": false, "note": "Mild cervical lymphadenopathy" },
+      { "signId": "petechiae", "baseWeight": 3, "doubleWeight": false, "note": "Congenital CMV: blueberry muffin rash, petechiae" }
+    ],
+    "riskFactors": [
+      { "id": "immunocompromised_transplant_hiv_chemotherapy", "multiplier": 5.0 },
+      { "id": "congenital_exposure_mother_primary_cmv_during_pregnancy", "multiplier": 4.0 },
+      { "id": "daycare_workers_young_children", "multiplier": 2.0 },
+      { "id": "sexual_contact_men_who_have_sex_with_men", "multiplier": 2.0 },
+      { "id": "blood_product_transfusion", "multiplier": 1.5 },
+      { "id": "solid_organ_transplant_recipient", "multiplier": 5.0 },
+      { "id": "bone_marrow_transplant_recipient", "multiplier": 5.0 }
+    ],
+    "subtypes": [
+      { "id": "acute_cmv_in_immunocompetent", "name": "Acute CMV in Immunocompetent", "note": "Mononucleosis-like syndrome with fever, fatigue, mild hepatitis. Usually self-limited. Less pharyngitis compared to EBV." },
+      { "id": "cmv_in_immunocompromised", "name": "CMV in Immunocompromised", "note": "Severe disseminated disease: hepatitis, pneumonitis, colitis, retinitis, encephalitis. High morbidity and mortality if untreated." },
+      { "id": "congenital_cmv", "name": "Congenital CMV", "note": "Leading infectious cause of neonatal jaundice. Features: IUGR, petechiae, hepatosplenomegaly, jaundice, microcephaly, sensorineural hearing loss, chorioretinitis." }
+    ],
+    "mimics": [
+      {
+        "diseaseId": "ebv_hepatitis",
+        "discriminators": ["ebv_serology_positive", "pharyngitis_prominent", "atypical_lymphocytosis_30_percent", "palatal_petechiae", "monospot_positive"]
+      },
+      {
+        "diseaseId": "acute_hiv_seroconversion",
+        "discriminators": ["hiv_rna_p24_positive", "rash_prominent", "oral_ulcers", "monospot_negative"]
+      },
+      {
+        "diseaseId": "toxoplasmosis",
+        "discriminators": ["toxoplasma_serology_positive", "posterior_cervical_lymphadenopathy", "cat_exposure", "ocular_involvement"]
+      },
+      {
+        "diseaseId": "autoimmune_hepatitis",
+        "discriminators": ["autoimmune_serology_positive", "igg_elevated", "cmv_pcr_negative", "interface_hepatitis_on_biopsy"]
+      }
+    ],
+    "investigations": {
+      "firstLine": [
+        { "test": "CMV_PCR_blood", "weight": 10 },
+        { "test": "CMV_pp65_antigen", "weight": 9 },
+        { "test": "CMV_IgM_IgG", "weight": 8 },
+        { "test": "LFTs_ALT_AST_ALP_bilirubin", "weight": 8 },
+        { "test": "abdominal_ultrasound", "weight": 6 }
+      ],
+      "secondLine": ["CMV_PCR_liver_biopsy", "CMV_viral_culture", "ophthalmology_exam_for_retinitis", "bronchoscopy_BAL_if_pneumonitis"],
+      "goldStandard": "CMV_PCR_quantitative_in_blood"
+    },
+    "management": {
+      "emergency": [
+        { "action": "IV ganciclovir 5 mg/kg q12h for severe/disseminated CMV in immunocompromised" },
+        { "action": "ICU supportive care for multiorgan failure" },
+        { "action": "Ophthalmology consult for retinitis" }
+      ],
+      "inpatient": [
+        { "action": "IV ganciclovir or oral valganciclovir 900 mg PO BID for moderate-severe disease" },
+        { "action": "Reduce immunosuppression if possible in transplant recipients" },
+        { "action": "Monitor CMV PCR weekly until negative" },
+        { "action": "Supportive care for immunocompetent: hydration, rest, antipyretics" }
+      ],
+      "outpatient": [
+        { "action": "Valganciclovir 900 mg PO BID for mild-moderate CMV in immunocompromised (step-down)" },
+        { "action": "Immunocompetent: supportive care only (self-limited)" },
+        { "action": "Monitor CMV PCR q1-2 weeks until clearance" },
+        { "action": "Secondary prophylaxis after treatment until immune recovery" }
+      ],
+      "refractory": [
+        { "action": "Foscarnet or cidofovir for ganciclovir-resistant CMV (UL97 mutation)" },
+        { "action": "CMV hyperimmune globulin in transplant settings" },
+        { "action": "Maribavir for refractory/resistant CMV" }
+      ],
+      "preventive": [
+        { "action": "CMV prophylaxis in high-risk transplant: valganciclovir 900 mg PO daily" },
+        { "action": "Preemptive therapy: monitor CMV PCR weekly, initiate treatment at predefined threshold" },
+        { "action": "Valacyclovir prophylaxis in CMV D+/R- kidney transplant" },
+        { "action": "Avoid CMV-positive blood products in CMV-negative transplant recipients" }
+      ]
+    },
+    "pathophysiology": "CMV infects hepatocytes, biliary epithelium, endothelial cells, and monocytes. Direct cytopathic effect causes cell lysis and microabscesses. CD8+ T-cell mediated inflammation drives granulomatous hepatitis pattern. In immunocompromised, unchecked viral replication leads to widespread tissue involvement. Congenital CMV: transplacental transmission; virus targets neural progenitor cells and inner ear causing hearing loss, and infects hepatocytes causing cholestatic jaundice.",
+    "complications": [
+      { "diseaseId": "disseminated_cmv", "probability": 0.3, "clues": ["immunocompromised_host", "high_viral_load_cmv_pcr", "multiorgan_involvement", "pneumonitis_colitis_retinitis"] },
+      { "diseaseId": "cmv_pneumonitis", "probability": 0.2, "clues": ["hypoxemia", "diffuse_interstitial_infiltrates", "cmv_detected_in_BAL"] },
+      { "diseaseId": "cmv_retinitis", "probability": 0.1, "clues": ["hiv_with_low_cd4_less_than_50", "visual_changes", "fluffy_retinal_lesions_hemorrhages"] },
+      { "diseaseId": "sensorineural_hearing_loss_congenital", "probability": 0.15, "severityBoost": 0.5, "clues": ["congenital_cmv", "microcephaly", "petechiae_at_birth"] }
+    ],
+    "mustNotMiss": ["disseminated_cmv_in_immunocompromised_host", "congenital_cmv_as_cause_of_neonatal_jaundice", "cmv_in_transplant_recipients"],
+    "emergencyPriority": "medium",
+    "diagnosticClues": [
+      { "clue": "Fever + hepatitis + atypical lymphocytosis in immunocompetent (mono-like but less pharyngitis)", "weight": 7 },
+      { "clue": "CMV PCR positive in blood in setting of elevated LFTs", "weight": 10 },
+      { "clue": "Immunocompromised host with fever, hepatitis, and high CMV viral load", "weight": 10 },
+      { "clue": "Neonatal jaundice + petechiae + microcephaly + sensorineural hearing loss", "weight": 9 },
+      { "clue": "Transplant recipient with fever and transaminitis", "weight": 8 }
+    ],
+    "exclusionClues": [
+      { "clue": "Negative CMV PCR and CMV IgM", "weight": 10 },
+      { "clue": "Alternative diagnosis confirmed (EBV, HIV, toxoplasma)", "weight": 8 },
+      { "clue": "Immunocompetent CMV IgG positive only (past infection)", "weight": 7 }
+    ]
+  }
+}

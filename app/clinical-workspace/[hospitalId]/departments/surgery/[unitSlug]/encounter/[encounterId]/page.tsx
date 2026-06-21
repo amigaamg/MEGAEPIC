@@ -24,6 +24,8 @@ import {
   FullClerkingPhase,
   TimelineViewer,
 } from '@/src/components/encounter';
+import { CoughAdaptiveHPI } from '@/src/ui/encounter/phases/CoughAdaptiveHPI';
+import { QUESTION_REGISTRY } from '@/src/engine/cough/ClinicalEngine';
 import { ClinicalIntelligencePanel } from '@/src/components/surgery/ClinicalIntelligencePanel';
 import { Stepper } from '@/src/components/shared/Stepper';
 import { getPresentingComplaintsForUnit } from '@/src/engine/knowledge-graph';
@@ -321,14 +323,19 @@ export default function SurgeryEncounterPage() {
         );
       case 'hpi':
         return (
-          <IntelligentHPI
+          <CoughAdaptiveHPI
             patientName={encounter.patientName}
-            unitSlug={unitSlug}
-            presentingComplaint={encounter.presentingComplaint?.complaint || ''}
+            presentingComplaint={encounter.presentingComplaint?.complaint || 'Cough'}
             complaintDuration={encounter.presentingComplaint?.duration || ''}
-            existingAnswers={hpiItems}
-            onAnswer={handleHPIAnswer}
-            onComplete={() => handleCompletePhase('hpi')}
+            onComplete={async (narrative, answers) => {
+              for (const [qId, value] of Object.entries(answers)) {
+                const q = QUESTION_REGISTRY.find(q => q.id === qId);
+                await handleHPIAnswer(qId, q?.text || qId, String(value));
+              }
+              await addEvent('HPI completed', 'Adaptive HPI narrative generated', 'dr_current', 'Dr. Current');
+              handleCompletePhase('hpi');
+            }}
+            deptColor="#3B82F6"
           />
         );
       case 'examination':

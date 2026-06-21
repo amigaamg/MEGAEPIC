@@ -1,0 +1,136 @@
+{
+  "disease": {
+    "id": "hsv_hepatitis",
+    "name": "HSV Hepatitis",
+    "system": "infectious_disease",
+    "agePeak_months": [],
+    "note": "Rare but fulminant hepatitis from HSV-1/2, predominantly in immunocompromised and pregnant women (3rd trimester). High mortality (>50%) if untreated. May lack classic mucocutaneous lesions in 50% of cases - high index of suspicion needed.",
+    "prevalenceWeight": 0.1,
+    "syndromeTags": ["liver", "hepatitis", "jaundice", "viral", "fulminant", "acute_liver_failure"],
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "acute_liver_failure_coagulopathy_inr_greater_than_1_5", "weight": 10 },
+        { "sign": "hepatic_encephalopathy_any_grade", "weight": 10 },
+        { "sign": "massive_transaminase_elevation_ast_alt_greater_than_5000", "weight": 10 },
+        { "sign": "multiorgan_failure_dic", "weight": 10 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "Any suspected HSV hepatitis -> EMERGENCY; Proven HSV hepatitis -> ICU; Fulminant liver failure -> TRANSPLANT EVALUATION"
+    },
+    "historyFeatures": [
+      { "symptomId": "fever", "weight": 5 },
+      { "symptomId": "abdominal_pain_right_upper_quadrant", "weight": 5 },
+      { "symptomId": "nausea_vomiting", "weight": 4 },
+      { "symptomId": "jaundice", "weight": 4, "note": "Rapid onset" },
+      { "symptomId": "confusion", "weight": 4, "note": "Hepatic encephalopathy" },
+      { "symptomId": "fatigue_malaise", "weight": 3 },
+      { "symptomId": "bleeding_tendency", "weight": 3, "note": "Coagulopathy from acute liver failure" }
+    ],
+    "examFeatures": [
+      { "signId": "fever", "baseWeight": 5, "doubleWeight": false },
+      { "signId": "jaundice", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "hepatomegaly", "baseWeight": 4, "doubleWeight": false, "note": "Tender hepatomegaly" },
+      { "signId": "abdominal_tenderness_ruq", "baseWeight": 4, "doubleWeight": false },
+      { "signId": "asterixis", "baseWeight": 4, "doubleWeight": true, "note": "Hepatic encephalopathy" },
+      { "signId": "tachycardia", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "hypotension", "baseWeight": 3, "doubleWeight": false },
+      { "signId": "ecchymosis", "baseWeight": 3, "doubleWeight": false, "note": "Coagulopathy" },
+      { "signId": "ascites", "baseWeight": 3, "doubleWeight": false }
+    ],
+    "riskFactors": [
+      { "id": "pregnancy_third_trimester", "multiplier": 5.0 },
+      { "id": "immunosuppression_hiv_transplant_chemotherapy", "multiplier": 5.0 },
+      { "id": "atopic_dermatitis_kaposi_varicelliform_eruption", "multiplier": 3.0 },
+      { "id": "severe_burns", "multiplier": 2.0 },
+      { "id": "history_of_genital_or_oral_herpes", "multiplier": 1.5 },
+      { "id": "neonatal_perinatal_transmission", "multiplier": 4.0 }
+    ],
+    "subtypes": [],
+    "mimics": [
+      {
+        "diseaseId": "drug_induced_liver_injury",
+        "discriminators": ["temporal_relation_to_drug", "hsv_pcr_negative", "eosinophilia", "no_mucocutaneous_lesions"]
+      },
+      {
+        "diseaseId": "acute_hepatitis_b",
+        "discriminators": ["hbsag_positive", "igm_anti_hbc_positive", "less_severe_transaminase_elevation", "slower_progression"]
+      },
+      {
+        "diseaseId": "autoimmune_hepatitis",
+        "discriminators": ["a_na_anti_smooth_muscle_positive", "igg_elevated", "hsv_pcr_negative", "female_predominance"]
+      },
+      {
+        "diseaseId": "ischemic_hepatitis_shock_liver",
+        "discriminators": ["cardiac_event_preceding", "transaminases_peak_rapidly_fall_24_48h", "no_viral_pcr", "clinical_history_of_hypotension"]
+      }
+    ],
+    "investigations": {
+      "firstLine": [
+        { "test": "HSV_PCR_blood", "weight": 10 },
+        { "test": "HSV_PCR_liver_biopsy", "weight": 10 },
+        { "test": "LFTs_AST_ALT", "weight": 10, "note": "Massively elevated >5000 IU/L" },
+        { "test": "INR", "weight": 9 },
+        { "test": "lactate", "weight": 8 },
+        { "test": "HSV_IgM_IgG", "weight": 7 },
+        { "test": "abdominal_US_CT", "weight": 6 },
+        { "test": "CBC", "weight": 6 }
+      ],
+      "secondLine": ["liver_biopsy_with_HSV_immunohistochemistry", "HSV_viral_culture", "CT_head_if_encephalopathy"],
+      "goldStandard": "HSV_PCR_or_immunohistochemistry_on_liver_biopsy"
+    },
+    "management": {
+      "emergency": [
+        { "action": "IV acyclovir 10 mg/kg q8h immediately upon suspicion (do NOT wait for confirmation)" },
+        { "action": "Admit to ICU for monitoring of acute liver failure" },
+        { "action": "Evaluate for liver transplant if fulminant hepatic failure develops" },
+        { "action": "Volume resuscitation and vasopressors for shock" }
+      ],
+      "inpatient": [
+        { "action": "IV acyclovir 10 mg/kg q8h for 14-21 days (adjust for renal function)" },
+        { "action": "Monitor LFTs, INR, viral load daily during acute phase" },
+        { "action": "N-acetylcysteine IV for acute liver failure" },
+        { "action": "ICP monitoring if severe encephalopathy" },
+        { "action": "Transplant listing if King's College criteria met" }
+      ],
+      "outpatient": [
+        { "action": "Oral valacyclovir 1g PO TID after IV step-down (after clinical improvement)" },
+        { "action": "Complete 14-21 day course total" }
+      ],
+      "refractory": [
+        { "action": "Foscarnet for acyclovir-resistant HSV" },
+        { "action": "Liver transplantation for irreversible acute liver failure" },
+        { "action": "Exchange transfusion/plasmapheresis for massive hepatic necrosis" }
+      ],
+      "preventive": [
+        { "action": "Acyclovir prophylaxis in high-risk pregnant women with recurrent HSV in 3rd trimester" },
+        { "action": "Acyclovir prophylaxis in HSV-seropositive transplant recipients" },
+        { "action": "Cesarean delivery if active genital lesions at time of labor" }
+      ]
+    },
+    "pathophysiology": "HSV directly infects hepatocytes via viral glycoproteins binding to host cell receptors. Lytic viral replication causes widespread hemorrhagic necrosis of liver parenchyma. Massive release of transaminases into circulation (AST/ALT >5000 IU/L). The necrosis is often patchy but confluent, producing characteristic geographic necrotic zones on pathology. Systemic inflammatory response syndrome and DIC from hepatocellular necrosis. Portal hypertension develops from sinusoidal destruction. Without prompt antiviral therapy, rapid progression to multiorgan failure and death.",
+    "complications": [
+      { "diseaseId": "acute_liver_failure_fulminant", "probability": 0.6, "severityBoost": 0.9, "clues": ["rapid_progression", "encephalopathy", "coagulopathy", "massive_transaminase_elevation"] },
+      { "diseaseId": "disseminated_intravascular_coagulation", "probability": 0.4, "severityBoost": 0.8, "clues": ["thrombocytopenia", "elevated_d_dimer", "prolonged_pt_ptt", "bleeding"] },
+      { "diseaseId": "multiorgan_failure", "probability": 0.3, "severityBoost": 0.9, "clues": ["renal_failure", "respiratory_failure", "hemodynamic_instability", "cardiac_dysfunction"] }
+    ],
+    "mustNotMiss": ["hsv_hepatitis_in_pregnant_woman_with_fever_and_transaminitis", "hsv_hepatitis_in_immunocompromised_without_mucocutaneous_lesions", "start_acyclovir_empirically_if_suspected_do_not_wait_for_pcr"],
+    "emergencyPriority": "high",
+    "diagnosticClues": [
+      { "clue": "Massive transaminase elevation (AST/ALT >5000 IU/L) disproportionate to bilirubin", "weight": 10 },
+      { "clue": "Pregnant patient (3rd trimester) or immunocompromised with acute hepatitis", "weight": 9 },
+      { "clue": "HSV PCR positive in blood", "weight": 10 },
+      { "clue": "Rapid progression to acute liver failure with encephalopathy", "weight": 9 },
+      { "clue": "History of genital or oral herpes (present in ~50%)", "weight": 6 }
+    ],
+    "exclusionClues": [
+      { "clue": "Negative HSV PCR from blood and/or liver biopsy", "weight": 10 },
+      { "clue": "Alternative cause of acute liver failure confirmed (drug, HBV, ischemic)", "weight": 8 },
+      { "clue": "Transaminases falling rapidly with supportive care alone (suggests ischemic hepatitis)", "weight": 7 }
+    ]
+  }
+}

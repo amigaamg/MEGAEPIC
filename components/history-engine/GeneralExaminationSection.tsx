@@ -10,6 +10,7 @@ const APPEARANCE_OPTIONS = [
 ];
 
 const HYDRATION_STATUSES = [
+  { value: '' as const, label: '-- Select --' },
   { value: 'normal' as const, label: 'Normal' },
   { value: 'mild_dehydration' as const, label: 'Mild Dehydration' },
   { value: 'moderate_dehydration' as const, label: 'Moderate Dehydration' },
@@ -17,6 +18,7 @@ const HYDRATION_STATUSES = [
 ];
 
 const NUTRITION_STATUSES = [
+  { value: '' as const, label: '-- Select --' },
   { value: 'normal' as const, label: 'Normal' },
   { value: 'underweight' as const, label: 'Underweight' },
   { value: 'wasted' as const, label: 'Wasted' },
@@ -24,6 +26,7 @@ const NUTRITION_STATUSES = [
 ];
 
 const CONSCIOUSNESS_LEVELS = [
+  { value: '' as const, label: '-- Select --' },
   { value: 'alert' as const, label: 'Alert' },
   { value: 'drowsy' as const, label: 'Drowsy' },
   { value: 'confused' as const, label: 'Confused' },
@@ -188,7 +191,7 @@ export default function GeneralExaminationSection() {
         <RadioGroup
           options={HYDRATION_STATUSES}
           value={exam.hydration.status}
-          onChange={handleHydrationStatus}
+          onChange={(s) => { setHydrationStatus(s, exam.hydration.dryMucosa, exam.hydration.sunkenEyes, exam.hydration.reducedSkinTurgor); }}
           name="hydration"
         />
         <div className="flex flex-wrap gap-4 mt-2">

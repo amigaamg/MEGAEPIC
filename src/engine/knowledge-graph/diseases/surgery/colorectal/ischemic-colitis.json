@@ -1,0 +1,143 @@
+{
+  "disease": {
+    "id": "ischemic_colitis",
+    "name": "Ischemic Colitis",
+    "system": "surgery",
+    "agePeak_months": [720, 1080],
+    "note": "Most common form of GI ischemia from acute colonic hypoperfusion. Watershed areas: splenic flexure (Griffith point) and rectosigmoid junction (Sudeck point). Sudden onset crampy LLQ pain + urgent bloody diarrhea. 80% resolve spontaneously. Must differentiate from gangrenous form requiring emergency surgery.",
+    "prevalenceWeight": 0.4,
+    "syndromeTags": ["lower_gi_bleeding", "colonic_ischemia", "bloody_diarrhea", "acute_abdomen", "hematochezia"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "generalized_peritonitis", "weight": 10 },
+        { "sign": "septic_shock", "weight": 10 },
+        { "sign": "free_air_on_imaging", "weight": 10 },
+        { "sign": "pneumatosis_intestinalis_on_ct", "weight": 9 },
+        { "sign": "hemodynamic_instability", "weight": 9 }
+      ],
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "noDangerSigns": true },
+      "severityLabel": "Peritonitis/gangrene/sepsis -> emergency surgery; no peritonitis -> supportive care, 80% resolve"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "abdominal_pain_left_lower_quadrant", "weight": 5 },
+      { "symptomId": "rectal_bleeding", "weight": 5 },
+      { "symptomId": "tenesmus", "weight": 3 },
+      { "symptomId": "nausea_vomiting", "weight": 3 },
+      { "symptomId": "abdominal_distension", "weight": 2 },
+      { "symptomId": "rectal_bleeding", "weight": 4 }
+    ],
+
+    "examFeatures": [
+      { "signId": "left_lower_quadrant_tenderness", "baseWeight": 4 },
+      { "signId": "abdominal_distension", "baseWeight": 3 },
+      { "signId": "guarding", "baseWeight": 3 },
+      { "signId": "rebound_tenderness", "baseWeight": 4 },
+      { "signId": "fever", "baseWeight": 3 },
+      { "signId": "tachycardia", "baseWeight": 3 },
+      { "signId": "hypotension", "baseWeight": 3 },
+      { "signId": "peritoneal_signs", "baseWeight": 5 }
+    ],
+
+    "riskFactors": [
+      { "id": "age_over_60", "multiplier": 2.5 },
+      { "id": "atherosclerosis", "multiplier": 2.0 },
+      { "id": "congestive_heart_failure", "multiplier": 2.0 },
+      { "id": "atrial_fibrillation", "multiplier": 1.8 },
+      { "id": "recent_aaa_repair", "multiplier": 2.5 },
+      { "id": "hypotension", "multiplier": 2.0 },
+      { "id": "vasopressor_use", "multiplier": 2.0 },
+      { "id": "cocaine_use", "multiplier": 2.0 },
+      { "id": "aortic_dissection", "multiplier": 2.5 },
+      { "id": "hypercoagulable_state", "multiplier": 1.5 },
+      { "id": "long_distance_running", "multiplier": 1.3 }
+    ],
+
+    "subtypes": [
+      { "id": "transient_reversible_ischemic_colitis", "name": "Transient Reversible Ischemic Colitis", "prevalenceModifier": 0.8, "notes": "Mucosal/submucosal injury only, 80% resolve in 1-2wk" },
+      { "id": "stricturing_ischemic_colitis", "name": "Stricturing Ischemic Colitis", "prevalenceModifier": 0.12, "notes": "Deeper injury, fibrotic stricture over weeks-months" },
+      { "id": "fulminant_gangrenous_ischemic_colitis", "name": "Fulminant Gangrenous Ischemic Colitis", "prevalenceModifier": 0.08, "notes": "Transmural necrosis, surgical emergency" }
+    ],
+
+    "mimics": [
+      { "diseaseId": "c_difficile_colitis", "discriminators": ["broad_antibiotic_use", "diffuse_pseudomembranes"], "ruleOutTests": ["stool_c_diff_toxin"] },
+      { "diseaseId": "ulcerative_colitis", "discriminators": ["chronic_course", "rectal_bleeding", "continuous_from_rectum"], "ruleOutTests": ["colonoscopy_biopsy"] },
+      { "diseaseId": "diverticulitis", "discriminators": ["fever_present_early", "focal_inflammation_on_ct"], "ruleOutTests": ["ct_abdomen"] },
+      { "diseaseId": "infectious_colitis", "discriminators": ["stool_culture_positive"], "ruleOutTests": ["stool_culture"] }
+    ],
+
+    "investigations": {
+      "firstLine": [
+        { "test": "CBC with differential", "weight": 8 },
+        { "test": "Lactate", "weight": 9 },
+        { "test": "CRP", "weight": 7 },
+        { "test": "Abdominal X-ray (thumbprinting, free air)", "weight": 7 },
+        { "test": "CT abdomen with IV contrast (colonic wall thickening, pneumatosis)", "weight": 10 },
+        { "test": "Stool culture and C. diff toxin", "weight": 6 }
+      ],
+      "secondLine": [
+        { "test": "Colonoscopy (if no peritonitis - patchy erythema, ulceration, hemorrhagic nodules at watershed)", "weight": 9 },
+        { "test": "Mesenteric angiography (if SMA territory or pain out of proportion)", "weight": 6 }
+      ],
+      "goldStandard": "CT abdomen with IV contrast showing segmental colonic wall thickening at watershed areas with pericolonic stranding"
+    },
+
+    "management": {
+      "emergency": [
+        "Emergency laparotomy if peritonitis/pneumatosis/hemodynamic instability - Hartmann procedure preferred",
+        "Aggressive IV fluid resuscitation",
+        "IV broad-spectrum antibiotics (gram-negative and anaerobic coverage)",
+        "ICU monitoring for gangrenous cases"
+      ],
+      "inpatient": [
+        "NPO and bowel rest",
+        "Correct underlying cause (optimize cardiac output, discontinue vasoconstrictors)",
+        "Supportive care for transient form - 80% resolve in 1-2 weeks",
+        "Serial abdominal exams and lactate monitoring",
+        "VTE prophylaxis"
+      ],
+      "outpatient": [
+        "Colonoscopy in 6-8 weeks after resolution to document healing",
+        "Exclude stricture formation",
+        "Cardiovascular risk factor modification",
+        "Low-dose aspirin if cardiac indication not contraindicated"
+      ],
+      "refractory": [
+        "Elective surgical resection for stricturing type",
+        "Endoscopic dilation for short benign strictures"
+      ],
+      "preventive": []
+    },
+
+    "pathophysiology": "Acute decrease in colonic blood flow (non-occlusive: low flow/hypotension, or occlusive: emboli/thrombus) → hypoxic injury to colonic mucosa (most sensitive layer) → mucosal edema and hemorrhage → inflammatory infiltration → superficial mucosal necrosis → ulceration → hematochezia. Watershed areas (splenic flexure, rectosigmoid) most vulnerable due to tenuous collateral circulation between SMA and IMA territories.",
+
+    "complications": [
+      { "complication": "Colonic gangrene requiring resection", "severity": "high" },
+      { "complication": "Colonic stricture formation", "severity": "moderate" },
+      { "complication": "Colonic perforation", "severity": "high" },
+      { "complication": "Sepsis from bacterial translocation", "severity": "high" }
+    ],
+
+    "mustNotMiss": [
+      "Differentiate transient (80%) from gangrenous (8%) - peritonitis/pneumatosis mandates emergency surgery",
+      "Pain out of proportion to exam suggests SMA occlusion (acute mesenteric ischemia) not ischemic colitis",
+      "Do NOT scope if peritonitis or pneumatosis - risk of perforation",
+      "Colon cancer can mimic ischemic stricture - biopsy mandatory"
+    ],
+
+    "emergencyPriority": "high",
+    "diagnosticClues": [
+      { "clue": "Sudden LLQ pain + urgent bloody diarrhea in elderly with vascular disease", "weight": 10 },
+      { "clue": "Segmental colitis at watershed areas (splenic flexure, rectosigmoid) with rectal sparing on colonoscopy", "weight": 9 },
+      { "clue": "Thumbprinting on abdominal XR", "weight": 8 },
+      { "clue": "Colonic wall thickening with pericolonic stranding at watershed on CT", "weight": 9 }
+    ],
+    "exclusionClues": [
+      { "clue": "Positive stool culture or C. diff toxin (infectious colitis)", "weight": 8 },
+      { "clue": "Chronic symptoms with extra-intestinal manifestations (IBD)", "weight": 7 },
+      { "clue": "Inflamed diverticula with abscess on CT (diverticulitis)", "weight": 7 }
+    ]
+  }
+}

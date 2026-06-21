@@ -1,0 +1,322 @@
+{
+  "disease": {
+    "id": "post_nasal_drip",
+    "name": "Post-Nasal Drip / Upper Airway Cough Syndrome (UACS)",
+    "system": "ent",
+    "agePeak_months": [12, 720],
+    "note": "One of the most common causes of chronic cough. Nasal/sinus mucosal inflammation produces excess mucus that drips posteriorly into the pharynx, triggering cough reflex.",
+    "prevalenceWeight": 0.8,
+    "syndromeTags": ["upper_airway_cough_syndrome", "chronic_cough", "rhinologic"],
+
+    "severityAssessment": {
+      "immediateDangerSigns": [
+        { "sign": "hemoptysis", "weight": 9 },
+        { "sign": "unexplained_weight_loss", "weight": 8 },
+        { "sign": "night_sweats", "weight": 7 },
+        { "sign": "stridor", "weight": 9 },
+        { "sign": "respiratory_distress", "weight": 8 }
+      ],
+      "severeCriteria": {
+        "anyDangerSign": true,
+        "additionalCriteria": [
+          { "sign": "chronic_cough_impacting_sleep_and_work", "weight": 6 },
+          { "sign": "cough_syncope", "weight": 5 },
+          { "sign": "voice_loss_persistent", "weight": 4 },
+          { "sign": "recurrent_sinusitis", "weight": 4 }
+        ]
+      },
+      "nonSevereCriteria": {
+        "noDangerSigns": true
+      },
+      "severityLabel": "Danger sign -> UACS not primary. Else classify by QoL impact: mild=occasional, moderate=daily, severe=constant+ sleep disruption"
+    },
+
+    "historyFeatures": [
+      { "symptomId": "sensation_of_post_nasal_drip", "weight": 5 },
+      { "symptomId": "chronic_cough", "weight": 5, "modifiers": [
+          { "condition": "duration > 8 weeks", "suspectChronicCough": true }
+        ]
+      },
+      { "symptomId": "throat_clearing", "weight": 5 },
+      { "symptomId": "nasal_congestion", "weight": 4, "contextualWeights": [
+          { "condition": "bilateral_and_seasonal", "weightBoost": 1, "favorsSubtype": "allergic_uacs" },
+          { "condition": "unilateral_and_persistent", "weightBoost": 1, "considerMimic": "nasal_polyps_or_mass" }
+        ]
+      },
+      { "symptomId": "morning_cough_worse", "weight": 4 },
+      { "symptomId": "rhinorrhea_anterior", "weight": 3 },
+      { "symptomId": "supine_cough_worse", "weight": 3 },
+      { "symptomId": "hoarseness", "weight": 3 },
+      { "symptomId": "sore_throat", "weight": 2 },
+      { "symptomId": "allergic_rhinitis_history", "weight": 4, "favorsSubtype": "allergic_uacs" },
+      { "symptomId": "sinusitis_history", "weight": 3, "favorsSubtype": "sinusitis_associated_uacs" },
+      { "symptomId": "seasonal_variation", "weight": 3 },
+      { "symptomId": "trigger_exacerbation", "weight": 2, "modifiers": [
+          { "condition": "dust_pollen_pets", "favorsSubtype": "allergic_uacs" },
+          { "condition": "weather_change_irritants", "favorsSubtype": "non_allergic_uacs" },
+          { "condition": "meals_and_supine", "considerMimic": "GERD" }
+        ]
+      },
+      { "symptomId": "globus_sensation", "weight": 2 },
+      { "symptomId": "dysphonia", "weight": 2 },
+      { "symptomId": "fever", "weight": 0, "negativePredictor": {
+          "description": "Fever is NOT a feature of UACS.",
+          "scoreReduction": 3,
+          "considerMimic": ["acute_sinusitis", "bronchitis", "pneumonia"]
+        }
+      },
+      { "symptomId": "heartburn_or_regurgitation", "weight": 0, "negativeImpactOnDisease": 2, "considerMimic": "GERD_laryngopharyngeal_reflux" },
+      { "symptomId": "ace_inhibitor_use", "weight": 0, "negativeImpactOnDisease": 4, "considerMimic": "ACE_inhibitor_cough" }
+    ],
+
+    "examFeatures": [
+      { "signId": "pharyngeal_mucosal_erythema", "baseWeight": 4 },
+      { "signId": "cobblestone_mucosa_of_posterior_pharynx", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "mucus_strand_in_oropharynx", "baseWeight": 5, "doubleWeight": true },
+      { "signId": "nasal_mucosa_erythema_or_pallor", "baseWeight": 3 },
+      { "signId": "inferior_turbinate_hypertrophy", "baseWeight": 3 },
+      { "signId": "nasal_polyps", "baseWeight": 2, "condition": "chronic_cases", "favorsSubtype": "sinusitis_associated_uacs" },
+      { "signId": "clear_or_mucoid_discharge", "baseWeight": 3 },
+      { "signId": "purulent_discharge", "baseWeight": 2, "favorsSubtype": "sinusitis_associated_uacs" },
+      { "signId": "froglike_mucosa", "baseWeight": 3 },
+      { "signId": "normal_chest_auscultation", "baseWeight": 3, "note": "Key negative finding" },
+      { "signId": "wheeze", "baseWeight": 0, "negativePredictorForUACS": true, "considerMimic": "asthma" },
+      { "signId": "crackles", "baseWeight": 0, "excludeUACS": true, "considerMimic": "pneumonia_bronchiectasis" }
+    ],
+
+    "riskFactors": [
+      { "id": "allergic_rhinitis", "multiplier": 3.0 },
+      { "id": "chronic_sinusitis", "multiplier": 2.5 },
+      { "id": "deviated_nasal_septum", "multiplier": 1.5 },
+      { "id": "nasal_polyps", "multiplier": 2.0 },
+      { "id": "smoking_exposure", "multiplier": 1.8 },
+      { "id": "GERD", "multiplier": 1.6 },
+      { "id": "environmental_allergens", "multiplier": 1.5 },
+      { "id": "occupational_irritants", "multiplier": 1.4 },
+      { "id": "cold_dry_climate", "multiplier": 1.3 },
+      { "id": "pregnancy", "multiplier": 1.2 }
+    ],
+
+    "subtypes": [
+      {
+        "id": "allergic_uacs",
+        "name": "Allergic UACS (Allergic Rhinitis Driven)",
+        "prevalenceModifier": 0.5,
+        "keyFeatures": [
+          { "feature": "sneezing_paroxysms", "weight": 4 },
+          { "feature": "allergic_history", "weight": 5 },
+          { "feature": "seasonal_variation", "weight": 4 },
+          { "feature": "itching_eyes_nose", "weight": 4 },
+          { "feature": "trigger_exposure_worsens", "weight": 4 },
+          { "feature": "froglike_nasal_mucosa", "weight": 3 }
+        ],
+        "management": "Intranasal corticosteroids + oral antihistamines. Allergen avoidance. Immunotherapy if refractory."
+      },
+      {
+        "id": "non_allergic_uacs",
+        "name": "Non-Allergic UACS (Vasomotor Rhinitis)",
+        "prevalenceModifier": 0.3,
+        "keyFeatures": [
+          { "feature": "no_allergic_triggers", "weight": 5 },
+          { "feature": "weather_changes_trigger", "weight": 4 },
+          { "feature": "irritant_exposure", "weight": 4 },
+          { "feature": "negative_allergy_tests", "weight": 4 },
+          { "feature": "rhinorrhea_predominant", "weight": 4 },
+          { "feature": "older_age_onset", "weight": 3 }
+        ],
+        "negativePredictors": [
+          { "feature": "seasonal_pattern", "weightReduction": 3 },
+          { "feature": "positive_skin_test", "weightReduction": 5 }
+        ],
+        "management": "Intranasal ipratropium if rhinorrhea predominant. Saline irrigation. Avoid irritants."
+      },
+      {
+        "id": "sinusitis_associated_uacs",
+        "name": "Sinusitis-Associated UACS",
+        "prevalenceModifier": 0.2,
+        "keyFeatures": [
+          { "feature": "facial_pain_or_pressure", "weight": 5 },
+          { "feature": "purulent_discharge", "weight": 5 },
+          { "feature": "fever_acute", "weight": 4 },
+          { "feature": "hyposmia", "weight": 4 },
+          { "feature": "nasal_polyps_on_exam", "weight": 4 },
+          { "feature": "headache", "weight": 3 },
+          { "feature": "dental_pain", "weight": 3 }
+        ],
+        "imagingFeatures": ["sinus_opacification", "air_fluid_levels", "mucosal_thickening"],
+        "management": "Amoxicillin-clavulanate if acute bacterial. INS adjunct. Refractory: ENT referral, sinus CT, possible surgery."
+      }
+    ],
+
+    "mimics": [
+      {
+        "diseaseId": "allergic_rhinitis",
+        "discriminators": ["sneezing_dominant", "nasal_itching_prominent", "eye_symptoms", "no_cough_dominant"],
+        "negativeImpactOnDisease": 2
+      },
+      {
+        "diseaseId": "GERD_laryngopharyngeal_reflux",
+        "discriminators": ["heartburn", "regurgitation", "worse_after_meals", "worse_supine", "no_nasal_symptoms"],
+        "negativeImpactOnDisease": 4
+      },
+      {
+        "diseaseId": "chronic_bronchitis",
+        "discriminators": ["productive_cough", "smoking_history", "wheeze", "dyspnea_on_exertion"],
+        "negativeImpactOnDisease": 3
+      },
+      {
+        "diseaseId": "asthma_cough_variant",
+        "discriminators": ["nocturnal_cough", "bronchial_hyperreactivity", "exercise_induced", "normal_nasal_exam", "response_to_bronchodilators"],
+        "negativeImpactOnDisease": 4
+      },
+      {
+        "diseaseId": "ACE_inhibitor_cough",
+        "discriminators": ["drug_history_ACEi", "onset_after_starting_drug", "no_nasal_symptoms", "dry_cough"],
+        "negativeImpactOnDisease": 4
+      },
+      {
+        "diseaseId": "eosinophilic_bronchitis",
+        "discriminators": ["sputum_eosinophilia", "normal_nasal_exam", "normal_spirometry", "response_to_corticosteroids"],
+        "negativeImpactOnDisease": 2
+      }
+    ],
+
+    "investigations": {
+      "bedside": [
+        { "name": "Anterior Rhinoscopy", "priority": "immediate", "yield": 0.7, "indication": "all suspected UACS" },
+        { "name": "Oropharyngeal Examination", "priority": "immediate", "yield": 0.8, "indication": "all suspected UACS" },
+        { "name": "Nasal Endoscopy", "priority": "medium", "yield": 0.85, "indication": "refractory cases, suspected polyps" },
+        { "name": "Chest Auscultation", "priority": "immediate", "yield": 0.5, "indication": "all chronic cough" }
+      ],
+      "laboratory": [
+        { "name": "Serum Total IgE", "priority": "medium", "yield": 0.6, "indication": "suspected allergic component" },
+        { "name": "Blood Eosinophil Count", "priority": "medium", "yield": 0.5, "indication": "suspected allergic/eosinophilic etiology" },
+        { "name": "Allergen Specific IgE (RAST)", "priority": "medium", "yield": 0.8, "indication": "identify specific triggers" }
+      ],
+      "imaging": [
+        {
+          "name": "Sinus CT (Coronal)",
+          "priority": "medium",
+          "yield": 0.8,
+          "indication": "refractory UACS, suspected chronic sinusitis",
+          "typicalFindingsBySubtype": {
+            "sinusitis_associated": "mucosal thickening, opacification, air-fluid levels",
+            "allergic_uacs": "normal or minimal thickening",
+            "non_allergic_uacs": "normal"
+          }
+        },
+        { "name": "Chest X-ray PA", "priority": "medium", "yield": 0.4, "indication": "chronic cough to exclude lung pathology" }
+      ],
+      "specialTests": [
+        { "name": "Skin Prick Test", "priority": "high_if_allergic_suspected", "yield": 0.9, "indication": "identify aeroallergen triggers" },
+        { "name": "Saccharin Mucociliary Clearance Test", "priority": "low", "yield": 0.5, "indication": "suspected primary ciliary dyskinesia" }
+      ]
+    },
+
+    "management": {
+      "protocolReference": "CHEST Guideline for UACS/Postnasal Drip, AAO-HNS Clinical Practice Guideline: Chronic Cough",
+      "pathways": [
+        {
+          "severity": "mild",
+          "criteria": "Occasional symptoms, no QoL impact",
+          "treatment": "Saline nasal irrigation. Avoid triggers."
+        },
+        {
+          "severity": "moderate",
+          "criteria": "Daily symptoms affecting QoL or sleep",
+          "treatment": "Intranasal corticosteroid (Fluticasone 50 mcg 2 sprays each nostril daily). Add antihistamine if allergic. Saline irrigation."
+        },
+        {
+          "severity": "severe_or_refractory",
+          "criteria": "Persistent despite 4-6 weeks first-line",
+          "treatment": "Re-evaluate. Add ipratropium if rhinorrhea predominant. Sinus CT. ENT referral. GERD workup."
+        }
+      ],
+      "firstLine": "Intranasal corticosteroids (Fluticasone/Mometasone/Budesonide) 1-2 sprays each nostril daily + saline irrigation.",
+      "secondLine": "Add oral antihistamine (Cetirizine/Loratadine/Levocetirizine/Fexofenadine) if allergic features.",
+      "thirdLine": "Intranasal Ipratropium Bromide 0.03% 2 sprays each nostril TID if rhinorrhea predominant.",
+      "refractory": "ENT referral. Sinus CT. PPI trial. Sublingual immunotherapy. Endoscopic sinus surgery if chronic sinusitis.",
+      "specialConsiderations": {
+        "pregnancy": "INS safe first-line. Budesonide preferred. Avoid decongestants first trimester.",
+        "pediatric": "INS for ≥2 years. Fluticasone furoate once daily.",
+        "geriatric": "Consider anticholinergic burden. Evaluate for ACEi."
+      }
+    },
+
+    "pathophysiology": [
+      "increased_mucus_production",
+      "impaired_mucociliary_clearance",
+      "posterior_pharyngeal_irritation",
+      "cough_reflex_sensitization",
+      "pharyngeal_inflammation",
+      "laryngeal_irritation_and_hoarseness",
+      "neurogenic_inflammation_via_TRP_channels"
+    ],
+
+    "complications": [
+      { "diseaseId": "chronic_cough", "probability": 0.9, "lagDays": [30, 365], "severityBoost": 0.3 },
+      { "diseaseId": "laryngitis_chronic", "probability": 0.3, "lagDays": [90, 730], "severityBoost": 0.2 },
+      { "diseaseId": "sleep_disturbance", "probability": 0.4, "lagDays": [1, 30], "severityBoost": 0.2 },
+      { "diseaseId": "sinusitis", "probability": 0.25, "lagDays": [60, 365], "severityBoost": 0.2 },
+      { "diseaseId": "eustachian_tube_dysfunction", "probability": 0.2, "lagDays": [30, 180], "severityBoost": 0.15 },
+      { "diseaseId": "cough_syncope", "probability": 0.05, "lagDays": [180, 730], "severityBoost": 0.3 }
+    ],
+
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["cough_duration?", "nasal_congestion?", "throat_clearing?", "morning_worse?", "allergy_history?"],
+      "branching": [
+        {
+          "if": "allergic_history_positive",
+          "ask": ["seasonal_or_perennial?", "specific_triggers?", "sneezing?", "itchy_eyes?"],
+          "action": "Increase probability of allergic UACS subtype."
+        },
+        {
+          "if": "rhinorrhea_predominant",
+          "ask": ["clear_or_colored?", "triggered_by_weather?", "triggered_by_food?", "triggered_by_irritants?"],
+          "action": "Consider non-allergic/vasomotor subtype."
+        },
+        {
+          "if": "facial_pain_or_pressure",
+          "ask": ["fever?", "purulent_discharge?", "dental_pain?", "hyposmia?"],
+          "action": "Consider sinusitis-associated UACS. Assess need for sinus imaging."
+        },
+        {
+          "if": "heartburn_or_regurgitation",
+          "ask": ["worse_after_meals?", "worse_supine?", "dysphagia?"],
+          "action": "Consider GERD/LPR co-morbidity. PPI trial may be warranted."
+        },
+        {
+          "if": "ACE_inhibitor_use",
+          "ask": ["cough_onset_timeline?"],
+          "action": "If cough started after ACEi, discontinue and substitute ARB."
+        },
+        {
+          "if": "cough_dominant_without_nasal_symptoms",
+          "ask": ["exercise_triggered?", "nocturnal_cough?", "bronchodilator_response?"],
+          "action": "Consider cough variant asthma. Spirometry with bronchodilator testing."
+        }
+      ]
+    },
+
+    "mustNotMiss": false,
+    "emergencyPriority": "low",
+    "diagnosticClues": [
+      "chronic_cough_with_throat_clearing",
+      "morning_cough",
+      "nasal_congestion",
+      "sensation_of_post_nasal_drip",
+      "cobblestone_mucosa_on_exam",
+      "mucus_strand_in_oropharynx",
+      "normal_chest_auscultation"
+    ],
+    "exclusionClues": [
+      "ACE_inhibitor_cough",
+      "cough_variant_asthma",
+      "GERD_cough",
+      "hemoptysis",
+      "fever_and_purulent_sputum",
+      "unexplained_weight_loss",
+      "abnormal_chest_auscultation"
+    ]
+  }
+}

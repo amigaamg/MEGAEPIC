@@ -7,7 +7,6 @@
     "note": "Seasonal respiratory viral illness caused by Influenza A/B. High fever, myalgia, cough. Can cause severe pneumonia, especially in extremes of age.",
     "prevalenceWeight": 0.8,
     "syndromeTags": ["viral_respiratory_infection", "febrile_illness", "seasonal_outbreak"],
-
     "severityAssessment": {
       "immediateDangerSigns": [
         { "sign": "respiratory_distress", "weight": 9 },
@@ -15,27 +14,41 @@
         { "sign": "septic_shock", "weight": 10 },
         { "sign": "encephalitis_altered_consciousness", "weight": 9 }
       ],
-      "severeCriteria": {
-        "anyDangerSign": true
-      },
-      "nonSevereCriteria": {
-        "hasIndrawingOrFastBreathing": false,
-        "noDangerSigns": true
-      },
+      "severeCriteria": { "anyDangerSign": true },
+      "nonSevereCriteria": { "hasIndrawingOrFastBreathing": false, "noDangerSigns": true },
       "severityLabel": "Uncomplicated -> MILD-MODERATE; Pneumonia/ICU -> SEVERE"
     },
-
+    "negativePredictors": [
+      { "feature": "gradual_onset", "weightReduction": 4, "considerMimic": ["URTI_common_cold", "non_influenza_viral_illness"] },
+      { "feature": "purulent_sputum", "weightReduction": 3, "considerMimic": ["bacterial_pneumonia", "acute_bronchitis"] },
+      { "feature": "no_fever", "weightReduction": 5, "considerMimic": ["URTI_common_cold", "allergic_rhinitis"] },
+      { "feature": "negative_rapid_test_during_outbreak", "weightReduction": 3 }
+    ],
     "historyFeatures": [
-      { "symptomId": "fever_sudden_onset_high", "weight": 5 },
-      { "symptomId": "myalgia_severe", "weight": 4 },
-      { "symptomId": "cough_non_productive", "weight": 4 },
+      { "symptomId": "fever_sudden_onset_high", "weight": 5, "contextualWeights": [
+          { "condition": "temp > 39C in adults", "weightBoost": 2 },
+          { "condition": "temp 37.5-38.5C", "weightBoost": -1 }
+        ]
+      },
+      { "symptomId": "myalgia_severe", "weight": 4, "modifiers": [
+          { "condition": "severe_myalgia", "weightBoost": 2 }
+        ]
+      },
+      { "symptomId": "cough_non_productive", "weight": 4, "modifiers": [
+          { "condition": "dry_cough", "favorsSubtype": "uncomplicated_influenza" },
+          { "condition": "productive_cough", "weightBoost": 1, "favorsSubtype": "complicated_influenza" }
+        ]
+      },
       { "symptomId": "headache", "weight": 3 },
       { "symptomId": "sore_throat", "weight": 3 },
       { "symptomId": "fatigue_profound", "weight": 4 },
       { "symptomId": "nasal_congestion_rhinorrhea", "weight": 2 },
-      { "symptomId": "seasonal_community_outbreak", "weight": 4 }
+      { "symptomId": "seasonal_community_outbreak", "weight": 5, "contextualWeights": [
+          { "condition": "winter_season_and_known_outbreak", "weightBoost": 2 },
+          { "condition": "summer_no_outbreak", "weightBoost": -2 }
+        ]
+      }
     ],
-
     "examFeatures": [
       { "signId": "fever_high", "baseWeight": 5 },
       { "signId": "tachycardia", "baseWeight": 3 },
@@ -43,7 +56,6 @@
       { "signId": "crackles_wheezing", "baseWeight": 2 },
       { "signId": "conjunctival_injection", "baseWeight": 2 }
     ],
-
     "riskFactors": [
       { "id": "age_under_2_or_over_65", "multiplier": 2.5 },
       { "id": "pregnancy", "multiplier": 2.0 },
@@ -53,7 +65,6 @@
       { "id": "obesity", "multiplier": 1.5 },
       { "id": "healthcare_worker", "multiplier": 1.5 }
     ],
-
     "subtypes": [
       {
         "id": "uncomplicated_influenza",
@@ -62,7 +73,15 @@
         "keyFeatures": [
           { "feature": "symptoms_less_5_days", "weight": 4 },
           { "feature": "no_hypoxia", "weight": 5 },
-          { "feature": "self_limiting", "weight": 3 }
+          { "feature": "self_limiting", "weight": 3 },
+          { "feature": "fever_responds_to_antipyretics", "weight": 3 },
+          { "feature": "no_dyspnea", "weight": 4 },
+          { "feature": "no_chest_pain", "weight": 3 }
+        ],
+        "negativePredictors": [
+          { "feature": "dyspnea", "weightReduction": 4 },
+          { "feature": "hypoxia", "weightReduction": 5 },
+          { "feature": "persistent_fever_beyond_5_days", "weightReduction": 3 }
         ],
         "management": "Symptomatic care: antipyretics, hydration, rest. Antivirals (oseltamivir) if high risk or within 48h. Isolation."
       },
@@ -71,54 +90,153 @@
         "name": "Complicated Influenza (Pneumonia)",
         "prevalenceModifier": 0.2,
         "keyFeatures": [
-          { "feature": "persistent_high_fever", "weight": 4 },
+          { "feature": "persistent_high_fever", "weight": 5 },
           { "feature": "dyspnea_hypoxia", "weight": 5 },
-          { "feature": "infiltrates_on_imaging", "weight": 4 }
+          { "feature": "infiltrates_on_imaging", "weight": 5 },
+          { "feature": "biphasic_illness", "weight": 4 },
+          { "feature": "purulent_sputum", "weight": 3 },
+          { "feature": "hemoptysis", "weight": 3 },
+          { "feature": "high_risk_group", "weight": 4 }
+        ],
+        "negativePredictors": [
+          { "feature": "isolated_upper_respiratory_symptoms", "weightReduction": 4 },
+          { "feature": "normal_chest_xray", "weightReduction": 4 },
+          { "feature": "rapid_improvement_within_48h", "weightReduction": 3 }
         ],
         "management": "Oseltamivir 75mg BD (or IV peramivir). Antibiotics if bacterial superinfection. O2 therapy. ICU if respiratory failure."
       }
     ],
-
     "mimics": [
-      {
-        "diseaseId": "covid_19",
-        "discriminators": ["loss_of_smell_taste_more_common", "longer_incubation", "pcr_distinction"]
-      },
-      {
-        "diseaseId": "bacterial_pneumonia",
-        "discriminators": ["productive_cough_focal_signs", "high_procalcitonin", "lobar_consolidation"]
-      }
+      { "diseaseId": "covid_19", "discriminators": ["loss_of_smell_taste_more_common", "longer_incubation_2_14_days", "pcr_distinction", "anosmia_ageusia_key_feature", "less_sudden_onset_typically"], "negativeImpactOnInfluenza": 3 },
+      { "diseaseId": "bacterial_pneumonia", "discriminators": ["productive_cough_focal_signs", "high_procalcitonin_>0.5", "lobar_consolidation", "focal_crackles_or_bronchial_breathing", "rigors_more_common"], "negativeImpactOnInfluenza": 3 },
+      { "diseaseId": "URTI_common_cold", "discriminators": ["milder_symptoms", "no_myalgia_or_mild", "low_grade_fever_or_afebrile", "gradual_onset", "predominant_nasal_symptoms"], "negativeImpactOnInfluenza": 3 },
+      { "diseaseId": "RSV_infection", "discriminators": ["bronchiolitis_in_children", "wheeze_prominent", "age_under_2_common", "apnea_in_infants", "crackles_and_wheeze_on_auscultation"], "negativeImpactOnInfluenza": 2 },
+      { "diseaseId": "streptococcal_pharyngitis", "discriminators": ["exudative_pharyngitis", "no_cough", "no_myalgia", "anterior_cervical_lymphadenopathy", "scarlatiniform_rash", "positive_strep_test"], "negativeImpactOnInfluenza": 2 },
+      { "diseaseId": "dengue", "discriminators": ["retro_orbital_pain", "rash", "thrombocytopenia", "travel_history_to_endemic_area", "severe_headache", "arthralgia", "bleeding_tendencies"], "negativeImpactOnInfluenza": 2 }
     ],
-
     "investigations": {
       "bedside": [
-        { "name": "Rapid influenza antigen test", "priority": "high", "yield": 0.7, "indication": "quick diagnosis during season" }
+        { "name": "Rapid influenza antigen test", "priority": "high", "yield": 0.7, "indication": "quick diagnosis during season", "limitations": "low sensitivity 50-70%; confirm negative with PCR if high suspicion", "turnaround": "15-30 minutes" },
+        { "name": "Pulse oximetry", "priority": "high", "yield": 0.9, "indication": "all suspected influenza, especially if dyspnea or high risk" }
       ],
       "laboratory": [
-        { "name": "Influenza A/B PCR (NP swab)", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis" },
-        { "name": "FBC, CRP", "priority": "medium", "yield": 0.4, "indication": "leukopenia common" }
+        { "name": "Influenza A/B PCR (NP swab)", "priority": "high", "yield": 0.95, "indication": "confirm diagnosis, especially if rapid test negative but high suspicion", "turnaround": "1-48 hours depending on platform", "note": "Gold standard; detects influenza A and B subtypes" },
+        { "name": "FBC, CRP", "priority": "medium", "yield": 0.5, "indication": "all suspected influenza", "typicalFindings": "leukopenia, lymphopenia in influenza; neutrophilia suggests bacterial superinfection" },
+        { "name": "Procalcitonin", "priority": "medium", "yield": 0.6, "indication": "distinguish viral from bacterial superinfection", "interpretation": "PCT <0.25 suggests viral; PCT >0.5 suggests bacterial superinfection" }
       ],
       "imaging": [
-        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "if hypoxia or suspicion of pneumonia" }
+        { "name": "Chest X-ray", "priority": "high", "yield": 0.5, "indication": "if hypoxia, dyspnea, or suspicion of pneumonia", "typicalFindings": "bilateral interstitial infiltrates (viral); lobar consolidation (bacterial superinfection); normal in uncomplicated cases" }
       ]
     },
-
     "management": {
       "protocolReference": "CDC/WHO Guidelines for Influenza",
       "pathways": [
         {
           "severity": "mild uncomplicated",
-          "criteria": "no hypoxia, no comorbidities",
-          "treatment": "Rest, hydration, paracetamol/ibuprofen. Antivirals not routinely needed. Monitor for worsening."
+          "criteria": "no hypoxia, no comorbidities, able to tolerate oral",
+          "treatment": "Rest, hydration, paracetamol/ibuprofen. Oseltamivir 75mg BD for 5 days if high risk or within 48h of onset. Monitor for worsening."
         },
         {
           "severity": "high risk or complicated",
           "criteria": "age <2/>65, pregnancy, chronic disease, or pneumonia",
-          "treatment": "Oseltamivir 75mg PO BD for 5 days (start within 48h). Antibiotics if bacterial superinfection. O2 if hypoxic. ICU if severe."
+          "treatment": [
+            "Oseltamivir 75mg PO BD for 5 days. Renal adjustment: CrCl 30-60 -> 30mg BD; CrCl 10-30 -> 30mg daily.",
+            "If oseltamivir resistance: Zanamivir 10mg inhaled BD for 5 days (avoid if reactive airway disease)",
+            "If severe/ICU: Peramivir 600mg IV single dose, or 600mg daily for 5-10 days",
+            "Antibiotics if bacterial superinfection: Amoxicillin-clavulanate or respiratory fluoroquinolone",
+            "O2 to maintain SpO2 >=94%",
+            "ICU if respiratory failure, shock, or multi-organ dysfunction"
+          ]
+        },
+        {
+          "severity": "hospitalization criteria",
+          "criteria": "SpO2 <94% on room air, RR >30, hypotension, altered mental status, immunocompromised, unable to maintain oral hydration",
+          "treatment": [
+            "Admit to medical ward",
+            "Start antivirals immediately (IV peramivir if unable to take oral)",
+            "Monitor O2, respiratory status, mental status",
+            "CXR and blood cultures on admission"
+          ]
+        },
+        {
+          "severity": "ICU criteria",
+          "criteria": "PaO2/FiO2 <300, need for mechanical ventilation, septic shock, acute organ dysfunction",
+          "treatment": [
+            "ICU admission",
+            "IV peramivir",
+            "Broad-spectrum antibiotics pending cultures",
+            "Organ support as indicated"
+          ]
+        }
+      ],
+      "specialConsiderations": {
+        "chemoprophylaxis": "Close contacts at high risk: Oseltamivir 75mg PO daily for 10 days within 48h of exposure.",
+        "pregnancy": "Oseltamivir safe in pregnancy; treat promptly as high risk.",
+        "oseltamivir_resistance": "If no improvement at 48h on oseltamivir, consider resistance. Switch to zanamivir or peramivir."
+      }
+    },
+    "treatmentResponseLogic": {
+      "triggers": [
+        {
+          "timePoint": "48 hours",
+          "ifNoImprovement": {
+            "actions": [
+              "Re-assess thoroughly",
+              "Suspect oseltamivir resistance -> consider zanamivir or peramivir",
+              "Suspect bacterial superinfection -> check CXR, procalcitonin, blood cultures",
+              "Consider alternative diagnoses if no response"
+            ]
+          }
+        },
+        {
+          "timePoint": "day 5",
+          "ifStillSick": {
+            "actions": [
+              "Get CXR to exclude pneumonia if not done",
+              "Re-evaluate for complications: empyema, ARDS, myocarditis",
+              "Consider alternative diagnoses if no response",
+              "Escalate care if deteriorating"
+            ]
+          }
         }
       ]
     },
-
+    "adaptiveQuestioning": {
+      "initialCoreQuestions": ["fever_sudden_onset?", "cough?", "myalgia?", "season?", "vaccination_status?"],
+      "branching": [
+        {
+          "if": "high_risk_group",
+          "criteria": "age <2 or >65, pregnant, chronic disease, immunocompromised",
+          "action": "Recommend antivirals regardless of duration",
+          "ask": ["comorbidities?", "current_medications?", "allergies_to_antivirals?"]
+        },
+        {
+          "if": "dyspnea_develops",
+          "ask": ["assess_hypoxia_with_oximetry?", "any_chest_pain?", "sputum_production?"],
+          "action": "Obtain CXR and consider bacterial superinfection"
+        },
+        {
+          "if": "sore_throat_predominant",
+          "ask": ["exudate_present?", "cervical_lymphadenopathy?", "cough_present?"],
+          "action": "Consider streptococcal pharyngitis; perform rapid strep test"
+        },
+        {
+          "if": "gastrointestinal_symptoms",
+          "ask": ["nausea_vomiting?", "diarrhea?", "abdominal_pain?"],
+          "action": "Consider other viral infections (enterovirus, norovirus, adenovirus)"
+        },
+        {
+          "if": "conjunctivitis_present",
+          "ask": ["watery_discharge?", "photophobia?", "preauricular_lymphadenopathy?"],
+          "action": "Consider adenovirus"
+        },
+        {
+          "if": "anosmia_or_ageusia",
+          "ask": ["sudden_loss_of_smell?", "known_covid_exposure?", "duration?"],
+          "action": "Consider COVID-19; perform SARS-CoV-2 testing"
+        }
+      ]
+    },
     "pathophysiology": [
       "respiratory_epithelium_infection",
       "cytokine_release",
@@ -126,17 +244,14 @@
       "immune_evasion_antigenic_drift",
       "secondary_bacterial_infection"
     ],
-
     "complications": [
-      {
-        "diseaseId": "bacterial_pneumonia_superinfection",
-        "probability": 0.15,
-        "lagDays": [5, 14],
-        "severityBoost": 0.4,
-        "clues": ["biphasic_illness", "purulent_sputum", "lobar_consolidation"]
-      }
+      { "diseaseId": "bacterial_pneumonia_superinfection", "probability": 0.15, "lagDays": [5, 14], "severityBoost": 0.4, "clues": ["biphasic_illness", "purulent_sputum", "lobar_consolidation", "rising_procalcitonin"], "management": "Empiric antibiotics covering S. pneumoniae, S. aureus, H. influenzae. Consider amoxicillin-clavulanate or ceftriaxone +/- vancomycin if MRSA risk." },
+      { "diseaseId": "acute_respiratory_distress_syndrome", "probability": 0.02, "lagDays": [3, 7], "severityBoost": 0.5, "clues": ["severe_hypoxia", "diffuse_bilateral_infiltrates", "rapid_deterioration", "low_pao2_fio2_ratio"], "management": "ICU admission, lung-protective ventilation, prone positioning, consider ECMO" },
+      { "diseaseId": "myocarditis", "probability": 0.01, "lagDays": [2, 7], "severityBoost": 0.4, "clues": ["chest_pain", "arrhythmia", "elevated_troponin", "heart_failure", "ecg_abnormalities"], "management": "ECG, echocardiogram, supportive care, avoid NSAIDs in acute phase" },
+      { "diseaseId": "encephalitis", "probability": 0.01, "lagDays": [2, 7], "severityBoost": 0.4, "clues": ["altered_consciousness", "seizures", "focal_neurological_signs", "cerebrospinal_fluid_pleocytosis"], "management": "Neuroimaging, lumbar puncture, supportive care, consider acyclovir if HSV suspected" },
+      { "diseaseId": "rhabdomyolysis", "probability": 0.01, "lagDays": [1, 5], "severityBoost": 0.3, "clues": ["severe_myalgia", "dark_urine", "elevated_ck", "acute_kidney_injury"], "management": "Aggressive IV hydration, monitor renal function and CK" },
+      { "diseaseId": "secondary_otitis_media", "probability": 0.05, "lagDays": [3, 10], "severityBoost": 0.2, "clues": ["ear_pain_in_children", "fever_recurrence", "tympanic_membrane_erythema_bulging"], "management": "Antibiotics per otitis media guideline (amoxicillin first-line)" }
     ],
-
     "mustNotMiss": false,
     "emergencyPriority": "medium",
     "diagnosticClues": ["sudden_onset_high_fever_myalgia_cough", "winter_season", "community_outbreak"],
