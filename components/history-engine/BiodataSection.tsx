@@ -1,33 +1,6 @@
 'use client';
 import { useHistoryStore } from '@/lib/history-engine/useHistoryStore';
 
-const OCCUPATIONS = [
-  'Farmer', 'Miner', 'Healthcare Worker', 'Teacher', 'Driver',
-  'Office Worker', 'Student', 'Retired', 'Unemployed', 'Business Owner',
-  'Mechanic', 'Housewife', 'Fisherman', 'Construction Worker', 'Other',
-];
-
-const INFORMANT_OPTIONS = [
-  { value: 'patient', label: 'Patient' },
-  { value: 'spouse', label: 'Spouse' },
-  { value: 'parent', label: 'Parent' },
-  { value: 'child', label: 'Child' },
-  { value: 'sibling', label: 'Sibling' },
-  { value: 'friend', label: 'Friend' },
-  { value: 'caregiver', label: 'Caregiver' },
-  { value: 'ems', label: 'EMS' },
-  { value: 'other', label: 'Other' },
-];
-
-const RELIABILITY_OPTIONS = [
-  { value: 'reliable', label: 'Reliable' },
-  { value: 'partially_reliable', label: 'Partially Reliable' },
-  { value: 'poor_historian', label: 'Poor Historian' },
-  { value: 'obtained_from_relative', label: 'From Relative' },
-  { value: 'obtained_from_caregiver', label: 'From Caregiver' },
-  { value: 'unavailable', label: 'Unavailable' },
-];
-
 export default function BiodataSection() {
   const biodata = useHistoryStore(s => s.biodata);
   const setBiodata = useHistoryStore(s => s.setBiodata);
@@ -38,19 +11,19 @@ export default function BiodataSection() {
 
   if (isComplete) {
     return (
-      <div className="rounded-xl border border-[var(--success)]/20 bg-[var(--success)]/5 p-4">
+      <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-[var(--success)] text-lg">✓</span>
-            <span className="font-medium text-sm text-[var(--success)]">Patient Details Completed</span>
+            <span className="text-green-400 text-lg">✓</span>
+            <span className="font-medium text-sm text-green-400">Patient Details</span>
           </div>
           <button onClick={() => uncompleteSection('biodata')}
-            className="text-xs text-[var(--info)] hover:text-[var(--info)]/80 underline">
+            className="text-xs text-blue-400 hover:text-blue-300 underline">
             Edit
           </button>
         </div>
-        <p className="text-xs text-[var(--text-secondary)] mt-1">
-          {biodata.name}, {biodata.age}yrs, {biodata.sex}, {biodata.occupation} — {biodata.residence}
+        <p className="text-xs text-gray-400 mt-1">
+          {biodata.name}, {biodata.age}yrs, {biodata.sex}
         </p>
       </div>
     );
@@ -58,85 +31,48 @@ export default function BiodataSection() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-1 h-6 bg-[var(--accent)] rounded-full" />
-        <h2 className="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">Patient Details</h2>
+      <div className="flex items-center gap-2 mb-1">
+        <div className="w-1 h-6 bg-teal-400 rounded-full" />
+        <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Patient Details</h2>
+        <span className="text-[9px] text-gray-500 ml-2">Minimum required</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1 block">Full Name</label>
-          <input type="text" value={biodata.name} onChange={e => setBiodata({ ...biodata, name: e.target.value })}
-            className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]"
-            placeholder="e.g. Julius Magambo" />
+          <label className="text-[10px] text-gray-500 mb-1 block">Name</label>
+          <input type="text" value={biodata.name}
+            onChange={e => setBiodata({ ...biodata, name: e.target.value })}
+            className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-teal-500"
+            placeholder="Patient name" />
         </div>
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1 block">Age (Years)</label>
-          <input type="number" value={biodata.age || ''} onChange={e => setBiodata({ ...biodata, age: parseInt(e.target.value) || 0 })}
-            className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]"
-            placeholder="e.g. 67" min={0} max={150} />
+          <label className="text-[10px] text-gray-500 mb-1 block">Age</label>
+          <input type="number" value={biodata.age || ''}
+            onChange={e => setBiodata({ ...biodata, age: parseInt(e.target.value) || 0 })}
+            className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-teal-500"
+            placeholder="Years" min={0} max={150} />
         </div>
         <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1 block">Sex</label>
-          <select value={biodata.sex} onChange={e => setBiodata({ ...biodata, sex: e.target.value as any })}
-            className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]">
+          <label className="text-[10px] text-gray-500 mb-1 block">Sex</label>
+          <select value={biodata.sex}
+            onChange={e => setBiodata({ ...biodata, sex: e.target.value as any })}
+            className="w-full bg-[#12193a] border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
             <option value="unknown">Select...</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
         </div>
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1 block">Occupation</label>
-          <select value={biodata.occupation} onChange={e => setBiodata({ ...biodata, occupation: e.target.value, occupationType: e.target.value.toLowerCase().replace(/\s+worker$/, '') as any })}
-            className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]">
-            <option value="">Select...</option>
-            {OCCUPATIONS.map(o => <option key={o} value={o}>{o}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1 block">Residence / County</label>
-          <input type="text" value={biodata.residence} onChange={e => setBiodata({ ...biodata, residence: e.target.value })}
-            className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)]"
-            placeholder="e.g. Kenyenya, Kisii County" />
-        </div>
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1 block">Informant</label>
-          <select value={biodata.informant} onChange={e => setBiodata({ ...biodata, informant: e.target.value as any })}
-            className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]">
-            <option value="">-- Select --</option>
-            {INFORMANT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-          </select>
-        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div>
-          <label className="text-xs text-[var(--text-secondary)] mb-1 block">History Reliability</label>
-          <select value={biodata.reliability} onChange={e => setBiodata({ ...biodata, reliability: e.target.value as any })}
-            className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]">
-            <option value="">-- Select --</option>
-            {RELIABILITY_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-          </select>
-        </div>
-        {biodata.sex === 'female' && biodata.age && biodata.age >= 12 && biodata.age <= 55 && (
-          <div>
-            <label className="text-xs text-[var(--text-secondary)] mb-1 block">Pregnancy / OBGYN Status</label>
-            <select value={biodata.obstetric?.isPregnant !== undefined ? (biodata.obstetric?.isPregnant ? 'pregnant' : 'not_pregnant') : ''}
-              onChange={e => setBiodata({ ...biodata, obstetric: { ...biodata.obstetric, isPregnant: e.target.value === 'pregnant' ? true : e.target.value === 'not_pregnant' ? false : undefined as any } as any })}
-              className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg px-3 py-2.5 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]">
-              <option value="">-- Select --</option>
-              <option value="pregnant">Currently Pregnant</option>
-              <option value="not_pregnant">Not Pregnant (GYN visit)</option>
-            </select>
-          </div>
-        )}
-      </div>
-
-      <button onClick={() => completeSection('biodata')}
-        disabled={!biodata.name || !biodata.age || biodata.sex === 'unknown'}
-        className="mt-2 px-5 py-2 bg-[var(--accent)] hover:brightness-110 disabled:bg-[var(--bg-hover)] disabled:text-[var(--text-muted)] text-white text-sm font-medium rounded-lg transition-all">
-        Complete & Continue
-      </button>
+      {biodata.name && biodata.age > 0 && biodata.sex !== 'unknown' && (
+        <button onClick={() => completeSection('biodata')}
+          className="px-5 py-2 bg-teal-600 hover:bg-teal-500 text-white text-sm font-medium rounded-lg transition-colors">
+          ✓ Done
+        </button>
+      )}
+      {(!biodata.name || biodata.age <= 0 || biodata.sex === 'unknown') && (
+        <p className="text-[10px] text-gray-500">Name, Age, and Sex required to proceed</p>
+      )}
     </div>
   );
 }

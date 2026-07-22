@@ -8,6 +8,32 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // ── Sky Blue Primary (Constitutional Theme) ──
+        sky: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+        },
+        primary: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#2F80ED',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+        },
+        // ── Legacy: Amexan indigo (kept for backward compat) ──
         amexan: {
           50: '#eef2ff',
           100: '#e0e7ff',
@@ -20,6 +46,7 @@ module.exports = {
           800: '#3730a3',
           900: '#312e81',
         },
+        // ── Legacy: Midnight navy (kept for backward compat) ──
         midnight: {
           50: '#f0f1f5',
           100: '#d4d6e3',
@@ -33,6 +60,7 @@ module.exports = {
           900: '#071029',
           DEFAULT: '#071029',
         },
+        // ── Therapeutic signal colors ──
         therapeutic: {
           green: '#00d68f',
           amber: '#ffb020',
@@ -40,6 +68,20 @@ module.exports = {
           purple: '#7c5af5',
           teal: '#00e5cc',
         },
+        // ── Neutral scale ──
+        neutral: {
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+        },
+        // ── Legacy: Frost scale (kept for backward compat) ──
         frost: {
           50: '#ffffff',
           100: '#fafafa',
@@ -54,27 +96,25 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
-        display: ['Syne', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
-      backdropBlur: {
-        xs: '2px',
-      },
       boxShadow: {
+        card: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+        'card-hover': '0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04)',
+        'card-lg': '0 10px 15px rgba(0,0,0,0.06), 0 4px 6px rgba(0,0,0,0.04)',
+        // Legacy shadows
         glass: '0 0 20px rgba(0,0,0,0.2)',
         'glass-lg': '0 8px 32px rgba(0,0,0,0.3)',
-        glow: '0 0 20px rgba(0,229,204,0.15)',
-        'glow-green': '0 0 20px rgba(0,214,143,0.15)',
-        'glow-red': '0 0 20px rgba(255,69,96,0.15)',
-        'glow-purple': '0 0 20px rgba(124,90,245,0.15)',
       },
       animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'pulse-ring': 'pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'fade-in': 'fadeIn 0.3s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'slide-in-left': 'slideInLeft 0.3s ease-out',
+        // Legacy animations
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-ring': 'pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'draw-line': 'drawLine 1.5s ease-out forwards',
       },
       keyframes: {

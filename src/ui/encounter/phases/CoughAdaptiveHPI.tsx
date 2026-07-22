@@ -276,10 +276,9 @@ export function CoughAdaptiveHPI({
   if (!engineRef.current) {
     engineRef.current = new ClinicalEngine({
       patientName,
-      patientAgeMonths: patientAgeMonths || 0,
-      patientGender: patientGender || '',
-      presentingComplaint: presentingComplaint || 'Cough',
-      complaintDuration: complaintDuration || '',
+      ageMonths: patientAgeMonths || 0,
+      gender: patientGender || '',
+      chiefComplaint: presentingComplaint || 'Cough',
     });
   }
   const engine = engineRef.current;

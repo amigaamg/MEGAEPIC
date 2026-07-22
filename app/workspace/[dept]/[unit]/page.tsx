@@ -135,7 +135,7 @@ export default function UnitPage() {
         <div className="content">
           <div className="quick-actions">
             <span className="qa-btn patients" onClick={() => router.push('/patients')}>📁 Patient Records</span>
-            <span className="qa-btn primary" onClick={() => router.push(unitId === 'lbo-intelligence' ? '/clinical-workspace/default/departments/surgery/lbo-intelligence' : '#')}>+ New Encounter</span>
+            <span className="qa-btn primary" onClick={() => router.push(unitId === 'lbo-intelligence' ? '/clinical-workspace/default/departments/surgery/lbo-intelligence' : '#')}>New Clinical Entry</span>
             {unit.encounterTypes.slice(0, 3).map(et => {
               const isLbo = unitId === 'lbo-intelligence';
               const path = isLbo ? `/clinical-workspace/default/departments/surgery/lbo-intelligence` : `/workspace/${deptKey}/${unitId}/${et.type}`;

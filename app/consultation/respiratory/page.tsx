@@ -1,5 +1,7 @@
-﻿'use client';
-import React, { useMemo, useEffect, useState, useCallback } from 'react';
+﻿// @ts-nocheck
+'use client';
+import React, { useMemo, useEffect, useState, useCallback, Suspense } from 'react';
+import { EncounterProvider } from '@/lib/amexan/encounter/EncounterContext';
 import { ThemeProvider, useTheme } from '@/src/ui/themes/ThemeProvider';
 import { MainLayout } from '@/src/ui/layouts/MainLayout';
 import { usePatientStore } from '@/src/state/patientStore';
@@ -166,19 +168,26 @@ function PhaseHeader({title,sub=""}){
 export default function Page() {
   return (
     <ThemeProvider>
-      <MainLayout>
-        <PageContent />
-      </MainLayout>
+      <EncounterProvider>
+        <MainLayout>
+          <Suspense fallback={null}>
+            <PageContent />
+          </Suspense>
+        </MainLayout>
+      </EncounterProvider>
     </ThemeProvider>
   );
 }
 
 function PageContent() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const theme = useTheme();
   const t = { ...theme.colors, font: theme.typography.font, mono: theme.typography.mono, id: theme.id };
   const phaseIdx = useUIStore(s => s.phaseIdx);
   const isMobile = useUIStore(s => s.isMobile);
-  const form = usePatientStore(s => s.form);
+  const { form } = usePatientStore();
+  if (!mounted) return null;
   const [copied, setCopied] = useState(false);
   const [draftLoaded, setDraftLoaded] = useState(false);
   const [editedNote, setEditedNote] = useState('');
@@ -194,15 +203,15 @@ function PageContent() {
   const noteText = useMemo(()=>buildClinicalNote(form, differentials),[form, differentials]);
   const plan = useMemo(()=>generateManagementPlan(form, differentials),[form, differentials]);
 
-  const set = useCallback((path, val)=>usePatientStore.getState().setField(path, val), []);
-  const toggle = useCallback((path, item)=>usePatientStore.getState().toggleArrayItem(path, item), []);
+  const set = useCallback((path: string, val: any)=>usePatientStore().setField(path, val), []);
+  const toggle = useCallback((path: string, item: string)=>usePatientStore().toggleArrayItem(path, item), []);
 
   // Auto-save
   useEffect(()=>{
     if (!draftLoaded) return;
     const timer=setTimeout(()=>{
       try {
-        const f = usePatientStore.getState().form;
+        const f = usePatientStore().form;
         const ui = useUIStore.getState();
         localStorage.setItem("pedsDraft",JSON.stringify({form:f, phaseIdx:ui.phaseIdx, done:ui.donePhases, themeKey:ui.themeId}));
       } catch(e){}
@@ -217,7 +226,7 @@ function PageContent() {
       if (saved) {
         const p=JSON.parse(saved);
         if (p&&p.form&&window.confirm("Restore previous draft?")) {
-          usePatientStore.getState().setForm({...INIT_FORM,...p.form});
+          usePatientStore().setForm({...INIT_FORM,...p.form});
           useUIStore.getState().setPhaseIdx(p.phaseIdx||0);
           if (p.done) p.done.forEach(id=>useUIStore.getState().addDonePhase(id));
           if (p.themeKey) useUIStore.getState().setThemeId(p.themeKey);

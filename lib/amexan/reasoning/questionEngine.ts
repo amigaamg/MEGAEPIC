@@ -33,6 +33,7 @@ import { FEATURES } from '../knowbase/features/featureLibrary';
 import { getLrPlus, getLrMinus } from '../knowbase/features/featureLibrary';
 import { getHighway, getActiveHighways } from '../highways/abdominalPain';
 import { selectNextQuestionClinical, type ClinicalReasoningStep } from './clinicalReasoningEngine';
+import { computePriorityScore, getScoreRationale } from './priorityScorer';
 
 export interface NextQuestion {
   featureId: string;
@@ -604,51 +605,69 @@ export function selectNextQuestion(
     candidateFeatures.add(df.featureId);
   }
 
-  // Compute EIG for each unanswered feature with phase-gating
-  const eigResults: { featureId: string; eig: number }[] = [];
+  // Compute 4-factor priority score for each unanswered feature with phase-gating
+  const scoredResults: { featureId: string; score: number; eig: number; diagnosticValue: number; safetyValue: number; documentationValue: number; redundancyPenalty: number }[] = [];
   for (const featureId of candidateFeatures) {
     if (answeredIds.has(featureId) || previousQuestionIds.includes(featureId)) continue;
 
-    // PHASE GATE: Features beyond current phase are penalized (not blocked completely,
-    // but heavily penalized unless convergence is high enough)
+    // PHASE GATE: Features beyond current phase are penalized
     const featurePhase = PATHOPHYS_PHASES.findIndex(p => p.features.includes(featureId));
     const isBeyondCurrent = featurePhase > currentPhaseIdx;
     const convergence = state.ddx.convergenceState;
     const isConverged = convergence === 'converging' || convergence === 'confirming';
+    if (isBeyondCurrent && !isConverged) continue;
 
-    // Allow ahead-of-phase only if convergence is progressing (we have strong leads)
-    if (isBeyondCurrent && !isConverged) continue;  // Block completely if still exploring
+    const feature = FEATURES[featureId];
+    if (!feature) continue;
 
     const eig = computeEig(featureId, candidates, diseaseMap);
     if (eig > 0.001) {
-      let adjustedEig = eig;
-      // Penalize ahead-of-phase features even if converged
-      if (isBeyondCurrent) adjustedEig *= 0.3;
+      // Compute 4-factor priority score
+      const priority = computePriorityScore(featureId, candidates, state);
+      let adjustedScore = priority.total;
+
+      // Penalize ahead-of-phase features
+      if (isBeyondCurrent) adjustedScore *= 0.3;
       // Apply stage relevance penalty
-      const feature = FEATURES[featureId];
-      if (feature && feature.stageRelevance.length > 0 && feature.stageRelevance.every(s => s >= 3)) {
-        adjustedEig *= 0.3;  // Late-stage features get penalty
+      if (feature.stageRelevance.length > 0 && feature.stageRelevance.every(s => s >= 3)) {
+        adjustedScore *= 0.3;
       }
-      eigResults.push({ featureId, eig: adjustedEig });
+
+      scoredResults.push({
+        featureId,
+        score: adjustedScore,
+        eig,
+        diagnosticValue: priority.diagnosticValue,
+        safetyValue: priority.safetyValue,
+        documentationValue: priority.documentationValue,
+        redundancyPenalty: priority.redundancyPenalty,
+      });
     }
   }
 
-  // Sort by EIG descending
-  eigResults.sort((a, b) => b.eig - a.eig);
+  // Sort by priority score descending (4-factor scoring)
+  scoredResults.sort((a, b) => b.score - a.score);
 
-  if (eigResults.length > 0) {
-    const best = eigResults[0];
+  if (scoredResults.length > 0) {
+    const best = scoredResults[0];
     const feature = FEATURES[best.featureId];
     if (feature) {
+      const rationale = getScoreRationale({
+        diagnosticValue: best.diagnosticValue,
+        safetyValue: best.safetyValue,
+        documentationValue: best.documentationValue,
+        redundancyPenalty: best.redundancyPenalty,
+        total: best.score,
+      });
       return {
         featureId: best.featureId,
         label: feature.label,
         shortLabel: feature.shortLabel,
         type: feature.type,
         options: feature.options,
-        rationale: generateRationale(best.featureId, topCandidate, candidates),
+        rationale: `${rationale}. ${generateRationale(best.featureId, topCandidate, candidates)}`,
         sourceDiseaseId: topCandidate?.diseaseId || 'abdominal_pain',
-        informationGain: best.eig,
+        informationGain: best.score,
         priority: getFeaturePriority(best.featureId),
         clinicalGuide: feature.clinicalGuide,
       };

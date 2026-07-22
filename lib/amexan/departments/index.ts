@@ -1,5 +1,6 @@
 export { CARD_DISEASES } from './card';
 export { IM_DISEASES } from './im';
+export { NEURO_DISEASES } from './neuro';
 export { OB_DISEASES } from './ob';
 export { PAED_DISEASES } from './paed';
 export { PSYCH_DISEASES } from './psych';
@@ -8,6 +9,7 @@ export { SURG_DISEASES } from './surgery';
 import type { DiseaseIntelligence } from '../core';
 import { CARD_DISEASES } from './card';
 import { IM_DISEASES } from './im';
+import { NEURO_DISEASES } from './neuro';
 import { OB_DISEASES } from './ob';
 import { PAED_DISEASES } from './paed';
 import { PSYCH_DISEASES } from './psych';
@@ -16,6 +18,7 @@ import { SURG_DISEASES } from './surgery';
 export const DISEASES_BY_DEPT: Record<string, DiseaseIntelligence[]> = {
   CARD: CARD_DISEASES,
   IM: IM_DISEASES,
+  NEURO: NEURO_DISEASES,
   OB: OB_DISEASES,
   PAED: PAED_DISEASES,
   PSYCH: PSYCH_DISEASES,

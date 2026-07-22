@@ -85,7 +85,7 @@ export default function DepartmentHomePage() {
             cursor: 'pointer', fontFamily: "'DM Sans',sans-serif",
           }}
         >
-          ➕ New Encounter
+          ➕ New Clinical Entry
         </button>
       </div>
 

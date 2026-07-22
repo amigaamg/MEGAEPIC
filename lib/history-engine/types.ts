@@ -54,6 +54,20 @@ export interface Biodata {
   newborn?: NewbornBiodata;
 }
 
+export type ComplaintCategory =
+  | 'Pain' | 'Respiratory' | 'Neurological' | 'GI' | 'GU'
+  | 'Psychiatric' | 'General' | 'Dermatology' | 'ENT' | 'Eye'
+  | 'Musculoskeletal' | 'Cardiovascular' | 'Endocrine' | 'Hematological'
+  | 'Constitutional' | 'Trauma' | 'Other';
+
+export type ComplaintStatus = 'Active' | 'Resolved' | 'Intermittent' | 'Unknown';
+export type ComplaintCertainty = 'Definite' | 'Probable' | 'Possible' | 'Unknown';
+export type ComplaintPriority = 'PRIMARY' | 'SECONDARY' | 'TERTIARY';
+export type ComplaintRelationship = 'Independent' | 'Progression' | 'Complication' | 'Associated' | 'Unknown';
+export type ComplaintOnset = 'Sudden' | 'Gradual' | 'Intermittent' | 'Recurrent' | 'Unknown';
+export type ComplaintSource = 'Patient' | 'Relative' | 'Caregiver' | 'EMS' | 'Referral' | 'Record' | 'Other';
+export type ComplaintSeverity = 'Mild' | 'Moderate' | 'Severe' | 'Unknown';
+
 export interface ChiefComplaint {
   id: string;
   symptomId: SymptomId;
@@ -62,6 +76,20 @@ export interface ChiefComplaint {
   durationDays: number;
   isPrimary: boolean;
   associatedSymptomIds?: string[];
+  // Enhanced fields (Chief Complaint Engine v2)
+  durationHours?: number;
+  onset?: ComplaintOnset;
+  status?: ComplaintStatus;
+  certainty?: ComplaintCertainty;
+  relationship?: ComplaintRelationship;
+  source?: ComplaintSource;
+  category?: ComplaintCategory;
+  priority?: ComplaintPriority;
+  severity?: ComplaintSeverity;
+  parentId?: string | null;
+  simultaneousGroup?: string | null;
+  schemaActivated?: string | null;
+  redFlagOverride?: boolean;
 }
 
 export interface TimelineEvent {

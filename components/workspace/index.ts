@@ -1,0 +1,5 @@
+export { default as WorkspaceShell } from './WorkspaceShell'
+export { default as LeftPane } from './LeftPane'
+export { default as CenterPane } from './CenterPane'
+export { default as RightPane } from './RightPane'
+export { default as CommandBar } from './CommandBar'

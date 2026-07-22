@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { getUserProfile } from '@/lib/firebase/authService';
 import { db } from '@/lib/firebase';
-import { collection, query, where, onSnapshot, getDocs, getDoc, doc } from 'firebase/firestore';
+import { collection, collectionGroup, query, where, onSnapshot, getDocs, getDoc, doc } from 'firebase/firestore';
 import type { ClinicianProfile } from '@/lib/firebase/authService';
 
 const CSS = `
@@ -91,7 +91,8 @@ export default function ClinicianDashboard() {
   useEffect(() => {
     if (!orgId || !user) return;
     const encQuery = query(
-      collection(db, 'organizations', orgId, 'encounters'),
+      collectionGroup(db, 'encounters'),
+      where('orgId', '==', orgId),
       where('participants', 'array-contains', user.uid)
     );
     const unsub = onSnapshot(encQuery, (snap) => {
@@ -181,8 +182,8 @@ export default function ClinicianDashboard() {
           <div className="action-card" onClick={() => router.push('/workspace/departments')}>
             <span className="action-icon">➕</span>
             <div className="action-info">
-              <div className="action-title">New Encounter</div>
-              <div className="action-desc">Select a department and unit to start a new encounter</div>
+              <div className="action-title">New Clinical Entry</div>
+              <div className="action-desc">Select a department and unit to start a new clinical entry</div>
             </div>
           </div>
           <div className="action-card" onClick={() => router.push('/clinical-intelligence')}>

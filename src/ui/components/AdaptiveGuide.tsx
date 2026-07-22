@@ -5,7 +5,7 @@ import { useTheme } from '../themes/ThemeProvider';
 import { getAdaptiveGuidance, AdaptiveGuideData } from '../../engine/inference/adaptive';
 
 export const AdaptiveGuide: React.FC<{ phaseIdx: number }> = ({ phaseIdx }) => {
-  const form = usePatientStore(s => s.form);
+  const { form } = usePatientStore();
   const t = useTheme();
   const guide: AdaptiveGuideData | null = getAdaptiveGuidance(phaseIdx, form);
 

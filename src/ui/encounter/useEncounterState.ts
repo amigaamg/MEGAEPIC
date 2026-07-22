@@ -45,28 +45,35 @@ export const useEncounterState = create<EncounterState>((set, get) => ({
   setForm: (form) => set({ form }),
 
   setField: (path, value) => set((s) => {
-    const copy = JSON.parse(JSON.stringify(s.form)) as PatientForm;
-    const keys = path.split('.');
-    let obj: any = copy;
-    for (let i = 0; i < keys.length - 1; i++) {
-      if (!obj[keys[i]]) obj[keys[i]] = {};
-      obj = obj[keys[i]];
+    if (!path.includes('.')) {
+      return { form: { ...s.form, [path]: value } };
     }
-    obj[keys[keys.length - 1]] = value;
-    return { form: copy };
+    const keys = path.split('.');
+    const newForm = { ...s.form } as PatientForm;
+    let newObj: any = newForm;
+    let oldObj: any = s.form;
+    for (let i = 0; i < keys.length - 1; i++) {
+      newObj[keys[i]] = { ...(oldObj[keys[i]] || {}) };
+      newObj = newObj[keys[i]];
+      oldObj = oldObj[keys[i]];
+    }
+    newObj[keys[keys.length - 1]] = value;
+    return { form: newForm };
   }),
 
   toggleArray: (path, item) => set((s) => {
-    const copy = JSON.parse(JSON.stringify(s.form)) as PatientForm;
     const keys = path.split('.');
-    let obj: any = copy;
+    const newForm = { ...s.form } as PatientForm;
+    let newObj: any = newForm;
+    let oldObj: any = s.form;
     for (let i = 0; i < keys.length - 1; i++) {
-      if (!obj[keys[i]]) obj[keys[i]] = {};
-      obj = obj[keys[i]];
+      newObj[keys[i]] = { ...(oldObj[keys[i]] || {}) };
+      newObj = newObj[keys[i]];
+      oldObj = oldObj[keys[i]];
     }
-    const arr: string[] = obj[keys[keys.length - 1]] || [];
-    obj[keys[keys.length - 1]] = arr.includes(item) ? arr.filter((x: string) => x !== item) : [...arr, item];
-    return { form: copy };
+    const arr: string[] = oldObj[keys[keys.length - 1]] || [];
+    newObj[keys[keys.length - 1]] = arr.includes(item) ? arr.filter((x: string) => x !== item) : [...arr, item];
+    return { form: newForm };
   }),
 
   setEncounterType: (t) => set({ encounterType: t }),

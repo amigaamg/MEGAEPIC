@@ -1,125 +1,150 @@
 'use client';
-import React, { useState } from 'react';
-import type { PresentingComplaintData } from '@/types/encounter';
+import React, { useState, useMemo } from 'react';
+import { useEncounter } from '@/lib/amexan/encounter';
+import type { SymptomId, StructuredSymptom } from '@/lib/amexan/encounter/encounterState';
+
+const SUGGESTED_COMPLAINTS = [
+  'Abdominal pain', 'Chest pain', 'Headache', 'Fever', 'Cough',
+  'Shortness of breath', 'Nausea and vomiting', 'Diarrhea',
+  'Vaginal bleeding', 'Seizures', 'Dizziness', 'Fainting',
+  'Palpitations', 'Back pain', 'Painful urination', 'Rash',
+  'Joint pain', 'Fatigue', 'Weight loss', 'Constipation',
+  'Blood in stool', 'Jaundice', 'Abdominal swelling',
+];
+
+const COMPLAINT_TO_SYMPTOM: Record<string, SymptomId> = {
+  'Abdominal pain': 'abdominal_pain',
+  'Abdominal swelling': 'distension',
+  'Back pain': 'back_pain',
+  'Blood in stool': 'gi_bleeding',
+  'Chest pain': 'chest_pain',
+  'Constipation': 'constipation',
+  'Cough': 'cough',
+  'Diarrhea': 'diarrhea',
+  'Dizziness': 'dizziness',
+  'Fainting': 'syncope',
+  'Fatigue': 'fatigue',
+  'Fever': 'fever',
+  'Headache': 'headache',
+  'Jaundice': 'jaundice',
+  'Joint pain': 'joint_pain',
+  'Nausea and vomiting': 'nausea_vomiting',
+  'Painful urination': 'dysuria',
+  'Palpitations': 'palpitations',
+  'Rash': 'rash',
+  'Seizures': 'seizure',
+  'Shortness of breath': 'dyspnea',
+  'Vaginal bleeding': 'vaginal_bleeding',
+  'Weight loss': 'weight_loss',
+};
 
 interface ComplaintPhaseProps {
-  onSave: (data: PresentingComplaintData) => Promise<void>;
-  onComplete: () => void;
-  initialData?: Partial<PresentingComplaintData>;
-  suggestedComplaints?: string[];
+  onComplete?: () => void;
 }
 
-export function ComplaintPhase({ onSave, onComplete, initialData, suggestedComplaints = [] }: ComplaintPhaseProps) {
-  const [form, setForm] = useState<PresentingComplaintData>({
-    complaint: initialData?.complaint || '',
-    duration: initialData?.duration || '',
-    severity: initialData?.severity || 5,
-    priority: initialData?.priority || 'medium',
-  });
-  const [saving, setSaving] = useState(false);
+export function ComplaintPhase({ onComplete }: ComplaintPhaseProps) {
+  const { state, setChiefComplaint, activateSymptom } = useEncounter();
+  const [complaint, setComplaint] = useState(state.chiefComplaint.text || '');
+  const [duration, setDuration] = useState(state.chiefComplaint.duration || '');
+  const [severity, setSeverity] = useState(state.chiefComplaint.severity || 5);
   const [customMode, setCustomMode] = useState(false);
 
-  const handleSave = async () => {
-    if (!form.complaint.trim()) return;
-    setSaving(true);
-    try {
-      await onSave(form);
-      onComplete();
-    } finally {
-      setSaving(false);
+  const handleSave = () => {
+    if (!complaint.trim()) return;
+    setChiefComplaint(complaint, duration, severity);
+
+    // Auto-activate symptom schema based on chief complaint
+    // Only set present:true — leave all fields undefined so the question engine asks them
+    const symptomId = COMPLAINT_TO_SYMPTOM[complaint];
+    if (symptomId && !state.symptoms[symptomId]) {
+      activateSymptom({ id: symptomId, present: true } as StructuredSymptom);
     }
+
+    if (onComplete) onComplete();
   };
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center gap-2 pb-2 border-b">
+        <span className="text-lg">🗣️</span>
+        <span className="text-sm font-semibold text-gray-700">Presenting Complaint</span>
+      </div>
+
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-medium text-gray-700">Presenting Complaint</label>
+          <label className="text-xs font-medium text-gray-600">What is the main problem?</label>
           <button
             onClick={() => setCustomMode(!customMode)}
-            className="text-xs text-blue-600 hover:text-blue-800"
+            className="text-[11px] text-blue-600 hover:text-blue-800"
           >
-            {customMode ? 'Pick from list' : 'Enter custom complaint'}
+            {customMode ? 'Pick from list' : 'Type manually'}
           </button>
         </div>
 
         {customMode ? (
           <input
             type="text"
-            value={form.complaint}
-            onChange={(e) => setForm((prev) => ({ ...prev, complaint: e.target.value }))}
+            value={complaint}
+            onChange={(e) => setComplaint(e.target.value)}
             className="w-full px-3 py-2 border rounded-lg text-sm"
             placeholder="Enter the presenting complaint..."
           />
         ) : (
-          <div className="grid grid-cols-2 gap-2">
-            {suggestedComplaints.map((complaint) => (
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTED_COMPLAINTS.map((c) => (
               <button
-                key={complaint}
-                onClick={() => setForm((prev) => ({ ...prev, complaint }))}
+                key={c}
+                onClick={() => setComplaint(c)}
                 className={`px-3 py-2 text-sm rounded-lg border text-left transition-colors ${
-                  form.complaint === complaint
+                  complaint === c
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-200 hover:border-gray-300 text-gray-700'
                 }`}
               >
-                {complaint}
+                {c}
               </button>
             ))}
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Duration</label>
           <input
             type="text"
-            value={form.duration}
-            onChange={(e) => setForm((prev) => ({ ...prev, duration: e.target.value }))}
-            className="w-full px-3 py-2 border rounded-lg text-sm"
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+            className="w-full px-3 py-1.5 border rounded-lg text-sm"
             placeholder="e.g., 3 days, 6 hours"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Severity ({form.severity}/10)
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            Severity ({severity}/10)
           </label>
           <input
             type="range"
             min={1} max={10}
-            value={form.severity}
-            onChange={(e) => setForm((prev) => ({ ...prev, severity: parseInt(e.target.value) }))}
-            className="w-full"
+            value={severity}
+            onChange={(e) => setSeverity(parseInt(e.target.value))}
+            className="w-full h-1.5 accent-blue-600"
           />
-          <div className="flex justify-between text-xs text-gray-400">
+          <div className="flex justify-between text-[10px] text-gray-400">
             <span>Mild</span>
             <span>Severe</span>
           </div>
         </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-          <select
-            value={form.priority}
-            onChange={(e) => setForm((prev) => ({ ...prev, priority: e.target.value as any }))}
-            className="w-full px-3 py-2 border rounded-lg text-sm"
-          >
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-          </select>
-        </div>
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t">
+      <div className="flex justify-end pt-4 border-t">
         <button
           onClick={handleSave}
-          disabled={saving || !form.complaint.trim()}
+          disabled={!complaint.trim()}
           className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
         >
-          {saving ? 'Saving...' : 'Save & Continue'}
+          Save & Continue
         </button>
       </div>
     </div>

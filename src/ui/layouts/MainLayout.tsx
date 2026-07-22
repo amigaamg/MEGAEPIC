@@ -15,13 +15,11 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
   const phaseIdx = useUIStore(s => s.phaseIdx);
   const setPhaseIdx = useUIStore(s => s.setPhaseIdx);
   const addDonePhase = useUIStore(s => s.addDonePhase);
-  const clearDonePhases = useUIStore(s => s.clearDonePhases);
   const isMobile = useUIStore(s => s.isMobile);
   const setIsMobile = useUIStore(s => s.setIsMobile);
   const themeId = useUIStore(s => s.themeId);
   const setThemeId = useUIStore(s => s.setThemeId);
-  const form = usePatientStore(s => s.form);
-  const resetForm = usePatientStore(s => s.reset);
+  const { form, reset: resetForm } = usePatientStore();
 
   const severity = getSeverity(form);
 
@@ -46,7 +44,6 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
   const handleReset = () => {
     if (window.confirm('Clear all data and start over?')) {
       resetForm();
-      clearDonePhases();
       setPhaseIdx(0);
     }
   };

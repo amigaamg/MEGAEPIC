@@ -32,12 +32,15 @@ export interface EncounterData {
   clinicianNotes: string;
 }
 
-export async function createEncounter(data: EncounterData, orgId?: string): Promise<string> {
+export async function createEncounter(data: EncounterData, orgId?: string, explicitId?: string): Promise<string> {
   const oid = resolveOrgId(orgId);
-  const ref = doc(encountersCol(oid, data.departmentId, data.unitId));
+  const ref = explicitId
+    ? doc(encountersCol(oid, data.departmentId, data.unitId), explicitId)
+    : doc(encountersCol(oid, data.departmentId, data.unitId));
   const encounter: Record<string, unknown> = {
     ...data,
     id: ref.id,
+    orgId: oid,
     createdAt: Date.now(),
     updatedAt: Date.now(),
     status: data.status || 'active',

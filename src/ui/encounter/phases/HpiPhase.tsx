@@ -1,5 +1,5 @@
 'use client';
-import { useMemo } from 'react';
+import { useMemo, useDeferredValue } from 'react';
 import { runInference } from '@/src/engine/inference/scorer';
 import { buildHPI } from '@/src/engine/inference/clinicalNoteBuilder';
 import type { PatientForm } from '@/src/types';
@@ -17,10 +17,11 @@ const h: Record<string, React.CSSProperties> = {
 interface Props { form: PatientForm; setField: (p: string, v: any) => void; addEvent: (e: Partial<DocumentEvent>) => void; addInsight: (i: Partial<AIInsight>) => void; deptColor: string; }
 
 export function HpiPhase({ form, setField, addEvent, addInsight, deptColor }: Props) {
-  const differentials = useMemo(() => runInference(form), [form]);
+  const deferredForm = useDeferredValue(form);
+  const differentials = useMemo(() => runInference(deferredForm), [deferredForm]);
   const narrative = useMemo(() => {
-    try { return buildHPI(form, differentials); } catch { return ''; }
-  }, [form, differentials]);
+    try { return buildHPI(deferredForm, differentials); } catch { return ''; }
+  }, [deferredForm, differentials]);
 
   // Derive red flags from form state
   const redFlags = useMemo(() => {

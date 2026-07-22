@@ -5,7 +5,7 @@
 // No question is asked twice — CC-sourced features appear only in narrative.
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import type { EncounterState, CandidateDiseaseState, AnswerRecord } from '../knowbase/diseaseNode';
+import type { EncounterState, CandidateDiseaseState, AnswerRecord, NarrativePart } from '../knowbase/diseaseNode';
 import { FEATURES } from '../knowbase/features/featureLibrary';
 import { ABDOMINAL_PAIN_DISEASE_MAP } from '../knowbase/diseases/abdominalPainNodes';
 
@@ -19,6 +19,10 @@ export interface HpiNarrative {
   differentialSummary: string;       // Ranked DDx
   redFlags: string;                  // Any triggered red flags
   fullNarrative: string;             // Combined clinical prose
+  /** Continuous narrative parts built progressively after each answer */
+  continuousNarrative: string;
+  /** Per-answer narrative fragments */
+  narrativeParts: NarrativePart[];
 }
 
 /** Convert an answer to narrative text */
@@ -597,6 +601,26 @@ function generateDifferential(state: EncounterState): string {
   return lines.join('\n');
 }
 
+/** Build a continuous narrative from per-answer parts */
+export function buildContinuousNarrative(
+  state: EncounterState,
+  narrativeParts: NarrativePart[],
+): string {
+  if (narrativeParts.length === 0) {
+    // Build from answers if no parts exist
+    return state.answers.map(a => {
+      const feature = FEATURES[a.featureId];
+      if (!feature) return '';
+      if (a.polarity === 'present') {
+        return `${feature.shortLabel} is present.`;
+      }
+      return `${feature.shortLabel} is absent.`;
+    }).filter(Boolean).join(' ');
+  }
+
+  return narrativeParts.map(p => p.text).filter(Boolean).join(' ');
+}
+
 /** Generate the HPI narrative */
 export function generateHpiNarrative(state: EncounterState): HpiNarrative {
   const painHistory = generatePainHistory(state);
@@ -651,6 +675,8 @@ export function generateHpiNarrative(state: EncounterState): HpiNarrative {
     differentialSummary,
   ].filter(Boolean);
 
+  const continuousNarrative = buildContinuousNarrative(state, state.narrativeParts || []);
+
   return {
     introduction,
     painHistory,
@@ -661,5 +687,7 @@ export function generateHpiNarrative(state: EncounterState): HpiNarrative {
     differentialSummary,
     redFlags,
     fullNarrative: parts.join('\n\n'),
+    continuousNarrative,
+    narrativeParts: state.narrativeParts || [],
   };
 }

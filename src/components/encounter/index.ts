@@ -1,10 +1,12 @@
 export { RegistrationPhase } from './RegistrationPhase';
 export { ComplaintPhase } from './ComplaintPhase';
+export { LegacyComplaintPhase } from './LegacyComplaintPhase';
 export { HPIPhase } from './HPIPhase';
 export { IntelligentHPI } from './IntelligentHPI';
 export { ExaminationPhase } from './ExaminationPhase';
 export { BedsideScorePhase } from './BedsideScorePhase';
 export { DDXPhase } from './DDXPhase';
+export { LegacyDDXPhase } from './LegacyDDXPhase';
 export { InvestigationsPhase } from './InvestigationsPhase';
 export { ImagingPhase } from './ImagingPhase';
 export { TreatmentPhase } from './TreatmentPhase';

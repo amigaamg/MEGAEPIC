@@ -13,11 +13,12 @@ export function buildTimeline(complaints: ChiefComplaint[]): TimelineResult {
   for (const c of complaints) {
     const daysAgo = c.durationDays;
     const eventDate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+    const primaryTag = c.isPrimary ? ' [PRIMARY]' : '';
     events.push({
       id: `tl_${c.id}`,
       date: eventDate.toISOString().split('T')[0],
       relativeTime: `${c.duration} ago`,
-      description: `${c.label} started`,
+      description: `${c.label} started${primaryTag}`,
       symptomId: c.symptomId,
     });
   }

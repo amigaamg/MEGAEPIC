@@ -299,7 +299,7 @@ export default function LboMasterEncounterPage() {
           </div>
           <div className="flex items-center gap-2">
             {activeRecordId && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-mono">{activeRecordId}</span>}
-            <button onClick={handleNewEncounter} className="text-xs bg-green-500 text-white px-3 py-1.5 rounded-lg hover:bg-green-600 font-medium">+ New</button>
+            <button onClick={handleNewEncounter} className="text-xs bg-green-500 text-white px-3 py-1.5 rounded-lg hover:bg-green-600 font-medium">+ New Clinical Entry</button>
             <button onClick={() => { setShowRecords(!showRecords); setRecords(getAllRecords()); }} className="text-xs bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-300 font-medium">{showRecords ? 'Close Records' : '📁 Records'}</button>
           </div>
         </div>

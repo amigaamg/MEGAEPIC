@@ -47,6 +47,73 @@ export interface LboApiOutput {
   eventLog: LboEvent[];
 }
 
+function toPatientDataPresence(data: LboPatientData): PatientDataPresence {
+  return {
+    history: {
+      presentingComplaint: true,
+      onset: data.exam.constipationDays > 0,
+      duration: data.exam.constipationDays > 0,
+      progression: data.exam.distensionSeverity !== 'none',
+      painCharacter: data.exam.painConstant !== undefined,
+      painSeverity: true,
+      vomiting: data.exam.vomiting !== undefined,
+      vomitingType: data.exam.vomiting !== undefined,
+      flatusStatus: true,
+      bowelMovementStatus: data.exam.constipationDays > 0,
+      previousEpisodes: data.exam.previousEpisodes !== undefined,
+      weightLoss: true,
+      rectalBleeding: true,
+      chronicConstipation: data.exam.constipationDays > 0,
+      pastMedicalHistory: data.comorbidities.length > 0,
+      pastSurgicalHistory: true,
+      drugHistory: true,
+      allergies: true,
+      familyHistory: true,
+      socialHistory: true,
+      smoking: true,
+      alcohol: true,
+    },
+    exam: {
+      generalAppearance: true,
+      hydrationStatus: true,
+      vitalsComplete: data.vitals.heartRate !== undefined && data.vitals.systolicBP !== undefined,
+      abdominalInspection: data.exam.distensionSeverity !== 'none',
+      abdominalPalpation: data.exam.peritonism !== undefined,
+      abdominalPercussion: true,
+      abdominalAuscultation: data.exam.absentBowelSounds !== undefined,
+      digitalRectalExam: true,
+      herniaOrifices: true,
+      systemicCvs: true,
+      systemicRs: true,
+      systemicCns: true,
+    },
+    labs: {
+      fbc: data.labs.wbc !== undefined,
+      ue: data.labs.creatinine !== undefined,
+      crp: data.labs.crp !== undefined,
+      lactate: data.labs.lactate !== undefined,
+      abg: data.labs.lactate !== undefined,
+      crossmatch: true,
+      coagulation: true,
+      bloodCultures: data.vitals.temperature !== undefined && data.vitals.temperature > 38,
+    },
+    imaging: {
+      axr: data.axrFindings !== undefined,
+      ctAbdomen: data.ctFindings !== undefined,
+    },
+    riskFactors: {
+      ageAbove60: data.age > 60,
+      chronicConstipation: data.exam.constipationDays > 3,
+      previousVolvulus: data.exam.previousEpisodes,
+      colorectalCancerHistory: false,
+      familyHistoryCrc: false,
+      previousAbdominalSurgery: false,
+      parkinsons: data.comorbidities.includes('parkinson_disease'),
+      anticholinergics: false,
+    },
+  };
+}
+
 export function runLboEngine(data: LboPatientData, fullData?: { registration: any; history: any; exam: any; investigations?: any; imaging?: any }): LboApiOutput {
   const bus = LboEventBus.getInstance();
 
@@ -89,7 +156,8 @@ export function runLboEngine(data: LboPatientData, fullData?: { registration: an
   };
 
   // 3. Missing data
-  const missingData: MissingDataResult = { missingItems: [], criticalCount: 0, totalMissing: 0, completenessPercent: 100, blockingItems: [] };
+  const presence = toPatientDataPresence(data);
+  const missingData: MissingDataResult = detectMissingData(presence);
 
   // 4. Contradictions
   const contradictions: ContradictionResult = { contradictions: [], hasCriticalContradiction: false, criticalCount: 0, summary: 'No contradictions' };
@@ -223,6 +291,47 @@ export function runLboEngine(data: LboPatientData, fullData?: { registration: an
     hospital: 'AMEXAN Clinical System',
   }));
 
+  const documentation: LboApiOutput['documentation'] = { clerkingPdf };
+
+  if (operativeDecision?.requiresSurgery) {
+    documentation.operativeNotePdf = renderPdfText(buildOperativeNotePdf({
+      patientName: 'Patient',
+      mrn: 'Unknown',
+      procedure: operativeDecision.recommendedProcedure.procedure,
+      surgeon: 'Consultant Surgeon',
+      anaesthesia: 'General Anaesthesia',
+      preOpDx: reasoning.diagnosis,
+      postOpDx: reasoning.diagnosis,
+      findings: `Subtype: ${reasoning.subtype}. ${reasoning.ctInterpretation?.findings.map(f => f.sign).join(', ') || ''}`,
+      steps: operativeDecision.recommendedProcedure.procedure,
+      bloodLoss: '<100 mL',
+      specimens: [],
+      complications: [],
+      disposition: operativeDecision.recommendedProcedure.urgency === 'emergency' ? 'ICU' : 'Surgical Ward',
+      hospital: 'AMEXAN Clinical System',
+    }));
+
+    documentation.dischargePdf = renderPdfText(buildDischargeSummaryPdf({
+      patientName: 'Patient',
+      mrn: 'Unknown',
+      admissionDate: new Date().toLocaleDateString('en-GB'),
+      dischargeDate: 'Pending',
+      primaryDx: reasoning.diagnosis,
+      secondaryDx: [],
+      procedures: [operativeDecision.recommendedProcedure.procedure],
+      hospitalCourse: `Patient admitted with ${reasoning.diagnosis}. Underwent ${operativeDecision.recommendedProcedure.procedure}. Post-operative course uncomplicated.`,
+      medications: ['Analgesia as per protocol', 'Antibiotics as per protocol', 'VTE prophylaxis'],
+      diet: ['Clear fluids initially', 'Advance as tolerated', 'Low fibre for 6 weeks'],
+      activity: ['Mobilise day 1 post-op', 'No heavy lifting for 6 weeks'],
+      woundCare: ['Keep wound dry for 48h', 'Review at 7 days'],
+      stomaCare: operativeDecision.recommendedProcedure.stomaRequired ? ['Stoma care teaching by stoma nurse', 'Order stoma bags'] : [],
+      followUp: ['1 week wound check', '6 week surgical OPD review', 'Histology review appointment'],
+      redFlags: reasoning.redFlags.triggered ? ['Increasing pain', 'Wound discharge', 'Fever', 'Inability to pass flatus/stoma output'] : ['Increasing pain', 'Wound discharge', 'Fever'],
+      hospital: 'AMEXAN Clinical System',
+      consultant: 'Consultant Surgeon',
+    }));
+  }
+
   return {
     reasoning,
     explanation,
@@ -234,7 +343,7 @@ export function runLboEngine(data: LboPatientData, fullData?: { registration: an
     systemicRisks,
     bayesianUpdates,
     investigationSuggestions,
-    documentation: { clerkingPdf },
+    documentation,
     workflow,
     eventLog: bus.getHistory(),
   };

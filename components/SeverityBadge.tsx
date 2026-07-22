@@ -3,7 +3,7 @@ import { useClinical } from '@/src/store/ClinicalContext';
 
 export function SeverityBadge({ compact = false }: { compact?: boolean }) {
   const { state } = useClinical();
-  const { severity } = state;
+  const severity = (state as any).severity || state.assessment?.severity;
 
   if (!severity) return null;
 

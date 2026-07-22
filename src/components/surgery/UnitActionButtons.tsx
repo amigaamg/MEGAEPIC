@@ -15,7 +15,7 @@ interface UnitActionButtonsProps {
 }
 
 const ACTIONS: ActionButton[] = [
-  { id: 'new-encounter', label: '+ New Encounter', icon: '📋', color: 'bg-blue-600 hover:bg-blue-700', description: 'Create a new clinical encounter' },
+  { id: 'new-encounter', label: 'New Clinical Entry', icon: '📋', color: 'bg-blue-600 hover:bg-blue-700', description: 'Create a new clinical entry' },
   { id: 'admit', label: '📋 Admit Patient', icon: '📋', color: 'bg-green-600 hover:bg-green-700', description: 'Direct inpatient admission' },
   { id: 'operative-note', label: '📄 Operative Note', icon: '📄', color: 'bg-purple-600 hover:bg-purple-700', description: 'Write an operative note for an active case' },
   { id: 'trauma', label: '🚨 Trauma Activation', icon: '🚨', color: 'bg-red-600 hover:bg-red-700', description: 'Activate trauma team response' },

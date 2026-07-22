@@ -14,7 +14,18 @@ interface HistoryStore extends HistoryState {
   orchestrator: HistoryOrchestrator;
 
   setBiodata: (b: Biodata) => void;
-  addChiefComplaint: (symptomId: string, label: string, duration: string, durationDays: number) => void;
+  addChiefComplaint: (symptomId: string, label: string, duration: string, durationDays: number, enhanced?: {
+    durationHours?: number;
+    onset?: string;
+    status?: string;
+    certainty?: string;
+    relationship?: string;
+    source?: string;
+    category?: string;
+    severity?: string;
+    schemaActivated?: string;
+    redFlagOverride?: boolean;
+  }) => void;
   removeChiefComplaint: (id: string) => void;
   setPrimaryComplaint: (id: string) => void;
 
@@ -83,6 +94,8 @@ interface HistoryStore extends HistoryState {
   getSuggestedCards: () => { diseaseId: string; diseaseName: string; probability: number; questions: { featureId: string; label: string }[] }[];
 
   reset: () => void;
+  /** Defer recomputeAll by 50ms — used by ChiefComplaintSection for DDX sidebar, never called during HPI or later sections */
+  scheduleRecompute: () => void;
 }
 
 export const useHistoryStore = create<HistoryStore>((set) => {
@@ -96,25 +109,44 @@ export const useHistoryStore = create<HistoryStore>((set) => {
   return {
     ...initialState,
     orchestrator,
+    /** Run recomputeAll asynchronously — only called from ChiefComplaintSection for DDX sidebar updates */
+    scheduleRecompute: () => {
+      setTimeout(() => {
+        orchestrator.recomputeAll();
+        set(orchestrator.getState());
+      }, 50);
+    },
 
     setBiodata: (b: Biodata) => {
       orchestrator.setBiodata(b);
       sync();
     },
 
-    addChiefComplaint: (symptomId, label, duration, durationDays) => {
-      orchestrator.addChiefComplaint(symptomId, label, duration, durationDays);
-      sync();
+    addChiefComplaint: (symptomId, label, duration, durationDays, enhanced) => {
+      try {
+        orchestrator.addChiefComplaint(symptomId, label, duration, durationDays, enhanced);
+        sync();
+      } catch (e) {
+        console.error('[useHistoryStore] addChiefComplaint failed:', e);
+      }
     },
 
     removeChiefComplaint: (id) => {
-      orchestrator.removeChiefComplaint(id);
-      sync();
+      try {
+        orchestrator.removeChiefComplaint(id);
+        sync();
+      } catch (e) {
+        console.error('[useHistoryStore] removeChiefComplaint failed:', e);
+      }
     },
 
     setPrimaryComplaint: (id) => {
-      orchestrator.setPrimaryComplaint(id);
-      sync();
+      try {
+        orchestrator.setPrimaryComplaint(id);
+        sync();
+      } catch (e) {
+        console.error('[useHistoryStore] setPrimaryComplaint failed:', e);
+      }
     },
 
     setFeature: (featureId, present) => {
@@ -335,18 +367,31 @@ export const useHistoryStore = create<HistoryStore>((set) => {
 
     // ── Section management (adaptive) ──
     setActiveSection: (section) => {
-      orchestrator.setActiveSection(section);
-      sync();
+      try {
+        orchestrator.setActiveSection(section);
+        sync();
+      } catch (e) {
+        console.error('[useHistoryStore] setActiveSection failed:', e);
+      }
     },
 
     completeSection: (section) => {
-      orchestrator.completeSection(section);
-      sync();
+      try {
+        orchestrator.completeSection(section);
+        sync();
+      } catch (e) {
+        console.error('[useHistoryStore] completeSection failed:', e);
+        throw e;
+      }
     },
 
     uncompleteSection: (section) => {
-      orchestrator.uncompleteSection(section);
-      sync();
+      try {
+        orchestrator.uncompleteSection(section);
+        sync();
+      } catch (e) {
+        console.error('[useHistoryStore] uncompleteSection failed:', e);
+      }
     },
 
     suggestNextSection: () => {

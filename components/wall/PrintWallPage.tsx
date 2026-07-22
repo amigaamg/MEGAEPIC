@@ -4,7 +4,7 @@
 // Accessible via window.open() from PDFExportBar
 // Use @media print or browser Print to PDF
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   collection, query, where, orderBy, getDocs, limit, doc, getDoc,
@@ -15,13 +15,14 @@ import { TOOL_CONFIGS } from '@/lib/diseaseTools';
 const fmtDate = (ts:any) => { if(!ts)return'—'; const d=ts?.toDate?ts.toDate():new Date(ts); return d.toLocaleDateString('en-KE',{day:'numeric',month:'long',year:'numeric'}); };
 const fmtDateTime = (ts:any) => { if(!ts)return'—'; const d=ts?.toDate?ts.toDate():new Date(ts); return `${d.toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'})} ${d.toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'})}`; };
 
-interface PrintProps { params: { patientId: string } }
+interface PrintProps { params: Promise<{ patientId: string }> }
 
 export default function PrintWallPage({ params }: PrintProps) {
   const searchParams = useSearchParams();
   const sections     = searchParams?.get('sections')?.split(',') || ['all'];
   const doctorId     = searchParams?.get('doctor') || '';
-  const patientId    = params.patientId;
+  const resolved = React.use(params);
+  const patientId    = resolved.patientId;
   const includeAll   = sections.includes('all');
   const has = (k:string) => includeAll || sections.includes(k);
 

@@ -60,9 +60,10 @@ export interface SectionDef {
 }
 
 // ── BASE SECTIONS (common to all profiles) ──
+// CHIEF COMPLAINTS FIRST — always the entry point
 const BASE_SECTIONS: SectionDef[] = [
-  { id: 'biodata', label: 'Patient Details', icon: '👤' },
   { id: 'chief_complaints', label: 'Chief Complaints', icon: '🩺' },
+  { id: 'biodata', label: 'Patient Details', icon: '👤' },
   { id: 'hpi', label: 'HPI & Exploration', icon: '📋' },
 ];
 

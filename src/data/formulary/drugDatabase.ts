@@ -664,6 +664,434 @@ reg({
   excretion: 'Renal (metabolites)',
 });
 
+// ── Antimicrobials ──────────────────────────────────────────────────────
+reg({
+  id: 'ceftriaxone', name: 'Ceftriaxone', genericName: 'Ceftriaxone sodium', brandNames: ['Rocephin', 'Ceftriaxone'],
+  drugClass: 'Third-Generation Cephalosporin', therapeuticCategory: 'Anti-Infective',
+  indications: ['Community-acquired pneumonia', 'Meningitis', 'Sepsis', 'Typhoid fever', 'Gonorrhea', 'UTI', 'Cellulitis', 'Lyme disease'],
+  contraindications: ['Cephalosporin allergy', 'Neonates with hyperbilirubinemia (calcium precipitation risk)', 'Previous severe hypersensitivity'],
+  sideEffects: ['Diarrhea', 'Rash', 'Nausea', 'Eosinophilia', 'Injection site pain', 'Headache'],
+  seriousSideEffects: ['Anaphylaxis', 'C. difficile colitis', 'Biliary pseudolithiasis', 'Pancreatitis', 'Thrombocytopenia', 'Hemolytic anemia'],
+  dosing: {
+    adult: [
+      { route: 'iv', dose: '1-2 g', frequency: 'Every 12-24 hours', maxDaily: '4 g/day', notes: '1g IV BD is standard for most infections' },
+      { route: 'im', dose: '1 g', frequency: 'Every 24 hours', notes: 'Deep IM injection with lidocaine' },
+    ],
+    pediatric: [
+      { route: 'iv', dose: '50-100 mg/kg/day', frequency: 'Divided every 12-24 hours', maxDaily: '4 g/day', notes: 'Dose varies by indication' },
+      { route: 'im', dose: '50 mg/kg', frequency: 'Once daily', notes: 'Max 1g per injection site' },
+    ],
+    renalAdjustment: 'No adjustment needed (hepatic excretion)',
+    hepaticAdjustment: 'No adjustment needed',
+    elderlyAdjustment: 'Standard dosing',
+  },
+  availableStrengths: ['250 mg', '500 mg', '1 g', '2 g (per vial)'],
+  routes: ['iv', 'im'],
+  halfLife: '5.8-8.7 hours',
+  pregnancyCategory: 'Category B',
+  lactation: 'Excreted in breast milk (low levels, compatible)',
+  monitoring: ['CBC with differential', 'Liver function tests', 'Renal function (if prolonged therapy)', 'C. difficile monitoring'],
+  interactions: [
+    { drug: 'Warfarin', severity: 'moderate', effect: 'Increased INR and bleeding risk', mechanism: 'Reduced vitamin K production by gut flora' },
+    { drug: 'Calcium-containing IV solutions', severity: 'major', effect: 'Ceftriaxone-calcium precipitation risk in neonates', mechanism: 'Physicochemical incompatibility' },
+    { drug: 'Alcohol', severity: 'moderate', effect: 'Possible disulfiram-like reaction', mechanism: 'Aldehyde dehydrogenase inhibition (rare)' },
+    { drug: 'Probenecid', severity: 'minor', effect: 'Increased ceftriaxone levels', mechanism: 'Reduced renal clearance' },
+  ],
+  onset: 'IV: immediate, IM: 1-2 hours',
+  duration: '12-24 hours (dose-dependent)',
+  maxDailyDose: '4 g',
+  notes: 'Ceftriaxone 1g IV BD is the most common adult dosing for moderate-severe infections. Can be given IM for gonorrhea (250mg stat). Avoid calcium-containing IV fluids in neonates.',
+  mechanismOfAction: 'Inhibits bacterial cell wall synthesis by binding to penicillin-binding proteins (PBPs), inhibiting transpeptidase activity and causing cell lysis.',
+  metabolism: 'Not significantly metabolized',
+  excretion: 'Hepatic (60%) and renal (40%)',
+});
+
+reg({
+  id: 'paracetamol', name: 'Paracetamol (Acetaminophen)', genericName: 'Paracetamol', brandNames: ['Panadol', 'Calpol', 'Tylenol', 'PCM'],
+  drugClass: 'Analgesic / Antipyretic (Non-opioid)', therapeuticCategory: 'Pain / Fever',
+  indications: ['Mild-moderate pain', 'Fever', 'Headache', 'Arthralgia', 'Myalgia', 'Post-operative pain (adjunct)'],
+  contraindications: ['Severe hepatic impairment', 'Hypersensitivity'],
+  sideEffects: ['Nausea', 'Rash (rare)'],
+  seriousSideEffects: ['Hepatotoxicity (overdose >4g/day)', 'Stevens-Johnson syndrome (rare)', 'Acute liver failure (overdose)'],
+  dosing: {
+    adult: [
+      { route: 'oral', dose: '500-1000 mg', frequency: 'Every 4-6 hours', maxDaily: '4 g/day', notes: 'Max 4g in 24 hours; reduce in hepatic impairment' },
+      { route: 'iv', dose: '1 g', frequency: 'Every 6 hours', maxDaily: '4 g/day', notes: 'IV infusion over 15 min' },
+      { route: 'rectal', dose: '500-1000 mg', frequency: 'Every 4-6 hours', maxDaily: '4 g/day', notes: 'If unable to take oral/IV' },
+    ],
+    pediatric: [
+      { route: 'oral', dose: '10-15 mg/kg/dose', frequency: 'Every 4-6 hours', maxDaily: '60 mg/kg/day', notes: 'Max 4 doses in 24h' },
+      { route: 'rectal', dose: '15-20 mg/kg/dose', frequency: 'Every 4-6 hours', maxDaily: '60 mg/kg/day', notes: 'PR if vomiting' },
+    ],
+    renalAdjustment: 'Extended interval if severe impairment (CrCl <10: Q8H)',
+    hepaticAdjustment: 'Avoid in severe impairment; max 2g/day if moderate',
+    elderlyAdjustment: 'Standard dosing; caution in frail elderly',
+  },
+  availableStrengths: ['500 mg tab', '1 g tab', '120 mg/5mL syrup', '250 mg/5mL syrup', '500 mg suppository', '10 mg/mL IV'],
+  routes: ['oral', 'iv', 'rectal'],
+  halfLife: '2-3 hours',
+  pregnancyCategory: 'Category A (safest analgesic in pregnancy)',
+  lactation: 'Excreted in breast milk (safe)',
+  monitoring: ['Liver function (if prolonged high-dose or overdose)', 'Pain score'],
+  interactions: [
+    { drug: 'Warfarin', severity: 'moderate', effect: 'Increased INR with chronic high-dose paracetamol', mechanism: 'Inhibition of vitamin K-dependent clotting factors' },
+    { drug: 'Alcohol (chronic)', severity: 'major', effect: 'Increased hepatotoxicity at lower doses', mechanism: 'CYP2E1 induction, glutathione depletion' },
+    { drug: 'Carbamazepine', severity: 'moderate', effect: 'Reduced paracetamol efficacy, increased toxicity', mechanism: 'CYP induction' },
+    { drug: 'Rifampin', severity: 'moderate', effect: 'Reduced paracetamol levels, increased hepatotoxicity risk', mechanism: 'CYP induction' },
+  ],
+  onset: '30 min (oral), 5 min (IV)',
+  duration: '4-6 hours',
+  maxDailyDose: '4 g (adults), 60 mg/kg (children)',
+  notes: 'First-line analgesic and antipyretic. Safe in pregnancy. Avoid exceeding 4g/day due to hepatotoxicity. IV form is significantly more expensive. Use weight-based dosing in children.',
+  mechanismOfAction: 'Inhibits COX-1 and COX-2 in the CNS (centrally acting), reducing prostaglandin synthesis. Also activates TRPV1 channels and cannabinoid receptors. Antipyretic via hypothalamic heat-regulating center.',
+  metabolism: 'Hepatic (CYP450, glucuronidation, sulfation)',
+  excretion: 'Renal (metabolites, <5% unchanged)',
+});
+
+reg({
+  id: 'amoxicillin', name: 'Amoxicillin', genericName: 'Amoxicillin trihydrate', brandNames: ['Amoxil', 'Moxilin', 'Amox'],
+  drugClass: 'Penicillin Antibiotic', therapeuticCategory: 'Anti-Infective',
+  indications: ['URTI (sinusitis, otitis media, pharyngitis)', 'Community-acquired pneumonia', 'UTI', 'Helicobacter pylori eradication', 'Lyme disease', 'Enterococcal infections'],
+  contraindications: ['Penicillin allergy (anaphylaxis history)', 'Infectious mononucleosis (rash risk)'],
+  sideEffects: ['Rash', 'Diarrhea', 'Nausea', 'Abdominal pain', 'Vomiting'],
+  seriousSideEffects: ['Anaphylaxis', 'Stevens-Johnson syndrome', 'C. difficile colitis', 'Drug-induced hepatitis'],
+  dosing: {
+    adult: [
+      { route: 'oral', dose: '500 mg-1 g', frequency: 'Every 8 hours', maxDaily: '6 g/day', notes: '500 mg TDS for most infections; 1g TDS for pneumonia' },
+      { route: 'oral', dose: '3 g', frequency: 'Single dose', notes: 'For uncomplicated gonorrhea' },
+    ],
+    pediatric: [
+      { route: 'oral', dose: '20-40 mg/kg/day', frequency: 'Divided every 8 hours', maxDaily: '3 g/day', notes: 'Standard dosing' },
+      { route: 'oral', dose: '80-90 mg/kg/day', frequency: 'Divided every 8-12 hours', maxDaily: '3 g/day', notes: 'High-dose for resistant pneumococcus' },
+    ],
+    renalAdjustment: 'CrCl 10-30: Q12H; CrCl <10: Q24H',
+    hepaticAdjustment: 'No adjustment needed',
+    elderlyAdjustment: 'Standard dosing',
+  },
+  availableStrengths: ['250 mg', '500 mg', '1 g (capsules/tabs)', '125 mg/5mL syrup', '250 mg/5mL syrup'],
+  routes: ['oral'],
+  halfLife: '60-90 minutes',
+  pregnancyCategory: 'Category B (safe)',
+  lactation: 'Excreted in breast milk (safe)',
+  monitoring: ['CBC (if prolonged therapy)', 'Renal function (if high-dose)', 'Signs of superinfection'],
+  interactions: [
+    { drug: 'Warfarin', severity: 'moderate', effect: 'Increased INR', mechanism: 'Reduced vitamin K production by gut flora' },
+    { drug: 'Methotrexate', severity: 'major', effect: 'Increased methotrexate toxicity', mechanism: 'Reduced renal clearance' },
+    { drug: 'Allopurinol', severity: 'moderate', effect: 'Increased rash risk', mechanism: 'Unknown' },
+    { drug: 'Oral contraceptives', severity: 'minor', effect: 'Reduced contraceptive efficacy', mechanism: 'Gut flora alteration (clinically insignificant)' },
+    { drug: 'Probenecid', severity: 'minor', effect: 'Increased amoxicillin levels', mechanism: 'Reduced tubular secretion' },
+  ],
+  onset: '1-2 hours',
+  duration: '6-8 hours',
+  maxDailyDose: '6 g',
+  notes: 'One of the most commonly prescribed antibiotics. Well-absorbed orally. Often combined with clavulanic acid (co-amoxiclav) to overcome beta-lactamase resistance.',
+  mechanismOfAction: 'Inhibits bacterial cell wall synthesis by binding to penicillin-binding proteins (PBPs), inhibiting transpeptidase activity during peptidoglycan cross-linking.',
+  metabolism: 'Hepatic (minor)',
+  excretion: 'Renal (60% unchanged, via tubular secretion)',
+});
+
+reg({
+  id: 'gentamicin', name: 'Gentamicin', genericName: 'Gentamicin sulfate', brandNames: ['Garamycin', 'Genticin', 'Gentamicin'],
+  drugClass: 'Aminoglycoside Antibiotic', therapeuticCategory: 'Anti-Infective',
+  indications: ['Severe sepsis (with other agents)', 'Gram-negative bacteremia', 'Pseudomonas aeruginosa infections', 'Enterococcal endocarditis (with penicillin)', 'Empiric therapy in neutropenic fever'],
+  contraindications: ['Aminoglycoside allergy', 'Myasthenia gravis (neuromuscular blockade risk)'],
+  sideEffects: ['Nephrotoxicity (reversible)', 'Ototoxicity (irreversible)', 'Vestibular toxicity', 'Nausea', 'Rash'],
+  seriousSideEffects: ['Acute renal failure', 'Irreversible hearing loss', 'Vestibular damage (ataxia)', 'Neuromuscular blockade (respiratory depression)'],
+  dosing: {
+    adult: [
+      { route: 'iv', dose: '5-7 mg/kg', frequency: 'Once daily', maxDaily: '7 mg/kg/day', notes: 'Extended-interval dosing (preferred); adjust by levels' },
+      { route: 'iv', dose: '1.5-2.5 mg/kg', frequency: 'Every 8-12 hours', maxDaily: '7 mg/kg/day', notes: 'Traditional divided dosing' },
+      { route: 'im', dose: '5-7 mg/kg', frequency: 'Once daily', notes: 'IM if no IV access' },
+    ],
+    pediatric: [
+      { route: 'iv', dose: '2.5 mg/kg/dose', frequency: 'Every 8-12 hours', notes: 'For neonates: adjust based on gestational age' },
+      { route: 'iv', dose: '5-7.5 mg/kg', frequency: 'Once daily', notes: 'Extended interval for older children' },
+    ],
+    renalAdjustment: 'CrCl 30-60: Q24-36H; CrCl 10-30: Q36-48H; CrCl <10: Q48H+',
+    hepaticAdjustment: 'No adjustment needed',
+    elderlyAdjustment: 'Reduce dose and monitor levels closely',
+  },
+  availableStrengths: ['10 mg/mL', '20 mg/mL', '40 mg/mL (injection)'],
+  routes: ['iv', 'im', 'topical', 'intrathecal'],
+  halfLife: '2-4 hours (increased in renal impairment)',
+  pregnancyCategory: 'Category C (avoid unless life-threatening infection)',
+  lactation: 'Excreted in breast milk (compatible with monitoring)',
+  monitoring: ['Serum gentamicin levels (peak and trough)', 'Renal function (creatinine, eGFR)', 'Audiometry (if prolonged therapy)', 'Vestibular assessment'],
+  interactions: [
+    { drug: 'Furosemide', severity: 'major', effect: 'Increased ototoxicity and nephrotoxicity', mechanism: 'Additive toxicity' },
+    { drug: 'Vancomycin', severity: 'moderate', effect: 'Increased nephrotoxicity', mechanism: 'Additive renal toxicity' },
+    { drug: 'Cisplatin', severity: 'major', effect: 'Increased nephrotoxicity/ototoxicity', mechanism: 'Additive toxicity' },
+    { drug: 'NSAIDs', severity: 'moderate', effect: 'Increased nephrotoxicity risk', mechanism: 'Reduced renal blood flow' },
+    { drug: 'Neuromuscular blockers', severity: 'major', effect: 'Enhanced/residual neuromuscular blockade', mechanism: 'Presynaptic inhibition' },
+  ],
+  onset: 'IV: immediate; IM: 30-60 min',
+  duration: '12-24 hours (dose-dependent)',
+  maxDailyDose: '7 mg/kg (extended interval)',
+  notes: 'Always check renal function BEFORE each dose. Extended-interval dosing (once daily) is as effective and less nephrotoxic than divided doses. Trough levels should be <1 mcg/mL for once-daily, <2 for traditional. Peak varies by indication.',
+  mechanismOfAction: 'Irreversibly binds to 30S ribosomal subunit, inhibiting bacterial protein synthesis and causing misreading of mRNA codons.',
+  metabolism: 'Not metabolized',
+  excretion: 'Renal (95% unchanged, glomerular filtration)',
+});
+
+reg({
+  id: 'salbutamol', name: 'Salbutamol (Albuterol)', genericName: 'Salbutamol sulfate', brandNames: ['Ventolin', 'Salbulin', 'Proventil'],
+  drugClass: 'Short-Acting Beta-2 Agonist (SABA)', therapeuticCategory: 'Respiratory',
+  indications: ['Acute asthma exacerbation', 'Exercise-induced bronchospasm', 'COPD exacerbation', 'Bronchospasm prophylaxis'],
+  contraindications: ['Hypersensitivity', 'Tachyarrhythmias (caution)', 'Severe hypokalemia'],
+  sideEffects: ['Tremor', 'Tachycardia', 'Palpitations', 'Headache', 'Muscle cramps', 'Nervousness'],
+  seriousSideEffects: ['Hypokalemia (high doses)', 'Cardiac ischemia (rare)', 'Paradoxical bronchospasm (rare)'],
+  dosing: {
+    adult: [
+      { route: 'inhaler', dose: '100-200 mcg (1-2 puffs)', frequency: 'Every 4-6 hours PRN', maxDaily: '8 puffs/day', notes: 'PRN for symptom relief' },
+      { route: 'nebulised', dose: '2.5-5 mg', frequency: 'Every 4-6 hours', maxDaily: '15 mg/day', notes: 'Acute exacerbation: up to 5mg Q20min x 3' },
+      { route: 'iv', dose: '250 mcg (4 mcg/min)', frequency: 'Slow IV/Infusion', notes: 'Only in ICU setting for severe status asthmaticus' },
+    ],
+    pediatric: [
+      { route: 'inhaler', dose: '100 mcg (1 puff)', frequency: 'Every 4-6 hours PRN', notes: 'Use with spacer' },
+      { route: 'nebulised', dose: '2.5 mg', frequency: 'Every 4-6 hours', notes: '<12 years: 2.5 mg; >12 years: 5 mg' },
+    ],
+    renalAdjustment: 'No adjustment needed',
+    hepaticAdjustment: 'No adjustment needed',
+    elderlyAdjustment: 'Standard dosing; monitor cardiac status',
+  },
+  availableStrengths: ['100 mcg/puff (inhaler)', '2.5 mg/2.5mL nebules', '5 mg/2.5mL nebules', '500 mcg/mL IV'],
+  routes: ['inhaler', 'nebulised', 'iv', 'oral'],
+  halfLife: '3-6 hours',
+  pregnancyCategory: 'Category C (safe in asthma management)',
+  lactation: 'Excreted in breast milk (safe)',
+  monitoring: ['Peak expiratory flow rate', 'Symptom frequency', 'Inhaler technique', 'Heart rate with high doses'],
+  interactions: [
+    { drug: 'Beta blockers', severity: 'major', effect: 'Antagonised bronchodilation, risk of bronchospasm', mechanism: 'Beta-receptor blockade' },
+    { drug: 'Digoxin', severity: 'moderate', effect: 'Increased risk of arrhythmias/hypokalemia', mechanism: 'Beta-2 mediated hypokalemia' },
+    { drug: 'Corticosteroids', severity: 'moderate', effect: 'Increased hypokalemia risk with high-dose salbutamol', mechanism: 'Additive effect' },
+    { drug: 'Diuretics (loop)', severity: 'moderate', effect: 'Increased hypokalemia', mechanism: 'Additive potassium wasting' },
+  ],
+  onset: '5-15 min (inhaler), 5 min (nebulised)',
+  duration: '3-6 hours',
+  maxDailyDose: 'Varies by route; generally 8 puffs/day maintenance, up to 15mg nebulised/day',
+  notes: 'Reliever (rescue) medication for asthma. Blue inhaler. If needed more than 3x/week, escalate controller therapy. Check inhaler technique at every visit.',
+  mechanismOfAction: 'Selective beta-2 adrenergic receptor agonist, causing bronchodilation via relaxation of bronchial smooth muscle, also reduces mast cell mediator release.',
+  metabolism: 'Hepatic (first-pass for oral; minimal for inhaled)',
+  excretion: 'Renal (metabolites)',
+});
+
+reg({
+  id: 'prednisolone', name: 'Prednisolone', genericName: 'Prednisolone', brandNames: ['Deltacortril', 'Predsol', 'Precortisyl'],
+  drugClass: 'Corticosteroid (Systemic)', therapeuticCategory: 'Immunology / Inflammation',
+  indications: ['Acute asthma exacerbation', 'COPD exacerbation', 'Autoimmune diseases (SLE, RA, IBD)', 'Allergic reactions', 'Organ transplantation', 'Inflammatory bowel disease'],
+  contraindications: ['Systemic fungal infection', 'Hypersensitivity', 'Live vaccine administration'],
+  sideEffects: ['Increased appetite', 'Weight gain', 'Insomnia', 'Mood changes', 'Fluid retention', 'Hypertension', 'Hyperglycemia', 'Osteoporosis'],
+  seriousSideEffects: ['Adrenal suppression', 'Osteoporosis/fractures', 'Avascular necrosis', 'Peptic ulcer disease', 'Psychosis', 'Immunosuppression', 'Cushing syndrome'],
+  dosing: {
+    adult: [
+      { route: 'oral', dose: '30-60 mg', frequency: 'Once daily', notes: 'Asthma/COPD: 40mg OD for 5-7 days, no taper needed' },
+      { route: 'oral', dose: '5-20 mg', frequency: 'Once daily', notes: 'Chronic inflammatory conditions: lowest effective dose' },
+      { route: 'oral', dose: '0.5-1 mg/kg', frequency: 'Once daily', notes: 'High-dose for severe autoimmune conditions' },
+    ],
+    pediatric: [
+      { route: 'oral', dose: '1-2 mg/kg/day', frequency: 'Once daily', maxDaily: '60 mg/day', notes: 'For 5-7 days, no taper' },
+    ],
+    renalAdjustment: 'No adjustment needed',
+    hepaticAdjustment: 'No adjustment needed (prednisolone is active form)',
+    elderlyAdjustment: 'Use lowest effective dose; monitor for osteoporosis',
+  },
+  availableStrengths: ['5 mg', '15 mg', '25 mg', '30 mg (tablets)', '5 mg/5mL oral solution', '25 mg/mL injection'],
+  routes: ['oral', 'iv', 'im', 'rectal'],
+  halfLife: '12-36 hours (biological)',
+  pregnancyCategory: 'Category C (benefit likely outweighs risk)',
+  lactation: 'Excreted in breast milk (safe at low doses)',
+  monitoring: ['Blood glucose', 'Blood pressure', 'Bone density (if >3 months use)', 'Growth in children', 'Eye exam (if prolonged)'],
+  interactions: [
+    { drug: 'NSAIDs', severity: 'major', effect: 'Increased risk of GI ulceration and bleeding', mechanism: 'Additive mucosal injury' },
+    { drug: 'Anticoagulants (Warfarin)', severity: 'moderate', effect: 'Altered INR (variable effect)', mechanism: 'Multiple mechanisms' },
+    { drug: 'Insulin/Oral hypoglycemics', severity: 'moderate', effect: 'Increased blood glucose, need higher doses', mechanism: 'Counter-regulatory hormone effect' },
+    { drug: 'Digoxin', severity: 'moderate', effect: 'Increased digoxin toxicity (hypokalemia)', mechanism: 'Mineralocorticoid effect' },
+    { drug: 'Diuretics', severity: 'moderate', effect: 'Increased hypokalemia', mechanism: 'Additive potassium wasting' },
+    { drug: 'Live vaccines', severity: 'major', effect: 'Risk of disseminated infection', mechanism: 'Immunosuppression' },
+  ],
+  onset: '1-2 hours (oral), immediate (IV)',
+  duration: '12-36 hours',
+  maxDailyDose: '60 mg (standard acute); up to 100 mg in severe disease',
+  notes: 'Short courses (5-7 days) for acute exacerbations do NOT need tapering. Always use lowest effective dose for shortest duration. Calcium + Vitamin D supplementation if >3 months use.',
+  mechanismOfAction: 'Binds to glucocorticoid receptors, modulating gene expression leading to anti-inflammatory and immunosuppressive effects via inhibition of NF-kB, AP-1, and reduction of cytokine production.',
+  metabolism: 'Hepatic (prednisolone is active form; prednisone is pro-drug)',
+  excretion: 'Renal (metabolites)',
+});
+
+reg({
+  id: 'omeprazole', name: 'Omeprazole', genericName: 'Omeprazole magnesium', brandNames: ['Losec', 'Prilosec', 'Omecid'],
+  drugClass: 'Proton Pump Inhibitor (PPI)', therapeuticCategory: 'Gastroenterology',
+  indications: ['GERD', 'Peptic ulcer disease', 'HP eradication (triple therapy)', 'Stress ulcer prophylaxis', 'Zollinger-Ellison syndrome', 'NSAID-related ulcer prevention'],
+  contraindications: ['Hypersensitivity', 'Concurrent atazanavir/rilpivirine', 'Long-term use without clear indication'],
+  sideEffects: ['Headache', 'Nausea', 'Abdominal pain', 'Constipation', 'Flatulence', 'Diarrhea'],
+  seriousSideEffects: ['C. difficile colitis', 'Osteoporosis-related fractures', 'Acute interstitial nephritis', 'Vitamin B12 deficiency', 'Hypomagnesemia', 'Fundic gland polyps'],
+  dosing: {
+    adult: [
+      { route: 'oral', dose: '20 mg', frequency: 'Once daily', maxDaily: '40 mg/day', notes: 'Standard dose; take before breakfast' },
+      { route: 'oral', dose: '40 mg', frequency: 'Once daily', notes: 'Erosive esophagitis, HP eradication' },
+      { route: 'iv', dose: '20-40 mg', frequency: 'Once daily', notes: 'IV if unable to take oral' },
+    ],
+    pediatric: [
+      { route: 'oral', dose: '0.7-3.3 mg/kg/day', frequency: 'Once daily', maxDaily: '40 mg/day', notes: 'Weight-based dosing' },
+    ],
+    renalAdjustment: 'No adjustment needed',
+    hepaticAdjustment: 'Max 20 mg/day in severe impairment',
+    elderlyAdjustment: 'Standard dosing; consider shorter duration',
+  },
+  availableStrengths: ['10 mg', '20 mg', '40 mg (capsules)', '20 mg IV vial'],
+  routes: ['oral', 'iv'],
+  halfLife: '0.5-1 hour (effect lasts 24+ hours)',
+  pregnancyCategory: 'Category B (most studied PPI in pregnancy)',
+  lactation: 'Excreted in breast milk (considered compatible)',
+  monitoring: ['Magnesium levels (if prolonged use)', 'Bone density (if >1 year use)', 'Vitamin B12 (if long-term)'],
+  interactions: [
+    { drug: 'Clopidogrel', severity: 'moderate', effect: 'Reduced clopidogrel efficacy (controversial)', mechanism: 'CYP2C19 inhibition' },
+    { drug: 'Warfarin', severity: 'moderate', effect: 'Increased INR', mechanism: 'CYP450 inhibition' },
+    { drug: 'Methotrexate', severity: 'major', effect: 'Increased methotrexate levels, toxicity', mechanism: 'Reduced renal clearance' },
+    { drug: 'Citalopram/Escitalopram', severity: 'moderate', effect: 'Risk of QT prolongation with high-dose omeprazole', mechanism: 'CYP2C19 inhibition' },
+    { drug: 'Iron supplements', severity: 'minor', effect: 'Reduced iron absorption', mechanism: 'Increased gastric pH' },
+  ],
+  onset: '1-4 hours (max effect at 3-5 days)',
+  duration: '24-48 hours',
+  maxDailyDose: '40 mg (up to 120 mg in Zollinger-Ellison)',
+  notes: 'Most effective when taken 30-60 min before breakfast. Short-term (4-8 weeks) for most indications. Rebound acid hypersecretion upon withdrawal after >8 weeks.',
+  mechanismOfAction: 'Irreversibly inhibits gastric H+/K+ ATPase (proton pump) in parietal cells, reducing gastric acid secretion by up to 99% at steady state.',
+  metabolism: 'Hepatic (CYP2C19, CYP3A4)',
+  excretion: 'Renal (80% metabolites)',
+});
+
+reg({
+  id: 'diazepam', name: 'Diazepam', genericName: 'Diazepam', brandNames: ['Valium', 'Diazemuls', 'Stesolid'],
+  drugClass: 'Benzodiazepine', therapeuticCategory: 'CNS / Psychiatry',
+  indications: ['Status epilepticus (first-line)', 'Severe anxiety/panic', 'Alcohol withdrawal', 'Muscle spasm', 'Sedation (procedural)', 'Benzodiazepine withdrawal'],
+  contraindications: ['Severe respiratory depression', 'Myasthenia gravis', 'Severe hepatic impairment', 'Sleep apnoea syndrome', 'Acute narrow-angle glaucoma', 'Benzodiazepine hypersensitivity'],
+  sideEffects: ['Sedation', 'Drowsiness', 'Ataxia', 'Dizziness', 'Slurred speech', 'Confusion', 'Amnesia (anterograde)'],
+  seriousSideEffects: ['Respiratory depression (with high doses/IV)', 'Paradoxical reaction (agitation)', 'Dependence (tolerance, withdrawal)', 'Falls (elderly)', 'Risk of abuse'],
+  dosing: {
+    adult: [
+      { route: 'oral', dose: '5-10 mg', frequency: 'Every 6-8 hours PRN', maxDaily: '30 mg/day', notes: 'For anxiety/muscle spasm' },
+      { route: 'iv', dose: '5-10 mg', frequency: 'Slow IV push (5 mg/min)', notes: 'For status epilepticus; may repeat after 10 min' },
+      { route: 'rectal', dose: '5-10 mg', frequency: 'Single dose PR', notes: 'When IV not available; status epilepticus' },
+      { route: 'oral', dose: '10-20 mg', frequency: 'Every 6-8 hours', notes: 'Alcohol withdrawal (reducing regimen)' },
+    ],
+    pediatric: [
+      { route: 'iv', dose: '0.1-0.3 mg/kg/dose', frequency: 'Every 5-10 min PRN', maxDaily: '5 mg (children), 10 mg (adolescents)', notes: 'Status epilepticus' },
+      { route: 'rectal', dose: '0.5 mg/kg', frequency: 'Single dose', notes: 'Max 10 mg; status epilepticus' },
+    ],
+    renalAdjustment: 'Caution; prolonged half-life in renal failure',
+    hepaticAdjustment: 'Reduce dose by 50% in cirrhosis',
+    elderlyAdjustment: 'Start 2-5 mg daily; avoid if possible (falls risk)',
+  },
+  availableStrengths: ['2 mg', '5 mg', '10 mg (tablets)', '5 mg/5mL oral solution', '5 mg/mL (injection)', '5 mg, 10 mg (rectal tubes)'],
+  routes: ['oral', 'iv', 'rectal', 'im'],
+  halfLife: '20-100 hours (active metabolite: 50-120 hours)',
+  pregnancyCategory: 'Category D (avoid; risk of neonatal withdrawal)',
+  lactation: 'Excreted in breast milk; avoid',
+  monitoring: ['Respiratory rate (with IV)', 'Blood pressure', 'Level of sedation', 'Signs of dependence'],
+  interactions: [
+    { drug: 'Alcohol', severity: 'major', effect: 'Increased sedation, respiratory depression risk', mechanism: 'Additive CNS depression' },
+    { drug: 'Opioids', severity: 'major', effect: 'Severe respiratory depression, coma', mechanism: 'Additive CNS depression' },
+    { drug: 'Antipsychotics', severity: 'moderate', effect: 'Increased sedation', mechanism: 'Additive effect' },
+    { drug: 'Phenytoin', severity: 'moderate', effect: 'Altered phenytoin levels', mechanism: 'CYP metabolism competition' },
+    { drug: 'Omeprazole', severity: 'moderate', effect: 'Reduced diazepam clearance', mechanism: 'CYP2C19 inhibition' },
+  ],
+  onset: 'Oral: 30-60 min; IV: 1-3 min; Rectal: 5-10 min',
+  duration: '6-24 hours (acute effects); 2-7 days (biological)',
+  maxDailyDose: '30 mg (oral); up to 40 mg IV in status epilepticus',
+  notes: 'First-line for status epilepticus (IV/rectal). Short-term use only (max 2-4 weeks) for anxiety due to dependence risk. For alcohol withdrawal, use a symptom-triggered or fixed-dose reducing regimen.',
+  mechanismOfAction: 'Binds to GABA-A receptor at the benzodiazepine site, potentiating GABA-mediated chloride influx, leading to neuronal hyperpolarization and CNS depression.',
+  metabolism: 'Hepatic (CYP2C19, CYP3A4) to active metabolite (desmethyldiazepam)',
+  excretion: 'Renal (metabolites)',
+});
+
+reg({
+  id: 'haloperidol', name: 'Haloperidol', genericName: 'Haloperidol', brandNames: ['Haldol', 'Serenace', 'Dozirol'],
+  drugClass: 'Typical Antipsychotic (Butyrophenone)', therapeuticCategory: 'Psychiatry',
+  indications: ['Acute psychosis', 'Schizophrenia (positive symptoms)', 'Delirium', 'Acute agitation', 'Tourette syndrome', 'Nausea/vomiting (off-label)'],
+  contraindications: ['Parkinson disease (severe EPS risk)', 'Comatose states', 'CNS depression', 'QT prolongation (baseline)', 'Lewy body dementia'],
+  sideEffects: ['Extrapyramidal symptoms (dystonia, akathisia, parkinsonism)', 'Sedation', 'Dry mouth', 'Constipation', 'Blurred vision'],
+  seriousSideEffects: ['Tardive dyskinesia (long-term)', 'Neuroleptic malignant syndrome', 'QT prolongation / Torsades de pointes', 'Seizures', 'Agranulocytosis (rare)'],
+  dosing: {
+    adult: [
+      { route: 'oral', dose: '1.5-5 mg', frequency: 'Every 8-12 hours', maxDaily: '20 mg/day', notes: 'Start low in elderly/naive' },
+      { route: 'im', dose: '2.5-10 mg', frequency: 'Every 1-8 hours PRN', maxDaily: '20 mg/day', notes: 'For acute agitation' },
+      { route: 'iv', dose: '2.5-5 mg', frequency: 'Slow IV', notes: 'For delirium/ICU agitation' },
+      { route: 'oral', dose: '5-20 mg', frequency: 'Once daily', notes: 'Maintenance in chronic psychosis' },
+    ],
+    pediatric: [
+      { route: 'oral', dose: '0.01-0.05 mg/kg/day', frequency: 'Divided BID', notes: 'Start low; very potent' },
+    ],
+    renalAdjustment: 'No adjustment needed',
+    hepaticAdjustment: 'Reduce dose in severe impairment',
+    elderlyAdjustment: 'Start 0.5-1 mg daily; extreme caution',
+  },
+  availableStrengths: ['0.5 mg', '1.5 mg', '5 mg', '10 mg (tablets)', '2 mg/mL (oral liquid)', '5 mg/mL (injection)'],
+  routes: ['oral', 'im', 'iv'],
+  halfLife: '12-36 hours (oral); 21 hours (IM depot)',
+  pregnancyCategory: 'Category C',
+  lactation: 'Excreted in breast milk; monitor infant for sedation',
+  monitoring: ['ECG (QT interval at baseline and with dose increases)', 'Extrapyramidal symptom assessment', 'Liver function tests', 'CBC (agranulocytosis screen)'],
+  interactions: [
+    { drug: 'QT-prolonging drugs', severity: 'major', effect: 'Increased risk of fatal arrhythmias', mechanism: 'Additive QT prolongation' },
+    { drug: 'CNS depressants (alcohol, opioids)', severity: 'major', effect: 'Increased sedation and respiratory depression', mechanism: 'Additive CNS depression' },
+    { drug: 'Fluoxetine/Paroxetine', severity: 'moderate', effect: 'Increased haloperidol levels', mechanism: 'CYP2D6 inhibition' },
+    { drug: 'Lithium', severity: 'moderate', effect: 'Encephalopathy risk (rare)', mechanism: 'Unknown' },
+    { drug: 'Anticholinergics', severity: 'moderate', effect: 'May worsen EPS via central anticholinergic mechanisms', mechanism: 'Cholinergic-dopaminergic imbalance' },
+  ],
+  onset: 'Oral: 30-60 min; IM: 15-30 min; IV: 5-10 min',
+  duration: '12-72 hours',
+  maxDailyDose: '20 mg (oral), 20 mg (IM), 15 mg (IV)',
+  notes: 'Gold-standard for acute agitation and delirium. High EPS risk, especially at high doses. Always use lowest effective dose. Monitor QTc at baseline and with each dose increase.',
+  mechanismOfAction: 'Potent D2 dopamine receptor antagonist in mesolimbic and mesocortical pathways. Also has some sigma and alpha-1 receptor affinity.',
+  metabolism: 'Hepatic (CYP3A4, CYP2D6)',
+  excretion: 'Renal (60%), biliary (40%)',
+});
+
+reg({
+  id: 'morphine', name: 'Morphine', genericName: 'Morphine sulfate', brandNames: ['Oramorph', 'MST Continus', 'Sevredol', 'Morphine'],
+  drugClass: 'Opioid Analgesic', therapeuticCategory: 'Pain Management',
+  indications: ['Moderate-severe acute pain', 'Post-operative pain', 'Myocardial infarction (chest pain)', 'Cancer pain', 'Pulmonary oedema (acute, reduces preload/afterload)', 'End-of-life care'],
+  contraindications: ['Respiratory depression', 'Severe asthma/COPD', 'Paralytic ileus', 'Head injury (raised ICP)', 'Pheochromocytoma', 'Concurrent MAOIs', 'Hypersensitivity'],
+  sideEffects: ['Nausea/vomiting', 'Constipation', 'Sedation', 'Dizziness', 'Pruritus', 'Urinary retention', 'Confusion'],
+  seriousSideEffects: ['Respiratory depression', 'Hypotension', 'Bradycardia', 'Opioid dependence/tolerance', 'Adrenal insufficiency (prolonged use)'],
+  dosing: {
+    adult: [
+      { route: 'oral', dose: '5-20 mg', frequency: 'Every 4 hours PRN', maxDaily: 'No absolute max; titrate to effect', notes: 'Immediate release (Oramorph, Sevredol)' },
+      { route: 'oral', dose: '10-30 mg', frequency: 'Every 12 hours', notes: 'Modified release (MST Continus)' },
+      { route: 'iv', dose: '2.5-10 mg', frequency: 'Slow IV over 4-5 min', notes: 'Titrate to effect; have naloxone ready' },
+      { route: 'sc', dose: '5-10 mg', frequency: 'Every 4 hours', notes: 'SC if no IV access' },
+      { route: 'sc', dose: '0.5-2 mg/hour', frequency: 'Continuous infusion', notes: 'Via syringe driver; for end-of-life care' },
+    ],
+    pediatric: [
+      { route: 'oral', dose: '0.2-0.5 mg/kg/dose', frequency: 'Every 4-6 hours', notes: 'Max 15 mg/dose' },
+      { route: 'iv', dose: '0.05-0.1 mg/kg/dose', frequency: 'Every 2-4 hours', notes: 'Titrate to effect with caution' },
+    ],
+    renalAdjustment: 'Reduce dose by 50% if CrCl <30; avoid in ESRD',
+    hepaticAdjustment: 'Reduce dose; increased bioavailability',
+    elderlyAdjustment: 'Start at 50% of adult dose; increase slowly',
+  },
+  availableStrengths: ['5 mg', '10 mg', '15 mg', '20 mg (tablets)', '10 mg/5mL oral solution', '10 mg/mL (injection)'],
+  routes: ['oral', 'iv', 'sc', 'im', 'rectal', 'intrathecal'],
+  halfLife: '2-4 hours (adults); increased in elderly/renal failure',
+  pregnancyCategory: 'Category C (avoid in labour; neonatal respiratory depression)',
+  lactation: 'Excreted in breast milk (safe at low doses)',
+  monitoring: ['Pain score (regularly)', 'Respiratory rate (monitor hourly for 12h after initiation)', 'Oxygen saturation', 'Sedation score', 'Bowel function', 'Nausea/vomiting'],
+  interactions: [
+    { drug: 'Benzodiazepines (Diazepam)', severity: 'major', effect: 'Severe respiratory depression, coma, death', mechanism: 'Additive CNS depression' },
+    { drug: 'Alcohol', severity: 'major', effect: 'Increased sedation and respiratory depression', mechanism: 'Additive CNS depression' },
+    { drug: 'MAOIs', severity: 'major', effect: 'Life-threatening serotonin syndrome or CNS excitation', mechanism: 'Serotonin/noradrenaline interaction' },
+    { drug: 'Gabapentin/Pregabalin', severity: 'major', effect: 'Increased risk of opioid-related death', mechanism: 'Additive CNS depression' },
+    { drug: 'Metoclopramide', severity: 'moderate', effect: 'Increased risk of extrapyramidal side effects', mechanism: 'Additive dopaminergic blockade' },
+  ],
+  onset: 'Oral: 30 min; IV: 5-10 min; SC: 15-30 min',
+  duration: 'Oral IR: 4-6h; Oral MR: 12-24h; IV: 2-4h',
+  maxDailyDose: 'No absolute maximum; titrate to effect with appropriate monitoring',
+  notes: 'Gold-standard opioid for moderate-severe pain. Always prescribe with anti-emetic and laxative (PRN). Naloxone should be available. Monitor respiratory rate closely. Morphine is pro-drug, partially metabolized to M6G (more potent).',
+  mechanismOfAction: 'Agonist at mu-opioid receptors (primarily), also kappa and delta, in CNS and periphery, producing analgesia, sedation, euphoria and respiratory depression.',
+  metabolism: 'Hepatic (glucuronidation to M3G, M6G)',
+  excretion: 'Renal (90% metabolites)',
+});
+
 export function getDrug(id: string): DrugEntry | undefined {
   return DRUG_DATABASE[id];
 }
@@ -786,6 +1214,35 @@ export function calculateDoseByWeight(drugId: string, weightKg: number, isPediat
   }
 
   return drug.dosing.adult[0]?.dose || '';
+}
+
+export function getCommonDrugs(): { id: string; name: string; category: string }[] {
+  return Object.values(DRUG_DATABASE).map(d => ({
+    id: d.id,
+    name: d.name,
+    category: d.therapeuticCategory,
+  }));
+}
+
+export function searchDrugsBasic(query: string): DrugEntry[] {
+  if (!query || query.length < 2) return [];
+  const q = query.toLowerCase();
+  return Object.values(DRUG_DATABASE).filter(d =>
+    d.name.toLowerCase().includes(q) ||
+    d.genericName.toLowerCase().includes(q) ||
+    d.id.toLowerCase().includes(q) ||
+    d.brandNames.some(b => b.toLowerCase().includes(q))
+  );
+}
+
+export function getDosingSummary(drugId: string, route?: string): string {
+  const drug = DRUG_DATABASE[drugId];
+  if (!drug) return '';
+  const doses = route
+    ? drug.dosing.adult.filter(d => d.route.toLowerCase() === route.toLowerCase())
+    : drug.dosing.adult;
+  if (doses.length === 0) return drug.dosing.adult[0]?.dose || '';
+  return doses.map(d => `${d.dose} ${d.frequency}${d.maxDaily ? ` (max ${d.maxDaily})` : ''}`).join('; ');
 }
 
 export { DRUG_DATABASE };

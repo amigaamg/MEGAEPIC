@@ -1,0 +1,262 @@
+'use client';
+
+import { useMemo } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { AlertTriangle, ArrowRight, Calendar, Clock, Users, Pill, FlaskConical, Scan, FileText, LogOut, Activity, Bell, TrendingUp, BarChart3, UserCog, Settings, Menu, ChevronRight, CheckCircle, XCircle, PlusCircle, UserPlus } from 'lucide-react';
+import { can } from '@/lib/amexan';
+
+const C = {
+  navy: 'var(--sky-800)',
+  sky: 'var(--primary)',
+  skyLight: 'var(--sky-50)',
+  skySoft: 'var(--sky-400)',
+  white: 'var(--surface-card)',
+  panel: 'var(--surface-elevated)',
+  border: 'var(--surface-border)',
+  text: 'var(--text-primary)',
+  textLight: 'var(--text-muted)',
+  green: 'var(--green)',
+  amber: 'var(--amber)',
+  red: 'var(--red)',
+  purple: 'var(--purple)',
+};
+
+const S = {
+  page: { minHeight: '100vh', background: C.panel, fontFamily: "'Inter', system-ui, sans-serif", color: C.text, display: 'flex', flexDirection: 'column' as const },
+  topBar: { height: 64, background: C.white, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', padding: '0 24px', gap: 12, flexShrink: 0 },
+  logoText: { fontSize: 14, fontWeight: 700, color: C.navy },
+  body: { flex: 1, display: 'flex', overflow: 'hidden' },
+  main: { flex: 1, overflow: 'auto', padding: 24 },
+  card: { background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, padding: 20 },
+  badge: (c: string) => ({ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: `${c}15`, color: c }),
+  btn: (c: string) => ({ padding: '8px 16px', borderRadius: 8, border: 'none', background: c, color: C.white, fontSize: 11, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }),
+  btnO: { padding: '8px 16px', borderRadius: 8, border: `1px solid ${C.border}`, background: C.white, color: C.text, fontSize: 11, fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 },
+  navItem: (a: boolean) => ({ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 8, fontSize: 12, fontWeight: a ? 600 : 400, color: a ? C.sky : C.text, background: a ? C.skyLight : 'transparent', cursor: 'pointer', border: 'none', width: '100%', textAlign: 'left' as const }),
+};
+
+const ICONS: Record<string, any> = { Pill, FlaskConical, Scan, FileText, LogOut, Activity, Calendar, Users, Bell, TrendingUp, BarChart3, UserCog, Settings, AlertTriangle, ArrowRight, Clock, CheckCircle, XCircle, PlusCircle, UserPlus, ChevronRight, Menu };
+
+export default function DashboardPage() {
+  const { session, dashboard, can: canAccess, loading, user, logout } = useAuth();
+  const router = useRouter();
+
+  const activeSection = useMemo(() => {
+    if (!dashboard || dashboard.sections.length === 0) return null;
+    return dashboard.sections.reduce((a, b) => a.priority < b.priority ? a : b);
+  }, [dashboard]);
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: C.panel, fontFamily: "'Inter', system-ui, sans-serif" }}>
+        <div style={{ textAlign: 'center' }}>
+          <Activity size={32} color={C.sky} style={{ animation: 'spin 1s linear infinite' }} />
+          <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+          <p style={{ marginTop: 12, fontSize: 13, color: C.textLight }}>Loading AMEXAN...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: C.panel, fontFamily: "'Inter', system-ui, sans-serif" }}>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: 16, fontWeight: 600, color: C.navy }}>Not signed in</p>
+          <button onClick={() => router.push('/login')} style={{ marginTop: 12, ...S.btn(C.sky) }}>
+            Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!dashboard) return null;
+
+  function Icon({ name, size = 14 }: { name: string; size?: number }) {
+    const I = ICONS[name];
+    return I ? <I size={size} /> : <Activity size={size} />;
+  }
+
+  return (
+    <div style={S.page}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');`}</style>
+
+      {/* Top Bar */}
+      <div style={S.topBar}>
+        <span style={S.logoText}>AMEXAN</span>
+        <span style={{ fontSize: 10, color: C.textLight, background: C.panel, padding: '2px 8px', borderRadius: 4 }}>{dashboard.title}</span>
+        <div style={{ flex: 1 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 11, color: C.textLight }}>{user?.email}</span>
+          <button onClick={logout} style={S.btnO}>
+            <LogOut size={14} />
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      <div style={S.body}>
+        {/* Left Nav */}
+        <div style={{ width: 220, background: C.white, borderRight: `1px solid ${C.border}`, display: 'flex', flexDirection: 'column', padding: '12px 8px', gap: 1, flexShrink: 0, overflow: 'auto' }}>
+          <div style={{ fontSize: 10, fontWeight: 600, color: C.textLight, textTransform: 'uppercase', letterSpacing: '0.05em', padding: '4px 12px 8px' }}>
+            {session.professional?.primaryCategory === 'medical_doctor' ? 'Clinician' :
+             session.professional?.primaryCategory === 'nurse' ? 'Nursing' :
+             session.professional?.primaryCategory === 'facility_admin' ? 'Administration' :
+             session.professional?.primaryCategory === 'pharmacist' ? 'Pharmacy' :
+             session.professional?.primaryCategory === 'lab_technologist' ? 'Laboratory' : 'Workspace'}
+          </div>
+          {dashboard.sections.map(section => (
+            <button key={section.id} style={S.navItem(activeSection?.id === section.id)}>
+              {section.type === 'tasks' ? <Clipboard size={14} /> :
+               section.type === 'patients' ? <Users size={14} /> :
+               section.type === 'alerts' ? <Bell size={14} /> :
+               section.type === 'schedule' ? <Calendar size={14} /> :
+               <Activity size={14} />}
+              {section.title.length > 22 ? section.title.slice(0, 22) + '...' : section.title}
+              {section.items.filter(i => i.status === 'urgent' || i.status === 'critical').length > 0 && (
+                <span style={{ marginLeft: 'auto', background: C.red, color: C.white, borderRadius: 10, padding: '1px 6px', fontSize: 9, fontWeight: 700 }}>
+                  {section.items.filter(i => i.status === 'urgent' || i.status === 'critical').length}
+                </span>
+              )}
+            </button>
+          ))}
+
+          {/* Workspace Links */}
+          <div style={{ borderTop: `1px solid ${C.border}`, padding: '12px 0', marginTop: 8 }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: C.textLight, textTransform: 'uppercase', letterSpacing: '0.05em', padding: '4px 12px 8px' }}>
+              Workspace
+            </div>
+            {dashboard.workspaceLinks.map(link => (
+              <button key={link.id} onClick={() => router.push(link.href)} style={S.navItem(false)}>
+                <div style={{ width: 14, height: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon name={link.icon} size={14} />
+                </div>
+                {link.label}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ flex: 1 }} />
+
+          {/* Quick Actions */}
+          <div style={{ borderTop: `1px solid ${C.border}`, padding: '12px 0' }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: C.textLight, textTransform: 'uppercase', letterSpacing: '0.05em', padding: '4px 12px 8px' }}>
+              Quick Actions
+            </div>
+            {dashboard.quickActions.map(action => (
+              <button key={action.id} onClick={() => router.push(action.link)} style={S.btnO}>
+                <div style={{ width: 14, height: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon name={action.icon} size={14} />
+                </div>
+                {action.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div style={S.main}>
+          {/* Greeting */}
+          <div style={{ marginBottom: 24 }}>
+            <h1 style={{ fontSize: 20, fontWeight: 700, color: C.navy, margin: 0 }}>{dashboard.greeting}</h1>
+            <p style={{ fontSize: 12, color: C.textLight, marginTop: 4 }}>
+              {session.currentOrganization ? `Workspace: ${session.currentOrganization.name}` : 'Individual Practice'}
+              {session.currentDepartment ? ` — ${session.currentDepartment.name}` : ''}
+              {session.onDuty ? '' : ' (Off Duty)'}
+            </p>
+          </div>
+
+          {/* Sections */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {dashboard.sections.map(section => (
+              <div key={section.id} style={S.card}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {section.type === 'tasks' ? <Clipboard size={16} color={C.sky} /> :
+                     section.type === 'patients' ? <Users size={16} color={C.sky} /> :
+                     section.type === 'alerts' ? <Bell size={16} color={C.amber} /> :
+                     section.type === 'schedule' ? <Calendar size={16} color={C.sky} /> :
+                     <Activity size={16} color={C.sky} />}
+                    <span style={{ fontSize: 13, fontWeight: 600, color: C.navy }}>{section.title}</span>
+                    {section.items.filter(i => i.status === 'critical').length > 0 && (
+                      <span style={{ background: C.red, color: C.white, borderRadius: 10, padding: '1px 8px', fontSize: 10, fontWeight: 700 }}>
+                        CRITICAL
+                      </span>
+                    )}
+                  </div>
+                  {section.items.length > 3 && (
+                    <button style={{ ...S.btnO }} onClick={() => router.push(`/${section.id}`)}>
+                      View All <ChevronRight size={12} />
+                    </button>
+                  )}
+                </div>
+
+                {section.items.length === 0 ? (
+                  <div style={{ padding: '20px 0', textAlign: 'center', fontSize: 12, color: C.textLight }}>
+                    <Activity size={24} style={{ margin: '0 auto 8px', opacity: 0.3 }} />
+                    {section.emptyMessage || 'Nothing here right now.'}
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {section.items.slice(0, 5).map(item => (
+                      <div
+                        key={item.id}
+                        onClick={() => item.link && router.push(item.link)}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 12,
+                          padding: '10px 12px', borderRadius: 8,
+                          background: item.status === 'critical' ? `${C.red}05` :
+                                     item.status === 'urgent' ? `${C.amber}05` : C.panel,
+                          cursor: item.link ? 'pointer' : 'default',
+                          border: item.status === 'critical' ? `1px solid ${C.red}20` :
+                                  item.status === 'urgent' ? `1px solid ${C.amber}20` : 'none',
+                        }}
+                      >
+                        <div style={{
+                          width: 6, height: 6, borderRadius: '50%',
+                          background: item.status === 'critical' ? C.red :
+                                      item.status === 'urgent' ? C.amber :
+                                      item.status === 'active' ? C.green : C.textLight,
+                          flexShrink: 0,
+                        }} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: 12, fontWeight: 500, color: C.text }}>{item.title}</div>
+                          {item.subtitle && (
+                            <div style={{ fontSize: 10, color: C.textLight, marginTop: 2 }}>{item.subtitle}</div>
+                          )}
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          {item.patientName && (
+                            <span style={S.badge(C.sky)}>{item.patientName}</span>
+                          )}
+                          {item.time && (
+                            <span style={{ fontSize: 10, color: C.textLight, whiteSpace: 'nowrap' }}>
+                              <Clock size={10} style={{ verticalAlign: 'middle', marginRight: 2 }} />
+                              {item.time}
+                            </span>
+                          )}
+                          {item.link && <ChevronRight size={14} color={C.textLight} />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Inline clipboard icon since it's not a named icon in older lucide
+function Clipboard({ size = 16, color = '#64748B' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+    </svg>
+  );
+}

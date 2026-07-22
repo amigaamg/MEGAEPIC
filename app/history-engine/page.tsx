@@ -10,7 +10,7 @@ import DocumentEditor from '@/components/history-engine/DocumentEditor';
 import EducationPanel from '@/components/history-engine/EducationPanel';
 import FollowUpPanel from '@/components/history-engine/FollowUpPanel';
 import { applyTheme, getStoredTheme } from '@/lib/history-engine/themeEngine';
-import { autoSaveState, getUserId, loadLastState } from '@/lib/history-engine/userStorage';
+import { autoSaveState, getUserId, clearAllData } from '@/lib/history-engine/userStorage';
 
 export default function HistoryEnginePage() {
   const activeSection = useHistoryStore(s => s.activeSection);
@@ -22,8 +22,6 @@ export default function HistoryEnginePage() {
   const biodata = useHistoryStore(s => s.biodata);
   const provisionalDiagnosis = useHistoryStore(s => s.provisionalDiagnosis);
   const encounterId = useHistoryStore(s => s.encounterId || '');
-  const sectionHistory = useHistoryStore(s => s);
-
   const [showDashboard, setShowDashboard] = useState(false);
   const [showDocument, setShowDocument] = useState(false);
   const [showEducation, setShowEducation] = useState(false);
@@ -37,30 +35,19 @@ export default function HistoryEnginePage() {
 
   const sections = useMemo(() => getSectionsForProfile(profile, biodata.sex, biodata.age), [profile, biodata.sex, biodata.age]);
 
-  // Auto-save every state change
+  // Auto-save on relevant state changes (debounced internally)
   useEffect(() => {
     const state = useHistoryStore.getState();
     autoSaveState(state);
   }, [
     activeSection, completedSections, biodata,
-    sectionHistory.chiefComplaints?.length,
-    sectionHistory.hpi,
-    sectionHistory.featureRegistry,
+    profile, encounterId,
   ]);
 
   // Theme on mount
   useEffect(() => {
     applyTheme(getStoredTheme());
     document.title = 'AMEXAN — Clinical History Engine';
-    // Attempt to restore last session
-    try {
-      const lastState = loadLastState();
-      if (lastState) {
-        const store = useHistoryStore.getState();
-        store.orchestrator.loadState(lastState);
-        useHistoryStore.setState(store.orchestrator.getState());
-      }
-    } catch {}
   }, []);
 
   const currentIdx = sections.findIndex(s => s.id === activeSection);
@@ -73,6 +60,7 @@ export default function HistoryEnginePage() {
   function handleReset() {
     if (confirmReset) {
       reset();
+      clearAllData();
       setConfirmReset(false);
     } else {
       setConfirmReset(true);

@@ -66,7 +66,7 @@ function getComplications(diseaseId: string, allScored: ScoredDisease[]): Scored
 }
 
 export function DifferentialDashboard() {
-  const form = usePatientStore(s => s.form);
+  const { form } = usePatientStore();
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [viewTab, setViewTab] = useState<'scores' | 'details' | 'evidence' | 'complications'>('scores');
 

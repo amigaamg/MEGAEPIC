@@ -1,0 +1,160 @@
+version: "3.8"
+
+services:
+  # ============================================================================
+  # DATABASE
+  # ============================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: amexan-db
+    environment:
+      POSTGRES_DB: amexan_clinical_os
+      POSTGRES_USER: amexan
+      POSTGRES_PASSWORD: amexan
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U amexan"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: amexan-cache
+    ports:
+      - "6379:6379"
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: amexan-knowledge-graph
+    ports:
+      - "7687:7687"
+      - "7474:7474"
+    environment:
+      NEO4J_AUTH: neo4j/amexan_secret
+      NEO4J_dbms_memory_pagecache_size: 512m
+      NEO4J_dbms_memory_heap_max__size: 1G
+    volumes:
+      - neo4j_data:/data
+
+  # ============================================================================
+  # MICROSERVICES
+  # ============================================================================
+  gateway:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: gateway
+    container_name: amexan-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+
+  encounter-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: encounter
+    container_name: amexan-encounter
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  patient-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: patient
+    container_name: amexan-patient
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  history-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: history
+    container_name: amexan-history
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  examination-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: examination
+    container_name: amexan-examination
+    ports:
+      - "8084:8084"
+
+  diagnosis-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: diagnosis
+    container_name: amexan-diagnosis
+    ports:
+      - "8085:8085"
+
+  management-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: management
+    container_name: amexan-management
+    ports:
+      - "8086:8086"
+
+   documentation-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: documentation
+    container_name: amexan-documentation
+    ports:
+      - "8087:8087"
+
+  chief-complaint-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: chief-complaint
+    container_name: amexan-chief-complaint
+    ports:
+      - "8088:8088"
+
+  # ============================================================================
+  # FRONTEND
+  # ============================================================================
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: amexan-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+
+volumes:
+  postgres_data:
+  neo4j_data:

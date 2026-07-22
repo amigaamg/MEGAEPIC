@@ -45,7 +45,7 @@ export interface OperativeDecisionResult {
 export function decideOperativeApproach(input: OperativeDecisionInput): OperativeDecisionResult {
   const requiresSurgery = input.ischemiaLikelihood === 'high' || input.ischemiaLikelihood === 'very_high'
     || input.perforation || input.freeAir || input.lactate > 4
-    || (input.subtype !== 'pseudo_obstruction' && !input.endoscopicDetorsionPossible);
+    || (input.subtype !== 'pseudo_obstruction' && (!input.endoscopicDetorsionPossible || !input.patientStable));
 
   const urgency: OperativeIndicationUrgency = input.freeAir || input.ischemiaLikelihood === 'very_high' || input.lactate > 6
     ? 'immediate'

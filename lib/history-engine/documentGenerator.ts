@@ -142,20 +142,38 @@ function generateChiefComplaintText(input: DocumentInput): string {
   const { chiefComplaints: complaints } = input;
   if (complaints.length === 0) return '';
 
-  const parts = complaints.map((c, i) => {
-    const label = c.label.toLowerCase();
-    const days = c.durationDays > 0 ? ` (${c.durationDays} days)` : '';
-    const dur = c.duration ? ` for ${c.duration}${days}` : '';
-    return `${i === 0 ? 'Patient presented with' : ''} ${label}${dur}`;
-  });
+  const primary = complaints.find(c => c.isPrimary);
+  const others = complaints.filter(c => !c.isPrimary);
 
-  if (complaints.length === 1) return `${parts[0]}.`;
+  let text = '';
+  if (primary) {
+    const dur = primary.duration ? ` for ${primary.duration}` : '';
+    text += `PRESENTING COMPLAINT: ${primary.label}${dur}`;
+    if (primary.severity && primary.severity !== 'Unknown') text += ` (${primary.severity})`;
+    if (primary.onset && primary.onset !== 'Unknown') text += `, ${primary.onset} onset`;
+    text += '.';
+  } else if (complaints.length > 0) {
+    text += `PRESENTING COMPLAINTS: ${complaints.map(c => c.label).join(', ')}.`;
+  }
 
-  const all = complaints.map(c => {
-    const days = c.durationDays > 0 ? ` (${c.durationDays} days)` : '';
-    return `${c.label.toLowerCase()} for ${c.duration}${days}`;
-  });
-  return `Patient presented with ${all.slice(0, -1).join(', ')} and ${all.slice(-1)}.`;
+  if (others.length > 0) {
+    text += '\nASSOCIATED COMPLAINTS:\n';
+    for (const c of others) {
+      const dur = c.duration ? ` for ${c.duration}` : '';
+      const rel = c.relationship && c.relationship !== 'Unknown' ? ` (${c.relationship})` : '';
+      const sev = c.severity && c.severity !== 'Unknown' ? `, ${c.severity}` : '';
+      text += `- ${c.label}${dur}${rel}${sev}\n`;
+    }
+  }
+
+  text += `\nTOTAL: ${complaints.length} complaint(s)`;
+
+  if (complaints.some(c => c.redFlagOverride)) {
+    const flags = complaints.filter(c => c.redFlagOverride);
+    text += `\n⚠ RED FLAG COMPLAINT(S): ${flags.map(f => f.label).join(', ')}`;
+  }
+
+  return text;
 }
 
 // ═══════════════════════════════════════════════════════════════

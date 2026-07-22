@@ -164,7 +164,7 @@ export class HistoryOrchestrator {
         treatmentPlanNarrative: '', monitoringPlanNarrative: '',
         summaryNarrative: '', fullDocumentation: '',
       },
-      activeSection: 'biodata',
+      activeSection: 'chief_complaints',
       completedSections: [],
       confirmedSymptoms: [],
       globalAnswers: {},
@@ -224,18 +224,40 @@ export class HistoryOrchestrator {
     this.state.biodata = { ...biodata, profile, obstetric: updatedObstetric };
 
     if (prevProfile && prevProfile !== profile) {
-      this.state.activeSection = 'biodata';
+      this.state.activeSection = 'chief_complaints';
       this.state.completedSections = [];
     }
 
-    this.recomputeAll();
   }
 
   // ── CHIEF COMPLAINTS ──
-  addChiefComplaint(symptomId: string, label: string, duration: string, durationDays: number): void {
+  addChiefComplaint(symptomId: string, label: string, duration: string, durationDays: number, enhanced?: Partial<{
+    durationHours: number;
+    onset: string;
+    status: string;
+    certainty: string;
+    relationship: string;
+    source: string;
+    category: string;
+    severity: string;
+    schemaActivated: string;
+    redFlagOverride: boolean;
+  }>): void {
     const id = `cc_${symptomId}_${Date.now()}`;
     const isPrimary = this.state.chiefComplaints.length === 0;
-    const complaint: ChiefComplaint = { id, symptomId, label, duration, durationDays, isPrimary };
+    const complaint: ChiefComplaint = {
+      id, symptomId, label, duration, durationDays, isPrimary,
+      durationHours: enhanced?.durationHours,
+      onset: enhanced?.onset as any,
+      status: enhanced?.status as any,
+      certainty: enhanced?.certainty as any,
+      relationship: enhanced?.relationship as any,
+      source: enhanced?.source as any,
+      category: enhanced?.category as any,
+      severity: enhanced?.severity as any,
+      schemaActivated: enhanced?.schemaActivated,
+      redFlagOverride: enhanced?.redFlagOverride,
+    };
 
     this.state.chiefComplaints = [...this.state.chiefComplaints, complaint];
 
@@ -255,7 +277,6 @@ export class HistoryOrchestrator {
       this.state.confirmedSymptoms = [...this.state.confirmedSymptoms, symptomId];
     }
 
-    this.recomputeAll();
   }
 
   removeChiefComplaint(id: string): void {
@@ -272,14 +293,12 @@ export class HistoryOrchestrator {
     this.state.hpi = restHpi;
 
     this.state.timeline = buildTimeline(this.state.chiefComplaints).events;
-    this.recomputeAll();
   }
 
   setPrimaryComplaint(id: string): void {
     this.state.chiefComplaints = this.state.chiefComplaints.map(c => ({
       ...c, isPrimary: c.id === id
     }));
-    this.recomputeAll();
   }
 
   // ── FEATURE REGISTRY ──
@@ -308,7 +327,6 @@ export class HistoryOrchestrator {
       },
     };
 
-    this.recomputeAll();
   }
 
   setFeatureWithModifier(featureId: string, present: boolean | null, modifier: { key: string; value: string | number | boolean; weightBoost?: number }): void {
@@ -319,7 +337,6 @@ export class HistoryOrchestrator {
         ...this.state.featureRegistry,
         [featureId]: { ...entry, modifier },
       };
-      this.recomputeAll();
     }
   }
 
@@ -338,14 +355,12 @@ export class HistoryOrchestrator {
       if (!this.state.confirmedSymptoms.includes(symptomId)) {
         this.state.confirmedSymptoms = [...this.state.confirmedSymptoms, symptomId];
       }
-      this.recomputeAll();
     }
   }
 
   // ── GLOBAL ANSWERS (shared questions) ──
   setGlobalAnswer(key: string, value: string): void {
     this.state.globalAnswers = { ...this.state.globalAnswers, [key]: value };
-    this.recomputeAll();
   }
 
   // ── SOCRATES ──
@@ -384,19 +399,16 @@ export class HistoryOrchestrator {
     };
 
     this.state.hpi = { ...this.state.hpi, [symptomId]: updatedEntry };
-    this.recomputeAll();
   }
 
   // ── PAST HISTORY ──
   setPastHistory(pastHistory: Partial<PastHistory>): void {
     this.state.pastHistory = { ...this.state.pastHistory, ...pastHistory };
-    this.recomputeAll();
   }
 
   // ── FAMILY SOCIAL ──
   setFamilySocial(familySocial: Partial<FamilySocial>): void {
     this.state.familySocial = { ...this.state.familySocial, ...familySocial };
-    this.recomputeAll();
   }
 
   // ── ROS ──
@@ -421,7 +433,6 @@ export class HistoryOrchestrator {
   // ── IMPACT ON LIFE ──
   setImpactOnLife(impact: Partial<ImpactOnLife>): void {
     this.state.impactOnLife = { ...this.state.impactOnLife, ...impact };
-    this.recomputeAll();
   }
 
   // ── Count total user-answered Socrates questions across all HPI entries ──
@@ -956,6 +967,7 @@ export class HistoryOrchestrator {
   }
 
   completeSection(section: string): void {
+    if (!section) return;
     if (!this.state.completedSections.includes(section)) {
       this.state.completedSections = [...this.state.completedSections, section];
     }
@@ -981,7 +993,6 @@ export class HistoryOrchestrator {
   // ═══════════════════════════════════════════════════════════════
   loadState(state: HistoryState): void {
     this.state = state;
-    this.recomputeAll();
   }
 
   reset(): void {

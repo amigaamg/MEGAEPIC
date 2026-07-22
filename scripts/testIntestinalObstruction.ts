@@ -3,7 +3,7 @@
 // Simulates the complete adaptive questioning via Bayesian EIG.
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { createSession, processAnswer } from '../lib/amexan/reasoning/encounterOrchestrator';
+import { createSession, processAnswer } from '../lib/amexan/encounter/engines/sessionAdapter';
 import { generateHpiNarrative } from '../lib/amexan/reasoning/narrativeEngine';
 import { FEATURES } from '../lib/amexan/knowbase/features/featureLibrary';
 

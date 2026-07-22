@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://amexan.dev/schemas/encounter.json",
+  "title": "AMEXAN Encounter",
+  "description": "Universal encounter object - ACRS Volume 2A, Chapter 6",
+  "type": "object",
+  "required": ["id", "patient_id", "provider_id", "visit_type", "priority"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "patient_id": { "type": "string", "format": "uuid" },
+    "provider_id": { "type": "string", "format": "uuid" },
+    "department_id": { "type": "string", "format": "uuid" },
+    "facility_id": { "type": "string", "format": "uuid" },
+    "visit_type": {
+      "type": "string",
+      "enum": ["outpatient", "emergency", "inpatient", "ward_round", "follow_up",
+               "procedure", "telemedicine", "antenatal", "postnatal", "home_visit",
+               "referral", "mdt"]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["immediate", "emergency", "urgent", "semi_urgent", "routine", "elective"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "paused", "completed", "cancelled"]
+    },
+    "clinical_state": {
+      "type": "string",
+      "enum": ["registered", "triage", "abcde", "history", "examination",
+               "investigation", "diagnosis", "treatment", "monitoring",
+               "disposition", "follow_up", "completed", "cancelled"]
+    },
+    "reason_for_visit": { "type": "string" },
+    "informant": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "name": { "type": "string" },
+        "relationship": { "type": "string" },
+        "reliability": { "type": "string", "enum": ["reliable", "partially_reliable", "unreliable"] }
+      }
+    }
+  }
+}

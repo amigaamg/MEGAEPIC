@@ -1,4 +1,5 @@
-// ─── AMEXAN — Shared Types ─────────────────────────────────────────────────
+// ─── AMEXAN — Shared Types (legacy re-exports) ──────────────────────────────
+// New code should import from '@/lib/amexan/encounter' instead.
 
 export type Symptom =
   | 'cough' | 'fever' | 'wheeze' | 'difficulty_breathing'
@@ -51,22 +52,6 @@ export interface QuestionNode {
   next?: Record<string, string>;
 }
 
-export interface ConsultationContext {
-  patientName?: string;
-  age?: number;          // in months
-  sex?: 'male' | 'female';
-  symptoms: Symptom[];
-  answers: Record<string, string | string[] | boolean>;
-  askedQuestions: string[];
-  vitals: {
-    spo2?: number;
-    rr?: number;
-    hr?: number;
-    temp?: number;
-    weight?: number;
-  };
-}
-
 export interface DiseaseScore {
   diseaseId: DiseaseId;
   name: string;
@@ -110,5 +95,5 @@ export interface ClinicalNote {
 }
 
 export type { DepartmentId, DiseaseSummary } from './disease';
-export type { EncounterPhase, EncounterState } from './encounter';
+export type { EncounterPhase, EncounterState as LegacyEncounterState } from './encounter';
 export type { DepartmentSummary } from './department';

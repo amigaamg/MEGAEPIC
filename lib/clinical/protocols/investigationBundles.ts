@@ -1,0 +1,55 @@
+import type { InvestigationBundle } from '../types/protocols'
+
+export const PNEUMONIA_INVESTIGATION_BUNDLES: InvestigationBundle[] = [
+  {
+    id: 'cap_initial',
+    label: 'CAP Initial Workup',
+    diseaseId: 'community_acquired_pneumonia',
+    severity: 'moderate',
+    bedside: ['Pulse oximetry', 'Blood glucose', 'Urinalysis', 'ECG'],
+    laboratory: ['CBC', 'U&E / Creatinine', 'CRP', 'Blood culture x2', 'HIV test'],
+    imaging: ['Chest X-ray PA', 'Chest X-ray lateral'],
+    microbiology: ['Sputum Gram stain', 'Sputum culture'],
+    conditional: {
+      if_severe: ['ABG', 'Lactate', 'Procalcitonin', 'Chest CT'],
+      if_immunocompromised: ['LDH', 'Fungal studies', 'PCP PCR', 'CMV PCR'],
+      if_tb_possible: ['GeneXpert MTB/RIF', 'Sputum AFB x3', 'TB Culture'],
+      if_pleural_effusion: ['Pleural ultrasound', 'Thoracentesis', 'Pleural fluid culture'],
+      if_hypoxia: ['ABG', 'BNP / NT-proBNP'],
+      if_hyponatremia: ['Serum osmolality', 'Urine osmolality', 'Urine sodium'],
+      if_renal_impairment: ['Renal ultrasound', 'Urine protein/creatinine ratio'],
+    },
+  },
+  {
+    id: 'cap_severe',
+    label: 'Severe CAP — ICU Workup',
+    diseaseId: 'community_acquired_pneumonia',
+    severity: 'severe',
+    bedside: ['Pulse oximetry continuous', 'Blood glucose', 'ECG', 'Urinary catheter', 'CVP monitoring'],
+    laboratory: ['CBC', 'U&E / Creatinine', 'CRP', 'Procalcitonin', 'Blood culture x2', 'Lactate', 'ABG', 'BNP', 'Troponin', 'Coagulation profile', 'LFTs', 'HIV test'],
+    imaging: ['Chest X-ray PA', 'Chest CT', 'CT pulmonary angiogram if PE suspected'],
+    microbiology: ['Sputum Gram stain', 'Sputum culture', 'Urine pneumococcal antigen', 'Urine legionella antigen', 'GeneXpert MTB/RIF'],
+    conditional: {
+      if_ventilated: ['BAL', 'Mini-BAL', 'ET aspirate culture'],
+      if_shock: ['Blood culture x3', 'Lactate q2h', 'Echocardiogram'],
+      if_renal_failure: ['Renal ultrasound', 'Urine electrolytes'],
+      if_arrhythmia: ['Continuous ECG monitoring', 'Troponin q6h'],
+    },
+  },
+  {
+    id: 'tb_initial',
+    label: 'TB Initial Workup',
+    diseaseId: 'tuberculosis',
+    severity: 'moderate',
+    bedside: ['Pulse oximetry', 'Weight', 'Height / BMI'],
+    laboratory: ['CBC', 'U&E / Creatinine', 'LFTs', 'CRP', 'HIV test', 'HbA1c if diabetic'],
+    imaging: ['Chest X-ray PA'],
+    microbiology: ['GeneXpert MTB/RIF', 'Sputum AFB smear x3', 'TB culture', 'DST if indicated'],
+    conditional: {
+      if_hiv_positive: ['CD4 count', 'HIV viral load', 'Cryptococcal antigen if CD4 <100'],
+      if_extra_pulmonary: ['CT chest', 'Ultrasound abdomen', 'Lymph node FNA', 'Pleural fluid analysis', 'CSF if meningeal'],
+      if_mdr_suspected: ['Line probe assay', 'Culture DST', 'GenoType MTBDRplus'],
+      if_disseminated: ['Blood culture for TB', 'Urine TB-LAM', 'Bone marrow aspirate'],
+    },
+  },
+]

@@ -1,4 +1,5 @@
 import { AuthProvider } from "@/context/AuthContext";
+import FirestoreErrorHandler from "@/components/FirestoreErrorHandler";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 
@@ -12,16 +13,18 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#071029",
+  themeColor: "#2F80ED",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+    <html lang="en" data-theme="light">
+      <body style={{ background: "var(--surface)", color: "var(--text-primary)" }}>
+        <FirestoreErrorHandler>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </FirestoreErrorHandler>
       </body>
     </html>
   );

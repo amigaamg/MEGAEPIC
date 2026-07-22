@@ -7,12 +7,12 @@ import { useTimeline } from '@/src/hooks/useTimeline';
 import { useDDX } from '@/src/hooks/useDDX';
 import {
   RegistrationPhase,
-  ComplaintPhase,
+  LegacyComplaintPhase,
   HPIPhase,
   IntelligentHPI,
   ExaminationPhase,
   BedsideScorePhase,
-  DDXPhase,
+  LegacyDDXPhase,
   InvestigationsPhase,
   ImagingPhase,
   TreatmentPhase,
@@ -314,7 +314,7 @@ export default function SurgeryEncounterPage() {
         );
       case 'presenting_complaint':
         return (
-          <ComplaintPhase
+          <LegacyComplaintPhase
             onSave={handleComplaintSave}
             onComplete={() => handleCompletePhase('presenting_complaint')}
             initialData={encounter.presentingComplaint}
@@ -358,7 +358,7 @@ export default function SurgeryEncounterPage() {
         );
       case 'ddx':
         return (
-          <DDXPhase
+          <LegacyDDXPhase
             ddxResults={ddxResults}
             factCount={factCount}
             isComputing={isComputing}

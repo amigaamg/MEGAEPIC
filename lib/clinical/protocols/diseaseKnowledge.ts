@@ -1,0 +1,48 @@
+import type { DiseaseKnowledge } from '../types/protocols'
+
+export const PNEUMONIA_DISEASE_KNOWLEDGE: DiseaseKnowledge[] = [
+  {
+    id: 'community_acquired_pneumonia',
+    name: 'Community-Acquired Pneumonia',
+    mechanisms: ['alveolar_disease', 'airway_inflammation'],
+    epidemiology: ['Leading infectious cause of death worldwide', 'Incidence higher at extremes of age', 'More common in winter months', 'Associated with COPD, diabetes, heart failure', 'Increased risk in smokers and alcohol users'],
+    riskFactors: ['Age >65 years', 'Smoking', 'COPD', 'Diabetes mellitus', 'HIV infection', 'Chronic kidney disease', 'Chronic liver disease', 'Immunosuppressive therapy', 'Malnutrition', 'Recent influenza infection', 'Hospitalization within 90 days'],
+    pathophysiology: 'Pneumonia results from microbial invasion of the lung parenchyma. The causative organism reaches the alveoli through microaspiration of oropharyngeal contents, inhalation of contaminated droplets, or hematogenous spread. The host inflammatory response leads to alveolar filling with neutrophils, macrophages, and exudative fluid producing the classic consolidation pattern on imaging. In CAP, Streptococcus pneumoniae remains the most common pathogen, followed by Haemophilus influenzae, Mycoplasma pneumoniae, and respiratory viruses.',
+    diagnosticCriteria: [
+      'Acute onset of respiratory symptoms (cough, sputum production, dyspnea)',
+      'Fever or hypothermia',
+      'Evidence of consolidation on examination (crackles, bronchial breathing, dull percussion)',
+      'Radiographic evidence of pneumonia (chest X-ray or CT)',
+      'Supportive laboratory findings (leukocytosis, elevated CRP/procalcitonin)',
+      'Positive microbiologic cultures when available',
+    ],
+    differentials: ['Acute bronchitis', 'Pulmonary tuberculosis', 'Pulmonary embolism', 'Heart failure', 'COPD exacerbation', 'Asthma exacerbation', 'Bronchiectasis exacerbation', 'Lung cancer', 'Aspiration pneumonitis', 'Drug-induced pneumonitis', 'Viral pneumonitis (COVID, influenza)', 'Fungal pneumonia (if immunocompromised)'],
+    severityScoring: ['CURB-65: Confusion, Urea >7, RR ≥30, BP <90/60, Age ≥65', 'PSI/PORT score: 20 variables — mortality prediction', 'qSOFA: RR ≥22, SBP ≤100, altered mental status (sepsis screening)', 'NEWS: National Early Warning Score for deterioration'],
+    complications: ['Parapneumonic effusion', 'Empyema', 'Lung abscess', 'Sepsis / septic shock', 'Acute respiratory failure', 'ARDS', 'Multiorgan dysfunction', 'Bacteremia', 'Metastatic infection (endocarditis, meningitis, septic arthritis)'],
+    references: ['IDSA/ATS Guidelines for CAP (2019)', 'Kenya National Guidelines for Pneumonia Management', 'BTS Guidelines for Pneumonia (2023)', 'WHO Integrated Management of Adolescent and Adult Illness'],
+  },
+  {
+    id: 'tuberculosis',
+    name: 'Pulmonary Tuberculosis',
+    mechanisms: ['alveolar_disease'],
+    epidemiology: ['Kenya is a high-burden TB country', 'Incidence ~261 per 100,000 population', 'TB is the leading cause of death among HIV patients', 'Increasing MDR-TB in some regions', 'Higher prevalence in urban slums and mining areas'],
+    riskFactors: ['HIV infection (strongest risk factor)', 'Close contact with active TB case', 'Diabetes mellitus (triples risk)', 'Malnutrition', 'Alcohol use disorder', 'Smoking', 'Chronic kidney disease on dialysis', 'Immunosuppressive therapy (TNF-alpha inhibitors, steroids)', 'Silicosis', 'Post-gastrectomy', 'Overcrowded living conditions', 'Healthcare work'],
+    pathophysiology: 'Primary TB infection occurs when inhaled Mycobacterium tuberculosis reaches the alveoli and is engulfed by alveolar macrophages. The bacteria survive intracellularly by inhibiting phagosome-lysosome fusion. Cell-mediated immunity leads to granuloma formation (Ghon focus). In immunocompetent individuals, the infection is controlled (latent TB). Reactivation occurs when immunity wanes — typically in the upper lobes due to high oxygen tension. Cavitation develops as the immune response destroys lung tissue containing multiplying bacteria.',
+    diagnosticCriteria: [
+      'Persistent cough ≥2 weeks (though can present acutely)',
+      'Unexplained weight loss',
+      'Night sweats',
+      'Fever (often evening)',
+      'Hemoptysis',
+      'Chest X-ray: upper lobe infiltrates, cavitation, miliary pattern',
+      'GeneXpert MTB/RIF positive',
+      'Sputum AFB smear positive',
+      'TB culture positive',
+      'Histopathology: caseating granulomas',
+    ],
+    differentials: ['Community-acquired pneumonia', 'Lung cancer', 'Bronchiectasis', 'Fungal pneumonia', 'HIV-related lung disease (PCP, KS)', 'Sarcoidosis', 'Necrotizing pneumonia', 'Lung abscess', 'Pulmonary embolism with infarction'],
+    severityScoring: ['TB score (WHO): clinical severity for treatment monitoring', 'BANDIM TB score: mortality prediction', 'CXR severity score (Ralph score)'],
+    complications: ['Hemoptysis (including massive hemoptysis / Rasmussen aneurysm)', 'Pleural effusion / empyema', 'Pneumothorax', 'Miliary TB', 'Tuberculous meningitis', 'TB pericarditis', 'Bronchopleural fistula', 'Chronic pulmonary aspergillosis', 'Respiratory failure', 'Paradoxical reaction (especially with ART initiation — IRIS)'],
+    references: ['Kenya National TB Program Guidelines', 'WHO Global TB Report', 'ATS/CDC/IDSA Guidelines for TB (2023)', 'International Standards for TB Care (ISTC)'],
+  },
+]

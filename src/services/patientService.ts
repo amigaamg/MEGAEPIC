@@ -1,47 +1,21 @@
-import { doc, setDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+// localStorage-based patient storage — no Firestore dependency
+import { registerPatient as localRegister, getPatient as localGet, findPatientByMRN as localFind, updatePatient as localUpdate } from '@/lib/amexan/persistence/localStorage';
+import type { PatientData } from '@/lib/amexan/persistence/localStorage';
 
-export interface PatientData {
-  mrn: string;
-  name: string;
-  dob: number;
-  sex: string;
-  bloodGroup: string;
-  allergies: string[];
-  medicalHistory: string[];
-  surgicalHistory: string[];
-  familyHistory: string[];
-  contact: string;
-  address: string;
-}
+export type { PatientData };
 
 export async function registerPatient(data: PatientData, orgId?: string): Promise<string> {
-  const patientsCol = collection(db, `organizations/${orgId || 'telemed-a98cf'}/patients`);
-  const q = query(patientsCol, where('mrn', '==', data.mrn));
-  const existing = await getDocs(q);
-  if (!existing.empty) {
-    return existing.docs[0].id;
-  }
-  const ref = doc(patientsCol);
-  await setDoc(ref, { ...data, id: ref.id, createdAt: Date.now(), updatedAt: Date.now() });
-  return ref.id;
+  return localRegister(data, orgId);
 }
 
 export async function getPatient(patientId: string, orgId?: string): Promise<PatientData | null> {
-  const snap = await getDoc(doc(db, `organizations/${orgId || 'telemed-a98cf'}/patients/${patientId}`));
-  return snap.exists() ? snap.data() as PatientData : null;
+  return localGet(patientId) || null;
 }
 
 export async function findPatientByMRN(mrn: string, orgId?: string): Promise<{ id: string; data: PatientData } | null> {
-  const patientsCol = collection(db, `organizations/${orgId || 'telemed-a98cf'}/patients`);
-  const q = query(patientsCol, where('mrn', '==', mrn));
-  const snap = await getDocs(q);
-  if (snap.empty) return null;
-  const d = snap.docs[0];
-  return { id: d.id, data: d.data() as PatientData };
+  return localFind(mrn);
 }
 
 export async function updatePatient(patientId: string, updates: Partial<PatientData>, orgId?: string): Promise<void> {
-  const ref = doc(db, `organizations/${orgId || 'telemed-a98cf'}/patients/${patientId}`);
-  await setDoc(ref, { ...updates, updatedAt: Date.now() }, { merge: true });
+  localUpdate(patientId, updates);
 }

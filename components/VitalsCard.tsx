@@ -2,14 +2,18 @@
 import { useClinical } from '@/src/store/ClinicalContext';
 
 export function VitalsCard() {
-  const { state, setVitals } = useClinical();
-  const { vitals } = state;
+  const { state, dispatch } = useClinical();
+  const vitals = state.examination.vitals;
 
   const handleChange = (key: string, value: string) => {
     const num = parseFloat(value);
     if (!isNaN(num)) {
-      setVitals({ [key]: num });
+      dispatch({ type: 'SET_VITALS', payload: { [key]: num } });
     }
+  };
+
+  const handleAvpuChange = (value: string) => {
+    dispatch({ type: 'SET_VITALS', payload: { avpu: value as any } });
   };
 
   const vitalsFields: Array<{ key: keyof typeof vitals; label: string; unit: string; normal: string }> = [
@@ -50,7 +54,7 @@ export function VitalsCard() {
         <label className="text-[9px] font-medium text-gray-400 uppercase">AVPU</label>
         <select
           value={vitals.avpu || 'alert'}
-          onChange={e => setVitals({ avpu: e.target.value as any })}
+          onChange={e => handleAvpuChange(e.target.value)}
           className="w-full mt-0.5 px-2 py-1 text-xs border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white"
         >
           <option value="alert">Alert</option>

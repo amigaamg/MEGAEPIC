@@ -1,5 +1,5 @@
 // DIRECT debug: trace every step inside processAnswer
-import { createSession, processAnswer } from '../lib/amexan/reasoning/encounterOrchestrator';
+import { createSession, processAnswer } from '../lib/amexan/encounter/engines/sessionAdapter';
 import { computeDdxUpdate } from '../lib/amexan/reasoning/bayesianEngine';
 import { getMergedDiseaseMap, getActiveHighways } from '../lib/amexan/highways/abdominalPain';
 

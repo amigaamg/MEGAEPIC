@@ -1,0 +1,284 @@
+{
+  "test_suite": "ACRS Volume 2A - Core Test Suite",
+  "version": "1.0.0",
+  "tests": [
+    {
+      "id": "PAT-001-T1",
+      "rule": "PAT-001",
+      "name": "Minimum identity - all required fields present",
+      "given": {
+        "given_name": "John",
+        "family_name": "Kamau",
+        "sex_at_birth": "male",
+        "date_of_birth": "1990-03-15"
+      },
+      "expected": "PASS",
+      "assertions": [
+        "Patient identity validated",
+        "No errors raised"
+      ]
+    },
+    {
+      "id": "PAT-001-T2",
+      "rule": "PAT-001",
+      "name": "Minimum identity - missing given name",
+      "given": {
+        "given_name": "",
+        "family_name": "Kamau",
+        "sex_at_birth": "male"
+      },
+      "expected": "FAIL",
+      "assertions": [
+        "Error: 'given_name is required'"
+      ]
+    },
+    {
+      "id": "PAT-002-T1",
+      "rule": "PAT-002",
+      "name": "Auto-generate hospital number",
+      "given": {
+        "facility": "Nairobi Teaching Hospital",
+        "year": 2024,
+        "next_sequence": 42
+      },
+      "expected": "HN-2024-00042"
+    },
+    {
+      "id": "PAT-003-T1",
+      "rule": "PAT-003",
+      "name": "Age calculation from DOB - adult",
+      "given": {
+        "date_of_birth": "1990-03-15",
+        "encounter_date": "2024-06-28"
+      },
+      "expected": {
+        "age": 34,
+        "age_unit": "years"
+      }
+    },
+    {
+      "id": "PAT-003-T2",
+      "rule": "PAT-003",
+      "name": "Age calculation from DOB - infant in months",
+      "given": {
+        "date_of_birth": "2024-03-01",
+        "encounter_date": "2024-06-28"
+      },
+      "expected": {
+        "age": 3,
+        "age_unit": "months"
+      }
+    },
+    {
+      "id": "PAT-004-T1",
+      "rule": "PAT-004",
+      "name": "Age classification - neonate",
+      "given": { "age": 10, "age_unit": "days" },
+      "expected": { "age_category": "neonate" }
+    },
+    {
+      "id": "PAT-004-T2",
+      "rule": "PAT-004",
+      "name": "Age classification - adult",
+      "given": { "age": 30, "age_unit": "years" },
+      "expected": { "age_category": "adult" }
+    },
+    {
+      "id": "PAT-004-T3",
+      "rule": "PAT-004",
+      "name": "Age classification - older adult",
+      "given": { "age": 70, "age_unit": "years" },
+      "expected": { "age_category": "older_adult" }
+    },
+    {
+      "id": "PAT-005-T1",
+      "rule": "PAT-005",
+      "name": "Male sex context",
+      "given": { "sex_at_birth": "male", "age": 30 },
+      "expected": {
+        "has_uterus": false,
+        "is_menstruating": false,
+        "pregnancy_status": "not_pregnant"
+      }
+    },
+    {
+      "id": "PAT-005-T2",
+      "rule": "PAT-005",
+      "name": "Female reproductive age context",
+      "given": { "sex_at_birth": "female", "age": 25 },
+      "expected": {
+        "has_uterus": true,
+        "is_menstruating": true,
+        "pregnancy_status": "unknown"
+      }
+    },
+    {
+      "id": "PAT-005-T3",
+      "rule": "PAT-005",
+      "name": "Female prepubescent context",
+      "given": { "sex_at_birth": "female", "age": 5 },
+      "expected": {
+        "has_uterus": true,
+        "is_menstruating": false,
+        "pregnancy_status": "unknown"
+      }
+    },
+    {
+      "id": "CTX-001-T1",
+      "rule": "CTX-001",
+      "name": "Neonate activation",
+      "given": { "age_category": "neonate" },
+      "expected": {
+        "visible_sections": ["birth_history", "maternal_antenatal_history", "feeding_history", "neonatal_examination", "immunization_history"],
+        "hidden_sections": ["adult_history", "occupational_history", "sexual_history", "geriatric_assessment"]
+      }
+    },
+    {
+      "id": "CTX-001-T2",
+      "rule": "CTX-001",
+      "name": "Older adult activation",
+      "given": { "age_category": "older_adult" },
+      "expected": {
+        "visible_sections": ["geriatric_assessment", "functional_status", "falls_assessment", "cognitive_assessment", "polypharmacy_review"],
+        "hidden_sections": ["neonatal_history", "pediatric_history"]
+      }
+    },
+    {
+      "id": "CTX-003-T1",
+      "rule": "CTX-003",
+      "name": "Pregnancy pathway activation",
+      "given": {
+        "pregnancy_status": "pregnant",
+        "lmp": "2024-01-15",
+        "sex_at_birth": "female"
+      },
+      "expected": {
+        "edd": "2024-10-21",
+        "visible": ["antenatal_history", "obstetric_examination", "fetal_assessment", "danger_signs_screening"],
+        "required": ["gestational_age", "gravida_para", "edd", "bp_measurement", "urine_protein", "fetal_heart_rate"]
+      }
+    },
+    {
+      "id": "CTX-005-T1",
+      "rule": "CTX-005",
+      "name": "Chest pain complaint activation",
+      "given": { "reason_for_visit": "Chest pain for 2 hours" },
+      "expected": {
+        "visible": ["cardiovascular_examination", "cardiac_investigations_panel"],
+        "required": ["bp_both_arms", "heart_auscultation"]
+      }
+    },
+    {
+      "id": "CTX-005-T2",
+      "rule": "CTX-005",
+      "name": "Diabetic foot complaint activation",
+      "given": {
+        "reason_for_visit": "Foot ulcer right foot",
+        "pmh": ["diabetes"]
+      },
+      "expected": {
+        "visible": ["diabetic_foot_pathway", "wound_assessment", "vascular_examination", "neurological_examination"],
+        "required": ["monofilament_test", "foot_pulses", "hba1c"]
+      }
+    },
+    {
+      "id": "ENC-001-T1",
+      "rule": "ENC-001",
+      "name": "Emergency priority escalation",
+      "given": {
+        "visit_type": "emergency",
+        "priority": "routine"
+      },
+      "expected": {
+        "priority": "emergency"
+      }
+    },
+    {
+      "id": "ENC-0101-T1",
+      "rule": "ENC-0101",
+      "name": "Block: non-emergency skip history",
+      "given": {
+        "visit_type": "outpatient",
+        "clinical_state": "examination",
+        "history_complete": false
+      },
+      "expected": "BLOCKED: History required"
+    },
+    {
+      "id": "ENC-0101-T2",
+      "rule": "ENC-0101",
+      "name": "Allow: emergency skip history",
+      "given": {
+        "visit_type": "emergency",
+        "clinical_state": "examination",
+        "history_complete": false
+      },
+      "expected": "ALLOWED: Emergency exception"
+    },
+    {
+      "id": "ENC-0102-T1",
+      "rule": "ENC-0102",
+      "name": "Block: treatment without diagnosis",
+      "given": {
+        "clinical_state": "treatment",
+        "working_diagnosis": null
+      },
+      "expected": "BLOCKED: Working diagnosis required"
+    },
+    {
+      "id": "VAL-002-T1",
+      "rule": "VAL-002",
+      "name": "GCS out of range",
+      "given": { "gcs": 16 },
+      "expected": "ERROR: GCS must be 3-15"
+    },
+    {
+      "id": "VAL-003-T1",
+      "rule": "VAL-003",
+      "name": "Date logic: discharge before admission",
+      "given": {
+        "admission_date": "2024-06-28",
+        "discharge_date": "2024-06-25"
+      },
+      "expected": "ERROR: Discharge cannot be before admission"
+    },
+    {
+      "id": "DER-001-T1",
+      "rule": "DER-001",
+      "name": "BMI calculation",
+      "given": { "weight_kg": 75, "height_cm": 175 },
+      "expected": { "bmi": 24.5, "classification": "normal" }
+    },
+    {
+      "id": "DER-002-T1",
+      "rule": "DER-002",
+      "name": "EDD calculation via Naegele",
+      "given": { "lmp": "2024-01-15", "current_date": "2024-06-28" },
+      "expected": {
+        "edd": "2024-10-21",
+        "gestational_age_weeks": 23,
+        "gestational_age_days": 4
+      }
+    },
+    {
+      "id": "SPC-005-T1",
+      "rule": "SPC-005",
+      "name": "Neonatology module activation",
+      "given": { "department_specialty": "neonatology" },
+      "expected": {
+        "visible": ["neonatal_history", "maternal_antenatal_history", "perinatal_history", "delivery_details", "neonatal_examination", "feeding_assessment"],
+        "required": ["gestational_age_at_birth", "mode_of_delivery", "apgar_score_1min", "apgar_score_5min", "birth_weight", "birth_head_circumference", "temperature", "blood_glucose"]
+      }
+    },
+    {
+      "id": "SPC-008-T1",
+      "rule": "SPC-008",
+      "name": "Emergency medicine module activation",
+      "given": { "department_specialty": "emergency_medicine" },
+      "expected": {
+        "visible": ["triage_assessment", "abcde_assessment", "emergency_vitals", "resuscitation_chart"],
+        "required": ["airway_patent", "gcs", "heart_rate", "blood_pressure", "oxygen_saturation"]
+      }
+    }
+  ]
+}

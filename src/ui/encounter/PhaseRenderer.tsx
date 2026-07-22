@@ -1,4 +1,4 @@
-import { PresentingComplaintPhase, HpiPhase, AdaptiveHpiPhase, PmhPhase, DdxPhase, TreatmentPhase } from './phases';
+import { PresentingComplaintPhase, HpiPhase, AdaptiveHpiPhase, AbdominalPainHpiPhase, PmhPhase, DdxPhase, TreatmentPhase } from './phases';
 import type { EncounterState } from './useEncounterState';
 
 interface PhaseRendererProps {
@@ -7,12 +7,30 @@ interface PhaseRendererProps {
   departmentColor: string;
 }
 
+function getComplaintType(form: any): string {
+  const complaints: string[] = form?.complaints || [];
+  const primary = (complaints[0] || '').toLowerCase();
+  if (primary.includes('abdomen') || primary.includes('abdominal') || primary.includes('belly') ||
+      primary.includes('stomach ache') || primary.includes('tummy') || primary.includes('stomach pain')) return 'abdominal_pain';
+  if (primary.includes('nausea') || primary.includes('vomit')) return 'vomiting';
+  if (primary.includes('cough') || primary.includes('coughing')) return 'cough';
+  return 'other';
+}
+
 export function PhaseRenderer({ phaseId, store, departmentColor }: PhaseRendererProps) {
   switch (phaseId) {
     case 'presenting_complaint':
       return <PresentingComplaintPhase form={store.form} setField={store.setField} toggleArray={store.toggleArray} addEvent={store.addEvent} addInsight={store.addInsight} deptColor={departmentColor} />;
-    case 'hpi':
-      return <AdaptiveHpiPhase form={store.form} setField={store.setField} addEvent={store.addEvent} addInsight={store.addInsight} deptColor={departmentColor} />;
+    case 'hpi': {
+      const complaintType = getComplaintType(store.form);
+      if (complaintType === 'abdominal_pain' || complaintType === 'vomiting') {
+        return <AbdominalPainHpiPhase form={store.form} setField={store.setField} addEvent={store.addEvent} addInsight={store.addInsight} deptColor={departmentColor} />;
+      }
+      if (complaintType === 'cough') {
+        return <AdaptiveHpiPhase form={store.form} setField={store.setField} addEvent={store.addEvent} addInsight={store.addInsight} deptColor={departmentColor} />;
+      }
+      return <HpiPhase form={store.form} setField={store.setField} addEvent={store.addEvent} addInsight={store.addInsight} deptColor={departmentColor} />;
+    }
     case 'pmh':
       return <PmhPhase form={store.form} setField={store.setField} addEvent={store.addEvent} deptColor={departmentColor} />;
     case 'ddx':

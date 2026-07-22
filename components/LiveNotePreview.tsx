@@ -134,8 +134,7 @@ function getDefaultSafety(diseaseId: string, severity: string): string {
 }
 
 export function LiveNotePreview() {
-  const form = usePatientStore(s => s.form);
-  const setField = usePatientStore(s => s.setField);
+  const { form, setField } = usePatientStore();
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);

@@ -461,7 +461,7 @@ export interface AnswerRecord {
   value: string | boolean | string[] | number;
   polarity: AnswerPolarity;
   timestamp: number;
-  source: 'socrates' | 'chief_complaint' | 'biodata' | 'inferred';
+  source: 'socrates' | 'chief_complaint' | 'biodata' | 'inferred' | 'hpi' | 'cc';
 }
 
 export interface CandidateDiseaseState {
@@ -508,4 +508,65 @@ export interface EncounterState {
   };
 
   phase: 'triage' | 'characterization' | 'confirmation' | 'risk_factor' | 'examination' | 'output';
+
+  /** 8-state clinical interview state machine */
+  interviewState: InterviewState;
+  completeness: DomainCompleteness;
+  contradictions: Contradiction[];
+  narrativeParts: NarrativePart[];
+}
+
+export type InterviewState =
+  | 'patient_identification'
+  | 'chief_complaint'
+  | 'timeline_construction'
+  | 'symptom_characterization'
+  | 'differential_resolution'
+  | 'red_flag_exclusion'
+  | 'documentation_validation'
+  | 'complete';
+
+export const INTERVIEW_STATE_ORDER: InterviewState[] = [
+  'patient_identification',
+  'chief_complaint',
+  'timeline_construction',
+  'symptom_characterization',
+  'differential_resolution',
+  'red_flag_exclusion',
+  'documentation_validation',
+  'complete',
+];
+
+export interface DomainCompleteness {
+  timeline: boolean;
+  location: boolean;
+  character: boolean;
+  severity: boolean;
+  radiation: boolean;
+  aggravating: boolean;
+  relieving: boolean;
+  temporal_pattern: boolean;
+  functional_impact: boolean;
+  associated_gi: boolean;
+  associated_fever: boolean;
+  associated_urinary: boolean;
+  associated_gynae: boolean;
+  red_flags: boolean;
+  risk_factors: boolean;
+}
+
+export interface Contradiction {
+  type: 'temporal' | 'anatomical' | 'logical' | 'severity';
+  featureA: string;
+  valueA: string;
+  featureB: string;
+  valueB: string;
+  description: string;
+}
+
+export interface NarrativePart {
+  section: string;
+  text: string;
+  timestamp: number;
+  featureId: string;
 }

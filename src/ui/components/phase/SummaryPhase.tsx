@@ -8,8 +8,7 @@ import { DDX_RULES } from '../../../engine/knowledge-graph/reference';
 import { getSeverity } from '../../../engine/inference/scorer';
 
 export const SummaryPhase: React.FC = () => {
-  const form = usePatientStore(s => s.form);
-  const setField = usePatientStore(s => s.setField);
+  const { form, setField } = usePatientStore();
   const isMobile = useUIStore(s => s.isMobile);
   const t = useTheme();
   const [activeDdx, setActiveDdx] = useState<string | null>(null);

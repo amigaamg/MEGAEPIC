@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { getUserProfile } from '@/lib/firebase/authService';
 import { getOrganization } from '@/lib/firebase/organizationService';
 import { db } from '@/lib/firebase';
-import { collection, onSnapshot, query, where, getDocs } from 'firebase/firestore';
+import { collection, collectionGroup, onSnapshot, query, where, getDocs } from 'firebase/firestore';
 import type { FacilityProfile } from '@/lib/firebase/authService';
 import type { Organization } from '@/lib/firebase/organizationService';
 import { DEPARTMENTS } from '@/lib/clinicalProtocols';
@@ -88,7 +88,7 @@ export default function FacilityDashboard() {
 
   useEffect(() => {
     if (!orgId) return;
-    const unsub = onSnapshot(collection(db, 'organizations', orgId, 'encounters'), (snap) => {
+    const unsub = onSnapshot(query(collectionGroup(db, 'encounters'), where('orgId', '==', orgId)), (snap) => {
       let active = 0;
       let today = 0;
       const recent: any[] = [];

@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useDeferredValue } from 'react';
 import { useTheme } from '../../themes/ThemeProvider';
 import { runInference } from '@/src/engine/inference/scorer';
 import {
@@ -68,15 +68,16 @@ export function AdaptiveHpiPhase({ form, setField, addEvent, addInsight, deptCol
   const [activeSection, setActiveSection] = useState<SectionId>('triage');
   const [completedSections, setCompletedSections] = useState<Set<SectionId>>(new Set());
   const [showRiskFactors, setShowRiskFactors] = useState(false);
+  const deferredForm = useDeferredValue(form);
 
-  const ageMonths = getAgeInMonths(form);
+  const ageMonths = getAgeInMonths(deferredForm);
   const ageGroup = getAgeGroup(ageMonths);
-  const sex = getSexDisplay(form);
+  const sex = getSexDisplay(deferredForm);
   const isChild = ageGroup === 'neonatal' || ageGroup === 'infant' || ageGroup === 'toddler' || ageGroup === 'child';
 
   const differentials = useMemo(() => {
-    try { return runInference(form); } catch { return []; }
-  }, [form]);
+    try { return runInference(deferredForm); } catch { return []; }
+  }, [deferredForm]);
 
   const topDifferentialIds = useMemo(() => {
     return differentials.slice(0, 5).map(d => {
@@ -91,48 +92,51 @@ export function AdaptiveHpiPhase({ form, setField, addEvent, addInsight, deptCol
   }, [topDifferentialIds]);
 
   const markSectionComplete = useCallback((id: SectionId) => {
-    setCompletedSections(prev => new Set(prev).add(id));
-    const idx = SECTIONS.findIndex(s => s.id === id);
-    const nextSection = SECTIONS.slice(idx + 1).find(s => {
-      if (s.id === 'risk_factors' && targetedRiskFactors.length === 0) return false;
-      return !completedSections.has(s.id);
+    setCompletedSections(prev => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
     });
-    if (nextSection) {
-      setActiveSection(nextSection.id);
-    }
-  }, [completedSections, targetedRiskFactors]);
+    setActiveSection(prev => {
+      const idx = SECTIONS.findIndex(s => s.id === id);
+      const nextSection = SECTIONS.slice(idx + 1).find(s => s.id !== 'risk_factors' || targetedRiskFactors.length > 0);
+      return nextSection ? nextSection.id : prev;
+    });
+  }, [targetedRiskFactors]);
 
   const handleField = useCallback((path: string, value: any, eventDesc?: string) => {
     setField(path, value);
     if (eventDesc) addEvent({ type: 'hpi_entered', description: eventDesc });
   }, [setField, addEvent]);
 
-  const hpi = form.hpi as any;
+  const hpi = deferredForm.hpi as any;
 
   const redFlags = useMemo(() => {
+    const f = deferredForm;
+    const hp = f.hpi as any;
     const flags: { sign: string; severity: 'critical' | 'high' | 'moderate' }[] = [];
-    if (form.vitals.examStridor) flags.push({ sign: 'Stridor at rest — impending airway obstruction', severity: 'critical' });
-    if (form.vitals.examIndrawing) flags.push({ sign: 'Chest indrawing — severe respiratory distress', severity: 'high' });
-    if (form.vitals.examGrunting) flags.push({ sign: 'Grunting — severe respiratory distress', severity: 'high' });
-    if (form.vitals.examNasalFlaring) flags.push({ sign: 'Nasal flaring — respiratory distress', severity: 'high' });
-    if (hpi.cyanoticEpisodes) flags.push({ sign: 'Cyanotic episodes — severe hypoxia', severity: 'critical' });
-    if (hpi.hemoptysis && hpi.hemoptysisVolume === 'massive') flags.push({ sign: 'Massive haemoptysis — airway emergency', severity: 'critical' });
-    if (hpi.associatedOrthopnea) flags.push({ sign: 'Orthopnoea — possible heart failure', severity: 'high' });
-    if (hpi.associatedPND) flags.push({ sign: 'Paroxysmal Nocturnal Dyspnoea — possible heart failure', severity: 'high' });
-    if (hpi.suddenOnset && hpi.unilateralWheeze) flags.push({ sign: 'Sudden onset + unilateral wheeze — foreign body aspiration', severity: 'high' });
-    if (hpi.associatedWeightLoss && hpi.associatedNightSweats) flags.push({ sign: 'Weight loss + night sweats — rule out TB', severity: 'high' });
-    if (hpi.hemoptysis && hpi.riskSmoking) flags.push({ sign: 'Haemoptysis in a smoker >40 years — rule out lung cancer', severity: 'high' });
-    if (hpi.pertussisContact && !hpi.suddenOnset) flags.push({ sign: 'Pertussis contact with paroxysmal cough', severity: 'moderate' });
-    if (form.vitals.examStridor && hpi.drooling && hpi.tripodPosition) flags.push({ sign: 'Drooling + tripod positioning — suspect epiglottitis', severity: 'critical' });
+    if (f.vitals.examStridor) flags.push({ sign: 'Stridor at rest — impending airway obstruction', severity: 'critical' });
+    if (f.vitals.examIndrawing) flags.push({ sign: 'Chest indrawing — severe respiratory distress', severity: 'high' });
+    if (f.vitals.examGrunting) flags.push({ sign: 'Grunting — severe respiratory distress', severity: 'high' });
+    if (f.vitals.examNasalFlaring) flags.push({ sign: 'Nasal flaring — respiratory distress', severity: 'high' });
+    if (hp.cyanoticEpisodes) flags.push({ sign: 'Cyanotic episodes — severe hypoxia', severity: 'critical' });
+    if (hp.hemoptysis && hp.hemoptysisVolume === 'massive') flags.push({ sign: 'Massive haemoptysis — airway emergency', severity: 'critical' });
+    if (hp.associatedOrthopnea) flags.push({ sign: 'Orthopnoea — possible heart failure', severity: 'high' });
+    if (hp.associatedPND) flags.push({ sign: 'Paroxysmal Nocturnal Dyspnoea — possible heart failure', severity: 'high' });
+    if (hp.suddenOnset && hp.unilateralWheeze) flags.push({ sign: 'Sudden onset + unilateral wheeze — foreign body aspiration', severity: 'high' });
+    if (hp.associatedWeightLoss && hp.associatedNightSweats) flags.push({ sign: 'Weight loss + night sweats — rule out TB', severity: 'high' });
+    if (hp.hemoptysis && hp.riskSmoking) flags.push({ sign: 'Haemoptysis in a smoker >40 years — rule out lung cancer', severity: 'high' });
+    if (hp.pertussisContact && !hp.suddenOnset) flags.push({ sign: 'Pertussis contact with paroxysmal cough', severity: 'moderate' });
+    if (f.vitals.examStridor && hp.drooling && hp.tripodPosition) flags.push({ sign: 'Drooling + tripod positioning — suspect epiglottitis', severity: 'critical' });
     return flags;
-  }, [form, hpi]);
+  }, [deferredForm]);
 
   const duration = classifyCoughDuration(parseInt(String(hpi.coughDuration || hpi.durationDays || '0')));
 
   const hpiNarrative = useMemo(() => {
     const parts: string[] = [];
-    const ageText = getAgeDisplay(form);
-    const sexText = getSexDisplay(form);
+    const ageText = getAgeDisplay(deferredForm);
+    const sexText = getSexDisplay(deferredForm);
     const dur = hpi.durationDays || hpi.coughDuration || 'several';
 
     const coughChar = hpi.coughChar || '';
@@ -259,7 +263,7 @@ export function AdaptiveHpiPhase({ form, setField, addEvent, addInsight, deptCol
     if (hpi.severity) parts.push(` The patient rates cough severity as ${hpi.severity} out of 10.`);
 
     return parts.join('');
-  }, [form]);
+  }, [deferredForm, duration]);
 
   const s = {
     header: { fontSize: '1.125rem', fontWeight: 600, color: theme.colors.text, marginBottom: 4 },
@@ -409,7 +413,7 @@ export function AdaptiveHpiPhase({ form, setField, addEvent, addInsight, deptCol
         <div>
           <div style={s.label}>Presenting Complaint</div>
           <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-            {(form.complaints || []).map((c: string) => (
+            {(deferredForm.complaints || []).map((c: string) => (
               <span key={c} style={{ padding: '2px 10px', borderRadius: 100, fontSize: '.6875rem', background: `${deptColor}15`, color: deptColor, fontWeight: 500 }}>{c.replace(/_/g, ' ')}</span>
             ))}
           </div>
@@ -443,12 +447,12 @@ export function AdaptiveHpiPhase({ form, setField, addEvent, addInsight, deptCol
 
   const isSectionVisible = useCallback((section: typeof COUGH_SOCRATES_FLOW[0]) => {
     if (!section.condition) return true;
-    const condFieldValue = (form as any).hpi?.[section.condition.field];
+    const condFieldValue = (deferredForm as any).hpi?.[section.condition.field];
     const cv = typeof condFieldValue === 'string' ? condFieldValue.toLowerCase() : condFieldValue;
     if (typeof section.condition.value === 'boolean') return cv === section.condition.value;
     if (typeof section.condition.value === 'string') return cv === section.condition.value.toLowerCase();
     return !!cv;
-  }, [form]);
+  }, [deferredForm]);
 
   const renderQuestionSection = (sectionId: SectionId) => {
     const socratesSection = COUGH_SOCRATES_FLOW.find(sf => {
@@ -492,10 +496,10 @@ export function AdaptiveHpiPhase({ form, setField, addEvent, addInsight, deptCol
         </div>
 
         {questions.map((q: any) => {
-          const currentValue = (form as any).hpi?.[q.field];
+          const currentValue = (deferredForm as any).hpi?.[q.field];
           if (q.condition) {
             const conditionField = q.condition.field || q.condition;
-            const condFieldValue = (form as any).hpi?.[conditionField];
+            const condFieldValue = (deferredForm as any).hpi?.[conditionField];
             const cv = typeof condFieldValue === 'string' ? condFieldValue.toLowerCase() : condFieldValue;
             if (q.condition.values && Array.isArray(q.condition.values)) {
               const matched = q.condition.values.some((v: string) => v.toLowerCase() === cv);
@@ -573,7 +577,7 @@ export function AdaptiveHpiPhase({ form, setField, addEvent, addInsight, deptCol
         )}
 
         {targetedRiskFactors.map((rf: TargetedRiskFactor) => {
-          const currentValue = (form as any).hpi?.[rf.field];
+          const currentValue = (deferredForm as any).hpi?.[rf.field];
           return (
             <div key={rf.id} style={{ marginBottom: 20, paddingBottom: 16, borderBottom: `1px solid ${theme.colors.border}` }}>
               <div style={s.label}>{rf.label}</div>

@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://amexan.dev/schemas/patient.json",
+  "title": "AMEXAN Patient",
+  "description": "Universal patient identity object - ACRS Volume 2A, Chapter 2",
+  "type": "object",
+  "required": ["id", "hospital_number", "identity", "demographics"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "hospital_number": { "type": "string", "pattern": "^HN-\\d{4}-\\d{5}$" },
+    "national_id": { "type": "string" },
+    "identity": {
+      "type": "object",
+      "required": ["given_name", "family_name"],
+      "properties": {
+        "given_name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "middle_name": { "type": "string", "maxLength": 100 },
+        "family_name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "full_name": { "type": "string" },
+        "preferred_name": { "type": "string" }
+      }
+    },
+    "demographics": {
+      "type": "object",
+      "required": ["sex_at_birth"],
+      "properties": {
+        "date_of_birth": { "type": "string", "format": "date" },
+        "age": { "type": "integer", "minimum": 0, "maximum": 150 },
+        "age_unit": { "type": "string", "enum": ["days", "months", "years"] },
+        "sex_at_birth": { "type": "string", "enum": ["male", "female", "intersex"] },
+        "gender_identity": { "type": "string" },
+        "residence": { "type": "string" },
+        "occupation": { "type": "string" },
+        "marital_status": { "type": "string", "enum": ["single", "married", "divorced", "widowed", "separated"] },
+        "religion": { "type": "string" },
+        "preferred_language": { "type": "string" },
+        "interpreter_required": { "type": "boolean" }
+      }
+    },
+    "clinical_context": {
+      "type": "object",
+      "properties": {
+        "age_category": { "type": "string", "enum": ["neonate", "infant", "child", "adolescent", "adult", "older_adult"] },
+        "is_pregnant": { "type": "boolean" },
+        "pregnancy_status": { "type": "string", "enum": ["pregnant", "not_pregnant", "unknown", "postpartum", "post_abortion"] },
+        "has_uterus": { "type": "boolean" },
+        "requires_guardian": { "type": "boolean" },
+        "weight_kg": { "type": "number" },
+        "height_cm": { "type": "number" },
+        "bmi": { "type": "number" }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "properties": {
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

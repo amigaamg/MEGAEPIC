@@ -219,7 +219,7 @@ export default function DepartmentPage() {
             <span className="qa-btn patients" onClick={() => router.push('/patients')}>📁 Patient Records</span>
             <span className="qa-btn primary" onClick={() => {
               if (firstUnit) router.push(`/workspace/${deptKey}/${firstUnit.id}/${firstEncType}`);
-            }}>+ New Encounter</span>
+            }}>New Clinical Entry</span>
             <span className="qa-btn" onClick={() => {
               if (firstUnit) router.push(`/workspace/${deptKey}/${firstUnit.id}/inpatient`);
             }}>📋 Admit Patient</span>
@@ -326,7 +326,7 @@ export default function DepartmentPage() {
               {firstUnit && (
                 <span className="qa-btn primary" style={{ display: 'inline-flex', marginTop: 12 }}
                   onClick={() => router.push(`/workspace/${deptKey}/${firstUnit.id}/${firstEncType}`)}>
-                  + New Encounter
+                  New Clinical Entry
                 </span>
               )}
             </div>

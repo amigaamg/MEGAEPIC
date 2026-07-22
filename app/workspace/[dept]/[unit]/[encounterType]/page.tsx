@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useCallback, useRef, useState } from 'react';
+import { useEffect, useMemo, useCallback, useRef, useState, useDeferredValue } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { EncounterLayout } from '@/src/ui/layouts/EncounterLayout';
 import { PhaseRenderer } from '@/src/ui/encounter/PhaseRenderer';
@@ -105,44 +105,49 @@ export default function EncounterPage() {
     }
   }, [encType, isValidEncounter]);
 
+  const debouncedForm = useDeferredValue(form);
+
   useEffect(() => {
-    const diff = runInference(form);
-    const sev = getSeverity(form);
-    const newInsights: AIInsight[] = [];
+    const timer = setTimeout(() => {
+      const diff = runInference(debouncedForm);
+      const sev = getSeverity(debouncedForm);
+      const newInsights: AIInsight[] = [];
 
-    if (sev && sev.level !== 'normal' && sev.level !== 'unknown') {
-      newInsights.push({
-        id: `ins-sev-${Date.now()}`, type: 'alert', timestamp: Date.now(),
-        severity: sev.level === 'emergency' ? 'critical' : 'warning',
-        title: `${sev.level === 'emergency' ? '🚨 ' : '⚠ '}Severity: ${sev.msg}`,
-        description: `Patient acuity flagged as ${sev.level}`,
-        acknowledged: false, source: 'AMEXAN Engine',
-      });
-    }
-
-    diff.slice(0, 4).forEach((d, i) => {
-      newInsights.push({
-        id: `ins-dd-${i}-${Date.now()}`, type: 'differential', timestamp: Date.now(),
-        severity: 'info',
-        title: d.disease.name,
-        description: `${Math.round(d.probability * 100)}% probability`,
-        acknowledged: false, source: 'AMEXAN Engine',
-      });
-    });
-
-    if (diff.length > 0 && diff[0].disease.investigations) {
-      const invs = diff[0].disease.investigations.slice(0, 4) as unknown as string[];
-      invs.forEach((inv, i) => {
+      if (sev && sev.level !== 'normal' && sev.level !== 'unknown') {
         newInsights.push({
-          id: `ins-inv-${i}-${Date.now()}`, type: 'suggestion', timestamp: Date.now(),
-          severity: 'info', title: String(inv), description: `Suggested for ${diff[0].disease.name}`,
+          id: `ins-sev-${Date.now()}`, type: 'alert', timestamp: Date.now(),
+          severity: sev.level === 'emergency' ? 'critical' : 'warning',
+          title: `${sev.level === 'emergency' ? '🚨 ' : '⚠ '}Severity: ${sev.msg}`,
+          description: `Patient acuity flagged as ${sev.level}`,
+          acknowledged: false, source: 'AMEXAN Engine',
+        });
+      }
+
+      diff.slice(0, 4).forEach((d, i) => {
+        newInsights.push({
+          id: `ins-dd-${i}-${Date.now()}`, type: 'differential', timestamp: Date.now(),
+          severity: 'info',
+          title: d.disease.name,
+          description: `${Math.round(d.probability * 100)}% probability`,
           acknowledged: false, source: 'AMEXAN Engine',
         });
       });
-    }
 
-    if (newInsights.length > 0) setInsights(newInsights);
-  }, [form.complaints, form.hpi]);
+      if (diff.length > 0 && diff[0].disease.investigations) {
+        const invs = diff[0].disease.investigations.slice(0, 4) as unknown as string[];
+        invs.forEach((inv, i) => {
+          newInsights.push({
+            id: `ins-inv-${i}-${Date.now()}`, type: 'suggestion', timestamp: Date.now(),
+            severity: 'info', title: String(inv), description: `Suggested for ${diff[0].disease.name}`,
+            acknowledged: false, source: 'AMEXAN Engine',
+          });
+        });
+      }
+
+      if (newInsights.length > 0) setInsights(newInsights);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [debouncedForm]);
 
   const handlePhaseChange = useCallback((phaseId: string) => {
     changePhase(phaseId);

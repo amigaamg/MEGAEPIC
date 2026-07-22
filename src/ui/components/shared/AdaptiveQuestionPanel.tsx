@@ -11,8 +11,7 @@ interface AdaptiveQuestionPanelProps {
 }
 
 export const AdaptiveQuestionPanel: React.FC<AdaptiveQuestionPanelProps> = ({ phaseType = 'all' }) => {
-  const form = usePatientStore(s => s.form);
-  const updateForm = usePatientStore(s => s.updateForm);
+  const { form, updateForm } = usePatientStore();
   const t = useTheme();
   const [expanded, setExpanded] = useState(false);
   const [answeredIds, setAnsweredIds] = useState<Set<string>>(new Set());
