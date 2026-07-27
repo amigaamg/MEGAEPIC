@@ -1,0 +1,589 @@
+import { ObjectType } from './book-I-objects';
+
+export enum RelationshipType {
+  HasEncounter = 'HAS_ENCOUNTER',
+  HasComplaint = 'HAS_COMPLAINT',
+  HasMechanism = 'HAS_MECHANISM',
+  ProducesPhenotype = 'PRODUCES_PHENOTYPE',
+  SuggestsDisease = 'SUGGESTS_DISEASE',
+  HasInvestigation = 'HAS_INVESTIGATION',
+  Confirms = 'CONFIRMS',
+  HasTreatment = 'HAS_TREATMENT',
+  RequiresMonitoring = 'REQUIRES_MONITORING',
+
+  CapturesFact = 'CAPTURES_FACT',
+  FactSupports = 'FACT_SUPPORTS',
+  SupportedBySign = 'SUPPORTED_BY_SIGN',
+  DocumentedAs = 'DOCUMENTED_AS',
+
+  Triggers = 'TRIGGERS',
+  Activates = 'ACTIVATES',
+  Requires = 'REQUIRES',
+  Contraindicates = 'CONTRAINDICATES',
+  InteractsWith = 'INTERACTS_WITH',
+
+  HasCause = 'HAS_CAUSE',
+  HasRiskFactor = 'HAS_RISK_FACTOR',
+  HasComplication = 'HAS_COMPLICATION',
+  TreatedBy = 'TREATED_BY',
+  MonitoredBy = 'MONITORED_BY',
+  FollowedBy = 'FOLLOWED_BY',
+  Overrides = 'OVERRIDES',
+  AppliesTo = 'APPLIES_TO',
+  InheritsFrom = 'INHERITS_FROM',
+
+  Shows = 'SHOWS',
+  Hides = 'HIDES',
+  Enables = 'ENABLES',
+  Disables = 'DISABLES',
+  Modifies = 'MODIFIES',
+
+  OccursIn = 'OCCURS_IN',
+  ModifiedBy = 'MODIFIED_BY',
+  BelongsTo = 'BELONGS_TO',
+  AssignedTo = 'ASSIGNED_TO',
+  ReferredTo = 'REFERRED_TO',
+  TransferredTo = 'TRANSFERRED_TO',
+
+  Narrates = 'NARRATES',
+  Generates = 'GENERATES',
+  ParticipatesIn = 'PARTICIPATES_IN',
+
+  Evidences = 'EVIDENCES',
+  Supports = 'SUPPORTS',
+  Contradicts = 'CONTRADICTS',
+}
+
+export const RELATIONSHIP_METADATA: Record<
+  RelationshipType,
+  {
+    label: string;
+    description: string;
+    allowedSources: ObjectType[];
+    allowedTargets: ObjectType[];
+    isHierarchical: boolean;
+    requiresEvidence: boolean;
+    cardinality: 'one_to_one' | 'one_to_many' | 'many_to_many';
+  }
+> = {
+  [RelationshipType.HasEncounter]: {
+    label: 'has encounter',
+    description: 'A patient has a clinical encounter',
+    allowedSources: [ObjectType.Patient],
+    allowedTargets: [ObjectType.Encounter, ObjectType.Admission, ObjectType.Consultation],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.HasComplaint]: {
+    label: 'has complaint',
+    description: 'An encounter is associated with a presenting complaint',
+    allowedSources: [ObjectType.Encounter, ObjectType.Consultation],
+    allowedTargets: [ObjectType.Symptom],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.HasMechanism]: {
+    label: 'has mechanism',
+    description: 'A symptom or sign has an underlying pathophysiological mechanism',
+    allowedSources: [ObjectType.Symptom, ObjectType.Sign, ObjectType.Finding],
+    allowedTargets: [ObjectType.Mechanism],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.ProducesPhenotype]: {
+    label: 'produces phenotype',
+    description: 'A mechanism produces a clinical phenotype or syndrome',
+    allowedSources: [ObjectType.Mechanism],
+    allowedTargets: [ObjectType.Phenotype, ObjectType.Syndrome],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.SuggestsDisease]: {
+    label: 'suggests disease',
+    description: 'A phenotype or syndrome suggests a specific disease',
+    allowedSources: [ObjectType.Phenotype, ObjectType.Syndrome, ObjectType.Symptom],
+    allowedTargets: [ObjectType.Disease, ObjectType.Diagnosis],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.HasInvestigation]: {
+    label: 'has investigation',
+    description: 'A disease or diagnosis requires specific investigations',
+    allowedSources: [ObjectType.Disease, ObjectType.Diagnosis, ObjectType.Phenotype],
+    allowedTargets: [ObjectType.Investigation],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Confirms]: {
+    label: 'confirms',
+    description: 'An investigation confirms or rules out a diagnosis',
+    allowedSources: [ObjectType.Investigation, ObjectType.LabResult, ObjectType.ImagingResult],
+    allowedTargets: [ObjectType.Diagnosis, ObjectType.Disease],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.HasTreatment]: {
+    label: 'has treatment',
+    description: 'A disease has a recommended treatment or management plan',
+    allowedSources: [ObjectType.Disease, ObjectType.Diagnosis],
+    allowedTargets: [ObjectType.Treatment, ObjectType.Drug, ObjectType.ProcedurePlan],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.RequiresMonitoring]: {
+    label: 'requires monitoring',
+    description: 'A treatment or disease requires ongoing monitoring',
+    allowedSources: [ObjectType.Disease, ObjectType.Treatment, ObjectType.Drug],
+    allowedTargets: [ObjectType.MonitoringPlan, ObjectType.VitalSign, ObjectType.Investigation],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.CapturesFact]: {
+    label: 'captures fact',
+    description: 'A question captures a clinical fact or observation',
+    allowedSources: [ObjectType.Question],
+    allowedTargets: [ObjectType.Answer, ObjectType.Finding, ObjectType.Measurement],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_one',
+  },
+  [RelationshipType.FactSupports]: {
+    label: 'fact supports',
+    description: 'A clinical fact supports a mechanism or diagnosis',
+    allowedSources: [ObjectType.Finding, ObjectType.Measurement, ObjectType.Answer],
+    allowedTargets: [ObjectType.Mechanism, ObjectType.Phenotype, ObjectType.Disease],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.SupportedBySign]: {
+    label: 'supported by sign',
+    description: 'A mechanism is supported by clinical signs',
+    allowedSources: [ObjectType.Mechanism],
+    allowedTargets: [ObjectType.Sign, ObjectType.Finding, ObjectType.PhysicalFinding],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.DocumentedAs]: {
+    label: 'documented as',
+    description: 'A finding is documented as a specific narrative pattern',
+    allowedSources: [
+      ObjectType.Finding, ObjectType.PhysicalFinding, ObjectType.Measurement,
+      ObjectType.VitalSign, ObjectType.Question, ObjectType.Answer,
+    ],
+    allowedTargets: [
+      ObjectType.HistoryNote, ObjectType.SOAPNote, ObjectType.ProgressNote,
+      ObjectType.AdmissionNote, ObjectType.OperationNote,
+    ],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.Triggers]: {
+    label: 'triggers',
+    description: 'An event or finding triggers a workflow or cascade',
+    allowedSources: [
+      ObjectType.Event, ObjectType.Finding, ObjectType.Diagnosis,
+      ObjectType.Symptom, ObjectType.VitalSign,
+    ],
+    allowedTargets: [
+      ObjectType.Task, ObjectType.Notification, ObjectType.Escalation,
+      ObjectType.Workflow, ObjectType.StateTransition,
+    ],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Activates]: {
+    label: 'activates',
+    description: 'A symptom or context activates an examination module or protocol',
+    allowedSources: [ObjectType.Symptom, ObjectType.Finding, ObjectType.Context],
+    allowedTargets: [ObjectType.Protocol, ObjectType.Guideline, ObjectType.ProcedurePlan],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Requires]: {
+    label: 'requires',
+    description: 'A procedure or workflow step requires a prerequisite',
+    allowedSources: [
+      ObjectType.Procedure, ObjectType.Investigation, ObjectType.Treatment,
+      ObjectType.Workflow, ObjectType.Task,
+    ],
+    allowedTargets: [
+      ObjectType.Investigation, ObjectType.Equipment, ObjectType.Drug,
+      ObjectType.Approval,
+    ],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Contraindicates]: {
+    label: 'contraindicates',
+    description: 'A condition or drug contraindicates a treatment',
+    allowedSources: [
+      ObjectType.Disease, ObjectType.Diagnosis, ObjectType.Drug,
+      ObjectType.Contraindication, ObjectType.Pregnancy,
+    ],
+    allowedTargets: [ObjectType.Treatment, ObjectType.Drug, ObjectType.Procedure],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.InteractsWith]: {
+    label: 'interacts with',
+    description: 'A drug interacts with another drug or substance',
+    allowedSources: [ObjectType.Drug],
+    allowedTargets: [ObjectType.Drug],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.HasCause]: {
+    label: 'has cause',
+    description: 'A disease or mechanism has an underlying cause',
+    allowedSources: [ObjectType.Disease, ObjectType.Mechanism],
+    allowedTargets: [ObjectType.Disease, ObjectType.Mechanism],
+    isHierarchical: true,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.HasRiskFactor]: {
+    label: 'has risk factor',
+    description: 'A disease has associated risk factors',
+    allowedSources: [ObjectType.Disease],
+    allowedTargets: [ObjectType.RiskFactor],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.HasComplication]: {
+    label: 'has complication',
+    description: 'A disease or procedure has potential complications',
+    allowedSources: [ObjectType.Disease, ObjectType.Procedure, ObjectType.Operation],
+    allowedTargets: [ObjectType.Complication, ObjectType.Disease],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.TreatedBy]: {
+    label: 'treated by',
+    description: 'A disease is treated by a specific treatment or drug',
+    allowedSources: [ObjectType.Disease, ObjectType.Diagnosis],
+    allowedTargets: [ObjectType.Treatment, ObjectType.Drug, ObjectType.ProcedurePlan],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.MonitoredBy]: {
+    label: 'monitored by',
+    description: 'A disease or treatment is monitored by specific parameters',
+    allowedSources: [ObjectType.Disease, ObjectType.Treatment, ObjectType.Drug],
+    allowedTargets: [
+      ObjectType.VitalSign, ObjectType.Investigation, ObjectType.MonitoringPlan,
+      ObjectType.Score,
+    ],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.FollowedBy]: {
+    label: 'followed by',
+    description: 'An encounter or event should be followed by a subsequent action',
+    allowedSources: [
+      ObjectType.Encounter, ObjectType.Treatment, ObjectType.Discharge,
+      ObjectType.Procedure, ObjectType.Operation,
+    ],
+    allowedTargets: [
+      ObjectType.FollowUp, ObjectType.Appointment, ObjectType.Visit,
+      ObjectType.MonitoringPlan,
+    ],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Overrides]: {
+    label: 'overrides',
+    description: 'A guideline or protocol overrides a parent guideline',
+    allowedSources: [ObjectType.Guideline, ObjectType.Protocol],
+    allowedTargets: [ObjectType.Guideline, ObjectType.Protocol],
+    isHierarchical: true,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.AppliesTo]: {
+    label: 'applies to',
+    description: 'A guideline or rule applies to a specific context',
+    allowedSources: [ObjectType.Guideline, ObjectType.Protocol, ObjectType.Rule],
+    allowedTargets: [
+      ObjectType.Facility, ObjectType.Department, ObjectType.Organization,
+    ],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.InheritsFrom]: {
+    label: 'inherits from',
+    description: 'A concept inherits properties from a parent concept',
+    allowedSources: [
+      ObjectType.Symptom, ObjectType.Sign, ObjectType.Disease,
+      ObjectType.Mechanism, ObjectType.Phenotype,
+    ],
+    allowedTargets: [
+      ObjectType.Symptom, ObjectType.Sign, ObjectType.Disease,
+      ObjectType.Mechanism, ObjectType.Phenotype,
+    ],
+    isHierarchical: true,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Shows]: {
+    label: 'shows',
+    description: 'A context or rule shows a UI element',
+    allowedSources: [
+      ObjectType.Context, ObjectType.Rule, ObjectType.Disease,
+    ],
+    allowedTargets: [
+      ObjectType.Question, ObjectType.Section, ObjectType.Module,
+    ],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Hides]: {
+    label: 'hides',
+    description: 'A context or rule hides a UI element',
+    allowedSources: [
+      ObjectType.Context, ObjectType.Rule, ObjectType.Disease,
+    ],
+    allowedTargets: [
+      ObjectType.Question, ObjectType.Section, ObjectType.Module,
+    ],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Enables]: {
+    label: 'enables',
+    description: 'A question or answer enables a subsequent question',
+    allowedSources: [ObjectType.Question, ObjectType.Answer],
+    allowedTargets: [ObjectType.Question],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Disables]: {
+    label: 'disables',
+    description: 'A question or answer disables a subsequent question',
+    allowedSources: [ObjectType.Question, ObjectType.Answer],
+    allowedTargets: [ObjectType.Question],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Modifies]: {
+    label: 'modifies',
+    description: 'A context modifies the probability or presentation of a disease',
+    allowedSources: [ObjectType.Context, ObjectType.Disease],
+    allowedTargets: [ObjectType.Disease, ObjectType.Differential],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.OccursIn]: {
+    label: 'occurs in',
+    description: 'A symptom or disease occurs in a population group',
+    allowedSources: [ObjectType.Symptom, ObjectType.Disease, ObjectType.Mechanism],
+    allowedTargets: [ObjectType.Population],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.ModifiedBy]: {
+    label: 'modified by',
+    description: 'A concept is modified by a context (pregnancy, age, etc.)',
+    allowedSources: [
+      ObjectType.Symptom, ObjectType.Disease, ObjectType.Treatment, ObjectType.Drug,
+    ],
+    allowedTargets: [ObjectType.Context],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.BelongsTo]: {
+    label: 'belongs to',
+    description: 'An object belongs to a parent entity',
+    allowedSources: [
+      ObjectType.Department, ObjectType.Ward, ObjectType.Room, ObjectType.Bed,
+    ],
+    allowedTargets: [ObjectType.Facility, ObjectType.Department],
+    isHierarchical: true,
+    requiresEvidence: false,
+    cardinality: 'one_to_one',
+  },
+  [RelationshipType.AssignedTo]: {
+    label: 'assigned to',
+    description: 'A task or encounter is assigned to a clinician',
+    allowedSources: [ObjectType.Task, ObjectType.Encounter],
+    allowedTargets: [ObjectType.Clinician],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.ReferredTo]: {
+    label: 'referred to',
+    description: 'A patient or encounter is referred to a department or clinician',
+    allowedSources: [ObjectType.Patient, ObjectType.Encounter],
+    allowedTargets: [ObjectType.Department, ObjectType.Clinician, ObjectType.Facility],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.TransferredTo]: {
+    label: 'transferred to',
+    description: 'A patient is transferred to another ward or facility',
+    allowedSources: [ObjectType.Patient, ObjectType.Encounter],
+    allowedTargets: [ObjectType.Ward, ObjectType.Facility, ObjectType.Department],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.Narrates]: {
+    label: 'narrates',
+    description: 'An object has a narrative representation',
+    allowedSources: [
+      ObjectType.Finding, ObjectType.Measurement, ObjectType.PhysicalFinding,
+      ObjectType.Symptom, ObjectType.Sign,
+    ],
+    allowedTargets: [ObjectType.Documentation],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_one',
+  },
+  [RelationshipType.Generates]: {
+    label: 'generates',
+    description: 'An event or workflow generates a document',
+    allowedSources: [
+      ObjectType.Event, ObjectType.Workflow, ObjectType.StateTransition,
+    ],
+    allowedTargets: [
+      ObjectType.SOAPNote, ObjectType.DischargeSummary, ObjectType.ReferralLetter,
+      ObjectType.OperationNote, ObjectType.DeathSummary,
+    ],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'one_to_many',
+  },
+  [RelationshipType.ParticipatesIn]: {
+    label: 'participates in',
+    description: 'A user or system participates in a workflow',
+    allowedSources: [ObjectType.Clinician, ObjectType.Patient, ObjectType.System],
+    allowedTargets: [ObjectType.Workflow, ObjectType.Task],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.Evidences]: {
+    label: 'evidences',
+    description: 'A reference or study provides evidence for a relationship',
+    allowedSources: [ObjectType.Evidence, ObjectType.Reference],
+    allowedTargets: [
+      ObjectType.Relationship, ObjectType.Rule, ObjectType.Guideline,
+    ],
+    isHierarchical: false,
+    requiresEvidence: false,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.Supports]: {
+    label: 'supports',
+    description: 'A finding or fact supports a diagnosis or mechanism',
+    allowedSources: [
+      ObjectType.Finding, ObjectType.Sign, ObjectType.Symptom,
+      ObjectType.Answer, ObjectType.Measurement,
+    ],
+    allowedTargets: [
+      ObjectType.Diagnosis, ObjectType.Disease, ObjectType.Mechanism,
+      ObjectType.Phenotype,
+    ],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+  [RelationshipType.Contradicts]: {
+    label: 'contradicts',
+    description: 'A finding or fact contradicts a diagnosis or mechanism',
+    allowedSources: [
+      ObjectType.Finding, ObjectType.Sign, ObjectType.Answer,
+      ObjectType.Measurement, ObjectType.LabResult,
+    ],
+    allowedTargets: [
+      ObjectType.Diagnosis, ObjectType.Disease, ObjectType.Mechanism,
+      ObjectType.Phenotype,
+    ],
+    isHierarchical: false,
+    requiresEvidence: true,
+    cardinality: 'many_to_many',
+  },
+};
+
+export interface RelationshipDefinition {
+  type: RelationshipType;
+  sourceType: ObjectType;
+  targetType: ObjectType;
+  properties: Record<string, unknown>;
+  evidence?: EvidenceRef[];
+  metadata: RelationshipMetadata;
+}
+
+export interface RelationshipMetadata {
+  weight: number;
+  confidence: number;
+  isDefault: boolean;
+  priority: number;
+  createdAt: number;
+  updatedAt: number;
+  author: string;
+  source: string;
+}
+
+export interface EvidenceRef {
+  id: string;
+  level: string;
+  source: string;
+  citation: string;
+}
+
+export function createRelationship(
+  type: RelationshipType,
+  sourceType: ObjectType,
+  targetType: ObjectType,
+  overrides?: Partial<RelationshipMetadata>,
+): RelationshipDefinition {
+  return {
+    type,
+    sourceType,
+    targetType,
+    properties: {},
+    metadata: {
+      weight: 1.0,
+      confidence: 1.0,
+      isDefault: false,
+      priority: 0,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      author: 'system',
+      source: 'amexan-constitution',
+      ...overrides,
+    },
+  };
+}
