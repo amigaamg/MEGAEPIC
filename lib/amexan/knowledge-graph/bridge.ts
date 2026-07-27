@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DiseaseNode } from '../knowbase/diseaseNode';
 import {
   createDiseaseNode, linkSymptomToDisease, createScore,

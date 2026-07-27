@@ -29,6 +29,7 @@ import {
   generateSummaryNarrative,
 } from '@/lib/amexan/encounter-engine/engines/documentation-engine';
 import { saveEncounter } from '@/lib/amexan/encounter/encounterPersistence';
+import { persistExamFindings, listenExamFindings, persistEvidenceGraph } from '@/lib/clinical/constitutional/examinationPersistence';
 import { InvestigationCards } from './InvestigationCards';
 import { PrescriptionCards } from './PrescriptionCards';
 import { getAllSymptomNames, searchSymptom as searchSymptomNodes, getSymptomById, getSymptomNodeByName, getApplicableQuestions, extractFacts, getApplicableQuestionsConstitutional } from '@/lib/amexan/encounter-engine/knowledge/symptomKnowledge';
@@ -46,6 +47,22 @@ import { getPerinatalCardsForSection } from '@/lib/amexan/encounter-engine/rules
 import { getPsychiatricCardsForSection } from '@/lib/amexan/encounter-engine/rules/psychiatricQuestionGroups';
 import type { QuestionCard } from '@/lib/amexan/encounter-engine/types/ces';
 import { ConstitutionalSidebar } from '@/components/clinical/ConstitutionalSidebar';
+import { useCoughEngine } from './bridge/CoughEngineBridge';
+import {
+  useExaminationEngine,
+  VitalsPanel,
+  AnthropometryPanel,
+  GeneralExamPanel,
+  SystemicExamPanel,
+  SpecialCascadeRenderer,
+  RespiratoryPanel,
+  AbdominalPanel,
+  CardiovascularPanel,
+  NeurologicalPanel,
+  UEOPlayground,
+  BreastPanel,
+} from './exam/index';
+import type { ExamFindings } from '@/lib/clinical/constitutional/examination-engine';
 import './clinical-encounter-theme.css';
 
 interface Props {
@@ -64,6 +81,8 @@ interface Props {
 }
 
 const ORG_ID = 'telemed-a98cf';
+const DEFAULT_DEPT = 'OUTPATIENT';
+const DEFAULT_UNIT = 'general';
 
 /**
  * FIX: added fullLabel — used for Previous/Next nav buttons and tooltips.
@@ -135,6 +154,7 @@ export function ClinicalEncounter({
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const aiTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hpiContainerRef = useRef<HTMLDivElement>(null);
+  const hpiUserScrolledRef = useRef(false);
 
   const [state, setState] = useState<EncounterOrchestratorState>(() => {
     if (initialState) {
@@ -291,14 +311,6 @@ export function ClinicalEncounter({
     });
   }, [currentPhase, state.chiefComplaints, constitutionalContext, getSymptomIdForComplaint]);
 
-  useEffect(() => {
-    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-    saveTimerRef.current = setTimeout(async () => {
-      await saveEncounter(ORG_ID, encounterIdRef.current, state);
-    }, 2000);
-    return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
-  }, [state.questionEngine.answers, currentPhase, completedPhases]);
-
   const complaintFacts = useMemo(() => {
     const facts: { key: string; value: string | number | boolean; type: 'reported' | 'observed' | 'measured' | 'derived'; questionId: string; documentationPhrase: string }[] = [];
     for (const cc of state.chiefComplaints) {
@@ -365,6 +377,106 @@ export function ClinicalEncounter({
     return generateConstitutionalHpiNarrative(complaintIds, complaintFacts);
   }, [complaintFacts, state.chiefComplaints, getSymptomIdForComplaint]);
 
+  const coughBridge = useCoughEngine(
+    state.biodata?.age || patientAge || 30,
+    state.biodata?.sex || patientSex || 'male',
+    state.biodata?.ageGroup || 'adult',
+    pregnant,
+    state.chiefComplaints.map(cc => cc.complaint),
+    Object.fromEntries(
+      Object.entries(state.questionEngine.answers).map(([k, v]) => [k, v.value]),
+    ),
+  );
+
+  const [examFindings, setExamFindings] = useState<ExamFindings>({});
+
+  // Load exam findings from Firestore on mount
+  const examLoadedRef = useRef(false);
+  useEffect(() => {
+    if (examLoadedRef.current || !encounterIdRef.current) return;
+    examLoadedRef.current = true;
+    const unsub = listenExamFindings(ORG_ID, DEFAULT_DEPT, DEFAULT_UNIT, encounterIdRef.current, (data) => {
+      if (!data) return;
+      const loaded: ExamFindings = {};
+      for (const system of ['cardiology', 'respiratory', 'abdominal', 'neurological', 'breast'] as const) {
+        const findings = data[system] as Record<string, { value: unknown; documentedAt: number }> | undefined;
+        if (findings) {
+          for (const [id, f] of Object.entries(findings)) {
+            loaded[id] = f;
+          }
+        }
+      }
+      if (Object.keys(loaded).length > 0) {
+        setExamFindings(prev => ({ ...prev, ...loaded }));
+      }
+    });
+    return () => unsub();
+  }, []);
+
+  const handleExamFindingChange = useCallback((findingId: string, value: unknown) => {
+    setExamFindings(prev => ({
+      ...prev,
+      [findingId]: { value, documentedAt: Date.now() },
+    }));
+  }, []);
+
+  useEffect(() => {
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(async () => {
+      await saveEncounter(ORG_ID, encounterIdRef.current, state);
+      const eid = encounterIdRef.current;
+      if (Object.keys(examFindings).length > 0) {
+        persistExamFindings(ORG_ID, DEFAULT_DEPT, DEFAULT_UNIT, eid, {
+          cardiology: Object.fromEntries(Object.entries(examFindings).filter(([k]) => k.startsWith('cvs_'))),
+          respiratory: Object.fromEntries(Object.entries(examFindings).filter(([k]) => k.startsWith('resp_') || k.startsWith('scr_resp_'))),
+          abdominal: Object.fromEntries(Object.entries(examFindings).filter(([k]) => k.startsWith('abd_') || k.startsWith('scr_abd_'))),
+          neurological: Object.fromEntries(Object.entries(examFindings).filter(([k]) => k.startsWith('neuro_') || k.startsWith('scr_neuro_'))),
+          breast: Object.fromEntries(Object.entries(examFindings).filter(([k]) => k.startsWith('breast_') || k.startsWith('scr_breast_'))),
+        }).catch(() => {});
+      }
+    }, 2000);
+    return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
+  }, [state.questionEngine.answers, examFindings, currentPhase, completedPhases]);
+
+  const historyFacts = useMemo(() => {
+    const facts: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(state.questionEngine.answers)) {
+      if (v?.value != null) facts[k] = v.value;
+    }
+    return facts;
+  }, [state.questionEngine.answers]);
+
+  const examBridge = useExaminationEngine(
+    (state.biodata?.age || patientAge || 30) * 12,
+    state.biodata?.sex || patientSex || 'male',
+    pregnant,
+    state.chiefComplaints.map(cc => cc.complaint),
+    historyFacts,
+    examFindings,
+    handleExamFindingChange,
+    (state.patientContext as any)?.knownDiseases || [],
+    state.patientContext?.activeModules || [],
+  );
+
+  // Persist evidence graphs to Neo4j whenever they change
+  const evidencePersistedRef = useRef(false);
+  useEffect(() => {
+    const eid = encounterIdRef.current;
+    if (!eid || evidencePersistedRef.current) return;
+    const allNodes = [
+      ...(examBridge.respEvidenceGraph || []).map(n => ({ ...n, value: examFindings[n.finding]?.value })),
+      ...(examBridge.abdEvidenceGraph || []).map(n => ({ ...n, value: examFindings[n.finding]?.value })),
+      ...(examBridge.cvsEvidenceGraph || []).map(n => ({ ...n, value: examFindings[n.finding]?.value })),
+      ...(examBridge.neuroEvidenceGraph || []).map(n => ({ ...n, value: examFindings[n.finding]?.value })),
+      ...(examBridge.breastEvidenceGraph || []).map(n => ({ ...n, value: examFindings[n.finding]?.value })),
+    ];
+    const validNodes = allNodes.filter(n => n.mechanisms?.length > 0 || n.diseases?.length > 0);
+    if (validNodes.length > 0) {
+      persistEvidenceGraph(eid, validNodes);
+      evidencePersistedRef.current = true;
+    }
+  }, [examBridge.respEvidenceGraph, examBridge.abdEvidenceGraph, examBridge.cvsEvidenceGraph, examBridge.neuroEvidenceGraph, examBridge.breastEvidenceGraph, examFindings]);
+
   useEffect(() => {
     const answeredCount = Object.keys(state.questionEngine.answers).length;
     if (answeredCount < 2) return;
@@ -392,6 +504,7 @@ export function ClinicalEncounter({
     const currentCount = Object.keys(state.questionEngine.answers).length;
     if (currentCount > prevHpiAnswerCountRef.current && hpiContainerRef.current) {
       prevHpiAnswerCountRef.current = currentCount;
+      if (hpiUserScrolledRef.current) return;
       requestAnimationFrame(() => {
         const el = hpiContainerRef.current;
         if (el) {
@@ -400,6 +513,13 @@ export function ClinicalEncounter({
       });
     }
   }, [state.questionEngine.answers, currentPhase]);
+
+  const handleHpiScroll = useCallback(() => {
+    const el = hpiContainerRef.current;
+    if (!el) return;
+    const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 100;
+    hpiUserScrolledRef.current = !isNearBottom;
+  }, []);
 
   // Debounced constitutional store re-evaluation for realtime doc panel/sidebar updates
   const reEvalTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -860,7 +980,7 @@ export function ClinicalEncounter({
         </div>
 
         {/* LEFT: Questions — own scroll, sticky footer inside, ONE footer nav for all phases */}
-        <div className="ec-question-panel" ref={hpiContainerRef}>
+        <div className="ec-question-panel" ref={hpiContainerRef} onScroll={handleHpiScroll}>
           {/* ── Format strip: shows current constitutional format ── */}
           {storeFormatResult && (
             <div style={{
@@ -982,6 +1102,12 @@ export function ClinicalEncounter({
             <div className="ec-phase-view">
               <div className="ec-phase-title">
                 History of Presenting Illness
+                {coughBridge.isCoughActive && (
+                  <span style={{
+                    fontSize: 9, fontWeight: 600, color: '#7C3AED', marginLeft: 8,
+                    background: '#7C3AED18', padding: '1px 6px', borderRadius: 3,
+                  }}>Cough · Context-adapted</span>
+                )}
               </div>
               {state.chiefComplaints.length === 0 ? (
                 <div className="ec-empty-state">
@@ -989,20 +1115,64 @@ export function ClinicalEncounter({
                 </div>
               ) : (
                 <div className="ec-hpi-grid">
-                  {hpiCardsByComplaint.map((group, gi) => (
-                    <div key={gi} className="ec-hpi-col">
-                      <div className="ec-hpi-col-h">{group.complaint}</div>
-                      <div className="ec-hpi-cards-grid">
-                        {group.cards.length > 0 ? group.cards.map((c: any) =>
-                          renderCard(c, !!state.questionEngine.answers[c.id])
-                        ) : (
-                          <div className="ec-empty-state" style={{ padding: '12px' }}>
-                            <div>All captured</div>
+                  {hpiCardsByComplaint.map((group, gi) => {
+                    const isCoughGroup = coughBridge.isCoughActive &&
+                      group.complaint.toLowerCase().includes('cough');
+                    return (
+                      <div key={gi} className="ec-hpi-col">
+                        <div className="ec-hpi-col-h">
+                          {group.complaint}
+                          {isCoughGroup && (
+                            <span style={{
+                              fontSize: 7, fontWeight: 600, color: '#7C3AED', marginLeft: 6,
+                              background: '#7C3AED18', padding: '1px 4px', borderRadius: 2,
+                              textTransform: 'uppercase', verticalAlign: 'middle',
+                            }}>
+                              {coughBridge.patientDesc}
+                            </span>
+                          )}
+                        </div>
+                        <div className="ec-hpi-cards-grid">
+                          {isCoughGroup ? (
+                            coughBridge.cards.length > 0 ? (
+                              coughBridge.cards.map(c => {
+                                const answered = !!state.questionEngine.answers[c.id];
+                                const cardForRender = {
+                                  ...c,
+                                  chips: c.chips,
+                                  options: c.options?.map(o => ({ value: o.value, label: o.label })),
+                                };
+                                return renderCard(cardForRender, answered);
+                              })
+                            ) : (
+                              <div className="ec-empty-state" style={{ padding: '12px' }}>
+                                <div>All cough details captured</div>
+                              </div>
+                            )
+                          ) : (
+                            group.cards.length > 0 ? group.cards.map((c: any) =>
+                              renderCard(c, !!state.questionEngine.answers[c.id])
+                            ) : (
+                              <div className="ec-empty-state" style={{ padding: '12px' }}>
+                                <div>All captured</div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                        {/* Cough-specific context bar */}
+                        {isCoughGroup && coughBridge.hpiNarrative && (
+                          <div style={{
+                            marginTop: 6, padding: '6px 8px', fontSize: 9, lineHeight: 1.4,
+                            color: '#334155', background: '#F8FAFC', borderRadius: 4,
+                            borderLeft: '2px solid #7C3AED',
+                          }}>
+                            {coughBridge.hpiNarrative.slice(0, 200)}
+                            {coughBridge.hpiNarrative.length > 200 ? '…' : ''}
                           </div>
                         )}
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                   {hpiCardsByComplaint.length === 0 && state.chiefComplaints.length > 0 && (
                     <div className="ec-empty-state">
                       <div>No further questions. Continue to next phase.</div>
@@ -1105,7 +1275,154 @@ export function ClinicalEncounter({
             </div>
           )}
 
-          {![ 'registration', 'chief_complaint', 'hpi', 'investigations', 'management' ].includes(currentPhase) && (
+          {currentPhase === 'general_exam' && (
+            <div className="ec-phase-view">
+              <div className="ec-phase-title">
+                Physical Examination
+                <span style={{
+                  fontSize: 9, fontWeight: 600, color: '#7C3AED', marginLeft: 8,
+                  background: '#7C3AED18', padding: '1px 6px', borderRadius: 3,
+                }}>
+                  {examBridge.engineOutput.sequence.label}
+                </span>
+              </div>
+
+              <div className="ec-exam-container">
+                <VitalsPanel
+                  groups={examBridge.visibleVitals}
+                  findings={examFindings}
+                  onAnswer={handleExamFindingChange}
+                />
+
+                <AnthropometryPanel
+                  engineOutput={examBridge.anthropometry}
+                  onValueChange={examBridge.handleAnthropometryValue}
+                />
+
+                <GeneralExamPanel
+                  cards={examBridge.generalExamCards}
+                  findings={examBridge.generalExamFindings}
+                  ageBand={state.biodata?.ageGroup || 'adult'}
+                  onAnswer={examBridge.handleGeneralExamAnswer}
+                  narrative={examBridge.engineOutput.generalExamNarrative}
+                />
+
+                <RespiratoryPanel
+                  mode={examBridge.respMode}
+                  cards={examBridge.respCards}
+                  expandedCardIds={examBridge.respExpandedCardIds}
+                  narrative={examBridge.respNarrative}
+                  escalated={examBridge.respEscalated}
+                  evidenceGraph={examBridge.respEvidenceGraph}
+                  findings={examFindings}
+                  onAnswer={examBridge.handleRespiratoryAnswer}
+                  onEscalate={() => {
+                    /* engine auto-escalates via shouldEscalateToPrimary */
+                  }}
+                />
+
+                <AbdominalPanel
+                  mode={examBridge.abdMode}
+                  cards={examBridge.abdCards}
+                  expandedCardIds={examBridge.abdExpandedCardIds}
+                  narrative={examBridge.abdNarrative}
+                  escalated={examBridge.abdEscalated}
+                  evidenceGraph={examBridge.abdEvidenceGraph}
+                  findings={examFindings}
+                  onAnswer={examBridge.handleAbdominalAnswer}
+                  onEscalate={() => {}}
+                />
+
+                <CardiovascularPanel
+                  mode={examBridge.cvsMode}
+                  cards={examBridge.cvsCards}
+                  expandedCardIds={examBridge.cvsExpandedCardIds}
+                  narrative={examBridge.cvsNarrative}
+                  escalated={examBridge.cvsEscalated}
+                  evidenceGraph={examBridge.cvsEvidenceGraph}
+                  findings={examFindings}
+                  onAnswer={examBridge.handleCardiovascularAnswer}
+                  onEscalate={() => {}}
+                />
+
+                <NeurologicalPanel
+                  mode={examBridge.neuroMode}
+                  cards={examBridge.neuroCards}
+                  expandedCardIds={examBridge.neuroExpandedCardIds}
+                  narrative={examBridge.neuroNarrative}
+                  escalated={examBridge.neuroEscalated}
+                  evidenceGraph={examBridge.neuroEvidenceGraph}
+                  findings={examFindings}
+                  onAnswer={examBridge.handleNeurologicalAnswer}
+                  onEscalate={() => {}}
+                />
+
+                <BreastPanel
+                  mode={examBridge.breastMode}
+                  cards={examBridge.breastCards}
+                  expandedCardIds={examBridge.breastExpandedCardIds}
+                  narrative={examBridge.breastNarrative}
+                  escalated={examBridge.breastEscalated}
+                  evidenceGraph={examBridge.breastEvidenceGraph}
+                  findings={examFindings}
+                  onAnswer={examBridge.handleBreastAnswer}
+                  onEscalate={() => {}}
+                />
+
+                <SystemicExamPanel
+                  modules={examBridge.visibleModules}
+                  findings={examFindings}
+                  onAnswer={handleExamFindingChange}
+                />
+
+                <SpecialCascadeRenderer
+                  cascades={examBridge.activeCascades}
+                  findings={examFindings}
+                  onAnswer={handleExamFindingChange}
+                />
+
+                <UEOPlayground
+                  activeUEOs={examBridge.activeUEOs}
+                  allFindings={examFindings}
+                  onFindingChange={handleExamFindingChange}
+                />
+              </div>
+
+              {/* Cross-check alerts */}
+              {examBridge.crossCheckResults.length > 0 && (
+                <div style={{ marginTop: 12 }}>
+                  <div style={{
+                    fontSize: 10, fontWeight: 700, color: '#EA580C',
+                    textTransform: 'uppercase', letterSpacing: '0.04em',
+                    marginBottom: 6,
+                  }}>
+                    Cross-Check Alerts ({examBridge.crossCheckResults.length})
+                  </div>
+                  {examBridge.crossCheckResults.map(cr => (
+                    <div key={cr.ruleId} style={{
+                      padding: '6px 10px', marginBottom: 4, borderRadius: 5,
+                      fontSize: 10, lineHeight: 1.4,
+                      background: cr.severity === 'critical' ? '#FEF2F2'
+                        : cr.severity === 'warning' ? '#FFF7ED' : '#F0FDF4',
+                      border: `1px solid ${
+                        cr.severity === 'critical' ? '#FECACA'
+                        : cr.severity === 'warning' ? '#FED7AA' : '#BBF7D0'
+                      }`,
+                      color: cr.severity === 'critical' ? '#991B1B'
+                        : cr.severity === 'warning' ? '#9A3412' : '#166534',
+                    }}>
+                      <span style={{ fontWeight: 600, textTransform: 'uppercase', fontSize: 8 }}>
+                        {cr.severity}
+                      </span>
+                      {' '}{cr.message}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {![ 'registration', 'chief_complaint', 'hpi', 'general_exam', 'investigations', 'management' ].includes(currentPhase) && (
             <div className="ec-phase-view">
               <div className="ec-phase-title">
                 {(() => {
@@ -1310,7 +1627,31 @@ export function ClinicalEncounter({
                       ))}</div>
                     )}
                     {sectionId === 'hpi' && (
-                      <div>{constitutionalNarrative || state.aiNarrative || state.hpiNarrative || (state.chiefComplaints.length > 0 ? 'Capturing details…' : 'No history captured yet.')}</div>
+                      <div>
+                        {coughBridge.isCoughActive && coughBridge.hpiNarrative ? (
+                          <>
+                            {coughBridge.isCoughActive && (
+                              <span style={{
+                                fontSize: 7, fontWeight: 600, color: '#7C3AED',
+                                background: '#7C3AED15', padding: '1px 4px', borderRadius: 2,
+                                textTransform: 'uppercase', marginRight: 4,
+                              }}>COUGH ENGINE</span>
+                            )}
+                            {coughBridge.hpiNarrative}
+                            {coughBridge.differentials.length > 0 && (
+                              <div style={{ marginTop: 4, fontSize: 9, color: '#64748B' }}>
+                                Top differentials: {coughBridge.differentials.slice(0, 3).map(d => d.diseaseName).join(', ')}
+                              </div>
+                            )}
+                          </>
+                        ) : constitutionalNarrative || state.aiNarrative || state.hpiNarrative ? (
+                          <>{constitutionalNarrative || state.aiNarrative || state.hpiNarrative}</>
+                        ) : (
+                          <span style={{ color: '#94A3B8' }}>
+                            {state.chiefComplaints.length > 0 ? 'Capturing details…' : 'No history captured yet.'}
+                          </span>
+                        )}
+                      </div>
                     )}
                     {sectionId === 'past_medical_surgical' && (
                       <div>{generatePastMedicalSurgicalNarrative(state.questionEngine.answers) || 'Not yet assessed.'}{renderQuickComplete('past_medical_surgical')}</div>
@@ -1393,7 +1734,45 @@ export function ClinicalEncounter({
                       <div>{generateDrugAllergyNarrative(state.questionEngine.answers) || 'Not yet assessed.'}{renderQuickComplete('drug_allergy')}</div>
                     )}
                     {sectionId === 'examination' && (
-                      <div><div>Physical examination findings pending documentation.</div></div>
+                      <div>
+                        {examBridge.engineOutput.fullExaminationNarrative ? (
+                          <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>
+                            {examBridge.engineOutput.fullExaminationNarrative}
+
+                            {/* Cross-check results in documentation */}
+                            {examBridge.crossCheckResults.length > 0 && (
+                              <div style={{ marginTop: 8, padding: '6px 8px', background: '#FFF7ED', borderRadius: 4, border: '1px solid #FED7AA' }}>
+                                <div style={{ fontWeight: 700, fontSize: 8, color: '#9A3412', textTransform: 'uppercase', marginBottom: 4 }}>
+                                  Cross-Check Findings
+                                </div>
+                                {examBridge.crossCheckResults.map(cr => (
+                                  <div key={cr.ruleId} style={{ fontSize: 8, color: '#9A3412', marginBottom: 2 }}>
+                                    {cr.message}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Evidence score summary */}
+                            {Object.keys(examBridge.engineOutput.evidenceScore.diseaseEvidenceMap).length > 0 && (
+                              <div style={{ marginTop: 6, fontSize: 8, color: '#64748B' }}>
+                                <div style={{ fontWeight: 600 }}>Evidence: {
+                                  Object.entries(examBridge.engineOutput.evidenceScore.diseaseEvidenceMap)
+                                    .sort(([, a], [, b]) => b.forDisease - a.forDisease)
+                                    .slice(0, 5)
+                                    .map(([disease, score]) =>
+                                      `${disease} (${score.forDisease.toFixed(1)}↑${score.againstDisease > 0 ? `/${score.againstDisease.toFixed(1)}↓` : ''})`
+                                    ).join(', ')
+                                }</div>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <span style={{ color: '#94A3B8' }}>
+                            Physical examination findings pending documentation. Capture findings in the Examination phase.
+                          </span>
+                        )}
+                      </div>
                     )}
                     {sectionId === 'clinical_summary' && (
                       <div>{generateSummaryNarrative(state.questionEngine.answers, state.biodata, state.chiefComplaints) || 'Awaiting summary...'}</div>
@@ -1722,6 +2101,23 @@ export function ClinicalEncounter({
 .ec-docs-empty{text-align:center;padding:45px 14px;color:var(--text-secondary);font-size:11px}
 .ec-docs-empty-icon{font-size:26px;margin-bottom:8px;opacity:.3}
 .ec-bottom{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--white);border-top:1px solid var(--border-light);flex-shrink:0;overflow-x:auto;min-height:36px;position:sticky;bottom:0;z-index:10;margin-top:auto}
+.ec-exam-container{width:100%;box-sizing:border-box}
+.ec-exam-section{margin-bottom:16px;border:1px solid var(--border-light);border-radius:8px;overflow:hidden}
+.ec-exam-section-title{font-size:11px;font-weight:700;color:var(--sky-darker);padding:8px 10px;background:var(--sky-lighter);border-bottom:1px solid var(--sky-border);text-transform:uppercase;letter-spacing:.04em}
+.ec-exam-group{margin:0;padding:6px 10px}
+.ec-exam-group+.ec-exam-group{border-top:1px dashed var(--border-light)}
+.ec-exam-group-label{font-size:8px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.ec-exam-unit{font-size:8px;color:var(--text-secondary);font-weight:400}
+.ec-exam-module-tabs{display:flex;gap:3px;padding:6px 10px;flex-wrap:wrap;border-bottom:1px solid var(--border-light);background:var(--sky-lighter)}
+.ec-exam-module-tab{padding:4px 10px;border-radius:4px;border:1px solid var(--border);background:var(--white);color:var(--text-secondary);font-size:9px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .1s ease}
+.ec-exam-module-tab:hover{border-color:var(--sky);color:var(--sky-darker)}
+.ec-exam-module-tab-active{border-color:var(--sky-dark)!important;background:var(--sky-light)!important;color:var(--sky-dark)!important;font-weight:600}
+.ec-exam-module-content{padding:0}
+.ec-exam-module-header{font-size:10px;font-weight:700;color:var(--text);padding:8px 10px;display:flex;align-items:center;gap:8px}
+.ec-exam-module-sequence{font-size:8px;font-weight:400;color:var(--text-secondary);margin-left:auto}
+.ec-exam-cascade{border-top:2px solid var(--warning)}
+.ec-exam-cascade-header{font-size:10px;font-weight:700;color:#9A3412;padding:8px 10px;background:#FFF7ED;display:flex;align-items:center;gap:8px}
+.ec-exam-cascade-trigger{font-size:8px;font-weight:400;color:#9A3412;margin-left:auto}
 .ec-nav-btn{padding:5px 14px;border-radius:6px;border:1px solid var(--border);background:var(--white);color:var(--text-secondary);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .1s ease;white-space:nowrap;line-height:1.3}
 .ec-nav-btn:hover:not(:disabled){border-color:var(--sky);color:var(--sky-darker)}
 .ec-nav-btn:disabled{opacity:.25;cursor:default}
@@ -1746,11 +2142,13 @@ export function ClinicalEncounter({
   .ec-doc-panel{border-left:none;border-top:1px solid var(--border-light);max-height:30vh}
   .ec-bottom{flex-wrap:wrap}
   .ec-phase-bar{order:-1;width:100%;justify-content:flex-start;padding-bottom:3px}
+  .ec-cards{grid-template-columns:repeat(2,1fr)!important}
 }
 @media(max-width:480px){
   .ec-question-panel{padding:7px}
   .ec-doc-panel{padding:7px;max-height:25vh}
   .ec-phase-title{font-size:12px}
+  .ec-cards{grid-template-columns:1fr!important}
   .ec-card{padding:5px 6px}
   .ec-cc-opt{font-size:10px;padding:4px 8px}
   .ec-input-lg{font-size:13px}

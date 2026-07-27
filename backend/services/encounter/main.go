@@ -75,7 +75,10 @@ func (s *EncounterService) StartEncounter(w http.ResponseWriter, r *http.Request
 }
 
 func (s *EncounterService) GetEncounter(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+	id := r.PathValue("id")
+	if id == "" {
+		id = r.URL.Query().Get("id")
+	}
 	if id == "" {
 		http.Error(w, `{"error":"encounter ID required"}`, http.StatusBadRequest)
 		return

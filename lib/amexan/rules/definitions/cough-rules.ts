@@ -1,0 +1,373 @@
+import type { RuleDefinition } from '../types';
+
+export const COUGH_UI_RULES: RuleDefinition[] = [
+  {
+    id: 'ui_cough_dry_vs_productive', type: 'ui', priority: 80,
+    name: 'Cough Character Drives Sputum Questions',
+    description: 'Show sputum questions only when cough is productive',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.productive', operator: 'eq', value: true }],
+    actions: [
+      { type: 'show', target: 'section.sputum_characteristics' },
+      { type: 'show', target: 'question.sputum_color' },
+      { type: 'show', target: 'question.sputum_volume' },
+      { type: 'show', target: 'question.sputum_odor' },
+    ],
+    active: true, tags: ['cough', 'conditional'],
+  },
+  {
+    id: 'ui_cough_hemoptysis_triggers', type: 'ui', priority: 85,
+    name: 'Hemoptysis Triggers Urgent Workup',
+    description: 'Show urgent investigation options when hemoptysis present',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.hemoptysis', operator: 'eq', value: true }],
+    actions: [
+      { type: 'show', target: 'section.urgent_investigations' },
+      { type: 'activate_module', target: 'hemoptysis_protocol' },
+    ],
+    active: true, tags: ['cough', 'hemoptysis', 'urgent'],
+  },
+  {
+    id: 'ui_cough_duration_splits', type: 'ui', priority: 80,
+    name: 'Cough Duration Splits Workup',
+    description: 'Acute vs chronic cough changes workup pathway',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.duration_days', operator: 'gt', value: 21 }],
+    actions: [
+      { type: 'show', target: 'section.chronic_cough_workup' },
+      { type: 'show', target: 'question.weight_loss' },
+      { type: 'show', target: 'question.night_sweats' },
+      { type: 'show', target: 'question.tb_contact' },
+    ],
+    active: true, tags: ['cough', 'chronic'],
+  },
+  {
+    id: 'ui_cough_nocturnal_triggers_asthma', type: 'ui', priority: 75,
+    name: 'Nocturnal Cough Suggests Asthma/GERD Workup',
+    description: 'Show asthma and GERD questions when cough is nocturnal',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.nocturnal', operator: 'eq', value: true }],
+    actions: [
+      { type: 'show', target: 'section.asthma_screening' },
+      { type: 'show', target: 'section.gerd_screening' },
+      { type: 'show', target: 'question.wheeze' },
+      { type: 'show', target: 'question.heartburn' },
+    ],
+    active: true, tags: ['cough', 'nocturnal'],
+  },
+  {
+    id: 'ui_cough_exertional', type: 'ui', priority: 75,
+    name: 'Exertional Cough Needs Cardiopulmonary Assessment',
+    description: 'Show cardiac and pulmonary workup for exertional cough',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.exertional', operator: 'eq', value: true }],
+    actions: [
+      { type: 'show', target: 'section.cardiac_assessment' },
+      { type: 'show', target: 'question.dyspnea' },
+      { type: 'show', target: 'question.orthopnea' },
+    ],
+    active: true, tags: ['cough', 'exertional'],
+  },
+];
+
+export const COUGH_CLINICAL_RULES: RuleDefinition[] = [
+  // ── Red Flag Rules ────────────────────────────────────────────
+  {
+    id: 'cl_cough_hemoptysis_red_flag', type: 'clinical', priority: 95,
+    name: 'Hemoptysis Red Flag',
+    description: 'Any hemoptysis requires urgent investigation for TB, cancer, bronchiectasis, PE',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.hemoptysis', operator: 'eq', value: true }],
+    actions: [
+      { type: 'flag_red_flag', target: 'hemoptysis', message: 'Hemoptysis requires urgent investigation: TB, lung cancer, bronchiectasis, or PE', severity: 'critical' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'Stat CXR to assess for mass, cavity, or infiltrate' },
+      { type: 'suggest_investigation', target: 'CT Chest', message: 'CT chest for further characterization if CXR abnormal' },
+      { type: 'suggest_investigation', target: 'Sputum AFB', message: 'Sputum AFB × 3 to rule out TB' },
+      { type: 'suggest_investigation', target: 'CBC', message: 'CBC to assess for anemia or infection' },
+    ],
+    active: true, tags: ['cough', 'red_flag', 'hemoptysis'],
+  },
+  {
+    id: 'cl_cough_stridor_red_flag', type: 'clinical', priority: 95,
+    name: 'Stridor Requires Immediate Airway Assessment',
+    description: 'Stridor indicates upper airway obstruction - emergency',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.stridor', operator: 'eq', value: true }],
+    actions: [
+      { type: 'flag_red_flag', target: 'stridor', message: 'Stridor: Upper airway obstruction. Assess airway urgently.', severity: 'critical' },
+    ],
+    active: true, tags: ['cough', 'red_flag', 'airway'],
+  },
+  {
+    id: 'cl_cough_whooping_red_flag', type: 'clinical', priority: 90,
+    name: 'Whooping Cough Needs Public Health Notification',
+    description: 'Pertussis is a notifiable disease with public health implications',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.whooping', operator: 'eq', value: true }],
+    actions: [
+      { type: 'flag_red_flag', target: 'pertussis', message: 'Suspected pertussis: notifiable disease. Notify public health authorities.', severity: 'warning' },
+      { type: 'suggest_investigation', target: 'NP swab PCR', message: 'Confirm with nasopharyngeal swab PCR' },
+      { type: 'suggest_treatment', target: 'Azithromycin', message: 'Start azithromycin for pertussis' },
+    ],
+    active: true, tags: ['cough', 'pertussis', 'public_health'],
+  },
+  {
+    id: 'cl_cough_acute_onset_red_flag', type: 'clinical', priority: 90,
+    name: 'Acute Onset Cough Needs Emergency Assessment',
+    description: 'Sudden cough suggests foreign body, PE, or pneumothorax',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.onset', operator: 'eq', value: 'sudden' }],
+    actions: [
+      { type: 'flag_red_flag', target: 'acute_onset', message: 'Sudden onset cough: consider foreign body aspiration, pulmonary embolism, pneumothorax', severity: 'critical' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'Stat CXR to exclude pneumothorax or foreign body' },
+    ],
+    active: true, tags: ['cough', 'red_flag', 'acute'],
+  },
+  {
+    id: 'cl_cough_choking_red_flag', type: 'clinical', priority: 95,
+    name: 'Choking Episode Suggests Foreign Body',
+    description: 'Cough after choking is foreign body aspiration until proven otherwise',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.choking_episode', operator: 'eq', value: true }],
+    actions: [
+      { type: 'flag_red_flag', target: 'foreign_body', message: 'Cough after choking episode: foreign body aspiration. Urgent bronchoscopy.', severity: 'critical' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'CXR for air trapping or radiopaque FB' },
+      { type: 'suggest_investigation', target: 'Bronchoscopy', message: 'Bronchoscopy for diagnosis and removal' },
+    ],
+    active: true, tags: ['cough', 'foreign_body', 'emergency'],
+  },
+
+  // ── Investigation Suggestion Rules ────────────────────────────
+  {
+    id: 'cl_cough_productive_fever', type: 'clinical', priority: 80,
+    name: 'Productive Cough with Fever Needs CXR',
+    description: 'Productive cough with fever suggests pneumonia',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [
+      { fact: 'symptoms.cough.productive', operator: 'eq', value: true },
+      { fact: 'symptoms.cough.fever', operator: 'eq', value: true },
+    ],
+    actions: [
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'CXR to assess for consolidation' },
+      { type: 'suggest_investigation', target: 'CBC', message: 'CBC for leukocytosis' },
+      { type: 'suggest_investigation', target: 'CRP', message: 'CRP to assess inflammation severity' },
+      { type: 'suggest_investigation', target: 'Sputum Culture', message: 'Sputum for Gram stain and culture' },
+      { type: 'suggest_investigation', target: 'Blood Culture', message: 'Blood cultures before antibiotics if febrile' },
+    ],
+    active: true, tags: ['cough', 'pneumonia', 'investigations'],
+  },
+  {
+    id: 'cl_cough_chronic_weight_loss', type: 'clinical', priority: 85,
+    name: 'Chronic Cough with Weight Loss Needs TB Workup',
+    description: 'Chronic cough + weight loss + night sweats = TB until proven otherwise',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [
+      { fact: 'symptoms.cough.duration_days', operator: 'gt', value: 21 },
+      { fact: 'symptoms.cough.weight_loss', operator: 'eq', value: true },
+    ],
+    actions: [
+      { type: 'flag_red_flag', target: 'possible_tb', message: 'Chronic cough + weight loss: high suspicion for pulmonary TB', severity: 'warning' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'CXR looking for apical infiltrates, cavitation, or hilar lymphadenopathy' },
+      { type: 'suggest_investigation', target: 'Sputum AFB', message: 'Sputum AFB smear × 3' },
+      { type: 'suggest_investigation', target: 'GeneXpert MTB/RIF', message: 'GeneXpert for rapid TB diagnosis and rifampicin resistance' },
+      { type: 'suggest_investigation', target: 'HIV Test', message: 'HIV test given TB-HIV co-infection prevalence' },
+    ],
+    active: true, tags: ['cough', 'tb', 'chronic'],
+  },
+  {
+    id: 'cl_cough_gerd_symptoms', type: 'clinical', priority: 75,
+    name: 'Postprandial/Nocturnal Cough with Heartburn',
+    description: 'Cough with GERD symptoms suggests reflux aspiration',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [
+      { fact: 'symptoms.cough.heartburn', operator: 'eq', value: true },
+    ],
+    actions: [
+      { type: 'suggest_investigation', target: 'Upper GI Endoscopy', message: 'EGD to assess for reflux esophagitis' },
+      { type: 'suggest_treatment', target: 'PPI Trial', message: 'Empiric PPI trial for suspected GERD-related cough' },
+      { type: 'suggest_treatment', target: 'Lifestyle Modification', message: 'Elevate head of bed, avoid late meals' },
+    ],
+    active: true, tags: ['cough', 'gerd', 'reflux'],
+  },
+  {
+    id: 'cl_cough_ace_inhibitor', type: 'clinical', priority: 85,
+    name: 'ACE Inhibitor Cough',
+    description: 'Consider ACE inhibitor as cause of dry chronic cough',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [
+      { fact: 'symptoms.cough.ace_inhibitor', operator: 'eq', value: true },
+      { fact: 'symptoms.cough.productive', operator: 'eq', value: false },
+    ],
+    actions: [
+      { type: 'flag_red_flag', target: 'ace_inhibitor_cough', message: 'ACE inhibitors cause dry cough in 10-20% of patients', severity: 'warning' },
+      { type: 'suggest_treatment', target: 'Switch to ARB', message: 'Consider switching ACE inhibitor to ARB' },
+    ],
+    active: true, tags: ['cough', 'medication', 'adverse_effect'],
+  },
+  {
+    id: 'cl_cough_smoking_copd', type: 'clinical', priority: 75,
+    name: 'Smoker with Chronic Productive Cough',
+    description: 'Smoker with chronic cough suggests COPD or lung cancer',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [
+      { fact: 'symptoms.cough.smoker', operator: 'eq', value: true },
+      { fact: 'symptoms.cough.duration_days', operator: 'gt', value: 21 },
+      { fact: 'symptoms.cough.productive', operator: 'eq', value: true },
+    ],
+    actions: [
+      { type: 'suggest_investigation', target: 'Spirometry', message: 'Spirometry for COPD diagnosis (post-bronchodilator FEV1/FVC <0.70)' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'CXR to exclude lung cancer' },
+      { type: 'suggest_treatment', target: 'Smoking Cessation', message: 'Advise and support smoking cessation' },
+    ],
+    active: true, tags: ['cough', 'copd', 'smoking'],
+  },
+  {
+    id: 'cl_cough_orthopnea_edema', type: 'clinical', priority: 85,
+    name: 'Cough with Orthopnea and Edema Suggests Heart Failure',
+    description: 'Nocturnal cough with orthopnea, PND, and pedal edema = heart failure',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [
+      { fact: 'symptoms.cough.orthopnea', operator: 'eq', value: true },
+    ],
+    actions: [
+      { type: 'suggest_investigation', target: 'Echocardiogram', message: 'Echo to assess LV function' },
+      { type: 'suggest_investigation', target: 'BNP', message: 'BNP/NT-proBNP to assess heart failure probability' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'CXR for pulmonary congestion' },
+      { type: 'suggest_investigation', target: 'ECG', message: 'ECG to assess for ischemia or arrhythmia' },
+    ],
+    active: true, tags: ['cough', 'heart_failure', 'cardiac'],
+  },
+  {
+    id: 'cl_cough_exposure_tuberculosis', type: 'clinical', priority: 85,
+    name: 'TB Contact with Chronic Cough',
+    description: 'Known TB contact with chronic cough requires full TB evaluation',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [
+      { fact: 'symptoms.cough.tb_contact', operator: 'eq', value: true },
+      { fact: 'symptoms.cough.duration_days', operator: 'gt', value: 14 },
+    ],
+    actions: [
+      { type: 'flag_red_flag', target: 'tb_exposure', message: 'Known TB contact + cough >2 weeks: high probability of TB infection', severity: 'critical' },
+      { type: 'suggest_investigation', target: 'GeneXpert MTB/RIF', message: 'GeneXpert as initial diagnostic test' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'CXR for TB findings' },
+      { type: 'suggest_investigation', target: 'TST/IGRA', message: 'Tuberculin skin test or IGRA' },
+    ],
+    active: true, tags: ['cough', 'tb', 'exposure'],
+  },
+  {
+    id: 'cl_cough_pediatric_danger', type: 'clinical', priority: 90,
+    name: 'Pediatric Cough Danger Signs',
+    description: 'WHO IMCI danger signs for children with cough',
+    domain: 'cough',
+    contexts: [
+      { fact: 'symptoms.cough.active', operator: 'eq', value: true },
+      { fact: 'patient.age', operator: 'lt', value: 5 },
+    ],
+    conditions: [
+      { fact: 'symptoms.cough.chest_indrawing', operator: 'eq', value: true },
+    ],
+    actions: [
+      { type: 'flag_red_flag', target: 'chest_indrawing', message: 'Chest indrawing: severe pneumonia per WHO IMCI. Urgent referral.', severity: 'critical' },
+      { type: 'suggest_treatment', target: 'Oxygen', message: 'If SpO2 <90%, give oxygen' },
+      { type: 'suggest_treatment', target: 'IV Antibiotics', message: 'IV antibiotics for severe pneumonia' },
+    ],
+    active: true, tags: ['cough', 'pediatric', 'imci'],
+  },
+  {
+    id: 'cl_cough_immunocompromised', type: 'clinical', priority: 90,
+    name: 'Cough in Immunocompromised Needs Broad Workup',
+    description: 'Immunocompromised patients need broader infection workup',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [
+      { fact: 'symptoms.cough.immunocompromised', operator: 'eq', value: true },
+    ],
+    actions: [
+      { type: 'flag_red_flag', target: 'immunocompromised', message: 'Immunocompromised with cough: broad differential including PCP, TB, CMV, fungi', severity: 'warning' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'CXR as initial screen' },
+      { type: 'suggest_investigation', target: 'CT Chest', message: 'CT chest given atypical presentations' },
+      { type: 'suggest_investigation', target: 'Sputum Culture', message: 'Sputum for bacterial, mycobacterial, and fungal culture' },
+      { type: 'suggest_investigation', target: 'HIV Test', message: 'HIV test if status unknown' },
+    ],
+    active: true, tags: ['cough', 'immunocompromised', 'hiv'],
+  },
+
+  // ── Context-Specific Rules ────────────────────────────────────
+  {
+    id: 'cl_cough_pregnancy', type: 'clinical', priority: 85,
+    name: 'Cough in Pregnancy',
+    description: 'Pregnancy modifies investigation and treatment options for cough',
+    domain: 'cough',
+    contexts: [
+      { fact: 'symptoms.cough.active', operator: 'eq', value: true },
+      { fact: 'patient.pregnant', operator: 'eq', value: true },
+    ],
+    conditions: [{ fact: 'true', operator: 'eq', value: true }],
+    actions: [
+      { type: 'flag_red_flag', target: 'pregnancy', message: 'Pregnant patient: avoid radiation-based imaging if possible', severity: 'warning' },
+      { type: 'suggest_treatment', target: 'Safe Antibiotics', message: 'Avoid tetracyclines and fluoroquinolones in pregnancy' },
+    ],
+    active: true, tags: ['cough', 'pregnancy', 'context'],
+  },
+  {
+    id: 'cl_cough_resource_limited', type: 'clinical', priority: 75,
+    name: 'Cough in Resource-Limited Setting',
+    description: 'WHO syndromic approach when resources are limited',
+    domain: 'cough',
+    contexts: [
+      { fact: 'symptoms.cough.active', operator: 'eq', value: true },
+      { fact: 'environment.resourceLimited', operator: 'eq', value: true },
+    ],
+    conditions: [{ fact: 'true', operator: 'eq', value: true }],
+    actions: [
+      { type: 'suggest_investigation', target: 'Clinical Diagnosis', message: 'WHO syndromic management: Use clinical criteria' },
+      { type: 'suggest_investigation', target: 'Chest X-ray', message: 'CXR if available' },
+      { type: 'suggest_investigation', target: 'GeneXpert', message: 'GeneXpert if available (WHO-recommended)' },
+    ],
+    active: true, tags: ['cough', 'resource_limited', 'who'],
+  },
+];
+
+export const COUGH_DATA_RULES: RuleDefinition[] = [
+  {
+    id: 'dr_cough_duration_range', type: 'data', priority: 80,
+    name: 'Cough Duration Range',
+    description: 'Cough duration cannot exceed 2 years (730 days)',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.duration_days', operator: 'exists' }],
+    actions: [
+      { type: 'validate_range', target: 'symptoms.cough.duration_days', message: 'Cough duration cannot exceed 730 days', severity: 'error', params: { min: 0, max: 730 } },
+    ],
+    active: true, tags: ['cough', 'validation'],
+  },
+  {
+    id: 'dr_cough_severity_range', type: 'data', priority: 80,
+    name: 'Cough Severity Range',
+    description: 'Cough severity must be 1-10',
+    domain: 'cough',
+    contexts: [{ fact: 'symptoms.cough.active', operator: 'eq', value: true }],
+    conditions: [{ fact: 'symptoms.cough.severity', operator: 'exists' }],
+    actions: [
+      { type: 'validate_range', target: 'symptoms.cough.severity', message: 'Severity must be 1-10', severity: 'error', params: { min: 1, max: 10 } },
+    ],
+    active: true, tags: ['cough', 'validation'],
+  },
+];

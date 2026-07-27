@@ -180,6 +180,17 @@ export type { FormatGenerationInput, FullFormatInput } from './engines/format-en
 export { MODULES, detectActiveModules } from './rules/modules';
 export { QUESTION_GROUPS } from './rules/questionGroups';
 
+// Visibility Engine (Constitutional)
+export {
+  evaluateVisibility, evaluateCardVisibility, getQuestionCatalog, QUESTION_GROUPS_CATALOG,
+} from './visibility-engine/visibility-engine';
+export type {
+  QuestionCardVisibility, QuestionGroupVisibility, VisibilityCriterion,
+  VisibilityResult, VisibilityEvaluation, CascadeRule, CascadeDomain,
+  EncounterCascadeActivation, ClinicalPriority, QuestionDomain,
+} from './visibility-engine/types';
+export { PRIORITY_ORDER } from './visibility-engine/types';
+
 // Constitution Integration
 export {
   PHASE_TO_CONSTITUTION_STATE, mapPhaseToState,

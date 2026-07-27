@@ -37,6 +37,7 @@ const PHASE_LABELS: Record<string, string> = {
 export function QuestionPanel({ questionEngine, onAnswer, currentPhase, primaryComplaint }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const prevAnswerCountRef = useRef(Object.keys(questionEngine.answers).length);
+  const userScrolledUpRef = useRef(false);
 
   const visibleCards = useMemo(() => {
     return questionEngine.visibleCards || [];
@@ -48,10 +49,11 @@ export function QuestionPanel({ questionEngine, onAnswer, currentPhase, primaryC
   const answeredCount = Object.keys(questionEngine.answers).length;
   const totalCount = visibleCards.length;
 
-  // Auto-scroll to bottom when new cards appear
+  // Auto-scroll to bottom only if user hasn't scrolled up
   useEffect(() => {
     if (answeredCount > prevAnswerCountRef.current) {
       prevAnswerCountRef.current = answeredCount;
+      if (userScrolledUpRef.current) return;
       setTimeout(() => {
         if (containerRef.current) {
           containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -60,10 +62,17 @@ export function QuestionPanel({ questionEngine, onAnswer, currentPhase, primaryC
     }
   }, [answeredCount]);
 
+  const handleScroll = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 100;
+    userScrolledUpRef.current = !isNearBottom;
+  };
+
   const phaseLabel = PHASE_LABELS[currentPhase] || currentPhase.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
   return (
-    <div className="ce-question-panel">
+    <div className="ce-question-panel" onScroll={handleScroll}>
       {/* Phase Header */}
       <div className="ce-question-header">
         <div className="ce-question-phase-label">{phaseLabel}</div>

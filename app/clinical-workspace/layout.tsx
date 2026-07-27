@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { icon: '👤', label: 'Patient Records', href: '/patient-records' },
   { icon: '🛤️', label: 'Pathways', href: '/pathways' },
   { icon: '📈', label: 'Analytics', href: '/analytics' },
+  { icon: '🔬', label: 'Knowledge Graph', href: '/knowledge-graph' },
   { icon: '⚙️', label: 'Settings', href: '/settings' },
 ];
 

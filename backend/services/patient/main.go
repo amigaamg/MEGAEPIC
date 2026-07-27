@@ -79,7 +79,10 @@ func (s *PatientService) RegisterPatient(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *PatientService) GetPatient(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+	id := r.PathValue("id")
+	if id == "" {
+		id = r.URL.Query().Get("id")
+	}
 	if id == "" {
 		http.Error(w, `{"error":"patient ID required"}`, http.StatusBadRequest)
 		return
