@@ -33,7 +33,7 @@ async function runQuery(cypher: string, params?: Record<string, unknown>) {
   try {
     const result = await session.run(cypher, params);
     return result.records.map(r => {
-      const keys = r.keys;
+      const keys = r.keys as string[];
       const entry: Record<string, unknown> = {};
       for (const key of keys) {
         try {
