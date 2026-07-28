@@ -445,3 +445,9 @@ export {
   saveCareTeamNotifications, getCareTeamNotifications,
   listCareTeamByProfession,
 } from './clinical-constitution';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// HMIS Constitution — Universal Hospital Information Management System
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export * from './hmis';
