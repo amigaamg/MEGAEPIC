@@ -1,0 +1,252 @@
+{
+  "diseases": [
+    {
+      "name": "Acute Appendicitis",
+      "specialty": "general_surgery",
+      "rules": {
+        "symptoms_required": ["abdominal pain"],
+        "symptoms_boost": {
+          "vomiting": 0.3,
+          "fever": 0.2,
+          "anorexia": 0.2
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "abdominal_exam.abdo_palpation_tenderness": 0.3,
+          "abdominal_exam.abdo_palpation_guarding": 0.3,
+          "abdominal_exam.abdo_palpation_rigidity": 0.5
+        },
+        "demographics": {"age_min": 5, "age_max": 60},
+        "context": ["acute_abdomen"],
+        "red_flags": ["rigidity", "guarding"]
+      },
+      "management": {
+        "immediate": ["NBM", "IV access", "IV fluids", "analgesia"],
+        "medical": ["IV antibiotics (cefuroxime + metronidazole)"],
+        "surgical": ["Laparoscopic appendicectomy"],
+        "monitoring": ["Vitals q2h", "Serial abdominal exam"],
+        "referral": "General Surgery"
+      }
+    },
+    {
+      "name": "Small Bowel Obstruction",
+      "specialty": "general_surgery",
+      "rules": {
+        "symptoms_required": ["abdominal pain", "vomiting"],
+        "symptoms_boost": {
+          "distension": 0.4,
+          "obstipation": 0.5,
+          "vomit_bilious": 0.3
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "abdominal_exam.abdo_inspection_distension": 0.4,
+          "abdominal_exam.abdo_auscultation_bowel_sounds": {"eq": "tinkling", "weight": 0.4}
+        },
+        "demographics": {"age_min": 0, "age_max": 100},
+        "context": ["bowel_obstruction", "acute_abdomen"],
+        "red_flags": ["rigidity", "peritonitis", "sepsis"]
+      },
+      "management": {
+        "immediate": ["NBM", "NG tube", "IV fluids", "electrolyte correction"],
+        "medical": ["Conservative trial (if no peritonism)"],
+        "surgical": ["Exploratory laparotomy", "Adhesiolysis/Resection"],
+        "monitoring": ["Vitals", "NG output", "Abdominal girth", "Urine output"],
+        "referral": "General Surgery"
+      }
+    },
+    {
+      "name": "Acute Pancreatitis",
+      "specialty": "internal_medicine",
+      "rules": {
+        "symptoms_required": ["abdominal pain"],
+        "symptoms_boost": {
+          "vomiting": 0.3,
+          "pain_radiation": 0.3
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "abdominal_exam.abdo_palpation_tenderness": 0.3,
+          "abdominal_exam.abdo_palpation_guarding": 0.2
+        },
+        "demographics": {},
+        "context": ["acute_abdomen"],
+        "red_flags": ["hypotension", "tachycardia", "respiratory distress"]
+      },
+      "management": {
+        "immediate": ["NBM", "IV fluids (aggressive)", "analgesia (opioid)", "O2 if hypoxic"],
+        "medical": ["Pain control", "Nutritional support (enteral if tolerated)"],
+        "surgical": ["ERCP if gallstone pancreatitis", "Debridement if necrosis"],
+        "monitoring": ["Vitals", "CRP", "Lactate", "Glucose", "Calcium"],
+        "referral": "Gastroenterology / HPB Surgery"
+      }
+    },
+    {
+      "name": "Community-Acquired Pneumonia",
+      "specialty": "respiratory",
+      "rules": {
+        "symptoms_required": ["cough"],
+        "symptoms_boost": {
+          "fever": 0.3,
+          "dyspnea": 0.4,
+          "sputum": 0.2
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "respiratory_exam.resp_auscultation_crackles": 0.4,
+          "respiratory_exam.resp_percussion_note": {"eq": "dull", "weight": 0.3},
+          "general_exam.temperature": {"gt": 38.0, "weight": 0.2}
+        },
+        "demographics": {},
+        "context": ["respiratory_distress", "respiratory_infection"],
+        "red_flags": ["hypoxia", "confusion", "tachypnea"]
+      },
+      "management": {
+        "immediate": ["O2 if SpO2 <94%", "IV access"],
+        "medical": ["Antibiotics (amoxicillin + macrolide)", "Chest physiotherapy"],
+        "surgical": ["Chest drain if empyema"],
+        "monitoring": ["Vitals", "SpO2", "CRP trend"],
+        "referral": "Respiratory Medicine if severe"
+      }
+    },
+    {
+      "name": "Acute Myocardial Infarction",
+      "specialty": "cardiology",
+      "rules": {
+        "symptoms_required": ["chest pain"],
+        "symptoms_boost": {
+          "dyspnea": 0.3,
+          "nausea": 0.2,
+          "vomiting": 0.2
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "general_exam.pulse_rhythm": {"eq": "irregular", "weight": 0.3},
+          "general_exam.capillary_refill": {"gt": 2, "weight": 0.2}
+        },
+        "demographics": {"age_min": 40},
+        "context": ["chest_pain"],
+        "red_flags": ["shock", "pulmonary edema", "arrhythmia"]
+      },
+      "management": {
+        "immediate": ["MONA (Morphine, Oxygen, Nitrates, Aspirin)", "ECG", "Troponin"],
+        "medical": ["Dual antiplatelet", "Anticoagulation", "Beta-blocker", "Statin"],
+        "surgical": ["PCI", "CABG"],
+        "monitoring": ["Cardiac monitoring", "Vitals", "ECG serial"],
+        "referral": "Cardiology / Interventional Cardiology"
+      }
+    },
+    {
+      "name": "Bacterial Meningitis",
+      "specialty": "neurology",
+      "rules": {
+        "symptoms_required": ["headache"],
+        "symptoms_boost": {
+          "fever": 0.4,
+          "vomiting": 0.3,
+          "photophobia": 0.3,
+          "altered_consciousness": 0.6
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "neurological_exam.cranial_nerves_normal": {"eq": "abnormal", "weight": 0.4},
+          "neurological_exam.mental_state": {"eq": "confused", "weight": 0.5}
+        },
+        "demographics": {},
+        "context": ["acute_neuro"],
+        "red_flags": ["purpura", "shock", "seizure", "coma"]
+      },
+      "management": {
+        "immediate": ["IV antibiotics (ceftriaxone + vancomycin)", "Dexamethasone", "IV fluids"],
+        "medical": ["ICU admission", "Antibiotics for 10-14 days"],
+        "surgical": ["ICP monitoring if needed"],
+        "monitoring": ["Neurological obs", "Vitals", "CSF culture"],
+        "referral": "Neurology / Infectious Diseases"
+      }
+    },
+    {
+      "name": "Diabetic Ketoacidosis",
+      "specialty": "endocrinology",
+      "rules": {
+        "symptoms_required": ["polydipsia", "polyuria"],
+        "symptoms_boost": {
+          "vomiting": 0.3,
+          "abdominal pain": 0.2,
+          "altered_consciousness": 0.5
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "general_exam.hydration_status": {"eq": "severe dehydration", "weight": 0.4},
+          "general_exam.pulse_rate": {"gt": 100, "weight": 0.3}
+        },
+        "demographics": {},
+        "context": ["shock"],
+        "red_flags": ["coma", "severe acidosis", "hypokalemia"]
+      },
+      "management": {
+        "immediate": ["IV fluids (0.9% saline)", "Insulin infusion", "Potassium replacement", "Bicarbonate if pH<6.9"],
+        "medical": ["Monitor glucose hourly", "Electrolytes q2h"],
+        "surgical": ["None"],
+        "monitoring": ["CVP", "Urine output", "Neurological status"],
+        "referral": "Endocrinology / ICU"
+      }
+    },
+    {
+      "name": "Intussusception (Pediatric)",
+      "specialty": "pediatric_surgery",
+      "rules": {
+        "symptoms_required": ["abdominal pain"],
+        "symptoms_boost": {
+          "vomiting": 0.3,
+          "blood_in_stool": 0.7,
+          "lethargy": 0.4
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "abdominal_exam.abdo_palpation_masses": 0.5,
+          "abdominal_exam.abdo_palpation_guarding": 0.2,
+          "abdominal_exam.abdo_inspection_distension": 0.3
+        },
+        "demographics": {"age_max": 4},
+        "context": ["acute_abdomen"],
+        "red_flags": ["shock", "peritonitis", "bilious_vomiting"]
+      },
+      "management": {
+        "immediate": ["NBM", "IV access", "IV fluids"],
+        "medical": ["Air enema reduction (if no peritonitis)"],
+        "surgical": ["Laparotomy + manual reduction or resection"],
+        "monitoring": ["Vitals", "Abdominal exam"],
+        "referral": "Pediatric Surgery"
+      }
+    },
+    {
+      "name": "Major Depressive Episode",
+      "specialty": "psychiatry",
+      "rules": {
+        "symptoms_required": ["low mood", "anhedonia"],
+        "symptoms_boost": {
+          "fatigue": 0.3,
+          "insomnia": 0.2,
+          "appetite_change": 0.2,
+          "guilt": 0.3,
+          "suicidal_ideation": 0.6
+        },
+        "exam_required": [],
+        "exam_boost": {
+          "mental_state_exam.mood": {"eq": "depressed", "weight": 0.5},
+          "mental_state_exam.affect": {"eq": "flat", "weight": 0.3}
+        },
+        "demographics": {},
+        "context": [],
+        "red_flags": ["suicidal_plan", "psychosis"]
+      },
+      "management": {
+        "immediate": ["Suicide risk assessment", "Safety plan"],
+        "medical": ["SSRI (e.g., sertraline)", "Psychotherapy (CBT)"],
+        "surgical": ["ECT if refractory"],
+        "monitoring": ["Mood rating scales", "Side effects"],
+        "referral": "Psychiatry"
+      }
+    }
+  ]
+}

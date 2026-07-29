@@ -1,0 +1,148 @@
+{
+  "rules": [
+    {
+      "name": "Hypovolemic / Septic Shock",
+      "level": "critical",
+      "override_context": "shock",
+      "conditions": {
+        "any": [
+          {
+            "all": [
+              {"path": "examination.general_exam.bp_systolic", "operator": "lt", "value": 90},
+              {"path": "examination.general_exam.pulse_rate", "operator": "gt", "value": 110}
+            ]
+          },
+          {
+            "all": [
+              {"path": "examination.general_exam.bp_systolic", "operator": "lt", "value": 90},
+              {"path": "crs.active_context", "operator": "eq", "value": "sepsis"}
+            ]
+          },
+          {
+            "all": [
+              {"path": "examination.general_exam.capillary_refill", "operator": "gt", "value": 2},
+              {"path": "examination.general_exam.mentation", "operator": "in", "value": ["confused", "drowsy"]}
+            ]
+          }
+        ]
+      },
+      "message": "CRITICAL: Patient shows signs of shock (hypotension + tachycardia). Immediate resuscitation required.",
+      "action": "Start IV fluids, call ICU, consider vasopressors, check lactate."
+    },
+    {
+      "name": "Sepsis (qSOFA positive)",
+      "level": "critical",
+      "override_context": "sepsis",
+      "conditions": {
+        "any": [
+          {
+            "all": [
+              {"path": "examination.general_exam.respiratory_rate", "operator": "ge", "value": 22},
+              {"path": "crs.active_context", "operator": "in", "value": ["sepsis", "infection", "pneumonia"]}
+            ]
+          },
+          {
+            "all": [
+              {"path": "symptom_present.altered_consciousness", "operator": "eq", "value": true},
+              {"path": "symptom_present.fever", "operator": "eq", "value": true}
+            ]
+          }
+        ]
+      },
+      "message": "CRITICAL: Sepsis suspected (qSOFA >=2). Start antibiotics, fluid resuscitation, lactate measurement.",
+      "action": "Blood cultures, broad-spectrum antibiotics, IV fluids, monitor lactate q2h, consider ICU."
+    },
+    {
+      "name": "Acute Surgical Abdomen (Peritonitis)",
+      "level": "high",
+      "override_context": "surgical_emergency",
+      "conditions": {
+        "any": [
+          {"path": "examination.abdominal_exam.abdo_palpation_rigidity", "operator": "eq", "value": "present"},
+          {"path": "examination.abdominal_exam.abdo_palpation_guarding", "operator": "eq", "value": "present"},
+          {
+            "all": [
+              {"path": "examination.abdominal_exam.abdo_palpation_tenderness", "operator": "eq", "value": "present"},
+              {"path": "crs.active_context", "operator": "eq", "value": "acute_abdomen"}
+            ]
+          }
+        ]
+      },
+      "message": "HIGH: Signs of peritonitis (guarding/rigidity). Surgical emergency. Urgent surgical consultation.",
+      "action": "NBM, IV fluids, analgesia, stat surgical review, prepare for theatre."
+    },
+    {
+      "name": "Pediatric Respiratory Distress (Danger Signs)",
+      "level": "high",
+      "override_context": "pediatric_emergency",
+      "conditions": {
+        "all": [
+          {"path": "identity.age", "operator": "lt", "value": 5},
+          {
+            "any": [
+              {"path": "examination.respiratory_exam.resp_inspection_accessory_muscles", "operator": "eq", "value": "yes"},
+              {"path": "examination.respiratory_exam.resp_auscultation_wheeze", "operator": "eq", "value": "present"},
+              {"path": "examination.general_exam.respiratory_rate", "operator": "gt", "value": 50}
+            ]
+          }
+        ]
+      },
+      "message": "HIGH: Pediatric respiratory distress. Risk of hypoxia and fatigue.",
+      "action": "Oxygen, position upright, consider bronchodilators, prepare for intubation if worsening."
+    },
+    {
+      "name": "Altered Mental State + Fever (Meningitis until proven otherwise)",
+      "level": "high",
+      "override_context": "neurological_emergency",
+      "conditions": {
+        "all": [
+          {"path": "symptom_present.fever", "operator": "eq", "value": true},
+          {"path": "symptom_present.altered_consciousness", "operator": "eq", "value": true}
+        ]
+      },
+      "message": "HIGH: Fever with altered mental state - possible meningitis. Urgent evaluation.",
+      "action": "IV antibiotics (ceftriaxone + vancomycin), CT head then lumbar puncture, dexamethasone."
+    },
+    {
+      "name": "Pregnancy + Vaginal Bleeding + Pain (Ectopic Pregnancy)",
+      "level": "critical",
+      "override_context": "obstetric_emergency",
+      "conditions": {
+        "all": [
+          {"path": "profile", "operator": "eq", "value": "pregnancy"},
+          {"path": "symptom_present.vaginal_bleeding", "operator": "eq", "value": true},
+          {"path": "symptom_present.abdominal_pain", "operator": "eq", "value": true}
+        ]
+      },
+      "message": "CRITICAL: Pregnant patient with bleeding + pain. Ectopic pregnancy until proven otherwise.",
+      "action": "IV access, crossmatch, urgent pelvic ultrasound, call gynecology, resuscitate if unstable."
+    },
+    {
+      "name": "Chest Pain + Diaphoresis + Nausea (Acute Coronary Syndrome)",
+      "level": "high",
+      "override_context": "cardiac_emergency",
+      "conditions": {
+        "all": [
+          {"path": "symptom_present.chest_pain", "operator": "eq", "value": true},
+          {"path": "symptom_present.diaphoresis", "operator": "eq", "value": true}
+        ]
+      },
+      "message": "HIGH: Chest pain with diaphoresis - possible ACS. Immediate ECG and troponin.",
+      "action": "Aspirin 300mg, Nitrates (if no hypotension), ECG, cardiac monitoring, cardiology referral."
+    },
+    {
+      "name": "Pediatric Lethargy + Poor Feeding (Sepsis / Serious illness)",
+      "level": "high",
+      "override_context": "pediatric_emergency",
+      "conditions": {
+        "all": [
+          {"path": "identity.age", "operator": "lt", "value": 2},
+          {"path": "symptom_present.lethargy", "operator": "eq", "value": true},
+          {"path": "symptom_present.poor_feeding", "operator": "eq", "value": true}
+        ]
+      },
+      "message": "HIGH: Child with lethargy and poor feeding - possible serious infection/sepsis.",
+      "action": "Full septic screen, IV antibiotics, IV fluids, monitor glucose, low threshold for PICU."
+    }
+  ]
+}

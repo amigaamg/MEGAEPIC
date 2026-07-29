@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AMEXAN Rule Editor</title>
+    <meta charset="utf-8">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1e1e2f; color: #ccc; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #fff; font-size: 1.5em; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header a { color: #8ab4f8; text-decoration: none; font-size: 0.9em; }
+        .header a:hover { text-decoration: underline; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 0; }
+        .tab { padding: 10px 24px; cursor: pointer; background: #2a2a3a; border-radius: 8px 8px 0 0; border: none; color: #aaa; font-size: 0.9em; }
+        .tab.active { background: #3a3a5a; color: #fff; font-weight: 600; }
+        .tab:hover { background: #33334a; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .editor-panel { background: #2a2a3a; border-radius: 0 8px 8px 8px; padding: 16px; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .toolbar .file-label { color: #8ab4f8; font-size: 0.85em; font-family: monospace; }
+        textarea { width: 100%; height: 540px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 13px; background: #1a1a2a; color: #e0e0e0; border: 1px solid #444; padding: 12px; border-radius: 6px; resize: vertical; tab-size: 2; line-height: 1.5; }
+        textarea:focus { outline: none; border-color: #8ab4f8; }
+        .actions { display: flex; gap: 10px; margin-top: 12px; align-items: center; }
+        button { background: #2c6e9e; color: white; border: none; padding: 10px 24px; cursor: pointer; border-radius: 6px; font-size: 0.9em; font-weight: 500; }
+        button:hover { background: #1e4f73; }
+        button:disabled { opacity: 0.5; cursor: default; }
+        button.validate { background: #5a5a7a; }
+        button.validate:hover { background: #4a4a6a; }
+        button.format { background: #6a5a3a; }
+        button.format:hover { background: #5a4a2a; }
+        .status { margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.9em; display: none; }
+        .status.show { display: block; }
+        .status.success { background: #1e5a2e; color: #a3e0b0; border: 1px solid #2a7a3e; }
+        .status.error { background: #6e2e2e; color: #ffb0b0; border: 1px solid #8e4e4e; }
+        .status.info { background: #2a3a5a; color: #a0c0ff; border: 1px solid #3a4a7a; }
+        .backup-info { font-size: 0.8em; color: #888; margin-top: 6px; }
+        .docs { margin-top: 30px; padding: 16px; background: #2a2a3a; border-radius: 8px; }
+        .docs h3 { color: #8ab4f8; margin: 0 0 12px 0; font-size: 1em; }
+        .docs pre { font-family: 'Consolas', monospace; font-size: 0.82em; color: #bbb; line-height: 1.6; white-space: pre-wrap; margin: 0; }
+        .docs code { background: #1a1a2a; padding: 1px 5px; border-radius: 3px; color: #e0e0e0; }
+        .line-count { color: #666; font-size: 0.8em; font-family: monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>AMEXAN Rule Editor</h1>
+            <span style="font-size:0.85em;color:#888;">Edit rule files &mdash; changes take effect for new encounters immediately</span>
+        </div>
+        <div>
+            <a href="/" target="_blank">Open Clinical OS &rarr;</a>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="rules">rules.json</button>
+        <button class="tab" data-tab="diseases">diseases.json</button>
+        <button class="tab" data-tab="safety">safety_rules.json</button>
+    </div>
+
+    <div id="editor-rules" class="tab-content active">
+        <div class="editor-panel">
+            <div class="toolbar">
+                <span class="file-label">rules/rules.json &mdash; profile_rules, context_rules, activation_rules</span>
+                <span id="lineCount-rules" class="line-count">0 lines</span>
+            </div>
+            <textarea id="content-rules" placeholder="Loading..." spellcheck="false"></textarea>
+        </div>
+    </div>
+    <div id="editor-diseases" class="tab-content">
+        <div class="editor-panel">
+            <div class="toolbar">
+                <span class="file-label">knowledge/diseases.json &mdash; disease definitions with boost/scoring rules</span>
+                <span id="lineCount-diseases" class="line-count">0 lines</span>
+            </div>
+            <textarea id="content-diseases" placeholder="Loading..." spellcheck="false"></textarea>
+        </div>
+    </div>
+    <div id="editor-safety" class="tab-content">
+        <div class="editor-panel">
+            <div class="toolbar">
+                <span class="file-label">safety_rules.json &mdash; critical alerts, override contexts</span>
+                <span id="lineCount-safety" class="line-count">0 lines</span>
+            </div>
+            <textarea id="content-safety" placeholder="Loading..." spellcheck="false"></textarea>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button id="saveBtn">Save Current File</button>
+        <button id="validateBtn" class="validate">Validate JSON</button>
+        <button id="formatBtn" class="format">Format JSON</button>
+        <span id="fileIndicator" style="color:#888;font-size:0.85em;">Current: <span id="currentFileLabel">rules.json</span></span>
+    </div>
+    <div id="status" class="status"></div>
+    <div id="backupInfo" class="backup-info"></div>
+
+    <div class="docs">
+        <h3>Quick Reference</h3>
+        <pre>
+<b>rules.json</b> &mdash; Core rule engine
+  Profile rule:    <code>{"if": {"identity.age": {"lt": 13}}, "then": {"profile": "child"}}</code>
+  Context rule:    <code>{"if": {"symptoms": ["abdominal pain", "vomiting"]}, "then": {"context": "acute_abdomen", "confidence": 0.7}}</code>
+  Activation:      <code>{"if": {"profile": "child"}, "then": {"action": "activate_module", "module": "immunization_history"}}</code>
+
+<b>diseases.json</b> &mdash; Differential diagnosis scoring
+  <code>{"name": "Appendicitis", "specialty": "General Surgery", "rules": {"symptoms_required": ["abdominal pain"], "symptoms_boost": {"vomiting": 0.3}, ...}, "management": {...}}</code>
+
+<b>safety_rules.json</b> &mdash; Safety alerts
+  <code>{"name": "Shock", "level": "critical", "override_context": "shock", "message": "Patient in shock", "action": "Start IV fluids", "conditions": {"all": [{"path": "examination.general_exam.bp_systolic", "operator": "lt", "value": 90}]}}</code>
+        </pre>
+    </div>
+</div>
+
+<script>
+    let token = localStorage.getItem('amexan_token');
+    let currentTab = 'rules';
+
+    function getEditorId(tab) { return 'content-' + tab; }
+    function getTextarea(tab) { return document.getElementById(getEditorId(tab)); }
+
+    async function apiCall(url, options) {
+        options = options || {};
+        options.headers = options.headers || {};
+        if (token) {
+            options.headers['Authorization'] = 'Bearer ' + token;
+        }
+        const res = await fetch(url, options);
+        if (res.status === 401) {
+            showStatus('Session expired. <a href="/" style="color:#8ab4f8;">Login again</a>.', 'error');
+            return null;
+        }
+        return res;
+    }
+
+    function showStatus(msg, type) {
+        const el = document.getElementById('status');
+        el.innerHTML = msg;
+        el.className = 'status show ' + type;
+    }
+
+    function updateLineCount(tab) {
+        const ta = getTextarea(tab);
+        const lines = ta.value.split('\n').length;
+        document.getElementById('lineCount-' + tab).textContent = lines + ' lines';
+    }
+
+    async function loadFile(type) {
+        const res = await apiCall('/api/rules/' + type);
+        if (!res) return;
+        const data = await res.json();
+        const ta = getTextarea(type);
+        if (ta) {
+            ta.value = data.content;
+            updateLineCount(type);
+        }
+    }
+
+    function getCurrentContent() {
+        return getTextarea(currentTab).value;
+    }
+
+    async function saveCurrent() {
+        const content = getCurrentContent();
+        // JSON validation before sending
+        try {
+            JSON.parse(content);
+        } catch(e) {
+            showStatus('Invalid JSON: ' + e.message, 'error');
+            return;
+        }
+        const res = await apiCall('/api/rules/' + currentTab, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ content: content })
+        });
+        if (!res) return;
+        const data = await res.json();
+        if (res.ok) {
+            const backupMsg = data.backup ? ' (backup: ' + data.backup + ')' : '';
+            showStatus('Saved successfully' + backupMsg, 'success');
+            if (data.backup) {
+                document.getElementById('backupInfo').textContent = 'Backup: ' + data.backup;
+            }
+        } else {
+            showStatus('Error: ' + (data.detail || 'Unknown error'), 'error');
+        }
+    }
+
+    function validateCurrent() {
+        const content = getCurrentContent();
+        try {
+            JSON.parse(content);
+            showStatus(' JSON is valid!', 'success');
+        } catch(e) {
+            // Find position of error
+            const lines = content.substring(0, e.offset).split('\n');
+            const line = lines.length;
+            const col = lines[lines.length - 1].length + 1;
+            showStatus(' Invalid JSON at line ' + line + ', column ' + col + ': ' + e.message, 'error');
+        }
+    }
+
+    function formatCurrent() {
+        const content = getCurrentContent();
+        try {
+            const parsed = JSON.parse(content);
+            getTextarea(currentTab).value = JSON.stringify(parsed, null, 2);
+            updateLineCount(currentTab);
+            showStatus('Formatted with 2-space indentation.', 'info');
+        } catch(e) {
+            showStatus('Cannot format: ' + e.message, 'error');
+        }
+    }
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+            document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+            tab.classList.add('active');
+            currentTab = tab.getAttribute('data-tab');
+            document.getElementById('editor-' + currentTab).classList.add('active');
+            document.getElementById('currentFileLabel').textContent = currentTab + '.json';
+            document.getElementById('status').className = 'status';
+            document.getElementById('backupInfo').textContent = '';
+        });
+    });
+
+    // Live line count on input
+    document.addEventListener('input', function(e) {
+        if (e.target.id && e.target.id.startsWith('content-')) {
+            const tab = e.target.id.replace('content-', '');
+            updateLineCount(tab);
+        }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            saveCurrent();
+        }
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', saveCurrent);
+    document.getElementById('validateBtn').addEventListener('click', validateCurrent);
+    document.getElementById('formatBtn').addEventListener('click', formatCurrent);
+
+    // Load data
+    async function loadAll() {
+        // If no token stored, try to redirect
+        if (!token) {
+            showStatus('Not logged in. <a href="/" style="color:#8ab4f8;">Please login first</a>.', 'error');
+            return;
+        }
+        await loadFile('rules');
+        await loadFile('diseases');
+        await loadFile('safety');
+        document.getElementById('currentFileLabel').textContent = 'rules.json';
+    }
+
+    loadAll();
+</script>
+</body>
+</html>

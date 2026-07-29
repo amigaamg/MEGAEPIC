@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AMEXAN Clinical OS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f0f4f8; padding: 20px; color: #1a2a3a; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #1a5f7a 0%, #0d3b4f 100%); color: white; padding: 24px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.6em; }
+        .header span { opacity: 0.8; font-size: 0.9em; }
+        .header .user-info { display: flex; align-items: center; gap: 12px; }
+        .header .user-info button { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85em; }
+        .header .user-info button:hover { background: rgba(255,255,255,0.3); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        .card h3 { margin-bottom: 12px; color: #1a5f7a; border-left: 4px solid #1a5f7a; padding-left: 12px; font-size: 1em; }
+        .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 8px 0; }
+        .row > * { flex: 1; min-width: 100px; }
+        label { font-weight: 600; font-size: 0.85em; color: #555; display: block; margin-top: 4px; }
+        input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #d0d8e0; border-radius: 8px; font-size: 0.9em; background: #fafcff; }
+        input:focus, select:focus { outline: none; border-color: #1a5f7a; box-shadow: 0 0 0 3px rgba(26,95,122,0.1); }
+        button { background: #1a5f7a; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 500; transition: background 0.15s; white-space: nowrap; }
+        button:hover { background: #0d3b4f; }
+        button:disabled { opacity: 0.5; cursor: default; }
+        button.secondary { background: #6c757d; }
+        button.secondary:hover { background: #5a6268; }
+        button.success { background: #28a745; }
+        button.success:hover { background: #218838; }
+        button.danger { background: #dc3545; }
+        button.danger:hover { background: #c82333; }
+        button.outline { background: transparent; color: #1a5f7a; border: 1px solid #1a5f7a; }
+        button.outline:hover { background: #e6f3f9; }
+        .question-box { background: #e6f3f9; border: 2px solid #b8d8e8; padding: 16px; border-radius: 12px; margin: 16px 0; font-weight: 600; font-size: 1.05em; min-height: 60px; display: flex; align-items: center; }
+        .alert { padding: 12px 16px; border-radius: 8px; margin: 8px 0; font-size: 0.9em; }
+        .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .alert-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .timeline { font-size: 0.85em; background: #f8f9fa; padding: 12px; border-radius: 8px; max-height: 250px; overflow-y: auto; line-height: 1.6; font-family: monospace; }
+        pre { background: #f4f4f4; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 0.8em; max-height: 300px; overflow-y: auto; white-space: pre-wrap; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75em; font-weight: 600; }
+        .badge-context { background: #cce5ff; color: #004085; }
+        .badge-profile { background: #d4edda; color: #155724; }
+        .diff-item { padding: 8px 0; border-bottom: 1px solid #eee; }
+        .diff-item:last-child { border-bottom: none; }
+        .diff-score { font-weight: 700; color: #1a5f7a; }
+        .mgmt-section { margin: 4px 0; }
+        .mgmt-section strong { color: #555; font-size: 0.85em; text-transform: uppercase; }
+        .hidden { display: none !important; }
+        #loading { text-align: center; padding: 40px; color: #888; }
+        .ws-status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85em; padding: 6px 12px; border-radius: 20px; }
+        .ws-connected { background: #d4edda; color: #155724; }
+        .ws-disconnected { background: #f8d7da; color: #721c24; }
+        .quick-answer { cursor: pointer; border: none; color: #fff; padding: 8px 0; border-radius: 6px; font-weight: bold; }
+        .quick-answer:hover { opacity: 0.85; }
+        .question-badge { display: inline-block; background: #1a3a3a; color: #8ab4b4; font-size: 0.8em; border-radius: 4px; padding: 2px 8px; margin-right: 6px; }
+        .auth-card { max-width: 400px; margin: 60px auto; }
+        .auth-card h2 { text-align: center; margin-bottom: 24px; color: #1a5f7a; }
+        .auth-card .form-group { margin-bottom: 16px; }
+        .auth-card .form-group label { margin-bottom: 4px; }
+        .auth-card .auth-switch { text-align: center; margin-top: 16px; font-size: 0.9em; }
+        .auth-card .auth-switch a { color: #1a5f7a; cursor: pointer; text-decoration: underline; }
+        .auth-error { color: #dc3545; font-size: 0.85em; margin-top: 8px; text-align: center; }
+        .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; }
+        .auth-tabs button { flex: 1; background: none; color: #888; border: none; border-bottom: 2px solid transparent; padding: 10px; cursor: pointer; font-weight: 600; border-radius: 0; margin-bottom: -2px; }
+        .auth-tabs button.active { color: #1a5f7a; border-bottom-color: #1a5f7a; }
+        .auth-tabs button:hover { color: #1a5f7a; background: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>AMEXAN Clinical OS</h1>
+            <span>Rule-based clinical decision support</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <a href="/editor" target="_blank" style="background:#ff9800;color:white;padding:8px 16px;border-radius:8px;text-decoration:none;font-size:0.85em;font-weight:500;white-space:nowrap;">Edit Rules</a>
+            <div id="userInfo" class="hidden user-info">
+                <span id="userDisplay" style="font-size:0.9em;">user</span>
+                <button id="logoutBtn">Logout</button>
+            </div>
+            <div id="wsStatus" class="ws-status ws-disconnected">Disconnected</div>
+        </div>
+    </div>
+
+    <!-- AUTH PANEL -->
+    <div id="authPanel">
+        <div class="card auth-card">
+            <h2>AMEXAN Login</h2>
+            <div class="auth-tabs">
+                <button id="loginTab" class="active">Login</button>
+                <button id="registerTab">Register</button>
+            </div>
+
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password">
+                </div>
+                <button id="loginBtn" style="width:100%;">Login</button>
+                <div id="loginError" class="auth-error hidden"></div>
+            </div>
+
+            <div id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Choose a password">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="regRole">
+                        <option value="doctor">Doctor</option>
+                        <option value="nurse">Nurse</option>
+                    </select>
+                </div>
+                <button id="registerBtn" style="width:100%;" class="success">Register</button>
+                <div id="registerError" class="auth-error hidden"></div>
+            </div>
+
+            <div class="auth-switch">
+                <span id="authSwitchText"><a id="authSwitchLink">Register</a> if you don't have an account.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PATIENT PANEL -->
+    <div id="patientPanel" class="hidden">
+        <div class="card">
+            <h3>Create New Patient</h3>
+            <div class="row">
+                <div><label>Name</label><input type="text" id="patientName" placeholder="Full name"></div>
+                <div><label>Age</label><input type="number" id="patientAge" placeholder="Age in years"></div>
+                <div><label>Sex</label>
+                    <select id="patientSex">
+                        <option value="Male">Male</option>
+                        <option value="Female" selected>Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div><button id="createPatientBtn" class="success" style="margin-top:22px">Create Patient</button></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Select Existing Patient</h3>
+            <div class="row">
+                <div style="flex:3"><label>Patient</label>
+                    <select id="existingPatientSelect">
+                        <option value="">-- No patients loaded --</option>
+                    </select>
+                </div>
+                <div><button id="selectPatientBtn" style="margin-top:22px">Select</button></div>
+                <div><button id="startEncounterBtn" disabled style="margin-top:22px">Start New Encounter</button></div>
+            </div>
+            <div id="selectedPatientInfo" class="alert alert-info hidden">No patient selected.</div>
+        </div>
+    </div>
+
+    <!-- ENCOUNTER PANEL -->
+    <div id="encounterPanel" class="hidden">
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:12px 20px;">
+            <div>
+                <strong id="encPatientName">Patient</strong>
+                <span id="encProfileContext" style="margin-left:12px;color:#888;"></span>
+            </div>
+            <div>
+                <button id="backToPatientsBtn" class="secondary" style="font-size:0.85em;padding:6px 14px;">&larr; Back to Patients</button>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- LEFT COLUMN -->
+            <div>
+                <div class="card" id="statusCard">
+                    <h3>Current Status</h3>
+                    <div id="safetyAlert" class="hidden"></div>
+                    <div id="nextQuestion" class="question-box">Start by adding a symptom (e.g., pain, vomiting, fever).</div>
+                    <div id="inputArea">
+                        <div style="margin-bottom:12px;">
+                            <label>Patient Age (for profile detection)</label>
+                            <div class="row">
+                                <input type="number" id="ageInput" placeholder="e.g., 35" style="flex:1; min-width:80px;" value="">
+                                <button id="setAgeBtn" style="flex:0">Set Age</button>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <label>Symptom</label>
+                            <div class="row">
+                                <input type="text" id="symptomInput" placeholder="e.g., pain, vomiting, fever, abdominal pain" style="flex:3">
+                                <button id="submitSymptomBtn" style="flex:0">Add</button>
+                            </div>
+                        </div>
+                        <div id="guidedAnswerSection" style="margin-bottom:12px;">
+                            <label>Current Question</label>
+                            <div id="currentQuestionDisplay" style="background:#1e1e1e;padding:10px;border-radius:6px;margin-bottom:8px;font-size:1.1em;min-height:40px;color:#ccc;">
+                                Add a symptom to start the clinical interview.
+                            </div>
+                            <div class="row" id="answerRow">
+                                <input type="text" id="answerInput" placeholder="Type your answer here..." style="flex:3">
+                                <button id="submitAnswerBtn" style="flex:0">Answer</button>
+                            </div>
+                            <div id="quickAnswerBtns" class="row" style="margin-top:6px;gap:6px;display:none;">
+                                <button class="quick-answer" data-value="yes" style="flex:1;background:#2d6a4f;">Yes</button>
+                                <button class="quick-answer" data-value="no" style="flex:1;background:#9b2226;">No</button>
+                                <button class="quick-answer" data-value="unknown" style="flex:1;background:#555;">Unknown</button>
+                            </div>
+                            <div style="font-size:0.85em;color:#888;margin-top:4px;" id="answerContext"></div>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <label>Exam Finding</label>
+                            <div class="row">
+                                <input type="text" id="examInput" placeholder="finding_id|value  (e.g., bp_systolic|110)" style="flex:3">
+                                <button id="submitExamBtn" style="flex:0">Record</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button id="saveSnapshotBtn" class="secondary">Save Snapshot</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Timeline</h3>
+                    <div id="timeline" class="timeline"><em>No events yet.</em></div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div>
+                <div class="card">
+                    <h3>Differential Diagnosis</h3>
+                    <div id="differentialList"><em style="color:#888;">Complete history & exam to see differentials.</em></div>
+                </div>
+
+                <div class="card">
+                    <h3>Management Plan</h3>
+                    <pre id="managementPlan"><em style="color:#888;">Not yet generated.</em></pre>
+                </div>
+
+                <div class="card">
+                    <h3>Suggested Investigations</h3>
+                    <div id="investigationsList"><em style="color:#888;">Not yet suggested.</em></div>
+                </div>
+
+                <div class="card">
+                    <h3>Documents</h3>
+                    <div class="row" style="margin-bottom:12px;">
+                        <button id="viewHpNoteBtn">H&P Note</button>
+                        <button id="viewSoapNoteBtn">SOAP Note</button>
+                        <button id="viewDischargeBtn">Discharge</button>
+                        <button id="viewReferralBtn">Referral</button>
+                        <button id="viewClinicBtn">Clinic Note</button>
+                    </div>
+                    <div class="row" style="margin-bottom:12px;">
+                        <button id="pdfHpNoteBtn" class="secondary">Export H&P PDF</button>
+                        <button id="pdfSoapNoteBtn" class="secondary">Export SOAP PDF</button>
+                    </div>
+                    <pre id="documentPreview"><em style="color:#888;">Click a document button to preview.</em></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" class="hidden">Loading...</div>
+</div>
+
+<script>
+    let token = localStorage.getItem('amexan_token');
+    let currentUser = null;
+    let currentSessionId = null;
+    let ws = null;
+    let currentState = null;
+    let currentModule = null;
+    let currentQuestionId = null;
+    let currentQuestionText = '';
+    let currentQuestionModule = null;
+
+    function apiCall(url, options) {
+        options = options || {};
+        options.headers = options.headers || {};
+        if (token) {
+            options.headers['Authorization'] = 'Bearer ' + token;
+        }
+        return fetch(url, options).then(function(res) {
+            if (res.status === 401) {
+                localStorage.removeItem('amexan_token');
+                token = null;
+                currentUser = null;
+                showAuth();
+                return Promise.reject(new Error('Session expired. Please login again.'));
+            }
+            return res;
+        });
+    }
+
+    // ── Auth UI ──
+
+    function showAuth() {
+        document.getElementById('authPanel').classList.remove('hidden');
+        document.getElementById('patientPanel').classList.add('hidden');
+        document.getElementById('encounterPanel').classList.add('hidden');
+        document.getElementById('userInfo').classList.add('hidden');
+    }
+
+    function showApp() {
+        document.getElementById('authPanel').classList.add('hidden');
+        document.getElementById('patientPanel').classList.remove('hidden');
+        document.getElementById('userInfo').classList.remove('hidden');
+        document.getElementById('userDisplay').textContent = currentUser.username + ' (' + currentUser.role + ')';
+    }
+
+    document.getElementById('loginTab').onclick = function() {
+        document.getElementById('loginTab').classList.add('active');
+        document.getElementById('registerTab').classList.remove('active');
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('authSwitchLink').textContent = 'Register';
+        document.getElementById('authSwitchText').innerHTML = '<a id="authSwitchLink">Register</a> if you don\'t have an account.';
+        document.getElementById('loginError').classList.add('hidden');
+    };
+
+    document.getElementById('registerTab').onclick = function() {
+        document.getElementById('registerTab').classList.add('active');
+        document.getElementById('loginTab').classList.remove('active');
+        document.getElementById('registerForm').classList.remove('hidden');
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('authSwitchLink').textContent = 'Login';
+        document.getElementById('authSwitchText').innerHTML = 'Already have an account? <a id="authSwitchLink">Login</a>';
+        document.getElementById('registerError').classList.add('hidden');
+    };
+
+    document.getElementById('loginBtn').onclick = function() {
+        var username = document.getElementById('loginUsername').value.trim();
+        var password = document.getElementById('loginPassword').value;
+        if (!username || !password) { document.getElementById('loginError').textContent = 'Please fill in all fields.'; document.getElementById('loginError').classList.remove('hidden'); return; }
+        fetch('/api/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username: username, password: password})
+        }).then(function(r) {
+            if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Login failed'); });
+            return r.json();
+        }).then(function(data) {
+            token = data.access_token;
+            currentUser = data.user;
+            localStorage.setItem('amexan_token', token);
+            showApp();
+            loadPatients();
+        }).catch(function(err) {
+            document.getElementById('loginError').textContent = err.message;
+            document.getElementById('loginError').classList.remove('hidden');
+        });
+    };
+
+    document.getElementById('registerBtn').onclick = function() {
+        var username = document.getElementById('regUsername').value.trim();
+        var password = document.getElementById('regPassword').value;
+        var role = document.getElementById('regRole').value;
+        if (!username || !password) { document.getElementById('registerError').textContent = 'Please fill in all fields.'; document.getElementById('registerError').classList.remove('hidden'); return; }
+        fetch('/api/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username: username, password: password, role: role})
+        }).then(function(r) {
+            if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Registration failed'); });
+            return r.json();
+        }).then(function() {
+            alert('Registered successfully! Please login.');
+            document.getElementById('loginTab').click();
+            document.getElementById('loginUsername').value = username;
+            document.getElementById('loginPassword').value = '';
+        }).catch(function(err) {
+            document.getElementById('registerError').textContent = err.message;
+            document.getElementById('registerError').classList.remove('hidden');
+        });
+    };
+
+    document.getElementById('logoutBtn').onclick = function() {
+        if (ws) { ws.close(); }
+        localStorage.removeItem('amexan_token');
+        token = null;
+        currentUser = null;
+        currentSessionId = null;
+        showAuth();
+    };
+
+    // Enter key support on auth forms
+    document.getElementById('loginPassword').onkeydown = function(e) {
+        if (e.key === 'Enter') document.getElementById('loginBtn').click();
+    };
+    document.getElementById('regPassword').onkeydown = function(e) {
+        if (e.key === 'Enter') document.getElementById('registerBtn').click();
+    };
+
+    // ── WebSocket ──
+
+    function setWsStatus(connected) {
+        var el = document.getElementById('wsStatus');
+        el.className = 'ws-status ' + (connected ? 'ws-connected' : 'ws-disconnected');
+        el.textContent = connected ? 'Connected' : 'Disconnected';
+    }
+
+    function updateUI(state) {
+        currentState = state;
+        var profile = state.profile || 'none';
+        var context = state.crs ? state.crs.active_context || 'none' : 'none';
+        document.getElementById('encProfileContext').innerHTML =
+            '<span class="badge badge-profile">' + profile + '</span> <span class="badge badge-context">' + context + '</span>';
+
+        var safetyEl = document.getElementById('safetyAlert');
+        if (state.crs && state.crs.safety_override_active) {
+            safetyEl.className = 'alert alert-danger';
+            safetyEl.innerHTML = '<strong>SAFETY OVERRIDE</strong><br>' + (state.crs.safety_alert_message || 'Critical alert');
+            safetyEl.classList.remove('hidden');
+        } else if (state.crs && state.crs.current_alerts && state.crs.current_alerts.length > 0) {
+            var a = state.crs.current_alerts[0];
+            safetyEl.className = 'alert alert-warning';
+            safetyEl.innerHTML = '<strong>' + a.level.toUpperCase() + ':</strong> ' + a.name + ' - ' + a.message;
+            safetyEl.classList.remove('hidden');
+        } else {
+            safetyEl.classList.add('hidden');
+        }
+
+        var nq = state.crs ? state.crs.next_question : null;
+        document.getElementById('nextQuestion').innerHTML = nq ? '&#10067; ' + nq : '&#10067; No pending question.';
+
+        var timelineEl = document.getElementById('timeline');
+        var tl = state.timeline || [];
+        if (tl.length === 0) {
+            timelineEl.innerHTML = '<em>No events yet.</em>';
+        } else {
+            timelineEl.innerHTML = tl.map(function(e) {
+                var ts = e.timestamp ? new Date(e.timestamp * 1000).toLocaleTimeString() : '';
+                var summary = e.type + ': ' + (e.data ? JSON.stringify(e.data) : '');
+                return ts ? '[' + ts + '] ' + summary : summary;
+            }).join('<br>');
+            timelineEl.scrollTop = timelineEl.scrollHeight;
+        }
+
+        var dd = state.differential || [];
+        var ddEl = document.getElementById('differentialList');
+        if (dd.length === 0) {
+            ddEl.innerHTML = '<em style="color:#888;">Complete history &amp; exam to see differentials.</em>';
+        } else {
+            ddEl.innerHTML = dd.slice(0, 10).map(function(d, i) {
+                return '<div class="diff-item"><strong>' + (i+1) + '. ' + d.name +
+                    '</strong> <span class="diff-score">(' + d.score + ')</span>' +
+                    ' <span style="color:#888;font-size:0.85em;">' + (d.specialty || '') + '</span></div>';
+            }).join('');
+        }
+
+        var mgmt = state.management || {};
+        var mgmtEl = document.getElementById('managementPlan');
+        if (Object.keys(mgmt).length === 0) {
+            mgmtEl.innerHTML = '<em style="color:#888;">Not yet generated.</em>';
+        } else {
+            var lines = [];
+            for (var key in mgmt) {
+                if (mgmt.hasOwnProperty(key)) {
+                    var val = mgmt[key];
+                    var str = Array.isArray(val) ? val.join(', ') : (typeof val === 'string' ? val : JSON.stringify(val));
+                    if (str) {
+                        lines.push('<div class="mgmt-section"><strong>' + key.toUpperCase() + ':</strong> ' + str + '</div>');
+                    }
+                }
+            }
+            mgmtEl.innerHTML = lines.join('');
+        }
+
+        var inv = state.investigations && state.investigations.suggested || [];
+        var invEl = document.getElementById('investigationsList');
+        if (inv.length === 0) {
+            invEl.innerHTML = '<em style="color:#888;">Not yet suggested.</em>';
+        } else {
+            invEl.innerHTML = '<ul style="margin-left:20px;">' + inv.map(function(i) {
+                return '<li><strong>' + i.name + '</strong>' +
+                    (i.reason ? ' <span style="color:#888;font-size:0.85em;">(' + i.reason + ')</span>' : '') +
+                    (i.urgency ? ' <span class="badge badge-context">' + i.urgency + '</span>' : '') +
+                    '</li>';
+            }).join('') + '</ul>';
+        }
+    }
+
+    function connectWebSocket(sessionId) {
+        if (ws) { ws.close(); }
+        ws = new WebSocket('ws://localhost:8000/ws/' + sessionId + '?token=' + encodeURIComponent(token));
+        ws.onopen = function() { setWsStatus(true); };
+        ws.onclose = function() { setWsStatus(false); };
+        ws.onmessage = function(event) {
+            var msg = JSON.parse(event.data);
+            if (msg.type === 'state') {
+                updateUI(msg.data);
+            } else if (msg.type === 'next_question') {
+                currentQuestionText = msg.data.question || '';
+                currentQuestionModule = msg.data.module || '';
+                currentQuestionId = msg.data.qid || '';
+                var display = document.getElementById('currentQuestionDisplay');
+                display.innerHTML = '<span class="question-badge">' + currentQuestionModule + '</span> ' + currentQuestionText;
+                document.getElementById('answerInput').placeholder = 'Answer for: ' + currentQuestionText;
+                document.getElementById('answerContext').textContent = 'Module: ' + currentQuestionModule + ' | Question ID: ' + currentQuestionId;
+                var qBtns = document.getElementById('quickAnswerBtns');
+                qBtns.style.display = 'flex';
+                if (currentState) { updateUI(currentState); }
+            } else if (msg.type === 'exam_question') {
+                currentQuestionText = msg.data.question || '';
+                currentQuestionModule = msg.data.module || '';
+                currentQuestionId = msg.data.finding_id || '';
+                var display = document.getElementById('currentQuestionDisplay');
+                display.innerHTML = '<span class="question-badge">\u{1F3CA} ' + currentQuestionModule + '</span> ' + currentQuestionText;
+                document.getElementById('answerInput').placeholder = 'Exam answer for: ' + currentQuestionText;
+                document.getElementById('answerContext').textContent = 'Module: ' + currentQuestionModule + ' | Finding ID: ' + currentQuestionId;
+                var qBtns = document.getElementById('quickAnswerBtns');
+                qBtns.style.display = 'flex';
+                if (currentState) { updateUI(currentState); }
+            } else if (msg.type === 'history_started') {
+                var display = document.getElementById('currentQuestionDisplay');
+                display.innerHTML = '\u{1F4CB} History phase started.</span>';
+                document.getElementById('answerContext').textContent = '';
+                if (currentState) { updateUI(currentState); }
+            } else if (msg.type === 'differential_ready') {
+                if (currentState) { currentState.differential = msg.data.differentials || []; updateUI(currentState); }
+            } else if (msg.type === 'management_ready') {
+                if (currentState) { currentState.management = msg.data || {}; updateUI(currentState); }
+            } else if (msg.type === 'investigations_ready') {
+                if (currentState) { currentState.investigations = msg.data || {}; updateUI(currentState); }
+            } else if (msg.type === 'documents_ready') {
+                if (currentState) { currentState.documents = msg.data || {}; updateUI(currentState); }
+            } else if (msg.type === 'safety_override') {
+                if (currentState) {
+                    if (!currentState.crs) currentState.crs = {};
+                    currentState.crs.safety_override_active = true;
+                    currentState.crs.safety_alert_message = msg.data.message || 'Safety override triggered';
+                    updateUI(currentState);
+                }
+            } else if (msg.type === 'encounter_complete') {
+                updateUI(msg.data);
+                document.getElementById('nextQuestion').innerHTML = '&#9989; ' + (msg.data.message || 'Encounter complete.');
+            } else if (msg.type === 'error') {
+                alert('Error: ' + (typeof msg.data === 'string' ? msg.data : JSON.stringify(msg.data)));
+            } else if (msg.type === 'info') {
+                console.log('Info:', msg.data);
+            }
+        };
+    }
+
+    // ── Document fetching ──
+
+    function fetchDocument(docType) {
+        if (!currentSessionId) return;
+        apiCall('/api/document/' + currentSessionId + '/' + docType)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                document.getElementById('documentPreview').innerText = data.content || 'No content.';
+            })
+            .catch(function(err) {
+                document.getElementById('documentPreview').innerText = 'Error: ' + err.message;
+            });
+    }
+
+    function exportPDF(docType) {
+        if (!currentSessionId) return;
+        apiCall('/api/document/pdf/' + currentSessionId + '/' + docType, { method: 'POST' })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                alert('PDF saved: ' + data.filename);
+            })
+            .catch(function(err) {
+                alert('Error: ' + err.message);
+            });
+    }
+
+    // ── Patient management ──
+
+    function loadPatients() {
+        apiCall('/api/patients')
+            .then(function(r) { return r.json(); })
+            .then(function(patients) {
+                var select = document.getElementById('existingPatientSelect');
+                select.innerHTML = '<option value="">-- Select a patient --</option>';
+                patients.forEach(function(p) {
+                    var opt = document.createElement('option');
+                    opt.value = p.patient_id;
+                    opt.textContent = p.name + ' (' + p.age + 'y/' + p.sex + ')';
+                    select.appendChild(opt);
+                });
+                if (patients.length === 0) {
+                    select.innerHTML = '<option value="">-- No patients found --</option>';
+                }
+            })
+            .catch(function(err) {
+                // session expired will redirect to auth via apiCall
+            });
+    }
+
+    document.getElementById('createPatientBtn').onclick = function() {
+        var name = document.getElementById('patientName').value.trim();
+        var age = parseInt(document.getElementById('patientAge').value);
+        var sex = document.getElementById('patientSex').value;
+        if (!name || isNaN(age)) { alert('Name and age are required.'); return; }
+        apiCall('/api/patient', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, age: age, sex: sex })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            alert('Patient created: ' + data.name);
+            document.getElementById('patientName').value = '';
+            document.getElementById('patientAge').value = '';
+            loadPatients();
+        })
+        .catch(function(err) { alert('Error: ' + err.message); });
+    };
+
+    var selectedPatientId = null;
+    document.getElementById('selectPatientBtn').onclick = function() {
+        var pid = document.getElementById('existingPatientSelect').value;
+        if (!pid) { alert('Select a patient first.'); return; }
+        selectedPatientId = pid;
+        document.getElementById('startEncounterBtn').disabled = false;
+        apiCall('/api/patient/' + pid)
+            .then(function(r) { return r.json(); })
+            .then(function(p) {
+                var info = document.getElementById('selectedPatientInfo');
+                info.className = 'alert alert-info';
+                info.innerHTML = '<strong>Selected:</strong> ' + p.name + ' (' + p.age + 'y/' + p.sex + ')';
+                info.classList.remove('hidden');
+            });
+    };
+
+    document.getElementById('startEncounterBtn').onclick = function() {
+        if (!selectedPatientId) return;
+        document.getElementById('loading').classList.remove('hidden');
+        apiCall('/api/encounter/start?patient_id=' + selectedPatientId, { method: 'POST' })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                currentSessionId = data.session_id;
+                connectWebSocket(currentSessionId);
+                document.getElementById('patientPanel').classList.add('hidden');
+                document.getElementById('encounterPanel').classList.remove('hidden');
+                document.getElementById('loading').classList.add('hidden');
+                var info = document.getElementById('selectedPatientInfo');
+                document.getElementById('encPatientName').textContent = info.textContent || 'Patient';
+            })
+            .catch(function(err) {
+                document.getElementById('loading').classList.add('hidden');
+                alert('Error: ' + err.message);
+            });
+    };
+
+    document.getElementById('backToPatientsBtn').onclick = function() {
+        if (ws) { ws.close(); }
+        currentSessionId = null;
+        currentModule = null;
+        currentQuestionId = null;
+        currentQuestionText = '';
+        currentQuestionModule = null;
+        document.getElementById('encounterPanel').classList.add('hidden');
+        document.getElementById('patientPanel').classList.remove('hidden');
+        document.getElementById('ageInput').disabled = false;
+        document.getElementById('setAgeBtn').disabled = false;
+        document.getElementById('setAgeBtn').textContent = 'Set Age';
+        document.getElementById('ageInput').style.opacity = '1';
+        loadPatients();
+    };
+
+    // ── Clinical input handlers ──
+
+    function sendWS(command, payload) {
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+            alert('WebSocket not connected. Start an encounter first.');
+            return;
+        }
+        ws.send(JSON.stringify({ command: command, payload: payload }));
+    }
+
+    function answerQuestion(value) {
+        if (!currentQuestionModule || !currentQuestionId) {
+            alert('No active question to answer. Add a symptom first.');
+            return;
+        }
+        sendWS('answer', { module: currentQuestionModule, question_id: currentQuestionId, answer: value });
+        document.getElementById('answerInput').value = '';
+        document.getElementById('currentQuestionDisplay').innerHTML = '<span style="color:#888;">Answer sent. Waiting for next question...</span>';
+        document.getElementById('answerContext').textContent = '';
+        var qBtns = document.getElementById('quickAnswerBtns');
+        qBtns.style.display = 'none';
+        currentQuestionModule = null;
+        currentQuestionId = null;
+    }
+
+    document.getElementById('submitSymptomBtn').onclick = function() {
+        var sym = document.getElementById('symptomInput').value.trim();
+        if (!sym) return;
+        sendWS('symptom', { symptom: sym });
+        document.getElementById('symptomInput').value = '';
+        document.getElementById('currentQuestionDisplay').innerHTML = 'Processing: ' + sym + '...';
+    };
+    document.getElementById('symptomInput').onkeydown = function(e) {
+        if (e.key === 'Enter') document.getElementById('submitSymptomBtn').click();
+    };
+
+    document.getElementById('setAgeBtn').onclick = function() {
+        var age = parseInt(document.getElementById('ageInput').value);
+        if (isNaN(age) || age < 0 || age > 150) { alert('Enter a valid age (0-150).'); return; }
+        sendWS('age', { age: age });
+        document.getElementById('ageInput').disabled = true;
+        document.getElementById('setAgeBtn').disabled = true;
+        document.getElementById('setAgeBtn').textContent = 'Set';
+        document.getElementById('ageInput').style.opacity = '0.5';
+    };
+    document.getElementById('ageInput').onkeydown = function(e) {
+        if (e.key === 'Enter') document.getElementById('setAgeBtn').click();
+    };
+
+    document.getElementById('submitAnswerBtn').onclick = function() {
+        var raw = document.getElementById('answerInput').value.trim();
+        if (!raw) { alert('Type an answer first.'); return; }
+        answerQuestion(raw);
+    };
+    document.getElementById('answerInput').onkeydown = function(e) {
+        if (e.key === 'Enter') document.getElementById('submitAnswerBtn').click();
+    };
+
+    document.querySelectorAll('.quick-answer').forEach(function(btn) {
+        btn.onclick = function() { answerQuestion(this.getAttribute('data-value')); };
+    });
+
+    document.getElementById('submitExamBtn').onclick = function() {
+        var raw = document.getElementById('examInput').value.trim();
+        if (!raw) return;
+        var parts = raw.split('|');
+        if (parts.length === 2) {
+            sendWS('exam', { module: currentQuestionModule || 'general_exam', finding_id: parts[0], value: parts[1] });
+        } else if (parts.length === 3) {
+            sendWS('exam', { module: parts[0], finding_id: parts[1], value: parts[2] });
+        } else {
+            alert('Format: finding_id|value  (e.g., bp_systolic|110). Legacy: module|finding_id|value also supported.');
+            return;
+        }
+        document.getElementById('examInput').value = '';
+    };
+    document.getElementById('examInput').onkeydown = function(e) {
+        if (e.key === 'Enter') document.getElementById('submitExamBtn').click();
+    };
+
+    document.getElementById('saveSnapshotBtn').onclick = function() {
+        sendWS('save', {});
+    };
+
+    document.getElementById('viewHpNoteBtn').onclick = function() { fetchDocument('hp_note'); };
+    document.getElementById('viewSoapNoteBtn').onclick = function() { fetchDocument('soap_note'); };
+    document.getElementById('viewDischargeBtn').onclick = function() { fetchDocument('discharge_summary'); };
+    document.getElementById('viewReferralBtn').onclick = function() { fetchDocument('referral_letter'); };
+    document.getElementById('viewClinicBtn').onclick = function() { fetchDocument('clinic_note'); };
+    document.getElementById('pdfHpNoteBtn').onclick = function() { exportPDF('hp_note'); };
+    document.getElementById('pdfSoapNoteBtn').onclick = function() { exportPDF('soap_note'); };
+
+    // ── Initialise ──
+
+    if (token) {
+        // Validate token by trying to load patients
+        apiCall('/api/patients')
+            .then(function(r) { return r.json(); })
+            .then(function() {
+                currentUser = { username: 'User', role: 'doctor' };
+                showApp();
+                loadPatients();
+            })
+            .catch(function() {
+                token = null;
+                localStorage.removeItem('amexan_token');
+                showAuth();
+            });
+    } else {
+        showAuth();
+    }
+</script>
+</body>
+</html>
