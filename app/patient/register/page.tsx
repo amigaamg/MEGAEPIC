@@ -38,9 +38,9 @@ const S = {
   header: { height: 60, background: 'var(--surface-card)', borderBottom: '1px solid var(--surface-border)', display: 'flex', alignItems: 'center', padding: '0 24px', gap: 12 },
   card: { padding: 24, maxWidth: 720, margin: '0 auto' },
   panel: { padding: 24, background: 'var(--surface-card)', borderRadius: 12, border: '1px solid var(--surface-border)' },
-  input: { width: '100%', height: 42, padding: '0 14px', borderRadius: 8, border: '1px solid var(--surface-border)', background: 'var(--surface)', color: 'var(--text-primary)', fontSize: 14, outline: 'none', transition: 'border-color .2s', boxSizing: 'border-box' as const },
-  inputErr: { width: '100%', height: 42, padding: '0 14px', borderRadius: 8, border: '1px solid var(--red)', background: 'var(--surface)', color: 'var(--text-primary)', fontSize: 14, outline: 'none', boxSizing: 'border-box' as const },
-  select: { width: '100%', height: 42, padding: '0 14px', borderRadius: 8, border: '1px solid var(--surface-border)', background: 'var(--surface)', color: 'var(--text-primary)', fontSize: 14, outline: 'none', appearance: 'none' as const, cursor: 'pointer' },
+  input: { width: '100%', minHeight: 48, height: 'auto', padding: '0 14px', borderRadius: 8, border: '1px solid var(--surface-border)', background: 'var(--surface)', color: 'var(--text-primary)', fontSize: 16, outline: 'none', transition: 'border-color .2s', boxSizing: 'border-box' as const },
+  inputErr: { width: '100%', minHeight: 48, height: 'auto', padding: '0 14px', borderRadius: 8, border: '1px solid var(--red)', background: 'var(--surface)', color: 'var(--text-primary)', fontSize: 16, outline: 'none', boxSizing: 'border-box' as const },
+  select: { width: '100%', minHeight: 48, height: 'auto', padding: '0 14px', borderRadius: 8, border: '1px solid var(--surface-border)', background: 'var(--surface)', color: 'var(--text-primary)', fontSize: 16, outline: 'none', appearance: 'none' as const, cursor: 'pointer' },
   label: { fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 4, textTransform: 'uppercase' },
   error: { fontSize: 11, color: 'var(--red)', marginTop: 3 },
   stepDot: (active: boolean, done: boolean) => ({
@@ -50,8 +50,8 @@ const S = {
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontSize: 12, fontWeight: 700, flexShrink: 0,
   }),
-  btn: { padding: '10px 20px', borderRadius: 8, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-sans)' },
-  btnO: (disabled?: boolean) => ({ padding: '10px 20px', borderRadius: 8, border: '1px solid var(--surface-border)', background: 'transparent', fontSize: 13, fontWeight: 500, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1, fontFamily: 'var(--font-sans)' }),
+  btn: { minHeight: 48, padding: '0 24px', borderRadius: 8, border: 'none', fontSize: 15, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-sans)' },
+  btnO: (disabled?: boolean) => ({ minHeight: 48, padding: '0 24px', borderRadius: 8, border: '1px solid var(--surface-border)', background: 'transparent', fontSize: 15, fontWeight: 500, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1, fontFamily: 'var(--font-sans)' }),
 }
 
 function Field({ label, error, children, required }: { label: string; error?: string; children: React.ReactNode; required?: boolean }) {

@@ -160,8 +160,9 @@ export default function AuthLoginPage() {
           <button
             key={t.id}
             onClick={() => { setMethod(t.id); setError(null); }}
-            className="flex-1 py-2 px-3 rounded-md text-xs font-medium transition-all"
+            className="flex-1 rounded-md text-xs font-medium transition-all"
             style={{
+              minHeight: 48, padding: '4px 12px',
               background: method === t.id ? 'white' : 'transparent',
               color: method === t.id ? 'var(--primary)' : 'var(--text-muted)',
               border: method === t.id ? '1px solid var(--surface-border)' : 'none',
@@ -202,7 +203,7 @@ export default function AuthLoginPage() {
       {method === 'email' && (
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--text-secondary)" }} htmlFor="login-email">
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }} htmlFor="login-email">
               Email address
             </label>
             <input
@@ -215,13 +216,13 @@ export default function AuthLoginPage() {
               autoComplete="email"
               spellCheck={false}
               className="input"
-              style={{ height: 48, fontSize: 15 }}
+              style={{ minHeight: 48, height: 'auto', padding: '0 14px', fontSize: 16 }}
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-medium" style={{ color: "var(--text-secondary)" }} htmlFor="login-password">
+              <label className="block text-sm font-medium" style={{ color: "var(--text-secondary)" }} htmlFor="login-password">
                 Password
               </label>
               <a href="/recovery" className="text-xs font-medium no-underline hover:underline" style={{ color: "var(--primary)" }}>
@@ -230,7 +231,7 @@ export default function AuthLoginPage() {
             </div>
             <div
               className="flex items-center"
-              style={{ width: "100%", height: 48, padding: "0 12px", borderRadius: "var(--radius-md)", border: "1px solid var(--surface-border)", background: "var(--surface)", transition: "border-color .2s, box-shadow .2s" }}
+              style={{ width: "100%", minHeight: 48, height: 'auto', padding: "0 14px", borderRadius: "var(--radius-md)", border: "1px solid var(--surface-border)", background: "var(--surface)", transition: "border-color .2s, box-shadow .2s" }}
             >
               <input
                 id="login-password"
@@ -268,8 +269,8 @@ export default function AuthLoginPage() {
           <button
             onClick={handleLogin}
             disabled={loading}
-            className="btn-primary w-full mt-5"
-            style={{ height: 48, fontSize: 15 }}
+            className="w-full mt-5"
+            style={{ minHeight: 48, height: 'auto', padding: '0 20px', borderRadius: 'var(--radius-md)', border: 'none', background: 'var(--primary)', color: 'white', fontSize: 16, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
           >
             {loading ? <><Spinner /> Signing in...</> : "Sign in"}
           </button>

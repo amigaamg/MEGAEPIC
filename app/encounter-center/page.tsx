@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ClinicalEncounter } from "@/components/clinical-encounter/ClinicalEncounter"
 import { PatientRegistration } from "@/components/clinical-encounter/PatientRegistration"
 import { listRecentEncounters, loadEncounter, type SavedEncounter } from "@/lib/amexan/encounter/encounterPersistence"
+import { getDefaultOrgId } from "@/lib/config"
 import { useAuth } from "@/context/AuthContext"
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import { auth } from "@/lib/firebase"
@@ -25,7 +26,7 @@ export default function EncounterCenterPage() {
   const [existingEncounterData, setExistingEncounterData] = useState<{ state: any; encounterId: string } | null>(null)
 
   useEffect(() => {
-    listRecentEncounters('telemed-a98cf', 10)
+    listRecentEncounters(getDefaultOrgId(), 10)
       .then(setRecentEncounters)
       .catch(() => {})
       .finally(() => setLoadingEncounters(false))

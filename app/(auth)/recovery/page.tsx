@@ -150,9 +150,9 @@ export default function RecoveryPage() {
 
           <button onClick={() => { setStep('email'); setError(null); }}
             style={{
-              width: '100%', height: 44, borderRadius: 'var(--radius-md)',
+              width: '100%', minHeight: 48, padding: '0 16px', borderRadius: 'var(--radius-md)',
               border: '1px solid var(--surface-border)', background: 'transparent',
-              color: 'var(--text-secondary)', fontSize: 13, fontWeight: 500,
+              color: 'var(--text-secondary)', fontSize: 14, fontWeight: 500,
               cursor: 'pointer', fontFamily: 'var(--font-sans)',
             }}>
             Try a different email
@@ -164,9 +164,9 @@ export default function RecoveryPage() {
             </p>
             <button onClick={handleUseBackup}
               style={{
-                width: '100%', height: 44, borderRadius: 'var(--radius-md)',
+                width: '100%', minHeight: 48, padding: '0 16px', borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--primary)', background: 'transparent',
-                color: 'var(--primary)', fontSize: 13, fontWeight: 600,
+                color: 'var(--primary)', fontSize: 14, fontWeight: 600,
                 cursor: 'pointer', fontFamily: 'var(--font-sans)',
               }}>
               Use backup code
@@ -212,10 +212,11 @@ export default function RecoveryPage() {
           </button>
 
           <button onClick={() => { setStep('email'); setError(null); }}
-            className="w-full text-xs"
+            className="w-full"
             style={{
               background: 'transparent', border: 'none', color: 'var(--text-muted)',
-              cursor: 'pointer', fontFamily: 'var(--font-sans)',
+              cursor: 'pointer', fontFamily: 'var(--font-sans)', minHeight: 48,
+              fontSize: 13,
             }}>
             Back to email recovery
           </button>
