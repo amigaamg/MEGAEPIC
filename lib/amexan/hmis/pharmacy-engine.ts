@@ -22,8 +22,8 @@ export interface DrugMaster {
   lactationSafe: boolean;
   renalAdjustment: string;
   hepaticAdjustment: string;
-  pediatricDosing: string;
-  geriatricDosing: string;
+  pediatricDosing?: string;
+  geriatricDosing?: string;
   monitoring: string[];
   maxDailyDose?: string;
   overdoseTreatment?: string;

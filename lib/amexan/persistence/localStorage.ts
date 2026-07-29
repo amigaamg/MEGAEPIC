@@ -1,3 +1,5 @@
+import { offlineDB } from '../offline/indexeddb-persistence';
+
 export interface PatientData {
   mrn: string;
   name: string;
@@ -147,4 +149,72 @@ export function completeEncounter(_orgId: string, encounterId: string): void {
     encounters[encounterId].updatedAt = Date.now()
     saveEncounters(encounters)
   }
+}
+
+// ─── IndexedDB-backed operations (offline-capable) ───────┐
+
+export async function idbRegisterPatient(data: PatientData): Promise<string> {
+  const id = `pat_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+  const record = { ...data, id, createdAt: Date.now(), updatedAt: Date.now() }
+  await offlineDB.put('patients', record)
+  return id
+}
+
+export async function idbGetPatient(patientId: string): Promise<PatientData | null> {
+  return offlineDB.get<PatientData>('patients', patientId)
+}
+
+export async function idbFindPatientByMRN(mrn: string): Promise<{ id: string; data: PatientData } | null> {
+  const patients = await offlineDB.queryByIndex<PatientData>('patients', 'mrn', mrn)
+  if (patients.length === 0) return null
+  return { id: patients[0].id!, data: patients[0] }
+}
+
+export async function idbUpdatePatient(patientId: string, updates: Partial<PatientData>): Promise<void> {
+  const existing = await idbGetPatient(patientId)
+  if (existing) {
+    await offlineDB.put('patients', { ...existing, ...updates, updatedAt: Date.now() })
+  }
+}
+
+export async function idbSaveEncounter(encounterId: string, data: any): Promise<void> {
+  const existing = await offlineDB.get('encounters', encounterId)
+  const entry = {
+    id: encounterId,
+    encounterId,
+    patientName: data.biodata?.patientName || 'Unknown',
+    hospitalNumber: data.biodata?.hospitalNumber || '',
+    status: 'active',
+    currentPhase: data.currentPhase || 'registration',
+    updatedAt: Date.now(),
+    createdAt: (existing as any)?.createdAt || Date.now(),
+    data,
+  }
+  await offlineDB.put('encounters', entry)
+}
+
+export async function idbLoadEncounter(encounterId: string): Promise<any | null> {
+  const entry = await offlineDB.get('encounters', encounterId)
+  return entry ? (entry as any).data : null
+}
+
+export async function idbListRecentEncounters(maxResults = 20): Promise<any[]> {
+  const entries = await offlineDB.getAll<any>('encounters')
+  entries.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
+  return entries.slice(0, maxResults)
+}
+
+export async function idbCompleteEncounter(encounterId: string): Promise<void> {
+  const existing = await offlineDB.get<any>('encounters', encounterId)
+  if (existing) {
+    await offlineDB.put('encounters', { ...existing, status: 'completed', updatedAt: Date.now() })
+  }
+}
+
+export async function idbGetStorageInfo(): Promise<{ usage: number; quota: number; patientCount: number; encounterCount: number; queueCount: number }> {
+  const estimate = await offlineDB.getStorageEstimate()
+  const patientCount = await offlineDB.count('patients')
+  const encounterCount = await offlineDB.count('encounters')
+  const queueCount = await offlineDB.count('queue')
+  return { ...estimate, patientCount, encounterCount, queueCount }
 }

@@ -68,7 +68,8 @@ export function generateDashboard(session: UserSession): DashboardTemplate {
   const workspaceLinks = getWorkspaceLinks(session);
 
   // Section 1: Today's Assignments (always first)
-  const activeAssignments = currentAssignments.filter(a => a.status === 'active' || a.status === 'scheduled');
+  const safeAssignments = currentAssignments || [];
+  const activeAssignments = safeAssignments.filter(a => a.status === 'active' || a.status === 'scheduled');
   sections.push({
     id: 'today',
     title: onDuty ? 'Today\'s Assignments' : 'Off Duty — No Active Assignments',
@@ -89,8 +90,8 @@ export function generateDashboard(session: UserSession): DashboardTemplate {
 
   // Section 2: Critical / Urgent items
   const urgentItems: DashboardItem[] = [];
-  if (currentAssignments.some(a => a.priority === 'emergency' || a.priority === 'critical')) {
-    urgentItems.push(...currentAssignments
+  if (safeAssignments.some(a => a.priority === 'emergency' || a.priority === 'critical')) {
+    urgentItems.push(...safeAssignments
       .filter(a => a.priority === 'emergency' || a.priority === 'critical')
       .map(a => ({
         id: a.id,
@@ -126,8 +127,9 @@ export function generateDashboard(session: UserSession): DashboardTemplate {
 
   // Section 3: Active Patients (contextual)
   const patientItems: DashboardItem[] = [];
-  if (session.activePatientIds.length > 0) {
-    patientItems.push(...session.activePatientIds.slice(0, 10).map((pid, i) => ({
+  const safeActivePatientIds = session.activePatientIds || [];
+  if (safeActivePatientIds.length > 0) {
+    patientItems.push(...safeActivePatientIds.slice(0, 10).map((pid, i) => ({
       id: `patient-${pid}`,
       type: 'patient',
       title: `Patient ${pid}`,

@@ -41,6 +41,8 @@ interface AuthContextType {
   can: (resource: ResourceType, action: Action, scope?: { organizationId?: string; departmentId?: string; wardId?: string }) => boolean;
   login: (email: string, password: string) => Promise<string>;
   logout: () => Promise<void>;
+  needsToCompleteRegistration: boolean;
+  registrationStep: string | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -52,6 +54,8 @@ const AuthContext = createContext<AuthContextType>({
   can: () => false,
   login: async () => '',
   logout: async () => {},
+  needsToCompleteRegistration: false,
+  registrationStep: null,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -59,6 +63,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<UserSession>(buildEmptySession);
+  const [needsToCompleteRegistration, setNeedsToCompleteRegistration] = useState(false);
+  const [registrationStep, setRegistrationStep] = useState<string | null>(null);
 
   async function loadUserSession(firebaseUser: User) {
     try {
@@ -68,6 +74,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setRole(fetchedRole);
 
       const amxUid = userData?.amxUid as AmxUid | undefined;
+
+      const userRegistrationStep = userData?.registrationStep as string | undefined;
+      setRegistrationStep(userRegistrationStep || null);
+      setNeedsToCompleteRegistration(
+        !!userRegistrationStep && userRegistrationStep !== 'complete'
+      );
 
       if (amxUid) {
         const [identity, person, professional] = await Promise.all([
@@ -120,6 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }));
     } catch (err) {
       console.error('Failed to load UserSession:', err);
+      setNeedsToCompleteRegistration(false);
       setSession(prev => ({ ...prev, isAuthenticated: true, isLoading: false }));
     }
   }
@@ -164,7 +177,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, loading, session, dashboard, can: checkPermission, login, logout }}>
+    <AuthContext.Provider value={{ user, role, loading, session, dashboard, can: checkPermission, login, logout, needsToCompleteRegistration, registrationStep }}>
       {children}
     </AuthContext.Provider>
   );

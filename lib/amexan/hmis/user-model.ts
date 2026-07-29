@@ -88,7 +88,7 @@ export interface SessionInfo {
   deviceInfo: DeviceInfo;
   location?: string;
   ipAddress?: string;
-  authMethod: AuthMethod;
+  authMethod: UserAuthMethod;
   expiresAt: number;
   isActive: boolean;
 }
@@ -102,7 +102,7 @@ export interface DeviceInfo {
   userAgent?: string;
 }
 
-export enum AuthMethod {
+export enum UserAuthMethod {
   Password = 'password',
   Biometric = 'biometric',
   TwoFactor = 'two_factor',
@@ -272,7 +272,7 @@ export function getActorTaskSummary(actor: Actor): {
   };
 }
 
-export function createSession(actorId: string, deviceInfo: DeviceInfo, authMethod: AuthMethod): SessionInfo {
+export function createSession(actorId: string, deviceInfo: DeviceInfo, authMethod: UserAuthMethod): SessionInfo {
   return {
     sessionId: `SES-${Date.now().toString(36).toUpperCase()}`,
     startedAt: Date.now(),

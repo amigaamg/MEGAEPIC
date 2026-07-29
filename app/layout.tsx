@@ -1,5 +1,7 @@
 import { AuthProvider } from "@/context/AuthContext";
 import FirestoreErrorHandler from "@/components/FirestoreErrorHandler";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { ThemeInjector } from "@/components/presentation/ThemeInjector";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 
@@ -20,11 +22,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-theme="light">
       <body style={{ background: "var(--surface)", color: "var(--text-primary)" }}>
-        <FirestoreErrorHandler>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </FirestoreErrorHandler>
+        <ThemeInjector>
+          <FirestoreErrorHandler>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </FirestoreErrorHandler>
+        </ThemeInjector>
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );

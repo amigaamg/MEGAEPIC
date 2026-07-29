@@ -262,6 +262,7 @@ export enum RoomType {
   Procedure = 'procedure',
   Consultation = 'consultation',
   Triage = 'triage',
+  Resuscitation = 'resuscitation',
 }
 
 export interface ResourceInfo {

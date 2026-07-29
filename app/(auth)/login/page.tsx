@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
@@ -43,6 +43,7 @@ export default function AuthLoginPage() {
   const [loading, setLoading] = useState(false);
   const [pwVisible, setPwVisible] = useState(false);
   const [shake, setShake] = useState(false);
+  const { needsToCompleteRegistration } = useAuth();
 
   const triggerShake = useCallback(() => {
     setShake(false);
@@ -57,6 +58,12 @@ export default function AuthLoginPage() {
     },
     [triggerShake],
   );
+
+  useEffect(() => {
+    if (needsToCompleteRegistration) {
+      router.push('/register');
+    }
+  }, [needsToCompleteRegistration, router]);
 
   async function handleLogin() {
     if (loading) return;

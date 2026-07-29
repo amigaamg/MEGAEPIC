@@ -389,7 +389,6 @@ export {
   createClinicalFact, createEpisode,
   createPatientJourney as createPatientJourneyRecord,
   buildTimeline, filterByTrustLayer, detectCareGaps,
-  addGoal, updateGoalProgress,
   createCareNetwork, createConsentDirective,
   // ── Encounter Engine ──
   createEncounter, transitionEncounter, setPreparation,
@@ -400,7 +399,7 @@ export {
   createWorkflowInstance, transitionPatient,
   transferPatientOwnership, acceptTransfer,
   createQueue, addToQueue, reorderByPriority,
-  createTask, assignTask, completeTask,
+  createTask, assignTask,
   getAdmissionTaskBundle, getDischargeTaskBundle, getOperationTaskBundle,
   checkDependencies, createEscalationPolicy, checkEscalation, escalateTask,
   checkClinicalClock, computeWorkflowHealth,
@@ -451,3 +450,58 @@ export {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export * from './hmis';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Patient Constitution — APOS (AMEXAN Patient Operating System)
+// Volumes I–V: Identity, Registration, Journey, Care Service, Family, Seed
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export type {
+  AmxpId, PatientIdentity, HumanIdentity, AuthenticationIdentity,
+  VerificationIdentity, ClinicalIdentity, TrustIdentity, LinkedAccount,
+  ActiveSession, AuthMethod as PatientAuthMethod,
+  PatientAddress, EmergencyContactPerson, VerificationDocument,
+  PatientVerificationLevel, RegistrationStage,
+  CareService, ServiceRequirement, ServiceBilling,
+  ServiceCommunication, ServiceOutcome, ServiceFeedback,
+  JourneyObject, JourneyType, JourneyTask, JourneyAlert,
+  MonitoringParameter, EducationModule, EmergencyPlan,
+  PatientDashboardConfig, FamilyRelationship, FamilyPermission,
+  SeedProfile, SeedRole, SeedPatientProfile, SeedConfig,
+  SeedOrganization, SeedClinician, SeedNurse, SeedPatient,
+  SeedStudent, SeedSubscription, SeedVerificationState,
+} from './patient-constitution';
+export {
+  generateAmxpId, isValidAmxpId,
+  VERIFICATION_LABELS, REGISTRATION_STAGE_LABELS,
+  createEmptyPatientIdentity,
+  determineVerificationLevel,
+  linkPatientAccount, unlinkPatientAccount,
+  checkFamilyPermission, addClinicalIdentity,
+  registerDevice, createSession as patientCreateSession,
+  revokeSession, generateAmxpIdForTemp, mergeTempIdentity,
+  createJourney, addJourneyEvent, addMilestone, completeMilestone,
+  addGoal, updateGoalProgress, addTask, completeTask,
+  addCareTeamMember, addMonitoringParameter, addEducationModule,
+  addAlert, acknowledgeAlert, setEmergencyPlan,
+  initializeJourneyDefaults, getJourneyPriority,
+  buildPatientDashboard, determineJourneyTypesFromConditions,
+  generateWelcomeJourneys,
+  createCareService, transitionService, addServiceRequirement,
+  setServiceBilling, addServiceCommunication,
+  markCommunicationDelivered, setServiceOutcome, setServiceFeedback,
+  getServiceProgress, getPatientFacingStatus,
+  getBundlesForJourney, estimateBundleCost, CARE_BUNDLES,
+  createRegistrationState, validateStage1, validateStage2,
+  validateStage3, canAdvanceStage, getNextStage, getStageLabel,
+  getStageDescription, getStageProgress, generateTempPatientId,
+  isRegistrationComplete,
+  COUNTRIES, BLOOD_GROUPS, ID_TYPES, LANGUAGES, KENYA_COUNTIES,
+  addFamilyMember, removeFamilyMember,
+  getDefaultPermissionsForRelationship, canAccessPatientData,
+  getEmergencyContacts, createFamilyTree,
+  RELATIONSHIP_LABELS, PERMISSION_LABELS,
+  getDeveloperSeedConfig, getMinimalSeedConfig,
+  getTeachingHospitalSeedConfig, getSeedProfileByEmail,
+  getAllSeedEmails, getDemoCasePatients,
+} from './patient-constitution';

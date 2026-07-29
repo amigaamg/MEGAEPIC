@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Calendar, Clock, Users, Pill, FlaskConical, Scan, FileText, LogOut, Activity, Bell, TrendingUp, BarChart3, UserCog, Settings, Menu, ChevronRight, CheckCircle, XCircle, PlusCircle, UserPlus } from 'lucide-react';
@@ -38,8 +38,14 @@ const S = {
 const ICONS: Record<string, any> = { Pill, FlaskConical, Scan, FileText, LogOut, Activity, Calendar, Users, Bell, TrendingUp, BarChart3, UserCog, Settings, AlertTriangle, ArrowRight, Clock, CheckCircle, XCircle, PlusCircle, UserPlus, ChevronRight, Menu };
 
 export default function DashboardPage() {
-  const { session, dashboard, can: canAccess, loading, user, logout } = useAuth();
+  const { session, dashboard, can: canAccess, loading, user, logout, needsToCompleteRegistration } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && needsToCompleteRegistration) {
+      router.push('/register');
+    }
+  }, [loading, needsToCompleteRegistration, router]);
 
   const activeSection = useMemo(() => {
     if (!dashboard || dashboard.sections.length === 0) return null;

@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { icon: '🛤️', label: 'Pathways', href: '/pathways' },
   { icon: '📈', label: 'Analytics', href: '/analytics' },
   { icon: '🔬', label: 'Knowledge Graph', href: '/knowledge-graph' },
+  { icon: '⚙️', label: 'HMIS Console', href: '/hmis' },
   { icon: '⚙️', label: 'Settings', href: '/settings' },
 ];
 

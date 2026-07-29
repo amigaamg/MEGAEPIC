@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // AMEXAN Clinical Reasoning Orchestrator
-// Integrates all four clinical reasoning domains (abdominal pain, GI bleeding,
-// jaundice, constipation) into a unified gap pipeline for the Information Gap Engine.
+// Integrates all 15 clinical reasoning domains into a unified gap pipeline for
+// the Information Gap Engine.
 // Every question exists because a clinical reasoning rule triggered it.
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -43,23 +43,101 @@ import {
   recognizeCoughPhenotype,
 } from './coughReasoning';
 
+import {
+  getChestPainGaps,
+  getChestPainPatternGaps,
+  getBiodataAdjustedChestPainPriors,
+} from './chestPainReasoning';
+
+import {
+  getHeadacheGaps,
+  getHeadachePatternGaps,
+  getBiodataAdjustedHeadachePriors,
+} from './headacheReasoning';
+
+import {
+  getFeverGaps,
+  getFeverPatternGaps,
+  getBiodataAdjustedFeverPriors,
+} from './feverReasoning';
+
+import {
+  getDyspneaGaps,
+  getDyspneaPatternGaps,
+  getBiodataAdjustedDyspneaPriors,
+} from './dyspneaReasoning';
+
+import {
+  getDiarrheaGaps,
+  getDiarrheaPatternGaps,
+  getBiodataAdjustedDiarrheaPriors,
+} from './diarrheaReasoning';
+
+import {
+  getVomitingGaps,
+  getVomitingPatternGaps,
+  getBiodataAdjustedVomitingPriors,
+} from './vomitingReasoning';
+
+import {
+  getBackPainGaps,
+  getBackPainPatternGaps,
+  getBiodataAdjustedBackPainPriors,
+} from './backPainReasoning';
+
+import {
+  getRashGaps,
+  getRashPatternGaps,
+  getBiodataAdjustedRashPriors,
+} from './rashReasoning';
+
+import {
+  getJointPainGaps,
+  getJointPainPatternGaps,
+  getBiodataAdjustedJointPainPriors,
+} from './jointPainReasoning';
+
+import {
+  getDizzinessGaps,
+  getDizzinessPatternGaps,
+  getBiodataAdjustedDizzinessPriors,
+} from './dizzinessReasoning';
+
+import {
+  getTraumaGaps,
+  getTraumaPatternGaps,
+  getBiodataAdjustedTraumaPriors,
+} from './traumaReasoning';
+
 // ── Chief complaint detection ──────────────────────────────────────────
 
-type ClinicalDomain = 'abdominal_pain' | 'gi_bleeding' | 'jaundice' | 'constipation' | 'cough' | 'mixed' | 'other';
+type ClinicalDomain = 'abdominal_pain' | 'gi_bleeding' | 'jaundice' | 'constipation' | 'cough'
+  | 'chest_pain' | 'headache' | 'fever' | 'dyspnea' | 'diarrhea' | 'vomiting'
+  | 'back_pain' | 'rash' | 'joint_pain' | 'dizziness' | 'trauma' | 'mixed' | 'other';
 
-const DOMAIN_KEYWORDS: Record<ClinicalDomain, string[]> = {
+const DOMAIN_KEYWORDS: Record<string, string[]> = {
   abdominal_pain: ['abdominal pain', 'stomach ache', 'belly pain', 'abd pain', 'abdo pain', 'tummy ache', 'stomach pain', 'abdominal discomfort'],
   gi_bleeding: ['bleeding', 'blood in stool', 'blood in vomit', 'black stool', 'tarry stool', 'hematemesis', 'melena', 'hematochezia', 'rectal bleeding', 'vomiting blood', 'coffee ground'],
   jaundice: ['jaundice', 'yellow', 'yellow eyes', 'yellow skin', 'icterus', 'bilirubin', 'liver problem', 'dark urine'],
   constipation: ['constipation', 'constipated', 'not passing stool', 'hard stool', 'difficult bowel', 'straining', 'obstipation', 'can\'t poop'],
   cough: ['cough', 'coughing', 'hacking', 'productive cough', 'dry cough', 'chest congestion', 'phlegm', 'sputum', 'mucous', 'mucus', 'hemoptysis', 'coughing blood'],
+  chest_pain: ['chest pain', 'chest discomfort', 'chest tightness', 'chest pressure', 'angina', 'heart pain'],
+  headache: ['headache', 'head pain', 'migraine', 'tension headache', 'cluster headache', 'head hurting'],
+  fever: ['fever', 'high temperature', 'pyrexia', 'hot', 'rigors', 'chills', 'sweating', 'temperature'],
+  dyspnea: ['dyspnea', 'shortness of breath', 'difficulty breathing', 'breathlessness', 'can\'t breathe', 'SOB', 'breathing problem', 'wheeze', 'heavy breathing'],
+  diarrhea: ['diarrhea', 'diarrhoea', 'loose stool', 'watery stool', 'frequent stool', 'loose motion', 'loose bowel', 'runny stool'],
+  vomiting: ['vomiting', 'nausea', 'throwing up', 'being sick', 'sickness', 'retching', 'feel sick'],
+  back_pain: ['back pain', 'backache', 'back hurting', 'spinal pain', 'lumbago'],
+  rash: ['rash', 'skin rash', 'skin eruption', 'hives', 'spots', 'blisters', 'red spots', 'itchy skin'],
+  joint_pain: ['joint pain', 'joint ache', 'arthritis', 'swollen joint', 'arthralgia', 'stiff joints'],
+  dizziness: ['dizziness', 'vertigo', 'lightheaded', 'feeling faint', 'unsteady', 'balance problem', 'spinning', 'room spinning'],
+  trauma: ['trauma', 'injury', 'accident', 'fall', 'hit', 'wound', 'bleeding', 'fracture', 'hurt after'],
   mixed: [],
   other: [],
 };
 
 function detectClinicalDomains(state: EncounterBrainState): ClinicalDomain[] {
   const domains: ClinicalDomain[] = [];
-  const ccText = state.patient?.name ? '' : '';
   const answeredFeatures = new Set<string>();
 
   for (const symptom of Object.values(state.symptoms)) {
@@ -94,6 +172,53 @@ function detectClinicalDomains(state: EncounterBrainState): ClinicalDomain[] {
     domains.push('cough');
   }
 
+  if (answeredFeatures.has('chest_pain') || answeredFeatures.has('chest_tightness') ||
+      answeredFeatures.has('chest_pressure')) {
+    domains.push('chest_pain');
+  }
+
+  if (answeredFeatures.has('headache')) {
+    domains.push('headache');
+  }
+
+  if (answeredFeatures.has('fever') || answeredFeatures.has('fever_chills') ||
+      answeredFeatures.has('rigors')) {
+    domains.push('fever');
+  }
+
+  if (answeredFeatures.has('dyspnea') || answeredFeatures.has('orthopnea') ||
+      answeredFeatures.has('pnd') || answeredFeatures.has('dyspnea_on_exertion')) {
+    domains.push('dyspnea');
+  }
+
+  if (answeredFeatures.has('diarrhea') || answeredFeatures.has('diarrhoea')) {
+    domains.push('diarrhea');
+  }
+
+  if (answeredFeatures.has('vomiting') || answeredFeatures.has('nausea')) {
+    domains.push('vomiting');
+  }
+
+  if (answeredFeatures.has('back_pain')) {
+    domains.push('back_pain');
+  }
+
+  if (answeredFeatures.has('skin_rash')) {
+    domains.push('rash');
+  }
+
+  if (answeredFeatures.has('joint_pain')) {
+    domains.push('joint_pain');
+  }
+
+  if (answeredFeatures.has('dizziness')) {
+    domains.push('dizziness');
+  }
+
+  if (state.encounter?.isTrauma || answeredFeatures.has('trauma_history')) {
+    domains.push('trauma');
+  }
+
   if (domains.length === 0) {
     for (const [domain, keywords] of Object.entries(DOMAIN_KEYWORDS)) {
       if (domain === 'mixed' || domain === 'other') continue;
@@ -108,7 +233,7 @@ function detectClinicalDomains(state: EncounterBrainState): ClinicalDomain[] {
     domains.unshift('mixed');
   }
 
-  return domains.length > 0 ? [...new Set(domains)] : ['other'];
+  return domains.length > 0 ? Array.from(new Set(domains)) : ['other'];
 }
 
 // ── Unified gap generation ─────────────────────────────────────────────
@@ -177,6 +302,61 @@ export function getClinicalReasoningGaps(
     addUniqueGaps(coughGaps);
   }
 
+  if (domains.includes('chest_pain') || domains.includes('mixed')) {
+    addUniqueGaps(getChestPainGaps(state, answeredFeatureIds));
+    addUniqueGaps(getChestPainPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('headache') || domains.includes('mixed')) {
+    addUniqueGaps(getHeadacheGaps(state, answeredFeatureIds));
+    addUniqueGaps(getHeadachePatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('fever') || domains.includes('mixed')) {
+    addUniqueGaps(getFeverGaps(state, answeredFeatureIds));
+    addUniqueGaps(getFeverPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('dyspnea') || domains.includes('mixed')) {
+    addUniqueGaps(getDyspneaGaps(state, answeredFeatureIds));
+    addUniqueGaps(getDyspneaPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('diarrhea') || domains.includes('mixed')) {
+    addUniqueGaps(getDiarrheaGaps(state, answeredFeatureIds));
+    addUniqueGaps(getDiarrheaPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('vomiting') || domains.includes('mixed')) {
+    addUniqueGaps(getVomitingGaps(state, answeredFeatureIds));
+    addUniqueGaps(getVomitingPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('back_pain') || domains.includes('mixed')) {
+    addUniqueGaps(getBackPainGaps(state, answeredFeatureIds));
+    addUniqueGaps(getBackPainPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('rash') || domains.includes('mixed')) {
+    addUniqueGaps(getRashGaps(state, answeredFeatureIds));
+    addUniqueGaps(getRashPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('joint_pain') || domains.includes('mixed')) {
+    addUniqueGaps(getJointPainGaps(state, answeredFeatureIds));
+    addUniqueGaps(getJointPainPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('dizziness') || domains.includes('mixed')) {
+    addUniqueGaps(getDizzinessGaps(state, answeredFeatureIds));
+    addUniqueGaps(getDizzinessPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
+  if (domains.includes('trauma') || domains.includes('mixed')) {
+    addUniqueGaps(getTraumaGaps(state, answeredFeatureIds));
+    addUniqueGaps(getTraumaPatternGaps(state, answeredFeatureIds, activeDiseaseStates));
+  }
+
   return allGaps.sort((a, b) => b.priorityScore - a.priorityScore);
 }
 
@@ -210,6 +390,39 @@ export function getBiodataPriorsForAll(
   }
   if (domains.includes('constipation') || domains.includes('mixed')) {
     Object.assign(allPriors, getBiodataAdjustedConstipationPriors(state));
+  }
+  if (domains.includes('chest_pain') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedChestPainPriors(state));
+  }
+  if (domains.includes('headache') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedHeadachePriors(state));
+  }
+  if (domains.includes('fever') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedFeverPriors(state));
+  }
+  if (domains.includes('dyspnea') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedDyspneaPriors(state));
+  }
+  if (domains.includes('diarrhea') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedDiarrheaPriors(state));
+  }
+  if (domains.includes('vomiting') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedVomitingPriors(state));
+  }
+  if (domains.includes('back_pain') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedBackPainPriors(state));
+  }
+  if (domains.includes('rash') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedRashPriors(state));
+  }
+  if (domains.includes('joint_pain') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedJointPainPriors(state));
+  }
+  if (domains.includes('dizziness') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedDizzinessPriors(state));
+  }
+  if (domains.includes('trauma') || domains.includes('mixed')) {
+    Object.assign(allPriors, getBiodataAdjustedTraumaPriors(state));
   }
 
   return allPriors;

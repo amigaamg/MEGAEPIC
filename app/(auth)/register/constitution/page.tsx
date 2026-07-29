@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/context/AuthContext";
 import {
   validateIdentityStep,
@@ -19,6 +19,9 @@ import {
   createEmployment,
   createAssignment,
   addOrgMember,
+  getIdentity,
+  getPerson,
+  getProfessional,
   type RegistrationStep,
   type RegistrationData,
   type AmxUid,
@@ -106,17 +109,26 @@ const EMPLOYMENT_TYPES = [
   { value: 'consultant', label: 'Consultant' },
 ];
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+const COUNTRIES = [
+  'Kenya', 'Uganda', 'Tanzania', 'Rwanda', 'Burundi', 'South Sudan',
+  'Ethiopia', 'Somalia', 'DR Congo', 'Nigeria', 'Ghana', 'South Africa',
+  'Egypt', 'Morocco', 'Other',
+];
+
+function Field({ label, error, required, children }: { label: string; error?: string; required?: boolean; children: React.ReactNode }) {
   return (
-    <div>
-      <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--text-secondary)' }}>{label}</label>
+    <div role="group" aria-label={label}>
+      <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--text-secondary)' }}>
+        {label}
+        {required && <span style={{ color: 'var(--red)', marginLeft: 2 }}>*</span>}
+      </label>
       {children}
-      {error && <p style={{ color: 'var(--red)', fontSize: 11, marginTop: 4, marginLeft: 2 }}>{error}</p>}
+      {error && <p style={{ color: 'var(--red)', fontSize: 11, marginTop: 4, marginLeft: 2 }} role="alert">{error}</p>}
     </div>
   );
 }
 
-const inputStyle: React.CSSProperties = {
+const baseInput: React.CSSProperties = {
   width: '100%', height: 48, padding: '0 16px', borderRadius: 'var(--radius-md)',
   border: '1px solid var(--surface-border)',
   background: 'var(--surface)', color: 'var(--text-primary)',
@@ -124,17 +136,31 @@ const inputStyle: React.CSSProperties = {
   transition: 'border-color .2s, box-shadow .2s', boxSizing: 'border-box',
 };
 
+const inputStyle: React.CSSProperties = {
+  ...baseInput,
+};
+
+const inputError: React.CSSProperties = {
+  ...baseInput,
+  borderColor: 'var(--red)',
+  boxShadow: '0 0 0 2px var(--red-bg)',
+};
+
 const selectStyle: React.CSSProperties = {
-  ...inputStyle,
+  ...baseInput,
   appearance: 'none',
   cursor: 'pointer',
   backgroundImage: `url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
   backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center',
 };
 
+function getInputStyle(hasError: boolean): React.CSSProperties {
+  return hasError ? inputError : inputStyle;
+}
+
 export default function ConstitutionRegisterPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user, loading: authLoading, needsToCompleteRegistration, registrationStep: savedStep, session } = useAuth();
 
   const [step, setStep] = useState<RegistrationStep>('identity');
   const [data, setData] = useState<RegistrationData>(DEFAULT_DATA);
@@ -144,6 +170,10 @@ export default function ConstitutionRegisterPage() {
   const [shake, setShake] = useState(false);
   const [generatedAmxUid, setGeneratedAmxUid] = useState<string | null>(null);
   const [firebaseUid, setFirebaseUid] = useState<string | null>(null);
+  const [initializing, setInitializing] = useState(true);
+  const [pwStrength, setPwStrength] = useState<{ label: string; color: string; score: number } | null>(null);
+
+  const topRef = useRef<HTMLDivElement>(null);
 
   const triggerShake = useCallback(() => {
     setShake(false);
@@ -154,6 +184,7 @@ export default function ConstitutionRegisterPage() {
   const showError = useCallback((msg: string) => {
     setGlobalError(msg);
     triggerShake();
+    topRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [triggerShake]);
 
   const update = (fields: Partial<RegistrationData>) => {
@@ -165,6 +196,76 @@ export default function ConstitutionRegisterPage() {
     });
   };
 
+  async function saveProgress(nextStep: RegistrationStep) {
+    if (!firebaseUid) return;
+    try {
+      await updateDoc(doc(db, 'users', firebaseUid), {
+        registrationStep: nextStep,
+        updatedAt: serverTimestamp(),
+      });
+    } catch { }
+  }
+
+  useEffect(() => {
+    if (!authLoading && user && needsToCompleteRegistration && savedStep) {
+      const nextStep = savedStep as RegistrationStep;
+      setFirebaseUid(user.uid);
+      setGeneratedAmxUid(session.identity?.uid || null);
+      if (nextStep !== 'identity') {
+        loadExistingData(user.uid, nextStep);
+      }
+      setStep(nextStep);
+    }
+    if (!authLoading) {
+      setInitializing(false);
+    }
+  }, [authLoading, user, needsToCompleteRegistration, savedStep]);
+
+  async function loadExistingData(uid: string, currentStep: RegistrationStep) {
+    try {
+      const userDoc = await getDoc(doc(db, 'users', uid));
+      const userData = userDoc.data();
+      const amxUid = userData?.amxUid as string | undefined;
+      if (!amxUid) return;
+
+      setGeneratedAmxUid(amxUid);
+      setFirebaseUid(uid);
+
+      const promises: Promise<any>[] = [getIdentity(amxUid as AmxUid), getPerson(amxUid as AmxUid)];
+      if (currentStep !== 'identity') {
+        promises.push(getProfessional(amxUid as AmxUid));
+      }
+      const [identity, person, professional] = await Promise.all(promises);
+
+      if (identity || person) {
+        update({
+          email: identity?.email || data.email,
+          phone: identity?.phone || data.phone,
+          fullName: person?.fullName || data.fullName,
+          givenName: person?.givenName || data.givenName,
+          familyName: person?.familyName || data.familyName,
+          dateOfBirth: person?.dateOfBirth || data.dateOfBirth,
+          gender: person?.gender || data.gender,
+          nationality: person?.nationality || data.nationality,
+          nationalId: person?.nationalId || data.nationalId,
+        });
+      }
+
+      if (professional) {
+        update({
+          primaryCategory: professional.primaryCategory || data.primaryCategory,
+          categories: professional.categories || data.categories,
+          specialties: professional.specialties || data.specialties,
+          primarySpecialty: professional.primarySpecialty || data.primarySpecialty,
+          licenseNumber: professional.licenseNumber || data.licenseNumber,
+          councilNumber: professional.councilNumber || data.councilNumber,
+          yearsOfExperience: professional.yearsOfExperience || data.yearsOfExperience,
+          qualifications: professional.qualifications || data.qualifications,
+        });
+      }
+    } catch { }
+  }
+
   async function handleNext() {
     setGlobalError(null);
 
@@ -172,6 +273,19 @@ export default function ConstitutionRegisterPage() {
       const errs = validateIdentityStep(data);
       setErrors(errs);
       if (Object.keys(errs).length > 0) return;
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+      if (data.password.length < 8) {
+        showError('Password must be at least 8 characters.');
+        return;
+      }
+      if (data.phone.replace(/[\s\-\+\(\)]/g, '').length < 8) {
+        showError('Please enter a valid phone number with country code.');
+        return;
+      }
 
       setLoading(true);
       try {
@@ -187,7 +301,9 @@ export default function ConstitutionRegisterPage() {
           email: data.email.trim(),
           name: data.fullName.trim(),
           role: data.primaryCategory || 'patient',
+          registrationStep: 'identity',
           createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
         });
 
         await createIdentity(amxUid, {
@@ -217,9 +333,15 @@ export default function ConstitutionRegisterPage() {
         });
 
         await login(data.email.trim(), data.password);
+        await saveProgress('professional');
         setStep('professional');
       } catch (err: any) {
-        showError(mapFirebaseError(err.code ?? ''));
+        const msg = err.code
+          ? mapFirebaseError(err.code)
+          : err.message?.includes('email')
+            ? 'Please enter a valid email address.'
+            : 'Registration failed. Please try again.';
+        showError(msg);
       } finally {
         setLoading(false);
       }
@@ -227,6 +349,10 @@ export default function ConstitutionRegisterPage() {
     }
 
     if (step === 'professional') {
+      if (!data.primaryCategory) {
+        setErrors({ primaryCategory: 'Please select your profession' });
+        return;
+      }
       const errs = validateProfessionalStep(data);
       setErrors(errs);
       if (Object.keys(errs).length > 0) return;
@@ -246,6 +372,7 @@ export default function ConstitutionRegisterPage() {
           verified: false,
           verificationDocuments: [],
         });
+        await saveProgress('organization_choice');
         setStep('organization_choice');
       } catch (err: any) {
         showError('Failed to save professional profile. Please try again.');
@@ -256,16 +383,27 @@ export default function ConstitutionRegisterPage() {
     }
 
     if (step === 'organization_choice') {
-      if (data.organizationChoice === 'create') setStep('organization_create');
-      else if (data.organizationChoice === 'join') setStep('organization_join');
-      else setStep('department_select');
+      if (data.organizationChoice === 'create') {
+        await saveProgress('organization_create');
+        setStep('organization_create');
+      } else if (data.organizationChoice === 'join') {
+        await saveProgress('organization_join');
+        setStep('organization_join');
+      } else {
+        await saveProgress('department_select');
+        setStep('department_select');
+      }
       return;
     }
 
     if (step === 'organization_create') {
-      const errs = validateOrganizationCreateStep(data);
-      setErrors(errs);
-      if (Object.keys(errs).length > 0) return;
+      if (!data.organizationName || !data.organizationType) {
+        setErrors({
+          organizationName: !data.organizationName ? 'Facility name is required' : undefined,
+          organizationType: !data.organizationType ? 'Facility type is required' : undefined,
+        });
+        return;
+      }
 
       setLoading(true);
       try {
@@ -308,6 +446,7 @@ export default function ConstitutionRegisterPage() {
         });
 
         update({ organizationName: orgId });
+        await saveProgress('department_select');
         setStep('department_select');
       } catch (err: any) {
         showError('Failed to create organization. Please try again.');
@@ -318,11 +457,13 @@ export default function ConstitutionRegisterPage() {
     }
 
     if (step === 'organization_join') {
+      await saveProgress('department_select');
       setStep('department_select');
       return;
     }
 
     if (step === 'department_select') {
+      await saveProgress('assignment');
       setStep('assignment');
       return;
     }
@@ -374,6 +515,13 @@ export default function ConstitutionRegisterPage() {
             requiresSignature: false,
           });
         }
+
+        if (firebaseUid) {
+          await updateDoc(doc(db, 'users', firebaseUid), {
+            registrationStep: 'complete',
+            updatedAt: serverTimestamp(),
+          });
+        }
         setStep('complete');
       } catch (err: any) {
         showError('Failed to create assignment. Please try again.');
@@ -397,21 +545,49 @@ export default function ConstitutionRegisterPage() {
     else if (step === 'assignment') setStep('department_select');
   }
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && !loading && !isLast) handleNext();
+  }
+
   const currentStepMeta = REGISTRATION_STEPS.find(s => s.id === step);
   const totalSteps = REGISTRATION_STEPS.length;
   const stepIndex = REGISTRATION_STEPS.findIndex(s => s.id === step);
   const progress = ((stepIndex + 1) / totalSteps) * 100;
-  const isFirst = step === 'identity';
+  const isFirst = step === 'identity' || (needsToCompleteRegistration && step !== 'identity');
   const isLast = step === 'complete';
 
+  function computePwStrength(pw: string) {
+    if (!pw) { setPwStrength(null); return; }
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (pw.length >= 12) score++;
+    if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+    if (/\d/.test(pw)) score++;
+    if (/[^a-zA-Z0-9]/.test(pw)) score++;
+    const labels = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+    const colors = ['var(--red)', 'var(--amber)', '#f59e0b', 'var(--green)', '#059669'];
+    setPwStrength({ label: labels[Math.min(score, 4)], color: colors[Math.min(score, 4)], score: Math.min(score, 4) });
+  }
+
+  useEffect(() => { computePwStrength(data.password); }, [data.password]);
+
+  if (initializing) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--primary)' }}>
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col">
-      {/* Progress bar */}
+    <div ref={topRef} className="flex flex-col" onKeyDown={handleKeyDown}>
       <div style={{ width: '100%', height: 4, background: 'var(--surface-border)', borderRadius: 2, marginBottom: 20, overflow: 'hidden' }}>
-        <div style={{ width: `${progress}%`, height: '100%', background: 'var(--primary)', borderRadius: 2, transition: 'width 0.3s ease' }} />
+        <div style={{ width: `${progress}%`, height: '100%', background: 'var(--primary)', borderRadius: 2, transition: 'width 0.4s ease' }} />
       </div>
 
-      {/* Step indicator */}
       <div className="mb-4">
         <p className="text-xs font-semibold tracking-widest uppercase mb-1" style={{ color: 'var(--text-muted)' }}>
           Step {stepIndex + 1} of {totalSteps}
@@ -424,7 +600,6 @@ export default function ConstitutionRegisterPage() {
         </p>
       </div>
 
-      {/* Error */}
       {globalError && (
         <div className={`flex items-start gap-2.5 px-3.5 py-3 rounded-lg text-sm mb-4 border ${shake ? 'animate-shake' : ''}`}
           role="alert"
@@ -443,48 +618,70 @@ export default function ConstitutionRegisterPage() {
 
       {/* ══════ STEP: IDENTITY ══════ */}
       {step === 'identity' && (
-        <div className="space-y-4">
+        <div className="space-y-4" role="form" aria-label="Identity information">
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Given Name" error={errors.givenName}>
-              <input style={inputStyle} type="text" value={data.givenName} onChange={e => update({ givenName: e.target.value })} placeholder="Jane" />
+            <Field label="Given Name / First Name" error={errors.givenName} required>
+              <input style={getInputStyle(!!errors.givenName)} type="text" value={data.givenName}
+                onChange={e => update({ givenName: e.target.value })} placeholder="Jane" autoComplete="given-name" />
             </Field>
-            <Field label="Family Name" error={errors.familyName}>
-              <input style={inputStyle} type="text" value={data.familyName} onChange={e => update({ familyName: e.target.value })} placeholder="Smith" />
+            <Field label="Family Name / Last Name" error={errors.familyName} required>
+              <input style={getInputStyle(!!errors.familyName)} type="text" value={data.familyName}
+                onChange={e => update({ familyName: e.target.value })} placeholder="Smith" autoComplete="family-name" />
             </Field>
           </div>
-          <Field label="Full Name" error={errors.fullName}>
-            <input style={inputStyle} type="text" value={data.fullName} onChange={e => update({ fullName: e.target.value })} placeholder="Dr. Jane Smith" />
+          <Field label="Full Name (as on official ID)" error={errors.fullName} required>
+            <input style={getInputStyle(!!errors.fullName)} type="text" value={data.fullName}
+              onChange={e => update({ fullName: e.target.value })} placeholder="Dr. Jane Smith" autoComplete="name" />
           </Field>
-          <Field label="Email Address" error={errors.email}>
-            <input style={inputStyle} type="email" value={data.email} onChange={e => update({ email: e.target.value })} placeholder="jane@example.com" autoComplete="email" />
+          <Field label="Email Address" error={errors.email} required>
+            <input style={getInputStyle(!!errors.email)} type="email" value={data.email}
+              onChange={e => update({ email: e.target.value })} placeholder="jane@example.com" autoComplete="email" inputMode="email" />
           </Field>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Password" error={errors.password}>
-              <input style={inputStyle} type="password" value={data.password} onChange={e => update({ password: e.target.value })} placeholder="Min 8 characters" autoComplete="new-password" />
+            <Field label="Password" error={errors.password} required>
+              <div>
+                <input style={getInputStyle(!!errors.password)} type="password" value={data.password}
+                  onChange={e => update({ password: e.target.value })} placeholder="Min 8 characters" autoComplete="new-password" />
+                {pwStrength && data.password.length > 0 && (
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'var(--surface-border)', overflow: 'hidden' }}>
+                      <div style={{ width: `${(pwStrength.score + 1) * 20}%`, height: '100%', background: pwStrength.color, borderRadius: 2, transition: 'all 0.3s' }} />
+                    </div>
+                    <span style={{ fontSize: 10, color: pwStrength.color, fontWeight: 600 }}>{pwStrength.label}</span>
+                  </div>
+                )}
+              </div>
             </Field>
-            <Field label="Phone" error={errors.phone}>
-              <input style={inputStyle} type="tel" value={data.phone} onChange={e => update({ phone: e.target.value })} placeholder="+254 7XX XXX XXX" />
+            <Field label="Phone Number" error={errors.phone} required>
+              <input style={getInputStyle(!!errors.phone)} type="tel" value={data.phone}
+                onChange={e => update({ phone: e.target.value })} placeholder="+254 712 345 678" autoComplete="tel" inputMode="tel" />
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Date of Birth" error={errors.dateOfBirth}>
-              <input style={inputStyle} type="date" value={data.dateOfBirth} onChange={e => update({ dateOfBirth: e.target.value })} />
+            <Field label="Date of Birth" error={errors.dateOfBirth} required>
+              <input style={getInputStyle(!!errors.dateOfBirth)} type="date" value={data.dateOfBirth}
+                onChange={e => update({ dateOfBirth: e.target.value })} />
             </Field>
             <Field label="Gender" error={errors.gender}>
-              <select style={selectStyle} value={data.gender} onChange={e => update({ gender: e.target.value as any })}>
+              <select style={getInputStyle(!!errors.gender)} value={data.gender} onChange={e => update({ gender: e.target.value as any })}>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
-                <option value="undisclosed">Undisclosed</option>
+                <option value="undisclosed">Prefer not to say</option>
               </select>
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="National ID" error={errors.nationalId}>
-              <input style={inputStyle} type="text" value={data.nationalId} onChange={e => update({ nationalId: e.target.value })} placeholder="ID Number" />
+            <Field label="National ID / Identity Number" error={errors.nationalId} required>
+              <input style={getInputStyle(!!errors.nationalId)} type="text" value={data.nationalId}
+                onChange={e => update({ nationalId: e.target.value })} placeholder="National ID Number" autoComplete="off" />
             </Field>
-            <Field label="Nationality" error={errors.nationality}>
-              <input style={inputStyle} type="text" value={data.nationality} onChange={e => update({ nationality: e.target.value })} placeholder="Kenyan" />
+            <Field label="Nationality" error={errors.nationality} required>
+              <select style={getInputStyle(!!errors.nationality)} value={data.nationality}
+                onChange={e => update({ nationality: e.target.value })}>
+                <option value="">Select country...</option>
+                {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
             </Field>
           </div>
         </div>
@@ -492,17 +689,19 @@ export default function ConstitutionRegisterPage() {
 
       {/* ══════ STEP: PROFESSIONAL ══════ */}
       {step === 'professional' && (
-        <div className="space-y-4">
-          <Field label="Primary Category" error={errors.primaryCategory}>
-            <select style={selectStyle} value={data.primaryCategory} onChange={e => update({ primaryCategory: e.target.value as any, categories: [e.target.value] as any[] })}>
+        <div className="space-y-4" role="form" aria-label="Professional profile">
+          <Field label="Primary Profession" error={errors.primaryCategory} required>
+            <select style={getInputStyle(!!errors.primaryCategory)} value={data.primaryCategory}
+              onChange={e => update({ primaryCategory: e.target.value as any, categories: [e.target.value] as any[] })}>
               <option value="">Select your profession...</option>
               {PROFESSIONAL_CATEGORIES.map(c => (
                 <option key={c.value} value={c.value}>{c.label}</option>
               ))}
             </select>
           </Field>
-          <Field label="Specialty">
-            <select style={selectStyle} value={data.primarySpecialty ?? ''} onChange={e => update({ primarySpecialty: e.target.value as any, specialties: e.target.value ? [e.target.value as any] : [] })}>
+          <Field label="Specialty / Area of Practice">
+            <select style={selectStyle} value={data.primarySpecialty ?? ''}
+              onChange={e => update({ primarySpecialty: e.target.value as any, specialties: e.target.value ? [e.target.value as any] : [] })}>
               <option value="">Select specialty (optional)...</option>
               {SPECIALTIES.map(s => (
                 <option key={s.value} value={s.value}>{s.label}</option>
@@ -510,72 +709,63 @@ export default function ConstitutionRegisterPage() {
             </select>
           </Field>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="License Number" error={errors.licenseNumber}>
-              <input style={inputStyle} type="text" value={data.licenseNumber ?? ''} onChange={e => update({ licenseNumber: e.target.value })} placeholder="KMPDC Number" />
+            <Field label="Professional License Number" error={errors.licenseNumber}>
+              <input style={getInputStyle(!!errors.licenseNumber)} type="text" value={data.licenseNumber ?? ''}
+                onChange={e => update({ licenseNumber: e.target.value })} placeholder="KMPDC / Council Number" />
             </Field>
-            <Field label="Council Number" error={errors.councilNumber}>
-              <input style={inputStyle} type="text" value={data.councilNumber ?? ''} onChange={e => update({ councilNumber: e.target.value })} placeholder="Council Reg No." />
+            <Field label="Council Registration Number" error={errors.councilNumber}>
+              <input style={getInputStyle(!!errors.councilNumber)} type="text" value={data.councilNumber ?? ''}
+                onChange={e => update({ councilNumber: e.target.value })} placeholder="Council Reg No." />
             </Field>
           </div>
-          <Field label="Years of Experience">
-            <input style={inputStyle} type="number" value={data.yearsOfExperience} onChange={e => update({ yearsOfExperience: parseInt(e.target.value) || 0 })} placeholder="0" min={0} />
-          </Field>
-          <Field label="Qualifications (comma separated)">
-            <input style={inputStyle} type="text" value={data.qualifications.map(q => q.degree).join(', ')} onChange={e => update({ qualifications: e.target.value.split(',').filter(Boolean).map(d => ({ degree: d.trim(), institution: '', year: new Date().getFullYear() })) })} placeholder="MBChB, MMed, etc." />
-          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Years of Experience">
+              <input style={inputStyle} type="number" value={data.yearsOfExperience}
+                onChange={e => update({ yearsOfExperience: Math.max(0, parseInt(e.target.value) || 0) })} placeholder="0" min={0} />
+            </Field>
+            <Field label="Qualifications">
+              <input style={inputStyle} type="text" value={data.qualifications.map(q => q.degree).join(', ')}
+                onChange={e => update({ qualifications: e.target.value.split(',').filter(Boolean).map(d => ({ degree: d.trim(), institution: '', year: new Date().getFullYear() })) })}
+                placeholder="MBChB, MMed, BScN, etc." />
+            </Field>
+          </div>
         </div>
       )}
 
       {/* ══════ STEP: ORGANIZATION CHOICE ══════ */}
       {step === 'organization_choice' && (
-        <div className="space-y-3">
-          <button onClick={() => update({ organizationChoice: 'none' })}
-            style={{
-              width: '100%', padding: 16, borderRadius: 'var(--radius-md)', textAlign: 'left',
-              border: `1.5px solid ${data.organizationChoice === 'none' ? 'var(--primary)' : 'var(--surface-border)'}`,
-              background: data.organizationChoice === 'none' ? 'var(--primary-light)' : 'var(--surface)',
-              color: 'var(--text-primary)', cursor: 'pointer', fontSize: 14, fontFamily: 'var(--font-sans)',
-              transition: 'all 0.2s',
-            }}>
-            <div style={{ fontWeight: 600, marginBottom: 4 }}>Individual Practice</div>
-            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Work independently without an organization</div>
-          </button>
-
-          <button onClick={() => update({ organizationChoice: 'create' })}
-            style={{
-              width: '100%', padding: 16, borderRadius: 'var(--radius-md)', textAlign: 'left',
-              border: `1.5px solid ${data.organizationChoice === 'create' ? 'var(--primary)' : 'var(--surface-border)'}`,
-              background: data.organizationChoice === 'create' ? 'var(--primary-light)' : 'var(--surface)',
-              color: 'var(--text-primary)', cursor: 'pointer', fontSize: 14, fontFamily: 'var(--font-sans)',
-              transition: 'all 0.2s',
-            }}>
-            <div style={{ fontWeight: 600, marginBottom: 4 }}>Create a Facility</div>
-            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Register your hospital, clinic, or practice</div>
-          </button>
-
-          <button onClick={() => update({ organizationChoice: 'join' })}
-            style={{
-              width: '100%', padding: 16, borderRadius: 'var(--radius-md)', textAlign: 'left',
-              border: `1.5px solid ${data.organizationChoice === 'join' ? 'var(--primary)' : 'var(--surface-border)'}`,
-              background: data.organizationChoice === 'join' ? 'var(--primary-light)' : 'var(--surface)',
-              color: 'var(--text-primary)', cursor: 'pointer', fontSize: 14, fontFamily: 'var(--font-sans)',
-              transition: 'all 0.2s',
-            }}>
-            <div style={{ fontWeight: 600, marginBottom: 4 }}>Join Existing Facility</div>
-            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Use an invitation code to join an organization</div>
-          </button>
+        <div className="space-y-3" role="radiogroup" aria-label="Organization preference">
+          {[
+            { value: 'none', title: 'Individual Practice', desc: 'Work independently without an organization' },
+            { value: 'create', title: 'Create a Facility', desc: 'Register your hospital, clinic, or practice' },
+            { value: 'join', title: 'Join Existing Facility', desc: 'Use an invitation code to join an organization' },
+          ].map(opt => (
+            <button key={opt.value} onClick={() => update({ organizationChoice: opt.value as any })}
+              style={{
+                width: '100%', padding: 16, borderRadius: 'var(--radius-md)', textAlign: 'left',
+                border: `1.5px solid ${data.organizationChoice === opt.value ? 'var(--primary)' : 'var(--surface-border)'}`,
+                background: data.organizationChoice === opt.value ? 'var(--primary-light)' : 'var(--surface)',
+                color: 'var(--text-primary)', cursor: 'pointer', fontSize: 14, fontFamily: 'var(--font-sans)',
+                transition: 'all 0.2s',
+              }}>
+              <div style={{ fontWeight: 600, marginBottom: 4 }}>{opt.title}</div>
+              <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{opt.desc}</div>
+            </button>
+          ))}
         </div>
       )}
 
       {/* ══════ STEP: CREATE ORGANIZATION ══════ */}
       {step === 'organization_create' && (
-        <div className="space-y-4">
-          <Field label="Facility Name" error={errors.organizationName}>
-            <input style={inputStyle} type="text" value={data.organizationName ?? ''} onChange={e => update({ organizationName: e.target.value })} placeholder="Nairobi Teaching Hospital" />
+        <div className="space-y-4" role="form" aria-label="Create facility">
+          <Field label="Facility Name" error={errors.organizationName} required>
+            <input style={getInputStyle(!!errors.organizationName)} type="text" value={data.organizationName ?? ''}
+              onChange={e => update({ organizationName: e.target.value })} placeholder="Nairobi Teaching Hospital" />
           </Field>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Type" error={errors.organizationType}>
-              <select style={selectStyle} value={data.organizationType ?? ''} onChange={e => update({ organizationType: e.target.value as any })}>
+            <Field label="Facility Type" error={errors.organizationType} required>
+              <select style={getInputStyle(!!errors.organizationType)} value={data.organizationType ?? ''}
+                onChange={e => update({ organizationType: e.target.value as any })}>
                 <option value="">Select type...</option>
                 {ORG_TYPES.map(t => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -583,7 +773,8 @@ export default function ConstitutionRegisterPage() {
               </select>
             </Field>
             <Field label="Registration Number" error={errors.organizationRegistrationNumber}>
-              <input style={inputStyle} type="text" value={data.organizationRegistrationNumber ?? ''} onChange={e => update({ organizationRegistrationNumber: e.target.value })} placeholder="Reg No." />
+              <input style={getInputStyle(!!errors.organizationRegistrationNumber)} type="text" value={data.organizationRegistrationNumber ?? ''}
+                onChange={e => update({ organizationRegistrationNumber: e.target.value })} placeholder="Reg No." />
             </Field>
           </div>
         </div>
@@ -593,21 +784,23 @@ export default function ConstitutionRegisterPage() {
       {step === 'organization_join' && (
         <div className="space-y-4">
           <Field label="Invitation Code">
-            <input style={inputStyle} type="text" value={data.invitationCode ?? ''} onChange={e => update({ invitationCode: e.target.value })} placeholder="Enter invitation code" />
+            <input style={inputStyle} type="text" value={data.invitationCode ?? ''}
+              onChange={e => update({ invitationCode: e.target.value })} placeholder="Enter invitation code" />
           </Field>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            Ask your organization administrator for an invitation code. If you don't have one, choose "Create a Facility" instead.
+            Ask your organization administrator for an invitation code. If you don&apos;t have one, choose &quot;Create a Facility&quot; instead.
           </p>
         </div>
       )}
 
       {/* ══════ STEP: DEPARTMENT SELECT ══════ */}
       {step === 'department_select' && (
-        <div className="space-y-4">
+        <div className="space-y-4" role="form" aria-label="Department selection">
           <Field label="Job Title">
-            <input style={inputStyle} type="text" value={data.jobTitle ?? ''} onChange={e => update({ jobTitle: e.target.value })} placeholder="e.g. Senior Medical Officer" />
+            <input style={inputStyle} type="text" value={data.jobTitle ?? ''}
+              onChange={e => update({ jobTitle: e.target.value })} placeholder="e.g. Senior Medical Officer" />
           </Field>
-          <Field label="Department">
+          <Field label="Department / Unit">
             <select style={selectStyle} value={data.departmentType ?? ''} onChange={e => update({ departmentType: e.target.value })}>
               <option value="">Select department...</option>
               <option value="emergency">Emergency</option>
@@ -671,7 +864,6 @@ export default function ConstitutionRegisterPage() {
         </div>
       )}
 
-      {/* Navigation buttons */}
       {!isLast && (
         <div className="flex gap-3 mt-6">
           {!isFirst && (
