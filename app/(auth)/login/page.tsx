@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
-import { signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, OAuthProvider, sendEmailVerification } from "firebase/auth";
 import MagicLinkForm from "@/components/auth/MagicLinkForm";
 
 type AuthMethod = 'email' | 'passkey' | 'sso' | 'magic-link';
@@ -79,7 +79,7 @@ export default function AuthLoginPage() {
       await login(email.trim(), password);
       const user = auth.currentUser;
       if (user && !user.emailVerified) {
-        await user.sendEmailVerification();
+        await sendEmailVerification(user);
         showError('Email not verified. A verification email has been sent. Please verify before accessing all features.');
       }
       router.push("/dashboard");
