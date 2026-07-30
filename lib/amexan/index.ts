@@ -470,6 +470,7 @@ export type {
   SeedProfile, SeedRole, SeedPatientProfile, SeedConfig,
   SeedOrganization, SeedClinician, SeedNurse, SeedPatient,
   SeedStudent, SeedSubscription, SeedVerificationState,
+  SeedApiToken, SeedDemoCase,
 } from './patient-constitution';
 export {
   generateAmxpId, isValidAmxpId,
@@ -504,4 +505,29 @@ export {
   getDeveloperSeedConfig, getMinimalSeedConfig,
   getTeachingHospitalSeedConfig, getSeedProfileByEmail,
   getAllSeedEmails, getDemoCasePatients,
+  getAllApiTokenNames, getDemoCaseById, getCasesByCategory,
+  API_TOKENS, DEMO_CLINICAL_CASES,
 } from './patient-constitution';
+export {
+  getAllSeedEmails as getAllSeedEmailsV2,
+  getSeedProfileByEmail,
+  SEED_ORGANIZATIONS,
+  SEED_PLATFORM_USERS,
+  SEED_CLINICAL_USERS,
+  SEED_NURSES,
+  SEED_ALLIED_HEALTH,
+  SEED_STAFF,
+  SEED_STUDENTS,
+  SEED_PATIENTS,
+  SEED_SUBSCRIPTION_STATES,
+  SEED_API_TOKENS,
+  VERIFICATION_STATE_MAP,
+  SEED_DEMO_CASES,
+} from './seed-config';
+export type {
+  SeedOrgDef,
+  SeedUserDef,
+  SeedPatientDef,
+  SeedApiTokenDef,
+  SeedDemoCaseDef,
+} from './seed-config';

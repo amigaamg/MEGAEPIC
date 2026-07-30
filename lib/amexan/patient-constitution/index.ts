@@ -100,6 +100,11 @@ export {
   getSeedProfileByEmail,
   getAllSeedEmails,
   getDemoCasePatients,
+  getAllApiTokenNames,
+  getDemoCaseById,
+  getCasesByCategory,
+  API_TOKENS,
+  DEMO_CLINICAL_CASES,
 } from './seed-engine';
 
-export type { SeedConfig, SeedOrganization, SeedClinician, SeedNurse, SeedPatient, SeedStudent, SeedSubscription, SeedVerificationState } from './seed-engine';
+export type { SeedConfig, SeedOrganization, SeedClinician, SeedNurse, SeedPatient, SeedStudent, SeedSubscription, SeedVerificationState, SeedApiToken, SeedDemoCase } from './seed-engine';

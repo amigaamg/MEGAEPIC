@@ -150,14 +150,19 @@ const STAFF: SeedClinician[] = [
 ];
 
 const PATIENTS: SeedPatient[] = [
-  { email: 'patient.healthy@demo.dev', name: 'John Mwangi', context: 'Adult male - Healthy', age: 32, sex: 'male', conditions: [], verificationLevel: 2, hasHistory: false },
+  { email: 'patient.healthy.male@demo.dev', name: 'John Mwangi', context: 'Adult male - Healthy', age: 32, sex: 'male', conditions: [], verificationLevel: 2, hasHistory: false },
+  { email: 'patient.healthy.female@demo.dev', name: 'Sarah Wanjiku', context: 'Adult female - Healthy', age: 27, sex: 'female', conditions: [], verificationLevel: 2, hasHistory: false },
   { email: 'patient.pregnant@demo.dev', name: 'Mary Wanjiku', context: 'Pregnant - 12 weeks', age: 28, sex: 'female', conditions: ['pregnancy'], pregnant: true, weeksPregnant: 12, verificationLevel: 2, hasHistory: true },
   { email: 'patient.term@demo.dev', name: 'Jane Akinyi', context: 'Pregnant - 39 weeks', age: 31, sex: 'female', conditions: ['pregnancy'], pregnant: true, weeksPregnant: 39, verificationLevel: 3, hasHistory: true },
   { email: 'patient.postpartum@demo.dev', name: 'Grace Kamau', context: 'Postpartum', age: 26, sex: 'female', conditions: [], verificationLevel: 2, hasHistory: true },
   { email: 'patient.neonate@demo.dev', name: 'Baby Kamau', context: 'Neonate - Day 1', age: 0, sex: 'male', conditions: [], verificationLevel: 1, hasHistory: false },
+  { email: 'patient.premature@demo.dev', name: 'Baby Otieno', context: 'Premature neonate - 32 weeks', age: 0, sex: 'male', conditions: ['prematurity'], verificationLevel: 1, hasHistory: false },
   { email: 'patient.infant@demo.dev', name: 'Kevin Otieno', context: 'Infant - 6 months', age: 0, sex: 'male', conditions: [], verificationLevel: 2, hasHistory: true },
+  { email: 'patient.toddler@demo.dev', name: 'Amina Hassan', context: 'Toddler - 2 years', age: 2, sex: 'female', conditions: [], verificationLevel: 2, hasHistory: true },
   { email: 'patient.child@demo.dev', name: 'Sarah Chebet', context: 'School child - 8 years', age: 8, sex: 'female', conditions: ['asthma'], verificationLevel: 2, hasHistory: true },
+  { email: 'patient.child.healthy@demo.dev', name: 'Peter Kamau', context: 'School child - 10 years, Healthy', age: 10, sex: 'male', conditions: [], verificationLevel: 1, hasHistory: false },
   { email: 'patient.adolescent@demo.dev', name: 'James Kiprop', context: 'Adolescent - 15 years', age: 15, sex: 'male', conditions: [], verificationLevel: 1, hasHistory: false },
+  { email: 'patient.adult@demo.dev', name: 'Michael Omondi', context: 'Adult - 45 years', age: 45, sex: 'male', conditions: [], verificationLevel: 2, hasHistory: false },
   { email: 'patient.hiv@demo.dev', name: 'David Ochieng', context: 'HIV - Stable on ART', age: 42, sex: 'male', conditions: ['hiv'], verificationLevel: 3, hasHistory: true },
   { email: 'patient.tb@demo.dev', name: 'Samuel Mutua', context: 'TB - New diagnosis', age: 38, sex: 'male', conditions: ['tb'], verificationLevel: 2, hasHistory: false },
   { email: 'patient.diabetes@demo.dev', name: 'Peter Njenga', context: 'Diabetes Type 2', age: 55, sex: 'male', conditions: ['diabetes', 'hypertension'], verificationLevel: 3, hasHistory: true },
@@ -169,8 +174,10 @@ const PATIENTS: SeedPatient[] = [
   { email: 'patient.cancer@demo.dev', name: 'Robert Onyango', context: 'Cancer - Newly diagnosed', age: 52, sex: 'male', conditions: ['cancer'], verificationLevel: 2, hasHistory: false },
   { email: 'patient.psych@demo.dev', name: 'Esther Wanjala', context: 'Depression', age: 35, sex: 'female', conditions: ['depression', 'mental health'], verificationLevel: 1, hasHistory: true },
   { email: 'patient.trauma@demo.dev', name: 'Kevin Mwangi', context: 'Polytrauma - MVA', age: 29, sex: 'male', conditions: [], verificationLevel: 1, hasHistory: false },
+  { email: 'patient.icu@demo.dev', name: 'Patrick Omondi', context: 'ICU - Septic Shock', age: 50, sex: 'male', conditions: ['sepsis', 'respiratory failure'], verificationLevel: 2, hasHistory: true },
   { email: 'patient.elderly@demo.dev', name: 'Grace Nyambura', context: 'Elderly - 80 years', age: 80, sex: 'female', conditions: ['hypertension'], verificationLevel: 2, hasHistory: true },
   { email: 'patient.palliative@demo.dev', name: 'Samuel Kioko', context: 'Palliative Care - Advanced Cancer', age: 58, sex: 'male', conditions: ['cancer'], verificationLevel: 3, hasHistory: true },
+  { email: 'patient.terminal@demo.dev', name: 'Rose Achieng', context: 'Terminal illness - End stage liver disease', age: 62, sex: 'female', conditions: ['cirrhosis', 'liver failure'], verificationLevel: 3, hasHistory: true },
 ];
 
 const STUDENTS: SeedStudent[] = [
@@ -190,7 +197,8 @@ const SUBSCRIPTIONS: SeedSubscription[] = [
 ];
 
 const VERIFICATION_STATES: SeedVerificationState[] = [
-  { email: 'patient.healthy@demo.dev', state: 'email_verified' },
+  { email: 'patient.healthy.male@demo.dev', state: 'email_verified' },
+  { email: 'patient.healthy.female@demo.dev', state: 'email_verified' },
   { email: 'patient.pregnant@demo.dev', state: 'email_verified' },
   { email: 'patient.hiv@demo.dev', state: 'facility_approved' },
   { email: 'patient.diabetes@demo.dev', state: 'facility_approved' },
@@ -199,9 +207,85 @@ const VERIFICATION_STATES: SeedVerificationState[] = [
   { email: 'patient.cancer@demo.dev', state: 'license_pending' },
   { email: 'patient.psych@demo.dev', state: 'email_verified' },
   { email: 'patient.palliative@demo.dev', state: 'super_verified' },
+  { email: 'patient.icu@demo.dev', state: 'facility_approved' },
+  { email: 'patient.terminal@demo.dev', state: 'super_verified' },
   { email: 'consultant.med@kisii.dev', state: 'super_verified' },
   { email: 'intern@kisii.dev', state: 'facility_pending' },
   { email: 'student@kisii.dev', state: 'email_verified' },
+  { email: 'mo@kisii.dev', state: 'email_verified' },
+  { email: 'resident@kisii.dev', state: 'identity_pending' },
+  { email: 'surgery@kisii.dev', state: 'phone_verified' },
+  { email: 'lab@kisii.dev', state: 'license_pending' },
+  { email: 'reception@kisii.dev', state: 'pending_email' },
+  { email: 'admin@kisii.dev', state: 'facility_approved' },
+  { email: 'superadmin@amexan.dev', state: 'super_verified' },
+  { email: 'architect@amexan.dev', state: 'super_verified' },
+  { email: 'aisafety@amexan.dev', state: 'super_verified' },
+];
+
+// ── API Tokens ─────────────────────────────────────────────────────────────────
+export interface SeedApiToken {
+  name: string;
+  token: string;
+  scopes: string[];
+  organizationId: string;
+  type: 'fhir' | 'hl7' | 'dicom' | 'pacs' | 'lis' | 'insurance' | 'ai' | 'marketplace';
+}
+
+export const API_TOKENS: SeedApiToken[] = [
+  { name: 'FHIR Integration - KTRH', token: 'amx_fhir_ktrh_dev_001', scopes: ['patient.read', 'encounter.read', 'observation.read', 'condition.read', 'medication.read'], organizationId: 'ktrh', type: 'fhir' },
+  { name: 'HL7 Interface - KNH', token: 'amx_hl7_knh_dev_002', scopes: ['adt.send', 'orm.send', 'oru.receive', 'dfn.send'], organizationId: 'knh', type: 'hl7' },
+  { name: 'DICOM Gateway - AKUH', token: 'amx_dicom_akuh_dev_003', scopes: ['modality.read', 'study.read', 'series.read', 'instance.read', 'store'], organizationId: 'akuh', type: 'dicom' },
+  { name: 'PACS Viewer - KTRH', token: 'amx_pacs_ktrh_dev_004', scopes: ['study.read', 'series.read', 'wado.read', 'stow.write'], organizationId: 'ktrh', type: 'pacs' },
+  { name: 'LIS Integration - NRB', token: 'amx_lis_nrb_dev_005', scopes: ['order.create', 'order.read', 'result.read', 'result.write'], organizationId: 'nrb', type: 'lis' },
+  { name: 'Insurance Claims - NHIF', token: 'amx_ins_nhif_dev_006', scopes: ['claim.create', 'claim.read', 'eligibility.check', 'authorization.read'], organizationId: 'ktrh', type: 'insurance' },
+  { name: 'AI Diagnosis Engine', token: 'amx_ai_diag_dev_007', scopes: ['patient.read', 'encounter.read', 'diagnosis.read', 'recommendation.create'], organizationId: 'avc', type: 'ai' },
+  { name: 'Marketplace API', token: 'amx_mkt_global_dev_008', scopes: ['listing.read', 'listing.create', 'order.read', 'order.create', 'review.read'], organizationId: 'amexan', type: 'marketplace' },
+];
+
+// ── Demo Clinical Cases ────────────────────────────────────────────────────────
+export interface SeedDemoCase {
+  id: string;
+  title: string;
+  chiefComplaint: string;
+  patientEmail: string;
+  clinicianEmail: string;
+  description: string;
+  icd10: string;
+  category: 'medical' | 'surgical' | 'pediatric' | 'obstetric' | 'psychiatric' | 'emergency';
+  severity: 'mild' | 'moderate' | 'severe' | 'critical';
+}
+
+export const DEMO_CLINICAL_CASES: SeedDemoCase[] = [
+  { id: 'case_chest_pain', title: 'Chest Pain - ACS Workup', chiefComplaint: 'Retrosternal chest pain radiating to left arm', patientEmail: 'patient.htn@demo.dev', clinicianEmail: 'consultant.med@kisii.dev', description: '60yo female with HTN presents with acute onset retrosternal chest pain radiating to left arm with nausea. Rule out ACS.', icd10: 'I20.0', category: 'medical', severity: 'severe' },
+  { id: 'case_acute_abdomen', title: 'Acute Abdomen - Appendicitis', chiefComplaint: 'Right iliac fossa pain', patientEmail: 'patient.adult@demo.dev', clinicianEmail: 'surgery@kisii.dev', description: '45yo male with 24h history of central abdominal pain migrating to RIF, with nausea, anorexia and low-grade fever.', icd10: 'K35.8', category: 'surgical', severity: 'moderate' },
+  { id: 'case_stroke', title: 'Acute Stroke - Left sided weakness', chiefComplaint: 'Sudden onset left sided weakness', patientEmail: 'patient.elderly@demo.dev', clinicianEmail: 'emergency@kisii.dev', description: '80yo female with HTN presents with sudden onset left sided hemiparesis, facial droop, and slurred speech. Onset 2 hours ago.', icd10: 'I63.9', category: 'medical', severity: 'critical' },
+  { id: 'case_pneumonia', title: 'Community Acquired Pneumonia', chiefComplaint: 'Cough with productive sputum and fever', patientEmail: 'patient.copd@demo.dev', clinicianEmail: 'mo@kisii.dev', description: '65yo male with COPD presents with 5-day history of productive cough, high-grade fever, and right-sided pleuritic chest pain.', icd10: 'J18.9', category: 'medical', severity: 'moderate' },
+  { id: 'case_asthma_exacerbation', title: 'Acute Asthma Exacerbation', chiefComplaint: 'Severe shortness of breath and wheezing', patientEmail: 'patient.asthma@demo.dev', clinicianEmail: 'emergency@kisii.dev', description: '24yo female with known asthma presents with acute onset severe SOB, wheezing, and inability to speak full sentences.', icd10: 'J45.9', category: 'medical', severity: 'severe' },
+  { id: 'case_copd_exacerbation', title: 'COPD Exacerbation', chiefComplaint: 'Increased SOB and sputum purulence', patientEmail: 'patient.copd@demo.dev', clinicianEmail: 'mo@kisii.dev', description: '65yo male with known COPD presents with increased dyspnoea, purulent sputum, and wheezing for 3 days.', icd10: 'J44.1', category: 'medical', severity: 'moderate' },
+  { id: 'case_heart_failure', title: 'Acute Decompensated Heart Failure', chiefComplaint: 'Severe SOB and bilateral leg swelling', patientEmail: 'patient.hf@demo.dev', clinicianEmail: 'consultant.med@kisii.dev', description: '70yo male with HFrEF presents with worsening SOB, orthopnoea, PND, bilateral pedal oedema, and crackles on auscultation.', icd10: 'I50.9', category: 'medical', severity: 'severe' },
+  { id: 'case_sepsis', title: 'Septic Shock - UTI Source', chiefComplaint: 'Fever, confusion, low blood pressure', patientEmail: 'patient.icu@demo.dev', clinicianEmail: 'icu.nurse@kisii.dev', description: '50yo male presents with fever, hypotension, confusion, and oliguria. Suspected urosepsis.', icd10: 'A41.9', category: 'medical', severity: 'critical' },
+  { id: 'case_neonatal_jaundice', title: 'Neonatal Jaundice', chiefComplaint: 'Yellow discoloration of skin and eyes', patientEmail: 'patient.neonate@demo.dev', clinicianEmail: 'paeds@kisii.dev', description: 'Day 1 neonate with visible jaundice. Mother blood group O+, baby A+. Concern for ABO incompatibility.', icd10: 'P59.9', category: 'pediatric', severity: 'moderate' },
+  { id: 'case_neonatal_sepsis', title: 'Neonatal Sepsis', chiefComplaint: 'Fever, poor feeding, lethargy', patientEmail: 'patient.premature@demo.dev', clinicianEmail: 'paeds@kisii.dev', description: '32-week premature neonate with fever, poor feeding, lethargy, and grunting respiration.', icd10: 'P36.9', category: 'pediatric', severity: 'critical' },
+  { id: 'case_pregnancy_pet', title: 'Pregnancy with Pre-eclampsia', chiefComplaint: 'Headache, visual disturbances, BP 160/110', patientEmail: 'patient.term@demo.dev', clinicianEmail: 'obgyn@kisii.dev', description: '31yo G1P0 at 39 weeks presents with severe headache, blurred vision, and BP 160/110. Urine protein 3+.', icd10: 'O14.1', category: 'obstetric', severity: 'critical' },
+  { id: 'case_pph', title: 'Postpartum Haemorrhage', chiefComplaint: 'Heavy vaginal bleeding post-delivery', patientEmail: 'patient.postpartum@demo.dev', clinicianEmail: 'obgyn@kisii.dev', description: '26yo female 2h post normal vaginal delivery with heavy vaginal bleeding, tachycardia, and hypotension.', icd10: 'O72.1', category: 'obstetric', severity: 'critical' },
+  { id: 'case_eclampsia', title: 'Eclampsia', chiefComplaint: 'Generalized tonic-clonic seizure', patientEmail: 'patient.term@demo.dev', clinicianEmail: 'obgyn@kisii.dev', description: '31yo at 39 weeks with known PET develops generalized tonic-clonic seizure in labour ward.', icd10: 'O15.0', category: 'obstetric', severity: 'critical' },
+  { id: 'case_pediatric_malaria', title: 'Severe Pediatric Malaria', chiefComplaint: 'High fever, vomiting, lethargy', patientEmail: 'patient.child@demo.dev', clinicianEmail: 'paeds@kisii.dev', description: '8yo female with 3-day history of high fever, vomiting, general malaise. From malaria-endemic area.', icd10: 'B50.9', category: 'pediatric', severity: 'severe' },
+  { id: 'case_tuberculosis', title: 'Pulmonary Tuberculosis', chiefComplaint: 'Chronic cough, weight loss, night sweats', patientEmail: 'patient.tb@demo.dev', clinicianEmail: 'mo@kisii.dev', description: '38yo male with 3-week history of productive cough, haemoptysis, weight loss, and night sweats. Contact with TB patient.', icd10: 'A15.0', category: 'medical', severity: 'moderate' },
+  { id: 'case_hiv_opp', title: 'HIV with Opportunistic Infection', chiefComplaint: 'Fever, cough, oral thrush, weight loss', patientEmail: 'patient.hiv@demo.dev', clinicianEmail: 'mo@kisii.dev', description: '42yo male known HIV on ART presents with fever, cough, oral candidiasis, and 5kg weight loss over 1 month.', icd10: 'B24', category: 'medical', severity: 'severe' },
+  { id: 'case_dka', title: 'Diabetic Ketoacidosis', chiefComplaint: 'Vomiting, abdominal pain, deep breathing', patientEmail: 'patient.diabetes@demo.dev', clinicianEmail: 'emergency@kisii.dev', description: '55yo male with DM2 presents with nausea, vomiting, abdominal pain, Kussmaul breathing, and altered sensorium.', icd10: 'E11.1', category: 'medical', severity: 'critical' },
+  { id: 'case_ckd_uremia', title: 'CKD with Uremic Symptoms', chiefComplaint: 'Nausea, fatigue, decreased urine output', patientEmail: 'patient.ckd@demo.dev', clinicianEmail: 'consultant.med@kisii.dev', description: '48yo female with CKD Stage 4 presents with nausea, anorexia, fatigue, metallic taste, and oliguria.', icd10: 'N18.4', category: 'medical', severity: 'moderate' },
+  { id: 'case_polytrauma', title: 'Polytrauma - Road Traffic Accident', chiefComplaint: 'Multiple injuries after high-speed MVA', patientEmail: 'patient.trauma@demo.dev', clinicianEmail: 'emergency@kisii.dev', description: '29yo male involved in high-speed MVA. GCS 13, open femur fracture, rib fractures, abdominal tenderness. ATLS primary survey.', icd10: 'T07', category: 'emergency', severity: 'critical' },
+  { id: 'case_burns', title: 'Severe Burns', chiefComplaint: 'Thermal burns to chest and arms', patientEmail: 'patient.trauma@demo.dev', clinicianEmail: 'surgery@kisii.dev', description: '29yo male with 30% TBSA burns to anterior chest and bilateral upper limbs from house fire. Second and third degree.', icd10: 'T31.3', category: 'emergency', severity: 'severe' },
+  { id: 'case_snake_bite', title: 'Snake Envenomation', chiefComplaint: 'Snake bite to right foot with swelling', patientEmail: 'patient.adult@demo.dev', clinicianEmail: 'emergency@kisii.dev', description: '45yo male bitten by snake on right foot 4h ago. Progressive swelling, pain, and bleeding from bite site.', icd10: 'T63.0', category: 'emergency', severity: 'severe' },
+  { id: 'case_poisoning', title: 'Organophosphate Poisoning', chiefComplaint: 'Excessive salivation, sweating, small pupils', patientEmail: 'patient.adult@demo.dev', clinicianEmail: 'emergency@kisii.dev', description: '45yo male with excessive salivation, lacrimation, sweating, miosis, and muscle fasciculations. History of pesticide exposure.', icd10: 'T60.0', category: 'emergency', severity: 'critical' },
+  { id: 'case_psychiatric_emergency', title: 'Acute Psychotic Episode', chiefComplaint: 'Agitation, paranoia, auditory hallucinations', patientEmail: 'patient.psych@demo.dev', clinicianEmail: 'psych@kisii.dev', description: '35yo female with known depression presents with acute agitation, paranoid delusions, command auditory hallucinations, and poor self-care.', icd10: 'F23', category: 'psychiatric', severity: 'severe' },
+  { id: 'case_surgical_abdomen', title: 'Perforated Peptic Ulcer', chiefComplaint: 'Sudden severe epigastric pain, board-like rigidity', patientEmail: 'patient.diabetes@demo.dev', clinicianEmail: 'surgery@kisii.dev', description: '55yo male with known PUD presents with sudden onset severe epigastric pain, board-like abdominal rigidity, and free air under diaphragm.', icd10: 'K25.1', category: 'surgical', severity: 'critical' },
+  { id: 'case_breast_lump', title: 'Breast Lump - Suspected Malignancy', chiefComplaint: 'Painless lump in left breast', patientEmail: 'patient.healthy.female@demo.dev', clinicianEmail: 'surgery@kisii.dev', description: '27yo female with 2cm firm, irregular, non-tender lump in upper outer quadrant of left breast. No nipple discharge.', icd10: 'N63', category: 'surgical', severity: 'moderate' },
+  { id: 'case_thyroid_swelling', title: 'Thyroid Swelling - Multinodular Goitre', chiefComplaint: 'Anterior neck swelling, difficulty swallowing', patientEmail: 'patient.adult@demo.dev', clinicianEmail: 'surgery@kisii.dev', description: '45yo male with gradually enlarging anterior neck swelling over 2 years. Now with mild dysphagia and voice change.', icd10: 'E04.2', category: 'surgical', severity: 'moderate' },
+  { id: 'case_lower_gi_bleed', title: 'Lower GI Bleed', chiefComplaint: 'Passing fresh blood per rectum', patientEmail: 'patient.elderly@demo.dev', clinicianEmail: 'surgery@kisii.dev', description: '80yo female with known diverticulosis presents with painless fresh red blood per rectum. Haemodynamically stable.', icd10: 'K92.1', category: 'surgical', severity: 'moderate' },
+  { id: 'case_upper_gi_bleed', title: 'Upper GI Bleed - Haematemesis', chiefComplaint: 'Vomiting blood and melaena', patientEmail: 'patient.diabetes@demo.dev', clinicianEmail: 'consultant.med@kisii.dev', description: '55yo male on NSAIDs presents with haematemesis (coffee ground) and melaena. Tachycardic, Hb 8.0.', icd10: 'K92.0', category: 'medical', severity: 'severe' },
+  { id: 'case_acute_pancreatitis', title: 'Acute Pancreatitis', chiefComplaint: 'Severe epigastric pain radiating to back', patientEmail: 'patient.adult@demo.dev', clinicianEmail: 'surgery@kisii.dev', description: '45yo male with history of gallstones and alcohol use presents with severe epigastric pain radiating to back, nausea, and vomiting.', icd10: 'K85.9', category: 'surgical', severity: 'severe' },
 ];
 
 export function getDeveloperSeedConfig(): SeedConfig {
@@ -291,7 +375,8 @@ export function getAllSeedEmails(): string[] {
 
 export function getDemoCasePatients(): string[] {
   return [
-    'patient.healthy@demo.dev',
+    'patient.healthy.male@demo.dev',
+    'patient.healthy.female@demo.dev',
     'patient.pregnant@demo.dev',
     'patient.term@demo.dev',
     'patient.diabetes@demo.dev',
@@ -303,6 +388,27 @@ export function getDemoCasePatients(): string[] {
     'patient.cancer@demo.dev',
     'patient.psych@demo.dev',
     'patient.trauma@demo.dev',
+    'patient.icu@demo.dev',
     'patient.palliative@demo.dev',
+    'patient.terminal@demo.dev',
+    'patient.adult@demo.dev',
+    'patient.elderly@demo.dev',
+    'patient.neonate@demo.dev',
+    'patient.premature@demo.dev',
+    'patient.child@demo.dev',
+    'patient.ckd@demo.dev',
+    'patient.copd@demo.dev',
   ];
+}
+
+export function getAllApiTokenNames(): string[] {
+  return API_TOKENS.map(t => t.name);
+}
+
+export function getDemoCaseById(id: string): SeedDemoCase | undefined {
+  return DEMO_CLINICAL_CASES.find(c => c.id === id);
+}
+
+export function getCasesByCategory(category: SeedDemoCase['category']): SeedDemoCase[] {
+  return DEMO_CLINICAL_CASES.filter(c => c.category === category);
 }
