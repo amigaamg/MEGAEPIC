@@ -553,7 +553,7 @@ export default function ConstitutionRegisterPage() {
   const totalSteps = REGISTRATION_STEPS.length;
   const stepIndex = REGISTRATION_STEPS.findIndex(s => s.id === step);
   const progress = ((stepIndex + 1) / totalSteps) * 100;
-  const isFirst = step === 'identity' || (needsToCompleteRegistration && step !== 'identity');
+  const isFirst = step === 'identity' || needsToCompleteRegistration;
   const isLast = step === 'complete';
 
   function computePwStrength(pw: string) {
