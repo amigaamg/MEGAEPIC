@@ -46,6 +46,7 @@ export interface SeedUserDef {
   name: string;
   role: SeedRole | string;
   orgId: string;
+  amxUid?: string;
   license?: string;
   specialty?: string;
   dept?: string;
