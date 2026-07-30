@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { JOURNEY_STEPS, PRODUCTS, ENGINES, STANDARDS, MARKETPLACE_ITEMS, TESTIMONIALS } from '@/components/landing/config'
 import { useViewportClass, isMobileViewport } from '@/hooks/useViewportClass'
-import { ArrowRight, Play, Check, Brain, Stethoscope, Heart, Building, Users, Globe, GraduationCap, Shield, Activity, Microscope, BookOpen, FlaskConical, Scan, Pill, ClipboardList, FileText, Database, BarChart3, Lock, Server, UserCheck, FileCheck, AlertTriangle, MessageSquare, Star, MapPin, Smartphone, UserCircle, BookMarked, Award, Target, Dna, Syringe, Thermometer, Menu, X, ChevronDown, Code, Grid, Video, Zap, LinkIcon, Settings, GitMerge, Clock, List, RefreshCw, Headphones, ShoppingBag, Layers } from 'lucide-react'
+import { ArrowRight, Play, Check, Brain, Stethoscope, Heart, Building, Users, Globe, GraduationCap, Shield, Activity, Microscope, BookOpen, FlaskConical, Scan, Pill, ClipboardList, FileText, Database, BarChart3, Lock, Server, UserCheck, FileCheck, AlertTriangle, MessageSquare, Star, MapPin, Smartphone, UserCircle, BookMarked, Award, Target, Dna, Syringe, Thermometer, Menu, X, ChevronDown, Code, Grid, Video, Zap, LinkIcon, Settings, GitMerge, Clock, List, RefreshCw, Headphones, ShoppingBag, Layers, Airplay } from 'lucide-react'
 import Link from 'next/link'
 import Header from '@/components/landing/Header'
 import Footer from '@/components/landing/Footer'
@@ -136,7 +136,7 @@ export default function Home() {
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--surface-card)', fontFamily: "var(--font-inter), 'Inter', system-ui, sans-serif", color: 'var(--text-primary)', WebkitFontSmoothing: 'antialiased' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--surface-card)', color: 'var(--text-primary)', WebkitFontSmoothing: 'antialiased' }}>
 
       <Header scrolled={scrolled} />
 

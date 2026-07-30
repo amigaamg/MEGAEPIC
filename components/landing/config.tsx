@@ -1,6 +1,7 @@
 'use client'
+import type { ReactNode } from 'react'
 import { C } from '@/lib/colors'
-import { Hospital, Stethoscope, FlaskConical, Scan, Pill, ClipboardList, Microscope, Activity, FileText, Database, BarChart3, Shield, Lock, Globe, MapPin, BookOpen, ChevronRight, Menu, X, Check, ArrowRight, Star, Users, Bed, HeartPulse, Thermometer, Droplets, Search, UserCircle, Settings, LogOut, Bell, MessageSquare, AlertTriangle, Building, GraduationCap, Radio, ShieldCheck, ActivitySquare, Smartphone, Monitor, Layers, Network, Server, UserCheck, FileCheck, Clock, Calendar, Code, Cpu, Brain, Lightbulb, BookMarked, Award, Target, Eye, GitMerge, Zap, Link, Share2, Cloud, Download, Upload, RefreshCw, Play, Pause, DollarSign, CreditCard, Home, TrendingUp, TrendingDown, UsersRound, LifeBuoy, Headphones, Mail, Phone, ExternalLink, Grid, Package, AppWindow, Bot, Sparkles, Heart, Syringe, Bandage, Bone, Ear, EyeIcon, Tooth, Dna, Dribbble as Baby, Wind, Video, List, type LucideIcon } from 'lucide-react'
+import { Hospital, Stethoscope, FlaskConical, Scan, Pill, ClipboardList, Microscope, Activity, FileText, Database, BarChart3, Shield, Lock, Globe, MapPin, BookOpen, ChevronRight, Menu, X, Check, ArrowRight, Star, Users, Bed, HeartPulse, Thermometer, Droplets, Search, UserCircle, Settings, LogOut, Bell, MessageSquare, AlertTriangle, Building, GraduationCap, Radio, ShieldCheck, ActivitySquare, Smartphone, Monitor, Layers, Network, Server, UserCheck, FileCheck, Clock, Calendar, Code, Cpu, Brain, Lightbulb, BookMarked, Award, Target, Eye, GitMerge, Zap, Link, Share2, Cloud, Download, Upload, RefreshCw, Play, Pause, DollarSign, CreditCard, Home, TrendingUp, TrendingDown, UsersRound, LifeBuoy, Headphones, Mail, Phone, ExternalLink, Grid, Package, AppWindow, Bot, Sparkles, Heart, Syringe, Bandage, Bone, Ear, EyeIcon, Tooth, Dna, Dribbble as Baby, Wind, Video, List } from 'lucide-react'
 
 export type IconType = LucideIcon
 
@@ -11,21 +12,21 @@ export interface NavItem {
 }
 
 export interface ProductItem {
-  icon: LucideIcon
+  icon: ReactNode
   title: string
   desc: string
   gradient: string
 }
 
 export interface UserType {
-  icon: LucideIcon
+  icon: ReactNode
   title: string
   desc: string
   dashPreview: string[]
 }
 
 export interface EngineItem {
-  icon: LucideIcon
+  icon: ReactNode
   name: string
   desc: string
 }
