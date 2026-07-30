@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { C } from '@/lib/colors'
-import { Baby, Heart, Activity, Shield, Users, Syringe, Brain, Link, ChevronRight, ArrowRight } from 'lucide-react'
+import { Baby, Heart, Activity, Shield, Users, Syringe, Brain, GitMerge, ChevronRight, ArrowRight } from 'lucide-react'
 
 const systems = [
   { key: 'fetal', label: 'Fetal Intelligence Center', icon: <Heart size={18} />, color: '#EC4899', desc: 'Growth, dopplers, BPP, anomalies, twins' },
@@ -12,7 +12,7 @@ const systems = [
   { key: 'child-health', label: 'Child Health IC', icon: <Shield size={18} />, color: '#10B981', desc: 'Growth, development, nutrition, immunization, school health' },
   { key: 'vaccination', label: 'Vaccination Intelligence', icon: <Syringe size={18} />, color: '#6366F1', desc: 'Schedule, lot tracking, coverage, forecasting, adverse events' },
   { key: 'ecd', label: 'Early Childhood Development', icon: <Brain size={18} />, color: '#8B5CF6', desc: 'Motor, language, social, autism screening, school readiness' },
-  { key: 'mother-baby', label: 'Mother-Baby Linked Record', icon: <Link size={18} />, color: '#0EA5E9', desc: 'Two-patient record, generational health, linked outcomes' },
+  { key: 'mother-baby', label: 'Mother-Baby Linked Record', icon: <GitMerge size={18} />, color: '#0EA5E9', desc: 'Two-patient record, generational health, linked outcomes' },
 ]
 
 export default function MaternalChildHub() {

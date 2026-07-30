@@ -1,7 +1,7 @@
 'use client'
 import type { ReactNode } from 'react'
 import { C } from '@/lib/colors'
-import { Hospital, Stethoscope, FlaskConical, Scan, Pill, ClipboardList, Microscope, Activity, FileText, Database, BarChart3, Shield, Lock, Globe, MapPin, BookOpen, ChevronRight, Menu, X, Check, ArrowRight, Star, Users, Bed, HeartPulse, Thermometer, Droplets, Search, UserCircle, Settings, LogOut, Bell, MessageSquare, AlertTriangle, Building, GraduationCap, Radio, ShieldCheck, ActivitySquare, Smartphone, Monitor, Layers, Network, Server, UserCheck, FileCheck, Clock, Calendar, Code, Cpu, Brain, Lightbulb, BookMarked, Award, Target, Eye, GitMerge, Zap, Link, Share2, Cloud, Download, Upload, RefreshCw, Play, Pause, DollarSign, CreditCard, Home, TrendingUp, TrendingDown, UsersRound, LifeBuoy, Headphones, Mail, Phone, ExternalLink, Grid, Package, AppWindow, Bot, Sparkles, Heart, Syringe, Bandage, Bone, Ear, Dna, Video, List, type LucideIcon } from 'lucide-react'
+import { Hospital, Stethoscope, FlaskConical, Scan, Pill, ClipboardList, Microscope, Activity, FileText, Database, BarChart3, Shield, Lock, Globe, MapPin, BookOpen, ChevronRight, Menu, X, Check, ArrowRight, Star, Users, Bed, HeartPulse, Thermometer, Droplets, Search, UserCircle, Settings, LogOut, Bell, MessageSquare, AlertTriangle, Building, GraduationCap, Radio, ShieldCheck, ActivitySquare, Smartphone, Monitor, Layers, Network, Server, UserCheck, FileCheck, Clock, Calendar, Code, Cpu, Brain, Lightbulb, BookMarked, Award, Target, Eye, GitMerge, Zap, Share2, Cloud, Download, Upload, RefreshCw, Play, Pause, DollarSign, CreditCard, Home, TrendingUp, TrendingDown, UsersRound, LifeBuoy, Headphones, Mail, Phone, ExternalLink, Grid, Package, AppWindow, Bot, Sparkles, Heart, Syringe, Bandage, Bone, Ear, Dna, Video, List, type LucideIcon } from 'lucide-react'
 
 export type IconType = LucideIcon
 
@@ -217,7 +217,7 @@ export const ENGINES: EngineItem[] = [
   { icon: <GitMerge size={20} />, name: 'Research Engine', desc: 'Cohort queries, registry support, de-identified data exports, and trial management.' },
   { icon: <Settings size={20} />, name: 'Workflow Engine', desc: 'Configurable care workflows, task assignment, escalations, and completion tracking.' },
   { icon: <Shield size={20} />, name: 'Safety Engine', desc: 'Patient safety checks, medication reconciliation, fall risk, and adverse event monitoring.' },
-  { icon: <Link size={20} />, name: 'Integration Engine', desc: 'FHIR R4, HL7 v2, DICOM, and custom adapter framework for seamless interoperability.' },
+  { icon: <GitPullRequest size={20} />, name: 'Integration Engine', desc: 'FHIR R4, HL7 v2, DICOM, and custom adapter framework for seamless interoperability.' },
 ]
 
 export const STANDARDS: StandardItem[] = [

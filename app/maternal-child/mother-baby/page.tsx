@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { C } from '@/lib/colors'
-import { Link, Baby, Users, Heart, ArrowLeft, Search } from 'lucide-react'
+import { GitMerge, Baby, Users, Heart, ArrowLeft, Search } from 'lucide-react'
 import { MCStat } from '@/components/ui/MCStat'
 import { useRouter } from 'next/navigation'
 
@@ -18,7 +18,7 @@ export default function MotherBabyIC() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--surface-elevated)', fontFamily: 'var(--font-sans)', color: 'var(--text-primary)' }}>
       <div style={{ height: 60, background: 'var(--surface-card)', borderBottom: '1px solid var(--surface-border)', display: 'flex', alignItems: 'center', padding: '0 24px', gap: 12 }}>
-        <Link size={18} color="#0EA5E9" /><span style={{ fontSize: 15, fontWeight: 700, color: 'var(--sky-800)' }}>AMEXAN</span>
+        <GitMerge size={18} color="#0EA5E9" /><span style={{ fontSize: 15, fontWeight: 700, color: 'var(--sky-800)' }}>AMEXAN</span>
         <span style={{ width: 1, height: 20, background: 'var(--surface-border)' }} /><button onClick={() => router.back()} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid var(--surface-border)', background: 'var(--surface)', cursor: 'pointer', display: 'flex', color: 'var(--text-secondary)' }}><ArrowLeft size={14} /></button>
         <span style={{ fontSize: 13, fontWeight: 600 }}>Mother-Baby Linked Record</span>
       </div>
