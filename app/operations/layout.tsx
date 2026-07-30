@@ -17,7 +17,7 @@ const C = {
   green: '#22c55e', amber: '#f59e0b', red: '#ef4444',
 };
 
-type NavItem = { section: true; label: string } | { id: string; label: string; icon: React.ComponentType<{ size?: number }>; path: string };
+type NavItem = { section: true; label: string } | { id: string; label: string; icon: React.ComponentType<{ size?: number | string }>; path: string };
 
 const NAV_ITEMS: NavItem[] = [
   { section: true, label: 'Core Operations (L0-L6)' },
