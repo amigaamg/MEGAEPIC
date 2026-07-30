@@ -55,7 +55,8 @@ function useMediaQuery(q: string): boolean {
 
 export default function OperationsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const currentId = NAV_ITEMS.find(i => 'path' in i && i.path === pathname)?.id || 'dashboard';
+  const currentItem = NAV_ITEMS.find((i): i is Extract<NavItem, { id: string }> => 'id' in i && i.path === pathname);
+  const currentId = currentItem?.id || 'dashboard';
   const isMobile = useMediaQuery('(max-width: 640px)');
   const isTablet = useMediaQuery('(min-width: 641px) and (max-width: 1024px)');
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -144,7 +145,7 @@ export default function OperationsLayout({ children }: { children: React.ReactNo
           </div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12, fontSize: 'clamp(9px, 1vw, 11px)' }}>
-          {!isMobile && <span style={{ color: '#64748b' }}>{(NAV_ITEMS.find(i => 'id' in i && i.id === currentId) as any)?.label}</span>}
+          {!isMobile && <span style={{ color: '#64748b' }}>{NAV_ITEMS.find((i): i is Extract<NavItem, { label: string }> => 'id' in i && i.id === currentId)?.label}</span>}
         </div>
       </div>
 
