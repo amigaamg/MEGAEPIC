@@ -1,12 +1,16 @@
 'use client'
-import { MotionProps, motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { S, FOOTER_COLUMNS } from '@/components/landing/config'
 import { C } from '@/lib/colors'
 import { Globe, MessageCircle, Share2, Mail, Heart } from 'lucide-react'
 
 const LEGAL_LINKS = ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Contact']
 
-export default function Footer() {
+export default function Footer({ year: propYear }: { year?: string }) {
+  const [year, setYear] = useState('')
+  useEffect(() => { setYear(String(new Date().getFullYear())) }, [])
+  const displayYear = propYear || year
   return (
     <footer style={{ background: '#0B1926', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
       <div style={{ padding: '64px 40px 0', maxWidth: 1200, margin: '0 auto' }}>
@@ -109,7 +113,7 @@ export default function Footer() {
           }}
         >
           <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
-            &copy; {new Date().getFullYear()} AMEXAN. All rights reserved. Made with{' '}
+            &copy; {displayYear || '2026'} AMEXAN. All rights reserved. Made with{' '}
             <Heart size={11} style={{ display: 'inline', verticalAlign: 'middle', color: '#E74C3C' }} />{' '}
             for global health.
           </p>

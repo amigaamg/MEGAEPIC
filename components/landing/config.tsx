@@ -1,7 +1,7 @@
 'use client'
 import type { ReactNode } from 'react'
 import { C } from '@/lib/colors'
-import { Hospital, Stethoscope, FlaskConical, Scan, Pill, ClipboardList, Microscope, Activity, FileText, Database, BarChart3, Shield, Lock, Globe, MapPin, BookOpen, ChevronRight, Menu, X, Check, ArrowRight, Star, Users, Bed, HeartPulse, Thermometer, Droplets, Search, UserCircle, Settings, LogOut, Bell, MessageSquare, AlertTriangle, Building, GraduationCap, Radio, ShieldCheck, ActivitySquare, Smartphone, Monitor, Layers, Network, Server, UserCheck, FileCheck, Clock, Calendar, Code, Cpu, Brain, Lightbulb, BookMarked, Award, Target, Eye, GitMerge, Zap, Link, Share2, Cloud, Download, Upload, RefreshCw, Play, Pause, DollarSign, CreditCard, Home, TrendingUp, TrendingDown, UsersRound, LifeBuoy, Headphones, Mail, Phone, ExternalLink, Grid, Package, AppWindow, Bot, Sparkles, Heart, Syringe, Bandage, Bone, Ear, EyeIcon, Tooth, Dna, Dribbble as Baby, Wind, Video, List } from 'lucide-react'
+import { Hospital, Stethoscope, FlaskConical, Scan, Pill, ClipboardList, Microscope, Activity, FileText, Database, BarChart3, Shield, Lock, Globe, MapPin, BookOpen, ChevronRight, Menu, X, Check, ArrowRight, Star, Users, Bed, HeartPulse, Thermometer, Droplets, Search, UserCircle, Settings, LogOut, Bell, MessageSquare, AlertTriangle, Building, GraduationCap, Radio, ShieldCheck, ActivitySquare, Smartphone, Monitor, Layers, Network, Server, UserCheck, FileCheck, Clock, Calendar, Code, Cpu, Brain, Lightbulb, BookMarked, Award, Target, Eye, GitMerge, Zap, Link, Share2, Cloud, Download, Upload, RefreshCw, Play, Pause, DollarSign, CreditCard, Home, TrendingUp, TrendingDown, UsersRound, LifeBuoy, Headphones, Mail, Phone, ExternalLink, Grid, Package, AppWindow, Bot, Sparkles, Heart, Syringe, Bandage, Bone, Ear, Dna, Video, List, type LucideIcon } from 'lucide-react'
 
 export type IconType = LucideIcon
 
@@ -189,15 +189,16 @@ export const JOURNEY_STEPS = [
 ]
 
 export const PRODUCTS: ProductItem[] = [
-  { icon: <Stethoscope size={28} />, title: 'Clinical OS', desc: 'The doctor workspace with structured history, differential diagnosis, ward rounds, and clinical reasoning engine.', gradient: 'linear-gradient(135deg, #2F80ED, #1A6DD9)' },
-  { icon: <Building size={28} />, title: 'Hospital HMIS', desc: 'Complete hospital management — beds, scheduling, billing, inventory, HR, and operational intelligence.', gradient: 'linear-gradient(135deg, #1A6DD9, #1557B3)' },
-  { icon: <Smartphone size={28} />, title: 'Patient App', desc: 'Personal health record, appointments, lab results, medications, telehealth, and secure messaging.', gradient: 'linear-gradient(135deg, #2ECC71, #27AE60)' },
-  { icon: <Video size={28} />, title: 'Telemedicine', desc: 'Virtual consultations, remote monitoring, e-prescriptions, and integrated follow-up care.', gradient: 'linear-gradient(135deg, #9B59B6, #8E44AD)' },
-  { icon: <GraduationCap size={28} />, title: 'Education', desc: 'Medical school curriculum, simulation, assessments, OSCE, and continuous professional development.', gradient: 'linear-gradient(135deg, #E67E22, #D35400)' },
-  { icon: <Microscope size={28} />, title: 'Research Cloud', desc: 'De-identified data, cohort builder, registry support, trial management, and AI dataset creation.', gradient: 'linear-gradient(135deg, #1ABC9C, #16A085)' },
-  { icon: <Grid size={28} />, title: 'Marketplace', desc: 'Plugins, FHIR apps, regional modules, AI models, themes, and integration adapters.', gradient: 'linear-gradient(135deg, #E74C3C, #C0392B)' },
-  { icon: <Code size={28} />, title: 'Developer Platform', desc: 'Open APIs, FHIR R4, SDKs, webhooks, and plugin framework for building on AMEXAN.', gradient: 'linear-gradient(135deg, #34495E, #2C3E50)' },
-  { icon: <BarChart3 size={28} />, title: 'Analytics', desc: 'Population health dashboards, operational BI, clinical audit, and predictive analytics.', gradient: 'linear-gradient(135deg, #F39C12, #E67E22)' },
+  { icon: <Stethoscope size={28} />, title: 'AMEXAN Clinical OS', desc: 'The doctor workspace with structured history, differential diagnosis, ward rounds, and clinical reasoning engine.', gradient: 'linear-gradient(135deg, #2F80ED, #1A6DD9)' },
+  { icon: <Smartphone size={28} />, title: 'AMEXAN Patient', desc: 'Personal health record, appointments, lab results, medications, telehealth, and secure messaging.', gradient: 'linear-gradient(135deg, #2ECC71, #27AE60)' },
+  { icon: <Video size={28} />, title: 'AMEXAN TeleHealth', desc: 'Virtual consultations, remote monitoring, e-prescriptions, and integrated follow-up care.', gradient: 'linear-gradient(135deg, #9B59B6, #8E44AD)' },
+  { icon: <GraduationCap size={28} />, title: 'AMEXAN Education', desc: 'Medical school curriculum, simulation, assessments, OSCE, and continuous professional development.', gradient: 'linear-gradient(135deg, #E67E22, #D35400)' },
+  { icon: <Microscope size={28} />, title: 'AMEXAN Research', desc: 'De-identified data, cohort builder, registry support, trial management, and AI dataset creation.', gradient: 'linear-gradient(135deg, #1ABC9C, #16A085)' },
+  { icon: <BarChart3 size={28} />, title: 'AMEXAN Analytics', desc: 'Population health dashboards, operational BI, clinical audit, and predictive analytics.', gradient: 'linear-gradient(135deg, #F39C12, #E67E22)' },
+  { icon: <Grid size={28} />, title: 'AMEXAN Marketplace', desc: 'Plugins, FHIR apps, regional modules, AI models, themes, and integration adapters.', gradient: 'linear-gradient(135deg, #E74C3C, #C0392B)' },
+  { icon: <Code size={28} />, title: 'AMEXAN API', desc: 'Open APIs, FHIR R4, SDKs, webhooks, and plugin framework for building on AMEXAN.', gradient: 'linear-gradient(135deg, #34495E, #2C3E50)' },
+  { icon: <Brain size={28} />, title: 'AMEXAN AI', desc: 'Clinical intelligence engine with knowledge graph, decision support, and AI-assisted clinical reasoning.', gradient: 'linear-gradient(135deg, #0284C7, #0369A1)' },
+  { icon: <Cloud size={28} />, title: 'AMEXAN Cloud', desc: 'Secure, scalable healthcare infrastructure with HIPAA-aligned hosting, disaster recovery, and offline support.', gradient: 'linear-gradient(135deg, #0F172A, #1E293B)' },
 ]
 
 export const ENGINES: EngineItem[] = [
@@ -334,28 +335,28 @@ export const ECOSYSTEM_ITEMS = [
 
 export const FOOTER_COLUMNS = [
   {
-    title: 'Products',
-    links: ['Clinical OS', 'Hospital HMIS', 'Telemedicine', 'Patient App', 'Research Cloud', 'Education', 'Marketplace', 'Developer Platform', 'Analytics'],
+    title: 'Platform',
+    links: ['Clinical OS', 'Hospital HMIS', 'Patient App', 'Telemedicine', 'Education', 'Research Cloud', 'Analytics', 'Marketplace', 'Developer Platform'],
   },
   {
-    title: 'Solutions',
-    links: ['Hospitals', 'Clinics', 'Medical Schools', 'Governments', 'NGOs', 'Insurance', 'Laboratories', 'Radiology', 'Pharmacies', 'Private Practice'],
+    title: 'Who We Serve',
+    links: ['Patients', 'Doctors', 'Nurses', 'Hospitals', 'Clinics', 'Laboratories', 'Pharmacies', 'Governments', 'Insurance'],
   },
   {
     title: 'Developers',
-    links: ['Documentation', 'API Reference', 'FHIR Guide', 'SDKs', 'Plugin Development', 'Open Standards', 'Marketplace Publish'],
+    links: ['Documentation', 'API Reference', 'FHIR R4 Guide', 'SDKs & Libraries', 'Plugin Framework', 'Open Standards', 'Status'],
   },
   {
     title: 'Resources',
-    links: ['Knowledge Center', 'Clinical Library', 'Case Studies', 'Videos', 'Academy', 'Help Center', 'Community'],
+    links: ['Knowledge Center', 'Clinical Library', 'Case Studies', 'Release Notes', 'Community', 'Support', 'Roadmap'],
   },
   {
     title: 'Company',
-    links: ['About', 'Mission', 'Careers', 'Leadership', 'Security', 'Trust Center', 'Contact'],
+    links: ['About', 'Mission & Vision', 'Careers', 'Leadership', 'Security', 'Compliance', 'Privacy', 'Accessibility', 'Contact'],
   },
   {
     title: 'Legal',
-    links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Data Processing', 'HIPAA Compliance', 'GDPR'],
+    links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Data Processing', 'HIPAA Alignment', 'GDPR Compliance'],
   },
 ]
 
