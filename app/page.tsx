@@ -136,8 +136,7 @@ export default function Home() {
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--surface-card)', fontFamily: "'Inter', system-ui, sans-serif", color: 'var(--text-primary)', WebkitFontSmoothing: 'antialiased' }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');`}</style>
+    <div style={{ minHeight: '100vh', background: 'var(--surface-card)', fontFamily: "var(--font-inter), 'Inter', system-ui, sans-serif", color: 'var(--text-primary)', WebkitFontSmoothing: 'antialiased' }}>
 
       <Header scrolled={scrolled} />
 
