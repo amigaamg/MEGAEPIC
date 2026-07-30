@@ -217,7 +217,7 @@ export const ENGINES: EngineItem[] = [
   { icon: <GitMerge size={20} />, name: 'Research Engine', desc: 'Cohort queries, registry support, de-identified data exports, and trial management.' },
   { icon: <Settings size={20} />, name: 'Workflow Engine', desc: 'Configurable care workflows, task assignment, escalations, and completion tracking.' },
   { icon: <Shield size={20} />, name: 'Safety Engine', desc: 'Patient safety checks, medication reconciliation, fall risk, and adverse event monitoring.' },
-  { icon: <GitPullRequest size={20} />, name: 'Integration Engine', desc: 'FHIR R4, HL7 v2, DICOM, and custom adapter framework for seamless interoperability.' },
+  { icon: <Share2 size={20} />, name: 'Integration Engine', desc: 'FHIR R4, HL7 v2, DICOM, and custom adapter framework for seamless interoperability.' },
 ]
 
 export const STANDARDS: StandardItem[] = [
