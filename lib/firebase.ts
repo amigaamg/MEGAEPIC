@@ -12,14 +12,25 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+let _app: ReturnType<typeof initializeApp> | undefined;
+let _auth: ReturnType<typeof getAuth> | undefined;
+let _db: ReturnType<typeof getFirestore> | undefined;
+let _storage: ReturnType<typeof getStorage> | undefined;
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+if (typeof window !== 'undefined') {
+  _app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  _auth = getAuth(_app);
+  _db = getFirestore(_app);
+  _storage = getStorage(_app);
+}
 
-// Call this from a client-side useEffect to avoid SSR crash
+export const app = _app!;
+export const auth = _auth!;
+export const db = _db!;
+export const storage = _storage!;
+
 export function initPersistence() {
+  if (!auth) return;
   setPersistence(auth, browserSessionPersistence).catch((err) =>
     console.error('Failed to set auth persistence:', err)
   );

@@ -21,12 +21,12 @@ import './_shared/responsive.css'
 const ECOSYSTEM_NODES = ['Patient', 'Community', 'Clinic', 'Hospital', 'Referral', 'Laboratory', 'Radiology', 'Pharmacy', 'Insurance', 'Research', 'Education', 'Public Health', 'Government']
 
 const AUDIENCE = [
-  { icon: <UserCircle size={22} />, title: 'Patients', desc: 'Never repeat your medical history. Own your health data. One lifelong record across every visit.', gradient: 'linear-gradient(135deg,#f0fdf4,#dcfce7)', accent: '#22c55e' },
-  { icon: <Stethoscope size={22} />, title: 'Clinicians', desc: 'Spend more time treating. Less time documenting. AI-assisted reasoning at every step.', gradient: 'linear-gradient(135deg,#eff6ff,#dbeafe)', accent: '#2F80ED' },
-  { icon: <Building size={22} />, title: 'Organizations', desc: 'One platform for every department. Laboratory, radiology, pharmacy, billing—all connected.', gradient: 'linear-gradient(135deg,#f5f3ff,#ede9fe)', accent: '#7c3aed' },
+  { icon: <UserCircle size={22} />, title: 'Patients', desc: 'Never repeat your medical history. Own your health data. One lifelong record across every visit.', gradient: 'linear-gradient(135deg,#f0f7ff,#e0efff)', accent: '#2F80ED' },
+  { icon: <Stethoscope size={22} />, title: 'Clinicians', desc: 'Spend more time treating. Less time documenting. AI-assisted reasoning at every step.', gradient: 'linear-gradient(135deg,#e0efff,#bfdcff)', accent: '#2F80ED' },
+  { icon: <Building size={22} />, title: 'Organizations', desc: 'One platform for every department. Laboratory, radiology, pharmacy, billing—all connected.', gradient: 'linear-gradient(135deg,#bfdcff,#93c5fd)', accent: '#1c68d1' },
   { icon: <Shield size={22} />, title: 'Governments', desc: 'Real-time public health visibility. National surveillance. Policy intelligence. Population health.', gradient: 'linear-gradient(135deg,#eff6ff,#dbeafe)', accent: '#2F80ED' },
-  { icon: <Microscope size={22} />, title: 'Researchers', desc: 'Discover from real-world care. Built-in registries. De-identified cohorts. Trial-ready data.', gradient: 'linear-gradient(135deg,#ecfeff,#cffafe)', accent: '#06b6d4' },
-  { icon: <Code size={22} />, title: 'Developers', desc: 'Build on AMEXAN. Open APIs, FHIR R4, SDKs, and a plugin marketplace for endless extensions.', gradient: 'linear-gradient(135deg,#f4f4f5,#e4e4e7)', accent: '#18181b' },
+  { icon: <Microscope size={22} />, title: 'Researchers', desc: 'Discover from real-world care. Built-in registries. De-identified cohorts. Trial-ready data.', gradient: 'linear-gradient(135deg,#e0efff,#bfdcff)', accent: '#2F80ED' },
+  { icon: <Code size={22} />, title: 'Developers', desc: 'Build on AMEXAN. Open APIs, FHIR R4, SDKs, and a plugin marketplace for endless extensions.', gradient: 'linear-gradient(135deg,#1e3a8a,#172554)', accent: '#ffffff' },
 ]
 
 const PHILOSOPHY = [
@@ -86,27 +86,27 @@ const PRODUCTS_SHOW = [
   {
     icon: <Smartphone size={24} />, title: 'Patient',
     desc: 'Personal health record, appointments, lab results, medications, telehealth, and secure messaging—always in your pocket.',
-    gradient: 'linear-gradient(135deg,#22c55e,#16a34a)',
+    gradient: 'linear-gradient(135deg,#60A5FA,#3B82F6)',
   },
   {
     icon: <Microscope size={24} />, title: 'Research',
     desc: 'De-identified data, cohort builder, registry support, trial management, and AI dataset creation for real-world evidence.',
-    gradient: 'linear-gradient(135deg,#14b8a6,#0d9488)',
+    gradient: 'linear-gradient(135deg,#0EA5E9,#0284C7)',
   },
   {
     icon: <GraduationCap size={24} />, title: 'Education',
     desc: 'Medical school curriculum, simulation, assessments, OSCE tools, and continuous professional development inside clinical care.',
-    gradient: 'linear-gradient(135deg,#f97316,#ea580c)',
+    gradient: 'linear-gradient(135deg,#93C5FD,#60A5FA)',
   },
   {
     icon: <BarChart3 size={24} />, title: 'Analytics',
     desc: 'Population health dashboards, operational BI, clinical audit, infection surveillance, and predictive analytics.',
-    gradient: 'linear-gradient(135deg,#eab308,#ca8a04)',
+    gradient: 'linear-gradient(135deg,#3B82F6,#2563EB)',
   },
   {
     icon: <Grid size={24} />, title: 'Marketplace',
     desc: 'Certified plugins, FHIR apps, regional modules, AI models, themes, and integration adapters to extend every capability.',
-    gradient: 'linear-gradient(135deg,#ef4444,#dc2626)',
+    gradient: 'linear-gradient(135deg,#1C68D1,#1E4FA8)',
   },
   {
     icon: <Code size={24} />, title: 'API Platform',
@@ -116,7 +116,7 @@ const PRODUCTS_SHOW = [
   {
     icon: <Cloud size={24} />, title: 'Cloud',
     desc: 'Secure, scalable healthcare infrastructure with HIPAA-aligned hosting, disaster recovery, and offline-first support.',
-    gradient: 'linear-gradient(135deg,#0284c7,#0369a1)',
+    gradient: 'linear-gradient(135deg,#0284C7,#0369A1)',
   },
 ]
 
