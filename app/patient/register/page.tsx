@@ -31,6 +31,7 @@ import {
   type RegistrationData,
 } from '@/lib/amexan/patient-constitution/types'
 import type { PatientIdentity, AmxpId, PatientVerificationLevel } from '@/lib/amexan/patient-constitution/types'
+import { linkFirebaseUidToAmxpId } from '@/lib/amexan/patient-constitution/amxp-bridge'
 import { Check, ChevronRight, ChevronLeft, UserPlus, Mail, Phone, Shield, Globe, Heart, Users, FileText } from 'lucide-react'
 
 const S = {
@@ -123,6 +124,10 @@ export default function PatientRegistrationPage() {
         await createUserWithEmailAndPassword(auth, email, password)
         const amxpId = generateAmxpId('patient')
         setIdentity(prev => ({ ...prev, amxpId, human: { ...prev.human, email, phone: stage1.phone } }))
+        const firebaseUid = auth.currentUser?.uid
+        if (firebaseUid) {
+          await linkFirebaseUidToAmxpId({ amxpId, firebaseUid, email, phone: stage1.phone })
+        }
         await setDoc(doc(db, 'patient_registrations', email.replace(/[^a-zA-Z0-9]/g, '_')), {
           amxpId,
           email,

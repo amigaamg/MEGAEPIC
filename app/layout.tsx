@@ -6,7 +6,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
-  title: "AMEXAN — Clinical Intelligence",
+  title: "AMEXAN — Clinical Intelligence Platform for Three Worlds of Healthcare",
   description: "AI-powered clinical decision support system",
   manifest: "/manifest.json",
 };

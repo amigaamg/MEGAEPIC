@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 export default function PatientAppointments() {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [joining, setJoining] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export default function PatientAppointments() {
       const snap = await getDocs(q);
 
       if (snap.empty) {
-        alert("The doctor hasn't started the consultation yet. Please wait.");
+        setMsg("The doctor hasn't started the consultation yet. Please wait."); setTimeout(() => setMsg(null), 4000);
         return;
       }
 
@@ -54,7 +55,7 @@ export default function PatientAppointments() {
       router.push(`/dashboard/consultation/${snap.docs[0].id}`);
     } catch (e) {
       console.error(e);
-      alert("Failed to join. Please try again.");
+      setMsg("Failed to join. Please try again."); setTimeout(() => setMsg(null), 4000);
     } finally {
       setJoining(null);
     }
@@ -172,6 +173,7 @@ export default function PatientAppointments() {
           );
         })}
       </div>
+      {msg && <div style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', background: '#3b82f6', color: 'white', padding: '12px 24px', borderRadius: 12, zIndex: 10000, fontSize: 14, fontWeight: 600, boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>{msg}</div>}
     </div>
   );
 }

@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   Activity, Cpu, Building2, Scale, BookOpen, Workflow, Radio, Shield,
-  ChevronRight, Menu, X, AlertTriangle, LayoutDashboard
+  ChevronRight, Menu, X, AlertTriangle, LayoutDashboard,
+  Lock, Brain, Microscope, GraduationCap, ShoppingBag, Globe, Headphones,
+  BarChart3, Layers
 } from 'lucide-react';
 import './_shared/responsive.css';
 
@@ -15,7 +17,10 @@ const C = {
   green: '#22c55e', amber: '#f59e0b', red: '#ef4444',
 };
 
-const NAV_ITEMS = [
+type NavItem = { section: true; label: string } | { id: string; label: string; icon: React.ComponentType<{ size?: number }>; path: string };
+
+const NAV_ITEMS: NavItem[] = [
+  { section: true, label: 'Core Operations (L0-L6)' },
   { id: 'dashboard', label: 'Dashboard', icon: Activity, path: '/operations' },
   { id: 'engines', label: 'Engines', icon: Cpu, path: '/operations/engines' },
   { id: 'divisions', label: 'Divisions', icon: Building2, path: '/operations/divisions' },
@@ -24,6 +29,16 @@ const NAV_ITEMS = [
   { id: 'workflows', label: 'Workflows', icon: Workflow, path: '/operations/workflows' },
   { id: 'telemetry', label: 'Telemetry', icon: Radio, path: '/operations/telemetry' },
   { id: 'constitution', label: 'Council', icon: Shield, path: '/operations/constitution' },
+  { section: true, label: 'Advanced Operations (L7-L15)' },
+  { id: 'security', label: 'Security', icon: Lock, path: '/operations/security' },
+  { id: 'ai', label: 'AI Operations', icon: Brain, path: '/operations/ai' },
+  { id: 'research', label: 'Research', icon: Microscope, path: '/operations/research' },
+  { id: 'education', label: 'Education', icon: GraduationCap, path: '/operations/education' },
+  { id: 'marketplace', label: 'Marketplace', icon: ShoppingBag, path: '/operations/marketplace' },
+  { id: 'global', label: 'Global Monitor', icon: Globe, path: '/operations/global' },
+  { id: 'success', label: 'Customer Success', icon: Headphones, path: '/operations/success' },
+  { id: 'business', label: 'Business Ops', icon: BarChart3, path: '/operations/business' },
+  { id: 'meta', label: 'Meta-Operations', icon: Layers, path: '/operations/meta' },
 ];
 
 function useMediaQuery(q: string): boolean {
@@ -40,7 +55,7 @@ function useMediaQuery(q: string): boolean {
 
 export default function OperationsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const currentId = NAV_ITEMS.find(i => i.path === pathname)?.id || 'dashboard';
+  const currentId = NAV_ITEMS.find(i => 'path' in i && i.path === pathname)?.id || 'dashboard';
   const isMobile = useMediaQuery('(max-width: 640px)');
   const isTablet = useMediaQuery('(min-width: 641px) and (max-width: 1024px)');
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -53,10 +68,21 @@ export default function OperationsLayout({ children }: { children: React.ReactNo
 
   const sidebarContent = (
     <>
-      <div style={{ padding: isMobile ? 16 : '12px 16px 4px', fontSize: isMobile ? 10 : 9, fontWeight: 600, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-        {isMobile ? '' : isTablet ? '' : 'Operations'}
-      </div>
-      {NAV_ITEMS.map(item => {
+      {NAV_ITEMS.map((item, idx) => {
+        if ('section' in item && item.section) {
+          if (isTablet && !isMobile) return null;
+          return (
+            <div key={`s-${idx}`} style={{
+              padding: isMobile ? '16px 16px 4px' : '16px 16px 4px',
+              fontSize: 8, fontWeight: 600, color: '#475569',
+              letterSpacing: '1px', textTransform: 'uppercase' as const,
+              marginTop: idx > 0 ? 8 : 0,
+            }}>
+              {isMobile ? '' : item.label}
+            </div>
+          );
+        }
+        if (!('icon' in item)) return null;
         const Icon = item.icon;
         const active = currentId === item.id;
         return (
@@ -118,7 +144,7 @@ export default function OperationsLayout({ children }: { children: React.ReactNo
           </div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12, fontSize: 'clamp(9px, 1vw, 11px)' }}>
-          {!isMobile && <span style={{ color: '#64748b' }}>{NAV_ITEMS.find(i => i.id === currentId)?.label}</span>}
+          {!isMobile && <span style={{ color: '#64748b' }}>{(NAV_ITEMS.find(i => 'id' in i && i.id === currentId) as any)?.label}</span>}
         </div>
       </div>
 

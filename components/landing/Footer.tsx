@@ -2,7 +2,7 @@
 import { MotionProps, motion } from 'framer-motion'
 import { S, FOOTER_COLUMNS } from '@/components/landing/config'
 import { C } from '@/lib/colors'
-import { Github, Twitter, Linkedin, Mail, Heart } from 'lucide-react'
+import { Globe, MessageCircle, Share2, Mail, Heart } from 'lucide-react'
 
 const LEGAL_LINKS = ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Contact']
 
@@ -38,7 +38,7 @@ export default function Footer() {
               interoperable, and built for every care setting.
             </p>
             <div style={{ display: 'flex', gap: 10 }}>
-              {[Github, Twitter, Linkedin, Mail].map((Icon, i) => (
+              {[Globe, MessageCircle, Share2, Mail].map((Icon, i) => (
                 <a
                   key={i}
                   href="#"

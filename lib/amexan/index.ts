@@ -510,7 +510,6 @@ export {
 } from './patient-constitution';
 export {
   getAllSeedEmails as getAllSeedEmailsV2,
-  getSeedProfileByEmail,
   SEED_ORGANIZATIONS,
   SEED_PLATFORM_USERS,
   SEED_CLINICAL_USERS,

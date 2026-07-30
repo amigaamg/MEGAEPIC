@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
+import MagicLinkForm from "@/components/auth/MagicLinkForm";
 
-type AuthMethod = 'email' | 'passkey' | 'sso';
+type AuthMethod = 'email' | 'passkey' | 'sso' | 'magic-link';
 
 const FIREBASE_ERRORS: Record<string, string> = {
   "auth/invalid-credential": "Incorrect email or password. Please try again.",
@@ -76,6 +77,11 @@ export default function AuthLoginPage() {
     setLoading(true);
     try {
       await login(email.trim(), password);
+      const user = auth.currentUser;
+      if (user && !user.emailVerified) {
+        await user.sendEmailVerification();
+        showError('Email not verified. A verification email has been sent. Please verify before accessing all features.');
+      }
       router.push("/dashboard");
     } catch (err: any) {
       showError(mapFirebaseError(err.code ?? ""));
@@ -137,6 +143,7 @@ export default function AuthLoginPage() {
   const tabs: { id: AuthMethod; label: string; icon: string }[] = [
     { id: 'email', label: 'Email', icon: '✉' },
     { id: 'passkey', label: 'Passkey', icon: '🔑' },
+    { id: 'magic-link', label: 'Magic Link', icon: '📧' },
     { id: 'sso', label: 'SSO', icon: '🔗' },
   ];
 
@@ -308,6 +315,11 @@ export default function AuthLoginPage() {
             Passkeys use WebAuthn and work with fingerprint, face, or device PIN.
           </p>
         </div>
+      )}
+
+      {/* ══════ MAGIC LINK METHOD ══════ */}
+      {method === 'magic-link' && (
+        <MagicLinkForm />
       )}
 
       {/* ══════ SSO METHOD ══════ */}

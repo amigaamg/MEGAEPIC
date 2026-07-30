@@ -20,6 +20,7 @@ import AmexanClinicalMessaging from '@/components/AmexanClinicalMessaging';
 import PatientToolLogger from '@/components/PatientToolLogger';
 import ClinicalMessenger from '@/components/ClinicalMessenger';
 import PatientVisitSummary from '@/components/PatientVisitSummary';
+import { usePatientJourneys } from '@/hooks/usePatientJourneys';
 import PatientOrdersCenter  from '@/components/PatientOrdersCenter';
 import PatientRxCenter      from '@/components/PatientRxCenter';
 import DiscoverTab from '@/components/DiscoverTab';
@@ -964,6 +965,7 @@ function SmartcardModal({ patient, onClose }: { patient: Patient; onClose: () =>
 function TriageModal({ onClose, onDone }: { onClose: () => void; onDone: (sp: string) => void }) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [emergencyMsg, setEmergencyMsg] = useState<string | null>(null);
   const questions = [
     { q: "What's your main concern today?", opts: ['Heart / Chest pain','Blood sugar / Diabetes','Breathing problems','Mental health','Skin condition','Bone / Joint pain',"Child's health",'Eye / Vision','Ear / Nose / Throat','Reproductive / Gynae','Dental / Oral','General check-up','Other'] },
     { q: 'How long have you had this?', opts: ['Started today','A few days','A few weeks','Over a month','Chronic condition (years)'] },
@@ -977,13 +979,13 @@ function TriageModal({ onClose, onDone }: { onClose: () => void; onDone: (sp: st
     'Reproductive / Gynae':'Gynecology','Dental / Oral':'Dental','General check-up':'General',Other:'General',
   };
   const select = (ans: string) => {
-    if (ans === '🚨 Emergency — life-threatening') { alert('🚨 EMERGENCY: Call 999 or 112 immediately!'); onClose(); return; }
+    if (ans === '🚨 Emergency — life-threatening') { setEmergencyMsg('🚨 EMERGENCY: Call 999 or 112 immediately!'); setTimeout(() => { setEmergencyMsg(null); onClose(); }, 4000); return; }
     const next = [...answers, ans];
     if (step === questions.length - 1) { onDone(specialtyMap[next[0]] || 'General'); }
     else { setAnswers(next); setStep(s => s + 1); }
   };
   const q = questions[step];
-  return (
+  return (<>
     <div className="overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 500 }}>
         <div className="modal-hd"><h3 className="modal-ht">🔍 Smart Triage</h3><button className="modal-close" onClick={onClose}>✕</button></div>
@@ -996,17 +998,18 @@ function TriageModal({ onClose, onDone }: { onClose: () => void; onDone: (sp: st
               <button key={opt} className={`triage-opt ${opt.includes('🚨') ? 'triage-emergency' : ''}`} onClick={() => select(opt)}>{opt}</button>
             ))}
           </div>
-          {step > 0 && <button className="btn-secondary" onClick={() => setStep(s => s - 1)}>← Back</button>}
         </div>
       </div>
     </div>
-  );
+    {emergencyMsg && <div style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', background: '#ff4560', color: 'white', padding: '12px 24px', borderRadius: 12, zIndex: 10000, fontSize: 14, fontWeight: 600, boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>{emergencyMsg}</div>}
+  </>);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
 // EMERGENCY MODAL
 // ═══════════════════════════════════════════════════════════════════════════
 function EmergencyModal({ onClose, patientId }: { onClose: () => void; patientId: string }) {
+  const [emergencyMsg, setEmergencyMsg] = useState<string | null>(null);
   const alert911 = async () => {
     await addDoc(collection(db, 'alerts'), {
       recipientId: 'all-doctors',
@@ -1015,10 +1018,10 @@ function EmergencyModal({ onClose, patientId }: { onClose: () => void; patientId
       body: 'Patient has triggered an emergency alert and may need immediate assistance.',
       severity: 'high', read: false, createdAt: serverTimestamp(),
     });
-    window.alert('Emergency alert sent to your care team!');
-    onClose();
+    setEmergencyMsg('Emergency alert sent to your care team!');
+    setTimeout(() => { setEmergencyMsg(null); onClose(); }, 3000);
   };
-  return (
+  return (<>
     <div className="overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 400, textAlign: 'center' }}>
         <div style={{ padding: 32 }}>
@@ -1036,7 +1039,8 @@ function EmergencyModal({ onClose, patientId }: { onClose: () => void; patientId
         </div>
       </div>
     </div>
-  );
+    {emergencyMsg && <div style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', background: '#ff4560', color: 'white', padding: '12px 24px', borderRadius: 12, zIndex: 10000, fontSize: 14, fontWeight: 600, boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>{emergencyMsg}</div>}
+  </>);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1751,7 +1755,15 @@ export default function PatientDashboard() {
   const [expandedEdu, setExpandedEdu] = useState<string | null>(null);
   const [eduQuestions, setEduQuestions] = useState<any[]>([]);
   const [eduStories, setEduStories] = useState<any[]>([]);
+  const [toast, setToast] = useState<string | null>(null);
   const eduReadRef = useRef(false);
+
+  const { dashboardConfig } = usePatientJourneys({
+    name: patient?.name || '',
+    sex: patient?.gender,
+    dateOfBirth: patient?.dateOfBirth,
+    conditions: patient?.condition ? [patient.condition] : [],
+  });
 
   // ── Close sidebar on mobile resize ──
   useEffect(() => {
@@ -2066,11 +2078,11 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
     if (!qs.empty) {
       router.push(`/dashboard/consultation/${qs.docs[0].id}`);
     } else {
-      alert('Consultation room not ready yet. Please wait for your doctor to open the session.');
+      setToast('Consultation room not ready yet. Please wait for your doctor to open the session.'); setTimeout(() => setToast(null), 4000);
     }
   } catch (e) {
     console.error('joinConsultation error:', e);
-    alert('Could not join. Please try again.');
+    setToast('Could not join. Please try again.'); setTimeout(() => setToast(null), 4000);
   }
   setJoining(null);
 };
@@ -3094,7 +3106,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
               <div className="ov-avatar-status" />
             </div>
             <div className="ov-hero-text" style={{ minWidth: 0 }}>
-              <div className="ov-hero-greeting">{getGreeting()} ·  {new Date().toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+              <div className="ov-hero-greeting">{dashboardConfig?.greeting || `${getGreeting()} ${patient.name}`} ·  {new Date().toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
               <div className="ov-hero-name">{patient.name}</div>
               <div className="ov-hero-chips">
                 {patient.bloodGroup && <span className="ov-hero-chip ov-hero-chip--hl">🩸 {patient.bloodGroup}</span>}
@@ -3933,6 +3945,12 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
       {showTriage && <TriageModal onClose={() => setShowTriage(false)} onDone={sp => { setTriageSpecialty(sp); setTriageDone(true); setShowTriage(false); setActiveTab('discover'); }} />}
       {showSmartcard && <SmartcardModal patient={patient} onClose={() => setShowSmartcard(false)} />}
       {showEmergency && <EmergencyModal onClose={() => setShowEmergency(false)} patientId={patient.uid} />}
+
+      {toast && (
+        <div style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', background: '#3b82f6', color: 'white', padding: '12px 24px', borderRadius: 12, zIndex: 10001, fontSize: 14, fontWeight: 600, boxShadow: '0 8px 32px rgba(0,0,0,0.3)', textAlign: 'center', maxWidth: 400 }}>
+          {toast}
+        </div>
+      )}
     </>
   );
 }

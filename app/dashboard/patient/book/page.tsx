@@ -10,6 +10,7 @@ import {
 
 export default function BookAppointment() {
   const [services, setServices] = useState<any[]>([]);
+  const [msg, setMsg] = useState<string | null>(null);
 
   useEffect(() => {
     const loadServices = async () => {
@@ -33,7 +34,8 @@ export default function BookAppointment() {
       date: new Date()
     });
 
-    alert("Appointment booked 🚀");
+    setMsg('Appointment booked successfully! 🚀');
+    setTimeout(() => setMsg(null), 3000);
   };
 
   return (
@@ -68,6 +70,7 @@ export default function BookAppointment() {
         ))}
 
       </div>
+      {msg && <div style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', background: '#22c55e', color: 'white', padding: '12px 24px', borderRadius: 12, zIndex: 10000, fontSize: 14, fontWeight: 600, boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>{msg}</div>}
     </div>
   );
 }
