@@ -14,17 +14,6 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
 
   return (
     <>
-      <style>{`
-        @media (max-width: 1024px) {
-          .h-nav-center, .h-nav-right { display: none !important; }
-          .h-hamburger { display: inline-flex !important; }
-        }
-        @media (min-width: 1025px) {
-          .h-hamburger { display: none !important; }
-          .h-mobile-menu { display: none !important; }
-        }
-
-      `}</style>
       <motion.header
         style={{
           ...S.nav,
