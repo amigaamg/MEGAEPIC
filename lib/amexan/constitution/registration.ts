@@ -14,6 +14,7 @@ import type {
 export type RegistrationStep =
   | 'identity'
   | 'professional'
+  | 'workspace_choice'
   | 'organization_choice'
   | 'organization_create'
   | 'organization_join'
@@ -125,6 +126,7 @@ export interface StepConfig {
 export const REGISTRATION_STEPS: StepConfig[] = [
   { id: 'identity', title: 'Create Your Identity', subtitle: 'Your lifelong AMEXAN account', order: 1 },
   { id: 'professional', title: 'Professional Profile', subtitle: 'What you do and your qualifications', order: 2 },
+  { id: 'workspace_choice', title: 'Choose Workspace', subtitle: 'Select the organization you are working in', order: 3 },
   { id: 'organization_choice', title: 'Organization', subtitle: 'Work alone or join/create a facility', order: 3 },
   { id: 'organization_create', title: 'Create Facility', subtitle: 'Register your facility', order: 4 },
   { id: 'organization_join', title: 'Join Facility', subtitle: 'Connect to an existing organization', order: 4 },

@@ -6,6 +6,12 @@ export function ServiceWorkerRegistration(): null {
   useEffect(() => {
     if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
 
+    // Disable service worker in development to avoid offline page on API errors
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Service worker disabled in development');
+      return;
+    }
+
     const register = async () => {
       try {
         const registration = await navigator.serviceWorker.register('/sw.js');

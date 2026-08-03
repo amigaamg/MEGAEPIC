@@ -3,6 +3,9 @@
 // Every event may generate notifications through configurable channels.
 // ═══════════════════════════════════════════════════════════════════════════════
 
+import { deliverViaChannel } from './notification-delivery';
+import type { DeliveryResult } from './notification-delivery';
+
 export interface Notification {
   id: string;
   type: NotificationType;
@@ -280,4 +283,16 @@ export function getNotificationSummary(notifications: Notification[]): {
     urgent: notifications.filter(n => n.severity === NotificationSeverity.Urgent).length,
     byCategory, bySeverity,
   };
+}
+
+/**
+ * Deliver a notification through a single channel (delegates to the delivery
+ * module for channel config + a deterministic, testable result).
+ */
+export function deliverNotificationViaChannel(
+  notification: Notification,
+  channel: ChannelType,
+  recipient: NotificationRecipient,
+): Promise<DeliveryResult> {
+  return deliverViaChannel(notification, channel, recipient);
 }

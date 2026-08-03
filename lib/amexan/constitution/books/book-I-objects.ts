@@ -190,6 +190,13 @@ export enum ObjectType {
   NursingObservation = 'nursing_observation',
   FluidBalance = 'fluid_balance',
   IntakeOutput = 'intake_output',
+  Community = 'community_object',
+  Role = 'role',
+  Membership = 'membership',
+
+  Reasoning = 'reasoning',
+  ClinicalKnowledge = 'clinical_knowledge',
+  Observation = 'observation',
 }
 
 export const OBJECT_CATEGORY: Record<ObjectType, ObjectCategory> = {
@@ -370,6 +377,12 @@ export const OBJECT_CATEGORY: Record<ObjectType, ObjectCategory> = {
   [ObjectType.NursingObservation]: ObjectCategory.ClinicalKnowledge,
   [ObjectType.FluidBalance]: ObjectCategory.ClinicalKnowledge,
   [ObjectType.IntakeOutput]: ObjectCategory.ClinicalKnowledge,
+  [ObjectType.Community]: ObjectCategory.ClinicalKnowledge,
+  [ObjectType.Role]: ObjectCategory.Identity,
+  [ObjectType.Membership]: ObjectCategory.ClinicalKnowledge,
+  [ObjectType.Reasoning]: ObjectCategory.Reasoning,
+  [ObjectType.ClinicalKnowledge]: ObjectCategory.ClinicalKnowledge,
+  [ObjectType.Observation]: ObjectCategory.Observation,
 };
 
 export type ObjectStatus =

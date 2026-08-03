@@ -7,6 +7,7 @@ export type * from './types';
 export {
   can,
   generateDashboard,
+  generateActorDashboard,
   buildEmptySession,
 } from './auth';
 

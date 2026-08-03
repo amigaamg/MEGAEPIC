@@ -69,6 +69,9 @@ export enum ClinicalContext {
   Occupational = 'occupational',
   Environmental = 'environmental',
   PostSurgical = 'post_surgical',
+
+  Clinical = 'clinical',
+  SystemLevel = 'system_level',
 }
 
 export enum ContextCategory {
@@ -141,6 +144,8 @@ export const CONTEXT_CATEGORY: Record<ClinicalContext, ContextCategory> = {
   [ClinicalContext.Occupational]: ContextCategory.Clinical,
   [ClinicalContext.Environmental]: ContextCategory.Clinical,
   [ClinicalContext.PostSurgical]: ContextCategory.TreatmentPhase,
+  [ClinicalContext.Clinical]: ContextCategory.Clinical,
+  [ClinicalContext.SystemLevel]: ContextCategory.SystemLevel,
 };
 
 export interface ContextResolution {

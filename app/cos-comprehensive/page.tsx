@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 
+import { FileText, Stethoscope, ChevronDown, ArrowDown, Building2, Thermometer, BookOpen, Search, FlaskConical, Droplets, Bug, Target, Pill, CheckCircle, Apple, Footprints, DoorOpen, Scan, Building, RefreshCw, Zap, Heart, Dna, BarChart3, ClipboardList, Scale, User, Activity } from 'lucide-react';
+
 const COS_COMPREHENSIVE_CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -175,60 +177,60 @@ export default function CosComprehensive() {
   ];
 
   const timeline = [
-    { icon: "👤", label: "Arrival", time: "08:01", type: "data" },
-    { icon: "🌡️", label: "Vitals", time: "08:05", type: "data" },
-    { icon: "📖", label: "History", time: "08:08", type: "data" },
-    { icon: "🔍", label: "Examination", time: "08:25", type: "data" },
-    { icon: "🧪", label: "Blood drawn", time: "08:40", type: "data" },
-    { icon: "🩸", label: "Hb 6.8", time: "09:30", type: "intel" },
-    { icon: "🦟", label: "Malaria +", time: "09:45", type: "intel" },
-    { icon: "🎯", label: "Diagnosis", time: "09:47", type: "intel" },
-    { icon: "💊", label: "Artesunate", time: "09:49", type: "outcome" },
-    { icon: "🩸", label: "Transfuse", time: "10:15", type: "outcome" },
-    { icon: "✅", label: "Fever ↓", time: "14:00", type: "outcome" },
-    { icon: "🍽️", label: "Eating", time: "Day 2", type: "outcome" },
-    { icon: "🚶", label: "Walking", time: "Day 3", type: "outcome" },
-    { icon: "🚪", label: "Discharge", time: "Day 4", type: "outcome" },
+    { icon: <User size={16} />, label: "Arrival", time: "08:01", type: "data" },
+    { icon: <Thermometer size={16} />, label: "Vitals", time: "08:05", type: "data" },
+    { icon: <BookOpen size={16} />, label: "History", time: "08:08", type: "data" },
+    { icon: <Search size={16} />, label: "Examination", time: "08:25", type: "data" },
+    { icon: <FlaskConical size={16} />, label: "Blood drawn", time: "08:40", type: "data" },
+    { icon: <Droplets size={16} />, label: "Hb 6.8", time: "09:30", type: "intel" },
+    { icon: <Bug size={16} />, label: "Malaria +", time: "09:45", type: "intel" },
+    { icon: <Target size={16} />, label: "Diagnosis", time: "09:47", type: "intel" },
+    { icon: <Pill size={16} />, label: "Artesunate", time: "09:49", type: "outcome" },
+    { icon: <Droplets size={16} />, label: "Transfuse", time: "10:15", type: "outcome" },
+    { icon: <CheckCircle size={16} />, label: "Fever ↓", time: "14:00", type: "outcome" },
+    { icon: <Apple size={16} />, label: "Eating", time: "Day 2", type: "outcome" },
+    { icon: <Footprints size={16} />, label: "Walking", time: "Day 3", type: "outcome" },
+    { icon: <DoorOpen size={16} />, label: "Discharge", time: "Day 4", type: "outcome" },
   ];
 
   const roles = [
     {
-      icon: "👨‍⚕️", name: "Doctor",
+      icon: <Stethoscope size={28} />, name: "Doctor",
       question: "What decisions must I make now?",
       desc: "Ward Round Mode presents patients bed-by-bed. Review, plan, complete — auto-updates notes, orders, and to-do. No navigation.",
       flow: "Ward Round → Present → Review → Plan → Complete → Next Bed",
       href: "/dashboard/cos-doctor"
     },
     {
-      icon: "👩‍⚕️", name: "Nurse",
+      icon: <Stethoscope size={28} />, name: "Nurse",
       question: "What is due for this patient?",
       desc: "Task-oriented. Med round, vitals, fluids, escalations — patients appear in order of need. Never search.",
       flow: "Medication Round → Vitals → IV Fluids → Escalations → Documentation",
       href: "/dashboard/cos-nurse"
     },
     {
-      icon: "🧪", name: "Laboratory",
+      icon: <FlaskConical size={28} />, name: "Laboratory",
       question: "Which samples need attention?",
       desc: "Specimen-based. Received → Processing → Verified → Released. Critical alerts auto-notify.",
       flow: "Receive → Process → Verify → Release → Alert Clinician",
       href: "#"
     },
     {
-      icon: "💊", name: "Pharmacy",
+      icon: <Pill size={28} />, name: "Pharmacy",
       question: "Is this order safe?",
       desc: "Safety-first: interactions, allergies, stock, dispensing, admin tracking. Every order automatically checked.",
       flow: "Verify Order → Check Interactions → Allergies → Stock → Dispense → Administer",
       href: "#"
     },
     {
-      icon: "🩻", name: "Radiology",
+      icon: <Scan size={28} />, name: "Radiology",
       question: "What is the clinical question?",
       desc: "Requests include clinical question, not just study type. Supports meaningful reporting and prioritization.",
       flow: "Clinical Question → Prioritize → Acquire → Report → Critical Finding Alert",
       href: "#"
     },
     {
-      icon: "🏗️", name: "Administration",
+      icon: <Building size={28} />, name: "Administration",
       question: "How is the hospital running?",
       desc: "Real-time ops: census, throughput, bed occupancy, waiting times, resource allocation.",
       flow: "Live Census → Throughput → Bed Management → Discharge Planning → Reports",
@@ -270,14 +272,14 @@ export default function CosComprehensive() {
   ];
 
   const knowledgeGraphNodes = [
-    { icon: "🩺", title: "Diseases", desc: "Every disease is a node with ICD code, epidemiology, severity, and links to symptoms, drugs, guidelines.", tags: ["650+ Diseases", "ICD-10", "Acuity Tiered"] },
-    { icon: "🤒", title: "Symptoms & Signs", desc: "Linked to diseases via sensitivity and specificity. Every feature has a likelihood ratio.", tags: ["Sensitivity", "Specificity", "LR+/-"] },
-    { icon: "💊", title: "Drug Knowledge", desc: "Not disease-bundled. Drug nodes contain mechanism, dose, interactions, alternatives, monitoring.", tags: ["Dose", "Interactions", "Renal/Liver"] },
-    { icon: "📋", title: "Guidelines", desc: "WHO, national, and local guidelines as objects. Eligibility → Criteria → Recommendations → Evidence.", tags: ["WHO", "Evidence-Based", "Versioned"] },
-    { icon: "⚖️", title: "Clinical Scores", desc: "Reusable across diseases. GCS, CURB-65, Alvarado, APGAR — same structure.", tags: ["Inputs", "Calculation", "Interpretation"] },
-    { icon: "📊", title: "Reference Objects", desc: "Normal values by age, sex, pregnancy, altitude. Hb doesn't belong to malaria — it belongs to Reference.", tags: ["Age-Adjusted", "Pregnancy", "Evidence"] },
-    { icon: "🧬", title: "Anatomy", desc: "Body structures with parent-child relationships. Enables anatomical reasoning.", tags: ["System", "Function", "Pathologies"] },
-    { icon: "🏥", title: "Procedures", desc: "Surgical and medical procedures with indications, steps, complications, recovery.", tags: ["Surgical", "Medical", "Recovery"] },
+    { icon: <Stethoscope size={24} />, title: "Diseases", desc: "Every disease is a node with ICD code, epidemiology, severity, and links to symptoms, drugs, guidelines.", tags: ["650+ Diseases", "ICD-10", "Acuity Tiered"] },
+    { icon: <Thermometer size={24} />, title: "Symptoms & Signs", desc: "Linked to diseases via sensitivity and specificity. Every feature has a likelihood ratio.", tags: ["Sensitivity", "Specificity", "LR+/-"] },
+    { icon: <Pill size={24} />, title: "Drug Knowledge", desc: "Not disease-bundled. Drug nodes contain mechanism, dose, interactions, alternatives, monitoring.", tags: ["Dose", "Interactions", "Renal/Liver"] },
+    { icon: <ClipboardList size={24} />, title: "Guidelines", desc: "WHO, national, and local guidelines as objects. Eligibility → Criteria → Recommendations → Evidence.", tags: ["WHO", "Evidence-Based", "Versioned"] },
+    { icon: <Scale size={24} />, title: "Clinical Scores", desc: "Reusable across diseases. GCS, CURB-65, Alvarado, APGAR — same structure.", tags: ["Inputs", "Calculation", "Interpretation"] },
+    { icon: <BarChart3 size={24} />, title: "Reference Objects", desc: "Normal values by age, sex, pregnancy, altitude. Hb doesn't belong to malaria — it belongs to Reference.", tags: ["Age-Adjusted", "Pregnancy", "Evidence"] },
+    { icon: <Dna size={24} />, title: "Anatomy", desc: "Body structures with parent-child relationships. Enables anatomical reasoning.", tags: ["System", "Function", "Pathologies"] },
+    { icon: <Building2 size={24} />, title: "Procedures", desc: "Surgical and medical procedures with indications, steps, complications, recovery.", tags: ["Surgical", "Medical", "Recovery"] },
   ];
 
   const productionReadiness = [
@@ -322,16 +324,16 @@ export default function CosComprehensive() {
 
       {/* Hero */}
       <section className="cos-hero" id="hero">
-        <h1 className="cos-h1">📜 The AMEXAN Constitution</h1>
+        <h1 className="cos-h1"><FileText size={36} style={{ display: 'inline', verticalAlign: 'middle', marginTop: -6 }} /> The AMEXAN Constitution</h1>
         <p className="cos-p">
           An Encounter-Centered Clinical Operating System. Not an EMR — an operating system for medicine.
           Universal, scalable, disease-agnostic. Every relationship in Neo4j. Every view role-specific.
           Every document generated, not written.
         </p>
         <div className="cos-actions">
-          <a href="/dashboard/cos-doctor" className="cos-btn primary">⚕️ Enter COS Doctor →</a>
-          <a href="/dashboard/cos-nurse" className="cos-btn outline">👩‍⚕️ Nurse Workspace →</a>
-          <a href="/amexan-constitution" className="cos-btn outline">📜 Full Constitution →</a>
+          <a href="/dashboard/cos-doctor" className="cos-btn primary"><Stethoscope size={14} /> Enter COS Doctor →</a>
+          <a href="/dashboard/cos-nurse" className="cos-btn outline"><Stethoscope size={14} /> Nurse Workspace →</a>
+          <a href="/amexan-constitution" className="cos-btn outline"><FileText size={14} /> Full Constitution →</a>
         </div>
       </section>
 
@@ -348,13 +350,13 @@ export default function CosComprehensive() {
             <>
               {i === 5 && (
                 <div className="const-divider" style={{margin:'16px 0'}}>
-                  <span className="const-divider-label">🔽 DATA CAPTURE → INTELLIGENCE</span>
+                  <span className="const-divider-label"><ChevronDown size={12} /> DATA CAPTURE → INTELLIGENCE</span>
                 </div>
               )}
               <div key={i} className="const-node" style={{width: i >= 5 && i <= 9 ? 320 : 280}}>
                 <span style={{fontSize:14}}>{layer}</span>
               </div>
-              {i < constitution.length - 1 && <div className="const-arrow">↓</div>}
+              {i < constitution.length - 1 && <div className="const-arrow"><ArrowDown size={12} /></div>}
             </>
           ))}
         </div>
@@ -385,7 +387,7 @@ export default function CosComprehensive() {
 
         {/* Data Flow Diagram */}
         <div className="flow-diagram" style={{marginTop:32}}>
-          <div className="flow-title">🔄 Data Flow: DiseaseNode → Neo4j → Evidence Graph → Clinical Reasoning</div>
+          <div className="flow-title"><RefreshCw size={14} /> Data Flow: DiseaseNode → Neo4j → Evidence Graph → Clinical Reasoning</div>
           <div className="flow-row">
             <span className="flow-label">Knowledge</span>
             <span className="flow-box data">DiseaseNode (TS)</span>
@@ -423,7 +425,7 @@ export default function CosComprehensive() {
         </div>
 
         <div style={{marginTop:20,display:'flex',gap:8,flexWrap:'wrap',justifyContent:'center'}}>
-          <span style={{fontSize:11,color:'var(--frost-500)'}}>⚡ Neo4j Constraints: </span>
+          <span style={{fontSize:11,color:'var(--frost-500)'}}><Zap size={11} /> Neo4j Constraints: </span>
           <code style={{fontSize:10,background:'var(--purple-bg)',color:'var(--purple-text)',padding:'3px 8px',borderRadius:4}}>Patient(id)</code>
           <code style={{fontSize:10,background:'var(--purple-bg)',color:'var(--purple-text)',padding:'3px 8px',borderRadius:4}}>Encounter(id)</code>
           <code style={{fontSize:10,background:'var(--purple-bg)',color:'var(--purple-text)',padding:'3px 8px',borderRadius:4}}>Disease(id)</code>
@@ -511,7 +513,7 @@ export default function CosComprehensive() {
 
         <div className="ward-demo">
           <div className="ward-demo-header">
-            <h3>🏥 Male Medical Ward — Ward Round</h3>
+            <h3><Building2 size={14} /> Male Medical Ward — Ward Round</h3>
             <div className="live"><span className="ward-demo-live-dot" /> {completedBeds.length}/{wards.length} complete</div>
           </div>
           <div className="ward-demo-progress">
@@ -535,8 +537,8 @@ export default function CosComprehensive() {
 
         <div style={{textAlign:'center',marginTop:16}}>
           <div style={{display:'flex',gap:8,justifyContent:'center',flexWrap:'wrap'}}>
-            <a href="/dashboard/cos-doctor" className="cos-btn primary">⚕️ Full Doctor Dashboard →</a>
-            <a href="/dashboard/cos-nurse" className="cos-btn outline">👩‍⚕️ Nurse Dashboard →</a>
+            <a href="/dashboard/cos-doctor" className="cos-btn primary"><Stethoscope size={14} /> Full Doctor Dashboard →</a>
+            <a href="/dashboard/cos-nurse" className="cos-btn outline"><Stethoscope size={14} /> Nurse Dashboard →</a>
           </div>
         </div>
       </section>
@@ -570,14 +572,14 @@ export default function CosComprehensive() {
           18 constitutional layers. 5 engines. Universal.
         </p>
         <div className="cos-footer-actions">
-          <a href="/dashboard/cos-doctor" className="cos-btn primary">⚕️ Doctor →</a>
-          <a href="/dashboard/cos-nurse" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}>👩‍⚕️ Nurse →</a>
-          <a href="/dashboard/cos-lab" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}>🧪 Lab →</a>
-          <a href="/dashboard/cos-pharmacy" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}>💊 Pharmacy →</a>
-          <a href="/dashboard/cos-radiology" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}>🩻 Radiology →</a>
-          <a href="/dashboard/cos-admin" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}>🏗️ Admin →</a>
-          <a href="/cos-patient-portal" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}>💙 Patient Portal →</a>
-          <a href="/amexan-constitution" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}>📜 Constitution →</a>
+          <a href="/dashboard/cos-doctor" className="cos-btn primary"><Stethoscope size={14} /> Doctor →</a>
+          <a href="/dashboard/cos-nurse" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}><Stethoscope size={14} /> Nurse →</a>
+          <a href="/dashboard/cos-lab" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}><FlaskConical size={14} /> Lab →</a>
+          <a href="/dashboard/cos-pharmacy" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}><Pill size={14} /> Pharmacy →</a>
+          <a href="/dashboard/cos-radiology" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}><Scan size={14} /> Radiology →</a>
+          <a href="/dashboard/cos-admin" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}><Building size={14} /> Admin →</a>
+          <a href="/cos-patient-portal" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}><Heart size={14} /> Patient Portal →</a>
+          <a href="/amexan-constitution" className="cos-btn outline" style={{background:'rgba(255,255,255,.15)',color:'#fff',borderColor:'rgba(255,255,255,.3)'}}><FileText size={14} /> Constitution →</a>
         </div>
       </footer>
     </>

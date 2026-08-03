@@ -107,7 +107,7 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
                                 fontWeight: 700,
                                 padding: '1px 6px',
                                 borderRadius: 4,
-                                background: child.badge === 'New' ? C.green : child.badge === 'Core' ? C.sky : C.amber,
+                                background: child.badge === 'New' ? 'var(--sky-500)' : child.badge === 'Core' ? 'var(--sky-500)' : 'var(--sky-600)',
                                 color: C.white,
                                 lineHeight: '16px',
                               }}>
@@ -213,7 +213,7 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
                               fontWeight: 700,
                               padding: '1px 6px',
                               borderRadius: 4,
-                              background: child.badge === 'New' ? C.green : child.badge === 'Core' ? C.sky : C.amber,
+                              background: child.badge === 'New' ? 'var(--sky-500)' : child.badge === 'Core' ? 'var(--sky-500)' : 'var(--sky-600)',
                               color: C.white,
                             }}>
                               {child.badge}

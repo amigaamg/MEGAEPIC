@@ -30,7 +30,9 @@ export type EngineCategory =
   | 'enterprise_security' | 'enterprise_multi_tenant' | 'enterprise_support'
   | 'enterprise_growth' | 'enterprise_plugin' | 'enterprise_deployment'
   | 'enterprise_analytics' | 'business_constitution'
-  | 'constitutional_validation' | 'workflow_engine' | 'orchestrator';
+  | 'constitutional_validation' | 'workflow_engine' | 'orchestrator'
+  | 'workspace_resolution' | 'software_engineering' | 'knowledge_intelligence'
+  | 'knowledge_ecosystem' | 'healthcare_community';
 
 // â”€â”€ Universal Engine Event â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 //
@@ -410,7 +412,7 @@ export interface RuleRegistration {
   ruleId: string;
   ruleName: string;
   engineId: string;
-  category: 'visibility' | 'activation' | 'priority' | 'context' | 'ordering' | 'safety' | 'contraindication';
+category: 'visibility' | 'activation' | 'priority' | 'context' | 'ordering' | 'safety' | 'contraindication' | 'security' | 'architecture' | 'ownership' | 'quality' | 'ui' | 'operations' | 'data' | 'workflow' | 'reporting' | 'governance' | 'privacy';
   description: string;
   conditions: string;
   effect: string;
@@ -537,6 +539,9 @@ export function getEngineCategoryLabel(cat: EngineCategory): string {
     enterprise_analytics: 'Analytics Engine', business_constitution: 'Business Constitution',
     constitutional_validation: 'Constitutional Validation', workflow_engine: 'Workflow Engine',
     orchestrator: 'Orchestrator',
+    workspace_resolution: 'Workspace Resolution', software_engineering: 'Software Engineering',
+    knowledge_intelligence: 'Knowledge Intelligence', knowledge_ecosystem: 'Knowledge Ecosystem',
+    healthcare_community: 'Healthcare Community',
   };
   return labels[cat] || cat;
 }

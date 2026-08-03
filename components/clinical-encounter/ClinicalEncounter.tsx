@@ -36,6 +36,7 @@ import { getAllSymptomNames, searchSymptom as searchSymptomNodes, getSymptomById
 import type { AssessmentContext, ConstitutionalContext, ComplaintObject } from '@/lib/amexan/encounter-engine/knowledge/symptom-types';
 import { buildConstitutionalContext, determineAgeGroup } from '@/lib/amexan/encounter-engine/engines/context-engine';
 import { generateConstitutionalHpiNarrative } from '@/lib/amexan/encounter-engine/engines/documentation-engine';
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext';
 import { DocSectionId, NO_SIGNIFICANT_HISTORY_ACTIONS, SECTION_LABELS } from '@/lib/amexan/encounter-engine/engines/sectionEngine';
 import type { SectionExecutionState, AssessmentFormat, SectionDef } from '@/lib/amexan/encounter-engine/knowledge/symptom-types';
 import { getDynamicSections, generateAssessmentFormat, determineActiveModule } from '@/lib/amexan/encounter-engine/engines/formatEngine';
@@ -80,9 +81,12 @@ interface Props {
   encounterId?: string;
 }
 
-const ORG_ID = 'telemed-a98cf';
 const DEFAULT_DEPT = 'OUTPATIENT';
 const DEFAULT_UNIT = 'general';
+
+function orgId(): string {
+  return getActiveOrganizationId() || '';
+}
 
 /**
  * FIX: added fullLabel — used for Previous/Next nav buttons and tooltips.
@@ -395,7 +399,7 @@ export function ClinicalEncounter({
   useEffect(() => {
     if (examLoadedRef.current || !encounterIdRef.current) return;
     examLoadedRef.current = true;
-    const unsub = listenExamFindings(ORG_ID, DEFAULT_DEPT, DEFAULT_UNIT, encounterIdRef.current, (data) => {
+    const unsub = listenExamFindings(orgId(), DEFAULT_DEPT, DEFAULT_UNIT, encounterIdRef.current, (data) => {
       if (!data) return;
       const loaded: ExamFindings = {};
       for (const system of ['cardiology', 'respiratory', 'abdominal', 'neurological', 'breast'] as const) {
@@ -423,10 +427,10 @@ export function ClinicalEncounter({
   useEffect(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(async () => {
-      await saveEncounter(ORG_ID, encounterIdRef.current, state);
+      await saveEncounter(orgId(), encounterIdRef.current, state);
       const eid = encounterIdRef.current;
       if (Object.keys(examFindings).length > 0) {
-        persistExamFindings(ORG_ID, DEFAULT_DEPT, DEFAULT_UNIT, eid, {
+        persistExamFindings(orgId(), DEFAULT_DEPT, DEFAULT_UNIT, eid, {
           cardiology: Object.fromEntries(Object.entries(examFindings).filter(([k]) => k.startsWith('cvs_'))),
           respiratory: Object.fromEntries(Object.entries(examFindings).filter(([k]) => k.startsWith('resp_') || k.startsWith('scr_resp_'))),
           abdominal: Object.fromEntries(Object.entries(examFindings).filter(([k]) => k.startsWith('abd_') || k.startsWith('scr_abd_'))),

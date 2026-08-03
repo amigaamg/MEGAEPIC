@@ -369,7 +369,7 @@ export const JOURNEYS: Record<JourneyId, JourneyDefinition> = {
     id: 'system_operations', label: 'System Operations', description: 'Automated system operations',
     actors: ['system', 'developer'],
     entryPoint: 'monitoring',
-    completionCriteria: [],
+    completionCriteria: ['system_healthy', 'alerts_acknowledged'],
     phases: [
       { id: 'monitoring', label: 'Monitoring', description: 'System health monitoring', required: true, dependsOn: [], minCompletion: 0, sections: ['health', 'alerts', 'telemetry'] },
       { id: 'maintenance', label: 'Maintenance', description: 'System maintenance', required: false, dependsOn: ['monitoring'], minCompletion: 0, sections: ['backup', 'update', 'cleanup'] },
@@ -379,7 +379,7 @@ export const JOURNEYS: Record<JourneyId, JourneyDefinition> = {
     id: 'finance_portal', label: 'Finance Portal', description: 'Finance and billing operations',
     actors: ['finance_officer', 'administrator'],
     entryPoint: 'dashboard',
-    completionCriteria: [],
+    completionCriteria: ['billing_reconciled', 'claims_submitted'],
     phases: [
       { id: 'dashboard', label: 'Dashboard', description: 'Finance dashboard', required: true, dependsOn: [], minCompletion: 0, sections: ['billing', 'insurance', 'reports'] },
       { id: 'claims', label: 'Claims', description: 'Insurance claims management', required: false, dependsOn: ['dashboard'], minCompletion: 0, sections: ['submissions', 'tracking', 'appeals'] },
@@ -389,7 +389,7 @@ export const JOURNEYS: Record<JourneyId, JourneyDefinition> = {
     id: 'executive_dashboard', label: 'Executive Dashboard', description: 'Executive hospital leadership',
     actors: ['hospital_ceo', 'administrator'],
     entryPoint: 'overview',
-    completionCriteria: [],
+    completionCriteria: ['report_reviewed', 'compliance_confirmed'],
     phases: [
       { id: 'overview', label: 'Overview', description: 'Executive overview', required: true, dependsOn: [], minCompletion: 0, sections: ['analytics', 'operations', 'compliance'] },
       { id: 'reports', label: 'Reports', description: 'Executive reports', required: false, dependsOn: ['overview'], minCompletion: 0, sections: ['financial', 'clinical', 'quality'] },

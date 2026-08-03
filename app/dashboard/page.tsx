@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Calendar, Clock, Users, Pill, FlaskConical, Scan, FileText, LogOut, Activity, Bell, TrendingUp, BarChart3, UserCog, Settings, Menu, ChevronRight, CheckCircle, XCircle, PlusCircle, UserPlus } from 'lucide-react';
 import { can } from '@/lib/amexan';
+import { resolveWorkspaceGate } from '@/lib/amexan/workspace/WorkspaceResolutionEngine';
 
 const C = {
   navy: 'var(--sky-800)',
@@ -38,14 +39,28 @@ const S = {
 const ICONS: Record<string, any> = { Pill, FlaskConical, Scan, FileText, LogOut, Activity, Calendar, Users, Bell, TrendingUp, BarChart3, UserCog, Settings, AlertTriangle, ArrowRight, Clock, CheckCircle, XCircle, PlusCircle, UserPlus, ChevronRight, Menu };
 
 export default function DashboardPage() {
-  const { session, dashboard, can: canAccess, loading, user, logout, needsToCompleteRegistration } = useAuth();
+  const { session, dashboard, can: canAccess, loading, user, logout, needsToCompleteRegistration, needsEmailVerification, workspace, registrationStep, workspaceChoice, switchOrganization } = useAuth();
   const router = useRouter();
 
+  // CR-WS-001: the completeness gate is authoritative. It decides whether a
+  // dashboard may render ('ready'), the actor must choose a workspace
+  // ('choose_workspace'), or onboarding must resume ('onboarding').
+  const gate = useMemo(
+    () => resolveWorkspaceGate(workspace, { registrationStep, workspaceChoice }),
+    [workspace, registrationStep, workspaceChoice]
+  );
+
   useEffect(() => {
-    if (!loading && needsToCompleteRegistration) {
-      router.push('/register');
+    if (!loading) {
+      if (gate.type === 'onboarding') {
+        router.push('/register/constitution');
+      } else if (gate.type === 'ready' && needsToCompleteRegistration) {
+        router.push('/register/constitution');
+      } else if (needsEmailVerification) {
+        router.push('/verify');
+      }
     }
-  }, [loading, needsToCompleteRegistration, router]);
+  }, [loading, gate, needsToCompleteRegistration, needsEmailVerification, router]);
 
   const activeSection = useMemo(() => {
     if (!dashboard || dashboard.sections.length === 0) return null;
@@ -71,6 +86,70 @@ export default function DashboardPage() {
           <p style={{ fontSize: 16, fontWeight: 600, color: C.navy }}>Not signed in</p>
           <button onClick={() => router.push('/login')} style={{ marginTop: 12, ...S.btn(C.sky) }}>
             Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Book XV WS-009: multiple memberships, none active — present "Choose Workspace"
+  // instead of a dashboard. Never fabricate a default workspace.
+  if (gate.type === 'choose_workspace') {
+    return (
+      <div style={S.page}>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');`}</style>
+        <div style={{ maxWidth: 520, width: '100%', margin: 'auto', padding: 32 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+            <span style={S.logoText}>AMEXAN</span>
+          </div>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: C.navy, margin: '0 0 8px' }}>Choose your workspace</h1>
+          <p style={{ fontSize: 13, color: C.textLight, margin: '0 0 24px', lineHeight: 1.6 }}>
+            You are a member of one or more organizations. Select one to open its workspace dashboard. You can switch anytime without signing in again (WS-010).
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {(workspace?.memberships || []).map(m => (
+              <button
+                key={m.id || m.organizationId}
+                onClick={async () => {
+                  await switchOrganization(m.organizationId);
+                  router.push('/dashboard');
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
+                  padding: '16px 18px', borderRadius: 12,
+                  background: C.white, border: `1px solid ${C.border}`,
+                  cursor: 'pointer', fontFamily: "'Inter', system-ui, sans-serif",
+                }}
+              >
+                <div style={{
+                  width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+                  background: C.skyLight, color: C.sky,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 16, fontWeight: 700,
+                }}>
+                  {(m.organizationName || '?').charAt(0).toUpperCase()}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{m.organizationName}</div>
+                  {m.roleName && (
+                    <div style={{ fontSize: 11, color: C.textLight, marginTop: 2 }}>{m.roleName}</div>
+                  )}
+                </div>
+                <ChevronRight size={16} color={C.textLight} />
+              </button>
+            ))}
+            {(!workspace?.memberships || workspace.memberships.length === 0) && (
+              <div style={{ padding: '20px 0', textAlign: 'center', fontSize: 12, color: C.textLight }}>
+                No memberships found. Please contact your organization admin.
+              </div>
+            )}
+          </div>
+          <button
+            onClick={() => router.push('/register/constitution')}
+            style={{ marginTop: 20, width: '100%', ...S.btnO }}
+          >
+            <ArrowRight size={14} />
+            Set up a new workspace
           </button>
         </div>
       </div>

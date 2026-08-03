@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { auth } from '@/lib/firebase'
 import { sendSignInLinkToEmail } from 'firebase/auth'
+import { MailCheck } from 'lucide-react'
 
 export default function MagicLinkForm() {
   const [email, setEmail] = useState('')
@@ -45,7 +46,9 @@ export default function MagicLinkForm() {
           border: '1px solid var(--sky-200)',
           textAlign: 'center',
         }}>
-          <div style={{ fontSize: 32, marginBottom: 12 }}>📧</div>
+          <div style={{ fontSize: 32, marginBottom: 12 }}>
+            <MailCheck size={32} style={{ color: 'var(--primary)' }} aria-hidden="true" />
+          </div>
           <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', margin: '0 0 8px' }}>
             Check your email
           </p>

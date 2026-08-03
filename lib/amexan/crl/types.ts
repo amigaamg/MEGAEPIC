@@ -28,6 +28,7 @@ export type RuleCategory =
   | 'SYS'    // System rules
   | 'ACT'    // Context activation rules
   | 'SPE'    // Specialty rules
+  | 'ordering' | 'priority' | 'context' | 'visibility' | 'contraindication' | 'activation'
   ;
 
 export interface RuleIdentity {

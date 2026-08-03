@@ -17,8 +17,6 @@ export interface UseDeptStatsResult {
   deptStats: Map<string, { active: number; today: number }>;
 }
 
-const ORG_ID = 'telemed-a98cf';
-
 function getTodayStart(): number {
   const d = new Date();
   d.setHours(0, 0, 0, 0);

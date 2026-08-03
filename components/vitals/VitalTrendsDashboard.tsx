@@ -8,6 +8,7 @@ import {
 } from 'recharts'
 import { listenVitals, computeVitalTrends, computeNEWS2, getNEWS2Risk } from '@/lib/clinical/vitals/vitalSignsEngine'
 import type { VitalReading, VitalTrend } from '@/lib/clinical/vitals/vitalSignsEngine'
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext'
 
 interface Props {
   deptId: string
@@ -18,7 +19,7 @@ interface Props {
   maxReadings?: number
 }
 
-export function VitalTrendsDashboard({ deptId, unitId, encounterId, patientId, orgId = 'telemed-a98cf', maxReadings = 48 }: Props) {
+export function VitalTrendsDashboard({ deptId, unitId, encounterId, patientId, orgId = getActiveOrganizationId() || '', maxReadings = 48 }: Props) {
   const [vitals, setVitals] = useState<VitalReading[]>([])
   const [selectedParam, setSelectedParam] = useState<string | null>(null)
 

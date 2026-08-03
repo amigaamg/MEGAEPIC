@@ -15,7 +15,7 @@ import {
 
 export interface TabDefinition {
   id: string;
-  icon: string;
+  icon: React.ReactNode;
   label: string;
   badge?: number;
 }

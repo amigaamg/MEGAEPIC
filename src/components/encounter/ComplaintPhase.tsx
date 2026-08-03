@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useMemo } from 'react';
 import { useEncounter } from '@/lib/amexan/encounter';
+import { parseClinicalConversation, applyConversationToState } from '@/lib/amexan/encounter';
 import type { SymptomId, StructuredSymptom } from '@/lib/amexan/encounter/encounterState';
 
 const SUGGESTED_COMPLAINTS = [
@@ -43,21 +44,51 @@ interface ComplaintPhaseProps {
 }
 
 export function ComplaintPhase({ onComplete }: ComplaintPhaseProps) {
-  const { state, setChiefComplaint, activateSymptom } = useEncounter();
+  const { state, setChiefComplaint, activateSymptom, dispatch, markAbsent } = useEncounter();
   const [complaint, setComplaint] = useState(state.chiefComplaint.text || '');
   const [duration, setDuration] = useState(state.chiefComplaint.duration || '');
   const [severity, setSeverity] = useState(state.chiefComplaint.severity || 5);
   const [customMode, setCustomMode] = useState(false);
 
+  const isExactSuggestion = useMemo(() => SUGGESTED_COMPLAINTS.includes(complaint.trim()), [complaint]);
+
   const handleSave = () => {
     if (!complaint.trim()) return;
-    setChiefComplaint(complaint, duration, severity);
 
-    // Auto-activate symptom schema based on chief complaint
-    // Only set present:true — leave all fields undefined so the question engine asks them
-    const symptomId = COMPLAINT_TO_SYMPTOM[complaint];
-    if (symptomId && !state.symptoms[symptomId]) {
-      activateSymptom({ id: symptomId, present: true } as StructuredSymptom);
+    // Free-text entry → run the conversation parser so structured symptoms
+    // (with onset/duration/character/etc.) are extracted automatically.
+    if (customMode || !isExactSuggestion) {
+      const parsed = parseClinicalConversation(complaint);
+      const applied = applyConversationToState(state, parsed);
+
+      for (const [id, symptom] of Object.entries(applied.symptoms)) {
+        const existing = Object.prototype.hasOwnProperty.call(state.symptoms, id);
+        dispatch({
+          type: existing ? 'UPDATE_SYMPTOM' : 'ACTIVATE_SYMPTOM',
+          payload: symptom,
+        });
+      }
+      for (const deniedId of applied.denials) {
+        markAbsent(deniedId);
+      }
+      if (applied.chiefComplaint) {
+        setChiefComplaint(
+          applied.chiefComplaint.text,
+          applied.chiefComplaint.duration || '',
+          applied.chiefComplaint.severity || 0,
+        );
+      } else {
+        setChiefComplaint(complaint, duration, severity);
+      }
+    } else {
+      setChiefComplaint(complaint, duration, severity);
+
+      // Auto-activate symptom schema based on chief complaint
+      // Only set present:true — leave all fields undefined so the question engine asks them
+      const symptomId = COMPLAINT_TO_SYMPTOM[complaint];
+      if (symptomId && !state.symptoms[symptomId]) {
+        activateSymptom({ id: symptomId, present: true } as StructuredSymptom);
+      }
     }
 
     if (onComplete) onComplete();
@@ -87,7 +118,7 @@ export function ComplaintPhase({ onComplete }: ComplaintPhaseProps) {
             value={complaint}
             onChange={(e) => setComplaint(e.target.value)}
             className="w-full px-3 py-2 border rounded-lg text-sm"
-            placeholder="Enter the presenting complaint..."
+            placeholder="e.g. 3 days of left lower quadrant abdominal pain, worse after eating, no vomiting"
           />
         ) : (
           <div className="flex flex-wrap gap-2">

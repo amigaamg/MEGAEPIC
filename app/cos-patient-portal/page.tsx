@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { BarChart3, Clock, Target, BookOpen, Search, FlaskConical, Link, Brain, ClipboardList, PenSquare, Pill, Radio, DoorOpen, Calendar, Dna, FileText, TrendingUp, Thermometer, User, Stethoscope, Home, Bug, Apple, Droplets, Scan, RefreshCw, Building2, CheckCircle, Bed, Bell, AlertTriangle, Users, Database, Star, Lightbulb, Inbox, Heart } from 'lucide-react';
 
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -318,13 +319,13 @@ const monitoringData = [
 ];
 
 const documentsData = [
-  { name: "Admission Note", date: "Day 1, 08:30", status: "signed", icon: "📄" },
-  { name: "Ward Round Note 1", date: "Day 1, 10:00", status: "signed", icon: "📝" },
-  { name: "Ward Round Note 2", date: "Day 2, 09:00", status: "signed", icon: "📝" },
-  { name: "Blood Transfusion Record", date: "Day 1, 10:15", status: "signed", icon: "🩸" },
-  { name: "Progress Note", date: "Day 3, 08:00", status: "signed", icon: "📋" },
-  { name: "Nursing Handover", date: "Day 3, 07:00", status: "signed", icon: "👩‍⚕️" },
-  { name: "Discharge Summary", date: "In progress", status: "draft", icon: "📄" },
+  { name: "Admission Note", date: "Day 1, 08:30", status: "signed", icon: <FileText size={20} /> },
+  { name: "Ward Round Note 1", date: "Day 1, 10:00", status: "signed", icon: <PenSquare size={20} /> },
+  { name: "Ward Round Note 2", date: "Day 2, 09:00", status: "signed", icon: <PenSquare size={20} /> },
+  { name: "Blood Transfusion Record", date: "Day 1, 10:15", status: "signed", icon: <Droplets size={20} /> },
+  { name: "Progress Note", date: "Day 3, 08:00", status: "signed", icon: <ClipboardList size={20} /> },
+  { name: "Nursing Handover", date: "Day 3, 07:00", status: "signed", icon: <Stethoscope size={20} /> },
+  { name: "Discharge Summary", date: "In progress", status: "draft", icon: <FileText size={20} /> },
 ];
 
 const assessmentData = [
@@ -391,32 +392,32 @@ export default function CosPatientPortal() {
 
   const navSections = [
     { group: "ENCOUNTER", items: [
-      { id: "summary", label: "Summary", icon: "📊" },
-      { id: "timeline", label: "Timeline", icon: "⏱" },
-      { id: "problems", label: "Problems", icon: "🎯" },
+      { id: "summary", label: "Summary", icon: <BarChart3 size={12} /> },
+      { id: "timeline", label: "Timeline", icon: <Clock size={12} /> },
+      { id: "problems", label: "Problems", icon: <Target size={12} /> },
     ]},
     { group: "DATA CAPTURE", items: [
-      { id: "history", label: "History", icon: "📖" },
-      { id: "examination", label: "Examination", icon: "🔍" },
-      { id: "investigations", label: "Investigations", icon: "🧪" },
+      { id: "history", label: "History", icon: <BookOpen size={12} /> },
+      { id: "examination", label: "Examination", icon: <Search size={12} /> },
+      { id: "investigations", label: "Investigations", icon: <FlaskConical size={12} /> },
     ]},
     { group: "INTELLIGENCE", items: [
-      { id: "evidence", label: "Evidence Graph", icon: "🔗" },
-      { id: "reasoning", label: "Clinical Reasoning", icon: "🧠" },
-      { id: "diagnosis", label: "Diagnosis", icon: "🎯" },
-      { id: "assessment", label: "Assessment", icon: "📋" },
+      { id: "evidence", label: "Evidence Graph", icon: <Link size={12} /> },
+      { id: "reasoning", label: "Clinical Reasoning", icon: <Brain size={12} /> },
+      { id: "diagnosis", label: "Diagnosis", icon: <Target size={12} /> },
+      { id: "assessment", label: "Assessment", icon: <ClipboardList size={12} /> },
     ]},
     { group: "MANAGEMENT", items: [
-      { id: "orders", label: "Orders", icon: "📝" },
-      { id: "medications", label: "Medications", icon: "💊" },
-      { id: "monitoring", label: "Monitoring", icon: "📡" },
+      { id: "orders", label: "Orders", icon: <PenSquare size={12} /> },
+      { id: "medications", label: "Medications", icon: <Pill size={12} /> },
+      { id: "monitoring", label: "Monitoring", icon: <Radio size={12} /> },
     ]},
     { group: "OUTPUT", items: [
-      { id: "disposition", label: "Disposition", icon: "🚪" },
-      { id: "followup", label: "Follow-Up", icon: "📅" },
-      { id: "learning", label: "Learning", icon: "🧬" },
-      { id: "documents", label: "Documents", icon: "📄" },
-      { id: "analytics", label: "Analytics", icon: "📈" },
+      { id: "disposition", label: "Disposition", icon: <DoorOpen size={12} /> },
+      { id: "followup", label: "Follow-Up", icon: <Calendar size={12} /> },
+      { id: "learning", label: "Learning", icon: <Dna size={12} /> },
+      { id: "documents", label: "Documents", icon: <FileText size={12} /> },
+      { id: "analytics", label: "Analytics", icon: <TrendingUp size={12} /> },
     ]},
   ];
 
@@ -426,7 +427,7 @@ export default function CosPatientPortal() {
         return (
           <div className="summary-grid">
             <div className="summary-card highlight full">
-              <div className="summary-label">📋 Today's Clinical Summary</div>
+              <div className="summary-label"><ClipboardList size={13} className="inline-block" /> Today's Clinical Summary</div>
               <div className="summary-text">
                 Grace M., 28F, admitted Day 1 with Severe Malaria (P. falciparum) and Severe Anemia (Hb 6.8).
                 Overnight improvement — fever resolved (37.1°C), eating tolerated. Transfusion ongoing (1 unit PRBC).
@@ -434,7 +435,7 @@ export default function CosPatientPortal() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">🎯 Active Problems</div>
+              <div className="summary-label"><Target size={13} className="inline-block" /> Active Problems</div>
               {activeProblems.filter(p => p.status === "active").map((p, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", fontSize: 11 }}>
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--amber)", flexShrink: 0 }} />
@@ -444,7 +445,7 @@ export default function CosPatientPortal() {
               ))}
             </div>
             <div className="summary-card">
-              <div className="summary-label">🌡️ Latest Vitals</div>
+              <div className="summary-label"><Thermometer size={13} className="inline-block" /> Latest Vitals</div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
                 {[["Temp", "37.1°C", "var(--green)"], ["HR", "88 bpm", "var(--green)"], ["BP", "110/70", "var(--green)"], ["RR", "18/min", "var(--green)"], ["SpO₂", "97%", "var(--green)"], ["Hb", "8.2 g/dL", "var(--amber)"]].map((v, i) => (
                   <div key={i} style={{ padding: 8, border: "1px solid var(--f200)", borderRadius: 6, textAlign: "center" }}>
@@ -455,7 +456,7 @@ export default function CosPatientPortal() {
               </div>
             </div>
             <div className="summary-card full" style={{ background: "var(--s50)", borderColor: "var(--s200)" }}>
-              <div className="summary-label" style={{ color: "var(--s600)" }}>📋 Current Plan</div>
+              <div className="summary-label" style={{ color: "var(--s600)" }}><ClipboardList size={13} className="inline-block" /> Current Plan</div>
               <div className="summary-text" style={{ fontSize: 11 }}>
                 ✓ Continue IV Artesunate 2.4mg/kg 12hrly (7 doses)<br />
                 ✓ Complete blood transfusion (1 unit PRBC)<br />
@@ -463,8 +464,8 @@ export default function CosPatientPortal() {
                 ✓ Vital signs 4hrly<br />
                 ✓ Repeat Hb at 24h post-transfusion<br />
                 ✓ Monitor for bleeding, transfusion reaction<br />
-                ⌛ Step-down to oral when tolerating full diet<br />
-                ⌛ Consider discharge Day 4 if afebrile 48h
+                <Clock size={11} className="inline-block" /> Step-down to oral when tolerating full diet<br />
+                <Clock size={11} className="inline-block" /> Consider discharge Day 4 if afebrile 48h
               </div>
             </div>
           </div>
@@ -486,7 +487,7 @@ export default function CosPatientPortal() {
       case "problems":
         return (
           <div>
-            <div className="pp-section-title">🎯 Problem-Oriented Medical Record</div>
+            <div className="pp-section-title"><Target size={13} className="inline-block" /> Problem-Oriented Medical Record</div>
             {activeProblems.map((p, i) => (
               <div key={i} className="problem-item">
                 <span className={`problem-dot ${p.status}`} />
@@ -507,19 +508,19 @@ export default function CosPatientPortal() {
         return (
           <div className="summary-grid">
             <div className="summary-card">
-              <div className="summary-label">👤 Chief Complaint</div>
+              <div className="summary-label"><User size={11} /> Chief Complaint</div>
               <div className="summary-text">Fever for 3 days, chills, headache, vomiting</div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">⏱ History of Presenting Illness</div>
+              <div className="summary-label"><Clock size={13} className="inline-block" /> History of Presenting Illness</div>
               <div className="summary-text">Previously well. 3 days ago developed high-grade fever (39.2°C), associated with chills and rigors. Headache generalized, non-throbbing. Vomiting ×3 episodes, non-projectile. No convulsions. No cough, no diarrhea. No urinary symptoms. Had taken paracetamol with minimal relief.</div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">🩺 Past Medical History</div>
+              <div className="summary-label"><Stethoscope size={13} className="inline-block" /> Past Medical History</div>
               <div className="summary-text">No known chronic illnesses. No previous hospitalizations. No surgeries. No known drug allergies. Immunizations up to date.</div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">🏠 Social History</div>
+              <div className="summary-label"><Home size={11} /> Social History</div>
               <div className="summary-text">Lives in malaria-endemic area. Works as teacher. No smoking, no alcohol. Lives with husband and 2 children.</div>
             </div>
           </div>
@@ -545,7 +546,7 @@ export default function CosPatientPortal() {
       case "investigations":
         return (
           <div>
-            <div className="pp-section-title">🧪 Laboratory Results</div>
+            <div className="pp-section-title"><FlaskConical size={13} className="inline-block" /> Laboratory Results</div>
             <table className="data-table">
               <thead>
                 <tr>
@@ -577,7 +578,7 @@ export default function CosPatientPortal() {
         return (
           <div className="summary-grid">
             <div className="summary-card full highlight">
-              <div className="summary-label">🔗 Evidence Graph — Finding → Diagnosis Connections</div>
+              <div className="summary-label"><Link size={13} className="inline-block" /> Evidence Graph — Finding → Diagnosis Connections</div>
               <div className="evidence-canvas">
                 {evidenceNodes.map(n => (
                   <div key={n.id} className={`evidence-node ${n.type}`}
@@ -594,7 +595,7 @@ export default function CosPatientPortal() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">📊 Evidence Summary by Diagnosis</div>
+              <div className="summary-label"><BarChart3 size={13} className="inline-block" /> Evidence Summary by Diagnosis</div>
               {[
                 { diag: "Severe Malaria", count: 7, findings: ["Fever 39.2°C", "Chills & Rigors", "Headache", "Vomiting", "mRDT+", "Hb 6.8", "Thrombocytopenia"] },
                 { diag: "Severe Anemia", count: 4, findings: ["Hb 6.8", "Pallor ++", "Slow CRT >3s", "Hypotension"] },
@@ -620,14 +621,14 @@ export default function CosPatientPortal() {
         return (
           <div className="summary-grid">
             <div className="summary-card full highlight">
-              <div className="summary-label">🧠 Clinical Reasoning — Diagnostic Trace</div>
+              <div className="summary-label"><Brain size={13} className="inline-block" /> Clinical Reasoning — Diagnostic Trace</div>
               <div style={{marginTop:8}}>
                 {[
-                  { step: 1, icon: "📥", title: "Data Acquisition", detail: "History (fever 3d, chills, headache, vomiting) + Exam (pallor, CRT>3s, hypotension 90/60)" },
-                  { step: 2, icon: "🧪", title: "Test Ordering", detail: "mRDT → Positive (P. falciparum). CBC → Hb 6.8, Platelets 82. Blood culture → Pending." },
-                  { step: 3, icon: "🔗", title: "Evidence Linking", detail: "Fever + mRDT+ → Malaria. Hb 6.8 + Pallor → Severe Anemia. Criteria check: Hb <7, prostration → Severe Malaria" },
-                  { step: 4, icon: "📊", title: "Differential Weighting", detail: "Severe Malaria (94%) >> Bacterial Sepsis (15%) >> Leukemia (2%). Key discriminator: mRDT+ in endemic zone." },
-                  { step: 5, icon: "📋", title: "Guideline Application", detail: "WHO Severe Malaria 2023: IV Artesunate + Transfuse Hb<7 + Monitor parasitemia" },
+                  { step: 1, icon: <Inbox size={12} />, title: "Data Acquisition", detail: "History (fever 3d, chills, headache, vomiting) + Exam (pallor, CRT>3s, hypotension 90/60)" },
+                  { step: 2, icon: <FlaskConical size={12} />, title: "Test Ordering", detail: "mRDT → Positive (P. falciparum). CBC → Hb 6.8, Platelets 82. Blood culture → Pending." },
+                  { step: 3, icon: <Link size={12} />, title: "Evidence Linking", detail: "Fever + mRDT+ → Malaria. Hb 6.8 + Pallor → Severe Anemia. Criteria check: Hb <7, prostration → Severe Malaria" },
+                  { step: 4, icon: <BarChart3 size={12} />, title: "Differential Weighting", detail: "Severe Malaria (94%) >> Bacterial Sepsis (15%) >> Leukemia (2%). Key discriminator: mRDT+ in endemic zone." },
+                  { step: 5, icon: <ClipboardList size={12} />, title: "Guideline Application", detail: "WHO Severe Malaria 2023: IV Artesunate + Transfuse Hb<7 + Monitor parasitemia" },
                 ].map((s,i)=>(
                   <div key={i} style={{display:'flex',gap:12,padding:'10px 0',borderBottom:i<4?'1px solid var(--f100)':'none'}}>
                     <div style={{width:28,height:28,borderRadius:'50%',background:'var(--s100)',color:'var(--s600)',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>{s.icon}</div>
@@ -640,7 +641,7 @@ export default function CosPatientPortal() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">📊 Differential Diagnosis — Weighted</div>
+              <div className="summary-label"><BarChart3 size={13} className="inline-block" /> Differential Diagnosis — Weighted</div>
               <div style={{ marginTop: 8 }}>
                 {[
                   { name: "Severe Malaria", pct: 94, color: "var(--green)" },
@@ -660,7 +661,7 @@ export default function CosPatientPortal() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">📋 Guideline Applied: WHO Severe Malaria 2023</div>
+              <div className="summary-label"><ClipboardList size={13} className="inline-block" /> Guideline Applied: WHO Severe Malaria 2023</div>
               <div style={{display:'flex',flexDirection:'column',gap:4,marginTop:6}}>
                 {[
                   {rec:"IV Artesunate 2.4mg/kg IV at 0, 12, 24h then daily",status:"\u2713 Applied"},
@@ -683,9 +684,9 @@ export default function CosPatientPortal() {
         return (
           <div className="summary-grid">
             <div className="summary-card full highlight">
-              <div className="summary-label">🎯 Primary Diagnosis</div>
+              <div className="summary-label"><Target size={13} className="inline-block" /> Primary Diagnosis</div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 4 }}>
-                <span style={{ fontSize: 24 }}>🦟</span>
+                <span style={{ fontSize: 24 }}><Bug size={24} /></span>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 800, color: "var(--s800)" }}>Severe Malaria (P. falciparum)</div>
                   <div style={{ fontSize: 11, color: "var(--f500)" }}>ICD-10: B50.8 · WHO Severe Malaria Criteria Met · Confirmed by mRDT+</div>
@@ -693,7 +694,7 @@ export default function CosPatientPortal() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">📋 Associated Diagnoses</div>
+              <div className="summary-label"><ClipboardList size={13} className="inline-block" /> Associated Diagnoses</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 4 }}>
                 {[
                   { name: "Severe Anemia", code: "D64.8", status: "Active" },
@@ -716,7 +717,7 @@ export default function CosPatientPortal() {
         return (
           <div className="assessment-grid">
             <div className="summary-card full highlight" style={{marginBottom:4}}>
-              <div className="summary-label">📋 Problem-Oriented Assessment (SOAP)</div>
+              <div className="summary-label"><ClipboardList size={13} className="inline-block" /> Problem-Oriented Assessment (SOAP)</div>
               <div style={{fontSize:11,color:'var(--f500)',marginTop:2}}>Each active problem has a Subjective, Objective, Assessment, and Plan entry</div>
             </div>
             {assessmentData.map((a, i) => (
@@ -751,31 +752,31 @@ export default function CosPatientPortal() {
       case "orders":
         return (
           <div>
-            <div className="pp-section-title">📝 Universal Orders Engine — All Order Types</div>
+            <div className="pp-section-title"><PenSquare size={13} className="inline-block" /> Universal Orders Engine — All Order Types</div>
             {[
-              { category: "Medications", icon: "💊", items: medsData.filter(m => m.status === "active").map(m => ({ name: m.name, detail: `${m.route} · ${m.freq}`, status: m.status })) },
-              { category: "Investigations", icon: "🧪", items: [
+              { category: "Medications", icon: <Pill size={13} />, items: medsData.filter(m => m.status === "active").map(m => ({ name: m.name, detail: `${m.route} · ${m.freq}`, status: m.status })) },
+              { category: "Investigations", icon: <FlaskConical size={13} />, items: [
                 { name: "Repeat Hb", detail: "24h post-transfusion", status: "pending" },
                 { name: "Blood Culture (final)", detail: "48h incubation", status: "active" },
                 { name: "Malaria Smear", detail: "Day 3 clearance check", status: "pending" },
               ]},
-              { category: "Blood Products", icon: "🩸", items: [
+              { category: "Blood Products", icon: <Droplets size={13} />, items: [
                 { name: "PRBC 1 unit", detail: "Crossmatch compatible, transfusing", status: "active" },
               ]},
-              { category: "Imaging", icon: "🩻", items: [
+              { category: "Imaging", icon: <Scan size={13} />, items: [
                 { name: "Chest X-ray", detail: "Rule out pneumonia", status: "pending" },
               ]},
-              { category: "Diet & Nursing", icon: "🥗", items: [
+              { category: "Diet & Nursing", icon: <Apple size={13} />, items: [
                 { name: "High-protein diet", detail: "As tolerated", status: "active" },
                 { name: "Bed rest", detail: "Until Hb stable", status: "active" },
                 { name: "Pressure area care", detail: "2hrly turns", status: "active" },
               ]},
-              { category: "Monitoring", icon: "📡", items: [
+              { category: "Monitoring", icon: <Radio size={13} />, items: [
                 { name: "Hourly Vitals", detail: "BP/HR/Temp/RR", status: "active" },
                 { name: "Strict I/O Chart", detail: "Urine output q4h", status: "active" },
                 { name: "Bleeding Observations", detail: "4hrly", status: "active" },
               ]},
-              { category: "Therapy & Review", icon: "🔄", items: [
+              { category: "Therapy & Review", icon: <RefreshCw size={13} />, items: [
                 { name: "Physiotherapy review", detail: "Mobilise when stable", status: "pending" },
                 { name: "Infectious Disease review", detail: "If no improvement 48h", status: "pending" },
               ]},
@@ -800,7 +801,7 @@ export default function CosPatientPortal() {
       case "medications":
         return (
           <div>
-            <div className="pp-section-title">💊 Medication Administration Record</div>
+            <div className="pp-section-title"><Pill size={13} className="inline-block" /> Medication Administration Record</div>
             <table className="data-table">
               <thead>
                 <tr>
@@ -835,11 +836,11 @@ export default function CosPatientPortal() {
       case "monitoring":
         return (
           <div>
-            <div className="pp-section-title">📡 Monitoring Engine — Problem-Based</div>
+            <div className="pp-section-title"><Radio size={13} className="inline-block" /> Monitoring Engine — Problem-Based</div>
             <div className="monitor-grid">
               {monitoringData.map((m, i) => (
                 <div key={i} className="monitor-card">
-                  <div className="monitor-title">🎯 {m.problem}</div>
+                  <div className="monitor-title"><Target size={13} className="inline-block" /> {m.problem}</div>
                   {m.params.map((p, j) => (
                     <div key={j} className="monitor-param">
                       <span className="monitor-label">{p.label}</span>
@@ -855,35 +856,35 @@ export default function CosPatientPortal() {
       case "learning":
         return (
           <div>
-            <div className="pp-section-title">🧬 Learning Engine — Knowledge Extraction</div>
+            <div className="pp-section-title"><Dna size={13} className="inline-block" /> Learning Engine — Knowledge Extraction</div>
             <div className="learning-grid" style={{marginTop:0}}>
               <div className="learning-card">
-                <div className="learning-header">{'\uD83D\uDCCA'} Encounter as Knowledge</div>
+                <div className="learning-header"><BarChart3 size={13} /> Encounter as Knowledge</div>
                 <div className="learning-body">
                   <div className="learning-stat">
-                    <div className="learning-stat-icon blue">{'\uD83C\uDFD4\uFE0F'}</div>
+                    <div className="learning-stat-icon blue"><Database size={16} /></div>
                     <div className="learning-stat-label">Encounter ID</div>
                     <div className="learning-stat-value" style={{fontFamily:'monospace',fontSize:11}}>{learningData.encounter.id}</div>
                   </div>
                   <div className="learning-stat">
-                    <div className="learning-stat-icon blue">{'\uD83D\uDC65'}</div>
+                    <div className="learning-stat-icon blue"><Users size={16} /></div>
                     <div className="learning-stat-label">Patient Profile</div>
                     <div className="learning-stat-value">{learningData.encounter.age}{learningData.encounter.sex}</div>
                   </div>
                   <div className="learning-stat">
-                    <div className="learning-stat-icon green">{'\uD83D\uDEAA'}</div>
+                    <div className="learning-stat-icon green"><DoorOpen size={16} /></div>
                     <div className="learning-stat-label">Length of Stay</div>
                     <div className="learning-stat-value">{learningData.encounter.los_days} days</div>
                   </div>
                   <div className="learning-stat">
-                    <div className="learning-stat-icon amber">{'\uD83C\uDF1F'}</div>
+                    <div className="learning-stat-icon amber"><Star size={16} /></div>
                     <div className="learning-stat-label">Outcome</div>
                     <div className="learning-stat-value" style={{color:'var(--green)'}}>{learningData.encounter.outcome}</div>
                   </div>
                 </div>
               </div>
               <div className="learning-card">
-                <div className="learning-header">{'\uD83D\uDD0D'} Key Diagnostic Patterns</div>
+                <div className="learning-header"><Search size={13} /> Key Diagnostic Patterns</div>
                 <div className="learning-body">
                   {learningData.key_findings.map((kf, i) => (
                     <div key={i} className="learning-insight">
@@ -894,18 +895,18 @@ export default function CosPatientPortal() {
                 </div>
               </div>
               <div className="learning-card">
-                <div className="learning-header">{'\uD83E\uDDE0'} Reusable Clinical Patterns</div>
+                <div className="learning-header"><Brain size={13} /> Reusable Clinical Patterns</div>
                 <div className="learning-body">
                   {learningData.patterns.map((p, i) => (
                     <div key={i} className="learning-insight" style={{background:'var(--w)',borderColor:'var(--f200)'}}>
-                      <div className="learning-insight-title">{'\uD83D\uDCA1'} {p.pattern}</div>
+                      <div className="learning-insight-title"><Lightbulb size={13} /> {p.pattern}</div>
                       <div className="learning-insight-text">Frequency: <strong>{p.frequency}</strong> \u00B7 Source: {p.evidence}</div>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="learning-card">
-                <div className="learning-header">{'\uD83D\uDCDD'} Clinical Summary for Knowledge Base</div>
+                <div className="learning-header"><PenSquare size={13} /> Clinical Summary for Knowledge Base</div>
                 <div className="learning-body">
                   <div className="learning-insight" style={{background:'var(--s50)',borderColor:'var(--s200)'}}>
                     <div className="learning-insight-text">{learningData.summary}</div>
@@ -920,7 +921,7 @@ export default function CosPatientPortal() {
       case "documents":
         return (
           <div>
-            <div className="pp-section-title">📄 Documentation Engine</div>
+            <div className="pp-section-title"><FileText size={13} className="inline-block" /> Documentation Engine</div>
             <div className="doc-list">
               {documentsData.map((d, i) => (
                 <div key={i} className="doc-item">
@@ -940,14 +941,14 @@ export default function CosPatientPortal() {
         return (
           <div className="summary-grid">
             <div className="summary-card full highlight">
-              <div className="summary-label">🚪 Disposition Planning</div>
+              <div className="summary-label"><DoorOpen size={13} className="inline-block" /> Disposition Planning</div>
               <div style={{marginTop:4}}>
                 <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--f100)'}}>
-                  <span style={{fontSize:20}}>🏥</span>
+                  <span style={{fontSize:20}}><Building2 size={20} /></span>
                   <div><div style={{fontWeight:700}}>Current Status: Inpatient — Male Medical Ward</div><div style={{fontSize:11,color:'var(--f500)'}}>Bed 3 · Day 4 of planned 4-day stay</div></div>
                 </div>
                 <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--f100)'}}>
-                  <span style={{fontSize:20}}>✅</span>
+                  <span style={{fontSize:20}}><CheckCircle size={20} /></span>
                   <div><div style={{fontWeight:700}}>Discharge Criteria</div>
                     <div style={{fontSize:11,color:'var(--f500)',marginTop:2}}>
                       ✓ Afebrile 48h · ✓ Eating well · ✓ Hb stable (9.8) · ✓ Malaria smear negative<br />
@@ -956,7 +957,7 @@ export default function CosPatientPortal() {
                   </div>
                 </div>
                 <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0'}}>
-                  <span style={{fontSize:20}}>📋</span>
+                  <span style={{fontSize:20}}><ClipboardList size={20} /></span>
                   <div><div style={{fontWeight:700}}>Discharge Plan</div>
                     <div style={{fontSize:11,color:'var(--f500)',marginTop:2}}>
                       <strong>Destination:</strong> Home · <strong>Mode:</strong> Self-discharge · <strong>Timing:</strong> Tomorrow AM (Day 4)<br />
@@ -968,7 +969,7 @@ export default function CosPatientPortal() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">📄 Documents for Discharge</div>
+              <div className="summary-label"><FileText size={13} className="inline-block" /> Documents for Discharge</div>
               <div style={{display:'flex',flexDirection:'column',gap:6,marginTop:6}}>
                 {[
                   {name:'Discharge Summary',status:'Draft'},
@@ -1001,28 +1002,28 @@ export default function CosPatientPortal() {
         return (
           <div className="summary-grid">
             <div className="summary-card full highlight">
-              <div className="summary-label">📅 Follow-Up Plan</div>
+              <div className="summary-label"><Calendar size={13} className="inline-block" /> Follow-Up Plan</div>
               <div style={{marginTop:8}}>
                 <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--f100)'}}>
-                  <span style={{fontSize:20}}>📅</span>
+                  <span style={{fontSize:20}}><Calendar size={20} /></span>
                   <div><div style={{fontWeight:700}}>Review Appointment</div>
                     <div style={{fontSize:11,color:'var(--f500)'}}>Date: Day 11 (7 days post-discharge) · Clinic: Medical Outpatient · Provider: Dr. Kamau</div>
                   </div>
                 </div>
                 <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--f100)'}}>
-                  <span style={{fontSize:20}}>🧪</span>
+                  <span style={{fontSize:20}}><FlaskConical size={20} /></span>
                   <div><div style={{fontWeight:700}}>Pending Investigations at Follow-Up</div>
                     <div style={{fontSize:11,color:'var(--f500)'}}>Repeat Hb · Malaria smear · Blood culture (final result)</div>
                   </div>
                 </div>
                 <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--f100)'}}>
-                  <span style={{fontSize:20}}>💊</span>
+                  <span style={{fontSize:20}}><Pill size={20} /></span>
                   <div><div style={{fontWeight:700}}>Medication Adherence Monitoring</div>
                     <div style={{fontSize:11,color:'var(--f500)'}}>Oral Amoxicillin 500mg TDS × 5 days — Complete course</div>
                   </div>
                 </div>
                 <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0'}}>
-                  <span style={{fontSize:20}}>⚠️</span>
+                  <span style={{fontSize:20}}><AlertTriangle size={20} /></span>
                   <div><div style={{fontWeight:700}}>Red Flags — Return Immediately If</div>
                     <div style={{fontSize:11,color:'var(--red)',marginTop:2}}>Fever recurs · Bleeding · Severe headache · Pallor · Difficulty breathing</div>
                   </div>
@@ -1030,7 +1031,7 @@ export default function CosPatientPortal() {
               </div>
             </div>
             <div className="summary-card">
-              <div className="summary-label">📋 Post-Discharge Checklist</div>
+              <div className="summary-label"><ClipboardList size={13} className="inline-block" /> Post-Discharge Checklist</div>
               <div style={{display:'flex',flexDirection:'column',gap:4,marginTop:6,fontSize:11}}>
                 {[
                   {label:'Complete antibiotics course',done:false},
@@ -1053,15 +1054,15 @@ export default function CosPatientPortal() {
       case "analytics":
         return (
           <div>
-            <div className="pp-section-title">📈 Analytics Engine — Encounter & Population Intelligence</div>
+            <div className="pp-section-title"><TrendingUp size={13} className="inline-block" /> Analytics Engine — Encounter & Population Intelligence</div>
             <div className="analytics-grid">
               {[
-                { num: "4", label: "Length of Stay (days)", icon: "\uD83D\uDCC5", color: "blue" },
-                { num: "2", label: "Active Diagnoses", icon: "\uD83C\uDFAF", color: "green" },
-                { num: "3", label: "Active Orders", icon: "\uD83D\uDCDD", color: "purple" },
-                { num: "8", label: "Labs Collected", icon: "\uD83E\uDDEA", color: "amber" },
-                { num: "7", label: "Documents Generated", icon: "\uD83D\uDCC4", color: "blue" },
-                { num: "8", label: "Vital Signs Sets", icon: "\uD83C\uDF21\uFE0F", color: "green" },
+                { num: "4", label: "Length of Stay (days)", icon: <Calendar size={24} />, color: "blue" },
+                { num: "2", label: "Active Diagnoses", icon: <Target size={24} />, color: "green" },
+                { num: "3", label: "Active Orders", icon: <PenSquare size={24} />, color: "purple" },
+                { num: "8", label: "Labs Collected", icon: <FlaskConical size={24} />, color: "amber" },
+                { num: "7", label: "Documents Generated", icon: <FileText size={24} />, color: "blue" },
+                { num: "8", label: "Vital Signs Sets", icon: <Thermometer size={24} />, color: "green" },
               ].map((a, i) => (
                 <div key={i} className="analytic-card" style={a.color==='amber'?{background:'var(--s50)'}:{}}>
                   <div style={{fontSize:24,marginBottom:4}}>{a.icon}</div>
@@ -1072,7 +1073,7 @@ export default function CosPatientPortal() {
             </div>
             <div className="learning-grid" style={{marginTop:16}}>
               <div className="summary-card full">
-                <div className="summary-label">{'\uD83D\uDCC8'} Cost & Resource Utilization</div>
+                <div className="summary-label"><TrendingUp size={11} /> Cost & Resource Utilization</div>
                 <div className="assessment-section">
                   <div className="assessment-section-label">Estimated Cost Breakdown</div>
                   <div style={{fontSize:12,lineHeight:2}}>
@@ -1085,7 +1086,7 @@ export default function CosPatientPortal() {
                 </div>
               </div>
               <div className="summary-card full">
-                <div className="summary-label">{'\uD83D\uDCCA'} Outcome Metrics</div>
+                <div className="summary-label"><BarChart3 size={11} /> Outcome Metrics</div>
                 <div style={{display:'flex',flexDirection:'column',gap:6,marginTop:4}}>
                   {[
                     { label: "Time to Diagnosis", value: "2h 15m", detail: "From triage to definitive diagnosis", trend: "\u25BC faster than avg" },
@@ -1126,8 +1127,8 @@ export default function CosPatientPortal() {
           <div className="pp-brand">AMEXAN <span>Portal</span></div>
         </div>
         <div className="pp-right">
-          <button className="pp-btn outline">🔔 Alerts</button>
-          <button className="pp-btn primary">📝 Write Note</button>
+          <button className="pp-btn outline"><Bell size={12} /> Alerts</button>
+          <button className="pp-btn primary"><PenSquare size={13} className="inline-block" /> Write Note</button>
           <button className="pp-btn outline" onClick={() => window.history.back()}>Close</button>
         </div>
       </header>
@@ -1139,9 +1140,9 @@ export default function CosPatientPortal() {
           <div>
             <div className="pp-patient-name">Grace M.</div>
             <div className="pp-patient-meta">
-              <span>👤 28F</span>
-              <span>🛏️ Bed 3 · Male Medical Ward</span>
-              <span>📅 Admitted Day 1 (3 days ago)</span>
+              <span><User size={11} /> 28F</span>
+              <span><Bed size={11} /> Bed 3 · Male Medical Ward</span>
+              <span><Calendar size={13} className="inline-block" /> Admitted Day 1 (3 days ago)</span>
               <span className="pp-encounter-id">ENC-2026-0715-0342</span>
             </div>
           </div>

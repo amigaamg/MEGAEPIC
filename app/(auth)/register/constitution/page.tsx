@@ -112,8 +112,10 @@ const EMPLOYMENT_TYPES = [
 
 const COUNTRIES = [
   'Kenya', 'Uganda', 'Tanzania', 'Rwanda', 'Burundi', 'South Sudan',
-  'Ethiopia', 'Somalia', 'DR Congo', 'Nigeria', 'Ghana', 'South Africa',
-  'Egypt', 'Morocco', 'Other',
+  'Ethiopia', 'Somalia', 'Nigeria', 'Ghana', 'South Africa',
+  'Egypt', 'Morocco', 'United Kingdom', 'United States', 'Canada',
+  'India', 'Pakistan', 'Bangladesh', 'Philippines', 'Brazil',
+  'Germany', 'France', 'Australia', 'Other',
 ];
 
 function Field({ label, error, required, children }: { label: string; error?: string; required?: boolean; children: React.ReactNode }) {
@@ -161,7 +163,7 @@ function getInputStyle(hasError: boolean): React.CSSProperties {
 
 export default function ConstitutionRegisterPage() {
   const router = useRouter();
-  const { login, user, loading: authLoading, needsToCompleteRegistration, registrationStep: savedStep, session } = useAuth();
+  const { login, user, loading: authLoading, needsToCompleteRegistration, registrationStep: savedStep, session, refreshWorkspace } = useAuth();
 
   const [step, setStep] = useState<RegistrationStep>('identity');
   const [data, setData] = useState<RegistrationData>(DEFAULT_DATA);
@@ -208,14 +210,22 @@ export default function ConstitutionRegisterPage() {
   }
 
   useEffect(() => {
-    if (!authLoading && user && needsToCompleteRegistration && savedStep) {
-      const nextStep = savedStep as RegistrationStep;
+    if (!authLoading && user) {
+      // An authenticated user already has a Firebase account, so the identity
+      // step is already complete. Resume from a later step or from the
+      // professional step if the profile was quick-registered.
       setFirebaseUid(user.uid);
       setGeneratedAmxUid(session.identity?.uid || null);
-      if (nextStep !== 'identity') {
-        loadExistingData(user.uid, nextStep);
+
+      const resumedStep: RegistrationStep =
+        needsToCompleteRegistration && savedStep && savedStep !== 'identity'
+          ? (savedStep as RegistrationStep)
+          : 'professional';
+
+      if (resumedStep !== 'identity') {
+        loadExistingData(user.uid, resumedStep);
       }
-      setStep(nextStep);
+      setStep(resumedStep);
     }
     if (!authLoading) {
       setInitializing(false);
@@ -330,13 +340,26 @@ export default function ConstitutionRegisterPage() {
           gender: data.gender,
           nationality: data.nationality,
           nationalId: data.nationalId,
-          address: { country: data.nationality || 'Kenya', county: '' },
+          address: { country: data.nationality || '', county: '' },
         });
 
         await login(data.email.trim(), data.password);
         await saveProgress('professional');
         setStep('professional');
       } catch (err: any) {
+        if (err.code === 'auth/email-already-in-use') {
+          // The Firebase account already exists (interrupted registration).
+          // Sign in — onAuthStateChanged + this page's resume effect will
+          // continue from the saved registrationStep instead of dead-ending.
+          try {
+            await login(data.email.trim(), data.password);
+            showError('Welcome back! Continuing your registration...');
+            return;
+          } catch {
+            showError('An account with this email already exists. Try signing in with your password.');
+            return;
+          }
+        }
         const msg = err.code
           ? mapFirebaseError(err.code)
           : err.message?.includes('email')
@@ -376,14 +399,20 @@ export default function ConstitutionRegisterPage() {
         await saveProgress('organization_choice');
         setStep('organization_choice');
       } catch (err: any) {
-        showError('Failed to save professional profile. Please try again.');
+        // Provide more detailed error message
+        const errorMessage = err.code 
+          ? err.message 
+          : err.message?.includes('professional') || err.message?.includes('profile')
+            ? err.message
+            : 'Failed to save professional profile. Please try again.';
+        showError(errorMessage);
       } finally {
         setLoading(false);
       }
       return;
     }
 
-    if (step === 'organization_choice') {
+    if (step === 'organization_choice' || step === 'workspace_choice') {
       if (data.organizationChoice === 'create') {
         await saveProgress('organization_create');
         setStep('organization_create');
@@ -414,7 +443,7 @@ export default function ConstitutionRegisterPage() {
           type: data.organizationType!,
           level: data.organizationLevel || 'level_1',
           registrationNumber: data.organizationRegistrationNumber || '',
-          address: { country: 'Kenya', county: '' },
+          address: { country: data.nationality || '', county: '' },
           phone: data.phone,
           email: data.email,
           branches: [],
@@ -424,12 +453,12 @@ export default function ConstitutionRegisterPage() {
           ownedBy: generatedAmxUid as AmxUid,
           config: {
             documentHeader: { logoUrl: '', facilityName: data.organizationName!, facilityAddress: '', facilityPhone: data.phone, facilityEmail: data.email, headerTemplate: '', footerTemplate: '' },
-            branding: { primaryColor: '#2F80ED', secondaryColor: '#1a5bbf', accentColor: '#14b8a6', fontFamily: 'Inter' },
+            branding: { primaryColor: '#2F80ED', secondaryColor: '#1a5bbf', accentColor: '#2F80ED', fontFamily: 'Inter' },
             clinical: { defaultWards: [], defaultClinics: [], defaultTheatres: [], diagnosisCodeSystem: 'icd_10', medicationCodeSystem: 'local', labCodeSystem: 'local', imagingCodeSystem: 'local', enableTelemedicine: false, enableAI: true, enableResearch: false },
-            billing: { currency: 'KES', taxRate: 0, consultationFees: {}, bedCharges: {}, pharmacyMarkup: 0, labMarkup: 0, imagingMarkup: 0, insuranceAccepted: [], paymentMethods: ['cash', 'mpesa'] },
+            billing: { currency: 'USD', taxRate: 0, consultationFees: {}, bedCharges: {}, pharmacyMarkup: 0, labMarkup: 0, imagingMarkup: 0, insuranceAccepted: [], paymentMethods: ['cash', 'card', 'mpesa'] },
             integrations: { fhirEnabled: false, hl7Enabled: false, externalHmisEnabled: false, aiServicesEnabled: true, apiEnabled: false },
           },
-          license: { licenseNumber: data.organizationRegistrationNumber || '', licenseType: 'health_facility', issuingAuthority: 'MOH', issuedAt: Date.now(), expiresAt: Date.now() + 365 * 86400000, renewedAt: Date.now(), status: 'pending' },
+          license: { licenseNumber: data.organizationRegistrationNumber || '', licenseType: 'health_facility', issuingAuthority: 'Regulatory Authority', issuedAt: Date.now(), expiresAt: Date.now() + 365 * 86400000, renewedAt: Date.now(), status: 'pending' },
           pricingTier: 'free',
           createdAt: Date.now(),
           updatedAt: Date.now(),
@@ -520,6 +549,7 @@ export default function ConstitutionRegisterPage() {
         if (firebaseUid) {
           await updateDoc(doc(db, 'users', firebaseUid), {
             registrationStep: 'complete',
+            workspaceChoice: data.organizationChoice === 'none' ? 'individual' : 'organization',
             updatedAt: serverTimestamp(),
           });
         }
@@ -535,6 +565,7 @@ export default function ConstitutionRegisterPage() {
 
   function handleBack() {
     if (step === 'professional') setStep('identity');
+    else if (step === 'workspace_choice') setStep('professional');
     else if (step === 'organization_choice') setStep('professional');
     else if (step === 'organization_create') setStep('organization_choice');
     else if (step === 'organization_join') setStep('organization_choice');
@@ -712,7 +743,7 @@ export default function ConstitutionRegisterPage() {
           <div className="grid grid-cols-2 gap-3">
             <Field label="Professional License Number" error={errors.licenseNumber}>
               <input style={getInputStyle(!!errors.licenseNumber)} type="text" value={data.licenseNumber ?? ''}
-                onChange={e => update({ licenseNumber: e.target.value })} placeholder="KMPDC / Council Number" />
+                onChange={e => update({ licenseNumber: e.target.value })} placeholder="License / Council Number" />
             </Field>
             <Field label="Council Registration Number" error={errors.councilNumber}>
               <input style={getInputStyle(!!errors.councilNumber)} type="text" value={data.councilNumber ?? ''}
@@ -733,8 +764,8 @@ export default function ConstitutionRegisterPage() {
         </div>
       )}
 
-      {/* ══════ STEP: ORGANIZATION CHOICE ══════ */}
-      {step === 'organization_choice' && (
+      {/* ══════ STEP: ORGANIZATION / WORKSPACE CHOICE ══════ */}
+      {(step === 'organization_choice' || step === 'workspace_choice') && (
         <div className="space-y-3" role="radiogroup" aria-label="Organization preference">
           {[
             { value: 'none', title: 'Individual Practice', desc: 'Work independently without an organization' },
@@ -895,7 +926,10 @@ export default function ConstitutionRegisterPage() {
       )}
 
       {isLast && (
-        <button onClick={() => router.push('/dashboard')}
+        <button onClick={async () => {
+          await refreshWorkspace?.();
+          router.push('/dashboard');
+        }}
           style={{
             width: '100%', height: 48, borderRadius: 'var(--radius-md)', border: 'none',
             background: 'var(--primary)', color: 'white', fontSize: 14, fontWeight: 600,

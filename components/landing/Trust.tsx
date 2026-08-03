@@ -18,7 +18,7 @@ const itemAnim = {
 
 export default function Trust() {
   return (
-    <section style={{ background: '#0B1926' }}>
+    <section style={{ background: 'var(--sky-900)' }}>
       <div style={S.section}>
         <motion.div
           initial="hidden"
@@ -58,7 +58,7 @@ export default function Trust() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#6BB5FF',
+                    color: 'var(--sky-300)',
                     marginBottom: 14,
                   }}
                 >

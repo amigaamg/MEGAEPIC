@@ -190,15 +190,15 @@ export const JOURNEY_STEPS = [
 
 export const PRODUCTS: ProductItem[] = [
   { icon: <Stethoscope size={28} />, title: 'AMEXAN Clinical OS', desc: 'The doctor workspace with structured history, differential diagnosis, ward rounds, and clinical reasoning engine.', gradient: 'linear-gradient(135deg, #2F80ED, #1A6DD9)' },
-  { icon: <Smartphone size={28} />, title: 'AMEXAN Patient', desc: 'Personal health record, appointments, lab results, medications, telehealth, and secure messaging.', gradient: 'linear-gradient(135deg, #2ECC71, #27AE60)' },
-  { icon: <Video size={28} />, title: 'AMEXAN TeleHealth', desc: 'Virtual consultations, remote monitoring, e-prescriptions, and integrated follow-up care.', gradient: 'linear-gradient(135deg, #9B59B6, #8E44AD)' },
-  { icon: <GraduationCap size={28} />, title: 'AMEXAN Education', desc: 'Medical school curriculum, simulation, assessments, OSCE, and continuous professional development.', gradient: 'linear-gradient(135deg, #E67E22, #D35400)' },
-  { icon: <Microscope size={28} />, title: 'AMEXAN Research', desc: 'De-identified data, cohort builder, registry support, trial management, and AI dataset creation.', gradient: 'linear-gradient(135deg, #1ABC9C, #16A085)' },
-  { icon: <BarChart3 size={28} />, title: 'AMEXAN Analytics', desc: 'Population health dashboards, operational BI, clinical audit, and predictive analytics.', gradient: 'linear-gradient(135deg, #F39C12, #E67E22)' },
-  { icon: <Grid size={28} />, title: 'AMEXAN Marketplace', desc: 'Plugins, FHIR apps, regional modules, AI models, themes, and integration adapters.', gradient: 'linear-gradient(135deg, #E74C3C, #C0392B)' },
-  { icon: <Code size={28} />, title: 'AMEXAN API', desc: 'Open APIs, FHIR R4, SDKs, webhooks, and plugin framework for building on AMEXAN.', gradient: 'linear-gradient(135deg, #34495E, #2C3E50)' },
+  { icon: <Smartphone size={28} />, title: 'AMEXAN Patient', desc: 'Personal health record, appointments, lab results, medications, telehealth, and secure messaging.', gradient: 'linear-gradient(135deg, #60A5FA, #3B82F6)' },
+  { icon: <Video size={28} />, title: 'AMEXAN TeleHealth', desc: 'Virtual consultations, remote monitoring, e-prescriptions, and integrated follow-up care.', gradient: 'linear-gradient(135deg, #93C5FD, #60A5FA)' },
+  { icon: <GraduationCap size={28} />, title: 'AMEXAN Education', desc: 'Medical school curriculum, simulation, assessments, OSCE, and continuous professional development.', gradient: 'linear-gradient(135deg, #BFDCFF, #93C5FD)' },
+  { icon: <Microscope size={28} />, title: 'AMEXAN Research', desc: 'De-identified data, cohort builder, registry support, trial management, and AI dataset creation.', gradient: 'linear-gradient(135deg, #0EA5E9, #0284C7)' },
+  { icon: <BarChart3 size={28} />, title: 'AMEXAN Analytics', desc: 'Population health dashboards, operational BI, clinical audit, and predictive analytics.', gradient: 'linear-gradient(135deg, #3B82F6, #2563EB)' },
+  { icon: <Grid size={28} />, title: 'AMEXAN Marketplace', desc: 'Plugins, FHIR apps, regional modules, AI models, themes, and integration adapters.', gradient: 'linear-gradient(135deg, #1C68D1, #1E4FA8)' },
+  { icon: <Code size={28} />, title: 'AMEXAN API', desc: 'Open APIs, FHIR R4, SDKs, webhooks, and plugin framework for building on AMEXAN.', gradient: 'linear-gradient(135deg, #1E40AF, #1E3A8A)' },
   { icon: <Brain size={28} />, title: 'AMEXAN AI', desc: 'Clinical intelligence engine with knowledge graph, decision support, and AI-assisted clinical reasoning.', gradient: 'linear-gradient(135deg, #0284C7, #0369A1)' },
-  { icon: <Cloud size={28} />, title: 'AMEXAN Cloud', desc: 'Secure, scalable healthcare infrastructure with HIPAA-aligned hosting, disaster recovery, and offline support.', gradient: 'linear-gradient(135deg, #0F172A, #1E293B)' },
+  { icon: <Cloud size={28} />, title: 'AMEXAN Cloud', desc: 'Secure, scalable healthcare infrastructure with HIPAA-aligned hosting, disaster recovery, and offline support.', gradient: 'linear-gradient(135deg, #1E3A8A, #172554)' },
 ]
 
 export const ENGINES: EngineItem[] = [

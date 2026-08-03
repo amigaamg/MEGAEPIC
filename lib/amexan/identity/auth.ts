@@ -55,3 +55,7 @@ export async function verifyMFA(uid: AmxUid, code: string): Promise<AuthResult> 
   const token = `sess_${crypto.randomUUID()}`
   return { success: true, sessionToken: token, uid }
 }
+
+export function clearUserStore(): void {
+  Object.keys(fakeUsers).forEach(key => delete fakeUsers[key])
+}

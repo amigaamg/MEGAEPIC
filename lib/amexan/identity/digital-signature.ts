@@ -60,3 +60,8 @@ export function getSignatureChain(resourceId: string): DigitalSignature[] {
 export function getSignaturesByUser(uid: AmxUid, limit = 50): DigitalSignature[] {
   return signatures.filter(s => s.uid === uid).slice(-limit)
 }
+
+export function clearSignatures(): void {
+  signatures.length = 0
+  signatureChains.clear()
+}

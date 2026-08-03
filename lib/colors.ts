@@ -12,8 +12,12 @@ export const C = {
   navy: 'var(--sky-800)',
   text: 'var(--text-primary)',
   textLight: 'var(--text-muted)',
+  textMuted: 'var(--text-muted)',
   green: 'var(--green)',
   amber: 'var(--amber)',
   red: 'var(--red)',
   purple: 'var(--purple)',
+  surface: 'var(--surface-card)',
 };
+
+export default C;

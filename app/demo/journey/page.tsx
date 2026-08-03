@@ -9,6 +9,7 @@ import MedicationEvolutionMap, { buildTherapyTree } from '@/components/visual-in
 import PharmacyWallet from '@/components/visual-intelligence/PharmacyWallet';
 import PatientMobileJourney from '@/components/visual-intelligence/PatientMobileJourney';
 import LifetimeTherapeuticMemory from '@/components/visual-intelligence/LifetimeTherapeuticMemory';
+import { Activity, BarChart3, Pill, ClipboardList, GitBranch, Store, Smartphone, Brain, Droplets, Footprints, PenSquare, Syringe, Zap, TrendingUp, AlertTriangle, Trophy, Dna } from 'lucide-react';
 
 const PATIENT = { name: 'Marcus Chen', age: 55, diagnosis: 'Type 2 Diabetes Mellitus', mrn: 'MRN-44921' };
 
@@ -122,16 +123,16 @@ const inventoryItems = [
 ];
 
 const dailyTasks = [
-  { id: 't-1', time: '07:30', label: 'Check blood glucose', type: 'measurement' as const, detail: 'Fasting glucose', done: true, icon: '🩸' },
-  { id: 't-2', time: '08:00', label: 'Metformin ER 2000mg', type: 'medication' as const, detail: 'With breakfast', done: true, icon: '💊' },
-  { id: 't-3', time: '09:00', label: 'Morning walk', type: 'activity' as const, detail: '30 minutes moderate pace', done: true, icon: '🚶' },
-  { id: 't-4', time: '12:00', label: 'Check blood glucose', type: 'measurement' as const, detail: 'Pre-lunch', done: false, icon: '🩸' },
-  { id: 't-5', time: '14:00', label: 'Gabapentin 300mg', type: 'medication' as const, detail: 'Afternoon dose', done: false, icon: '💊' },
-  { id: 't-6', time: '18:00', label: 'Evening meal log', type: 'check-in' as const, detail: 'Record carbohydrate intake', done: false, icon: '📝' },
-  { id: 't-7', time: '20:00', label: 'Gabapentin 300mg', type: 'medication' as const, detail: 'With dinner', done: false, icon: '💊' },
-  { id: 't-8', time: '20:00', label: 'Metformin ER 2000mg', type: 'medication' as const, detail: 'With dinner', done: false, icon: '💊' },
-  { id: 't-9', time: '22:00', label: 'Tresiba 30U', type: 'medication' as const, detail: 'Bedtime injection', done: false, icon: '💉' },
-  { id: 't-10', time: '22:00', label: 'Atorvastatin 20mg', type: 'medication' as const, detail: 'Bedtime', done: false, icon: '💊' },
+  { id: 't-1', time: '07:30', label: 'Check blood glucose', type: 'measurement' as const, detail: 'Fasting glucose', done: true, icon: <Droplets size={14} /> },
+  { id: 't-2', time: '08:00', label: 'Metformin ER 2000mg', type: 'medication' as const, detail: 'With breakfast', done: true, icon: <Pill size={14} /> },
+  { id: 't-3', time: '09:00', label: 'Morning walk', type: 'activity' as const, detail: '30 minutes moderate pace', done: true, icon: <Footprints size={14} /> },
+  { id: 't-4', time: '12:00', label: 'Check blood glucose', type: 'measurement' as const, detail: 'Pre-lunch', done: false, icon: <Droplets size={14} /> },
+  { id: 't-5', time: '14:00', label: 'Gabapentin 300mg', type: 'medication' as const, detail: 'Afternoon dose', done: false, icon: <Pill size={14} /> },
+  { id: 't-6', time: '18:00', label: 'Evening meal log', type: 'check-in' as const, detail: 'Record carbohydrate intake', done: false, icon: <PenSquare size={14} /> },
+  { id: 't-7', time: '20:00', label: 'Gabapentin 300mg', type: 'medication' as const, detail: 'With dinner', done: false, icon: <Pill size={14} /> },
+  { id: 't-8', time: '20:00', label: 'Metformin ER 2000mg', type: 'medication' as const, detail: 'With dinner', done: false, icon: <Pill size={14} /> },
+  { id: 't-9', time: '22:00', label: 'Tresiba 30U', type: 'medication' as const, detail: 'Bedtime injection', done: false, icon: <Syringe size={14} /> },
+  { id: 't-10', time: '22:00', label: 'Atorvastatin 20mg', type: 'medication' as const, detail: 'Bedtime', done: false, icon: <Pill size={14} /> },
 ];
 
 export default function DiabeticJourneyDemo() {
@@ -148,14 +149,14 @@ export default function DiabeticJourneyDemo() {
   );
 
   const tabs = [
-    { id: 'timeline', label: '🧬 Timeline', icon: '🧬' },
-    { id: 'response', label: '📊 Response', icon: '📊' },
-    { id: 'schedule', label: '💊 Schedule', icon: '💊' },
-    { id: 'clinical', label: '📋 Clinical', icon: '📋' },
-    { id: 'evolution', label: '🌳 Evolution', icon: '🌳' },
-    { id: 'pharmacy', label: '🏪 Pharmacy', icon: '🏪' },
-    { id: 'mobile', label: '📱 Mobile', icon: '📱' },
-    { id: 'memory', label: '🧠 Memory', icon: '🧠' },
+    { id: 'timeline', label: 'Timeline', icon: <Activity size={12} /> },
+    { id: 'response', label: 'Response', icon: <BarChart3 size={12} /> },
+    { id: 'schedule', label: 'Schedule', icon: <Pill size={12} /> },
+    { id: 'clinical', label: 'Clinical', icon: <ClipboardList size={12} /> },
+    { id: 'evolution', label: 'Evolution', icon: <GitBranch size={12} /> },
+    { id: 'pharmacy', label: 'Pharmacy', icon: <Store size={12} /> },
+    { id: 'mobile', label: 'Mobile', icon: <Smartphone size={12} /> },
+    { id: 'memory', label: 'Memory', icon: <Brain size={12} /> },
   ];
 
   return (
@@ -188,7 +189,7 @@ export default function DiabeticJourneyDemo() {
                 10-Year Journey
               </div>
               <div className="px-2.5 py-1 rounded-full text-[9px] font-bold bg-[rgba(0,229,204,0.1)] border border-[rgba(0,229,204,0.2)] text-[var(--teal)]">
-                ⚡ Interactive Demo
+<Zap size={10} className="inline-block" /> Interactive Demo
               </div>
             </div>
           </div>
@@ -284,11 +285,11 @@ export default function DiabeticJourneyDemo() {
           <span className="font-bold text-[var(--teal)]">AMEXAN Clinical Summary</span>
         </div>
         <div className="flex gap-6">
-          <span>🧬 <strong className="text-[var(--text-secondary)]">Diagnosis:</strong> T2DM (2016)</span>
-          <span>💊 <strong className="text-[var(--text-secondary)]">Active Rx:</strong> 4</span>
-          <span>📈 <strong className="text-[var(--text-secondary)]">HbA1c Trend:</strong> 10.2% → 6.8%</span>
-          <span>⚠ <strong className="text-[var(--text-secondary)]">Complications:</strong> Neuropathy (mild)</span>
-          <span>🏆 <strong className="text-[var(--text-secondary)]">Status:</strong> Stable</span>
+          <span><Dna size={10} className="inline-block mr-0.5" /> <strong className="text-[var(--text-secondary)]">Diagnosis:</strong> T2DM (2016)</span>
+          <span><Pill size={10} className="inline-block mr-0.5" /> <strong className="text-[var(--text-secondary)]">Active Rx:</strong> 4</span>
+          <span><TrendingUp size={10} className="inline-block mr-0.5" /> <strong className="text-[var(--text-secondary)]">HbA1c Trend:</strong> 10.2% → 6.8%</span>
+          <span><AlertTriangle size={10} className="inline-block mr-0.5" /> <strong className="text-[var(--text-secondary)]">Complications:</strong> Neuropathy (mild)</span>
+          <span><Trophy size={10} className="inline-block mr-0.5" /> <strong className="text-[var(--text-secondary)]">Status:</strong> Stable</span>
         </div>
       </div>
     </AMEXANLayout>

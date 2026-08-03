@@ -1,7 +1,6 @@
-import { type AmxUid, type Session, type IdentityEvent } from './types'
+import { type AmxUid, type Session } from './types'
 
 const sessions = new Map<string, Session>()
-const eventLog: IdentityEvent[] = []
 
 export function createSession(uid: AmxUid, device: string, orgId?: string, deptId?: string, role?: string): Session {
   const session: Session = {
@@ -54,4 +53,22 @@ export function getSessionContext(sessionId: string): { orgId?: string; deptId?:
   const session = sessions.get(sessionId)
   if (!session || session.revoked) return null
   return { orgId: session.orgId, deptId: session.deptId, role: session.role }
+}
+
+/**
+ * Retrieve a session by its ID directly (without needing the owning uid).
+ */
+export function getSessionById(sessionId: string): Session | undefined {
+  return sessions.get(sessionId)
+}
+
+/**
+ * Revoke a session by its ID. Alias of {@link revokeSession}.
+ */
+export function getSessionByToken(sessionToken: string): Session | undefined {
+  return sessions.get(sessionToken)
+}
+
+export function clearSessionStore(): void {
+  sessions.clear()
 }

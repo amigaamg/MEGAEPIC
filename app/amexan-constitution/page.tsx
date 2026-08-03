@@ -1,5 +1,6 @@
 "use client";
 import { useState, useCallback } from "react";
+import { UserCircle, Stethoscope, Heart, Building, FlaskConical, Scan, Pill, ClipboardList, FileText, Database, BarChart3, Brain, Target, Activity, Clock, BookOpen, Calendar, Share2, Search, AlertTriangle, Eye, ArrowRight } from 'lucide-react'
 
 const CONSTITUTION_CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
@@ -200,24 +201,24 @@ export default function AmexanConstitution() {
   }, []);
 
   const constitution = [
-    { icon: "👤", label: "PATIENT" },
-    { icon: "🏥", label: "ENCOUNTER" },
-    { icon: "📖", label: "HISTORY" },
-    { icon: "🔍", label: "EXAMINATION" },
-    { icon: "🧪", label: "INVESTIGATIONS" },
-    { icon: "🔗", label: "EVIDENCE GRAPH" },
-    { icon: "🧠", label: "CLINICAL REASONING" },
-    { icon: "📋", label: "ASSESSMENT" },
-    { icon: "🎯", label: "DIAGNOSIS" },
-    { icon: "💊", label: "MANAGEMENT" },
-    { icon: "📝", label: "ORDERS" },
-    { icon: "📡", label: "MONITORING" },
-    { icon: "⏱", label: "TIMELINE" },
-    { icon: "📄", label: "DOCUMENTATION" },
-    { icon: "🚪", label: "DISPOSITION" },
-    { icon: "📅", label: "FOLLOW-UP" },
-    { icon: "📚", label: "LEARNING" },
-    { icon: "📊", label: "ANALYTICS" },
+    { icon: <UserCircle size={20} />, label: "PATIENT" },
+    { icon: <Building size={20} />, label: "ENCOUNTER" },
+    { icon: <FileText size={20} />, label: "HISTORY" },
+    { icon: <Search size={20} />, label: "EXAMINATION" },
+    { icon: <FlaskConical size={20} />, label: "INVESTIGATIONS" },
+    { icon: <Share2 size={20} />, label: "EVIDENCE GRAPH" },
+    { icon: <Brain size={20} />, label: "CLINICAL REASONING" },
+    { icon: <ClipboardList size={20} />, label: "ASSESSMENT" },
+    { icon: <Target size={20} />, label: "DIAGNOSIS" },
+    { icon: <Pill size={20} />, label: "MANAGEMENT" },
+    { icon: <ClipboardList size={20} />, label: "ORDERS" },
+    { icon: <Activity size={20} />, label: "MONITORING" },
+    { icon: <Clock size={20} />, label: "TIMELINE" },
+    { icon: <FileText size={20} />, label: "DOCUMENTATION" },
+    { icon: <ArrowRight size={20} />, label: "DISPOSITION" },
+    { icon: <Calendar size={20} />, label: "FOLLOW-UP" },
+    { icon: <BookOpen size={20} />, label: "LEARNING" },
+    { icon: <BarChart3 size={20} />, label: "ANALYTICS" },
   ];
 
   const engines = [
@@ -250,32 +251,32 @@ export default function AmexanConstitution() {
 
   const roles = [
     {
-      icon: "👨‍⚕️", name: "Doctor", question: "What do I need to do now?",
+      icon: <Stethoscope size={28} />, name: "Doctor", question: "What do I need to do now?",
       desc: "Ward round mode with bed-by-bed presentation, one-click decisions, auto-updating plans and notes. Never navigate modules — just review, decide, complete.",
       tasks: ["Ward Round", "Present", "Review", "Plan", "Sign Notes"]
     },
     {
-      icon: "👩‍⚕️", name: "Nurse", question: "What is due for this patient?",
+      icon: <Heart size={28} />, name: "Nurse", question: "What is due for this patient?",
       desc: "Task-oriented workflow. Medication round, vitals, fluid balance, monitoring orders, escalations. Patients appear in order of need.",
       tasks: ["Medication Round", "Vitals", "Fluid Balance", "Escalations"]
     },
     {
-      icon: "🧪", name: "Laboratory", question: "Which samples need attention?",
-      desc: "Specimen-based workflow. Received → Processing → Verified → Released. Critical alerts auto-notify clinicians.",
+      icon: <FlaskConical size={28} />, name: "Laboratory", question: "Which samples need attention?",
+      desc: "Specimen-based workflow. Received, Processing, Verified, Released. Critical alerts auto-notify clinicians.",
       tasks: ["Sample Tracking", "Result Entry", "QC Verification", "Critical Alerts"]
     },
     {
-      icon: "💊", name: "Pharmacy", question: "Is this order safe to dispense?",
+      icon: <Pill size={28} />, name: "Pharmacy", question: "Is this order safe to dispense?",
       desc: "Medication safety first. Interaction checks, allergy verification, stock status, dispensing, and administration tracking.",
       tasks: ["Verify", "Interactions", "Allergies", "Dispense", "Track"]
     },
     {
-      icon: "🩻", name: "Radiology", question: "What is the clinical question?",
+      icon: <Scan size={28} />, name: "Radiology", question: "What is the clinical question?",
       desc: "Every imaging request includes the clinical question, not just the study type. Supports meaningful reporting.",
       tasks: ["Prioritize", "Acquire", "Report", "Critical Findings"]
     },
     {
-      icon: "🏗️", name: "Administration", question: "How is the hospital running?",
+      icon: <Building size={28} />, name: "Administration", question: "How is the hospital running?",
       desc: "Real-time operational dashboard. Bed occupancy, waiting times, discharge planning, resource allocation.",
       tasks: ["Census", "Throughput", "Resources", "Reports"]
     },
@@ -333,8 +334,8 @@ export default function AmexanConstitution() {
           universal knowledge, and encounter-centered design that scales across every specialty,
           every department, and every hospital.
         </p>
-        <div className="cos-hero-tagline">
-          ⚕️ 18 Constitutional Layers · 5 Engines · 6 Roles · 6 Principles · International Standards
+        <div className="cos-hero-tagline" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          <Brain size={14} /> 18 Constitutional Layers · 5 Engines · 6 Roles · 6 Principles · International Standards
         </div>
       </section>
 
@@ -350,9 +351,11 @@ export default function AmexanConstitution() {
                 <span className="step-icon">{step.icon}</span>
                 {step.label}
               </div>
-              {i === 5 && (
+                  {i === 5 && (
                 <div className="constitution-divider">
-                  <span className="constitution-divider-label">🔽 DATA CAPTURE → INTELLIGENCE</span>
+                  <span className="constitution-divider-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <ArrowRight size={12} /> DATA CAPTURE TO INTELLIGENCE
+                  </span>
                 </div>
               )}
               {i < constitution.length - 1 && <div className="constitution-arrow">↓</div>}
@@ -409,7 +412,7 @@ export default function AmexanConstitution() {
 
         <div className="ward-round-preview">
           <div className="ward-round-header">
-            <h3>🏥 Male Medical Ward — Ward Round</h3>
+            <h3><Building size={18} /> Male Medical Ward — Ward Round</h3>
             <div className="ward-round-status">
               <span>{completedBeds.length} / {wardBeds.length} complete</span>
             </div>
@@ -486,7 +489,7 @@ export default function AmexanConstitution() {
         <h2>Ready to Experience the COS?</h2>
         <p>The Doctor Dashboard and Ward Round Mode are active. Walk through the constitution in practice.</p>
         <a href="/dashboard/doctor" className="dash-btn">
-          ⚕️ Enter Doctor Dashboard <span style={{fontSize:'20px'}}>→</span>
+          <Stethoscope size={18} /> Enter Doctor Dashboard <ArrowRight size={18} />
         </a>
       </section>
     </>

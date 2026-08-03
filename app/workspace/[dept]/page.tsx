@@ -9,6 +9,7 @@ import { DEPARTMENTS } from '@/lib/clinicalProtocols';
 import { ENCOUNTER_LABELS, CLINICAL_PATHWAYS } from '@/lib/encounterTypes';
 import { WORKSPACE_DATA, type UnitInfo, type DepartmentInfo } from '@/lib/workspaceData';
 import { getDiseasesForDept } from '@/lib/amexan/departments';
+import { AlertTriangle, Folder, ClipboardList, FileText, Users, BarChart3, Building2, BookOpen } from 'lucide-react';
 
 const CSS = (color: string) => `
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -169,7 +170,7 @@ export default function DepartmentPage() {
           <span className="back-btn" onClick={() => router.push('/workspace/departments')}>← All Departments</span>
           </nav>
           <div className="empty-state" style={{ maxWidth: 400, margin: '120px auto' }}>
-            <div style={{ fontSize: '2rem', marginBottom: 12 }}>⚠️</div>
+            <div style={{ marginBottom: 12 }}><AlertTriangle size={32} style={{ margin: '0 auto', display: 'block' }} /></div>
             <div style={{ color: '#E2E8F0', fontSize: '1rem', fontWeight: 600, marginBottom: 4 }}>Department Not Found</div>
             <div>&ldquo;{deptKey}&rdquo; does not exist.</div>
             <span className="back-btn" style={{ display: 'inline-flex', marginTop: 16 }} onClick={() => router.push('/workspace/departments')}>← All Departments</span>
@@ -216,23 +217,23 @@ export default function DepartmentPage() {
 
         <div className="content">
           <div className="quick-actions">
-            <span className="qa-btn patients" onClick={() => router.push('/patients')}>📁 Patient Records</span>
+            <span className="qa-btn patients" onClick={() => router.push('/patients')}><Folder size={14} /> Patient Records</span>
             <span className="qa-btn primary" onClick={() => {
               if (firstUnit) router.push(`/workspace/${deptKey}/${firstUnit.id}/${firstEncType}`);
             }}>New Clinical Entry</span>
             <span className="qa-btn" onClick={() => {
               if (firstUnit) router.push(`/workspace/${deptKey}/${firstUnit.id}/inpatient`);
-            }}>📋 Admit Patient</span>
+            }}><ClipboardList size={14} /> Admit Patient</span>
             <span className="qa-btn" onClick={() => {
               if (firstUnit) router.push(`/workspace/${deptKey}/${firstUnit.id}/operative_note`);
-            }}>📄 Operative Note</span>
+            }}><FileText size={14} /> Operative Note</span>
             <span className="qa-btn" onClick={() => {
               if (firstUnit) router.push(`/workspace/${deptKey}/${firstUnit.id}/emergency`);
-            }}>🚨 Trauma Activation</span>
+            }}><AlertTriangle size={14} /> Trauma Activation</span>
             <span className="qa-btn" onClick={() => {
               if (firstUnit) router.push(`/workspace/${deptKey}/${firstUnit.id}/mdt_review`);
-            }}>👥 MDT Review</span>
-            <span className="qa-btn" onClick={() => router.push(`/workspace/${deptKey}`)}>📊 Refresh</span>
+            }}><Users size={14} /> MDT Review</span>
+            <span className="qa-btn" onClick={() => router.push(`/workspace/${deptKey}`)}><BarChart3 size={14} /> Refresh</span>
           </div>
 
           <div className="section-label">
@@ -242,7 +243,7 @@ export default function DepartmentPage() {
 
           {units.length === 0 ? (
             <div className="empty-state" style={{ marginBottom: 24 }}>
-              <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>🏥</div>
+              <div style={{ marginBottom: 8 }}><Building2 size={20} style={{ margin: '0 auto', display: 'block' }} /></div>
               <div>No units configured for {deptInfo.label}</div>
               <div style={{ fontSize: '.6875rem', color: '#334155', marginTop: 4 }}>
                 Units will appear once the facility completes setup
@@ -302,7 +303,7 @@ export default function DepartmentPage() {
               </div>
             ) : (
               <div className="empty-state" style={{ marginBottom: '1rem' }}>
-                <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>📚</div>
+                <div style={{ marginBottom: 8 }}><BookOpen size={20} style={{ margin: '0 auto', display: 'block' }} /></div>
                 <div>No disease intelligence loaded for this department</div>
                 <div style={{ fontSize: '.6875rem', color: '#334155', marginTop: 4 }}>
                   Available for: PAED (13), IM (4), CARD (4), NEURO (3), OB (3), PSYCH (4)
@@ -318,7 +319,7 @@ export default function DepartmentPage() {
 
           {activeEncounters.length === 0 ? (
             <div className="empty-state">
-              <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>📋</div>
+              <div style={{ marginBottom: 8 }}><ClipboardList size={20} style={{ margin: '0 auto', display: 'block' }} /></div>
               <div>No active encounters in this department</div>
               <div style={{ fontSize: '.6875rem', color: '#334155', marginTop: 4 }}>
                 Start a new encounter or check back when patients are admitted

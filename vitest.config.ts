@@ -20,6 +20,7 @@ export default defineConfig({
       'components/**/*.test.tsx',
     ],
     exclude: ['node_modules', 'dist', '.next'],
+    setupFiles: ['lib/amexan/identity/__tests__/setup.ts'],
     testTimeout: 30000,
     reporters: ['verbose'],
   },

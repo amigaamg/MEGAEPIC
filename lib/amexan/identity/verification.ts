@@ -59,3 +59,7 @@ export function formatVerificationLevel(level: VerificationLevel): string {
   }
   return labels[level]
 }
+
+export function clearVerificationStore(): void {
+  userVerification.clear()
+}

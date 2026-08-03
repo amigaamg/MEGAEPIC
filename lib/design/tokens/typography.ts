@@ -1,0 +1,103 @@
+// AMEXAN Design Tokens - Typography
+// Constitutional Principle: One font family. One hierarchy.
+
+export const typographyTokens = {
+  display: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '64px',
+    fontWeight: '700',
+    lineHeight: '72px',
+    letterSpacing: '-0.02em',
+  },
+  hero: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '48px',
+    fontWeight: '600',
+    lineHeight: '56px',
+    letterSpacing: '-0.01em',
+  },
+  h1: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '40px',
+    fontWeight: '600',
+    lineHeight: '48px',
+    letterSpacing: '-0.005em',
+  },
+  h2: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '32px',
+    fontWeight: '600',
+    lineHeight: '40px',
+    letterSpacing: '0',
+  },
+  h3: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '24px',
+    fontWeight: '600',
+    lineHeight: '32px',
+    letterSpacing: '0',
+  },
+  h4: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '20px',
+    fontWeight: '500',
+    lineHeight: '28px',
+    letterSpacing: '0',
+  },
+  h5: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '16px',
+    fontWeight: '500',
+    lineHeight: '24px',
+    letterSpacing: '0',
+  },
+  h6: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '14px',
+    fontWeight: '500',
+    lineHeight: '20px',
+    letterSpacing: '0',
+  },
+  bodyLarge: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '20px',
+    fontWeight: '400',
+    lineHeight: '28px',
+    letterSpacing: '0',
+  },
+  body: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '16px',
+    fontWeight: '400',
+    lineHeight: '24px',
+    letterSpacing: '0',
+  },
+  bodySmall: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '14px',
+    fontWeight: '400',
+    lineHeight: '20px',
+    letterSpacing: '0',
+  },
+  caption: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '12px',
+    fontWeight: '400',
+    lineHeight: '16px',
+    letterSpacing: '0.02em',
+  },
+  label: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: '14px',
+    fontWeight: '500',
+    lineHeight: '20px',
+    letterSpacing: '0',
+  },
+  mono: {
+    fontFamily: 'Menlo, Monaco, Consolas, monospace',
+    fontSize: '14px',
+    fontWeight: '400',
+    lineHeight: '20px',
+    letterSpacing: '0',
+  },
+};

@@ -5,6 +5,57 @@ import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { generateRecoveryCode } from "@/lib/amexan";
+import { doc, getDoc, setDoc, updateDoc, arrayRemove } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { getVerificationState } from "@/lib/firebase/verificationService";
+
+async function hashCode(code: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(code);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function findUserByEmail(email: string): Promise<{ uid: string; amxUid: string } | null> {
+  const usersCol = collection(db, 'users');
+  const q = query(usersCol, where('email', '==', email.trim().toLowerCase()));
+  const snap = await getDocs(q);
+  if (snap.empty) return null;
+  const userDoc = snap.docs[0];
+  const data = userDoc.data();
+  return { uid: userDoc.id, amxUid: data.amxUid || userDoc.id };
+}
+
+async function generateAndStoreBackupCodes(amxUid: string): Promise<string[]> {
+  const codes: string[] = [];
+  const hashes: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const code = generateRecoveryCode();
+    codes.push(code);
+    hashes.push(await hashCode(code));
+  }
+  const identityRef = doc(db, 'identities', amxUid);
+  await setDoc(identityRef, { recoveryCodes: hashes, recoveryCodesGeneratedAt: Date.now() }, { merge: true });
+  return codes;
+}
+
+async function verifyBackupCode(amxUid: string, providedCode: string): Promise<boolean> {
+  const identityRef = doc(db, 'identities', amxUid);
+  const snap = await getDoc(identityRef);
+  if (!snap.exists()) return false;
+  const data = snap.data();
+  const storedHashes: string[] = data.recoveryCodes || [];
+  const providedHash = await hashCode(providedCode);
+  const matchIndex = storedHashes.indexOf(providedHash);
+  if (matchIndex === -1) return false;
+  const newHashes = [...storedHashes];
+  newHashes.splice(matchIndex, 1);
+  await updateDoc(identityRef, { recoveryCodes: newHashes });
+  return true;
+}
 
 function Spinner() {
   return (
@@ -31,9 +82,16 @@ export default function RecoveryPage() {
 
     setLoading(true);
     try {
+      const userInfo = await findUserByEmail(email.trim());
+      if (!userInfo) {
+        setError("No account found with that email address.");
+        setLoading(false);
+        return;
+      }
+
       await sendPasswordResetEmail(auth, email.trim());
-      const code = generateRecoveryCode();
-      setGeneratedCode(code);
+      const codes = await generateAndStoreBackupCodes(userInfo.amxUid);
+      setGeneratedCode(codes.join('\n'));
       setStep('sent');
     } catch (err: any) {
       const msg = err.code === 'auth/user-not-found'
@@ -50,9 +108,24 @@ export default function RecoveryPage() {
     setError(null);
   }
 
-  function handleVerifyBackup() {
+  async function handleVerifyBackup() {
     if (!backupCode.trim()) { setError("Please enter your backup code."); return; }
-    router.push("/login");
+
+    setLoading(true);
+    try {
+      const userInfo = await findUserByEmail(email.trim());
+      if (!userInfo) { setError("Account not found."); setLoading(false); return; }
+
+      const valid = await verifyBackupCode(userInfo.amxUid, backupCode.trim().toUpperCase());
+      if (!valid) { setError("Invalid or used backup code."); setLoading(false); return; }
+
+      await sendPasswordResetEmail(auth, email.trim());
+      router.push("/login?recovery=success");
+    } catch (err) {
+      setError("Verification failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -147,6 +220,20 @@ export default function RecoveryPage() {
               Didn&apos;t receive the email? Check your spam folder or try again.
             </p>
           </div>
+
+          {generatedCode && (
+            <div style={{ textAlign: 'left', padding: 16, background: 'var(--surface)', border: '1px solid var(--surface-border)', borderRadius: 'var(--radius-md)' }}>
+              <p className="text-xs font-medium mb-3" style={{ color: 'var(--text-secondary)' }}>
+                Your backup codes (save these securely):
+              </p>
+              <pre style={{ fontFamily: 'var(--font-mono)', fontSize: 11, whiteSpace: 'pre-wrap', wordBreak: 'break-all', color: 'var(--text-primary)', background: 'var(--background)', padding: 12, borderRadius: 'var(--radius-sm)' }}>
+                {generatedCode}
+              </pre>
+              <p className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>
+                Each code can be used once. Generate new codes in Account Settings.
+              </p>
+            </div>
+          )}
 
           <button onClick={() => { setStep('email'); setError(null); }}
             style={{

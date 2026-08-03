@@ -3,18 +3,21 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { ensureActor } from "@/lib/firebase/actorService";
+import { generateAmxUid } from "@/lib/amexan";
+import { Stethoscope, Building2, HeartPulse, Settings, KeyRound, FileText, type LucideIcon } from "lucide-react";
 
 type Role = "doctor" | "nurse" | "patient" | "administrator";
 type ContactMethod = "email" | "phone";
 type AuthMethod = "password" | "passkey";
 
-const ROLES: { id: Role; label: string; icon: string; desc: string; color: string }[] = [
-  { id: "doctor", label: "Doctor", icon: "\uD83D\uDC69\u200D\u2695\uFE0F", desc: "Physician / Surgeon / Specialist", color: "var(--blue)" },
-  { id: "nurse", label: "Nurse", icon: "\uD83C\uDFE5", desc: "Registered Nurse / Midwife", color: "var(--teal)" },
-  { id: "patient", label: "Patient", icon: "\uD83E\uDDD1\u200D\u2695\uFE0F", desc: "Individual seeking care", color: "var(--purple)" },
-  { id: "administrator", label: "Administrator", icon: "\u2699\uFE0F", desc: "Hospital / Facility Admin", color: "var(--amber)" },
+const ROLES: { id: Role; label: string; icon: LucideIcon; desc: string; color: string }[] = [
+  { id: "doctor", label: "Doctor", icon: Stethoscope, desc: "Physician / Surgeon / Specialist", color: "var(--blue)" },
+  { id: "nurse", label: "Nurse", icon: Building2, desc: "Registered Nurse / Midwife", color: "var(--teal)" },
+  { id: "patient", label: "Patient", icon: HeartPulse, desc: "Individual seeking care", color: "var(--purple)" },
+  { id: "administrator", label: "Administrator", icon: Settings, desc: "Hospital / Facility Admin", color: "var(--amber)" },
 ];
 
 const FIREBASE_ERRORS: Record<string, string> = {
@@ -163,15 +166,28 @@ export default function QuickRegisterPage() {
 
         const res = await createUserWithEmailAndPassword(auth, userEmail, password);
         const uid = res.user.uid;
+        const amxUid = generateAmxUid('person');
 
         await setDoc(doc(db, "users", uid), {
           name: trimmedName,
           email: userEmail,
           phone: userPhone,
           role,
-          registrationStep: "complete",
+          amxUid,
+          registrationStep: "professional",
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
+        });
+
+        await ensureActor({
+          uid,
+          amxUid,
+          email: userEmail,
+          displayName: trimmedName,
+          phone: userPhone,
+          accountType: role === 'patient' ? 'patient' : 'professional',
+          clinicianRole: role === 'doctor' ? 'consultant' : role === 'nurse' ? 'nurse' : undefined,
+          professionalCategory: role === 'doctor' ? 'medical_doctor' : role === 'nurse' ? 'nurse' : undefined,
         });
 
         setStep("success");
@@ -179,6 +195,7 @@ export default function QuickRegisterPage() {
         const tempPassword = generatePassword();
         const res = await createUserWithEmailAndPassword(auth, userEmail, tempPassword);
         const uid = res.user.uid;
+        const amxUid = generateAmxUid('person');
 
         const passkeyCred = await handlePasskeyEnrollment(userEmail);
         if (!passkeyCred) {
@@ -192,15 +209,43 @@ export default function QuickRegisterPage() {
           email: userEmail,
           phone: userPhone,
           role,
-          registrationStep: "complete",
+          amxUid,
+          registrationStep: "professional",
           passkeyCredentialId: passkeyCred.id,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
         });
 
+        await ensureActor({
+          uid,
+          amxUid,
+          email: userEmail,
+          displayName: trimmedName,
+          phone: userPhone,
+          accountType: role === 'patient' ? 'patient' : 'professional',
+          clinicianRole: role === 'doctor' ? 'consultant' : role === 'nurse' ? 'nurse' : undefined,
+          professionalCategory: role === 'doctor' ? 'medical_doctor' : role === 'nurse' ? 'nurse' : undefined,
+        });
+
         setStep("success");
       }
     } catch (err: any) {
+      if (err.code === "auth/email-already-in-use") {
+        // Constitutional: never dead-end a returning account. The Firebase
+        // account already exists (registration was interrupted), so sign in
+        // and resume onboarding instead of telling the user to register again.
+        if (authMethod === "password" && password) {
+          try {
+            await signInWithEmailAndPassword(auth, userEmail, password);
+            router.push("/register/constitution");
+            return;
+          } catch {
+            // Password mismatch — fall through to a helpful message.
+          }
+        }
+        showError("An account with this email already exists. Sign in to continue your registration.");
+        return;
+      }
       showError(mapFirebaseError(err.code ?? ""));
     } finally {
       setLoading(false);
@@ -219,7 +264,7 @@ export default function QuickRegisterPage() {
           className="font-bold tracking-tight"
           style={{ color: "var(--text-primary)", fontSize: "clamp(1.5rem, 5vw, 2rem)" }}
         >
-          {step === "success" ? "You\u2019re in \u2705" : "Get started in seconds"}
+          {step === "success" ? "Account created" : "Get started in seconds"}
         </h1>
         <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
           {step === "role"
@@ -294,11 +339,10 @@ export default function QuickRegisterPage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: 24,
                   flexShrink: 0,
                 }}
               >
-                {r.icon}
+                <r.icon size={24} style={{ color: r.color }} aria-hidden="true" />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 700, fontSize: 16, color: "var(--text-primary)", marginBottom: 2 }}>
@@ -496,7 +540,8 @@ export default function QuickRegisterPage() {
                 }}
               >
                 <p className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>
-                  {"\uD83D\uDD11"} Use your fingerprint, face, or PIN to sign in instantly.
+                  <KeyRound size={14} style={{ color: "var(--primary)", display: "inline", verticalAlign: "-2px", marginRight: 4 }} aria-hidden="true" />
+                  Use your fingerprint, face, or PIN to sign in instantly.
                 </p>
               </div>
             )}
@@ -520,7 +565,7 @@ export default function QuickRegisterPage() {
             {loading ? (
               <><Spinner /> Creating account...</>
             ) : authMethod === "passkey" ? (
-              "\uD83D\uDD11 Create with Passkey"
+              <><KeyRound size={18} aria-hidden="true" /> Create with Passkey</>
             ) : (
               "Create Account"
             )}
@@ -560,7 +605,9 @@ export default function QuickRegisterPage() {
             }}
           >
             <div className="flex items-start gap-3">
-              <div style={{ fontSize: 20, lineHeight: 1 }}>{"\uD83D\uDCDD"}</div>
+              <div style={{ display: "flex", flexShrink: 0 }}>
+                <FileText size={20} style={{ color: "var(--primary)" }} aria-hidden="true" />
+              </div>
               <div style={{ flex: 1 }}>
                 <p className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>
                   Complete your profile
@@ -600,7 +647,7 @@ export default function QuickRegisterPage() {
                 fontFamily: "var(--font-sans)",
               }}
             >
-              Skip for now \u2014 Go to Dashboard
+              I'll do this later \u2014 go to dashboard
             </button>
           </div>
         </div>

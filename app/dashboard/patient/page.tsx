@@ -27,6 +27,29 @@ import DiscoverTab from '@/components/DiscoverTab';
 import PatientReferralPortal from '@/components/PatientReferralPortal';
 import PatientEducationView from '@/components/PatientEducationView';
 
+import {
+  Home, ClipboardList, Users, MessageCircle, BarChart3, Settings,
+  Building2, DollarSign, Globe, Calendar, Bell, CheckCircle, XCircle,
+  Plus, FileText, User, Stethoscope, Pill, FlaskConical, Microscope,
+  Paperclip, Video, Phone, Search, AlertTriangle, Clock, Printer, Trash2,
+  Scan, Droplets, Thermometer, Syringe, Brain, Target, BookOpen, Key,
+  Heart, Monitor, Smartphone, MapPin, Trophy, Star, Camera, Mail,
+  ArrowRight, ArrowLeft, ArrowUp, ArrowDown, Check, X, Save, Image,
+  Lock, RefreshCw, CreditCard, Receipt, GraduationCap, Scissors,
+  FolderClosed, Pencil, Hourglass, MessageSquare, Wrench, Scale,
+  Menu, Route, Circle, IdCard, Inbox, LogOut, PartyPopper, type LucideIcon
+} from 'lucide-react';
+
+const iconMap: Record<string, LucideIcon> = {
+  home: Home, clipboard: ClipboardList, pill: Pill, chart: BarChart3,
+  microscope: Microscope, stethoscope: Stethoscope, calendar: Calendar,
+  wrench: Wrench, message: MessageCircle, book: BookOpen, search: Search,
+  creditcard: CreditCard, settings: Settings, heart: Heart, droplets: Droplets,
+  scale: Scale, thermometer: Thermometer, check: CheckCircle, bell: Bell,
+  alerttriangle: AlertTriangle, filetext: FileText, users: Users, globe: Globe,
+  scissors: Scissors, folder: FolderClosed, inbox: Inbox,
+};
+
 // ═══════════════════════════════════════════════════════════════════════════
 // ADD THESE TWO HELPERS near the top of your page.tsx (after imports)
 // They replace the raw fetch + res.json() calls and prevent the
@@ -323,11 +346,11 @@ function PrescriptionCalendar({ rx, patientId, apptId }: { rx: Prescription & { 
             key={key}
             className={`cal-day ${taken ? 'cal-taken' : ''} ${isToday ? 'cal-today' : ''}`}
             onClick={() => toggleDay(key)}
-            title={`${dayNames[d.getDay()]} ${d.getDate()} — ${taken ? 'Taken ✓' : 'Not taken'}`}
+            title={`${dayNames[d.getDay()]} ${d.getDate()} — ${taken ? 'Taken' : 'Not taken'}`}
           >
             <span className="cal-dn">{dayNames[d.getDay()][0]}</span>
             <span className="cal-dd">{d.getDate()}</span>
-            {taken && <span className="cal-check">✓</span>}
+            {taken && <span className="cal-check"><Check size={12} /></span>}
           </button>
         );
       })}
@@ -342,7 +365,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
   return (
     <div className="drawer-overlay" onClick={onClose}>
       <div className="drawer" onClick={e => e.stopPropagation()}>
-        <button className="drawer-close" onClick={onClose}>✕</button>
+        <button className="drawer-close" onClick={onClose}><X size={14} /></button>
         <div className="dr-profile-hero" style={{
           background: `linear-gradient(135deg, #0f172a 0%, #1e2a4a 100%)`,
         }}>
@@ -356,9 +379,9 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
             <h2 className="dr-profile-name">Dr. {svc.doctorName}</h2>
             <p className="dr-profile-spec">{svc.specialty} · {svc.clinic}</p>
             <div className="dr-profile-chips">
-              {svc.rating && <span className="dr-chip">⭐ {svc.rating}/5 ({svc.reviewCount || 0} reviews)</span>}
-              {svc.yearsExperience && <span className="dr-chip">🏆 {svc.yearsExperience} yrs exp</span>}
-              {svc.acceptsInsurance && <span className="dr-chip">🏥 Accepts Insurance</span>}
+              {svc.rating && <span className="dr-chip"><Star size={16} /> {svc.rating}/5 ({svc.reviewCount || 0} reviews)</span>}
+              {svc.yearsExperience && <span className="dr-chip"><Trophy size={16} /> {svc.yearsExperience} yrs exp</span>}
+              {svc.acceptsInsurance && <span className="dr-chip"><Building2 size={16} /> Accepts Insurance</span>}
             </div>
           </div>
         </div>
@@ -372,11 +395,11 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
             </div>
             <div className="dr-price-box">
               <span className="dr-price-label">Duration</span>
-              <span className="dr-price-val">⏱ {svc.duration} min</span>
+              <span className="dr-price-val"><Clock size={16} /> {svc.duration} min</span>
             </div>
             <div className="dr-price-box">
               <span className="dr-price-label">Type</span>
-              <span className="dr-price-val">💻 Video</span>
+              <span className="dr-price-val"><Monitor size={16} /> Video</span>
             </div>
           </div>
 
@@ -391,7 +414,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
           {/* Dedication message */}
           {svc.dedication && (
             <div className="dr-dedication">
-              <span className="dr-quote">❝</span>
+              <span className="dr-quote" style={{ fontSize: 32, color: 'var(--accent2)', opacity: 0.4, position: 'absolute', top: 6, left: 12, fontFamily: 'Georgia, serif', lineHeight: 1 }}>"</span>
               <p>{svc.dedication}</p>
             </div>
           )}
@@ -402,7 +425,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
               <div className="dr-section-title">Qualifications</div>
               <div className="dr-qual-list">
                 {svc.qualifications.map((q, i) => (
-                  <div key={i} className="dr-qual-item">🎓 {q}</div>
+                  <div key={i} className="dr-qual-item"><GraduationCap size={16} /> {q}</div>
                 ))}
               </div>
             </div>
@@ -423,7 +446,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
             <div className="dr-section">
               <div className="dr-section-title">Languages</div>
               <div className="dr-tags">
-                {svc.languages.map((l, i) => <span key={i} className="dr-tag">🌐 {l}</span>)}
+                {svc.languages.map((l, i) => <span key={i} className="dr-tag"><Globe size={16} /> {l}</span>)}
               </div>
             </div>
           ) : null}
@@ -434,7 +457,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
             <div className="dr-info-grid">
               {svc.physicalAddress && (
                 <div className="dr-info-item">
-                  <span className="dr-info-icon">📍</span>
+                  <span className="dr-info-icon"><MapPin size={16} /></span>
                   <div>
                     <span className="dr-info-label">Physical Location</span>
                     <span className="dr-info-val">{svc.physicalAddress}</span>
@@ -443,7 +466,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
               )}
               {svc.consultationHours && (
                 <div className="dr-info-item">
-                  <span className="dr-info-icon">🕐</span>
+                  <span className="dr-info-icon"><Clock size={16} /></span>
                   <div>
                     <span className="dr-info-label">Consultation Hours</span>
                     <span className="dr-info-val">{svc.consultationHours}</span>
@@ -452,7 +475,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
               )}
               {svc.availableDays?.length ? (
                 <div className="dr-info-item">
-                  <span className="dr-info-icon">📅</span>
+                  <span className="dr-info-icon"><Calendar size={16} /></span>
                   <div>
                     <span className="dr-info-label">Available Days</span>
                     <span className="dr-info-val">{svc.availableDays.join(', ')}</span>
@@ -471,7 +494,7 @@ function DoctorProfileDrawer({ svc, onClose, onBook }: { svc: Service; onClose: 
           )}
 
           <button className="btn-book-full" onClick={onBook}>
-            📅 Book Consultation — KES {svc.price?.toLocaleString()}
+            <Calendar size={16} /> Book Consultation — KES {svc.price?.toLocaleString()}
           </button>
         </div>
       </div>
@@ -649,11 +672,11 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
             <p className="modal-hs">Dr. {svc.doctorName} · {svc.clinic}</p>
             {!availLoading && availability?.timezone && (
               <p style={{ margin: '3px 0 0', fontSize: 11, color: '#0aaa76', fontWeight: 600 }}>
-                🌍 {timezone}{availability.slotDuration ? ` · ${availability.slotDuration}min slots` : ''}
+                <Globe size={16} /> {timezone}{availability.slotDuration ? ` · ${availability.slotDuration}min slots` : ''}
               </p>
             )}
           </div>
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <button className="modal-close" onClick={onClose}><X size={14} /></button>
         </div>
 
         {/* Progress bar */}
@@ -661,7 +684,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
           <div className="steps-bar">
             {['Date & Time','Details','Payment','Confirmed'].map((s, i) => (
               <div key={s} className="step-wrap">
-                <div className={`step-num ${i <= stepIdx ? 'step-on' : ''}`}>{i < stepIdx ? '✓' : i + 1}</div>
+                <div className={`step-num ${i <= stepIdx ? 'step-on' : ''}`}>{i < stepIdx ? <Check size={12} /> : i + 1}</div>
                 <span className="step-text">{s}</span>
                 {i < 3 && <div className={`step-line ${i < stepIdx ? 'step-line-on' : ''}`} />}
               </div>
@@ -674,7 +697,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
           <div className="modal-body">
             {availLoading ? (
               <div style={{ textAlign: 'center', padding: '40px 0', color: '#94a3b8' }}>
-                <div style={{ fontSize: 32, marginBottom: 8 }}>⏳</div>
+                <div style={{ fontSize: 32, marginBottom: 8 }}><Hourglass size={16} /></div>
                 <p style={{ fontSize: 14 }}>Loading Dr. {svc.doctorName}'s availability...</p>
               </div>
             ) : (
@@ -684,13 +707,13 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
                     Select Date
                     {availability && (
                       <span style={{ marginLeft: 8, fontSize: 10, fontWeight: 700, color: '#0aaa76', background: '#ecfdf5', padding: '2px 6px', borderRadius: 6 }}>
-                        🟢 LIVE
+                        <Circle size={8} fill="#00d68f" color="#00d68f" /> LIVE
                       </span>
                     )}
                   </label>
                   {next14Days.length === 0 ? (
                     <div style={{ padding: 14, background: '#fff7ed', borderRadius: 10, color: '#92400e', fontSize: 13, border: '1px solid #fed7aa' }}>
-                      ⚠️ No available days in the next 2 weeks. Please check back later.
+                      <AlertTriangle size={14} color="#ffb020" /> No available days in the next 2 weeks. Please check back later.
                     </div>
                   ) : (
                     <div className="slot-days">
@@ -729,7 +752,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
               if (!selectedDate || !selectedSlot) { setError('Please pick a date and time.'); return; }
               setError(''); setStep('details');
             }}>
-              Continue →
+              Continue <ArrowRight size={14} />
             </button>
           </div>
         )}
@@ -738,9 +761,9 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
         {step === 'details' && (
           <div className="modal-body">
             <div className="booking-summary">
-              <span>📅 {new Date(selectedDate).toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
-              <span>⏰ {selectedSlot} <span style={{ fontSize: 11, opacity: 0.7 }}>({timezone})</span></span>
-              <span>💰 KES {svc.price?.toLocaleString() ?? '0'}</span>
+              <span><Calendar size={16} /> {new Date(selectedDate).toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+              <span><Clock size={16} /> {selectedSlot} <span style={{ fontSize: 11, opacity: 0.7 }}>({timezone})</span></span>
+              <span><DollarSign size={16} /> KES {svc.price?.toLocaleString() ?? '0'}</span>
             </div>
             <div className="field-col">
               <label className="field-lbl">Describe your concern *</label>
@@ -750,9 +773,9 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
             </div>
             {error && <div className="err-box">{error}</div>}
             <div style={{ display: 'flex', gap: 8 }}>
-              <button className="btn-secondary" onClick={() => setStep('slot')}>← Back</button>
+              <button className="btn-secondary" onClick={() => setStep('slot')}><ArrowLeft size={14} /> Back</button>
               <button className="btn-cta" onClick={handleBook} disabled={loading}>
-                {loading ? 'Booking…' : 'Continue to Payment →'}
+                {loading ? 'Booking…' : 'Continue to Payment <ArrowRight size={14} />'}
               </button>
             </div>
           </div>
@@ -766,7 +789,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
               <p className="pay-sub">M-Pesa STK Push</p>
             </div>
             <div className="mpesa-pill">
-              <span style={{ fontSize: 24 }}>📱</span>
+              <span style={{ fontSize: 24 }}><Smartphone size={16} /></span>
               <span style={{ color: '#16a34a', fontWeight: 800, fontSize: 17 }}>M-PESA</span>
             </div>
             <div className="field-col">
@@ -774,17 +797,17 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
               <input className="field-inp" type="tel" value={phone}
                 onChange={e => setPhone(e.target.value)} placeholder="0712 345 678" />
             </div>
-            <p className="pay-note">📌 You'll receive an STK push on your phone. Enter your M-Pesa PIN to complete payment.</p>
+            <p className="pay-note"><MapPin size={16} /> You'll receive an STK push on your phone. Enter your M-Pesa PIN to complete payment.</p>
             {error && (
               <div className="err-box">
                 {error}
                 {existingApptId && (
-                  <button className="retry-btn" onClick={() => handlePay(existingApptId)}>🔄 Retry Payment</button>
+                  <button className="retry-btn" onClick={() => handlePay(existingApptId)}><RefreshCw size={16} /> Retry Payment</button>
                 )}
               </div>
             )}
             <button className="btn-cta" onClick={() => handlePay()} disabled={loading}>
-              {loading ? 'Sending prompt…' : `💳 Pay KES ${svc.price?.toLocaleString() ?? '0'}`}
+              {loading ? 'Sending prompt…' : `<CreditCard size={16} /> Pay KES ${svc.price?.toLocaleString() ?? '0'}`}
             </button>
           </div>
         )}
@@ -795,7 +818,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
             <div style={{ position: 'relative', width: 70, height: 70, margin: '0 auto 16px' }}>
               <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '3px solid #e2e8f0' }} />
               <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '3px solid transparent', borderTopColor: '#0aaa76', borderRightColor: '#0aaa76', animation: 'spin 0.9s linear infinite' }} />
-              <div style={{ position: 'absolute', inset: 10, background: '#0aaa76', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>📱</div>
+              <div style={{ position: 'absolute', inset: 10, background: '#0aaa76', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}><Smartphone size={16} /></div>
             </div>
             <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
             <h4 style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>Check your phone</h4>
@@ -812,7 +835,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
               </div>
             </div>
             <button className="btn-secondary" onClick={() => { stopPolling(); setStep('pay'); setError(''); }}>
-              ← Didn't get the prompt?
+              <ArrowLeft size={14} />  Didn't get the prompt?
             </button>
           </div>
         )}
@@ -820,7 +843,7 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
         {/* STEP: Done */}
         {step === 'done' && (
           <div className="modal-body" style={{ textAlign: 'center', padding: '32px 22px' }}>
-            <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
+            <div style={{ fontSize: 64, marginBottom: 16 }}><PartyPopper size={16} /></div>
             <h4 style={{ fontWeight: 800, fontSize: 20, color: 'var(--text)', marginBottom: 10 }}>Appointment Booked!</h4>
             <p style={{ color: 'var(--text2)', fontSize: 14, lineHeight: 1.8, marginBottom: 8 }}>
               Payment confirmed. Dr. {svc.doctorName} will be available on<br />
@@ -828,30 +851,30 @@ function BookModal({ svc, patient, onClose }: { svc: Service; patient: Patient; 
               <br /><span style={{ fontSize: 12, color: '#0aaa76' }}>({timezone})</span>
             </p>
             {isFirstVisit && (
-              <span style={{ display: 'inline-block', background: '#fef9c3', color: '#854d0e', borderRadius: 20, padding: '4px 12px', fontSize: 12, fontWeight: 700, marginBottom: 12 }}>⭐ First Visit</span>
+              <span style={{ display: 'inline-block', background: '#fef9c3', color: '#854d0e', borderRadius: 20, padding: '4px 12px', fontSize: 12, fontWeight: 700, marginBottom: 12 }}><Star size={16} /> First Visit</span>
             )}
             <p style={{ color: 'var(--accent)', fontSize: 13, marginBottom: 28 }}>
               You'll receive a notification when the doctor starts the session.
             </p>
-            <button className="btn-cta" onClick={onClose}>Done ✓</button>
+            <button className="btn-cta" onClick={onClose}>Done</button>
           </div>
         )}
 
         {/* STEP: Failed */}
         {step === 'failed' && (
           <div className="modal-body" style={{ textAlign: 'center', padding: '24px 20px' }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>❌</div>
+            <div style={{ fontSize: 48, marginBottom: 12 }}><XCircle size={16} /></div>
             <h4 style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>Payment Unsuccessful</h4>
             <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
               {error || 'Your M-Pesa payment could not be completed.'}
             </p>
             <div style={{ background: '#fef9c3', borderRadius: 10, padding: 12, marginBottom: 16, fontSize: 13, color: '#854d0e' }}>
-              ⏳ Your appointment slot is still reserved. You can retry without losing your date and time.
+              <Hourglass size={16} /> Your appointment slot is still reserved. You can retry without losing your date and time.
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button className="btn-secondary" onClick={onClose} style={{ flex: 1 }}>Cancel</button>
               <button className="btn-cta" onClick={() => { stopPolling(); setStep('pay'); setError(''); }} style={{ flex: 2 }}>
-                🔄 Retry Payment
+                <RefreshCw size={16} /> Retry Payment
               </button>
             </div>
           </div>
@@ -871,11 +894,11 @@ function LogVitalModal({ patient, onClose, onSaved }: { patient: Patient; onClos
   const [value, setValue] = useState(''); const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
   const types = [
-    { id: 'bp', label: 'Blood Pressure', icon: '❤️', unit: 'mmHg' },
-    { id: 'glucose', label: 'Blood Glucose', icon: '🩸', unit: 'mmol/L' },
-    { id: 'weight', label: 'Weight', icon: '⚖️', unit: 'kg' },
-    { id: 'temp', label: 'Temperature', icon: '🌡️', unit: '°C' },
-    { id: 'pulse', label: 'Pulse Rate', icon: '💓', unit: 'bpm' },
+    { id: 'bp', label: 'Blood Pressure', icon: 'heart', unit: 'mmHg' },
+    { id: 'glucose', label: 'Blood Glucose', icon: 'droplets', unit: 'mmol/L' },
+    { id: 'weight', label: 'Weight', icon: 'scale', unit: 'kg' },
+    { id: 'temp', label: 'Temperature', icon: 'thermometer', unit: '°C' },
+    { id: 'pulse', label: 'Pulse Rate', icon: 'heart', unit: 'bpm' },
   ];
   const save = async () => {
     setSaving(true);
@@ -892,12 +915,12 @@ function LogVitalModal({ patient, onClose, onSaved }: { patient: Patient; onClos
   return (
     <div className="overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 440 }}>
-        <div className="modal-hd"><h3 className="modal-ht">📊 Log Vital Sign</h3><button className="modal-close" onClick={onClose}>✕</button></div>
+        <div className="modal-hd"><h3 className="modal-ht"><BarChart3 size={16} /> Log Vital Sign</h3><button className="modal-close" onClick={onClose}><X size={14} /></button></div>
         <div className="modal-body">
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {types.map(v => (
               <button key={v.id} onClick={() => setType(v.id as any)} className={`vital-chip ${type === v.id ? 'vital-chip-on' : ''}`}>
-                {v.icon} {v.label}
+                <Heart size={16} /> {v.label}
               </button>
             ))}
           </div>
@@ -913,7 +936,7 @@ function LogVitalModal({ patient, onClose, onSaved }: { patient: Patient; onClos
             </div>
           )}
           <div className="field-col"><label className="field-lbl">Note (optional)</label><input className="field-inp" value={note} onChange={e => setNote(e.target.value)} placeholder="e.g. After morning walk" /></div>
-          <button className="btn-cta" onClick={save} disabled={saving}>{saving ? 'Saving…' : '💾 Save Reading'}</button>
+          <button className="btn-cta" onClick={save} disabled={saving}>{saving ? 'Saving…' : <><Save size={16} /> Save Reading</>}</button>
         </div>
       </div>
     </div>
@@ -929,7 +952,7 @@ function SmartcardModal({ patient, onClose }: { patient: Patient; onClose: () =>
   return (
     <div className="overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 380 }}>
-        <div className="modal-hd"><h3 className="modal-ht">🪪 Patient Smartcard</h3><button className="modal-close" onClick={onClose}>✕</button></div>
+        <div className="modal-hd"><h3 className="modal-ht"><IdCard size={16} /> Patient Smartcard</h3><button className="modal-close" onClick={onClose}><X size={14} /></button></div>
         <div className="modal-body">
           <div className="smartcard">
             <div className="sc-top">
@@ -938,15 +961,15 @@ function SmartcardModal({ patient, onClose }: { patient: Patient; onClose: () =>
                 <div className="sc-name">{patient.name}</div>
                 <div className="sc-id">ID: {uid}</div>
               </div>
-              <div style={{ fontSize: 24 }}>⚕️</div>
+              <div style={{ fontSize: 24 }}><Stethoscope size={16} /></div>
             </div>
             <div className="sc-grid">
               {[['Blood Group', patient.bloodGroup || '—'], ['Age', patient.age ? `${patient.age} yrs` : '—'], ['Gender', patient.gender || '—'], ['Condition', patient.condition || '—']].map(([k, v]) => (
                 <div key={k} className="sc-item"><span className="sc-key">{k}</span><span className="sc-val">{v}</span></div>
               ))}
             </div>
-            {patient.allergies?.length ? <div className="sc-allergy">⚠️ Allergies: {patient.allergies.join(', ')}</div> : null}
-            {patient.emergencyContact && <div className="sc-emergency">🆘 Emergency: {patient.emergencyContact}</div>}
+            {patient.allergies?.length ? <div className="sc-allergy"><AlertTriangle size={14} color="#ff4560" /> Allergies: {patient.allergies.join(', ')}</div> : null}
+            {patient.emergencyContact && <div className="sc-emergency"><AlertTriangle size={14} color="#fcd34d" /> Emergency: {patient.emergencyContact}</div>}
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0 6px', background: 'white', padding: 12, borderRadius: 12 }}>
             <QRCodeSVG value={qrValue} size={160} bgColor="#fff" fgColor="#0f172a" level="H" />
@@ -988,7 +1011,7 @@ function TriageModal({ onClose, onDone }: { onClose: () => void; onDone: (sp: st
   return (<>
     <div className="overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 500 }}>
-        <div className="modal-hd"><h3 className="modal-ht">🔍 Smart Triage</h3><button className="modal-close" onClick={onClose}>✕</button></div>
+        <div className="modal-hd"><h3 className="modal-ht"><Search size={16} /> Smart Triage</h3><button className="modal-close" onClick={onClose}><X size={14} /></button></div>
         <div className="modal-body">
           <div className="triage-bar"><div className="triage-prog" style={{ width: `${(step / questions.length) * 100}%` }} /></div>
           <p className="triage-step">Question {step + 1} of {questions.length}</p>
@@ -1025,15 +1048,15 @@ function EmergencyModal({ onClose, patientId }: { onClose: () => void; patientId
     <div className="overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: 400, textAlign: 'center' }}>
         <div style={{ padding: 32 }}>
-          <div style={{ fontSize: 52, marginBottom: 16 }}>🚨</div>
+          <div style={{ fontSize: 52, marginBottom: 16 }}><AlertTriangle size={16} /></div>
           <h3 style={{ fontSize: 22, fontWeight: 800, color: '#ff4560', marginBottom: 12 }}>Emergency</h3>
           <p style={{ color: 'var(--text2)', marginBottom: 24, lineHeight: 1.7 }}>
             For life-threatening emergencies, call emergency services immediately.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <a href="tel:999" className="btn-cta" style={{ background: '#ff4560', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>📞 Call 999</a>
-            <a href="tel:112" className="btn-cta" style={{ background: '#ef4444', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>📞 Call 112</a>
-            <button className="btn-secondary" onClick={alert911}>🔔 Alert My Care Team</button>
+            <a href="tel:999" className="btn-cta" style={{ background: '#ff4560', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><Phone size={16} /> Call 999</a>
+            <a href="tel:112" className="btn-cta" style={{ background: '#ef4444', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><Phone size={16} /> Call 112</a>
+            <button className="btn-secondary" onClick={alert911}><Bell size={16} /> Alert My Care Team</button>
             <button className="btn-secondary" onClick={onClose}>Close</button>
           </div>
         </div>
@@ -1104,14 +1127,14 @@ function SettingsPanel({ patient, onUpdate }: { patient: Patient; onUpdate: (p: 
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Profile Photo */}
       <div className="settings-card">
-        <div className="settings-card-title">🖼️ Profile Photo</div>
+        <div className="settings-card-title"><Image size={16} /> Profile Photo</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div className="settings-avatar">
             {form.photoUrl ? <img src={form.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} /> : (form.name || '?')[0]}
           </div>
           <div>
             <button className="btn-sm-accent" onClick={() => fileRef.current?.click()} disabled={photoUploading}>
-              {photoUploading ? 'Uploading…' : '📸 Change Photo'}
+              {photoUploading ? 'Uploading…' : <><Camera size={16} /> Change Photo</>}
             </button>
             <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>JPG, PNG. Max 5MB.</p>
             <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoUpload} />
@@ -1121,7 +1144,7 @@ function SettingsPanel({ patient, onUpdate }: { patient: Patient; onUpdate: (p: 
 
       {/* Personal Info */}
       <div className="settings-card">
-        <div className="settings-card-title">👤 Personal Information</div>
+        <div className="settings-card-title"><User size={16} /> Personal Information</div>
         <div className="settings-grid">
           {[
             { label: 'Full Name', key: 'name', type: 'text' },
@@ -1156,7 +1179,7 @@ function SettingsPanel({ patient, onUpdate }: { patient: Patient; onUpdate: (p: 
 
       {/* Medical Info */}
       <div className="settings-card">
-        <div className="settings-card-title">🏥 Medical & Emergency</div>
+        <div className="settings-card-title"><Building2 size={16} /> Medical & Emergency</div>
         <div className="settings-grid">
           <div className="field-col">
             <label className="field-lbl">Known Allergies (comma-separated)</label>
@@ -1188,12 +1211,12 @@ function SettingsPanel({ patient, onUpdate }: { patient: Patient; onUpdate: (p: 
 
       {msg && <div className={`msg-banner ${msg.includes('Error') ? 'msg-err' : 'msg-ok'}`}>{msg}</div>}
       <button className="btn-cta" onClick={handleSave} disabled={saving}>
-        {saving ? 'Saving…' : '💾 Save All Changes'}
+        {saving ? 'Saving…' : <><Save size={16} /> Save All Changes</>}
       </button>
 
       {/* Password Change */}
       <div className="settings-card">
-        <div className="settings-card-title">🔒 Change Password</div>
+        <div className="settings-card-title"><Lock size={16} /> Change Password</div>
         <div className="settings-grid">
           <div className="field-col">
             <label className="field-lbl">Current Password</label>
@@ -1206,7 +1229,7 @@ function SettingsPanel({ patient, onUpdate }: { patient: Patient; onUpdate: (p: 
         </div>
         {pwdMsg && <div className={`msg-banner ${pwdMsg.includes('Error') ? 'msg-err' : 'msg-ok'}`} style={{ marginTop: 8 }}>{pwdMsg}</div>}
         <button className="btn-secondary" onClick={handlePwdChange} style={{ marginTop: 12, width: 'auto', padding: '10px 20px' }}>
-          🔑 Update Password
+          <Key size={16} /> Update Password
         </button>
       </div>
     </div>
@@ -1261,7 +1284,7 @@ function PaymentsPanel({ appointments, patient }: { appointments: Appointment[];
       {pending.length > 0 && (
         <div className="panel">
           <div className="panel-hd">
-            <div className="panel-title">⚠️ Outstanding Payments</div>
+            <div className="panel-title"><AlertTriangle size={16} color="#ffb020" /> Outstanding Payments</div>
             <span className="count-badge" style={{ background: 'rgba(255,176,32,.15)', color: 'var(--amber)' }}>{pending.length}</span>
           </div>
           <div className="field-col" style={{ marginBottom: 12 }}>
@@ -1279,7 +1302,7 @@ function PaymentsPanel({ appointments, patient }: { appointments: Appointment[];
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontWeight: 900, fontSize: 16, color: 'var(--accent)', fontFamily: 'monospace' }}>KES {(a.amount || 0).toLocaleString()}</div>
                 <button className="btn-sm-accent" onClick={() => retryPay(a)} disabled={paying === a.id} style={{ marginTop: 6 }}>
-                  {paying === a.id ? 'Sending…' : '💳 Pay Now'}
+                  {paying === a.id ? 'Sending…' : <><CreditCard size={16} /> Pay Now</>}
                 </button>
               </div>
             </div>
@@ -1289,11 +1312,11 @@ function PaymentsPanel({ appointments, patient }: { appointments: Appointment[];
 
       <div className="panel">
         <div className="panel-hd">
-          <div className="panel-title">✅ Payment History</div>
+          <div className="panel-title"><CheckCircle size={16} /> Payment History</div>
           <span className="count-badge">{paid.length}</span>
         </div>
         {paid.length === 0 ? (
-          <div className="empty-sm"><div style={{ fontSize: 32 }}>🧾</div><p>No payment history yet.</p></div>
+          <div className="empty-sm"><div style={{ fontSize: 32 }}><Receipt size={16} /></div><p>No payment history yet.</p></div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {paid.map(a => (
@@ -1306,7 +1329,7 @@ function PaymentsPanel({ appointments, patient }: { appointments: Appointment[];
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontWeight: 800, color: 'var(--green)', fontFamily: 'monospace' }}>KES {(a.amount || 0).toLocaleString()}</div>
-                  <span style={{ fontSize: 10, color: 'var(--green)', fontWeight: 700 }}>✓ PAID</span>
+                  <span style={{ fontSize: 10, color: 'var(--green)', fontWeight: 700 }}>PAID</span>
                 </div>
               </div>
             ))}
@@ -1351,32 +1374,32 @@ function ClinicalHistoryPanel({ patientId, patient }: { patientId: string; patie
   const types = ['all', 'encounter', 'lab', 'medical', 'allergy', 'surgery', 'family', 'social', 'note'];
   const filtered = filter === 'all' ? history : history.filter(h => h.type === filter);
 
-  const typeIcon: Record<string, string> = {
-    encounter: '🩺', lab: '🔬', medical: '📋', allergy: '⚠️',
-    surgery: '🔪', family: '👨‍👩‍👦', social: '🌍', note: '📝', default: '📄',
+  const typeIcon: Record<string, LucideIcon> = {
+    encounter: Stethoscope, lab: Microscope, medical: ClipboardList, allergy: AlertTriangle,
+    surgery: Scissors, family: Users, social: Globe, note: FileText, default: FileText,
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div className="panel">
         <div className="panel-hd">
-          <div className="panel-title">📋 Clinical History Timeline</div>
+          <div className="panel-title"><ClipboardList size={16} /> Clinical History Timeline</div>
           <span className="count-badge">{history.length} entries</span>
         </div>
         <div className="filter-bar">
           {types.map(t => (
             <button key={t} className={`filter-pill ${filter === t ? 'filter-on' : ''}`} onClick={() => setFilter(t)}>
-              {t === 'all' ? '🗂️ All' : `${typeIcon[t] || '📄'} ${t[0].toUpperCase() + t.slice(1)}`}
+              {t === 'all' ? <><FolderClosed size={14} /> All</> : (() => { const Ic = typeIcon[t] || FileText; return <><Ic size={14} /> {t[0].toUpperCase() + t.slice(1)}</>; })()}
             </button>
           ))}
         </div>
         {filtered.length === 0 ? (
-          <div className="empty-sm"><div style={{ fontSize: 32 }}>📭</div><p>No history entries yet. They'll appear after doctor consultations.</p></div>
+          <div className="empty-sm"><div style={{ fontSize: 32 }}><Inbox size={16} /></div><p>No history entries yet. They'll appear after doctor consultations.</p></div>
         ) : (
           <div className="timeline">
             {filtered.map(h => (
               <div key={h.id} className="timeline-entry">
-                <div className="timeline-dot">{typeIcon[h.type] || '📄'}</div>
+                <div className="timeline-dot">{(() => { const Ic = typeIcon[h.type] || FileText; return <Ic size={14} />; })()}</div>
                 <div className="timeline-content" onClick={() => setExpanded(expanded === h.id ? null : h.id)}>
                   <div className="timeline-hd">
                     <div>
@@ -1403,7 +1426,7 @@ function ClinicalHistoryPanel({ patientId, patient }: { patientId: string; patie
                           {h.signatureHash && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 8, fontFamily: 'monospace' }}>Signature: {h.signatureHash.slice(0, 24)}…</div>}
                           <button className="btn-secondary" style={{ marginTop: 10, width: 'auto', padding: '6px 14px', fontSize: 12 }}
                             onClick={(e) => { e.stopPropagation(); setEditingId(h.id); setEditContent(h.content); }}>
-                            ✏️ Request edit
+                            <Pencil size={16} /> Request edit
                           </button>
                         </>
                       )}
@@ -1465,9 +1488,9 @@ function DiseaseToolsPanel({ patientId, condition, vitals, onLogVital }: {
   const latestBP = vitals.find(v => v.type === 'bp');
   const latestGlucose = vitals.find(v => v.type === 'glucose');
   const conditionTargets = targets.length ? targets : condition === 'Hypertension' ? [
-    { id: 'bp', label: 'Blood Pressure', target: '<130/80 mmHg', icon: '❤️', status: (latestBP && (latestBP.systolic ?? 120) < 130) ? 'on-target' as const : 'off-target' as const, current: latestBP ? `${latestBP.systolic ?? '—'}/${latestBP.diastolic ?? '—'}` : undefined, unit: 'mmHg' },
+    { id: 'bp', label: 'Blood Pressure', target: '<130/80 mmHg', icon: 'heart', status: (latestBP && (latestBP.systolic ?? 120) < 130) ? 'on-target' as const : 'off-target' as const, current: latestBP ? `${latestBP.systolic ?? '—'}/${latestBP.diastolic ?? '—'}` : undefined, unit: 'mmHg' },
   ] : condition === 'Diabetes' ? [
-    { id: 'glc', label: 'Blood Glucose', target: '4.0–7.0 mmol/L', icon: '🩸', status: (latestGlucose && parseFloat(latestGlucose.value) <= 7) ? 'on-target' as const : 'off-target' as const, current: latestGlucose?.value, unit: 'mmol/L' },
+    { id: 'glc', label: 'Blood Glucose', target: '4.0–7.0 mmol/L', icon: 'droplets', status: (latestGlucose && parseFloat(latestGlucose.value) <= 7) ? 'on-target' as const : 'off-target' as const, current: latestGlucose?.value, unit: 'mmol/L' },
   ] : [];
 
   if (!condition) return null;
@@ -1476,7 +1499,7 @@ function DiseaseToolsPanel({ patientId, condition, vitals, onLogVital }: {
     <div className="disease-panel">
       <div className="disease-panel-hd">
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div className="disease-icon">🎯</div>
+          <div className="disease-icon"><Target size={16} /></div>
           <div>
             <div className="disease-title">{condition} Management</div>
             <div className="disease-sub">Real-time monitoring · Updated by your doctor</div>
@@ -1490,8 +1513,8 @@ function DiseaseToolsPanel({ patientId, condition, vitals, onLogVital }: {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
           {alerts.filter(a => a.severity === 'high').slice(0, 3).map(a => (
             <div key={a.id} className="disease-alert">
-              <span>🚨 <strong>{a.title}</strong> — {a.body}</span>
-              <button className="dismiss-btn" onClick={() => dismissAlert(a.id)}>✕</button>
+              <span><AlertTriangle size={16} /> <strong>{a.title}</strong> — {a.body}</span>
+              <button className="dismiss-btn" onClick={() => dismissAlert(a.id)}><X size={14} /></button>
             </div>
           ))}
         </div>
@@ -1501,14 +1524,14 @@ function DiseaseToolsPanel({ patientId, condition, vitals, onLogVital }: {
       <div className="targets-grid">
         {conditionTargets.map(t => (
           <div key={t.id} className={`target-card target-${t.status}`}>
-            <div className="target-icon">{t.icon}</div>
+            <div className="target-icon"><Heart size={20} /></div>
             <div className="target-info">
               <div className="target-label">{t.label}</div>
               <div className="target-current">{t.current || '—'} <span className="target-unit">{t.unit}</span></div>
               <div className="target-goal">Target: {t.target}</div>
             </div>
             <div className={`target-status-badge ${t.status}`}>
-              {t.status === 'on-target' ? '✓ On Target' : t.status === 'warning' ? '⚠️ Monitor' : '× Off Target'}
+              {t.status === 'on-target' ? 'On Target' : t.status === 'warning' ? 'Monitor' : '× Off Target'}
             </div>
           </div>
         ))}
@@ -1559,7 +1582,7 @@ function LabsPanel({ patientId }: { patientId: string }) {
   return (
     <div className="panel">
       <div className="panel-hd">
-        <div className="panel-title">🔬 Lab Results</div>
+        <div className="panel-title"><Microscope size={16} /> Lab Results</div>
         <div style={{ display: 'flex', gap: 4 }}>
           {(['all','abnormal','critical'] as const).map(f => (
             <button key={f} className={`filter-pill ${filter === f ? 'filter-on' : ''}`} onClick={() => setFilter(f)} style={{ padding: '4px 10px', fontSize: 11 }}>
@@ -1569,7 +1592,7 @@ function LabsPanel({ patientId }: { patientId: string }) {
         </div>
       </div>
       {filtered.length === 0 ? (
-        <div className="empty-sm"><div style={{ fontSize: 28 }}>🔬</div><p>No lab results yet. They'll appear when ordered by your doctor.</p></div>
+        <div className="empty-sm"><div style={{ fontSize: 28 }}><Microscope size={16} /></div><p>No lab results yet. They'll appear when ordered by your doctor.</p></div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {filtered.map(lab => (
@@ -1586,7 +1609,7 @@ function LabsPanel({ patientId }: { patientId: string }) {
                 </div>
               </div>
               {lab.notes && <p style={{ fontSize: 12, color: 'var(--text2)', marginTop: 6, fontStyle: 'italic' }}>{lab.notes}</p>}
-              {lab.reportUrl && <a href={lab.reportUrl} target="_blank" rel="noreferrer" className="lab-download">📄 Download Report</a>}
+              {lab.reportUrl && <a href={lab.reportUrl} target="_blank" rel="noreferrer" className="lab-download"><FileText size={16} /> Download Report</a>}
             </div>
           ))}
         </div>
@@ -1658,10 +1681,10 @@ function MessagesPanel({ patient, appointments }: { patient: Patient; appointmen
     <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 16, height: 520 }}>
       {/* Thread list */}
       <div className="panel" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-        <div className="panel-title" style={{ marginBottom: 12 }}>💬 Conversations</div>
+        <div className="panel-title" style={{ marginBottom: 12 }}><MessageCircle size={16} /> Conversations</div>
         {myDoctors.length === 0 ? (
           <div className="empty-sm" style={{ padding: '20px 0' }}>
-            <div style={{ fontSize: 24 }}>💬</div>
+            <div style={{ fontSize: 24 }}><MessageCircle size={16} /></div>
             <p style={{ fontSize: 12 }}>Messages appear after consultations</p>
           </div>
         ) : (
@@ -1682,7 +1705,7 @@ function MessagesPanel({ patient, appointments }: { patient: Patient; appointmen
       <div className="panel" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {!activeThread ? (
           <div className="empty-sm" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ fontSize: 40, marginBottom: 10 }}>💬</div>
+            <div style={{ fontSize: 40, marginBottom: 10 }}><MessageCircle size={16} /></div>
             <p>Select a conversation</p>
           </div>
         ) : (
@@ -1693,22 +1716,22 @@ function MessagesPanel({ patient, appointments }: { patient: Patient; appointmen
             <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {msgs.map(m => (
                 <div key={m.id} className={`msg-b ${m.senderId === patient.uid ? 'msg-b-mine' : 'msg-b-theirs'}`}>
-                  <div className="msg-who">{m.senderRole === 'doctor' ? `🩺 Dr. ${m.senderName}` : 'You'}</div>
+                  <div className="msg-who">{m.senderRole === 'doctor' ? `<Stethoscope size={16} /> Dr. ${m.senderName}` : 'You'}</div>
                   {m.type === 'text' && <span>{m.text}</span>}
                   {m.type === 'image' && <img src={m.fileUrl} alt={m.fileName} style={{ maxWidth: '100%', borderRadius: 8, marginTop: 4 }} />}
-                  {m.type === 'file' && <a href={m.fileUrl} target="_blank" rel="noreferrer" className="msg-file-link">📎 {m.fileName}</a>}
+                  {m.type === 'file' && <a href={m.fileUrl} target="_blank" rel="noreferrer" className="msg-file-link"><Paperclip size={16} /> {m.fileName}</a>}
                 </div>
               ))}
               <div ref={endRef} />
             </div>
             <div style={{ borderTop: '1px solid var(--border)', paddingTop: 10, display: 'flex', gap: 6, marginTop: 10 }}>
               <button className="attach-btn-sm" onClick={() => fileRef.current?.click()} disabled={uploading} title="Attach file">
-                {uploading ? '⏳' : '📎'}
+                {uploading ? <Hourglass size={16} /> : <Paperclip size={16} />}
               </button>
               <input className="msg-inp" value={input} onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && sendMsg(input)}
                 placeholder="Type a message…" style={{ flex: 1 }} />
-              <button className="msg-send-btn" onClick={() => sendMsg(input)}>↑</button>
+              <button className="msg-send-btn" onClick={() => sendMsg(input)}><ArrowUp size={14} /></button>
               <input ref={fileRef} type="file" style={{ display: 'none' }} onChange={handleFile} accept="image/*,.pdf,.doc,.docx" />
             </div>
           </>
@@ -1796,7 +1819,7 @@ export default function PatientDashboard() {
 
  // ─── Firestore listeners ──────────────────────────────────────────────────────
 
-// Services — publicly readable (rule: allow read: if true) ✅ no change needed
+// Services — publicly readable (rule: allow read: if true) <CheckCircle size={16} /> no change needed
 // but add limit to avoid loading all docs unnecessarily
 useEffect(() => {
   const unsub = onSnapshot(
@@ -1811,14 +1834,14 @@ useEffect(() => {
 }, []);
 
 
-// Appointments — ✅ already correct (patientId filter present)
+// Appointments — <CheckCircle size={16} /> already correct (patientId filter present)
 // Added: handle missing orderBy index gracefully
 useEffect(() => {
   if (!patient) return;
   const unsub = onSnapshot(
     query(
       collection(db, 'appointments'),
-      where('patientId', '==', patient.uid),   // ← matches rule check
+      where('patientId', '==', patient.uid),   // <ArrowLeft size={14} />  matches rule check
       orderBy('date', 'desc')
     ),
     async snap => {
@@ -1846,13 +1869,13 @@ useEffect(() => {
 }, [patient]);
 
 
-// Vitals — ✅ already correct (patientId filter present)
+// Vitals — <CheckCircle size={16} /> already correct (patientId filter present)
 useEffect(() => {
   if (!patient) return;
   const unsub = onSnapshot(
     query(
       collection(db, 'vitals'),
-      where('patientId', '==', patient.uid),   // ← matches rule check
+      where('patientId', '==', patient.uid),   // <ArrowLeft size={14} />  matches rule check
       orderBy('recordedAt', 'desc'),
       limit(50)
     ),
@@ -1863,13 +1886,13 @@ useEffect(() => {
 }, [patient]);
 
 
-// Alerts — ✅ already correct (patientId filter present)
+// Alerts — <CheckCircle size={16} /> already correct (patientId filter present)
 useEffect(() => {
   if (!patient) return;
   const unsub = onSnapshot(
     query(
       collection(db, 'alerts'),
-      where('patientId', '==', patient.uid),   // ← matches rule check
+      where('patientId', '==', patient.uid),   // <ArrowLeft size={14} />  matches rule check
       orderBy('createdAt', 'desc'),
       limit(30)
     ),
@@ -2067,11 +2090,11 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
       return;
     }
 
-    // ✅ FIXED: add patientId filter so Firestore rule can verify access
+    // <CheckCircle size={16} /> FIXED: add patientId filter so Firestore rule can verify access
     const q = query(
       collection(db, 'consultations'),
       where('appointmentId', '==', appt.id),
-      where('patientId', '==', patient!.uid)   // ← required by security rule
+      where('patientId', '==', patient!.uid)   // <ArrowLeft size={14} />  required by security rule
     );
     const qs = await getDocs(q);
 
@@ -2087,29 +2110,29 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
   setJoining(null);
 };
   const tabs = [
-  { id: 'overview',      icon: '🏠', label: 'Overview' },
-  { id: 'record',        icon: '📋', label: 'Medical Record' },
-  { id: 'prescriptions', icon: '💊', label: 'Prescriptions' },
-  { id: 'vitals',        icon: '📊', label: 'Vitals' },
-  { id: 'labs',          icon: '🔬', label: 'Labs' },
-  { id: 'health',        icon: '🩺', label: 'My Health' },
-  { id: 'appointments',  icon: '📅', label: 'Appointments' },
-  { id: 'visits',        icon: '🩺', label: 'Visit Notes' },
-  { id: 'tools',         icon: '🔧', label: 'My Tools' },
-  { id: 'referrals',     icon: '📋', label: 'Referrals' },
-  { id: 'messages',      icon: '💬', label: 'Messages', badge: allNotifications.filter((n: any) => !n.read && (n.type === 'message' || n.type === 'clinical')).length },
-  { id: 'education',     icon: '📚', label: 'Education', badge: educationLogs.filter((e: any) => !e.read).length },
-  { id: 'discover',      icon: '🔍', label: 'Find Doctors' },
-  { id: 'payments',      icon: '💳', label: 'Payments' },
-  { id: 'settings',      icon: '⚙️', label: 'Settings' },
+  { id: 'overview',      icon: 'home', label: 'Overview' },
+  { id: 'record',        icon: 'clipboard', label: 'Medical Record' },
+  { id: 'prescriptions', icon: 'pill', label: 'Prescriptions' },
+  { id: 'vitals',        icon: 'chart', label: 'Vitals' },
+  { id: 'labs',          icon: 'microscope', label: 'Labs' },
+  { id: 'health',        icon: 'stethoscope', label: 'My Health' },
+  { id: 'appointments',  icon: 'calendar', label: 'Appointments' },
+  { id: 'visits',        icon: 'stethoscope', label: 'Visit Notes' },
+  { id: 'tools',         icon: 'wrench', label: 'My Tools' },
+  { id: 'referrals',     icon: 'clipboard', label: 'Referrals' },
+  { id: 'messages',      icon: 'message', label: 'Messages', badge: allNotifications.filter((n: any) => !n.read && (n.type === 'message' || n.type === 'clinical')).length },
+  { id: 'education',     icon: 'book', label: 'Education', badge: educationLogs.filter((e: any) => !e.read).length },
+  { id: 'discover',      icon: 'search', label: 'Find Doctors' },
+  { id: 'payments',      icon: 'creditcard', label: 'Payments' },
+  { id: 'settings',      icon: 'settings', label: 'Settings' },
 ];
 // Mobile nav — keep 5 items, swap Education for Health since Health is used daily
 [
-  { id: 'overview',     icon: '🏠', label: 'Home' },
-  { id: 'record',       icon: '📋', label: 'Record' },
-  { id: 'health',       icon: '🩺', label: 'Health' },     // ← My Health visible on mobile
-  { id: 'appointments', icon: '📅', label: 'Visits' },
-  { id: 'messages',     icon: '💬', label: 'Messages' },
+  { id: 'overview',     icon: 'home', label: 'Home' },
+  { id: 'record',       icon: 'clipboard', label: 'Record' },
+  { id: 'health',       icon: 'stethoscope', label: 'Health' },     // <ArrowLeft size={14} />  My Health visible on mobile
+  { id: 'appointments', icon: 'calendar', label: 'Visits' },
+  { id: 'messages',     icon: 'message', label: 'Messages' },
 ]
   // ── Loading state ──────────────────────────────────────────────────────
   if (!authDone || !patient) {
@@ -2660,7 +2683,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
         <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`} style={{ width: sidebarOpen ? 228 : 0, borderRight: sidebarOpen ? '1px solid var(--border)' : 'none' }}>
           <div className="sb-brand">
             <div className="sb-logo">
-              <div className="sb-logo-glyph">⚕️</div>
+              <div className="sb-logo-glyph"><Stethoscope size={16} /></div>
               <div>
                 <div className="sb-logo-name">AMEXAN</div>
                 <div className="sb-logo-sub">Patient Portal</div>
@@ -2673,12 +2696,12 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
             </div>
             <div className="sb-pname">{patient.name}</div>
             <div className="sb-pid">{patient.universalId}</div>
-            {patient.condition && <div className="sb-cond">🎯 {patient.condition}</div>}
+            {patient.condition && <div className="sb-cond"><Target size={16} /> {patient.condition}</div>}
           </div>
           <nav className="sb-nav">
             {tabs.map(t => (
               <button key={t.id} className={`sb-item ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
-                <span className="sb-item-icon">{t.icon}</span>
+                <span className="sb-item-icon">{(() => { const IconComp = iconMap[t.icon]; return IconComp ? <IconComp size={16} /> : <>{t.icon}</>; })()}</span>
                 {t.label}
                 {t.badge ? <span className="sb-badge">{t.badge}</span> : null}
               </button>
@@ -2695,7 +2718,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
               ))}
             </div>
             <button className="sb-signout" onClick={() => { signOut(auth); router.replace('/login'); }}>
-              <span>🚪</span> Sign Out
+              < LogOut size={16} /> Sign Out
             </button>
           </div>
         </aside>
@@ -2709,24 +2732,24 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div className="top-hd">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <button className="hamburger-btn" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle sidebar">
-                {sidebarOpen ? '✕' : '☰'}
+                {sidebarOpen ? <X size={14} /> : <Menu size={16} />}
               </button>
               <div className="th-left">
                 <span className="th-greeting">{getGreeting()},</span>
-                <span className="th-name">{patient.name.split(' ')[0]} 👋</span>
+                <span className="th-name">{patient.name.split(' ')[0]}</span>
               </div>
             </div>
             <div className="th-actions">
-              <button className="th-btn" onClick={() => setShowTriage(true)}>🔍 <span>Find Doctor</span></button>
-              <button className="th-btn" onClick={() => setShowLogVital(true)}>📊 <span>Log Vital</span></button>
+              <button className="th-btn" onClick={() => setShowTriage(true)}><Search size={16} /> <span>Find Doctor</span></button>
+              <button className="th-btn" onClick={() => setShowLogVital(true)}><BarChart3 size={16} /> <span>Log Vital</span></button>
               <button className="th-btn" onClick={() => setActiveTab('overview')} style={{
                 borderColor: unreadAlerts > 0 ? 'rgba(255,69,96,.3)' : 'var(--border2)',
                 color: unreadAlerts > 0 ? 'var(--red)' : 'var(--text2)',
                 position: 'relative',
               }}>
-                {unreadAlerts > 0 ? `🔔 ${unreadAlerts}` : '🔔'} {unreadNotifications > 0 && <span style={{ position: 'absolute', top: -4, right: -4, width: 8, height: 8, borderRadius: '50%', background: '#ff4560', animation: 'pulse 1.5s infinite' }} />}
+                {unreadAlerts > 0 ? <><Bell size={16} /> {unreadAlerts}</> : <Bell size={16} />} {unreadNotifications > 0 && <span style={{ position: 'absolute', top: -4, right: -4, width: 8, height: 8, borderRadius: '50%', background: '#ff4560', animation: 'pulse 1.5s infinite' }} />}
               </button>
-              <button className="th-btn th-btn-accent" onClick={() => setShowSmartcard(true)}>🪪 <span>Smartcard</span></button>
+              <button className="th-btn th-btn-accent" onClick={() => setShowSmartcard(true)}><IdCard size={16} /> <span>Smartcard</span></button>
             </div>
           </div>
 
@@ -2742,7 +2765,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                   </div>
                 </div>
                 <button className="btn-join-live" onClick={() => joinConsultation(a)} disabled={joining === a.id}>
-                  {joining === a.id ? 'Joining…' : '🎥 Rejoin'}
+                  {joining === a.id ? 'Joining…' : <><Video size={16} /> Rejoin</>}
                 </button>
               </div>
             ))}
@@ -3109,12 +3132,12 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
               <div className="ov-hero-greeting">{dashboardConfig?.greeting || `${getGreeting()} ${patient.name}`} ·  {new Date().toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
               <div className="ov-hero-name">{patient.name}</div>
               <div className="ov-hero-chips">
-                {patient.bloodGroup && <span className="ov-hero-chip ov-hero-chip--hl">🩸 {patient.bloodGroup}</span>}
+                {patient.bloodGroup && <span className="ov-hero-chip ov-hero-chip--hl"><Droplets size={16} /> {patient.bloodGroup}</span>}
                 {patient.age        && <span className="ov-hero-chip">{patient.age} yrs</span>}
                 {patient.gender     && <span className="ov-hero-chip">{patient.gender}</span>}
-                {patient.condition  && <span className="ov-hero-chip ov-hero-chip--hl">🎯 {patient.condition}</span>}
-                {patient.insuranceProvider && <span className="ov-hero-chip">🏥 {patient.insuranceProvider}</span>}
-                <span className="ov-hero-chip ov-hero-chip--hl">🟢 Active Patient</span>
+                {patient.condition  && <span className="ov-hero-chip ov-hero-chip--hl"><Target size={16} /> {patient.condition}</span>}
+                {patient.insuranceProvider && <span className="ov-hero-chip"><Building2 size={16} /> {patient.insuranceProvider}</span>}
+                <span className="ov-hero-chip ov-hero-chip--hl">Active Patient</span>
               </div>
             </div>
           </div>
@@ -3152,7 +3175,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
         {/* BP tip */}
         {latestBP && bpInfo && (
           <div className="ov-bp-tip">
-            <span style={{ fontSize: 18 }}>❤️</span>
+            <span style={{ fontSize: 18 }}><Heart size={16} /></span>
             <span>
               Latest Blood Pressure:&nbsp;
               <strong style={{ color: bpInfo.color, fontFamily: 'JetBrains Mono,monospace' }}>
@@ -3168,13 +3191,13 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
         {/* Bottom stat strip */}
         <div className="ov-hero-strip">
           {([
-            { icon: '📅', val: upcomingAppts.length,     label: 'Upcoming',    color: '#7c5af5', tab: 'appointments' },
-            { icon: '✅', val: completedCount,            label: 'Completed',   color: '#00d68f', tab: 'appointments' },
-            { icon: '💊', val: allPrescriptions.length,  label: 'Medications', color: '#00e5cc', tab: 'prescriptions' },
-            { icon: '🔔', val: allPendingAlerts.length,     label: 'Alerts & Updates',      color: allPendingAlerts.length > 0 ? '#ff4560' : '#00d68f', tab: 'overview' },
+            { icon: 'calendar', val: upcomingAppts.length,     label: 'Upcoming',    color: '#7c5af5', tab: 'appointments' },
+            { icon: 'check', val: completedCount,            label: 'Completed',   color: '#00d68f', tab: 'appointments' },
+            { icon: 'pill', val: allPrescriptions.length,  label: 'Medications', color: '#00e5cc', tab: 'prescriptions' },
+            { icon: 'bell', val: allPendingAlerts.length,     label: 'Alerts & Updates',      color: allPendingAlerts.length > 0 ? '#ff4560' : '#00d68f', tab: 'overview' },
           ] as any[]).map((s: any) => (
             <div key={s.label} className="ov-hero-strip-cell" onClick={() => setActiveTab(s.tab)}>
-              <div className="ov-strip-icon">{s.icon}</div>
+              <div className="ov-strip-icon">{(() => { const IconComp = iconMap[s.icon]; return IconComp ? <IconComp size={18} /> : <>{s.icon}</>; })()}</div>
               <div className="ov-strip-val" style={{ color: s.color }}>{s.val}</div>
               <div className="ov-strip-lbl">{s.label}</div>
             </div>
@@ -3188,7 +3211,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
       {nextApptSorted && countdown && (
         <div className="ov-next-card">
           <div className="ov-next-left">
-            <div className="ov-next-icon">📅</div>
+            <div className="ov-next-icon"><Calendar size={16} /></div>
             <div style={{ minWidth: 0 }}>
               <div className="ov-next-lbl">Next Appointment</div>
               <div className="ov-next-name">
@@ -3205,9 +3228,9 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
             {nextApptSorted.status === 'active'
               ? <button className="ov-next-btn" style={{ background: 'linear-gradient(135deg,#00d68f,#00b377)' }}
                   onClick={() => joinConsultation(nextApptSorted)} disabled={joining === nextApptSorted.id}>
-                  {joining === nextApptSorted.id ? '…' : '🎥 Join Now'}
+                  {joining === nextApptSorted.id ? '…' : <><Video size={16} /> Join Now</>}
                 </button>
-              : <button className="ov-next-btn" onClick={() => setActiveTab('appointments')}>View Details →</button>
+              : <button className="ov-next-btn" onClick={() => setActiveTab('appointments')}>View Details  <ArrowRight size={14} /> </button>
             }
           </div>
         </div>
@@ -3219,26 +3242,26 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
       <div className="ov-stats">
         {([
           {
-            icon: '❤️', iconBg: 'rgba(255,69,96,.12)',
+            icon: 'heart', iconBg: 'rgba(255,69,96,.12)',
             val: latestBP ? `${latestBP.systolic}/${latestBP.diastolic}` : '—',
             lbl: 'Blood Pressure', color: bpInfo?.color || 'var(--muted)',
             accent: bpInfo?.color ? `linear-gradient(90deg,${bpInfo.color},${bpInfo.color}99)` : 'linear-gradient(90deg,#ff4560,#ff456099)',
             trend: bpInfo?.label || 'No data', trendOk: bpInfo?.label === 'Normal',
           },
           {
-            icon: '📅', iconBg: 'rgba(124,90,245,.12)',
+            icon: 'calendar', iconBg: 'rgba(124,90,245,.12)',
             val: String(upcomingAppts.length), lbl: 'Upcoming Visits', color: '#7c5af5',
             accent: 'linear-gradient(90deg,#7c5af5,#00e5cc)',
             trend: upcomingAppts.length > 0 ? 'Scheduled' : 'None', trendOk: upcomingAppts.length > 0,
           },
           {
-            icon: '💊', iconBg: 'rgba(0,229,204,.12)',
+            icon: 'pill', iconBg: 'rgba(0,229,204,.12)',
             val: String(allPrescriptions.length), lbl: 'Active Medications', color: '#00e5cc',
             accent: 'linear-gradient(90deg,#00e5cc,#7c5af5)',
             trend: allPrescriptions.length > 0 ? 'On Track' : 'None', trendOk: true,
           },
           {
-            icon: allPendingAlerts.length > 0 ? '🔴' : '✅', iconBg: allPendingAlerts.length > 0 ? 'rgba(255,69,96,.12)' : 'rgba(0,214,143,.12)',
+            icon: 'check', iconBg: allPendingAlerts.length > 0 ? 'rgba(255,69,96,.12)' : 'rgba(0,214,143,.12)',
             val: String(allPendingAlerts.length), lbl: allPendingAlerts.length > 0 ? 'Unread' : 'All Clear',
             color: allPendingAlerts.length > 0 ? '#ff4560' : '#00d68f',
             accent: allPendingAlerts.length > 0 ? 'linear-gradient(90deg,#ff4560,#ff456099)' : 'linear-gradient(90deg,#00d68f,#00d68f99)',
@@ -3248,7 +3271,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div key={s.lbl} className="ov-stat" style={{ ['--_accent' as any]: s.accent }}>
             <div className="ov-stat-top">
               <div className="ov-stat-icon-wrap" style={{ background: s.iconBg }}>
-                <span style={{ fontSize: 18 }}>{s.icon}</span>
+                <span style={{ fontSize: 18 }}>{(() => { const IconComp = iconMap[s.icon]; return IconComp ? <IconComp size={18} /> : <>{s.icon}</>; })()}</span>
               </div>
               <span className="ov-stat-trend" style={{
                 background: s.trendOk ? 'rgba(0,214,143,.12)' : 'rgba(255,176,32,.1)',
@@ -3291,7 +3314,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           </div>
           <button style={{ background: '#00d68f', color: '#000', border: 'none', borderRadius: 10, padding: '10px 20px', fontWeight: 800, fontSize: 13, cursor: 'pointer', fontFamily: 'var(--font)' }}
             onClick={() => joinConsultation(a)} disabled={joining === a.id}>
-            {joining === a.id ? 'Joining…' : '🎥 Rejoin Session'}
+            {joining === a.id ? 'Joining…' : <><Video size={16} /> Rejoin Session</>}
           </button>
         </div>
       ))}
@@ -3304,14 +3327,14 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div className="ov-sec-hd">
             <div>
               <div className="ov-sec-eyebrow">Action Required</div>
-              <div className="ov-sec-title">🔔 Alerts & Notifications</div>
+              <div className="ov-sec-title"><Bell size={16} /> Alerts & Notifications</div>
             </div>
             <span style={mini('rgba(255,69,96,.12)', '#ff4560')}>{allPendingAlerts.length} unread</span>
           </div>
           {allPendingAlerts.slice(0, 6).map((al: any) => {
             const severity = al.severity || (al.type === 'pathway' || al.type === 'education' ? 'low' : 'medium');
             const severityClass = severity === 'high' || severity === 'urgent' ? 'high' : severity === 'medium' || severity === 'referral_created' ? 'med' : 'med';
-            const typeIcon = al.type === 'pathway' ? '🛤️' : al.type === 'education' || al._source === 'patientNotifications' && al.title?.includes('Education') ? '📚' : al.type === 'lab' ? '🧪' : al.type === 'referral_created' || al.title?.includes('referral') ? '📋' : al.type === 'message' || al.type === 'clinical' ? '💬' : al.type === 'emergency' ? '🚨' : '🔔';
+            const typeIcon = al.type === 'pathway' ? <Route size={14} /> : al.type === 'education' || al._source === 'patientNotifications' && al.title?.includes('Education') ? <BookOpen size={14} /> : al.type === 'lab' ? <FlaskConical size={14} /> : al.type === 'referral_created' || al.title?.includes('referral') ? <ClipboardList size={14} /> : al.type === 'message' || al.type === 'clinical' ? <MessageCircle size={14} /> : al.type === 'emergency' ? <AlertTriangle size={14} /> : <Bell size={14} />;
             const dismissFn = al._source === 'patientNotifications'
               ? () => updateDoc(doc(db, 'patientNotifications', al.id), { read: true })
               : () => updateDoc(doc(db, 'alerts', al.id), { read: true });
@@ -3341,14 +3364,14 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div className="ov-sec-hd">
             <div>
               <div className="ov-sec-eyebrow">From Your Doctor</div>
-              <div className="ov-sec-title">📨 Recent Updates</div>
+              <div className="ov-sec-title"><FileText size={16} /> Recent Updates</div>
             </div>
           </div>
           {pendingNotifications.slice(0, 4).map((n: any) => (
             <div key={n.id} className="ov-alert-card ov-alert-card--med">
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 3 }}>
-                  {n.type === 'pathway' ? '🛤️' : n.type === 'education' ? '📚' : n.type === 'lab' ? '🧪' : n.type === 'referral_created' ? '📋' : '📨'} {n.title}
+                  {n.type === 'pathway' ? <Route size={14} /> : n.type === 'education' ? <BookOpen size={14} /> : n.type === 'lab' ? <FlaskConical size={14} /> : n.type === 'referral_created' ? <ClipboardList size={14} /> : <FileText size={14} />} {n.title}
                 </div>
                 <div style={{ fontSize: 12, color: 'var(--text2)', lineHeight: 1.5 }}>{n.message}</div>
                 <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4, fontFamily: 'JetBrains Mono,monospace' }}>
@@ -3374,14 +3397,14 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div className="ov-sec-hd">
             <div>
               <div className="ov-sec-eyebrow">Real-time Health</div>
-              <div className="ov-sec-title">📊 Vital Signs</div>
+              <div className="ov-sec-title"><BarChart3 size={16} /> Vital Signs</div>
             </div>
             <button className="btn-sm-accent" onClick={() => setShowLogVital(true)}>+ Log Reading</button>
           </div>
 
           {vitals.length === 0 ? (
             <div className="ov-empty">
-              <div style={{ fontSize: 32, marginBottom: 8 }}>📊</div>
+              <div style={{ fontSize: 32, marginBottom: 8 }}><BarChart3 size={16} /></div>
               <div style={{ fontWeight: 700, marginBottom: 4 }}>No readings yet</div>
               <button className="btn-sm-accent" onClick={() => setShowLogVital(true)}>Start Tracking</button>
             </div>
@@ -3391,7 +3414,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
               {latestBP && bpInfo && (
                 <div className="ov-vital-card ov-vital-card--hero">
                   <div className="ov-vital-top">
-                    <span className="ov-vital-ico">❤️</span>
+                    <span className="ov-vital-ico"><Heart size={16} /></span>
                     <div>
                       <div className="ov-vital-label">Blood Pressure</div>
                       <div style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'JetBrains Mono,monospace' }}>
@@ -3419,16 +3442,16 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
 
               {/* Mini vitals */}
               {([
-                { type: 'glucose', icon: '🩸', label: 'Glucose',     unit: 'mmol/L', color: '#f59e0b' },
-                { type: 'pulse',   icon: '💓', label: 'Pulse Rate',  unit: 'bpm',    color: '#ec4899' },
-                { type: 'weight',  icon: '⚖️', label: 'Weight',      unit: 'kg',     color: '#60a5fa' },
-                { type: 'temp',    icon: '🌡️', label: 'Temperature', unit: '°C',     color: '#f97316' },
+                { type: 'glucose', icon: 'droplets', label: 'Glucose',     unit: 'mmol/L', color: '#f59e0b' },
+                { type: 'pulse',   icon: 'heart', label: 'Pulse Rate',  unit: 'bpm',    color: '#ec4899' },
+                { type: 'weight',  icon: 'scale', label: 'Weight',      unit: 'kg',     color: '#60a5fa' },
+                { type: 'temp',    icon: 'thermometer', label: 'Temperature', unit: '°C',     color: '#f97316' },
               ] as any[]).map((v: any) => {
                 const reading = vitals.find(vi => vi.type === v.type);
                 return (
                   <div key={v.type} className="ov-vital-card">
                     <div className="ov-vital-top">
-                      <span className="ov-vital-ico">{v.icon}</span>
+                      <span className="ov-vital-ico">{(() => { const IconComp = iconMap[v.icon]; return IconComp ? <IconComp size={22} /> : <>{v.icon}</>; })()}</span>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div className="ov-vital-label">{v.label}</div>
                         {reading && <div style={{ fontSize: 9, color: 'var(--muted)', fontFamily: 'JetBrains Mono,monospace' }}>{fmtShort(reading.recordedAt)}</div>}
@@ -3457,12 +3480,12 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div className="ov-sec-hd">
             <div>
               <div className="ov-sec-eyebrow">Current Medications</div>
-              <div className="ov-sec-title">💊 Prescriptions</div>
+              <div className="ov-sec-title"><Pill size={16} /> Prescriptions</div>
             </div>
             <button className="btn-sm-accent" onClick={() => setActiveTab('prescriptions')}>View All</button>
           </div>
           <div className="ov-empty">
-            <div style={{ fontSize: 32, marginBottom: 8 }}>💊</div>
+            <div style={{ fontSize: 32, marginBottom: 8 }}><Pill size={16} /></div>
             <div style={{ fontWeight: 700, marginBottom: 4 }}>No prescriptions yet</div>
             <div>Medications will appear after consultations.</div>
           </div>
@@ -3473,16 +3496,16 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div className="ov-sec-hd">
             <div>
               <div className="ov-sec-eyebrow">Care History</div>
-              <div className="ov-sec-title">📅 Recent Appointments</div>
+              <div className="ov-sec-title"><Calendar size={16} /> Recent Appointments</div>
             </div>
             <button className="btn-sm-accent" onClick={() => setActiveTab('appointments')}>View All</button>
           </div>
 
           {appointments.length === 0 ? (
             <div className="ov-empty">
-              <div style={{ fontSize: 36, marginBottom: 10 }}>📭</div>
+              <div style={{ fontSize: 36, marginBottom: 10 }}><Inbox size={16} /></div>
               <div style={{ fontWeight: 700, marginBottom: 4 }}>No appointments yet</div>
-              <button className="btn-sm-accent" onClick={() => setActiveTab('discover')}>Find a Doctor →</button>
+              <button className="btn-sm-accent" onClick={() => setActiveTab('discover')}>Find a Doctor  <ArrowRight size={14} /> </button>
             </div>
           ) : (
             <div>
@@ -3492,7 +3515,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                   <div key={appt.id} className="ov-appt" onClick={() => setActiveTab('appointments')}>
                     <div className="ov-appt-left">
                       <div className="ov-appt-ico">
-                        {appt.status === 'active' ? '🟢' : appt.status === 'completed' ? '✅' : appt.status === 'cancelled' ? '❌' : '📅'}
+                        {appt.status === 'active' ? <Circle size={18} fill="#00d68f" color="#00d68f" /> : appt.status === 'completed' ? <CheckCircle size={18} /> : appt.status === 'cancelled' ? <XCircle size={18} /> : <Calendar size={18} />}
                       </div>
                       <div style={{ minWidth: 0 }}>
                         <div className="ov-appt-spec">
@@ -3509,11 +3532,11 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                         <button className="ov-join-btn"
                           onClick={e => { e.stopPropagation(); joinConsultation(appt); }}
                           disabled={joining === appt.id}>
-                          {joining === appt.id ? '…' : '🎥 Join'}
+                          {joining === appt.id ? '…' : <><Video size={16} /> Join</>}
                         </button>
                       )}
                       {appt.paymentStatus === 'failed' && (
-                        <span style={mini('rgba(255,69,96,.1)', '#ff4560')}>Pay Now →</span>
+                        <span style={mini('rgba(255,69,96,.1)', '#ff4560')}>Pay Now  <ArrowRight size={14} /> </span>
                       )}
                     </div>
                   </div>
@@ -3532,7 +3555,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div className="ov-sec-hd">
             <div>
               <div className="ov-sec-eyebrow">Doctor-Ordered Tests</div>
-              <div className="ov-sec-title">🧪 Pending Lab Orders</div>
+              <div className="ov-sec-title"><FlaskConical size={16} /> Pending Lab Orders</div>
             </div>
             <span style={mini('rgba(255,176,32,.12)', '#ffb020')}>{pendingLabOrders} pending</span>
           </div>
@@ -3565,18 +3588,18 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
           <div className="ov-sec-hd">
             <div>
               <div className="ov-sec-eyebrow">Assigned Learning</div>
-              <div className="ov-sec-title">📚 Education from Your Doctor</div>
+              <div className="ov-sec-title"><BookOpen size={16} /> Education from Your Doctor</div>
             </div>
-            <button className="btn-sm-accent" onClick={() => setActiveTab('education')}>View All →</button>
+            <button className="btn-sm-accent" onClick={() => setActiveTab('education')}>View All  <ArrowRight size={14} /> </button>
           </div>
           <div className="edu-grid">
             {educationLogs.filter((e: any) => e.topic || e.title).slice(0, 3).map((e: any, i: number) => (
               <div key={e.id || i} className="edu-card" style={{ cursor: 'default' }}>
                 <div className="edu-body">
-                  <span className="edu-type">👨‍⚕️ Dr. {e.doctorName || 'Your Doctor'}</span>
-                  <div className="edu-title">📚 {e.topic || e.title}</div>
+                  <span className="edu-type">Dr. {e.doctorName || 'Your Doctor'}</span>
+                  <div className="edu-title"><BookOpen size={16} /> {e.topic || e.title}</div>
                   <p className="edu-summary">{e.notes || `Educational material sent on ${fmtDate(e.sentAt)}`}</p>
-                  <div className="edu-time">📅 {fmtDate(e.sentAt)}</div>
+                  <div className="edu-time"><Calendar size={16} /> {fmtDate(e.sentAt)}</div>
                 </div>
               </div>
             ))}
@@ -3602,13 +3625,13 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div className="panel">
                   <div className="panel-hd">
-                    <div className="panel-title">📊 Vital Signs History</div>
+                    <div className="panel-title"><BarChart3 size={16} /> Vital Signs History</div>
                     <button className="btn-sm-accent" onClick={() => setShowLogVital(true)}>+ Log Reading</button>
                   </div>
                   {latestBP && bpInfo && (
                     <div className="vital-main" style={{ borderColor: bpInfo.color + '40', marginBottom: 16 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                        <span style={{ fontSize: 28 }}>❤️</span>
+                        <span style={{ fontSize: 28 }}><Heart size={16} /></span>
                         <div>
                           <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>Blood Pressure (Latest)</div>
                           <div className="vital-main-val" style={{ color: bpInfo.color }}>{latestBP.systolic}/{latestBP.diastolic} <span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 400 }}>mmHg</span></div>
@@ -3636,15 +3659,15 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                   )}
                   <div className="vitals-mini" style={{ marginBottom: 16 }}>
                     {[
-                      { type: 'glucose', icon: '🩸', label: 'Glucose', unit: 'mmol/L' },
-                      { type: 'pulse', icon: '💓', label: 'Pulse', unit: 'bpm' },
-                      { type: 'weight', icon: '⚖️', label: 'Weight', unit: 'kg' },
-                      { type: 'temp', icon: '🌡️', label: 'Temp', unit: '°C' },
+                      { type: 'glucose', icon: 'droplets', label: 'Glucose', unit: 'mmol/L' },
+                      { type: 'pulse', icon: 'heart', label: 'Pulse', unit: 'bpm' },
+                      { type: 'weight', icon: 'scale', label: 'Weight', unit: 'kg' },
+                      { type: 'temp', icon: 'thermometer', label: 'Temp', unit: '°C' },
                     ].map(v => {
                       const r = vitals.find(vi => vi.type === v.type);
                       return (
                         <div key={v.type} className="vital-mini">
-                          <span style={{ fontSize: 22 }}>{v.icon}</span>
+                          <span style={{ fontSize: 22 }}>{(() => { const IconComp = iconMap[v.icon]; return IconComp ? <IconComp size={22} /> : <>{v.icon}</>; })()}</span>
                           <span className="vital-mini-val" style={{ color: 'var(--text)' }}>{r ? r.value : '—'}</span>
                           <span style={{ fontSize: 9, color: 'var(--muted)' }}>{v.unit}</span>
                           <span style={{ fontSize: 10, color: 'var(--text2)', fontWeight: 600 }}>{v.label}</span>
@@ -3653,14 +3676,14 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                     })}
                   </div>
                   {vitals.length === 0 ? (
-                    <div className="empty-sm"><div style={{ fontSize: 36 }}>📊</div><p>No readings yet. Log your first vital sign to start tracking.</p></div>
+                    <div className="empty-sm"><div style={{ fontSize: 36 }}><BarChart3 size={16} /></div><p>No readings yet. Log your first vital sign to start tracking.</p></div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                       <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 }}>All Readings</div>
                       {vitals.slice(0, 20).map(v => (
                         <div key={v.id} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 9, padding: '9px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                            <span style={{ fontSize: 16 }}>{v.type === 'bp' ? '❤️' : v.type === 'glucose' ? '🩸' : v.type === 'weight' ? '⚖️' : v.type === 'temp' ? '🌡️' : '💓'}</span>
+                            <span style={{ fontSize: 16 }}>{(() => { const m: Record<string, LucideIcon> = { bp: Heart, glucose: Droplets, weight: Scale, temp: Thermometer, pulse: Heart }; const C = m[v.type] || Heart; return <C size={16} />; })()}</span>
                             <div>
                               <div style={{ fontWeight: 700, fontSize: 13, fontFamily: 'var(--mono)' }}>{v.value} {v.unit}</div>
                               {v.note && <div style={{ fontSize: 11, color: 'var(--muted)', fontStyle: 'italic' }}>{v.note}</div>}
@@ -3692,7 +3715,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                   ))}
                 </div>
                 {appointments.length === 0 ? (
-                  <div className="panel"><div className="empty-sm"><div style={{ fontSize: 40 }}>📭</div><p>No appointments yet.</p><button className="btn-sm-accent" style={{ marginTop: 12 }} onClick={() => setActiveTab('discover')}>Find Doctors →</button></div></div>
+                  <div className="panel"><div className="empty-sm"><div style={{ fontSize: 40 }}><Inbox size={16} /></div><p>No appointments yet.</p><button className="btn-sm-accent" style={{ marginTop: 12 }} onClick={() => setActiveTab('discover')}>Find Doctors  <ArrowRight size={14} /> </button></div></div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {appointments.map(appt => {
@@ -3700,21 +3723,21 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                       return (
                         <div key={appt.id} className="appt-card">
                           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                            <div className="appt-icon">{appt.status === 'active' ? '🟢' : appt.status === 'completed' ? '✅' : appt.status === 'cancelled' ? '❌' : '📅'}</div>
+                            <div className="appt-icon">{appt.status === 'active' ? <Circle size={20} fill="#00d68f" color="#00d68f" /> : appt.status === 'completed' ? <CheckCircle size={20} /> : appt.status === 'cancelled' ? <XCircle size={20} /> : <Calendar size={20} />}</div>
                             <div>
                               <div className="appt-spec">
                                 {appt.specialty || 'Consultation'}
                                 {appt.firstVisit && <span className="appt-first-visit">1st Visit</span>}
-                                {appt.type === 'telemedicine' && <span style={{ fontSize: 9, color: 'var(--accent)', fontWeight: 700, marginLeft: 6 }}>💻 VIDEO</span>}
+                                {appt.type === 'telemedicine' && <span style={{ fontSize: 9, color: 'var(--accent)', fontWeight: 700, marginLeft: 6 }}><Monitor size={16} /> VIDEO</span>}
                               </div>
                               <div className="appt-dr">Dr. {appt.doctorName}</div>
                               <div className="appt-date">{fmtDate(appt.scheduledDate || appt.date)}</div>
-                              {appt.scheduledTime && <div style={{ fontSize: 10, color: 'var(--accent)', fontFamily: 'var(--mono)', marginTop: 1 }}>⏰ {appt.scheduledTime}</div>}
+                              {appt.scheduledTime && <div style={{ fontSize: 10, color: 'var(--accent)', fontFamily: 'var(--mono)', marginTop: 1 }}><Clock size={16} /> {appt.scheduledTime}</div>}
                               {appt.patientNotes && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3, fontStyle: 'italic' }}>"{appt.patientNotes.slice(0, 60)}…"</div>}
                               {appt.paymentStatus && (
                                 <div style={{ fontSize: 10, marginTop: 3, color: appt.paymentStatus === 'paid' ? 'var(--green)' : appt.paymentStatus === 'failed' ? 'var(--red)' : 'var(--amber)', fontWeight: 700 }}>
-                                  💳 {appt.paymentStatus === 'paid' ? `Paid · Ref: ${appt.paymentRef}` : appt.paymentStatus === 'processing' ? 'Payment processing…' : appt.paymentStatus === 'failed' ? 'Payment failed — ' : 'Pending payment'}
-                                  {appt.paymentStatus === 'failed' && <button style={{ background: 'none', border: 'none', color: 'var(--amber)', cursor: 'pointer', fontWeight: 700, fontSize: 10 }} onClick={() => setActiveTab('payments')}>Pay Now →</button>}
+                                  <CreditCard size={16} /> {appt.paymentStatus === 'paid' ? `Paid · Ref: ${appt.paymentRef}` : appt.paymentStatus === 'processing' ? 'Payment processing…' : appt.paymentStatus === 'failed' ? 'Payment failed — ' : 'Pending payment'}
+                                  {appt.paymentStatus === 'failed' && <button style={{ background: 'none', border: 'none', color: 'var(--amber)', cursor: 'pointer', fontWeight: 700, fontSize: 10 }} onClick={() => setActiveTab('payments')}>Pay Now  <ArrowRight size={14} /> </button>}
                                 </div>
                               )}
                             </div>
@@ -3723,11 +3746,11 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                             <span className="status-pill" style={{ background: sc.bg, color: sc.color }}>{sc.label}</span>
                             {appt.status === 'active' && (
                               <button className="btn-join-sm" onClick={() => joinConsultation(appt)} disabled={joining === appt.id}>
-                                {joining === appt.id ? '…' : '🎥 Join'}
+{joining === appt.id ? '…' : <><Video size={16} /> Join</>}
                               </button>
                             )}
                             {appt.status === 'completed' && (
-                              <button className="btn-records" onClick={() => setActiveTab('history')}>📄 History</button>
+                              <button className="btn-records" onClick={() => setActiveTab('history')}><FileText size={16} /> History</button>
                             )}
                           </div>
                         </div>
@@ -3741,7 +3764,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
             {/* ── PRESCRIPTIONS TAB ── */}
             {activeTab === 'prescriptions' && (
   <div className="ov-empty" style={{ padding: 40, textAlign: 'center' }}>
-    <div style={{ fontSize: 48, marginBottom: 12 }}>💊</div>
+    <div style={{ fontSize: 48, marginBottom: 12 }}><Pill size={16} /></div>
     <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 6 }}>Prescriptions</div>
     <div style={{ color: '#6b7280' }}>No prescription data available.</div>
   </div>
@@ -3774,7 +3797,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
     {false && allPrescriptions.length > 0 && (
       <div className="rx-history-section">
         <div className="rxh-hd">
-          <span className="rxh-title">💊 Prescription History</span>
+          <span className="rxh-title"><Pill size={16} /> Prescription History</span>
           <span className="rxh-count">{allPrescriptions.length} total</span>
         </div>
         <div className="rxh-grid">
@@ -3792,10 +3815,10 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
                   <span className="rxh-date">{rxDate}</span>
                 </div>
                 <div className="rxh-meta">
-                  {rx.dosage && <span className="rxh-chip">💉 {rx.dosage}</span>}
-                  {rx.frequency && <span className="rxh-chip">🕐 {rx.frequency}</span>}
-                  {rx.duration && <span className="rxh-chip">📆 {rx.duration}</span>}
-                  {rx.route && <span className="rxh-chip">🩸 {rx.route}</span>}
+                  {rx.dosage && <span className="rxh-chip"><Syringe size={16} /> {rx.dosage}</span>}
+                  {rx.frequency && <span className="rxh-chip"><Clock size={16} /> {rx.frequency}</span>}
+                  {rx.duration && <span className="rxh-chip"><Calendar size={14} /> {rx.duration}</span>}
+                  {rx.route && <span className="rxh-chip"><Droplets size={16} /> {rx.route}</span>}
                 </div>
                 <div className="rxh-footer">
                   <span className="rxh-doctor">Dr. {rx.doctorName || rx.prescriberName || 'Unknown'}</span>
@@ -3812,7 +3835,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
     {clinicalNotes.length > 0 && (
       <div className="panel">
         <div className="panel-hd">
-          <span className="panel-title">📝 Doctor's Clinical Notes</span>
+          <span className="panel-title"><FileText size={16} /> Doctor's Clinical Notes</span>
           <span className="count-badge">{clinicalNotes.length}</span>
         </div>
         <div className="rxh-grid">
@@ -3853,7 +3876,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
   <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
     <div style={{ marginBottom: 4 }}>
       <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--text, #1e293b)', marginBottom: 4 }}>
-        🏥 My Referrals
+        <Building2 size={16} /> My Referrals
       </div>
       <div style={{ fontSize: 13, color: 'var(--muted, #94a3b8)' }}>
         Referrals issued by your doctors · Download letters · Track status
@@ -3912,15 +3935,15 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
       <nav className="mobile-nav">
         {[
           
-  { id: 'overview',     icon: '🏠', label: 'Home' },
-  { id: 'record',       icon: '📋', label: 'Record' },
-  { id: 'discover',     icon: '🔍', label: 'Doctors' },
-  { id: 'appointments', icon: '📅', label: 'Visits' },
-  { id: 'messages',     icon: '💬', label: 'Messages' },
+  { id: 'overview',     icon: 'home', label: 'Home' },
+  { id: 'record',       icon: 'clipboard', label: 'Record' },
+  { id: 'discover',     icon: 'search', label: 'Doctors' },
+  { id: 'appointments', icon: 'calendar', label: 'Visits' },
+  { id: 'messages',     icon: 'message', label: 'Messages' },
 
         ].map(t => (
           <button key={t.id} className={`mob-nav-btn ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
-            <span className="mob-icon">{t.icon}</span>
+            <span className="mob-icon">{(() => { const IconComp = iconMap[t.icon]; return IconComp ? <IconComp size={18} /> : <>{t.icon}</>; })()}</span>
             {t.label}
           </button>
         ))}
@@ -3928,7 +3951,7 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
 
       {/* FAB */}
       <div className="fab-wrap">
-        <button className="fab-item" onClick={() => setShowEmergency(true)}>🚨 Emergency</button>
+        <button className="fab-item" onClick={() => setShowEmergency(true)}><AlertTriangle size={16} /> Emergency</button>
         <button className="fab-main" onClick={() => setShowLogVital(true)}>+</button>
       </div>
 

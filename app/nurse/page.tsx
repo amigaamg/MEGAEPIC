@@ -8,6 +8,7 @@ import { NurseEMAR } from '@/components/nurse/NurseEMAR'
 import { NurseKardexView } from '@/components/nurse/NurseKardexView'
 import { NurseVitalsCapture } from '@/components/nurse/NurseVitalsCapture'
 import { VitalTrendsDashboard } from '@/components/vitals/VitalTrendsDashboard'
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext'
 
 const S = {
   page: { minHeight: '100vh', background: C.panel, fontFamily: "'Inter', system-ui, sans-serif", color: C.text, display: 'flex', flexDirection: 'column' as const },
@@ -105,6 +106,7 @@ export default function NurseWorkspace() {
     return `enc-${selectedPatientId.replace(/^pt-/, '')}-${today}`
   }, [selectedPatientId])
   const userId = 'nurse_current'
+  const orgId = getActiveOrganizationId()
   const userName = 'Current Nurse'
 
   const shiftProgress = Math.round(((Date.now() - new Date().setHours(7, 0, 0, 0)) / (12 * 60 * 60 * 1000)) * 100)
@@ -352,7 +354,7 @@ export default function NurseWorkspace() {
             <div>
               <div style={{ fontSize: 18, fontWeight: 700, color: C.navy, marginBottom: 4 }}>Nursing Kardex</div>
               <div style={{ fontSize: 11, color: C.textLight, marginBottom: 20 }}>Live nursing care board — generated automatically from the encounter</div>
-              <NurseKardexView orgId="telemed-a98cf" deptId="ward" unitId="ward" userId={userId} />
+              {orgId && <NurseKardexView orgId={orgId} deptId="ward" unitId="ward" userId={userId} />}
             </div>
           )}
 

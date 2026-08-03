@@ -1,95 +1,138 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { S, FOOTER_COLUMNS } from '@/components/landing/config'
-import { C } from '@/lib/colors'
-import { Globe, MessageCircle, Share2, Mail, Heart } from 'lucide-react'
+// AMEXAN Universal Footer Component
+// Book III Visual Constitution: AMEXAN Blue (#2F80ED) / White / Soft Gray.
+// All values come from the CSS var layer (presentation.css). Never inline hex.
+import React from 'react';
+import { FOOTER_COLUMNS, TRUST_LOGOS } from './config';
+import { Globe, Mail, Phone, MapPin } from 'lucide-react';
 
-const LEGAL_LINKS = ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Contact']
+interface FooterProps {
+  year: string;
+}
 
-export default function Footer({ year: propYear }: { year?: string }) {
-  const [year, setYear] = useState('')
-  useEffect(() => { setYear(String(new Date().getFullYear())) }, [])
-  const displayYear = propYear || year
+export default function Footer({ year }: FooterProps) {
   return (
-    <footer style={{ background: '#0B1926', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ padding: '64px 40px 0', maxWidth: 1200, margin: '0 auto' }}>
+    <footer
+      style={{
+        background: 'var(--surface-card)',
+        color: 'var(--text-secondary)',
+        borderTop: '1px solid var(--surface-border)',
+        paddingTop: 'var(--space-16)',
+        paddingBottom: 'var(--space-12)',
+      }}
+    >
+      <div
+        style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 var(--space-4)',
+        }}
+      >
+        {/* Main Grid */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '2fr repeat(6, 1fr)',
-            gap: 32,
-            marginBottom: 48,
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 'var(--space-8)',
+            marginBottom: 'var(--space-8)',
           }}
         >
+          {/* Brand Column */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-3)',
+                marginBottom: 'var(--space-4)',
+              }}
+            >
               <div
                 style={{
-                  ...S.logoIcon,
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
+                  width: 32,
+                  height: 32,
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--sky-500)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-on-brand)',
+                  fontWeight: 700,
                   fontSize: 16,
                 }}
               >
-                A
+                AM
               </div>
-              <span style={{ ...S.logoText, color: C.white, fontSize: 18 }}>AMEXAN</span>
-            </div>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: 20, maxWidth: 260 }}>
-              The clinical operating system powering intelligent healthcare worldwide. Open,
-              interoperable, and built for every care setting.
-            </p>
-            <div style={{ display: 'flex', gap: 10 }}>
-              {[Globe, MessageCircle, Share2, Mail].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
+              <div>
+                <div
                   style={{
-                    width: 34,
-                    height: 34,
-                    borderRadius: 8,
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'rgba(255,255,255,0.5)',
-                    textDecoration: 'none',
-                    transition: 'all 0.15s',
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
                   }}
                 >
-                  <Icon size={15} />
-                </a>
-              ))}
+                  AMEXAN
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                  Clinical Operating System
+                </div>
+              </div>
+            </div>
+            <p
+              style={{
+                fontSize: 13,
+                lineHeight: 1.6,
+                color: 'var(--text-secondary)',
+                marginBottom: 'var(--space-4)',
+              }}
+            >
+              The International Clinical Operating System.
+              Connecting every patient, clinician, facility, and healthcare service through one intelligent platform.
+            </p>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-3)',
+                fontSize: 13,
+                color: 'var(--text-muted)',
+              }}
+            >
+              <MapPin size={14} />
+              <span>Kenya • Global</span>
             </div>
           </div>
 
-          {FOOTER_COLUMNS.map((col) => (
-            <div key={col.title}>
-              <h4
+          {/* Footer Columns */}
+          {FOOTER_COLUMNS.map((column) => (
+            <div key={column.title}>
+              <h3
                 style={{
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: 600,
-                  color: 'rgba(255,255,255,0.4)',
-                  marginBottom: 16,
-                  letterSpacing: '0.05em',
-                  textTransform: 'uppercase',
+                  color: 'var(--text-primary)',
+                  marginBottom: 'var(--space-3)',
                 }}
               >
-                {col.title}
-              </h4>
+                {column.title}
+              </h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {col.links.map((link) => (
-                  <li key={link} style={{ marginBottom: 10 }}>
+                {column.links.map((link) => (
+                  <li key={link}>
                     <a
                       href="#"
                       style={{
+                        display: 'block',
+                        padding: 'var(--space-1) 0',
                         fontSize: 13,
-                        color: 'rgba(255,255,255,0.6)',
+                        color: 'var(--text-secondary)',
                         textDecoration: 'none',
-                        transition: 'color 0.15s',
+                        transition: 'color var(--t-fast) ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = 'var(--sky-500)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = 'var(--text-secondary)';
                       }}
                     >
                       {link}
@@ -101,40 +144,63 @@ export default function Footer({ year: propYear }: { year?: string }) {
           ))}
         </div>
 
+        {/* Trust Logos */}
         <div
           style={{
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-            padding: '20px 0',
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
             flexWrap: 'wrap',
-            gap: 12,
+            gap: 'var(--space-2) var(--space-3)',
+            marginBottom: 'var(--space-6)',
           }}
         >
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
-            &copy; {displayYear || '2026'} AMEXAN. All rights reserved. Made with{' '}
-            <Heart size={11} style={{ display: 'inline', verticalAlign: 'middle', color: '#E74C3C' }} />{' '}
-            for global health.
-          </p>
-          <div style={{ display: 'flex', gap: 16 }}>
-            {LEGAL_LINKS.map((link) => (
-              <a
-                key={link}
-                href="#"
-                style={{
-                  fontSize: 12,
-                  color: 'rgba(255,255,255,0.4)',
-                  textDecoration: 'none',
-                  transition: 'color 0.15s',
-                }}
-              >
-                {link}
-              </a>
-            ))}
+          {TRUST_LOGOS.map((logo) => (
+            <span
+              key={logo}
+              style={{
+                fontSize: 11,
+                fontWeight: 500,
+                padding: 'var(--space-1) var(--space-3)',
+                borderRadius: 'var(--radius-pill)',
+                background: 'var(--surface-elevated)',
+                color: 'var(--text-muted)',
+                border: '1px solid var(--surface-border)',
+              }}
+            >
+              {logo}
+            </span>
+          ))}
+        </div>
+
+        {/* Contact Info */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-4)',
+            fontSize: 13,
+            color: 'var(--text-secondary)',
+            flexWrap: 'wrap',
+            paddingTop: 'var(--space-4)',
+            borderTop: '1px solid var(--surface-border)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <Mail size={14} />
+            <span>contact@amexan.health</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <Globe size={14} />
+            <span>amexan.health</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <Phone size={14} />
+            <span>+254 20 000 0000</span>
+          </div>
+          <div style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--text-muted)' }}>
+            © {year} AMEXAN. All rights reserved.
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

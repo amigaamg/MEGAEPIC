@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useCallback, useMemo } from 'react';
 import { useEncounter } from '@/lib/amexan/encounter';
+import { ConversationInput } from './ConversationInput';
 import { getNextQuestion } from '@/lib/amexan/encounter/engines/questionEngine';
 import type { SymptomField } from '@/lib/amexan/encounter/symptomSchemas';
 import type { SymptomId, StructuredSymptom } from '@/lib/amexan/encounter/encounterState';
@@ -218,6 +219,8 @@ export function HPIPhase({ onComplete }: HPIPhaseProps) {
           <span className="text-sm font-semibold text-gray-700">History of Presenting Illness</span>
         </div>
 
+        <ConversationInput />
+
         <p className="text-xs text-gray-500">Select the symptoms the patient is experiencing:</p>
 
         <div className="flex flex-wrap gap-2">
@@ -266,6 +269,8 @@ export function HPIPhase({ onComplete }: HPIPhaseProps) {
           ))}
         </div>
       </div>
+
+      <ConversationInput />
 
       {/* Progress */}
       <div className="flex items-center gap-3">

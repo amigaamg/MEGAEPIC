@@ -2,31 +2,32 @@
 import { useState, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Building2, Users, IdCard, RefreshCw, CheckCircle, Bell, ClipboardList, BarChart3, Wrench, Pill, Microscope, Radio, Building, DollarSign, Calendar, Send, Globe, FileText, Link as LinkIcon, WifiOff, Zap, TrendingUp, ArrowLeft } from "lucide-react";
 
 const HMIS_BOOKS = [
-  { icon: '🏥', label: 'Hospital Model', href: '/hmis/hospital', book: 'I' },
-  { icon: '👥', label: 'User Model', href: '/hmis/users', book: 'II' },
-  { icon: '🆔', label: 'Identity', href: '/hmis/identity', book: 'III' },
-  { icon: '🔄', label: 'Encounters', href: '/hmis/encounters', book: 'IV' },
-  { icon: '✅', label: 'Task Engine', href: '/hmis/tasks', book: 'V' },
-  { icon: '🔔', label: 'Notifications', href: '/hmis/notifications', book: 'VI' },
-  { icon: '📋', label: 'Orders', href: '/hmis/orders', book: 'VII' },
-  { icon: '📊', label: 'Results', href: '/hmis/results', book: 'VIII' },
-  { icon: '🔧', label: 'Resources', href: '/hmis/resources', book: 'IX' },
-  { icon: '💊', label: 'Pharmacy', href: '/hmis/pharmacy', book: 'X' },
-  { icon: '🔬', label: 'Laboratory', href: '/hmis/laboratory', book: 'XI' },
-  { icon: '📡', label: 'Radiology', href: '/hmis/radiology', book: 'XII' },
-  { icon: '🏨', label: 'Theatre', href: '/hmis/theatre', book: 'XIII' },
-  { icon: '💰', label: 'Billing', href: '/hmis/billing', book: 'XV' },
-  { icon: '📅', label: 'Scheduling', href: '/hmis/scheduling', book: 'XVI' },
-  { icon: '📨', label: 'Referrals', href: '/hmis/referrals', book: 'XVII' },
-  { icon: '🌍', label: 'Public Health', href: '/hmis/public-health', book: 'XVIII' },
-  { icon: '🔬', label: 'Research', href: '/hmis/research', book: 'XIX' },
-  { icon: '📝', label: 'Audit', href: '/hmis/audit', book: 'XX' },
-  { icon: '🔗', label: 'Integration', href: '/hmis/integration', book: 'XXI' },
-  { icon: '📴', label: 'Offline', href: '/hmis/offline', book: 'XXII' },
-  { icon: '⚡', label: 'Event Bus', href: '/hmis/events', book: 'XXIII' },
-  { icon: '📈', label: 'Analytics', href: '/hmis/analytics', book: 'XXIV' },
+  { icon: <Building2 size={14} />, label: 'Hospital Model', href: '/hmis/hospital', book: 'I' },
+  { icon: <Users size={14} />, label: 'User Model', href: '/hmis/users', book: 'II' },
+  { icon: <IdCard size={14} />, label: 'Identity', href: '/hmis/identity', book: 'III' },
+  { icon: <RefreshCw size={14} />, label: 'Encounters', href: '/hmis/encounters', book: 'IV' },
+  { icon: <CheckCircle size={14} />, label: 'Task Engine', href: '/hmis/tasks', book: 'V' },
+  { icon: <Bell size={14} />, label: 'Notifications', href: '/hmis/notifications', book: 'VI' },
+  { icon: <ClipboardList size={14} />, label: 'Orders', href: '/hmis/orders', book: 'VII' },
+  { icon: <BarChart3 size={14} />, label: 'Results', href: '/hmis/results', book: 'VIII' },
+  { icon: <Wrench size={14} />, label: 'Resources', href: '/hmis/resources', book: 'IX' },
+  { icon: <Pill size={14} />, label: 'Pharmacy', href: '/hmis/pharmacy', book: 'X' },
+  { icon: <Microscope size={14} />, label: 'Laboratory', href: '/hmis/laboratory', book: 'XI' },
+  { icon: <Radio size={14} />, label: 'Radiology', href: '/hmis/radiology', book: 'XII' },
+  { icon: <Building size={14} />, label: 'Theatre', href: '/hmis/theatre', book: 'XIII' },
+  { icon: <DollarSign size={14} />, label: 'Billing', href: '/hmis/billing', book: 'XV' },
+  { icon: <Calendar size={14} />, label: 'Scheduling', href: '/hmis/scheduling', book: 'XVI' },
+  { icon: <Send size={14} />, label: 'Referrals', href: '/hmis/referrals', book: 'XVII' },
+  { icon: <Globe size={14} />, label: 'Public Health', href: '/hmis/public-health', book: 'XVIII' },
+  { icon: <Microscope size={14} />, label: 'Research', href: '/hmis/research', book: 'XIX' },
+  { icon: <FileText size={14} />, label: 'Audit', href: '/hmis/audit', book: 'XX' },
+  { icon: <LinkIcon size={14} />, label: 'Integration', href: '/hmis/integration', book: 'XXI' },
+  { icon: <WifiOff size={14} />, label: 'Offline', href: '/hmis/offline', book: 'XXII' },
+  { icon: <Zap size={14} />, label: 'Event Bus', href: '/hmis/events', book: 'XXIII' },
+  { icon: <TrendingUp size={14} />, label: 'Analytics', href: '/hmis/analytics', book: 'XXIV' },
 ];
 
 export default function HMISLayout({ children }: { children: React.ReactNode }) {
@@ -71,7 +72,7 @@ export default function HMISLayout({ children }: { children: React.ReactNode }) 
               fontFamily: "'DM Sans',sans-serif",
             }}
           >
-            <span style={{ fontSize: 14, width: 20, textAlign: 'center' }}>{item.icon}</span>
+            <span style={{ width: 20, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'inherit' }}>{item.icon}</span>
             <span style={{ flex: 1 }}>{item.label}</span>
             <span style={{ fontSize: 9, color: '#475569', fontFamily: "'Syne',sans-serif" }}>{item.book}</span>
           </Link>
@@ -81,7 +82,7 @@ export default function HMISLayout({ children }: { children: React.ReactNode }) 
             onClick={() => router.push('/')}
             style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#64748B', fontSize: 13, cursor: 'pointer', fontFamily: "'DM Sans',sans-serif" }}
           >
-            <span>←</span><span>Exit</span>
+            <span style={{ display: 'inline-flex' }}><ArrowLeft size={14} /></span><span>Exit</span>
           </div>
         </div>
       </nav>

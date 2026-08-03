@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { generateHospitalNumber } from '@/lib/amexan/domain/hospital-number';
 import { registerPatient } from '@/src/services/patientService';
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext';
 
 interface PatientInfo {
   name: string;
@@ -32,7 +33,8 @@ export function PatientRegistration({ onComplete }: Props) {
 
     setSaving(true);
     try {
-      const orgId = 'telemed-a98cf';
+      const orgId = getActiveOrganizationId();
+      if (!orgId) { setError('No organization selected'); setSaving(false); return; }
       const hn = await generateHospitalNumber(orgId);
 
       await registerPatient({

@@ -9,7 +9,7 @@ interface DailyTask {
   type: 'medication' | 'measurement' | 'activity' | 'check-in' | 'education';
   detail: string;
   done: boolean;
-  icon: string;
+  icon: React.ReactNode;
 }
 
 interface Props {

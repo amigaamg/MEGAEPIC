@@ -1,5 +1,11 @@
 export type * from './types'
 
+// ── Constitution (frozen rules) ────────────────────────────────────────────
+export * from './constitution/index'
+
+// ── Tokens (data) ──────────────────────────────────────────────────────────
+export * from './tokens/index'
+
 export {
   VIEWPORT_CLASSES,
   VIEWPORT_ORDER,
@@ -106,3 +112,20 @@ export {
   getLayoutForRole,
 } from './theme-engine'
 export type { BrandConfig, ThemeOverride, RoleTheme, ThemeContext } from './theme-engine'
+
+export {
+  getCurrentViewport,
+  refreshViewport,
+  getCachedViewport,
+  getViewport,
+  isViewportAtLeast,
+  viewportEngine,
+} from './viewport-engine'
+export type { ViewportSnapshot, ViewportEngine } from './viewport-engine'
+
+export {
+  generatePage,
+  composePage,
+  pageEngine,
+} from './page-engine'
+export type { PageBlueprint, PageRequest, PageSectionSpec, PageNavigationSpec } from './page-engine'

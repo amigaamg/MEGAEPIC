@@ -5,7 +5,7 @@ import Link from "next/link"
 import { ClinicalEncounter } from "@/components/clinical-encounter/ClinicalEncounter"
 import { PatientRegistration } from "@/components/clinical-encounter/PatientRegistration"
 import { listRecentEncounters, loadEncounter, type SavedEncounter } from "@/lib/amexan/encounter/encounterPersistence"
-import { getDefaultOrgId } from "@/lib/config"
+import { getActiveOrganizationId } from "@/lib/firebase/orgContext"
 import { useAuth } from "@/context/AuthContext"
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import { auth } from "@/lib/firebase"
@@ -26,10 +26,15 @@ export default function EncounterCenterPage() {
   const [existingEncounterData, setExistingEncounterData] = useState<{ state: any; encounterId: string } | null>(null)
 
   useEffect(() => {
-    listRecentEncounters(getDefaultOrgId(), 10)
-      .then(setRecentEncounters)
-      .catch(() => {})
-      .finally(() => setLoadingEncounters(false))
+    const orgId = getActiveOrganizationId()
+    if (orgId) {
+      listRecentEncounters(orgId, 10)
+        .then(setRecentEncounters)
+        .catch(() => {})
+        .finally(() => setLoadingEncounters(false))
+    } else {
+      setLoadingEncounters(false)
+    }
   }, [])
 
   const handleRegister = () => {
@@ -78,7 +83,9 @@ export default function EncounterCenterPage() {
   const handleOpenEncounter = async (enc: SavedEncounter) => {
     setLoadingEncounters(true)
     try {
-      const loaded = await loadEncounter('telemed-a98cf', enc.encounterId)
+      const orgId = getActiveOrganizationId()
+      if (!orgId) { setLoadingEncounters(false); return }
+      const loaded = await loadEncounter(orgId, enc.encounterId)
       if (loaded && loaded.state) {
         setExistingEncounterData({ state: loaded.state, encounterId: enc.encounterId })
       } else {

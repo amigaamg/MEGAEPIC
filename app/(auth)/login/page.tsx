@@ -4,8 +4,9 @@ import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
-import { signInWithPopup, GoogleAuthProvider, OAuthProvider, sendEmailVerification } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, OAuthProvider, sendEmailVerification, isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import MagicLinkForm from "@/components/auth/MagicLinkForm";
+import { Mail, Key, Send, Link } from "lucide-react";
 
 type AuthMethod = 'email' | 'passkey' | 'sso' | 'magic-link';
 
@@ -44,6 +45,8 @@ export default function AuthLoginPage() {
   const [loading, setLoading] = useState(false);
   const [pwVisible, setPwVisible] = useState(false);
   const [shake, setShake] = useState(false);
+  const [magicLinkPending, setMagicLinkPending] = useState(false);
+  const [magicLinkEmail, setMagicLinkEmail] = useState("");
   const { needsToCompleteRegistration } = useAuth();
 
   const triggerShake = useCallback(() => {
@@ -62,9 +65,42 @@ export default function AuthLoginPage() {
 
   useEffect(() => {
     if (needsToCompleteRegistration) {
-      router.push('/register');
+      // Resume the constitutional registration flow, not quick-register.
+      router.push('/register/constitution');
     }
   }, [needsToCompleteRegistration, router]);
+
+  // Complete magic-link sign-in if the user arrived via an email link.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      const storedEmail = window.localStorage.getItem('emailForSignIn');
+      if (storedEmail) {
+        setMagicLinkEmail(storedEmail);
+        completeMagicLink(storedEmail);
+      } else {
+        // Email is required to finish signInWithEmailLink; ask for it inline.
+        setMagicLinkPending(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
+
+  const completeMagicLink = useCallback(async (address: string) => {
+    if (!address.trim()) return;
+    setLoading(true);
+    setError(null);
+    try {
+      await signInWithEmailLink(auth, address.trim(), window.location.href);
+      window.localStorage.removeItem('emailForSignIn');
+      router.push('/dashboard');
+    } catch (err: any) {
+      showError(mapFirebaseError(err.code ?? ''));
+    } finally {
+      setLoading(false);
+      setMagicLinkPending(false);
+    }
+  }, [router, showError]);
 
   async function handleLogin() {
     if (loading) return;
@@ -102,6 +138,15 @@ export default function AuthLoginPage() {
       }
       const result = await signInWithPopup(auth, provider);
       if (result.user) {
+        // Ensure identity/person/professional docs exist for SSO users.
+        const { ensureActor } = await import('@/lib/firebase/actorService');
+        await ensureActor({
+          uid: result.user.uid,
+          email: result.user.email || '',
+          displayName: result.user.displayName || result.user.email?.split('@')[0] || 'User',
+          phone: result.user.phoneNumber || '',
+          accountType: 'professional',
+        }).catch(() => {});
         router.push("/dashboard");
       }
     } catch (err: any) {
@@ -140,11 +185,11 @@ export default function AuthLoginPage() {
     if (e.key === "Enter" && !loading && method === 'email') handleLogin();
   }
 
-  const tabs: { id: AuthMethod; label: string; icon: string }[] = [
-    { id: 'email', label: 'Email', icon: '✉' },
-    { id: 'passkey', label: 'Passkey', icon: '🔑' },
-    { id: 'magic-link', label: 'Magic Link', icon: '📧' },
-    { id: 'sso', label: 'SSO', icon: '🔗' },
+  const tabs: { id: AuthMethod; label: string; icon: React.ReactNode }[] = [
+    { id: 'email', label: 'Email', icon: <Mail size={14} /> },
+    { id: 'passkey', label: 'Passkey', icon: <Key size={14} /> },
+    { id: 'magic-link', label: 'Magic Link', icon: <Send size={14} /> },
+    { id: 'sso', label: 'SSO', icon: <Link size={14} /> },
   ];
 
   return (
@@ -177,7 +222,7 @@ export default function AuthLoginPage() {
               cursor: 'pointer',
             }}
           >
-            {t.label}
+            <span style={{ color: '#2F80ED', display: 'inline-flex' }}>{t.icon}</span> {t.label}
           </button>
         ))}
       </div>
@@ -195,6 +240,46 @@ export default function AuthLoginPage() {
         </div>
       )}
 
+      {/* ══════ MAGIC LINK EMAIL CONFIRMATION ══════ */}
+      {magicLinkPending && (
+        <div className="space-y-4 mb-4" role="form" aria-label="Confirm email for magic link sign in">
+          <div style={{ padding: 16, borderRadius: 'var(--radius-md)', background: 'var(--primary-light)', border: '1px solid var(--sky-200)' }}>
+            <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+              Complete your magic link sign in
+            </p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+              Enter the email address you used to request the sign-in link.
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }} htmlFor="magic-confirm-email">
+              Email address
+            </label>
+            <input
+              id="magic-confirm-email"
+              type="email"
+              value={magicLinkEmail}
+              onChange={(e) => setMagicLinkEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              spellCheck={false}
+              className="input"
+              style={{ minHeight: 48, height: 'auto', padding: '0 14px', fontSize: 16 }}
+            />
+          </div>
+          <button
+            onClick={() => completeMagicLink(magicLinkEmail)}
+            disabled={loading}
+            className="w-full"
+            style={{ minHeight: 48, borderRadius: 'var(--radius-md)', border: 'none', background: 'var(--primary)', color: 'white', fontSize: 15, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+          >
+            {loading ? <><Spinner /> Signing in...</> : "Continue"}
+          </button>
+        </div>
+      )}
+
+      {!magicLinkPending && (
+      <>
       <style>{`
         @keyframes shake {
           0%,100%{transform:translateX(0)}
@@ -376,6 +461,8 @@ export default function AuthLoginPage() {
           Protected by 256-bit AES encryption &amp; HIPAA compliance.
         </p>
       </div>
+      </>
+      )}
     </div>
   );
 }

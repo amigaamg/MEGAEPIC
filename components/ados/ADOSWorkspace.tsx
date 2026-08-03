@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { collectionGroup, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { useAuth } from '@/context/AuthContext'
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext'
 import { Stethoscope, Clock, Activity, Plus, Search } from 'lucide-react'
 
 interface FirestoreEncounter {
@@ -56,9 +57,10 @@ export function ADOSWorkspace() {
 
   useEffect(() => {
     if (!user) return
+    const orgId = getActiveOrganizationId()
     const q = query(
       collectionGroup(db, 'encounters'),
-      where('orgId', '==', 'telemed-a98cf'),
+      where('orgId', '==', orgId),
       orderBy('createdAt', 'desc'),
       limit(50),
     )

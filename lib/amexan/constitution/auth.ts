@@ -178,6 +178,43 @@ function getDashboardTitle(session: UserSession): string {
   return 'Dashboard';
 }
 
+// ── Actor dashboard (role-aware) ──────────────────────────────────────────────
+// Same as generateDashboard, but derives role from either the professional
+// identity or the session role id (which the legacy AuthContext path sets).
+export function generateActorDashboard(session: UserSession): DashboardTemplate {
+  const derivedCategory =
+    session.professional?.primaryCategory ||
+    (session.role?.id ? ROLE_TO_CATEGORY[session.role.id] : undefined);
+
+  const augmented: UserSession = {
+    ...session,
+    professional: session.professional ?? {
+      uid: session.identity?.uid ?? ('' as AmxUid),
+      personId: session.person?.uid ?? ('' as AmxUid),
+      categories: (derivedCategory ? [derivedCategory] : ['other']) as ProfessionalIdentity['categories'],
+      primaryCategory: (derivedCategory || 'other') as ProfessionalIdentity['primaryCategory'],
+      specialties: [],
+      qualifications: [],
+      yearsOfExperience: 0,
+      verified: false,
+      verificationDocuments: [],
+    },
+  };
+  return generateDashboard(augmented);
+}
+
+const ROLE_TO_CATEGORY: Record<string, string> = {
+  doctor: 'medical_doctor',
+  consultant: 'consultant',
+  nurse: 'nurse',
+  midwife: 'midwife',
+  pharmacist: 'pharmacist',
+  lab_tech: 'lab_technologist',
+  receptionist: 'receptionist',
+  admin: 'facility_admin',
+  super_admin: 'super_admin',
+};
+
 function getQuickActions(session: UserSession): QuickAction[] {
   const actions: QuickAction[] = [];
   const perms = session.permissions;

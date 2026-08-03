@@ -6,6 +6,7 @@ import { createEncounterOrchestrator, answerInOrchestrator, setPatientBiodata, t
 import { db } from '@/lib/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '@/context/AuthContext'
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext'
 import { Bell, MessageSquare, AlertTriangle, UserCircle, Search, LayoutDashboard, Users, Footprints, ClipboardPlus, FileText, Beaker, Pill, MessageCircle, BarChart3, Activity, Calendar, BookOpen, Settings, LogOut, AlertCircle, CheckCircle, Clock, Plus, ArrowRight, ArrowLeft, Bed, HeartPulse, Thermometer, User, ChevronRight, Menu, X, Flag, ListTodo, CalendarClock, Brain, Stethoscope, Video, Monitor, Scissors } from 'lucide-react'
 import { C } from '@/lib/colors';
 
@@ -65,7 +66,12 @@ export default function DoctorDashboard() {
   const [userLoaded, setUserLoaded] = useState(false)
 
   useEffect(() => {
-    listRecentEncounters('telemed-a98cf', 50).then(e => { setEncounters(e); setLoading(false) }).catch(() => setLoading(false))
+    const orgId = getActiveOrganizationId()
+    if (orgId) {
+      listRecentEncounters(orgId, 50).then(e => { setEncounters(e); setLoading(false) }).catch(() => setLoading(false))
+    } else {
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => {
@@ -124,8 +130,10 @@ export default function DoctorDashboard() {
     state2 = answerInOrchestrator(state2, 'q_cc_duration', '2 days')
     state2 = answerInOrchestrator(state2, 'q_exam_bp_systolic', '160')
     state2 = answerInOrchestrator(state2, 'q_exam_bp_diastolic', '100')
-    await saveEncounter('telemed-a98cf', id, state)
-    await saveEncounter('telemed-a98cf', id2, state2)
+    const orgId = getActiveOrganizationId()
+    if (!orgId) return
+    await saveEncounter(orgId, id, state)
+    await saveEncounter(orgId, id2, state2)
     router.push(`/doctor/patient?encounter=${id}`)
   }, [router, doctorName])
 

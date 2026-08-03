@@ -13,6 +13,9 @@ export enum RuleCategory {
   Audit = 'audit',
   Interoperability = 'interoperability',
   Versioning = 'versioning',
+  Governance = 'governance',
+  Privacy = 'privacy',
+  Documentation = 'documentation',
 }
 
 export enum RuleTrigger {

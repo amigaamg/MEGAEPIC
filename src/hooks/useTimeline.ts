@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { doc, onSnapshot, Unsubscribe } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext';
 
 export interface TimelineEntry {
   timestamp: number;
@@ -22,7 +23,7 @@ export function useTimeline(
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const ref = doc(db, `organizations/${orgId || 'telemed-a98cf'}/departments/${deptSlug}/units/${unitSlug}/encounters/${encounterId}`);
+    const ref = doc(db, `organizations/${orgId || getActiveOrganizationId()}/departments/${deptSlug}/units/${unitSlug}/encounters/${encounterId}`);
     const unsub = onSnapshot(ref, (snap) => {
       if (snap.exists()) {
         const data = snap.data();

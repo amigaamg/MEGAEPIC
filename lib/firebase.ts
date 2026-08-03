@@ -12,22 +12,30 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-let _app: ReturnType<typeof initializeApp> | undefined;
-let _auth: ReturnType<typeof getAuth> | undefined;
-let _db: ReturnType<typeof getFirestore> | undefined;
-let _storage: ReturnType<typeof getStorage> | undefined;
-
-if (typeof window !== 'undefined') {
-  _app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-  _auth = getAuth(_app);
-  _db = getFirestore(_app);
-  _storage = getStorage(_app);
+function getFirebaseApp() {
+  if (getApps().length) return getApp();
+  return initializeApp(firebaseConfig);
 }
 
-export const app = _app!;
-export const auth = _auth!;
-export const db = _db!;
-export const storage = _storage!;
+// The Firebase App can be initialized during SSR — it is safe and inert until
+// a network call is made. Only Auth truly requires a browser environment.
+const _app = getFirebaseApp();
+const _db = getFirestore(_app);
+const _storage = getStorage(_app);
+
+// Auth is browser-only: `onAuthStateChanged`, `setPersistence` etc. throw without
+// a window/navigator. Initialize lazily and fall back to a no-op stub during SSR.
+function getAuthSafe() {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    return undefined as unknown as ReturnType<typeof getAuth>;
+  }
+  return getAuth(_app);
+}
+
+export const app = _app;
+export const db = _db;
+export const storage = _storage;
+export const auth = getAuthSafe();
 
 export function initPersistence() {
   if (!auth) return;

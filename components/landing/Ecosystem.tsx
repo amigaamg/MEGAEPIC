@@ -1,179 +1,266 @@
-'use client'
-import { useMemo } from 'react'
-import { motion } from 'framer-motion'
-import { ECOSYSTEM_ITEMS } from '@/components/landing/config'
-import { C } from '@/lib/colors'
-import { S } from '@/components/landing/config'
+"use client";
 
-const RADIUS = 220
-const CENTER = { x: 280, y: 260 }
+import { useState, useEffect, useRef } from 'react';
+import { TrendingUp, Users, Building2, Globe, Shield, Activity } from 'lucide-react';
 
 export default function Ecosystem() {
-  const positions = useMemo(() => {
-    return ECOSYSTEM_ITEMS.map((_, i) => {
-      const angle = (i / ECOSYSTEM_ITEMS.length) * Math.PI * 2 - Math.PI / 2
-      return {
-        x: CENTER.x + RADIUS * Math.cos(angle),
-        y: CENTER.y + RADIUS * Math.sin(angle),
-      }
-    })
-  }, [])
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
-  const nodeVariants = {
-    hidden: { opacity: 0, scale: 0 },
-    visible: (i: number) => ({
-      opacity: 1,
-      scale: 1,
-      transition: { delay: i * 0.08, duration: 0.4, ease: 'easeOut' as const },
-    }),
-  }
+  const ecosystems = [
+    {
+      id: 'patients',
+      title: 'Patient Ecosystem',
+      description: 'Patients navigate their health journey with personalized care pathways, trusted relationships, and seamless coordination across providers.',
+      icon: Users,
+      color: 'from-blue-500 to-cyan-600',
+      features: [
+        'Personalized Care Plans',
+        'Care Coordination',
+        'Provider Networks',
+        'Health Records',
+        'Medication Management',
+        'Appointment Scheduling',
+        'Health Tracking',
+        'Education Resources',
+      ],
+      stats: '500M+ patients',
+      growth: '+12% annually',
+    },
+    {
+      id: 'providers',
+      title: 'Provider Ecosystem',
+      description: 'Healthcare professionals collaborate through standardized protocols, shared knowledge, and coordinated care delivery for optimal patient outcomes.',
+      icon: Building2,
+      color: 'from-indigo-500 to-purple-600',
+      features: [
+        'Clinical Protocols',
+        'Research Integration',
+        'Quality Assurance',
+        'Professional Development',
+        'Telemedicine',
+        'Collaboration Tools',
+        'Audit Systems',
+        'Continuing Education',
+      ],
+      stats: '2.5M+ clinicians',
+      growth: '+8% annually',
+    },
+    {
+      id: 'systems',
+      title: 'System Ecosystem',
+      description: 'Enterprise and institutional healthcare systems integrate clinical intelligence, operational workflows, and analytics to streamline care delivery and improve outcomes.',
+      icon: Activity,
+      color: 'from-emerald-500 to-teal-600',
+      features: [
+        'HMIS Integration',
+        'EMR Interoperability',
+        'Billing & Revenue',
+        'Compliance & Auditing',
+        'Infrastructure Management',
+        'Patient Portals',
+        'Analytics & Reporting',
+        'Mobile & Telemedicine',
+      ],
+      stats: '500+ hospitals',
+      growth: '+15% annually',
+    },
+    {
+      id: 'governments',
+      title: 'Government Ecosystem',
+      description: 'Public health authorities leverage clinical intelligence for national health strategies, disease surveillance, population health, and healthcare policy implementation.',
+      icon: Shield,
+      color: 'from-amber-500 to-orange-600',
+      features: [
+        'Public Health',
+        'Disease Surveillance',
+        'Health Policy',
+        'Population Health',
+        'National Standards',
+        'Regulatory Compliance',
+        'Health Metrics',
+        'Research Integration',
+      ],
+      stats: '150+ countries',
+      growth: '+5% annually',
+    },
+    {
+      id: 'research',
+      title: 'Research Ecosystem',
+      description: 'Clinical research generates evidence, drives innovation, and advances medical knowledge through rigorous studies and data sharing.',
+      icon: TrendingUp,
+      color: 'from-rose-500 to-pink-600',
+      features: [
+        'Clinical Trials',
+        'Evidence Synthesis',
+        'Methodology',
+        'Data Analytics',
+        'Knowledge Graphs',
+        'AI Research',
+        'Publication',
+        'Training Programs',
+      ],
+      stats: '2M+ studies annually',
+      growth: '+20% annually',
+    },
+    {
+      id: 'education',
+      title: 'Education Ecosystem',
+      description: 'Medical education prepares professionals through simulation, cases, protocols, and continuous learning experiences across all healthcare disciplines.',
+      icon: Building2,
+      color: 'from-sky-500 to-cyan-600',
+      features: [
+        'Simulation',
+        'Case Studies',
+        'Protocols',
+        'Clinical Practice',
+        'Competency',
+        'Medical Ethics',
+        'Professional Development',
+        'CPD Programs',
+      ],
+      stats: '10M+ students & professionals',
+      growth: '+10% annually',
+    },
+  ];
 
-  const lineVariants = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: (i: number) => ({
-      pathLength: 1,
-      opacity: 0.12,
-      transition: { delay: 0.3 + i * 0.02, duration: 0.6 },
-    }),
-  }
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % ecosystems.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, ecosystems.length]);
+
+  const handleDotClick = (index: number) => {
+    setActiveIndex(index);
+    setIsAutoPlaying(false);
+  };
+
+  const handleMouseEnter = () => {
+    setIsAutoPlaying(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsAutoPlaying(true);
+  };
 
   return (
-    <section style={{ background: C.navy, overflow: 'hidden' }}>
-      <div style={{
-        ...S.sectionWide as React.CSSProperties,
-        textAlign: 'center' as const,
-        maxWidth: 1200,
-        margin: '0 auto',
-      }}>
-        <div style={S.secTagDark}>
-          <span>Connected Ecosystem</span>
+    <section id="ecosystem" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            The Healthcare Ecosystem
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            AMEXAN seamlessly connects every stakeholder in healthcare through intelligent ecosystems that collaborate, coordinate, and evolve together.
+          </p>
         </div>
-        <h2 style={S.secH2Light}>Everything Connected</h2>
-        <p style={{ ...S.secPLight as React.CSSProperties, maxWidth: 560, margin: '0 auto 48px' }}>
-          AMEXAN connects every part of the healthcare ecosystem — enabling seamless data
-          flow between clinicians, patients, administrators, and systems.
-        </p>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{
-            position: 'relative' as const,
-            width: 560,
-            height: 520,
-            margin: '0 auto',
-          }}
+        {/* Desktop View */}
+        <div
+          ref={carouselRef}
+          className="hidden md:block relative overflow-hidden rounded-2xl bg-white shadow-2xl"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          <svg
-            width={560}
-            height={520}
-            style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' as const }}
-          >
-            {positions.map((p, i) => {
-              const next = positions[(i + 1) % positions.length]
+          <div className="relative h-96 md:h-120">
+            {ecosystems.map((ecosystem, index) => {
+              const Icon = ecosystem.icon;
               return (
-                <motion.path
-                  key={`line-${i}`}
-                  d={`M${p.x},${p.y} L${next.x},${next.y}`}
-                  fill="none"
-                  stroke={C.skySoft}
-                  strokeWidth={1.5}
-                  custom={i}
-                  variants={lineVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                />
-              )
+                <div
+                  key={ecosystem.id}
+                  className={`absolute inset-0 transition-all duration-700 ease-in-out ${activeIndex === index ? 'opacity-100 z-10 transform translate-x-0' : 'opacity-0 z-0 transform translate-x-8'}`}
+                >
+                  <div className="flex flex-col md:flex-row items-center h-full p-8 md:p-12">
+                    <div className="flex-1 md:w-1/2">
+                      <div className={`inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-gradient-to-r ${ecosystem.color} text-white mb-6`}>
+                        <Icon className="w-6 h-6" />
+                        <span className="font-semibold">Ecosystem</span>
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                        {ecosystem.title}
+                      </h3>
+                      <p className="text-gray-600 mb-6 text-lg leading-relaxed">
+                        {ecosystem.description}
+                      </p>
+                      <div className="space-y-3 mb-6">
+                        {ecosystem.features.map((feature) => (
+                          <div key={feature} className="flex items-center space-x-3">
+                            <div className="w-2 h-2 bg-green-500 rounded-full" />
+                            <span className="text-sm text-gray-700">{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex items-center space-x-8">
+                        <div>
+                          <div className="text-2xl font-bold text-gray-900">{ecosystem.stats}</div>
+                          <div className="text-sm text-gray-500">Population</div>
+                        </div>
+                        <div>
+                          <div className="text-2xl font-bold text-green-600">{ecosystem.growth}</div>
+                          <div className="text-sm text-gray-500">Growth Rate</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex-1 md:w-1/2 relative">
+                      <div className="absolute inset-0 bg-gradient-to-r ${ecosystem.color} opacity-10 rounded-2xl" />
+                      <div className="relative h-64 md:h-80">
+                        {/* Visual representation of ecosystem */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-32 h-32 rounded-full bg-gradient-to-br ${ecosystem.color} opacity-20 animate-pulse" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <Icon className="w-16 h-16 text-white/50" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
             })}
-            {positions.map((p, i) => {
-              const next = positions[(i + 2) % positions.length]
-              return (
-                <motion.path
-                  key={`cross-${i}`}
-                  d={`M${p.x},${p.y} L${next.x},${next.y}`}
-                  fill="none"
-                  stroke={C.skySoft}
-                  strokeWidth={0.5}
-                  custom={i}
-                  variants={lineVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                />
-              )
-            })}
-          </svg>
+          </div>
+        </div>
 
-          <motion.div
-            style={{
-              position: 'absolute',
-              top: CENTER.y - 32,
-              left: CENTER.x - 32,
-              width: 64,
-              height: 64,
-              borderRadius: '50%',
-              background: C.sky,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: C.white,
-              fontWeight: 700,
-              fontSize: 11,
-              textAlign: 'center',
-              boxShadow: `0 0 0 8px rgba(47,128,237,0.15)`,
-              zIndex: 2,
-            }}
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
-          >
-            AMEXAN
-          </motion.div>
-
-          {ECOSYSTEM_ITEMS.map((item, i) => {
-            const p = positions[i]
+        {/* Mobile View */}
+        <div className="md:hidden space-y-4">
+          {ecosystems.map((ecosystem, index) => {
+            const Icon = ecosystem.icon;
             return (
-              <motion.div
-                key={i}
-                custom={i}
-                variants={nodeVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.15, transition: { duration: 0.15 } }}
-                style={{
-                  position: 'absolute',
-                  left: p.x - 48,
-                  top: p.y - 48,
-                  width: 96,
-                  height: 96,
-                  borderRadius: 20,
-                  background: 'rgba(255,255,255,0.07)',
-                  border: '1px solid rgba(255,255,255,0.12)',
-                  backdropFilter: 'blur(8px)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 6,
-                  color: C.white,
-                  cursor: 'default',
-                  zIndex: 1,
-                }}
+              <div
+                key={ecosystem.id}
+                className={`bg-white rounded-lg shadow-md p-6 cursor-pointer transition-all duration-300 ${activeIndex === index ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:shadow-lg'}`}
+                onClick={() => handleDotClick(index)}
               >
-                <div style={{ lineHeight: 1, opacity: 0.9 }}>{item.icon}</div>
-                <span style={{ fontSize: 10, fontWeight: 600, opacity: 0.85, textAlign: 'center', lineHeight: 1.2, padding: '0 4px' }}>
-                  {item.label}
-                </span>
-              </motion.div>
-            )
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${ecosystem.color} flex items-center justify-center`}>
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{ecosystem.title}</h4>
+                    <p className="text-sm text-gray-600">{ecosystem.stats}</p>
+                  </div>
+                </div>
+              </div>
+            );
           })}
-        </motion.div>
+        </div>
+
+        {/* Dots Navigation */}
+        <div className="flex justify-center mt-8 space-x-2">
+          {ecosystems.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handleDotClick(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${activeIndex === index ? 'bg-blue-600 scale-125' : 'bg-gray-300 hover:bg-gray-400'}`}
+              aria-label={`Go to ecosystem ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
-  )
+  );
 }

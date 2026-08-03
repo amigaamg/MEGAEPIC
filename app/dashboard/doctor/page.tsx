@@ -21,6 +21,11 @@ import {
 } from 'firebase/firestore';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  Home, ClipboardList, Users, FolderOpen, FileText, MessageCircle,
+  Stethoscope, BarChart3, Settings, Wrench, Building2, DollarSign,
+  Globe, Hospital, Route,
+} from 'lucide-react';
 
 // ─── TYPES ────────────────────────────────────────────────────────────────
 interface Appointment {
@@ -296,24 +301,24 @@ export default function DoctorDashboard() {
 
   // ─── TABS ──────────────────────────────────────────────────────────────
   const tabs: TabDefinition[] = [
-    { id: 'overview',   icon: '🏠', label: 'Overview' },
-    { id: 'queue',      icon: '📋', label: 'Queue', badge: upcomingAppts.length + activeAppts.length },
-    { id: 'patients',   icon: '👥', label: 'Patients' },
-    { id: 'history',    icon: '🗂️', label: 'History' },
-    { id: 'clinical_docs', icon: '📝', label: 'Clinical Notes' },
-    { id: 'messages',   icon: '💬', label: 'Messages' },
-    { id: 'referrals',  icon: '📋', label: 'Referrals' },
-    { id: 'htn',        icon: '🩺', label: 'HTN' },
-    { id: 'monitoring', icon: '📊', label: 'Monitoring' },
-    { id: 'operations', icon: '⚙️', label: 'Operations' },
-    { id: 'tools',      icon: '🛠️', label: 'Tools' },
-    { id: 'services',   icon: '🏥', label: 'Services' },
-    { id: 'earnings',   icon: '💰', label: 'Earnings' },
-    { id: 'portfolio',  icon: '🌐', label: 'My Portfolio' },
-    { id: 'inpatient',  icon: '🛏️', label: 'Inpatient' },
-    { id: 'pathways',   icon: '🛤️', label: 'Care Pathways' },
-    { id: 'team',       icon: '👥', label: 'Care Team', badge: 2 },
-    { id: 'settings',   icon: '⚙️', label: 'Settings' },
+    { id: 'overview',   icon: <Home size={16} />, label: 'Overview' },
+    { id: 'queue',      icon: <ClipboardList size={16} />, label: 'Queue', badge: upcomingAppts.length + activeAppts.length },
+    { id: 'patients',   icon: <Users size={16} />, label: 'Patients' },
+    { id: 'history',    icon: <FolderOpen size={16} />, label: 'History' },
+    { id: 'clinical_docs', icon: <FileText size={16} />, label: 'Clinical Notes' },
+    { id: 'messages',   icon: <MessageCircle size={16} />, label: 'Messages' },
+    { id: 'referrals',  icon: <ClipboardList size={16} />, label: 'Referrals' },
+    { id: 'htn',        icon: <Stethoscope size={16} />, label: 'HTN' },
+    { id: 'monitoring', icon: <BarChart3 size={16} />, label: 'Monitoring' },
+    { id: 'operations', icon: <Settings size={16} />, label: 'Operations' },
+    { id: 'tools',      icon: <Wrench size={16} />, label: 'Tools' },
+    { id: 'services',   icon: <Building2 size={16} />, label: 'Services' },
+    { id: 'earnings',   icon: <DollarSign size={16} />, label: 'Earnings' },
+    { id: 'portfolio',  icon: <Globe size={16} />, label: 'My Portfolio' },
+    { id: 'inpatient',  icon: <Hospital size={16} />, label: 'Inpatient' },
+    { id: 'pathways',   icon: <Route size={16} />, label: 'Care Pathways' },
+    { id: 'team',       icon: <Users size={16} />, label: 'Care Team', badge: 2 },
+    { id: 'settings',   icon: <Settings size={16} />, label: 'Settings' },
   ];
 
   // ─── LOADING ────────────────────────────────────────────────────────────

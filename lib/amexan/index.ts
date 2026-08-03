@@ -38,6 +38,7 @@ export type {
 export {
   can,
   generateDashboard,
+  generateActorDashboard,
   buildEmptySession,
   validateIdentityStep,
   validateProfessionalStep,
@@ -530,3 +531,81 @@ export type {
   SeedApiTokenDef,
   SeedDemoCaseDef,
 } from './seed-config';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Communication Constitution — Care team, direct, organization, announcements
+// ═══════════════════════════════════════════════════════════════════════════════
+export {
+  createThread,
+  sendMessage,
+  markRead,
+  getThreads,
+  getMessages,
+  getUnreadCount,
+  createCareTeamThread,
+  createPatientThread,
+  createAnnouncement,
+  resetCommunicationStore,
+  getThreadStats,
+} from './communication';
+export type {
+  CommunicationChannel,
+  MessagePriority,
+  MessageStatus,
+  MessageSender,
+  CommunicationMessage,
+  CommunicationThread,
+} from './communication';
+
+// ── Presentation (Universal Component Architecture) ─────────────────────────
+export * from './presentation';
+
+// ── Interaction Engine (Book I Part IV) ─────────────────────────────────────
+export {
+  interactionConstitution, interactionGuarantees, shortcutConventions, feedbackModes, undoScopes,
+  commandPalette, registerCommand, searchCommands, resolveShortcut,
+  keyboardEngine, getKeyboardState, listShortcuts, registerShortcut, focusIsVisible, trapFocus,
+  undoEngine, pushUndo, undo, redo, clearUndo, undoScopeLabel,
+  feedbackEngine, emitFeedback, dismissFeedback, acknowledgeConfirm, feedbackIsVisible,
+  selectionEngine, selectionAllowed, applySelection, clearSelection, isSelected,
+} from './interaction';
+export type {
+  InteractionGuarantee, FeedbackMode, UndoScope,
+  Command, CommandRegistration, CommandPalette,
+  KeyboardShortcut, KeyboardState, KeyboardEngine,
+  UndoAction, UndoState, UndoEngine,
+  FeedbackEvent, FeedbackState, FeedbackEngine,
+  SelectionState, SelectionUpdate, SelectionEngine,
+} from './interaction';
+
+// ── Experience Engine (Book I Part V) ───────────────────────────────────────
+export {
+  experienceConstitution, experienceGuarantees, fatigueTiers, focusModes,
+  journeyEngine, getJourney, initializeJourney, advancePhase, journeyProgress,
+  focusEngine, focusModeFor, initialFocus, setActiveTask, deferInterruptions, isFocused,
+  fatigueEngine, assessFatigue, fatigueSlowsMotion, fatigueReducesChrome,
+  trustEngine, assessTrust, everyAiOutputLabeled,
+  continuityEngine, captureSnapshot, resumeFromSnapshot, isSnapshotFresh, continuityGuarantee,
+} from './experience';
+export type {
+  ExperienceGuarantee, FatigueTier, FocusMode,
+  JourneyPhase, JourneyDefinition, JourneyState, JourneyEngine,
+  FocusState, FocusEngine,
+  FatigueInput, FatigueDecision, FatigueEngine,
+  TrustInput, TrustDecision, TrustEngine,
+  ContinuitySnapshot, ContinuityState, ContinuityEngine,
+} from './experience';
+
+// ── Workspace (Universal Workspace Assembly) ─────────────────────────────────
+export {
+  workspaceBuilder, buildWorkspace,
+  workspaceRouter, routeWorkspace, morphTarget,
+  workspaceContext, createWorkspaceContext, contextLabel,
+  workspaceLifecycle, initializeWorkspace, activateWorkspace, pauseWorkspace, suspendWorkspace, workspaceIsAlive,
+} from './workspace';
+export type {
+  WorkspaceBuildRequest, BuiltWorkspace, WorkspaceBuilder,
+  RouteDecision, RouteInput, WorkspaceRouter,
+  WorkspaceContext, WorkspaceContextEngine,
+  WorkspaceStage, LifecycleRecord, WorkspaceLifecycle,
+} from './workspace';

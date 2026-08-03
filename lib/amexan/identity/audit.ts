@@ -30,6 +30,11 @@ export function getFailedLogins(uid: AmxUid, since?: number): IdentityEvent[] {
 export function clearEvents(olderThan: number): number {
   const cutoff = Date.now() - olderThan
   const before = events.length
-  events.splice(0, events.findIndex(e => e.timestamp > cutoff))
+  const keepIndex = events.findIndex(e => e.timestamp > cutoff)
+  if (keepIndex === -1) {
+    events.length = 0
+  } else {
+    events.splice(0, keepIndex)
+  }
   return before - events.length
 }

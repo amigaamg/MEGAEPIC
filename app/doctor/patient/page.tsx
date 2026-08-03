@@ -6,6 +6,7 @@ import { loadEncounter } from '@/lib/amexan/encounter/encounterPersistence'
 import { createEncounterOrchestrator, answerInOrchestrator, setPatientBiodata, getClinicalNotes, getHpiNarrativeContext, type EncounterOrchestratorState } from '@/lib/amexan/encounter-engine'
 import { generateEnhancedHpiNarrative } from '@/lib/amexan/encounter-engine/engines/documentation-engine'
 import { useAuth } from '@/context/AuthContext'
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext'
 import { C } from '@/lib/colors';
 
 const S = {
@@ -95,7 +96,7 @@ function PatientWorkspaceInner() {
 
   useEffect(() => {
     if (!encounterId) { setError('No encounter specified.'); setLoading(false); return }
-    loadEncounter('telemed-a98cf', encounterId).then(data => {
+    loadEncounter(getActiveOrganizationId() ?? '', encounterId).then(data => {
       if (data?.state) setState(data.state as EncounterOrchestratorState)
       else setError('Encounter not found.')
       setLoading(false)

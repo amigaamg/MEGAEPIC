@@ -72,7 +72,7 @@ export interface ThemeContext {
   mode: 'light' | 'dark'
 }
 
-const ROLE_THEMES: Record<string, Partial<RoleTheme>> = {
+export const ROLE_THEMES: Record<string, Partial<RoleTheme>> = {
   doctor: { primaryColor: '#2563eb', secondaryColor: '#1d4ed8', layout: 'sidebar', showPatientList: true },
   nurse: { primaryColor: '#059669', secondaryColor: '#047857', layout: 'sidebar', showPatientList: true },
   student: { primaryColor: '#7c3aed', secondaryColor: '#6d28d9', layout: 'sidebar', showPatientList: false },

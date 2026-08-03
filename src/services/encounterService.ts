@@ -16,6 +16,7 @@ import {
   getDocs,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getActiveOrganizationId } from '@/lib/firebase/orgContext';
 import type {
   RegistrationData,
   PresentingComplaintData,
@@ -32,10 +33,8 @@ import type {
   DispositionData,
 } from '@/types/encounter';
 
-const DEFAULT_ORG = 'telemed-a98cf';
-
 function orgPath(orgId?: string) {
-  return `organizations/${orgId || DEFAULT_ORG}`;
+  return `organizations/${orgId || getActiveOrganizationId()}`;
 }
 
 export async function createEncounter(data: {
@@ -55,7 +54,7 @@ export async function createEncounter(data: {
     id: ref.id,
     patientId: data.patientId,
     patientName: data.patientName,
-    hospitalId: data.orgId || DEFAULT_ORG,
+    hospitalId: data.orgId || getActiveOrganizationId(),
     departmentSlug: data.departmentSlug,
     unitSlug: data.unitSlug,
     status: 'active',

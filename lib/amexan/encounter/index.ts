@@ -413,3 +413,11 @@ export { createSession, processAnswer } from './engines/sessionAdapter';
 // ── React context provider ─────────────────────────────────────────────────
 
 export { EncounterProvider, useEncounter } from './EncounterContext';
+
+// Free-text clinical conversation parsing ── natural-language chief complaint
+// → structured constitutional symptom candidates.
+export type {
+  ConversationParseResult,
+  AppliedConversationState,
+} from './conversation';
+export { parseClinicalConversation, applyConversationToState } from './conversation';
