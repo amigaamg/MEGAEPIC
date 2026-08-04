@@ -15,7 +15,7 @@ service cloud.firestore {
 
     function isOrgAdmin(orgId) {
       return isOrgMember(orgId) &&
-        get(/databases/$(database)/documents/organizations/$(orgId)/members/$(request.auth.uid)).data.roleId in ['super_admin', 'hospital_admin', 'org_admin'];
+        get(/databases/$(database)/documents/organizations/$(orgId)/members/$(request.auth.uid)).data.roleId in ['super_admin', 'hospital_admin', 'org_admin', 'admin'];
     }
 
     function isSelf(uid) {
@@ -74,8 +74,37 @@ service cloud.firestore {
       match /members/{userId} {
         allow read: if isOrgMember(orgId);
         allow create: if isOrgAdmin(orgId) || (isSignedIn() && request.resource.data.userId == request.auth.uid);
-        allow update: if isOrgAdmin(orgId);
+        allow update: if isOrgAdmin(orgId) || (isSignedIn() && request.resource.data.userId == request.auth.uid);
         allow delete: if isOrgAdmin(orgId);
+      }
+
+      // Organization memberships (WorkspaceEngine collection group)
+      match /memberships/{memberId} {
+        allow read: if isSignedIn() && (resource.data.orgId == null || isOrgMember(resource.data.orgId));
+        allow create: if isSignedIn();
+        allow update: if isSignedIn();
+        allow delete: if isOrgAdmin(orgId);
+      }
+
+      // Campuses & Buildings (FacilityResolver reads)
+      match /campuses/{campusId} {
+        allow read: if isOrgMember(orgId);
+        allow write: if isOrgAdmin(orgId);
+
+        match /buildings/{buildingId} {
+          allow read: if isOrgMember(orgId);
+          allow write: if isOrgAdmin(orgId);
+        }
+      }
+
+      // Shifts & Shift Assignments (AssignmentResolver reads)
+      match /shifts/{shiftId} {
+        allow read: if isOrgMember(orgId);
+        allow write: if isOrgAdmin(orgId);
+      }
+      match /shift_assignments/{assignmentId} {
+        allow read: if isOrgMember(orgId);
+        allow write: if isOrgAdmin(orgId);
       }
 
       // Employments
