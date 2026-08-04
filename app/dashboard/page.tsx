@@ -1,11 +1,11 @@
 'use client';
 
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, ArrowRight, Calendar, Clock, Users, Pill, FlaskConical, Scan, FileText, LogOut, Activity, Bell, TrendingUp, BarChart3, UserCog, Settings, Menu, ChevronRight, CheckCircle, XCircle, PlusCircle, UserPlus } from 'lucide-react';
-import { can } from '@/lib/amexan';
+import { AlertTriangle, ArrowRight, Calendar, Clock, Users, Pill, FlaskConical, Scan, FileText, LogOut, Activity, Bell, TrendingUp, BarChart3, UserCog, Settings, Menu, ChevronRight, CheckCircle, XCircle, PlusCircle, UserPlus, Mail, type LucideIcon } from 'lucide-react';
 import { resolveWorkspaceGate } from '@/lib/amexan/workspace/WorkspaceResolutionEngine';
+import OrganizationSetupWizard from '@/components/workspace/OrganizationSetupWizard';
 
 const C = {
   navy: 'var(--sky-800)',
@@ -36,10 +36,10 @@ const S = {
   navItem: (a: boolean) => ({ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 8, fontSize: 12, fontWeight: a ? 600 : 400, color: a ? C.sky : C.text, background: a ? C.skyLight : 'transparent', cursor: 'pointer', border: 'none', width: '100%', textAlign: 'left' as const }),
 };
 
-const ICONS: Record<string, any> = { Pill, FlaskConical, Scan, FileText, LogOut, Activity, Calendar, Users, Bell, TrendingUp, BarChart3, UserCog, Settings, AlertTriangle, ArrowRight, Clock, CheckCircle, XCircle, PlusCircle, UserPlus, ChevronRight, Menu };
+const ICONS: Record<string, LucideIcon> = { Pill, FlaskConical, Scan, FileText, LogOut, Activity, Calendar, Users, Bell, TrendingUp, BarChart3, UserCog, Settings, AlertTriangle, ArrowRight, Clock, CheckCircle, XCircle, PlusCircle, UserPlus, ChevronRight, Menu };
 
 export default function DashboardPage() {
-  const { session, dashboard, can: canAccess, loading, user, logout, needsToCompleteRegistration, needsEmailVerification, workspace, registrationStep, workspaceChoice, switchOrganization } = useAuth();
+  const { session, dashboard, loading, user, logout, needsToCompleteRegistration, needsEmailVerification, workspace, registrationStep, workspaceChoice, switchOrganization } = useAuth();
   const router = useRouter();
 
   // CR-WS-001: the completeness gate is authoritative. It decides whether a
@@ -50,17 +50,14 @@ export default function DashboardPage() {
     [workspace, registrationStep, workspaceChoice]
   );
 
-  useEffect(() => {
-    if (!loading) {
-      if (gate.type === 'onboarding') {
-        router.push('/register/constitution');
-      } else if (gate.type === 'ready' && needsToCompleteRegistration) {
-        router.push('/register/constitution');
-      } else if (needsEmailVerification) {
-        router.push('/verify');
-      }
-    }
-  }, [loading, gate, needsToCompleteRegistration, needsEmailVerification, router]);
+  // Constitutional rule (Book XV): authentication must NEVER depend on
+  // onboarding. The dashboard is always the destination after login. When the
+  // workspace is incomplete, an inline Organization Setup Wizard is rendered in
+  // place of the dashboard content — we never redirect back to registration
+  // (which caused the login → registration redirect loop).
+  const requiresSetup = !loading && gate.type === 'onboarding' && needsToCompleteRegistration;
+
+  // Email verification is a banner, never a gate. We surface it inline.
 
   const activeSection = useMemo(() => {
     if (!dashboard || dashboard.sections.length === 0) return null;
@@ -156,6 +153,26 @@ export default function DashboardPage() {
     );
   }
 
+  if (!dashboard && requiresSetup) {
+    return (
+      <div style={S.page}>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');`}</style>
+        <div style={{ minHeight: '100vh', padding: '48px 24px', boxSizing: 'border-box' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, justifyContent: 'center' }}>
+            <span style={S.logoText}>AMEXAN</span>
+          </div>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: C.navy, textAlign: 'center', margin: '0 0 4px' }}>
+            Welcome{user?.displayName ? `, ${user.displayName.split(' ')[0]}` : ''}.
+          </h1>
+          <p style={{ fontSize: 13, color: C.textLight, textAlign: 'center', margin: '0 0 28px', lineHeight: 1.6 }}>
+            Let&apos;s set up your organization. Estimated time: <strong>5 minutes</strong>.
+          </p>
+          <OrganizationSetupWizard />
+        </div>
+      </div>
+    );
+  }
+
   if (!dashboard) return null;
 
   function Icon({ name, size = 14 }: { name: string; size?: number }) {
@@ -180,6 +197,29 @@ export default function DashboardPage() {
           </button>
         </div>
       </div>
+
+      {/* Email Verification Banner — never blocks, always visible until verified */}
+      {needsEmailVerification && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          padding: '10px 24px', background: `${C.amber}12`, borderBottom: `1px solid ${C.amber}30`,
+          fontSize: 12, color: C.text,
+        }}>
+          <Mail size={15} color={C.amber} />
+          <span style={{ flex: 1 }}>
+            <strong>Verify your email.</strong> We sent a verification link to <strong>{user?.email}</strong>. Verification only unlocks advanced capabilities — you can keep using AMEXAN while it&apos;s pending.
+          </span>
+          <button
+            onClick={async () => {
+              const { sendEmailVerification } = await import('firebase/auth');
+              if (user) { await sendEmailVerification(user).catch(() => {}); alert('Verification email sent.'); }
+            }}
+            style={{ padding: '6px 14px', borderRadius: 6, border: 'none', background: C.amber, color: '#fff', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}
+          >
+            Resend Email
+          </button>
+        </div>
+      )}
 
       <div style={S.body}>
         {/* Left Nav */}

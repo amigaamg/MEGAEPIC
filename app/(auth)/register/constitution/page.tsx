@@ -27,6 +27,7 @@ import {
   getProfessionFieldConfig,
   isClinicalProfession,
   createActor,
+  provisionOrganization,
   type RegistrationStep,
   type RegistrationData,
   type AmxUid,
@@ -531,47 +532,29 @@ export default function ConstitutionRegisterPage() {
 
       setLoading(true);
       try {
-        const orgId = await createOrganization({
-          name: data.organizationName!,
-          legalName: data.organizationName!,
-          type: data.organizationType!,
-          level: data.organizationLevel || 'level_1',
-          registrationNumber: data.organizationRegistrationNumber || '',
-          address: { country: data.nationality || '', county: '' },
-          phone: data.phone,
-          email: data.email,
-          branches: [],
-          departments: [],
-          status: 'active',
-          verified: false,
-          ownedBy: generatedAmxUid as AmxUid,
-          config: {
-            documentHeader: { logoUrl: '', facilityName: data.organizationName!, facilityAddress: '', facilityPhone: data.phone, facilityEmail: data.email, headerTemplate: '', footerTemplate: '' },
-            branding: { primaryColor: '#2F80ED', secondaryColor: '#1a5bbf', accentColor: '#2F80ED', fontFamily: 'Inter' },
-            clinical: { defaultWards: [], defaultClinics: [], defaultTheatres: [], diagnosisCodeSystem: 'icd_10', medicationCodeSystem: 'local', labCodeSystem: 'local', imagingCodeSystem: 'local', enableTelemedicine: false, enableAI: true, enableResearch: false },
-            billing: { currency: 'USD', taxRate: 0, consultationFees: {}, bedCharges: {}, pharmacyMarkup: 0, labMarkup: 0, imagingMarkup: 0, insuranceAccepted: [], paymentMethods: ['cash', 'card', 'mpesa'] },
-            integrations: { fhirEnabled: false, hl7Enabled: false, externalHmisEnabled: false, aiServicesEnabled: true, apiEnabled: false },
-          },
-          license: { licenseNumber: data.organizationRegistrationNumber || '', licenseType: 'health_facility', issuingAuthority: 'Regulatory Authority', issuedAt: Date.now(), expiresAt: Date.now() + 365 * 86400000, renewedAt: Date.now(), status: 'pending' },
-          pricingTier: 'free',
-          createdAt: Date.now(),
-          updatedAt: Date.now(),
+        // Constitutional (Book XV, WS-011): the Organization Provisioning Engine
+        // atomically creates Organization → Owner Membership → Facility → Employment
+        // → Assignment and flips registrationStep to 'complete'. No more piecemeal
+        // writes that could leave the Workspace Engine unable to resolve a dashboard.
+        const result = await provisionOrganization({
+          firebaseUid: firebaseUid!,
+          actorId: generatedAmxUid as AmxUid,
+          actorName: data.fullName,
+          actorEmail: data.email,
+          actorPhone: data.phone,
+          organizationName: data.organizationName!,
+          organizationType: data.organizationType!,
+          organizationLevel: data.organizationLevel,
+          registrationNumber: data.organizationRegistrationNumber,
+          facilityName: data.organizationName!,
+          country: data.nationality || '',
+          county: '',
+          jobTitle: data.jobTitle || data.administrativeRole || 'Facility Administrator',
+          primaryCategory: data.primaryCategory,
         });
 
-        await addOrgMember(orgId, {
-          userId: firebaseUid!,
-          email: data.email,
-          displayName: data.fullName,
-          roleId: 'admin',
-          roleName: 'Organization Admin',
-          departmentIds: [],
-          isActive: true,
-          joinedAt: Date.now(),
-        });
-
-        update({ organizationName: orgId });
-        await saveProgress('department_select');
-        setStep('department_select');
+        update({ organizationName: result.organizationId });
+        setStep('complete');
       } catch (err: any) {
         showError('Failed to create organization. Please try again.');
       } finally {
@@ -1067,6 +1050,18 @@ export default function ConstitutionRegisterPage() {
           <div className="mt-4 text-xs" style={{ color: 'var(--text-muted)' }}>
             Your dashboard will reflect your role and organization context.
           </div>
+          <button
+            onClick={async () => {
+              await refreshWorkspace();
+              router.push('/dashboard');
+            }}
+            style={{
+              marginTop: 24, width: '100%', height: 48, borderRadius: 'var(--radius-md)',
+              border: 'none', background: 'var(--primary)', color: '#fff', fontSize: 14,
+              fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-sans)',
+            }}>
+            Go to Dashboard
+          </button>
         </div>
       )}
 

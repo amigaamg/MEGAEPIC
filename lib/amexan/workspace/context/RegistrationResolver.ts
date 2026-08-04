@@ -31,13 +31,17 @@ export function resolveRegistrationCompleteness(
   const hasIdentity = !!workspace.identity && !!workspace.identity.email;
   const hasOrganization = !!workspace.organization || !!workspace.activeMembership;
   const hasEmployment = !!workspace.activeEmployment;
-  const hasAssignment = !!workspace.activeAssignment;
   const hasDepartment = !!workspace.department;
   const emailVerified = !!(userData?.emailVerified as boolean) || workspace.identity.verified;
   const phone = (userData?.phone as string) || workspace.identity.phone;
   const phoneVerified = !!phone && phone.length >= 10;
 
-  const identityComplete = hasIdentity && emailVerified;
+  // Constitutional rule: authentication must never depend on onboarding, and
+  // onboarding must never gate on email verification. Identity is complete the
+  // moment the Actor's identity document exists with an email. Email/phone
+  // verification are surfaced as banners, never as gates that bounce the user
+  // back to Step 1 (which caused the login → registration redirect loop).
+  const identityComplete = hasIdentity;
   const professionalComplete = hasProfessional;
   const organizationSelected = hasOrganization;
   const employmentAccepted = hasEmployment || !hasOrganization;
@@ -52,22 +56,8 @@ export function resolveRegistrationCompleteness(
   if (!employmentAccepted) missing.push('employment');
   if (!departmentAssigned) missing.push('department');
   if (!licenseVerified) missing.push('license');
-  if (!emailVerified) missing.push('email_verification');
-  if (!phoneVerified) missing.push('phone_verification');
-  if (!paymentVerified) missing.push('payment');
 
   const complete = missing.length === 0;
-
-  const stepOrder: RegistrationStep[] = [
-    'identity',
-    'professional',
-    'organization_choice',
-    'organization_create',
-    'organization_join',
-    'department_select',
-    'assignment',
-    'complete',
-  ];
 
   let nextStep: RegistrationStep | null = null;
   if (!complete) {
@@ -77,9 +67,6 @@ export function resolveRegistrationCompleteness(
     else if (!employmentAccepted) nextStep = 'assignment';
     else if (!departmentAssigned) nextStep = 'department_select';
     else if (!licenseVerified) nextStep = 'professional';
-    else if (!emailVerified) nextStep = 'identity';
-    else if (!phoneVerified) nextStep = 'identity';
-    else nextStep = 'identity';
   }
 
   return {

@@ -93,6 +93,13 @@ export type {
   ProfessionFieldConfig,
 } from './constitution';
 
+// ── Organization Provisioning (Book XV, WS-011) ─────────────────────────────
+export {
+  provisionOrganization,
+  organizationProvisioningEngine,
+} from './organization/provisioning';
+export type { ProvisionOrganizationInput, ProvisionOrganizationResult } from './organization/provisioning';
+
 // ── Constitution Services (Firestore, Audit, Signature) ──────────────────────
 export {
   createIdentity, getIdentity, updateIdentity,
