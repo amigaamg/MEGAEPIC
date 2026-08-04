@@ -266,6 +266,10 @@ service cloud.firestore {
     match /{path=**}/members/{memberId} {
       allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
+    match /{path=**}/memberships/{memberId} {
+      allow read: if isSignedIn() && resource.data.organizationId != null && isOrgMember(resource.data.organizationId);
+      allow write: if isSignedIn() && request.resource.data.organizationId != null && isOrgMember(request.resource.data.organizationId);
+    }
 
     // ── Legacy Collections (backward compat) ──────────────────────────────
     // These are scoped by orgId field where available, else fall back to signed-in

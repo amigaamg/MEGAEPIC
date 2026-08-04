@@ -90,6 +90,7 @@ export interface Membership {
   id: string;
   personId: AmxUid;
   organizationId: string;
+  orgId?: string;
   organizationName: string;
   organizationType: Organization['type'];
   roleId: string;

@@ -675,6 +675,13 @@ export interface DashboardTemplate {
   quickActions: QuickAction[];
   notifications: DashboardNotification[];
   workspaceLinks: DashboardLink[];
+  widgets?: Array<{
+    id: string;
+    type: string;
+    title: string;
+    config: Record<string, unknown>;
+    position: { x: number; y: number; w: number; h: number };
+  }>;
 }
 
 export interface DashboardSection {

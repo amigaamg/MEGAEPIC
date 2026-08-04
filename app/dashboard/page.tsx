@@ -57,6 +57,12 @@ export default function DashboardPage() {
   // (which caused the login → registration redirect loop).
   const requiresSetup = !loading && gate.type === 'onboarding' && needsToCompleteRegistration;
 
+  // Admins are never on a clinical duty rota, so the "(Off Duty)" suffix is
+  // misleading for them. The command center communicates status via its widgets.
+  const isAdministrativeRole = ['facility_admin', 'super_admin'].includes(
+    session.professional?.primaryCategory || ''
+  );
+
   // Email verification is a banner, never a gate. We surface it inline.
 
   const activeSection = useMemo(() => {
@@ -288,9 +294,37 @@ export default function DashboardPage() {
             <p style={{ fontSize: 12, color: C.textLight, marginTop: 4 }}>
               {session.currentOrganization ? `Workspace: ${session.currentOrganization.name}` : 'Individual Practice'}
               {session.currentDepartment ? ` — ${session.currentDepartment.name}` : ''}
-              {session.onDuty ? '' : ' (Off Duty)'}
+              {isAdministrativeRole ? '' : session.onDuty ? '' : ' (Off Duty)'}
             </p>
           </div>
+
+          {/* Command Center Metrics — the presentation engine's live status strip */}
+          {(dashboard.widgets ?? []).length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 20 }}>
+              {(dashboard.widgets ?? []).filter(w => w.type === 'metric').map(w => {
+                const cfg = w.config || {};
+                const val = String(cfg.value ?? '—');
+                const subtitle = cfg.subtitle ? String(cfg.subtitle) : undefined;
+                const isOk = cfg.status !== 'warning' && cfg.status !== 'error';
+                return (
+                  <div key={w.id} style={{ ...S.card, padding: '14px 16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: C.textLight, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        {w.title}
+                      </span>
+                      <span style={{ width: 8, height: 8, borderRadius: '50%', background: isOk ? C.green : C.amber }} />
+                    </div>
+                    <div style={{ fontSize: 22, fontWeight: 700, color: C.navy, lineHeight: 1 }}>
+                      {val}
+                    </div>
+                    {subtitle && (
+                      <div style={{ fontSize: 10, color: C.textLight, marginTop: 6 }}>{subtitle}</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           {/* Sections */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

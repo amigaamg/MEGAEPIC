@@ -196,7 +196,7 @@ export class WorkspaceEngine {
     // Canonical personId (AMX-UID) — resolve the identity docs by the actor's
     // constitutional id first, then fall back to the Firebase UID for legacy
     // accounts that were keyed by firebase UID (quick-register).
-    const personId = (userData?.amxUid as string) || context.personId || uid;
+    const personId: AmxUid = ((userData?.amxUid as string) || context.personId || uid) as AmxUid;
 
     // Phase 1: Load Identity, Person, Professional directly from Firestore
     const [identityResult, personResult, professionalResult] = await Promise.all([
@@ -251,7 +251,7 @@ export class WorkspaceEngine {
     };
 
     // Phase 2: Resolve Memberships
-    const membershipsResult = await membershipResolver.resolve(context);
+    const membershipsResult = await membershipResolver.resolve({ ...context, personId });
     const memberships = membershipsResult.data || [];
 
     // Phase 3: Determine Active Membership
@@ -261,6 +261,7 @@ export class WorkspaceEngine {
     const storedOrgId = getActiveOrganizationId() || undefined;
     const activeMembershipResult = await membershipResolver.getActiveMembership({
       ...context,
+      personId,
       activeOrganizationId: storedOrgId || context.activeOrganizationId,
     });
     const activeMembership = activeMembershipResult.data;
@@ -268,6 +269,7 @@ export class WorkspaceEngine {
     // Update context with active organization
     const orgContext: ResolverContext = {
       ...context,
+      personId,
       activeOrganizationId: activeMembership?.organizationId || storedOrgId || context.activeOrganizationId,
     };
 

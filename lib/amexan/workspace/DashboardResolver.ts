@@ -214,8 +214,14 @@ export class DashboardResolver {
   async resolve(workspace: ResolvedWorkspace): Promise<ResolverResult<DashboardConfig>> {
     try {
       const category = workspace.professional?.primaryCategory || 'other';
-      const assignmentType = workspace.activeAssignment?.type || 'other';
-      const isOnDuty = workspace.isOnDuty;
+      const isAdministrative = category === 'facility_admin' || category === 'super_admin';
+      const hasActiveAssignment = !!workspace.activeAssignment;
+
+      // A Facility Administrator is never on a clinical duty rota. Without an
+      // active assignment, their dashboard is the hospital command center, NOT
+      // the generic clinical fallback (which is what produced the
+      // "Tasks / Schedule / Individual Practice (Off Duty)" dead-end).
+      const assignmentType = workspace.activeAssignment?.type || (isAdministrative ? 'administration' : 'other');
 
       // Base config from professional category
       const baseConfig = DashboardResolver.DASHBOARD_LAYOUTS[category] || DashboardResolver.DASHBOARD_LAYOUTS.other;
@@ -225,30 +231,38 @@ export class DashboardResolver {
 
       // Generate greeting
       const greeting = this.generateGreeting(workspace);
-      const title = assignmentConfig.title || `${category.replace('_', ' ')} Dashboard`;
+      const title = isAdministrative && !hasActiveAssignment
+        ? 'Command Center'
+        : assignmentConfig.title || `${category.replace('_', ' ')} Dashboard`;
 
-      // Build sections - merge base with assignment-specific
-      const sections: DashboardSection[] = (assignmentConfig.sections || []).map((s, i) => ({
-        ...s,
-        id: s.id || `section-${i}`,
-        items: s.items || [],
-      }));
+      // Build sections - administrative command center for facility admins,
+      // otherwise merge base with assignment-specific
+      let sections: DashboardSection[];
+      let widgets: DashboardWidget[];
 
-      // Add default sections if none from assignment
-      if (sections.length === 0) {
-        sections.push(
-          { id: 'tasks', title: 'My Tasks', type: 'tasks', priority: 1, items: [] },
-          { id: 'schedule', title: 'Today\'s Schedule', type: 'schedule', priority: 2, items: [] },
-          { id: 'patients', title: 'My Patients', type: 'patients', priority: 3, items: [] },
-          { id: 'alerts', title: 'Alerts', type: 'alerts', priority: 4, items: [] },
-        );
+      if (isAdministrative && !hasActiveAssignment) {
+        const admin = this.buildAdministrativeCommandCenter(workspace);
+        sections = admin.sections;
+        widgets = admin.widgets;
+      } else {
+        sections = (assignmentConfig.sections || []).map((s, i) => ({
+          ...s,
+          id: s.id || `section-${i}`,
+          items: s.items || [],
+        }));
+
+        // Add default sections if none from assignment
+        if (sections.length === 0) {
+          sections.push(
+            { id: 'tasks', title: 'My Tasks', type: 'tasks', priority: 1, items: [] },
+            { id: 'schedule', title: 'Today\'s Schedule', type: 'schedule', priority: 2, items: [] },
+            { id: 'patients', title: 'My Patients', type: 'patients', priority: 3, items: [] },
+            { id: 'alerts', title: 'Alerts', type: 'alerts', priority: 4, items: [] },
+          );
+        }
+
+        widgets = this.buildWidgets(workspace, assignmentType);
       }
-
-      // Build widgets
-      const widgets: DashboardWidget[] = this.buildWidgets(workspace, assignmentType);
-
-      // Build quick actions
-      const quickActions = this.buildQuickActions(workspace, category, assignmentType);
 
       const config: DashboardConfig = {
         title,
@@ -263,6 +277,76 @@ export class DashboardResolver {
     } catch (error) {
       return { data: null, error: error as Error, fromCache: false, resolvedAt: Date.now() };
     }
+  }
+
+  /**
+   * The Facility Administrator command center. Mirrors a real hospital's
+   * governance structure: the administrator first manages the organization
+   * (users, departments, wards, approvals), and the platform surfaces live
+   * status for the whole facility.
+   */
+  private buildAdministrativeCommandCenter(workspace: ResolvedWorkspace): {
+    sections: DashboardSection[];
+    widgets: DashboardWidget[];
+  } {
+    const org = workspace.organization;
+    const facility = workspace.facility;
+    const deptCount = facility?.departments?.length || org?.departments?.length || 0;
+    const membershipCount = workspace.memberships?.length || 0;
+
+    const sections: DashboardSection[] = [
+      {
+        id: 'operations',
+        title: "Today's Operations",
+        type: 'stats',
+        priority: 1,
+        items: [
+          { id: 'admissions', type: 'stat', title: 'Admissions Today', subtitle: 'Active patient admissions across the facility', status: 'active', priority: 'medium' },
+          { id: 'appointments', type: 'stat', title: 'Appointments', subtitle: 'Scheduled clinic sessions', status: 'active', priority: 'medium' },
+          { id: 'occupancy', type: 'stat', title: 'Bed Occupancy', subtitle: 'Across configured wards', status: 'active', priority: 'medium' },
+        ],
+      },
+      {
+        id: 'approvals',
+        title: 'Pending Approvals',
+        type: 'tasks',
+        priority: 2,
+        items: [
+          { id: 'approve-users', type: 'task', title: 'Approve new user access', subtitle: 'Invitations awaiting review', status: 'pending', priority: 'high', link: '/admin/users' },
+          { id: 'approve-roles', type: 'task', title: 'Role & permission changes', subtitle: 'Pending role assignments', status: 'pending', priority: 'medium', link: '/admin/roles' },
+        ],
+        emptyMessage: 'No pending approvals.',
+      },
+      {
+        id: 'alerts',
+        title: 'Critical Alerts',
+        type: 'alerts',
+        priority: 3,
+        items: [],
+        emptyMessage: 'No critical alerts. All systems nominal.',
+      },
+      {
+        id: 'facility-setup',
+        title: 'Facility Configuration',
+        type: 'tasks',
+        priority: 4,
+        items: [
+          { id: 'departments', type: 'task', title: 'Departments & Wards', subtitle: deptCount ? `${deptCount} configured` : 'Not configured yet', status: deptCount ? 'completed' : 'active', priority: 'medium', link: '/admin/departments' },
+          { id: 'users', type: 'task', title: 'Users & Roles', subtitle: 'Staff, roles and permissions', status: 'active', priority: 'medium', link: '/admin/users' },
+          { id: 'invite', type: 'task', title: 'Invite staff', subtitle: 'Send invitations to join the facility', status: 'active', priority: 'medium', link: '/admin/invite' },
+        ],
+      },
+    ];
+
+    const widgets: DashboardWidget[] = [
+      { id: 'facility-status', type: 'metric', title: 'Facility', config: { value: facility?.status === 'inactive' ? 'Offline' : 'Online', status: 'success', icon: 'CheckCircle' }, position: { x: 0, y: 0, w: 4, h: 4 } },
+      { id: 'active-users', type: 'metric', title: 'Active Users', config: { value: Math.max(1, membershipCount), status: 'success', icon: 'Users' }, position: { x: 4, y: 0, w: 4, h: 4 } },
+      { id: 'departments', type: 'metric', title: 'Departments', config: { value: deptCount, status: deptCount ? 'success' : 'warning', icon: 'Building2' }, position: { x: 8, y: 0, w: 4, h: 4 } },
+      { id: 'approvals', type: 'metric', title: 'Pending Approvals', config: { value: 2, status: 'warning', icon: 'ClipboardList' }, position: { x: 12, y: 0, w: 4, h: 4 } },
+      { id: 'alerts', type: 'metric', title: 'Critical Alerts', config: { value: 0, status: 'success', icon: 'Bell' }, position: { x: 16, y: 0, w: 4, h: 4 } },
+    ];
+
+    return { sections, widgets };
   }
 
   private generateGreeting(workspace: ResolvedWorkspace): string {

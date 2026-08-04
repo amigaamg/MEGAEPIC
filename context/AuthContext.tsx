@@ -376,6 +376,7 @@ const refreshWorkspace = async () => {
           title: config.title || generated.title,
           greeting: config.greeting || generated.greeting,
           sections: config.sections,
+          widgets: config.widgets,
         };
       }
       return generated;

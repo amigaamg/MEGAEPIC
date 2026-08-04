@@ -156,6 +156,7 @@ export async function provisionOrganization(
     id: actorId,
     personId: actorId,
     organizationId,
+    orgId: organizationId,
     organizationName,
     organizationType: organizationType as Organization['type'],
     roleId: OWNER_ROLE,
