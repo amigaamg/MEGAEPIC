@@ -140,7 +140,10 @@ export interface ProfessionalIdentity {
   councilNumber?: string;
   councilName?: string;
   qualifications: Qualification[];
-  yearsOfExperience: number;
+  yearsOfExperience: number | null;
+  university?: string;
+  universityYear?: number;
+  administrativeRole?: string;
   verified: boolean;
   verificationDocuments: string[];
   verificationDate?: number;

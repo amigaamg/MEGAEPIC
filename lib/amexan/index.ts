@@ -44,6 +44,8 @@ export {
   validateProfessionalStep,
   validateOrganizationCreateStep,
   REGISTRATION_STEPS,
+  getProfessionFieldConfig,
+  isClinicalProfession,
   generateAmxUid, validateAmxUid, getAmxUidType,
   getVerificationLevelLabel, getVerificationRequirements,
   createVerificationState, upgradeVerificationLevel,
@@ -88,6 +90,7 @@ export type {
   RegistrationData,
   RegistrationErrors,
   StepConfig,
+  ProfessionFieldConfig,
 } from './constitution';
 
 // ── Constitution Services (Firestore, Audit, Signature) ──────────────────────
@@ -103,9 +106,12 @@ export {
   createRole, createOrgRole, listRoles,
   createAuditEntry, verifyAuditEntryIntegrity, getAuditLogs, recordAccess,
   signDocument, verifySignature, revokeSignature, getDocumentSignatures,
+  getPersonSignatures,
+  createActor, getActor, updateActor,
+  cleanFirestore,
 } from './constitution';
 
-export type { OrgMemberRecord } from './constitution';
+export type { OrgMemberRecord, ActorRecord } from './constitution';
 
 // ── Core Types ────────────────────────────────────────────────────────────────
 export type * from './encounter-brain/types';

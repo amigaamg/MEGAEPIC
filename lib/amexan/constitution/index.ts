@@ -16,6 +16,8 @@ export {
   validateProfessionalStep,
   validateOrganizationCreateStep,
   REGISTRATION_STEPS,
+  getProfessionFieldConfig,
+  isClinicalProfession,
 } from './registration';
 
 export type {
@@ -24,6 +26,7 @@ export type {
   RegistrationData,
   RegistrationErrors,
   StepConfig,
+  ProfessionFieldConfig,
 } from './registration';
 
 // ── Firestore Service ─────────────────────────────────────────────────────────
@@ -47,9 +50,11 @@ export {
   createAssignment, getAssignment, updateAssignment, listAssignments, listPersonAssignments,
   createRole, createOrgRole, getRole, getOrgRole, updateRole, listRoles,
   addOrgMember, getOrgMember, updateOrgMember, removeOrgMember, listOrgMembers, listUserOrganizations,
+  cleanFirestore,
+  createActor, getActor, updateActor,
 } from './firestoreService';
 
-export type { OrgMemberRecord } from './firestoreService';
+export type { OrgMemberRecord, ActorRecord } from './firestoreService';
 
 // ── Audit Trail ───────────────────────────────────────────────────────────────
 export {

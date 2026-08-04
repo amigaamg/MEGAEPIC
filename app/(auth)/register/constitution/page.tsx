@@ -23,6 +23,10 @@ import {
   getIdentity,
   getPerson,
   getProfessional,
+  cleanFirestore,
+  getProfessionFieldConfig,
+  isClinicalProfession,
+  createActor,
   type RegistrationStep,
   type RegistrationData,
   type AmxUid,
@@ -46,7 +50,8 @@ function mapFirebaseError(code: string): string {
 const DEFAULT_DATA: RegistrationData = {
   email: '', password: '', phone: '', fullName: '', givenName: '', familyName: '',
   dateOfBirth: '', gender: 'undisclosed', nationality: '', nationalId: '',
-  categories: [], primaryCategory: '' as any, specialties: [], yearsOfExperience: 0,
+  categories: [], primaryCategory: '' as any, specialties: [], primarySpecialty: undefined,
+  yearsOfExperience: null,
   qualifications: [], organizationChoice: 'none', organizationName: '',
   organizationType: undefined, organizationLevel: undefined,
   organizationRegistrationNumber: '', invitationCode: '', jobTitle: '',
@@ -54,13 +59,31 @@ const DEFAULT_DATA: RegistrationData = {
 };
 
 const PROFESSIONAL_CATEGORIES = [
+  // ── Clinical ──
   { value: 'medical_doctor', label: 'Medical Doctor' },
+  { value: 'dentist', label: 'Dentist' },
+  { value: 'clinical_officer', label: 'Clinical Officer' },
   { value: 'nurse', label: 'Nurse' },
+  { value: 'midwife', label: 'Midwife' },
   { value: 'pharmacist', label: 'Pharmacist' },
   { value: 'lab_technologist', label: 'Lab Technologist' },
   { value: 'radiographer', label: 'Radiographer' },
-  { value: 'clinical_officer', label: 'Clinical Officer' },
-  { value: 'midwife', label: 'Midwife' },
+  { value: 'physiotherapist', label: 'Physiotherapist' },
+  { value: 'occupational_therapist', label: 'Occupational Therapist' },
+  { value: 'nutritionist', label: 'Nutritionist' },
+  { value: 'social_worker', label: 'Social Worker' },
+  { value: 'psychologist', label: 'Psychologist' },
+  { value: 'community_health_worker', label: 'Community Health Worker' },
+  // ── Academic ──
+  { value: 'medical_student', label: 'Medical Student' },
+  { value: 'nursing_student', label: 'Nursing Student' },
+  { value: 'intern', label: 'Intern' },
+  { value: 'resident', label: 'Resident' },
+  { value: 'consultant', label: 'Consultant' },
+  { value: 'specialist', label: 'Specialist' },
+  { value: 'educator', label: 'Educator / Lecturer' },
+  { value: 'researcher', label: 'Researcher' },
+  // ── Administration ──
   { value: 'administrator', label: 'Administrator' },
   { value: 'it_staff', label: 'IT Staff' },
   { value: 'finance_staff', label: 'Finance Staff' },
@@ -68,9 +91,13 @@ const PROFESSIONAL_CATEGORIES = [
   { value: 'receptionist', label: 'Receptionist' },
   { value: 'records_officer', label: 'Records Officer' },
   { value: 'facility_admin', label: 'Facility Admin' },
+  { value: 'insurance_officer', label: 'Insurance Officer' },
+  { value: 'supplier', label: 'Supplier' },
   { value: 'super_admin', label: 'Super Admin' },
+  // ── Patient / Guardian ──
   { value: 'patient', label: 'Patient' },
   { value: 'guardian', label: 'Guardian' },
+  // ── Other ──
   { value: 'other', label: 'Other' },
 ];
 
@@ -86,7 +113,47 @@ const SPECIALTIES = [
   { value: 'neurology', label: 'Neurology' },
   { value: 'general_practice', label: 'General Practice' },
   { value: 'public_health', label: 'Public Health' },
+  { value: 'palliative_care', label: 'Palliative Care' },
+  { value: 'oncology', label: 'Oncology' },
+  { value: 'dermatology', label: 'Dermatology' },
+  { value: 'radiology', label: 'Radiology' },
+  { value: 'anesthesiology', label: 'Anesthesiology' },
+  { value: 'pathology', label: 'Pathology' },
+  { value: 'orthopedic_surgery', label: 'Orthopedic Surgery' },
+  { value: 'cardiothoracic_surgery', label: 'Cardiothoracic Surgery' },
+  { value: 'neurosurgery', label: 'Neurosurgery' },
+  { value: 'plastic_surgery', label: 'Plastic Surgery' },
+  { value: 'vascular_surgery', label: 'Vascular Surgery' },
+  { value: 'ent', label: 'ENT / Otolaryngology' },
+  { value: 'ophthalmology', label: 'Ophthalmology' },
+  { value: 'urology', label: 'Urology' },
+  { value: 'gastroenterology', label: 'Gastroenterology' },
+  { value: 'pulmonology', label: 'Pulmonology' },
+  { value: 'nephrology', label: 'Nephrology' },
+  { value: 'endocrinology', label: 'Endocrinology' },
+  { value: 'rheumatology', label: 'Rheumatology' },
+  { value: 'hematology', label: 'Hematology' },
+  { value: 'infectious_disease', label: 'Infectious Disease' },
+  { value: 'sports_medicine', label: 'Sports Medicine' },
+  { value: 'forensic_medicine', label: 'Forensic Medicine' },
+  { value: 'intensive_care', label: 'Intensive Care' },
+  { value: 'neonatology', label: 'Neonatology' },
   { value: 'other', label: 'Other' },
+];
+
+const QUALIFICATIONS_CHIPS = [
+  'MBChB', 'MBBS', 'MB BS', 'MD', 'PhD', 'MSc', 'BSc',
+  'BScN', 'BM', 'BN', 'BHSc', 'BPhil', 'BPT', 'BDS', 'MBBS',
+  'MMed', 'MMed Surgery', 'MMed Internal Medicine', 'MMed Pediatrics',
+  'MMed Obstetrics', 'MMed Gynecology', 'MMed Psychiatry', 'MMed Pathology',
+  'MFRCS', 'MRCP', 'MRCPsych', 'MRCOG', 'MRCOG(LS)', 'MCPS', 'MD',
+  'MCh', 'MCh Orth', 'MCh Urology', 'MCh Neurosurgery',
+  'MPharm', 'BPharm', 'DPharm',
+  'BSc Med Lab', 'BSc Radiography', 'BSc Physiotherapy',
+  'BSc Nursing', 'BN', 'BSc Midwifery',
+  'MPA', 'MBA', 'MHA', 'MHSA', 'MPH',
+  'BCom', 'BA', 'BSS', 'LLB',
+  'Cert OR', 'Dipl In Healthcare Mgmt', 'Certificate in Clinical Medicine',
 ];
 
 const ORG_TYPES = [
@@ -202,10 +269,10 @@ export default function ConstitutionRegisterPage() {
   async function saveProgress(nextStep: RegistrationStep) {
     if (!firebaseUid) return;
     try {
-      await updateDoc(doc(db, 'users', firebaseUid), {
+      await updateDoc(doc(db, 'users', firebaseUid), cleanFirestore({
         registrationStep: nextStep,
         updatedAt: serverTimestamp(),
-      });
+      }));
     } catch { }
   }
 
@@ -268,10 +335,16 @@ export default function ConstitutionRegisterPage() {
           categories: professional.categories || data.categories,
           specialties: professional.specialties || data.specialties,
           primarySpecialty: professional.primarySpecialty || data.primarySpecialty,
+          subSpecialty: professional.subSpecialty || data.subSpecialty,
           licenseNumber: professional.licenseNumber || data.licenseNumber,
+          licenseCountry: professional.licenseCountry || data.licenseCountry,
           councilNumber: professional.councilNumber || data.councilNumber,
-          yearsOfExperience: professional.yearsOfExperience || data.yearsOfExperience,
+          councilName: professional.councilName || data.councilName,
+          yearsOfExperience: professional.yearsOfExperience ?? data.yearsOfExperience,
           qualifications: professional.qualifications || data.qualifications,
+          university: professional.university || data.university,
+          universityYear: professional.universityYear || data.universityYear,
+          administrativeRole: professional.administrativeRole || data.administrativeRole,
         });
       }
     } catch { }
@@ -340,10 +413,25 @@ export default function ConstitutionRegisterPage() {
           gender: data.gender,
           nationality: data.nationality,
           nationalId: data.nationalId,
-          address: { country: data.nationality || '', county: '' },
-        });
+           address: { country: data.nationality || '', county: '' },
+         });
 
-        await login(data.email.trim(), data.password);
+         // ── Constitutional Rule: Registration creates only the Actor root ──
+         // (Firebase Auth + Actor + AMX-UID). Professional Identity,
+         // Organization, and Workspace belong to onboarding.
+         await createActor(amxUid, {
+           amxuid: `AMX-${amxUid.replace(/-/g, '').slice(0, 8).toUpperCase()}`,
+           actorType: data.primaryCategory === 'patient' ? 'patient' : 'professional',
+           status: 'in_progress' as const,
+           displayName: data.fullName.trim(),
+           email: data.email.trim(),
+           phone: data.phone,
+           firebaseUid: fbUid,
+           registrationStep: 'professional',
+           constitutionVersion: '1.0.0',
+         });
+
+         await login(data.email.trim(), data.password);
         await saveProgress('professional');
         setStep('professional');
       } catch (err: any) {
@@ -383,19 +471,25 @@ export default function ConstitutionRegisterPage() {
 
       setLoading(true);
       try {
-        await createProfessional(generatedAmxUid!, {
+        await createProfessional(generatedAmxUid!, cleanFirestore({
           personId: generatedAmxUid as AmxUid,
           categories: data.categories,
           primaryCategory: data.primaryCategory,
           specialties: data.specialties || [],
           primarySpecialty: data.primarySpecialty,
+          subSpecialty: data.subSpecialty,
+          licenseNumber: data.licenseNumber,
+          licenseCountry: data.licenseCountry,
+          councilNumber: data.councilNumber,
+          councilName: data.councilName,
           qualifications: (data.qualifications || []).map(q => ({ ...q, country: '', verified: false })) as Qualification[],
           yearsOfExperience: data.yearsOfExperience,
-          licenseNumber: data.licenseNumber,
-          councilNumber: data.councilNumber,
+          university: data.university,
+          universityYear: data.universityYear,
+          administrativeRole: data.administrativeRole,
           verified: false,
           verificationDocuments: [],
-        });
+        }));
         await saveProgress('organization_choice');
         setStep('organization_choice');
       } catch (err: any) {
@@ -547,11 +641,11 @@ export default function ConstitutionRegisterPage() {
         }
 
         if (firebaseUid) {
-          await updateDoc(doc(db, 'users', firebaseUid), {
+          await updateDoc(doc(db, 'users', firebaseUid), cleanFirestore({
             registrationStep: 'complete',
             workspaceChoice: data.organizationChoice === 'none' ? 'individual' : 'organization',
             updatedAt: serverTimestamp(),
-          });
+          }));
         }
         setStep('complete');
       } catch (err: any) {
@@ -724,43 +818,123 @@ export default function ConstitutionRegisterPage() {
         <div className="space-y-4" role="form" aria-label="Professional profile">
           <Field label="Primary Profession" error={errors.primaryCategory} required>
             <select style={getInputStyle(!!errors.primaryCategory)} value={data.primaryCategory}
-              onChange={e => update({ primaryCategory: e.target.value as any, categories: [e.target.value] as any[] })}>
+              onChange={e => update({
+                primaryCategory: e.target.value as any,
+                categories: [e.target.value] as any[],
+                primarySpecialty: undefined,
+                specialties: [],
+                licenseNumber: undefined,
+                councilNumber: undefined,
+              })}>
               <option value="">Select your profession...</option>
               {PROFESSIONAL_CATEGORIES.map(c => (
                 <option key={c.value} value={c.value}>{c.label}</option>
               ))}
             </select>
           </Field>
-          <Field label="Specialty / Area of Practice">
-            <select style={selectStyle} value={data.primarySpecialty ?? ''}
-              onChange={e => update({ primarySpecialty: e.target.value as any, specialties: e.target.value ? [e.target.value as any] : [] })}>
-              <option value="">Select specialty (optional)...</option>
-              {SPECIALTIES.map(s => (
-                <option key={s.value} value={s.value}>{s.label}</option>
-              ))}
-            </select>
-          </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Professional License Number" error={errors.licenseNumber}>
-              <input style={getInputStyle(!!errors.licenseNumber)} type="text" value={data.licenseNumber ?? ''}
-                onChange={e => update({ licenseNumber: e.target.value })} placeholder="License / Council Number" />
-            </Field>
-            <Field label="Council Registration Number" error={errors.councilNumber}>
-              <input style={getInputStyle(!!errors.councilNumber)} type="text" value={data.councilNumber ?? ''}
-                onChange={e => update({ councilNumber: e.target.value })} placeholder="Council Reg No." />
-            </Field>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Years of Experience">
-              <input style={inputStyle} type="number" value={data.yearsOfExperience}
-                onChange={e => update({ yearsOfExperience: Math.max(0, parseInt(e.target.value) || 0) })} placeholder="0" min={0} />
-            </Field>
-            <Field label="Qualifications">
-              <input style={inputStyle} type="text" value={data.qualifications.map(q => q.degree).join(', ')}
-                onChange={e => update({ qualifications: e.target.value.split(',').filter(Boolean).map(d => ({ degree: d.trim(), institution: '', year: new Date().getFullYear() })) })}
-                placeholder="MBChB, MMed, BScN, etc." />
-            </Field>
-          </div>
+
+          {/* ── Actor-driven field rendering ── */}
+          {data.primaryCategory && (() => {
+            const cfg = getProfessionFieldConfig(data.primaryCategory);
+            return (
+              <>
+                {/* Specialty / Area of Practice */}
+                {cfg.showSpecialty && (
+                  <Field
+                    label="Specialty / Area of Practice"
+                    error={errors.primarySpecialty}
+                    required={cfg.specialtyRequired}
+                  >
+                    <select style={getInputStyle(!!errors.primarySpecialty)} value={data.primarySpecialty ?? ''}
+                      onChange={e => update({
+                        primarySpecialty: e.target.value ? (e.target.value as any) : undefined,
+                        specialties: e.target.value ? [e.target.value as any] : [],
+                      })}>
+                      <option value="">Select specialty{ cfg.specialtyRequired ? ' (required)' : ' (optional)' }</option>
+                      {SPECIALTIES.map(s => (
+                        <option key={s.value} value={s.value}>{s.label}</option>
+                      ))}
+                    </select>
+                  </Field>
+                )}
+
+                {/* License + Council (grid) */}
+                {(cfg.showLicenseNumber || cfg.showCouncilNumber) && (
+                  <div className="grid grid-cols-2 gap-3">
+                    {cfg.showLicenseNumber && (
+                      <Field label="Professional License Number" error={errors.licenseNumber} required={cfg.licenseRequired}>
+                        <input style={getInputStyle(!!errors.licenseNumber)} type="text" value={data.licenseNumber ?? ''}
+                          onChange={e => update({ licenseNumber: e.target.value || undefined })}
+                          placeholder={cfg.licenseRequired ? 'License number (required)' : 'License number (optional)'} />
+                      </Field>
+                    )}
+                    {cfg.showCouncilNumber && (
+                      <Field label="Council Registration Number" error={errors.councilNumber} required={cfg.councilRequired}>
+                        <input style={getInputStyle(!!errors.councilNumber)} type="text" value={data.councilNumber ?? ''}
+                          onChange={e => update({ councilNumber: e.target.value || undefined })}
+                          placeholder={cfg.councilRequired ? 'Council reg. no. (required)' : 'Council reg. no. (optional)'} />
+                      </Field>
+                    )}
+                  </div>
+                )}
+
+                {/* University (for students) */}
+                {cfg.showUniversity && (
+                  <Field label="University" error={errors.university} required={cfg.universityRequired}>
+                    <input style={getInputStyle(!!errors.university)} type="text" value={data.university ?? ''}
+                      onChange={e => update({ university: e.target.value || undefined })}
+                      placeholder="e.g. University of Nairobi" />
+                  </Field>
+                )}
+
+                {/* Administrative Role (for admin staff) */}
+                {cfg.showAdministrativeRole && (
+                  <Field label="Administrative Role" error={errors.administrativeRole}>
+                    <input style={inputStyle} type="text" value={data.administrativeRole ?? ''}
+                      onChange={e => update({ administrativeRole: e.target.value || undefined })}
+                      placeholder="e.g. Finance Manager, HR Coordinator" />
+                  </Field>
+                )}
+
+                {/* Years of Experience + Qualifications (grid) */}
+                {(cfg.showYearsExperience || cfg.showQualifications) && (
+                  <div className="grid grid-cols-2 gap-3">
+                    {cfg.showYearsExperience && (
+                      <Field label="Years of Experience" error={errors.yearsOfExperience} required={cfg.yearsRequired}>
+                        <input style={getInputStyle(!!errors.yearsOfExperience)}
+                          type="number"
+                          value={data.yearsOfExperience === null ? '' : String(data.yearsOfExperience)}
+                          onChange={e => update({ yearsOfExperience: e.target.value ? Math.max(0, parseInt(e.target.value)) : null })}
+                          placeholder={cfg.yearsRequired ? 'Years (required)' : 'Not entered'} min={0} />
+                      </Field>
+                    )}
+                    {cfg.showQualifications && (
+                      <Field label="Qualifications" error={errors.qualifications}>
+                        <QualificationInput
+                          value={data.qualifications.map(q => q.degree)}
+                          onChange={degrees => update({
+                            qualifications: degrees.map(d => ({ degree: d, institution: '', year: new Date().getFullYear() }))
+                          })}
+                        />
+                      </Field>
+                    )}
+                  </div>
+                )}
+
+                {/* No professional fields at all */}
+                {!cfg.showSpecialty && !cfg.showLicenseNumber && !cfg.showCouncilNumber
+                  && !cfg.showUniversity && !cfg.showAdministrativeRole
+                  && !cfg.showYearsExperience && !cfg.showQualifications && (
+                  <div style={{ padding: 16, borderRadius: 'var(--radius-md)', background: 'var(--primary-light)', border: '1px solid var(--sky-200)' }}>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                      Your profession "{PROFESSIONAL_CATEGORIES.find(c => c.value === data.primaryCategory)?.label || data.primaryCategory}"
+                      does not require additional professional fields.
+                    </p>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       )}
 
@@ -937,6 +1111,96 @@ export default function ConstitutionRegisterPage() {
           }}>
           Go to Dashboard
         </button>
+      )}
+    </div>
+  );
+}
+
+function QualificationInput({ value, onChange }: {
+  value: string[];
+  onChange: (degrees: string[]) => void;
+}) {
+  const [input, setInput] = useState('');
+  const [showChips, setShowChips] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const degrees = value;
+  const filtered = QUALIFICATIONS_CHIPS.filter(q =>
+    q.toLowerCase().includes(input.toLowerCase()) && !degrees.includes(q)
+  );
+
+  const addDegree = (degree: string) => {
+    if (!degrees.includes(degree)) onChange([...degrees, degree]);
+    setInput('');
+    inputRef.current?.focus();
+  };
+
+  const removeDegree = (degree: string) => {
+    onChange(degrees.filter(d => d !== degree));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && input.trim()) {
+      e.preventDefault();
+      addDegree(input.trim());
+    }
+    if (e.key === 'Backspace' && !input && degrees.length > 0) {
+      removeDegree(degrees[degrees.length - 1]);
+    }
+  };
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <div style={{
+        minHeight: 48, padding: '8px 16px', borderRadius: 'var(--radius-md)',
+        border: '1px solid var(--surface-border)', background: 'var(--surface)',
+        display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center',
+      }}>
+        {degrees.map(d => (
+          <span key={d} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            padding: '4px 10px', borderRadius: 16, background: 'var(--primary-light)',
+            color: 'var(--primary)', fontSize: 13, fontWeight: 500, fontFamily: 'var(--font-sans)',
+          }}>
+            {d}
+            <button type="button" onClick={() => removeDegree(d)}
+              style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 12 }}
+              aria-label={`Remove ${d}`}>&times;</button>
+          </span>
+        ))}
+        <input ref={inputRef} type="text" value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setShowChips(true)}
+          onBlur={() => setTimeout(() => setShowChips(false), 150)}
+          placeholder={degrees.length === 0 ? "Type a qualification and press Enter..." : "Add another..."}
+          style={{
+            flex: 1, minWidth: 120, border: 'none', outline: 'none',
+            background: 'transparent', color: 'var(--text-primary)',
+            fontSize: 15, fontFamily: 'var(--font-sans)',
+          }}
+        />
+      </div>
+      {showChips && filtered.length > 0 && (
+        <div style={{
+          position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 1000,
+          maxHeight: 160, overflowY: 'auto', background: 'var(--surface)',
+          border: '1px solid var(--surface-border)', borderRadius: 'var(--radius-md)',
+          marginTop: 4,
+        }}>
+          {filtered.map(q => (
+            <button key={q} type="button"
+              onClick={() => addDegree(q)}
+              style={{
+                width: '100%', padding: '6px 12px', textAlign: 'left',
+                border: 'none', background: 'transparent', color: 'var(--text-primary)',
+                fontSize: 13, cursor: 'pointer', fontFamily: 'var(--font-sans)',
+              }}
+              onMouseDown={e => e.preventDefault()}>
+              {q}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

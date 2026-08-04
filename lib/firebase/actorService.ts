@@ -336,16 +336,17 @@ export async function ensureActor(input: EnsureActorInput): Promise<void> {
   const existingProfessional = await getProfessional(key).catch(() => null);
   if (!existingProfessional && input.accountType === 'professional') {
     const category = (input.professionalCategory || categoryFromRole(input.clinicianRole)) as ProfessionalCategory;
-    await createProfessional(key, {
-      personId: key,
-      categories: [category],
-      primaryCategory: category,
-      specialties: [],
-      qualifications: [],
-      yearsOfExperience: 0,
-      verified: false,
-      verificationDocuments: [],
-    });
+       await createProfessional(key, {
+        personId: key,
+        categories: [category],
+        primaryCategory: category,
+        specialties: [],
+        primarySpecialty: undefined,
+        qualifications: [],
+        yearsOfExperience: null,
+        verified: false,
+        verificationDocuments: [],
+      });
   }
 }
 
