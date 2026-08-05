@@ -199,25 +199,61 @@ async function seedActor(u: DemoUser): Promise<void> {
       { merge: true },
     );
 
-  // Employment + active assignment so the clinical chain is complete.
+  // WorkspaceEngine membership row (organizations/{orgId}/memberships/{personId}).
+  // The MembershipResolver reads BOTH `members` (legacy) and `memberships`; an
+  // active membership here is what flips the completeness gate to 'ready'.
+  await db
+    .collection("organizations")
+    .doc(DEMO_ORG.id)
+    .collection("memberships")
+    .doc(amxUid)
+    .set(
+      {
+        id: amxUid,
+        personId: amxUid,
+        organizationId: DEMO_ORG.id,
+        orgId: DEMO_ORG.id,
+        organizationName: DEMO_ORG.name,
+        organizationType: "hospital",
+        roleId: u.role,
+        roleName: u.role,
+        departmentId: deptId,
+        departmentName: u.dept,
+        facilityId: DEMO_FAC.id,
+        facilityName: `${DEMO_ORG.name} · Main Campus`,
+        isPrimary: true,
+        status: "active",
+        joinedAt: NOW,
+        updatedAt: NOW,
+        metadata: { source: "demo-seed", services: [] },
+      },
+      { merge: true },
+    );
+
+  // Employment + active assignment so the clinical chain is complete. Writes are
+  // org-scoped (organizations/{orgId}/employments, /assignments) — the resolvers
+  // read collections nested under the org, NOT top-level collections.
   if (u.role !== "patient") {
-    await upsert("employments", `${uid}-emp`, {
-      id: empId,
-      personId: amxUid,
-      organizationId: DEMO_ORG.id,
-      departmentId: deptId,
-      professionalIdentityId: amxUid,
-      employeeId: `EMP-${uid.slice(0, 8).toUpperCase()}`,
-      jobTitle: u.role.replace("_", " "),
-      employmentType: "permanent",
-      startDate: NOW - 30 * 86400000,
-      isPrimary: true,
-      schedule: { type: "full_time", weeklyHours: 40, workingDays: [1, 2, 3, 4, 5], leaveBalance: {} },
-      privileges: [],
-      status: "active",
-      createdAt: NOW,
-      updatedAt: NOW,
-    });
+    await db.collection("organizations").doc(DEMO_ORG.id).collection("employments").doc(`${uid}-emp`).set(
+      {
+        id: empId,
+        personId: amxUid,
+        organizationId: DEMO_ORG.id,
+        departmentId: deptId,
+        professionalIdentityId: amxUid,
+        employeeId: `EMP-${uid.slice(0, 8).toUpperCase()}`,
+        jobTitle: u.role.replace("_", " "),
+        employmentType: "permanent",
+        startDate: NOW - 30 * 86400000,
+        isPrimary: true,
+        schedule: { type: "full_time", weeklyHours: 40, workingDays: [1, 2, 3, 4, 5], leaveBalance: {} },
+        privileges: [],
+        status: "active",
+        createdAt: NOW,
+        updatedAt: NOW,
+      },
+      { merge: true },
+    );
 
     const isWard = ["ward_round", "supervision"].includes(u.assignment);
     const locType =
@@ -232,25 +268,28 @@ async function seedActor(u: DemoUser): Promise<void> {
     };
     if (isWard) location.wardId = "ward-demo-1";
 
-    await upsert("assignments", `${uid}-${u.assignment}`, {
-      id: `${uid}-${u.assignment}`,
-      personId: amxUid,
-      employmentId: empId,
-      organizationId: DEMO_ORG.id,
-      departmentId: deptId,
-      type: u.assignment,
-      title: u.assignment.replace("_", " "),
-      startTime: NOW - 3600000,
-      endTime: NOW + 7 * 3600000,
-      location,
-      status: "active",
-      priority: "routine",
-      assignedBy: amxUid,
-      assignedAt: NOW,
-      requiresSignature: false,
-      linkedPatientIds: [],
-      linkedEncounterIds: [],
-    });
+    await db.collection("organizations").doc(DEMO_ORG.id).collection("assignments").doc(`${uid}-${u.assignment}`).set(
+      {
+        id: `${uid}-${u.assignment}`,
+        personId: amxUid,
+        employmentId: empId,
+        organizationId: DEMO_ORG.id,
+        departmentId: deptId,
+        type: u.assignment,
+        title: u.assignment.replace("_", " "),
+        startTime: NOW - 3600000,
+        endTime: NOW + 7 * 3600000,
+        location,
+        status: "active",
+        priority: "routine",
+        assignedBy: amxUid,
+        assignedAt: NOW,
+        requiresSignature: false,
+        linkedPatientIds: [],
+        linkedEncounterIds: [],
+      },
+      { merge: true },
+    );
   }
 
   await upsert("actors", uid, {
@@ -330,6 +369,16 @@ async function main() {
       status: "active",
       createdAt: NOW,
     });
+    // Org-scoped row — listDepartments reads organizations/{orgId}/departments.
+    await db.collection("organizations").doc(DEMO_ORG.id).collection("departments").doc(depId).set({
+      id: depId,
+      organizationId: DEMO_ORG.id,
+      facilityId: DEMO_FAC.id,
+      name: dep,
+      type: dep.toLowerCase().replace(/[^a-z0-9]+/g, "_"),
+      status: "active",
+      createdAt: NOW,
+    }, { merge: true });
   }
 
   // 2. Seed each demo actor with a full, complete workspace.

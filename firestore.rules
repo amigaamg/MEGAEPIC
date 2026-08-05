@@ -70,6 +70,19 @@ service cloud.firestore {
         }
       }
 
+      // Organization constitutional containers (written by OrganizationEngine.persist)
+      // during provisioning. Signed-in users may write while setting up a new org
+      // (chicken-and-egg: no member/admin row exists yet); reads stay member-scoped.
+      match /identity/{sub} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+      match /geography/{sub} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+      match /metadata/{sub} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+      match /domains/{domainId} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+      match /facilities/{facilityId} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+      match /branches/{branchId} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+      match /buildings/{buildingId} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+      match /floors/{floorId} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+      match /history/{eventId} { allow read: if isOrgMember(orgId); allow write: if isSignedIn(); }
+
       // Organization members
       match /members/{userId} {
         allow read: if isOrgMember(orgId);

@@ -556,7 +556,12 @@ export default function ConstitutionRegisterPage() {
         update({ organizationName: result.organizationId });
         setStep('complete');
       } catch (err: any) {
-        showError('Failed to create organization. Please try again.');
+        console.error('[Register] provisionOrganization failed:', err);
+        const msg =
+          err?.message?.includes('permission-denied') || err?.message?.includes('PERMISSION_DENIED')
+            ? 'Your account was created, but Firestore rules blocked saving the facility. If you are on a fresh deploy, the rules may need updating.'
+            : 'Failed to create organization. Please try again.';
+        showError(msg);
       } finally {
         setLoading(false);
       }
