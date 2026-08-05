@@ -43,7 +43,7 @@ function DoctorADOSInner() {
       doctorTitle: 'Consultant Physician',
       specialty: 'Internal Medicine',
       organizationId: 'org_ktrh',
-      organizationName: 'Kisii Teaching & Referral Hospital',
+      organizationName: 'AMEXAN Demo Facility',
       departmentId: 'dept_med',
       departmentName: 'Internal Medicine',
       shift: selectedDept === 'emergency' ? 'afternoon' : 'morning',
@@ -193,7 +193,7 @@ function DoctorADOSInner() {
             </button>
 
             <p style={{ textAlign: 'center', fontSize: 11, color: C.textLight, marginTop: 16 }}>
-              Kisii Teaching & Referral Hospital · {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+              AMEXAN Demo Facility · {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
           </div>
         </div>

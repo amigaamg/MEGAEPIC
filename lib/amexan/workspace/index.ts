@@ -122,3 +122,10 @@ export type {
   ResolutionGap,
   ResolutionContext,
 } from './WorkspaceResolutionEngine';
+
+// Constitutional Dashboard Adapter (Book VIII unification)
+export {
+  DashboardConstitutionalEngine,
+  dashboardConstitutionalEngine,
+  roleTokensFor,
+} from './dashboard-constitutional';

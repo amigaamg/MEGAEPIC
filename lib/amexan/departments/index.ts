@@ -1,3 +1,4 @@
+export * from './DepartmentEngine';
 export { CARD_DISEASES } from './card';
 export { IM_DISEASES } from './im';
 export { NEURO_DISEASES } from './neuro';

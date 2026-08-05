@@ -1,4 +1,6 @@
 export * from './types'
+export * from './NursingEngine'
+export * from './UniversalWorkforceEngine'
 export * from './shift-engine'
 export * from './schedule-engine'
 export * from './assignment-engine'

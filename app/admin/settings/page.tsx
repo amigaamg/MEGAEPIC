@@ -2,10 +2,38 @@
 
 import { useState } from 'react'
 import { C } from '@/lib/colors'
+import { useAuth } from '@/context/AuthContext'
 import { Settings, Save, Building, Bell, Shield, Palette, FileText } from 'lucide-react'
+
+const ORG_TYPE_LABEL: Record<string, string> = {
+  hospital: 'Hospital',
+  clinic: 'Clinic',
+  teaching_hospital: 'Teaching / Referral Hospital',
+  specialist_center: 'Specialist Center',
+  research_institute: 'Research Institute',
+  university: 'University',
+  pharmacy: 'Pharmacy',
+  laboratory: 'Laboratory',
+  health_center: 'Health Center',
+  nursing_home: 'Nursing Home',
+  medical_center: 'Medical Center',
+};
 
 export default function OrgSettingsPage() {
   const [tab, setTab] = useState('general')
+  const { workspace, session } = useAuth()
+  const org = workspace?.organization || null;
+
+  const fields = [
+    { l: 'Organization Name', v: org?.name || session?.currentOrganization?.name || 'Not configured' },
+    { l: 'Legal Name', v: org?.legalName || '' },
+    { l: 'Registration No.', v: org?.registrationNumber || '—' },
+    { l: 'Type', v: (org?.type && ORG_TYPE_LABEL[org.type]) || '—' },
+    { l: 'County', v: org?.address?.county || '' },
+    { l: 'City / Town', v: org?.address?.city || '' },
+    { l: 'Phone', v: org?.phone || '' },
+    { l: 'Email', v: org?.email || '' },
+  ];
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--surface-elevated)', fontFamily: 'var(--font-sans)', color: 'var(--text-primary)' }}>
@@ -26,7 +54,7 @@ export default function OrgSettingsPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <h3 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 4px' }}>General Information</h3>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                {[{ l: 'Organization Name', v: 'Kisii Teaching & Referral Hospital' }, { l: 'Registration No.', v: 'KMPDC/HS/0082' }, { l: 'Type', v: 'Public Hospital' }, { l: 'County', v: 'Kisii' }, { l: 'Phone', v: '+254 712 345 678' }, { l: 'Email', v: 'info@kisii.trh.go.ke' }].map(f => (
+                {fields.map(f => (
                   <div key={f.l}>
                     <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 3, textTransform: 'uppercase' }}>{f.l}</div>
                     <input style={{ width: '100%', height: 36, padding: '0 12px', borderRadius: 8, border: '1px solid var(--surface-border)', background: 'var(--surface)', color: 'var(--text-primary)', fontSize: 13, outline: 'none' }} defaultValue={f.v} />

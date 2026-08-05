@@ -92,7 +92,7 @@ export default function ReferralPage() {
             <div style={{ background: C.white, borderRadius: 12, border: `1px solid ${C.border}`, padding: 16 }}>
               <div style={{ fontSize: 10, fontWeight: 600, color: C.textLight, textTransform: 'uppercase', marginBottom: 4 }}>Referring Doctor</div>
               <div style={{ fontSize: 13, fontWeight: 600 }}>Dr. James Kamau</div>
-              <div style={{ fontSize: 11, color: C.textLight }}>General Surgery · Kisii TRH</div>
+              <div style={{ fontSize: 11, color: C.textLight }}>General Surgery · AMEXAN Demo Facility</div>
               <div style={{ fontSize: 11, color: C.textLight }}>KMPDC 5678</div>
             </div>
             <div style={{ background: C.white, borderRadius: 12, border: `1px solid ${C.border}`, padding: 16 }}>

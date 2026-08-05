@@ -20,7 +20,7 @@
 
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { AmxUid, Organization, Assignment } from '../constitution/types';
+import type { AmxUid, Assignment, Organization } from '../constitution/types';
 import {
   createOrganization,
   createEmployment,
@@ -29,6 +29,7 @@ import {
   cleanFirestore,
 } from '../constitution/firestoreService';
 import type { Membership } from '../workspace/types';
+import { OrganizationEngine } from './OrganizationEngine';
 
 export interface ProvisionOrganizationInput {
   /** Firebase UID of the actor creating the organization (owner). */
@@ -75,13 +76,15 @@ function now(): number {
 /**
  * Provision a complete organization hierarchy for the acting user.
  *
- * Creates (in order):
- *   1. organizations/{orgId}                    — the organization document
- *   2. organizations/{orgId}/members/{fbUid}    — legacy member row (rules gate)
- *   3. organizations/{orgId}/memberships/{actId}— WorkspaceEngine membership
- *   4. organizations/{orgId}/employments/{id}   — employment record
- *   5. organizations/{orgId}/assignments/{id}   — active assignment
- *   6. users/{uid}.activeOrganizationId         — active workspace pointer
+ * Orchestrates (provisioning is the conductor, engines perform the work):
+ *   1. OrganizationEngine.create()          — build the constitutional model
+ *   2. organizations/{orgId}                — persist the organization document
+ *   3. OrganizationEngine.persist()         — identity/geography/metadata/domains/history
+ *   4. organizations/{orgId}/members/{fbUid}— legacy member row (rules gate)
+ *   5. organizations/{orgId}/memberships/{actId} — WorkspaceEngine membership
+ *   6. organizations/{orgId}/employments/{id}    — employment record
+ *   7. organizations/{orgId}/assignments/{id}    — active assignment
+ *   8. users/{uid}.activeOrganizationId         — active workspace pointer
  *
  * Each step is individually resilient: a failure in an optional step (facility,
  * employment, assignment) is logged and does NOT abort provisioning, because the
@@ -98,8 +101,8 @@ export async function provisionOrganization(
     actorPhone,
     organizationName,
     organizationLegalName,
-    organizationType = 'hospital',
-    organizationLevel = 'level_1',
+    organizationType = 'general_hospital',
+    organizationLevel,
     registrationNumber = '',
     facilityName = organizationName,
     departmentId = 'general',
@@ -111,35 +114,37 @@ export async function provisionOrganization(
     city = input.city || '',
   } = input;
 
-  // 1. Organization (Firestore auto-ID).
-  const organizationId = await createOrganization({
+  // 1. Organization Engine builds the constitutional model (identity, geography,
+  //    metadata, domains, history, lifecycle) — pure, validated, rule-checked.
+  const model = OrganizationEngine.create({
     name: organizationName,
     legalName: organizationLegalName || organizationName,
-    type: organizationType as Organization['type'],
-    level: organizationLevel as Organization['level'],
-    registrationNumber,
-    address: { country, county, city, postalCode: '', street: '' },
-    phone: actorPhone || '',
+    type: organizationType,
+    level: organizationLevel,
+    registrationNumbers: registrationNumber
+      ? [{ authority: 'Regulatory Authority', number: registrationNumber, type: 'facility' }]
+      : [],
+    country,
+    county,
+    city,
+    phone: actorPhone,
     email: actorEmail,
-    branches: [],
-    departments: [],
-    status: 'active',
-    verified: false,
-    ownedBy: actorId,
-    config: {
-      documentHeader: { logoUrl: '', facilityName: organizationName, facilityAddress: '', facilityPhone: actorPhone || '', facilityEmail: actorEmail, headerTemplate: '', footerTemplate: '' },
-      branding: { primaryColor: '#2F80ED', secondaryColor: '#1a5bbf', accentColor: '#2F80ED', fontFamily: 'Inter' },
-      clinical: { defaultWards: [], defaultClinics: [], defaultTheatres: [], diagnosisCodeSystem: 'icd_10', medicationCodeSystem: 'local', labCodeSystem: 'local', imagingCodeSystem: 'local', enableTelemedicine: false, enableAI: true, enableResearch: false },
-      billing: { currency: 'USD', taxRate: 0, consultationFees: {}, bedCharges: {}, pharmacyMarkup: 0, labMarkup: 0, imagingMarkup: 0, insuranceAccepted: [], paymentMethods: ['cash', 'card', 'mpesa'] },
-      integrations: { fhirEnabled: false, hl7Enabled: false, externalHmisEnabled: false, aiServicesEnabled: true, apiEnabled: false },
-    },
-    license: { licenseNumber: registrationNumber, licenseType: 'health_facility', issuingAuthority: 'Regulatory Authority', issuedAt: now(), expiresAt: now() + 365 * 86400000, renewedAt: now(), status: 'pending' },
-    pricingTier: 'free',
-    createdAt: now(),
-    updatedAt: now(),
+    actorId,
   });
 
-  // 2. Legacy member row (used by Firestore rules isOrgAdmin).
+  // 2. Organization document (Firestore auto-ID) via the engine's document builder.
+  const organizationId = await createOrganization(OrganizationEngine.buildDocument(model, {
+    phone: actorPhone,
+    email: actorEmail,
+    ownedBy: actorId,
+    pricingTier: 'free',
+  }));
+
+  // 3. Constitutional containers: identity, geography, metadata, 13 domain
+  //    containers, and the full history ledger.
+  await OrganizationEngine.persist(organizationId, model);
+
+  // 4. Legacy member row (used by Firestore rules isOrgAdmin).
   await addOrgMember(organizationId, {
     userId: firebaseUid,
     email: actorEmail,

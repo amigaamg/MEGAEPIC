@@ -348,7 +348,7 @@ export default function FacilitySetupPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={{ fontSize: 12, color: '#94A3B8' }}>Facility Name *</label>
-          <input value={setupData.hospital.name} onChange={e => updateHospital('name', e.target.value)} placeholder="e.g. Kisii Teaching Hospital" style={inputStyle} />
+          <input value={setupData.hospital.name} onChange={e => updateHospital('name', e.target.value)} placeholder="e.g. AMEXAN Medical Center" style={inputStyle} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={{ fontSize: 12, color: '#94A3B8' }}>Legal Name</label>

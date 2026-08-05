@@ -58,7 +58,7 @@ const PLATFORM_USERS = [
 
 // Organizations
 const ORGANIZATIONS = [
-  { id: "ktrh", name: "Kisii Teaching & Referral Hospital", type: "teaching_hospital", level: "level_5", departments: ["Emergency", "Medicine", "Surgery", "Pediatrics", "OBGYN", "Psychiatry", "Radiology", "Laboratory", "Pharmacy", "ICU", "Theatre", "Outpatient"] },
+  { id: "ktrh", name: "AMEXAN Demo Teaching Hospital", type: "teaching_hospital", level: "level_5", departments: ["Emergency", "Medicine", "Surgery", "Pediatrics", "OBGYN", "Psychiatry", "Radiology", "Laboratory", "Pharmacy", "ICU", "Theatre", "Outpatient"] },
   { id: "knh", name: "Kenyatta National Hospital", type: "hospital", level: "level_6", departments: ["Emergency", "Medicine", "Surgery", "Pediatrics", "OBGYN", "Cardiology", "Neurology", "Oncology", "Radiology", "Laboratory", "Pharmacy", "ICU", "Theatre", "Outpatient"] },
   { id: "nrb", name: "Nairobi Hospital", type: "hospital", level: "level_5", departments: ["Emergency", "Medicine", "Surgery", "Pediatrics", "OBGYN", "Cardiology", "Radiology", "Laboratory", "Pharmacy", "ICU"] },
   { id: "akuh", name: "Aga Khan University Hospital", type: "teaching_hospital", level: "level_6", departments: ["Emergency", "Medicine", "Surgery", "Pediatrics", "OBGYN", "Cardiology", "Neurology", "Oncology", "Radiology", "Laboratory", "Pharmacy", "ICU", "Theatre", "Research"] },

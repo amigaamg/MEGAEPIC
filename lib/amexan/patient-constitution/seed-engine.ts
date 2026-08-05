@@ -81,7 +81,7 @@ export interface SeedVerificationState {
 }
 
 const ORGANIZATIONS: SeedOrganization[] = [
-  { id: 'ktrh', name: 'Kisii Teaching & Referral Hospital', type: 'teaching_hospital', level: 'level_5', verified: true, departments: ['Emergency', 'Medicine', 'Surgery', 'Pediatrics', 'OBGYN', 'Psychiatry', 'Radiology', 'Laboratory', 'Pharmacy', 'ICU', 'Theatre', 'Outpatient'], location: 'Kisii', county: 'Kisii', country: 'Kenya' },
+  { id: 'ktrh', name: 'AMEXAN Demo Teaching Hospital', type: 'teaching_hospital', level: 'level_5', verified: true, departments: ['Emergency', 'Medicine', 'Surgery', 'Pediatrics', 'OBGYN', 'Psychiatry', 'Radiology', 'Laboratory', 'Pharmacy', 'ICU', 'Theatre', 'Outpatient'], location: 'Kisii', county: 'Kisii', country: 'Kenya' },
   { id: 'knh', name: 'Kenyatta National Hospital', type: 'hospital', level: 'level_6', verified: true, departments: ['Emergency', 'Medicine', 'Surgery', 'Pediatrics', 'OBGYN', 'Cardiology', 'Neurology', 'Oncology', 'Radiology', 'Laboratory', 'Pharmacy', 'ICU', 'Theatre', 'Outpatient'], location: 'Nairobi', county: 'Nairobi', country: 'Kenya' },
   { id: 'nrb', name: 'Nairobi Hospital', type: 'hospital', level: 'level_5', verified: true, departments: ['Emergency', 'Medicine', 'Surgery', 'Pediatrics', 'OBGYN', 'Cardiology', 'Radiology', 'Laboratory', 'Pharmacy', 'ICU'], location: 'Nairobi', county: 'Nairobi', country: 'Kenya' },
   { id: 'akuh', name: 'Aga Khan University Hospital', type: 'teaching_hospital', level: 'level_6', verified: true, departments: ['Emergency', 'Medicine', 'Surgery', 'Pediatrics', 'OBGYN', 'Cardiology', 'Neurology', 'Oncology', 'Radiology', 'Laboratory', 'Pharmacy', 'ICU', 'Theatre', 'Research'], location: 'Nairobi', county: 'Nairobi', country: 'Kenya' },

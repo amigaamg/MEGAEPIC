@@ -1,8 +1,20 @@
-import type { Bed } from './types'
+export interface LegacyBed {
+  id: string
+  type: 'bed' | 'room' | 'theatre' | 'machine' | 'ventilator'
+  location: string
+  status: 'available' | 'occupied' | 'maintenance' | 'cleaning'
+  label: string
+  wardId: string
+  roomId: string
+  bedNumber: string
+  currentPatientId?: string
+  isolationType?: 'none' | 'contact' | 'droplet' | 'airborne'
+  cleaningStatus: 'clean' | 'dirty' | 'in_progress'
+}
 
-const bedStore = new Map<string, Bed[]>()
+const bedStore = new Map<string, LegacyBed[]>()
 
-export function registerBeds(wardId: string, beds: Bed[]): void {
+export function registerBeds(wardId: string, beds: LegacyBed[]): void {
   const existing = bedStore.get(wardId) ?? []
   bedStore.set(wardId, [...existing, ...beds.map(b => ({ ...b, wardId }))])
 }
@@ -41,7 +53,7 @@ export function markBedClean(bedId: string): boolean {
   return false
 }
 
-export function getAvailableBeds(wardId: string): Bed[] {
+export function getAvailableBeds(wardId: string): LegacyBed[] {
   return (bedStore.get(wardId) ?? []).filter(b => b.status === 'available')
 }
 
@@ -55,7 +67,7 @@ export function getBedOccupancy(wardId: string): { total: number; occupied: numb
   }
 }
 
-export function getPatientBed(patientId: string): Bed | undefined {
+export function getPatientBed(patientId: string): LegacyBed | undefined {
   for (const [, beds] of bedStore) {
     const bed = beds.find(b => b.currentPatientId === patientId)
     if (bed) return bed
@@ -63,6 +75,6 @@ export function getPatientBed(patientId: string): Bed | undefined {
   return undefined
 }
 
-export function getWardBeds(wardId: string): Bed[] {
+export function getWardBeds(wardId: string): LegacyBed[] {
   return bedStore.get(wardId) ?? []
 }

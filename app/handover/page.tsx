@@ -32,7 +32,7 @@ function HandoverInnerPage() {
       doctorTitle: 'Consultant Physician',
       specialty: 'Internal Medicine',
       organizationId: 'org_ktrh',
-      organizationName: 'Kisii Teaching & Referral Hospital',
+      organizationName: 'AMEXAN Demo Facility',
       departmentId: 'dept_med',
       departmentName: 'Internal Medicine',
       shift: 'morning',

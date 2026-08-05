@@ -1,4 +1,4 @@
-import { type AmxUid } from '@/lib/amexan/identity/types'
+import { type AmxUid } from '@/lib/amexan/constitution/types'
 
 interface WorkerRecord {
   uid: AmxUid

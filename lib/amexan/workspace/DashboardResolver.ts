@@ -16,6 +16,7 @@ import type {
 } from './types';
 import type { AmxUid, ProfessionalCategory, AssignmentType } from '@/lib/amexan/constitution/types';
 import { computeWorkspaceCompleteness } from './completeness';
+import { dashboardConstitutionalEngine } from './dashboard-constitutional';
 
 export class DashboardResolver {
   // Dashboard layout mappings by professional category and assignment type
@@ -212,6 +213,24 @@ export class DashboardResolver {
   };
 
   async resolve(workspace: ResolvedWorkspace): Promise<ResolverResult<DashboardConfig>> {
+    // ── Constitutional path (Book VIII). Single source of truth for the dashboard:
+    // the Workspace layer resolves WHO/WHERE/WHEN; the Book VIII family engine
+    // decides WHAT to show. Derived directly from ResolvedWorkspace → ResolutionInput.
+    if (workspace.identity?.uid || workspace.professional?.uid || workspace.person?.uid) {
+      const constitutional = dashboardConstitutionalEngine.buildConfig(workspace);
+      if (constitutional.error) {
+        return { ...constitutional, error: new Error(`Constitutional dashboard resolution failed; falling back to legacy resolver: ${constitutional.error.message}`) };
+      }
+      return constitutional;
+    }
+
+    // ── Legacy path. Retained only as a pure fallback when no identity context exists.
+    return this.resolveLegacy(workspace);
+  }
+
+  // The original category/assignment-based resolver. Kept intact and pure; the
+  // constitutional path above is now preferred, this only guards degenerate cases.
+  private async resolveLegacy(workspace: ResolvedWorkspace): Promise<ResolverResult<DashboardConfig>> {
     try {
       const category = workspace.professional?.primaryCategory || 'other';
       const isAdministrative = category === 'facility_admin' || category === 'super_admin';

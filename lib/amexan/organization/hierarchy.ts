@@ -1,44 +1,83 @@
-import { type AmxUid } from '@/lib/amexan/identity/types'
-import type { Organization, Branch, Department, Unit } from './types'
+import { type AmxUid } from '@/lib/amexan/constitution/types'
 
-const orgStore = new Map<string, Organization>()
-const branchStore = new Map<string, Branch[]>()
-const deptStore = new Map<string, Department[]>()
-const unitStore = new Map<string, Unit[]>()
+export interface LegacyOrganization {
+  uid: AmxUid
+  name: string
+  legalName: string
+  type: 'hospital' | 'clinic' | 'lab' | 'pharmacy' | 'insurance' | 'training' | 'ministry' | 'ngo'
+  taxId: string
+  country: string
+  licenseNumber: string
+  status: 'active' | 'suspended' | 'closed'
+  createdAt: number
+}
 
-export function registerOrg(org: Organization): void { orgStore.set(org.uid, org); branchStore.set(org.uid, []); deptStore.set(org.uid, []) }
-export function getOrg(orgId: AmxUid): Organization | undefined { return orgStore.get(orgId) }
+export interface LegacyBranch {
+  id: string
+  orgId: AmxUid
+  name: string
+  address: string
+  phone: string
+  type: 'main' | 'satellite' | 'mobile'
+}
 
-export function addBranch(orgId: AmxUid, branch: Branch): void {
+export interface LegacyDepartment {
+  id: string
+  orgId: AmxUid
+  branchId: string
+  name: string
+  type: 'medical' | 'surgical' | 'diagnostic' | 'support' | 'admin'
+  headId?: string
+  parentDeptId?: string
+  active: boolean
+}
+
+export interface LegacyUnit {
+  id: string
+  deptId: string
+  name: string
+  leadId?: string
+  type: 'ward' | 'icu' | 'theatre' | 'clinic' | 'lab_unit' | 'pharmacy_unit'
+}
+
+const orgStore = new Map<string, LegacyOrganization>()
+const branchStore = new Map<string, LegacyBranch[]>()
+const deptStore = new Map<string, LegacyDepartment[]>()
+const unitStore = new Map<string, LegacyUnit[]>()
+
+export function registerOrg(org: LegacyOrganization): void { orgStore.set(org.uid, org); branchStore.set(org.uid, []); deptStore.set(org.uid, []) }
+export function getOrg(orgId: AmxUid): LegacyOrganization | undefined { return orgStore.get(orgId) }
+
+export function addBranch(orgId: AmxUid, branch: LegacyBranch): void {
   const branches = branchStore.get(orgId) ?? []
   branches.push(branch)
   branchStore.set(orgId, branches)
 }
 
-export function addDepartment(orgId: AmxUid, dept: Department): void {
+export function addDepartment(orgId: AmxUid, dept: LegacyDepartment): void {
   const depts = deptStore.get(orgId) ?? []
   depts.push(dept)
   deptStore.set(orgId, depts)
 }
 
-export function addUnit(deptId: string, unit: Unit): void {
+export function addUnit(deptId: string, unit: LegacyUnit): void {
   const units = unitStore.get(deptId) ?? []
   units.push(unit)
   unitStore.set(deptId, units)
 }
 
-export function getOrgTree(orgId: AmxUid): { org: Organization | undefined; branches: Branch[]; departments: Department[]; units: Record<string, Unit[]> } {
+export function getOrgTree(orgId: AmxUid): { org: LegacyOrganization | undefined; branches: LegacyBranch[]; departments: LegacyDepartment[]; units: Record<string, LegacyUnit[]> } {
   const org = orgStore.get(orgId)
   const branches = branchStore.get(orgId) ?? []
   const departments = deptStore.get(orgId) ?? []
-  const units: Record<string, Unit[]> = {}
+  const units: Record<string, LegacyUnit[]> = {}
   departments.forEach(d => { units[d.id] = unitStore.get(d.id) ?? [] })
   return { org, branches, departments, units }
 }
 
-export function getDepartmentChain(deptId: string): Department[] {
-  const chain: Department[] = []
-  let current: Department | undefined
+export function getDepartmentChain(deptId: string): LegacyDepartment[] {
+  const chain: LegacyDepartment[] = []
+  let current: LegacyDepartment | undefined
   for (const depts of deptStore.values()) {
     current = depts.find(d => d.id === deptId)
     if (current) break
@@ -58,7 +97,7 @@ export function getStaffInUnit(unitId: string): string[] { return [] }
 
 export function getBedsInWard(wardId: string): any[] { return [] }
 
-export function getAllOrgs(): Organization[] { return Array.from(orgStore.values()) }
-export function getBranches(orgId: AmxUid): Branch[] { return branchStore.get(orgId) ?? [] }
-export function getDepartments(orgId: AmxUid): Department[] { return deptStore.get(orgId) ?? [] }
-export function getUnits(deptId: string): Unit[] { return unitStore.get(deptId) ?? [] }
+export function getAllOrgs(): LegacyOrganization[] { return Array.from(orgStore.values()) }
+export function getBranches(orgId: AmxUid): LegacyBranch[] { return branchStore.get(orgId) ?? [] }
+export function getDepartments(orgId: AmxUid): LegacyDepartment[] { return deptStore.get(orgId) ?? [] }
+export function getUnits(deptId: string): LegacyUnit[] { return unitStore.get(deptId) ?? [] }

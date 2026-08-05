@@ -104,7 +104,7 @@ export default function DoctorDashboard() {
   const createDemo = useCallback(async () => {
     const id = `demo_${Date.now()}`
     let state = createEncounterOrchestrator()
-    state = setPatientBiodata(state, { patientName: 'Kevin Mutua', age: 2, sex: 'male', hospitalNumber: 'KTRH-2026-0124', department: 'Pediatrics', date: new Date().toISOString().split('T')[0], time: new Date().toTimeString().split(' ')[0], hospital: 'Kisii Teaching & Referral Hospital', encounterType: 'new', clinician: doctorName || 'Dr. John Methu' })
+    state = setPatientBiodata(state, { patientName: 'Kevin Mutua', age: 2, sex: 'male', hospitalNumber: 'KTRH-2026-0124', department: 'Pediatrics', date: new Date().toISOString().split('T')[0], time: new Date().toTimeString().split(' ')[0], hospital: 'AMEXAN Demo Facility', encounterType: 'new', clinician: doctorName || 'Dr. John Methu' })
     state = answerInOrchestrator(state, 'q_cc_primary', 'Fever')
     state = answerInOrchestrator(state, 'q_cc_duration', '3 days')
     state = answerInOrchestrator(state, 'q_cc_onset', '3 days ago')
@@ -125,7 +125,7 @@ export default function DoctorDashboard() {
     state = answerInOrchestrator(state, 'q_exam_rr', '42')
     const id2 = `demo_${Date.now() + 1}`
     let state2 = createEncounterOrchestrator()
-    state2 = setPatientBiodata(state2, { patientName: 'Amina Hassan', age: 45, sex: 'female', hospitalNumber: 'KTRH-2026-0089', department: 'Medical Ward', date: new Date().toISOString().split('T')[0], time: new Date().toTimeString().split(' ')[0], hospital: 'Kisii Teaching & Referral Hospital', encounterType: 'new', clinician: doctorName || 'Dr. John Methu' })
+    state2 = setPatientBiodata(state2, { patientName: 'Amina Hassan', age: 45, sex: 'female', hospitalNumber: 'KTRH-2026-0089', department: 'Medical Ward', date: new Date().toISOString().split('T')[0], time: new Date().toTimeString().split(' ')[0], hospital: 'AMEXAN Demo Facility', encounterType: 'new', clinician: doctorName || 'Dr. John Methu' })
     state2 = answerInOrchestrator(state2, 'q_cc_primary', 'Chest pain')
     state2 = answerInOrchestrator(state2, 'q_cc_duration', '2 days')
     state2 = answerInOrchestrator(state2, 'q_exam_bp_systolic', '160')

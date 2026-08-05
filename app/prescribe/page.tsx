@@ -78,7 +78,7 @@ export default function PrescribePage() {
           <div style={S.card}>
             <div style={S.label}>Prescriber</div>
             <div style={{ fontSize: 13, fontWeight: 600 }}>Dr. James Kamau</div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>KMPDC 5678 · General Surgery · Kisii TRH</div>
+            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>AMEXAN · General Surgery · Demo Facility</div>
             <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>12 Jul 2026</div>
           </div>
         </div>

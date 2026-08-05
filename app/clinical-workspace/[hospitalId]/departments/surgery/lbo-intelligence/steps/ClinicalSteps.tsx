@@ -350,7 +350,7 @@ export function RegistrationStep({ data, onChange }: {
               { value: 'ward_round', label: 'Ward Round' }, { value: 'follow_up', label: 'Follow-up' },
             ]} />
           </Field>
-          <Field label="Referring Facility"><Input value={data.referringFacility} onChange={v => set('referringFacility', v)} placeholder="e.g. Kisii Teaching & Referral" /></Field>
+          <Field label="Referring Facility"><Input value={data.referringFacility} onChange={v => set('referringFacility', v)} placeholder="e.g. County Referral Hospital" /></Field>
           <Field label="Consultant"><Input value={data.consultant} onChange={v => set('consultant', v)} placeholder="Consultant surgeon" /></Field>
           <Field label="Ward"><Input value={data.ward} onChange={v => set('ward', v)} placeholder="e.g. Surgical Ward 3B" /></Field>
           <Field label="Bed"><Input value={data.bed} onChange={v => set('bed', v)} placeholder="e.g. Bed 12A" /></Field>

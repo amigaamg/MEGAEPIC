@@ -28,7 +28,7 @@ export default function DoctorProfilePage({ params }: { params: { doctorId: stri
           <div style={{ padding: 16, background: 'var(--surface-card)', borderRadius: 12, border: '1px solid var(--surface-border)' }}>
             <h3 style={{ fontSize: 12, fontWeight: 700, margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}><Briefcase size={14} color={C.sky} /> Current Positions</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11 }}>
-              <div style={{ padding: '5px 8px', borderRadius: 4, background: 'var(--surface)', border: '1px solid var(--surface-border)' }}>Kisii Teaching & Referral Hospital · Consultant Surgeon</div>
+              <div style={{ padding: '5px 8px', borderRadius: 4, background: 'var(--surface)', border: '1px solid var(--surface-border)' }}>AMEXAN Demo Facility · Consultant Surgeon</div>
               <div style={{ padding: '5px 8px', borderRadius: 4, background: 'var(--surface)', border: '1px solid var(--surface-border)' }}>University of Nairobi · Senior Lecturer (Part-time)</div>
             </div>
           </div>

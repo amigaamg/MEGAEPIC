@@ -178,9 +178,9 @@ export default function OrganizationSetupWizard() {
             </Field>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <Field label="Country"><input style={inputStyle} placeholder="Kenya" value={org.country} onChange={e => set({ country: e.target.value })} /></Field>
-              <Field label="County"><input style={inputStyle} placeholder="Kisii" value={org.county} onChange={e => set({ county: e.target.value })} /></Field>
+              <Field label="County"><input style={inputStyle} placeholder="Nairobi" value={org.county} onChange={e => set({ county: e.target.value })} /></Field>
             </div>
-            <Field label="City / Town"><input style={inputStyle} placeholder="Kisii Town" value={org.city} onChange={e => set({ city: e.target.value })} /></Field>
+            <Field label="City / Town"><input style={inputStyle} placeholder="Nairobi CBD" value={org.city} onChange={e => set({ city: e.target.value })} /></Field>
           </div>
         )}
 
@@ -191,7 +191,7 @@ export default function OrganizationSetupWizard() {
               The facility is where care is delivered. We&apos;ll provision it automatically once you continue.
             </p>
             <Field label="Facility Name">
-              <input style={inputStyle} placeholder="e.g. Kisii Teaching and Referral Hospital" value={facility.name} onChange={e => setFacility(prev => ({ ...prev, name: e.target.value }))} />
+              <input style={inputStyle} placeholder="e.g. AMEXAN Medical Center" value={facility.name} onChange={e => setFacility(prev => ({ ...prev, name: e.target.value }))} />
             </Field>
             <Field label="Facility Type">
               <select style={inputStyle} value={facility.type} onChange={e => setFacility(prev => ({ ...prev, type: e.target.value }))}>

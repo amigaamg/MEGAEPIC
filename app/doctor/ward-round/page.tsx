@@ -442,7 +442,7 @@ export default function WardRoundPage() {
             <Footprints size={28} color={C.sky} />
           </div>
           <div style={{ fontSize: 22, fontWeight: 700, color: C.navy, marginBottom: 4 }}>Good Morning, Dr. James</div>
-          <div style={{ fontSize: 13, color: C.textLight, marginBottom: 24 }}>Kisii Teaching Hospital · General Surgery · Morning Shift (07:00 - 11:00)</div>
+          <div style={{ fontSize: 13, color: C.textLight, marginBottom: 24 }}>AMEXAN Demo Facility · General Surgery · Morning Shift (07:00 - 11:00)</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 24 }}>
             <div style={{ padding: 14, borderRadius: 10, background: C.panel, border: `1px solid ${C.border}`, textAlign: 'center' }}>
               <div style={{ fontSize: 24, fontWeight: 700, color: C.sky }}>{patients.length}</div>
