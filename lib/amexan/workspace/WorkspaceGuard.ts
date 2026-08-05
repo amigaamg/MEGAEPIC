@@ -240,3 +240,13 @@ export function familyRedirect(family: WorkspaceFamily | null): string {
   if (family === 'patient') return '/dashboard/patient';
   return '/dashboard';
 }
+
+/**
+ * Post-login destination for a role name. Executives land directly in the
+ * Facility Administration Command Center (no /dashboard bounce); clinical
+ * support families go to the workspace resolver; everyone else to /dashboard.
+ */
+export function loginRedirectForRole(role: string | null | undefined): string {
+  const family = resolveFamily(role ?? null, role ?? null);
+  return family ? familyRedirect(family) : '/dashboard';
+}

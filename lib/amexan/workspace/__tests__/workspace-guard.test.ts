@@ -5,6 +5,7 @@ import {
   guardFamily,
   guardWorkspace,
   familyRedirect,
+  loginRedirectForRole,
   WorkspaceMismatchError,
 } from '../WorkspaceGuard';
 
@@ -127,5 +128,25 @@ describe('familyRedirect', () => {
 
   it('sends patients to the patient dashboard', () => {
     expect(familyRedirect('patient')).toBe('/dashboard/patient');
+  });
+});
+
+describe('loginRedirectForRole (post-login routing, WS-014 fix)', () => {
+  it('sends facility_administrator straight to the command center (no /dashboard bounce)', () => {
+    expect(loginRedirectForRole('facility_administrator')).toBe('/facility-admin');
+    expect(loginRedirectForRole('facility_admin')).toBe('/facility-admin');
+    expect(loginRedirectForRole('hospital_admin')).toBe('/facility-admin');
+    expect(loginRedirectForRole('super_admin')).toBe('/facility-admin');
+  });
+
+  it('sends clinical support roles to the workspace resolver', () => {
+    expect(loginRedirectForRole('consultant')).toBe('/workspace');
+    expect(loginRedirectForRole('nurse')).toBe('/workspace');
+    expect(loginRedirectForRole('pharmacist')).toBe('/workspace');
+  });
+
+  it('falls back to the dashboard for unknown/null roles', () => {
+    expect(loginRedirectForRole(null)).toBe('/dashboard');
+    expect(loginRedirectForRole('mystery_role')).toBe('/dashboard');
   });
 });

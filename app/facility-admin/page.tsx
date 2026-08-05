@@ -20,11 +20,13 @@ import {
 import { loadFacilityAdminModel, saveFacilityAdminModel } from '@/lib/firebase/facilityAdminService';
 import { loadFacilityAdminSettings, saveFacilityAdminSettings } from '@/lib/firebase/facilityAdminSettings';
 import type { FacilityAdminSettings } from '@/lib/firebase/facilityAdminSettings';
+import { resolveFamily } from '@/lib/amexan/workspace/WorkspaceGuard';
 import { MARKETPLACE_MODULES, type CommunityCenterId } from './centers';
 import { IntelligenceCenter } from './centers/IntelligenceCenter';
 import { HmisCenter } from './centers/HmisCenter';
 import { StructureCenter } from './centers/StructureCenter';
 import { SettingsCenter } from './centers/SettingsCenter';
+import { WorkforceProvisioning } from './centers/WorkforceProvisioning';
 import WorkspaceGuard from '@/components/workspace/WorkspaceGuard';
 
 // Book XV WS-016: this executive command center may only render for the
@@ -32,12 +34,11 @@ import WorkspaceGuard from '@/components/workspace/WorkspaceGuard';
 // the page body mounts.
 const SupportedRoles = ['executive'] as const;
 
-const ADMINS = ['facility_admin', 'super_admin'];
-
 const CENTERS: { id: CommunityCenterId; label: string; icon: any }[] = [
   { id: 'executive', label: 'Executive Overview', icon: LayoutDashboard },
   { id: 'digital_twin', label: 'Digital Twin', icon: Building2 },
   { id: 'workforce', label: 'Workforce Command', icon: Users },
+  { id: 'workforce_provisioning', label: 'Provision Staff & Roles', icon: Users },
   { id: 'organization', label: 'Organization', icon: Boxes },
   { id: 'services', label: 'Service Catalogue', icon: ListChecks },
   { id: 'infrastructure', label: 'Infrastructure', icon: Wrench },
@@ -137,7 +138,7 @@ function FacilityAdminCommandCenter() {
   }, [orgId]);
 
   const isAdmin = !loading && user && (session.professional?.primaryCategory
-    ? ADMINS.includes(session.professional.primaryCategory)
+    ? resolveFamily(session.professional.primaryCategory, session.role?.name) === 'executive'
     : false);
 
   const mutate = useCallback(async (next: FacilityAdminModel | ((m: FacilityAdminModel) => FacilityAdminModel)) => {
@@ -218,6 +219,7 @@ function FacilityAdminCommandCenter() {
 
           {center === 'executive' && <ExecutiveView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateMetrics(m, m.administratorId, patch))} />}
           {center === 'workforce' && <WorkforceView model={model} actorId={actorId} onCommand={(staffId, action) => mutate(m => FacilityAdministrationEngine.commandWorkforce(m, m.administratorId, { action, staffId, by: m.organizationId }))} />}
+          {center === 'workforce_provisioning' && <WorkforceProvisioning orgId={model.organizationId} structures={settings.structure} onProvisioned={() => setCenter('workforce')} />}
           {center === 'services' && <ServicesView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
           {center === 'infrastructure' && <InfrastructureView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
           {center === 'quality' && <QualityView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateQuality(m, m.administratorId, patch))} />}
@@ -831,6 +833,6 @@ const CENTER_GROUPS: { label: string; items: { id: CommunityCenterId; label: str
   { label: 'Configure', items: [CENTERS[3], CENTERS[4], CENTERS[5], CENTERS[6]] },
   { label: 'Monitor', items: [CENTERS[7], CENTERS[8], CENTERS[9], CENTERS[10], CENTERS[11]] },
   { label: 'Intelligence & Ecosystems', items: [CENTERS[12], CENTERS[13], CENTERS[14], CENTERS[15], CENTERS[16], CENTERS[17]] },
-  { label: 'Data & Govern', items: [CENTERS[18], CENTERS[19], CENTERS[20]] },
-  { label: 'Structure & Settings', items: [CENTERS[21], CENTERS[22]] },
+  { label: 'Data & Govern', items: [CENTERS[18], CENTERS[19], CENTERS[20], CENTERS[21]] },
+  { label: 'Structure & Settings', items: [CENTERS[22], CENTERS[23]] },
 ];
