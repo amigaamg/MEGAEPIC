@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { loginRedirectForRole } from "@/lib/amexan/workspace/WorkspaceGuard";
 import { DEMO_WORKSPACE_ACCOUNTS, DEMO_PASSWORD, DEMO_ORG_NAME } from "@/lib/amexan/demo/demoWorkspaces";
 import { UserRound } from "lucide-react";
 
@@ -20,10 +19,11 @@ export default function DemoLoginPage() {
     setError(null);
     setLoadingEmail(email);
     try {
-      const resolvedRole = await login(email, DEMO_PASSWORD);
-      // Route executives straight to the Command Center; everyone else to their
-      // constitutional workspace. Avoids the /dashboard guard bounce (WS-014).
-      router.push(loginRedirectForRole(resolvedRole));
+      await login(email, DEMO_PASSWORD);
+      // Route each actor to its true dashboard (declared in demoWorkspaces),
+      // never through the legacy /clinical-auth gate or workspace resolver.
+      const account = DEMO_WORKSPACE_ACCOUNTS.find(a => a.email === email);
+      router.push(account?.dashboardRoute || '/dashboard');
     } catch (err: any) {
       setError(
         err?.code === "auth/user-not-found"

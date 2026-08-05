@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -56,7 +56,7 @@ export default function PatientsPage() {
   const [patients, setPatients] = useState<PatientRecord[]>([]);
   const [search, setSearch] = useState('');
 
-  useEffect(() => { if (!loading && !user) router.replace('/clinical-auth'); }, [user, loading, router]);
+  useEffect(() => { if (!loading && !user) router.replace('/login'); }, [user, loading, router]);
 
   useEffect(() => {
     if (!user) return;
@@ -97,15 +97,15 @@ export default function PatientsPage() {
       <div className="page">
         <div className="top-bar">
           <div className="top-left">
-            <span className="back-btn" onClick={() => router.back()}>← Back</span>
+            <span className="back-btn" onClick={() => router.back()}>â† Back</span>
             <h1>Patient Records</h1>
           </div>
-          <span className="back-btn" onClick={() => router.push('/workspace')}>Clinical Workspace →</span>
+          <span className="back-btn" onClick={() => router.push('/workspace')}>Clinical Workspace â†’</span>
         </div>
 
         <div className="stats-row">
           <span className="stat-chip"><strong>{patients.length}</strong> total patients</span>
-          {!orgId && <span className="stat-chip" style={{ color: '#F59E0B' }}>⚠️ No organization linked</span>}
+          {!orgId && <span className="stat-chip" style={{ color: '#F59E0B' }}>âš ï¸ No organization linked</span>}
         </div>
 
         <p className="sub">
@@ -121,7 +121,7 @@ export default function PatientsPage() {
 
         {!orgId ? (
           <div className="empty">
-            <div className="empty-icon">🏥</div>
+            <div className="empty-icon">ðŸ¥</div>
             <div>No organization linked to your account</div>
             <div style={{ marginTop: 8, fontSize: '.75rem', color: '#334155' }}>
               Register or join a facility to access patient records
@@ -129,7 +129,7 @@ export default function PatientsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="empty">
-            <div className="empty-icon">📁</div>
+            <div className="empty-icon">ðŸ“</div>
             <div>{search ? 'No patients match your search' : 'No patients found'}</div>
             <div style={{ marginTop: 8, fontSize: '.75rem', color: '#334155' }}>
               {search ? 'Try a different search term' : 'Admit your first patient to see records here'}
@@ -144,11 +144,11 @@ export default function PatientsPage() {
                 <div className="patient-meta">
                   {p.gender && <span className="patient-tag">{p.gender}</span>}
                   {p.age != null && <span className="patient-tag">{p.age} yrs</span>}
-                  {p.phone && <span className="patient-tag">📞 {p.phone}</span>}
+                  {p.phone && <span className="patient-tag">ðŸ“ž {p.phone}</span>}
                   {p.diagnosis && <span className="patient-tag">{p.diagnosis.slice(0, 30)}</span>}
                 </div>
               </div>
-              <span className="patient-arrow">→</span>
+              <span className="patient-arrow">â†’</span>
             </div>
           ))
         )}

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useMemo, useCallback, useRef, useState, useDeferredValue } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { EncounterLayout } from '@/src/ui/layouts/EncounterLayout';
@@ -35,7 +35,7 @@ export default function EncounterPage() {
   const [orgId, setOrgId] = useState<string | null>(null);
   const createdRef = useRef(false);
 
-  useEffect(() => { if (!loading && !user) router.replace('/clinical-auth'); }, [user, loading, router]);
+  useEffect(() => { if (!loading && !user) router.replace('/login'); }, [user, loading, router]);
 
   useEffect(() => {
     if (!user) return;
@@ -98,7 +98,7 @@ export default function EncounterPage() {
       store.setDepartment(deptKey);
       store.setUnit(unitId);
       if (events.length === 0) {
-        addLiveEvent({ type: 'note_added', description: `Encounter started: ${unit?.label || unitId} — ${encType.replace(/_/g, ' ')}` });
+        addLiveEvent({ type: 'note_added', description: `Encounter started: ${unit?.label || unitId} â€” ${encType.replace(/_/g, ' ')}` });
         const firstPhase = (ENCOUNTER_PHASES[encType as EncounterType] || [])[0];
         if (firstPhase) setActivePhase(firstPhase);
       }
@@ -117,7 +117,7 @@ export default function EncounterPage() {
         newInsights.push({
           id: `ins-sev-${Date.now()}`, type: 'alert', timestamp: Date.now(),
           severity: sev.level === 'emergency' ? 'critical' : 'warning',
-          title: `${sev.level === 'emergency' ? '🚨 ' : '⚠ '}Severity: ${sev.msg}`,
+          title: `${sev.level === 'emergency' ? 'ðŸš¨ ' : 'âš  '}Severity: ${sev.msg}`,
           description: `Patient acuity flagged as ${sev.level}`,
           acknowledged: false, source: 'AMEXAN Engine',
         });
@@ -160,7 +160,7 @@ export default function EncounterPage() {
   if (!dept || !unit || !isValidEncounter) {
     return (
       <div style={{ padding: '80px 5%', textAlign: 'center', background: '#070B14', minHeight: '100vh', color: '#94A3B8' }}>
-        <div style={{ fontSize: '2rem', marginBottom: 12 }}>⚠️</div>
+        <div style={{ fontSize: '2rem', marginBottom: 12 }}>âš ï¸</div>
         <h2 style={{ color: '#E2E8F0', marginBottom: 8 }}>Encounter Not Found</h2>
         <p style={{ marginBottom: 24, fontSize: '.875rem' }}>
           {!dept ? `Department "${deptKey}" not found.` : !unit ? `Unit "${unitId}" not found.` : `Encounter type "${encType}" invalid.`}
@@ -168,7 +168,7 @@ export default function EncounterPage() {
         <button onClick={() => router.push('/workspace')} style={{
           padding: '10px 24px', borderRadius: 8, border: '1px solid rgba(255,255,255,.1)',
           background: 'rgba(255,255,255,.04)', color: '#E2E8F0', cursor: 'pointer', fontSize: '.875rem', fontFamily: 'Inter, sans-serif',
-        }}>← Back to Workspace Hub</button>
+        }}>â† Back to Workspace Hub</button>
       </div>
     );
   }

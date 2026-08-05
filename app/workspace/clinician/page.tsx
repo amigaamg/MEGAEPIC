@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -68,7 +68,7 @@ export default function ClinicianDashboard() {
   const [orgId, setOrgId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) router.replace('/clinical-auth');
+    if (!loading && !user) router.replace('/login');
   }, [user, loading, router]);
 
   useEffect(() => {
@@ -140,8 +140,8 @@ export default function ClinicianDashboard() {
           Welcome, {profile?.displayName || user.displayName || 'Clinician'}
         </div>
         <div className="welcome-sub">
-          {profile?.clinicianRole?.replace(/_/g, ' ')} · {profile?.specialty || 'No specialty set'}
-          {orgId ? ' · Live' : ''}
+          {profile?.clinicianRole?.replace(/_/g, ' ')} Â· {profile?.specialty || 'No specialty set'}
+          {orgId ? ' Â· Live' : ''}
         </div>
 
         <div className="stat-grid">
@@ -163,31 +163,31 @@ export default function ClinicianDashboard() {
           </div>
         </div>
 
-        <div className="section-label">⚡ Quick Actions</div>
+        <div className="section-label">âš¡ Quick Actions</div>
         <div className="card-list">
           <div className="action-card" onClick={() => router.push('/workspace/departments')}>
-            <span className="action-icon">🏥</span>
+            <span className="action-icon">ðŸ¥</span>
             <div className="action-info">
               <div className="action-title">All Departments</div>
               <div className="action-desc">Browse all departments, units, and start new encounters</div>
             </div>
           </div>
           <div className="action-card" onClick={() => router.push('/patients')}>
-            <span className="action-icon">📁</span>
+            <span className="action-icon">ðŸ“</span>
             <div className="action-info">
               <div className="action-title">Patient Records</div>
               <div className="action-desc">Search and manage patient records</div>
             </div>
           </div>
           <div className="action-card" onClick={() => router.push('/workspace/departments')}>
-            <span className="action-icon">➕</span>
+            <span className="action-icon">âž•</span>
             <div className="action-info">
               <div className="action-title">New Clinical Entry</div>
               <div className="action-desc">Select a department and unit to start a new clinical entry</div>
             </div>
           </div>
           <div className="action-card" onClick={() => router.push('/clinical-intelligence')}>
-            <span className="action-icon">🧠</span>
+            <span className="action-icon">ðŸ§ </span>
             <div className="action-info">
               <div className="action-title">Clinical AI</div>
               <div className="action-desc">AI-assisted clinical decision support</div>
@@ -195,10 +195,10 @@ export default function ClinicianDashboard() {
           </div>
         </div>
 
-        <div className="section-label" style={{ marginTop: 32 }}>🩺 Your Active Patients</div>
+        <div className="section-label" style={{ marginTop: 32 }}>ðŸ©º Your Active Patients</div>
         {activePatients.length === 0 ? (
           <div className="empty">
-            <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>👤</div>
+            <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>ðŸ‘¤</div>
             <div>No active patients assigned</div>
             <div style={{ fontSize: '.6875rem', color: '#334155', marginTop: 4 }}>
               Patients will appear here once encounters are created and assigned to you

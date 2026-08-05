@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -12,7 +12,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   // Auth guard for all workspace routes
   useEffect(() => {
     if (!loading && !user) {
-      router.replace('/clinical-auth');
+      router.replace('/login');
     }
   }, [user, loading, router]);
 

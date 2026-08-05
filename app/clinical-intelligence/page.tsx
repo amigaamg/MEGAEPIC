@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -11,7 +11,7 @@ export default function ClinicalIntelligencePage() {
   const router = useRouter();
   const [activePanel, setActivePanel] = useState<'chat' | 'differentials' | 'note'>('chat');
 
-  useEffect(() => { if (!loading && !user) router.replace('/clinical-auth'); }, [user, loading, router]);
+  useEffect(() => { if (!loading && !user) router.replace('/login'); }, [user, loading, router]);
   if (loading || !user) return null;
 
   return (
@@ -72,9 +72,9 @@ function Header({ activePanel, setActivePanel }: {
       {/* Mobile/Tablet panel switcher */}
       <div className="flex lg:hidden bg-gray-100 rounded-lg p-0.5">
         {[
-          { id: 'chat' as const, label: 'Interview', icon: '💬' },
-          { id: 'differentials' as const, label: 'DDx', icon: '📊' },
-          { id: 'note' as const, label: 'Note', icon: '📋' },
+          { id: 'chat' as const, label: 'Interview', icon: 'ðŸ’¬' },
+          { id: 'differentials' as const, label: 'DDx', icon: 'ðŸ“Š' },
+          { id: 'note' as const, label: 'Note', icon: 'ðŸ“‹' },
         ].map(p => (
           <button key={p.id} onClick={() => setActivePanel(p.id)}
             className={`flex items-center gap-1 text-[10px] px-2.5 py-1.5 rounded-md font-medium transition-colors ${

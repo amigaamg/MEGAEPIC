@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -62,7 +62,7 @@ export default function FacilityDashboard() {
   const [departments, setDepartments] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!loading && !user) router.replace('/clinical-auth');
+    if (!loading && !user) router.replace('/login');
   }, [user, loading, router]);
 
   useEffect(() => {
@@ -136,14 +136,14 @@ export default function FacilityDashboard() {
       <div className="bg-grid" />
       <div className="page">
         <div className="facility-head">
-          <div className="facility-icon">🏥</div>
+          <div className="facility-icon">ðŸ¥</div>
           <div className="facility-info">
             <div className="facility-name">{org?.name || profile?.facilityName || 'Facility Dashboard'}</div>
             <div className="facility-meta">
               {org?.type && <span>{org.type.replace(/_/g, ' ')}</span>}
               {profile?.country && <span>{profile.country}</span>}
               {org && <span>{departments.length} depts</span>}
-              {orgId && <span style={{ color: '#10B981' }}>● Live</span>}
+              {orgId && <span style={{ color: '#10B981' }}>â— Live</span>}
             </div>
           </div>
         </div>
@@ -167,31 +167,31 @@ export default function FacilityDashboard() {
           </div>
         </div>
 
-        <div className="section-label">⚡ Operations</div>
+        <div className="section-label">âš¡ Operations</div>
         <div className="card-list">
           <div className="action-card" onClick={() => router.push('/workspace/departments')}>
-            <span className="action-icon">🏥</span>
+            <span className="action-icon">ðŸ¥</span>
             <div className="action-info">
               <div className="action-title">All Departments</div>
               <div className="action-desc">Browse and manage all departments, units, and clinical workflows</div>
             </div>
           </div>
           <div className="action-card" onClick={() => router.push('/patients')}>
-            <span className="action-icon">📁</span>
+            <span className="action-icon">ðŸ“</span>
             <div className="action-info">
               <div className="action-title">Patient Records</div>
               <div className="action-desc">Access all facility patient records ({totalPatients})</div>
             </div>
           </div>
           <div className="action-card" onClick={() => router.push('/workspace')}>
-            <span className="action-icon">📊</span>
+            <span className="action-icon">ðŸ“Š</span>
             <div className="action-info">
               <div className="action-title">Analytics</div>
               <div className="action-desc">Clinical operations and performance analytics</div>
             </div>
           </div>
           <div className="action-card" onClick={() => router.push('/workspace')}>
-            <span className="action-icon">⚙️</span>
+            <span className="action-icon">âš™ï¸</span>
             <div className="action-info">
               <div className="action-title">Facility Settings</div>
               <div className="action-desc">Configure departments, staff, and permissions</div>
@@ -201,7 +201,7 @@ export default function FacilityDashboard() {
 
         {departments.length > 0 && (
           <>
-            <div className="section-label" style={{ marginTop: 32 }}>🏛️ Departments</div>
+            <div className="section-label" style={{ marginTop: 32 }}>ðŸ›ï¸ Departments</div>
             <div className="dept-grid">
               {departments.map(d => {
                 const key = d.toUpperCase().replace(/\s+/g, '_');
@@ -216,17 +216,17 @@ export default function FacilityDashboard() {
           </>
         )}
 
-        <div className="section-label" style={{ marginTop: 32 }}>🩺 Recent Encounters</div>
+        <div className="section-label" style={{ marginTop: 32 }}>ðŸ©º Recent Encounters</div>
         {recentEncounters.length === 0 ? (
           <div className="empty">
-            <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>🏥</div>
+            <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>ðŸ¥</div>
             <div>No active clinical operations</div>
             <div style={{ fontSize: '.6875rem', color: '#334155', marginTop: 4 }}>
               Encounters and admissions will appear here once clinicians begin working
             </div>
             <div style={{ marginTop: 12 }}>
               <span className="action-card" style={{ display: 'inline-flex' }} onClick={() => router.push('/workspace/departments')}>
-                <span className="action-title">Go to All Departments →</span>
+                <span className="action-title">Go to All Departments â†’</span>
               </span>
             </div>
           </div>
@@ -242,7 +242,7 @@ export default function FacilityDashboard() {
               <div className="encounter-patient">
                 <div className="encounter-patient-name">{enc.patientName || 'Patient'}</div>
                 <div className="encounter-meta">
-                  {enc.encounterType?.replace(/_/g, '')} · {enc.status}
+                  {enc.encounterType?.replace(/_/g, '')} Â· {enc.status}
                 </div>
               </div>
             </div>

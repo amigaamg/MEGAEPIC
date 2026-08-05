@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getDepartment, getUnit } from '@/lib/workspaceData';
@@ -73,7 +73,7 @@ export default function UnitPage() {
   const deptKey = typeof params.dept === 'string' ? params.dept.toUpperCase() : '';
   const unitId = typeof params.unit === 'string' ? params.unit : '';
 
-  useEffect(() => { if (!loading && !user) router.replace('/clinical-auth'); }, [user, loading, router]);
+  useEffect(() => { if (!loading && !user) router.replace('/login'); }, [user, loading, router]);
 
   const dept = getDepartment(deptKey);
   const unit = getUnit(deptKey, unitId);
@@ -88,13 +88,13 @@ export default function UnitPage() {
         <div className="page">
           <div className="bg-grid" />
           <nav className="top-bar">
-            <span className="back-btn" onClick={() => router.push('/workspace/departments')}>← All Departments</span>
+            <span className="back-btn" onClick={() => router.push('/workspace/departments')}>â† All Departments</span>
           </nav>
           <div className="empty-state" style={{ maxWidth: 400, margin: '120px auto' }}>
-            <div className="empty-icon">⚠️</div>
+            <div className="empty-icon">âš ï¸</div>
             <div style={{ color: '#E2E8F0', fontSize: '1rem', fontWeight: 600, marginBottom: 4 }}>Unit Not Found</div>
             <div>The unit &ldquo;{unitId}&rdquo; was not found.</div>
-            <span className="back-btn" style={{ display: 'inline-flex', marginTop: 16 }} onClick={() => router.push(`/workspace/${deptKey}`)}>← Back</span>
+            <span className="back-btn" style={{ display: 'inline-flex', marginTop: 16 }} onClick={() => router.push(`/workspace/${deptKey}`)}>â† Back</span>
           </div>
         </div>
       </>
@@ -107,16 +107,16 @@ export default function UnitPage() {
       <div className="bg-grid" />
       <div className="page">
         <nav className="top-bar">
-          <span className="back-btn" onClick={() => router.push(`/workspace/${deptKey}`)}>← {dept.label}</span>
+          <span className="back-btn" onClick={() => router.push(`/workspace/${deptKey}`)}>â† {dept.label}</span>
           <div className="top-right">
-            <span className="qa-btn patients" onClick={() => router.push('/patients')} style={{ padding: '.35rem .75rem', fontSize: '.6875rem' }}>📁 Patient Records</span>
+            <span className="qa-btn patients" onClick={() => router.push('/patients')} style={{ padding: '.35rem .75rem', fontSize: '.6875rem' }}>ðŸ“ Patient Records</span>
           </div>
         </nav>
 
         <section className="unit-header">
           <div className="unit-header-inner">
             <div className="unit-bread">
-              <span onClick={() => router.push('/workspace/departments')}>Departments</span> · <span onClick={() => router.push(`/workspace/${deptKey}`)}>{dept.label}</span> · {unit.label}
+              <span onClick={() => router.push('/workspace/departments')}>Departments</span> Â· <span onClick={() => router.push(`/workspace/${deptKey}`)}>{dept.label}</span> Â· {unit.label}
             </div>
             <div className="unit-id">
               <div className="unit-icon" style={{ background: `${dept.color}18`, color: dept.color }}>{unit.icon}</div>
@@ -134,7 +134,7 @@ export default function UnitPage() {
 
         <div className="content">
           <div className="quick-actions">
-            <span className="qa-btn patients" onClick={() => router.push('/patients')}>📁 Patient Records</span>
+            <span className="qa-btn patients" onClick={() => router.push('/patients')}>ðŸ“ Patient Records</span>
             <span className="qa-btn primary" onClick={() => router.push(unitId === 'lbo-intelligence' ? '/clinical-workspace/default/departments/surgery/lbo-intelligence' : '#')}>New Clinical Entry</span>
             {unit.encounterTypes.slice(0, 3).map(et => {
               const isLbo = unitId === 'lbo-intelligence';
@@ -144,7 +144,7 @@ export default function UnitPage() {
           </div>
 
           <div className="section-label">
-            <span className="section-label-text">Available Encounter Types · {unit.encounterTypes.length}</span>
+            <span className="section-label-text">Available Encounter Types Â· {unit.encounterTypes.length}</span>
             <span className="section-label-line" />
           </div>
 
@@ -158,12 +158,12 @@ export default function UnitPage() {
                 <div className="enc-type-info">
                   <div className="enc-type-name" style={{ color: et.color }}>{et.label}</div>
                 </div>
-                <span className="enc-type-arrow">→</span>
+                <span className="enc-type-arrow">â†’</span>
               </div>
             );
             }) : (
               <div className="empty-state" style={{ gridColumn: '1 / -1' }}>
-                <div className="empty-icon">📋</div>
+                <div className="empty-icon">ðŸ“‹</div>
                 <div>No encounter types configured for this unit.</div>
               </div>
             )}
@@ -191,7 +191,7 @@ export default function UnitPage() {
           )}
 
           <div className="section-label" style={{ marginTop: '2rem' }}>
-            <span className="section-label-text">Disease Intelligence Library · {getDiseasesForUnit(deptKey, unitId).length} diseases</span>
+            <span className="section-label-text">Disease Intelligence Library Â· {getDiseasesForUnit(deptKey, unitId).length} diseases</span>
             <span className="section-label-line" />
           </div>
           {(() => {
@@ -218,7 +218,7 @@ export default function UnitPage() {
               </div>
             ) : (
               <div className="empty-state">
-                <div className="empty-icon">📚</div>
+                <div className="empty-icon">ðŸ“š</div>
                 <div>No disease intelligence loaded for this unit.</div>
                 <div style={{ fontSize: '.6875rem', color: '#334155', marginTop: 4 }}>
                   Disease libraries are available for PAED, IM, CARD, NEURO, OB, PSYCH
@@ -232,7 +232,7 @@ export default function UnitPage() {
             <span className="section-label-line" />
           </div>
           <div className="empty-state">
-            <div className="empty-icon">🩺</div>
+            <div className="empty-icon">ðŸ©º</div>
             <div>No active encounters in this unit.</div>
             <div style={{ fontSize: '.6875rem', color: '#334155', marginTop: 4 }}>Select an encounter type above to start a new workflow.</div>
           </div>

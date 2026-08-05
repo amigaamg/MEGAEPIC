@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -97,7 +97,7 @@ export default function DepartmentPage() {
   const [units, setUnits] = useState<UnitData[]>([]);
   const [activeEncounters, setActiveEncounters] = useState<EncounterItem[]>([]);
 
-  useEffect(() => { if (!loading && !user) router.replace('/clinical-auth'); }, [user, loading, router]);
+  useEffect(() => { if (!loading && !user) router.replace('/login'); }, [user, loading, router]);
 
   useEffect(() => {
     if (!user) return;
@@ -167,13 +167,13 @@ export default function DepartmentPage() {
         <div className="page">
           <div className="bg-grid" />
           <nav className="top-bar">
-          <span className="back-btn" onClick={() => router.push('/workspace/departments')}>← All Departments</span>
+          <span className="back-btn" onClick={() => router.push('/workspace/departments')}>â† All Departments</span>
           </nav>
           <div className="empty-state" style={{ maxWidth: 400, margin: '120px auto' }}>
             <div style={{ marginBottom: 12 }}><AlertTriangle size={32} style={{ margin: '0 auto', display: 'block' }} /></div>
             <div style={{ color: '#E2E8F0', fontSize: '1rem', fontWeight: 600, marginBottom: 4 }}>Department Not Found</div>
             <div>&ldquo;{deptKey}&rdquo; does not exist.</div>
-            <span className="back-btn" style={{ display: 'inline-flex', marginTop: 16 }} onClick={() => router.push('/workspace/departments')}>← All Departments</span>
+            <span className="back-btn" style={{ display: 'inline-flex', marginTop: 16 }} onClick={() => router.push('/workspace/departments')}>â† All Departments</span>
           </div>
         </div>
       </>
@@ -190,7 +190,7 @@ export default function DepartmentPage() {
       <div className="bg-grid" />
       <div className="page">
         <nav className="top-bar">
-          <span className="back-btn" onClick={() => router.push('/workspace')}>← All Departments</span>
+          <span className="back-btn" onClick={() => router.push('/workspace')}>â† All Departments</span>
         </nav>
 
         <section className="dept-header">
@@ -199,7 +199,7 @@ export default function DepartmentPage() {
               <div className="dept-id-icon" style={{ background: `${color}18`, color }}>{deptInfo.icon}</div>
               <div className="dept-id-info">
                 <div className="dept-id-name">{deptInfo.label}</div>
-                <div className="dept-id-sub">{deptInfo.label} department — realtime operational view</div>
+                <div className="dept-id-sub">{deptInfo.label} department â€” realtime operational view</div>
                 <div className="dept-stats">
                   <div className="dept-stat">
                     <span className="dept-stat-val" style={{ color }}>{activeEncounters.length}</span>
@@ -276,7 +276,7 @@ export default function DepartmentPage() {
           )}
 
           <div className="section-label" style={{ marginTop: '2rem' }}>
-            <span className="section-label-text">Disease Intelligence Library · {getDiseasesForDept(deptKey).length} diseases</span>
+            <span className="section-label-text">Disease Intelligence Library Â· {getDiseasesForDept(deptKey).length} diseases</span>
             <span className="section-label-line" />
           </div>
           {(() => {
@@ -338,10 +338,10 @@ export default function DepartmentPage() {
                 <div className="encounter-patient">
                   <div className="encounter-patient-name">{enc.patientName || 'Unnamed Patient'}</div>
                   <div className="encounter-meta">
-                    {enc.encounterType?.replace(/_/g, ' ')} · {enc.unitId?.replace(/-/g, ' ')}
+                    {enc.encounterType?.replace(/_/g, ' ')} Â· {enc.unitId?.replace(/-/g, ' ')}
                   </div>
                 </div>
-                <span className="qa-btn" style={{ fontSize: '.625rem', padding: '3px 10px' }}>Open →</span>
+                <span className="qa-btn" style={{ fontSize: '.625rem', padding: '3px 10px' }}>Open â†’</span>
               </div>
             ))
           )}

@@ -845,9 +845,9 @@ export class OrganizationEngine {
 
     const identified: OrganizationModel = { ...model, id: orgId, tree: { ...model.tree, organizationId: orgId } };
 
-    await setDoc(doc(db, 'organizations', orgId, 'identity'), cleanFirestore(identified.identity));
-    await setDoc(doc(db, 'organizations', orgId, 'geography'), cleanFirestore(identified.geography));
-    await setDoc(doc(db, 'organizations', orgId, 'metadata'), cleanFirestore(identified.metadata));
+    await setDoc(doc(db, 'organizations', orgId, 'identity', 'main'), cleanFirestore(identified.identity));
+    await setDoc(doc(db, 'organizations', orgId, 'geography', 'main'), cleanFirestore(identified.geography));
+    await setDoc(doc(db, 'organizations', orgId, 'metadata', 'main'), cleanFirestore(identified.metadata));
 
     await Promise.all(
       (Object.keys(identified.domains) as ConstitutionalDomain[]).map(domain =>

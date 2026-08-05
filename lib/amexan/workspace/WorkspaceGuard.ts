@@ -226,25 +226,25 @@ export function guardWorkspace(
 
 /**
  * Where a mismatched actor should be redirected. Executive family must land in
- * the Facility Administration Command Center; clinical roles land in the
- * workspace resolver / dashboard.
+ * the Facility Administration Command Center; every other family lands on its
+ * real dashboards — never the legacy /clinical-auth gate or workspace resolver.
  */
 export function familyRedirect(family: WorkspaceFamily | null): string {
   if (family === 'executive') return '/facility-admin';
-  if (
-    family === 'nursing' || family === 'pharmacy' || family === 'laboratory' ||
-    family === 'radiology' || family === 'clinical' || family === 'department'
-  ) {
-    return '/workspace';
-  }
+  if (family === 'department' || family === 'finance' || family === 'hr' || family === 'ict' || family === 'research') return '/dashboard/cos-admin';
+  if (family === 'clinical' || family === 'telemedicine' || family === 'teaching') return '/dashboard/cos-doctor';
+  if (family === 'nursing') return '/dashboard/cos-nurse';
+  if (family === 'pharmacy') return '/dashboard/cos-pharmacy';
+  if (family === 'laboratory') return '/dashboard/cos-lab';
+  if (family === 'radiology') return '/dashboard/cos-radiology';
   if (family === 'patient') return '/dashboard/patient';
   return '/dashboard';
 }
 
 /**
  * Post-login destination for a role name. Executives land directly in the
- * Facility Administration Command Center (no /dashboard bounce); clinical
- * support families go to the workspace resolver; everyone else to /dashboard.
+ * Facility Administration Command Center; every other family lands on its real
+ * dashboard — no /dashboard or /clinical-auth bounce.
  */
 export function loginRedirectForRole(role: string | null | undefined): string {
   const family = resolveFamily(role ?? null, role ?? null);

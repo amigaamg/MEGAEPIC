@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -34,7 +34,7 @@ export default function DepartmentsPage() {
   const router = useRouter();
   const [search, setSearch] = useState('');
 
-  useEffect(() => { if (!loading && !user) router.replace('/clinical-auth'); }, [user, loading, router]);
+  useEffect(() => { if (!loading && !user) router.replace('/login'); }, [user, loading, router]);
 
   if (loading || !user) return null;
 
@@ -50,15 +50,15 @@ export default function DepartmentsPage() {
       <style>{CSS}</style>
       <div className="bg-grid" />
       <div className="page">
-        <div className="back-btn" onClick={() => router.push('/workspace')}>← Back to Hub</div>
+        <div className="back-btn" onClick={() => router.push('/workspace')}>â† Back to Hub</div>
         <div className="page-head">All Departments</div>
-        <div className="page-sub">{WORKSPACE_DATA.length} departments · Select a department to view clinical units</div>
+        <div className="page-sub">{WORKSPACE_DATA.length} departments Â· Select a department to view clinical units</div>
 
         <input className="search-input" type="text" placeholder="Search departments..." value={search} onChange={e => setSearch(e.target.value)} />
 
         {filtered.length === 0 ? (
           <div className="empty">
-            <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>🔍</div>
+            <div style={{ fontSize: '1.25rem', marginBottom: 8 }}>ðŸ”</div>
             <div>No departments match &ldquo;{search}&rdquo;</div>
           </div>
         ) : (

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -11,12 +11,12 @@ export default function WorkspaceRouter() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.replace('/clinical-auth');
+      router.replace('/login');
       return;
     }
     getUserProfile(user.uid).then(profile => {
       if (!profile || profile.onboardingStatus !== 'complete') {
-        router.replace('/clinical-auth');
+        router.replace('/login');
         return;
       }
       if (profile.accountType === 'clinician') {

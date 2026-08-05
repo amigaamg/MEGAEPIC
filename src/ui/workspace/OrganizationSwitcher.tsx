@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -69,7 +69,7 @@ export function OrganizationSwitcher() {
 
   const handleLogout = async () => {
     await signOutUser();
-    router.replace('/clinical-auth');
+    router.replace('/login');
   };
 
   if (loading || !activeOrg) return null;
@@ -81,15 +81,15 @@ export function OrganizationSwitcher() {
         <div className="org-trigger" onClick={() => setOpen(!open)}>
           <span className="dot" />
           {activeOrg?.name || 'Select Organization'}
-          <span className="arrow">▼</span>
+          <span className="arrow">â–¼</span>
         </div>
         {open && (
           <div className="org-dropdown">
             <div className="org-dd-header">Your Organizations</div>
             {orgs.map(org => (
               <div key={org.id} className={`org-dd-item${org.id === activeOrg?.id ? ' active' : ''}`} onClick={() => handleSwitchOrg(org)}>
-                🏥 {org.name}
-                <span className="check">✓</span>
+                ðŸ¥ {org.name}
+                <span className="check">âœ“</span>
               </div>
             ))}
             <div className="org-dd-divider" />
