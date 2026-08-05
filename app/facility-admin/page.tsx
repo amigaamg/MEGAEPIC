@@ -8,7 +8,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Activity, LayoutDashboard, Building2, Users, Boxes, ListChecks, Wrench, HeartPulse, BarChart3, ShieldCheck, DollarSign, FlaskConical, GraduationCap, Megaphone, FileText, Brain, Plug, Database, Store, Lock, TrendingUp, AlertTriangle, Loader2 } from 'lucide-react';
+import { Activity, LayoutDashboard, Menu, X, Building2, Users, Boxes, ListChecks, Wrench, HeartPulse, BarChart3, ShieldCheck, DollarSign, FlaskConical, GraduationCap, Megaphone, FileText, Brain, Plug, Database, Store, Lock, TrendingUp, AlertTriangle, Loader2, Network, ListTree, Settings2 } from 'lucide-react';
 import {
   FacilityAdministrationEngine,
   type FacilityAdminModel,
@@ -18,7 +18,19 @@ import {
   type WorkforceCategory,
 } from '@/lib/amexan/facility';
 import { loadFacilityAdminModel, saveFacilityAdminModel } from '@/lib/firebase/facilityAdminService';
+import { loadFacilityAdminSettings, saveFacilityAdminSettings } from '@/lib/firebase/facilityAdminSettings';
+import type { FacilityAdminSettings } from '@/lib/firebase/facilityAdminSettings';
 import { MARKETPLACE_MODULES, type CommunityCenterId } from './centers';
+import { IntelligenceCenter } from './centers/IntelligenceCenter';
+import { HmisCenter } from './centers/HmisCenter';
+import { StructureCenter } from './centers/StructureCenter';
+import { SettingsCenter } from './centers/SettingsCenter';
+import WorkspaceGuard from '@/components/workspace/WorkspaceGuard';
+
+// Book XV WS-016: this executive command center may only render for the
+// executive role family. Any other family is hard-redirected (WS-014) before
+// the page body mounts.
+const SupportedRoles = ['executive'] as const;
 
 const ADMINS = ['facility_admin', 'super_admin'];
 
@@ -39,10 +51,13 @@ const CENTERS: { id: CommunityCenterId; label: string; icon: any }[] = [
   { id: 'protocol', label: 'Protocol Center', icon: FileText },
   { id: 'intelligence', label: 'Clinical Intelligence', icon: Brain },
   { id: 'integration', label: 'Integration Center', icon: Plug },
+  { id: 'hmis', label: 'HMIS Connection', icon: Network },
   { id: 'migration', label: 'Data Migration', icon: Database },
   { id: 'marketplace', label: 'Marketplace', icon: Store },
   { id: 'security', label: 'Security Center', icon: Lock },
   { id: 'analytics', label: 'Hospital Analytics', icon: TrendingUp },
+  { id: 'structure', label: 'Hospital Structure', icon: ListTree },
+  { id: 'settings', label: 'Settings', icon: Settings2 },
 ];
 
 const C = {
@@ -73,12 +88,22 @@ const S = {
 };
 
 export default function FacilityAdminPage() {
+  return (
+    <WorkspaceGuard supportedRoles={SupportedRoles}>
+      <FacilityAdminCommandCenter />
+    </WorkspaceGuard>
+  );
+}
+
+function FacilityAdminCommandCenter() {
   const { session, user, activeOrganizationId, loading } = useAuth();
   const [orgId, setOrgId] = useState<string | null>(null);
   const [model, setModel] = useState<FacilityAdminModel | null>(null);
+  const [settings, setSettings] = useState<FacilityAdminSettings | null>(null);
   const [center, setCenter] = useState<CommunityCenterId>('executive');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const adminId = useRef<string>('');
   adminId.current = (session.identity?.uid as string) || (user?.uid as string) || '';
 
@@ -95,6 +120,18 @@ export default function FacilityAdminPage() {
         setModel(m);
       } catch (e: any) {
         setError(e?.message || 'Failed to load facility');
+      }
+    })();
+  }, [orgId]);
+
+  useEffect(() => {
+    if (!orgId) return;
+    (async () => {
+      try {
+        const s = await loadFacilityAdminSettings(orgId);
+        setSettings(s);
+      } catch (e: any) {
+        setError(e?.message || 'Failed to load settings');
       }
     })();
   }, [orgId]);
@@ -121,13 +158,33 @@ export default function FacilityAdminPage() {
   if (!user || !isAdmin) return <Centered><AlertTriangle size={24} color={C.amber} /><span>Facility Administrator access required.</span></Centered>;
   if (!orgId) return <Centered><AlertTriangle size={24} color={C.amber} /><span>No active organization. Switch to a facility from your workspace.</span></Centered>;
   if (!model) return <Centered><Loader2 className="spin" size={28} color={C.sky} /><span>Initializing facility…</span></Centered>;
+  if (!settings) return <Centered><Loader2 className="spin" size={28} color={C.sky} /><span>Loading settings…</span></Centered>;
 
   const actorId = adminId.current;
 
+  const saveSettings = async (next: FacilityAdminSettings | ((s: FacilityAdminSettings) => FacilityAdminSettings)) => {
+    if (!orgId || !settings) return;
+    setSaving(true);
+    setError('');
+    try {
+      const applied = typeof next === 'function' ? next(settings) : next;
+      setSettings(applied);
+      await saveFacilityAdminSettings(orgId, applied);
+    } catch (e: any) {
+      setError(e?.message || 'Settings change failed');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Inter', system-ui, sans-serif", color: C.navy }}>
-      <style>{`.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+      <style>{`.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.menu-toggle{display:none}@media(max-width:820px){.menu-toggle{display:inline-flex}.cmd-sidebar{display:none;position:fixed;width:250px!important;z-index:30}.cmd-main{padding:16px!important}}`}</style>
+        <style>{`.cmd-sidebar--open{display:block!important}`}</style>
       <div style={{ height: 60, background: C.card, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 12, padding: '0 24px' }}>
+        <button onClick={() => setMobileOpen(o => !o)} style={{ display: 'none', background: 'transparent', border: 'none', cursor: 'pointer', padding: 6, borderRadius: 8 }} className="menu-toggle" aria-label="Toggle menu">
+          {mobileOpen ? <X size={20} color={C.slate} /> : <Menu size={20} color={C.slate} />}
+        </button>
         <Building2 size={18} color={C.sky} />
         <span style={{ fontSize: 15, fontWeight: 800 }}>AMEXAN · Facility Administration</span>
         <span style={{ width: 1, height: 22, background: C.border }} />
@@ -137,15 +194,15 @@ export default function FacilityAdminPage() {
         <span style={{ fontSize: 11, color: C.muted }}>Digital COO · Engine No. 23</span>
       </div>
 
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - 60px)' }}>
-        <aside style={{ width: 232, background: C.card, borderRight: `1px solid ${C.border}`, padding: '12px 10px', overflowY: 'auto', flexShrink: 0 }}>
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - 60px)', position: 'relative' }}>
+        <aside style={{ width: 232, background: C.card, borderRight: `1px solid ${C.border}`, padding: '12px 10px', overflowY: 'auto', flexShrink: 0, ...(mobileOpen ? { position: 'fixed', zIndex: 30, left: 0, top: 60, bottom: 0, boxShadow: '0 8px 30px rgba(11,44,77,.18)' } : {}) }} className={`cmd-sidebar${mobileOpen ? ' cmd-sidebar--open' : ''}`}>
           {CENTER_GROUPS.map(g => (
             <div key={g.label} style={{ marginBottom: 12 }}>
               <div style={{ fontSize: 10, fontWeight: 700, color: C.muted, textTransform: 'uppercase', letterSpacing: '.06em', padding: '6px 12px' }}>{g.label}</div>
               {g.items.map((it) => {
                 const IconComp = it.icon;
                 return (
-                  <button key={it.id} onClick={() => setCenter(it.id)} style={S.li(center === it.id)}>
+                  <button key={it.id} onClick={() => { setCenter(it.id); setMobileOpen(false); }} style={S.li(center === it.id)}>
                     <IconComp size={15} /> {it.label}
                   </button>
                 );
@@ -153,8 +210,9 @@ export default function FacilityAdminPage() {
             </div>
           ))}
         </aside>
+        {mobileOpen && <div onClick={() => setMobileOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(11,44,77,.35)', zIndex: 20 }} className="cmd-backdrop" />}
 
-        <main style={{ flex: 1, overflowY: 'auto', padding: 24 }}>
+        <main style={{ flex: 1, overflowY: 'auto', padding: 24 }} className="cmd-main">
           {saving && <div data-testid="saving" style={{ marginBottom: 12, fontSize: 11, color: C.slate, display: 'flex', alignItems: 'center', gap: 6 }}><Loader2 size={13} className="spin" /> Persisting…</div>}
           {error && <div style={{ ...S.banner, background: `${C.red}12`, color: C.red }}><AlertTriangle size={15} /> {error}</div>}
 
@@ -177,6 +235,10 @@ export default function FacilityAdminPage() {
           {center === 'organization' && <OrganizationView model={model} />}
           {center === 'clinical' && <ClinicalView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateMetrics(m, m.administratorId, patch))} />}
           {center === 'workforce_analytics' && <WorkforceAnalyticsView model={model} />}
+          {center === 'intelligence' && <IntelligenceCenter model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateIntelligence(m, m.administratorId, patch))} />}
+          {center === 'hmis' && <HmisCenter model={model} onSave={(fn) => mutate(fn)} />}
+          {center === 'structure' && <StructureCenter entries={settings.structure} onChange={(structure) => saveSettings(s => ({ ...s, structure }))} />}
+          {center === 'settings' && <SettingsCenter settings={settings} onChange={(next) => saveSettings(next)} />}
         </main>
       </div>
     </div>
@@ -303,7 +365,7 @@ function WorkforceView({ model, actorId, onCommand }: { model: FacilityAdminMode
               <div style={{ color: C.slate }}><span style={{ fontWeight: 600 }}>{w.category}</span> · {w.departmentId || '—'}</div>
               <StatusBadge status={w.employmentStatus} />
               <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                {(['suspend', 'promote', 'approve_leave', 'verify_credential'] as const).map(a => (
+                {(['suspend', 'promote', 'approve_leave', 'verify_credential', 'reset_password', 'transfer', 'reassign', 'deactivate'] as const).map(a => (
                   <ActionBtn key={a} label={a.replace('_', ' ')} onClick={() => onCommand(w.staffId, a)} />
                 ))}
               </div>
@@ -320,8 +382,8 @@ function StatusBadge({ status }: { status: string }) {
   const tone = status === 'active' ? C.green : status === 'suspended' || status === 'deactivated' ? C.red : C.amber;
   return <span style={{ padding: '3px 8px', borderRadius: 20, fontSize: 10, fontWeight: 700, background: `${tone}18`, color: tone, textTransform: 'capitalize', textAlign: 'center' }}>{status}</span>;
 }
-function ActionBtn({ label, onClick, danger }: { label: string; onClick: () => void; danger?: boolean }) {
-  return <button onClick={onClick} style={{ padding: '4px 8px', borderRadius: 6, border: `1px solid ${danger ? C.red : C.border}`, background: '#fff', color: danger ? C.red : C.slate, fontSize: 10, fontWeight: 600, cursor: 'pointer' }}>{label}</button>;
+function ActionBtn({ label, onClick, danger, primary }: { label: string; onClick: () => void; danger?: boolean; primary?: boolean }) {
+  return <button onClick={onClick} style={{ padding: '4px 8px', borderRadius: 6, border: primary ? 'none' : `1px solid ${danger ? C.red : C.border}`, background: primary ? C.sky : '#fff', color: primary ? '#fff' : danger ? C.red : C.slate, fontSize: 10, fontWeight: 600, cursor: 'pointer' }}>{label}</button>;
 }
 function AddBtn({ label, onClick }: { label: string; onClick: () => void }) {
   return <button onClick={onClick} style={{ padding: '6px 12px', borderRadius: 8, border: 'none', background: C.sky, color: '#fff', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>{label}</button>;
@@ -332,11 +394,23 @@ function AddBtn({ label, onClick }: { label: string; onClick: () => void }) {
 function ServicesView({ model, actorId, onSave }: { model: FacilityAdminModel; actorId: string; onSave: (fn: (m: FacilityAdminModel) => FacilityAdminModel) => void }) {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
+  const [edits, setEdits] = useState<Record<string, { price: string; capacity: string; schedule: string }>>({});
   const add = () => {
     if (!name.trim()) return;
     const input: any = { code: name.toUpperCase().slice(0, 8), name: name.trim(), category: 'medicine', availability: 'available', price: Number(price) || 0, capacityPerDay: 0, schedule: '', requiresReferral: false };
     onSave(m => FacilityAdministrationEngine.addService(m, m.administratorId, input).model);
     setName(''); setPrice('');
+  };
+  const commitEdits = (sid: string) => {
+    const e = edits[sid];
+    if (!e) return;
+    onSave(m => ({ ...m, services: m.services.map(s => s.id === sid ? {
+      ...s,
+      price: e.price !== '' ? Number(e.price) : s.price,
+      capacityPerDay: e.capacity !== '' ? Number(e.capacity) : s.capacityPerDay,
+      schedule: e.schedule !== '' ? e.schedule : s.schedule,
+    } : s) } as FacilityAdminModel));
+    setEdits(prev => { const n = { ...prev }; delete n[sid]; return n; });
   };
   return (
     <Card title="Service Catalogue" subtitle="Every service the hospital provides — availability, pricing, capacity, schedules.">
@@ -346,17 +420,23 @@ function ServicesView({ model, actorId, onSave }: { model: FacilityAdminModel; a
         <AddBtn label="Add Service" onClick={add} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {model.services.map(s => (
-          <div key={s.id} style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr 90px', gap: 8, alignItems: 'center', padding: '8px 10px', borderRadius: 8, background: '#f8fafc', fontSize: 12 }}>
-            <div><div style={{ fontWeight: 700 }}>{s.name}</div><div style={{ fontSize: 10, color: C.muted }}>{s.code}</div></div>
-            <div style={{ color: C.slate }}>{s.category}</div>
-            <div style={{ fontWeight: 600 }}>KES {s.price.toLocaleString()}</div>
-            <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 10, fontWeight: 700, background: s.availability === 'available' ? `${C.green}18` : s.availability === 'limited' ? `${C.amber}18` : `${C.red}18`, color: s.availability === 'available' ? C.green : s.availability === 'limited' ? C.amber : C.red, textAlign: 'center' }}>{s.availability}</span>
-            <div style={{ display: 'flex', gap: 4 }}>
-              <ActionBtn label="Available" danger={!s.active} onClick={() => onSave(m => FacilityAdministrationEngine.setServiceAvailability(m, m.administratorId, s.id, s.availability === 'available' ? 'limited' : 'available', true))} />
+        {model.services.map(s => {
+          const e = edits[s.id];
+          const dirty = e && (e.price !== '' || e.capacity !== '' || e.schedule !== '');
+          return (
+            <div key={s.id} style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 100px 100px 1fr auto', gap: 8, alignItems: 'center', padding: '8px 10px', borderRadius: 8, background: '#f8fafc', fontSize: 12 }}>
+              <div style={{ minWidth: 0 }}><div style={{ fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</div><div style={{ fontSize: 10, color: C.muted }}>{s.code} · {s.category}</div></div>
+              <input value={e?.price ?? ''} placeholder={`KES ${s.price.toLocaleString()}`} onChange={ev => setEdits({ ...edits, [s.id]: { ...(e || { price: '', capacity: '', schedule: '' }), price: ev.target.value } })} style={{ height: 28, borderRadius: 6, border: `1px solid ${C.border}`, padding: '0 8px', fontSize: 11, outline: 'none', width: '100%' }} />
+              <input value={e?.capacity ?? ''} placeholder={`Cap ${s.capacityPerDay}`} onChange={ev => setEdits({ ...edits, [s.id]: { ...(e || { price: '', capacity: '', schedule: '' }), capacity: ev.target.value } })} style={{ height: 28, borderRadius: 6, border: `1px solid ${C.border}`, padding: '0 8px', fontSize: 11, outline: 'none', width: '100%' }} />
+              <input value={e?.schedule ?? ''} placeholder={s.schedule || 'Schedule'} onChange={ev => setEdits({ ...edits, [s.id]: { ...(e || { price: '', capacity: '', schedule: '' }), schedule: ev.target.value } })} style={{ height: 28, borderRadius: 6, border: `1px solid ${C.border}`, padding: '0 8px', fontSize: 11, outline: 'none', width: '100%' }} />
+              <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 10, fontWeight: 700, background: s.availability === 'available' ? `${C.green}18` : s.availability === 'limited' ? `${C.amber}18` : `${C.red}18`, color: s.availability === 'available' ? C.green : s.availability === 'limited' ? C.amber : C.red, textAlign: 'center' }}>{s.availability}</span>
+              <div style={{ display: 'flex', gap: 4 }}>
+                {dirty && <ActionBtn label="Save" primary onClick={() => commitEdits(s.id)} />}
+                <ActionBtn label="Avail" danger={s.availability === 'available'} onClick={() => onSave(m => FacilityAdministrationEngine.setServiceAvailability(m, m.administratorId, s.id, s.availability === 'available' ? 'limited' : 'available', true))} />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         {model.services.length === 0 && <div style={{ fontSize: 12, color: C.muted, padding: '12px 0' }}>No services yet. Add your first service above.</div>}
       </div>
     </Card>
@@ -751,5 +831,6 @@ const CENTER_GROUPS: { label: string; items: { id: CommunityCenterId; label: str
   { label: 'Configure', items: [CENTERS[3], CENTERS[4], CENTERS[5], CENTERS[6]] },
   { label: 'Monitor', items: [CENTERS[7], CENTERS[8], CENTERS[9], CENTERS[10], CENTERS[11]] },
   { label: 'Intelligence & Ecosystems', items: [CENTERS[12], CENTERS[13], CENTERS[14], CENTERS[15], CENTERS[16], CENTERS[17]] },
-  { label: 'Govern & Analyze', items: [CENTERS[18], CENTERS[19]] },
+  { label: 'Data & Govern', items: [CENTERS[18], CENTERS[19], CENTERS[20]] },
+  { label: 'Structure & Settings', items: [CENTERS[21], CENTERS[22]] },
 ];

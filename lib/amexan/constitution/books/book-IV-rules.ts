@@ -28,6 +28,7 @@ export enum RuleTrigger {
   OnTransition = 'on_transition',
   OnEvent = 'on_event',
   Scheduled = 'scheduled',
+  BeforeRender = 'before_render',
 }
 
 export enum RuleAction {

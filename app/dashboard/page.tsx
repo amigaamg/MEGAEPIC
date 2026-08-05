@@ -6,6 +6,17 @@ import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Calendar, Clock, Users, Pill, FlaskConical, Scan, FileText, LogOut, Activity, Bell, TrendingUp, BarChart3, UserCog, Settings, Menu, ChevronRight, CheckCircle, XCircle, PlusCircle, UserPlus, Mail, type LucideIcon } from 'lucide-react';
 import { resolveWorkspaceGate } from '@/lib/amexan/workspace/WorkspaceResolutionEngine';
 import OrganizationSetupWizard from '@/components/workspace/OrganizationSetupWizard';
+import WorkspaceGuard from '@/components/workspace/WorkspaceGuard';
+
+// Book XV WS-016: the /dashboard resolver page may render for the clinical,
+// nursing, pharmacy, laboratory, radiology, department, research, teaching,
+// finance, HR and ICT families. The executive family never renders this page —
+// it is hard-redirected to the Facility Administration Command Center (WS-014).
+const SupportedRoles = [
+  'clinical_leadership', 'department', 'clinical', 'nursing', 'pharmacy',
+  'laboratory', 'radiology', 'finance', 'hr', 'ict', 'research', 'teaching',
+  'telemedicine', 'community_health', 'patient',
+] as const;
 
 const C = {
   navy: 'var(--sky-800)',
@@ -39,6 +50,14 @@ const S = {
 const ICONS: Record<string, LucideIcon> = { Pill, FlaskConical, Scan, FileText, LogOut, Activity, Calendar, Users, Bell, TrendingUp, BarChart3, UserCog, Settings, AlertTriangle, ArrowRight, Clock, CheckCircle, XCircle, PlusCircle, UserPlus, ChevronRight, Menu };
 
 export default function DashboardPage() {
+  return (
+    <WorkspaceGuard supportedRoles={SupportedRoles}>
+      <DashboardPageInner />
+    </WorkspaceGuard>
+  );
+}
+
+function DashboardPageInner() {
   const { session, dashboard, loading, user, logout, needsToCompleteRegistration, needsEmailVerification, workspace, registrationStep, workspaceChoice, switchOrganization } = useAuth();
   const router = useRouter();
 

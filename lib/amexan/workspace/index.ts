@@ -129,3 +129,17 @@ export {
   dashboardConstitutionalEngine,
   roleTokensFor,
 } from './dashboard-constitutional';
+
+// Workspace Guard (Book XV, WS-011..WS-016)
+export {
+  WorkspaceMismatchError,
+  resolveFamily,
+  guardFamily,
+  guardWorkspace,
+  familyRedirect,
+} from './WorkspaceGuard';
+export type {
+  WorkspaceFamily,
+  SupportedRoles,
+  WorkspaceGuardResult,
+} from './WorkspaceGuard';

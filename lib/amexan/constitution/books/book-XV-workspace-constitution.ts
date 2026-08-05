@@ -213,11 +213,127 @@ export const WS_010: RuleNode = createRule({
   version: 1,
 });
 
+/** WS-011 — One actor, one active workspace. */
+export const WS_011: RuleNode = createRule({
+  id: 'WS-011',
+  name: 'One Actor, One Active Workspace',
+  category: RuleCategory.Workflow,
+  trigger: RuleTrigger.OnTransition,
+  conditions: [{ field: 'workspace.active', operator: 'exists', value: true }],
+  action: RuleAction.SetValue,
+  priority: 95,
+  targetTypes: [ObjectType.Person],
+  contexts: [ClinicalContext.SystemLevel],
+  explanation:
+    'A logged-in actor operates in exactly one active workspace at any moment, resolved from ' +
+    'Identity → Organization → Role → Workspace. Never a random dashboard.',
+  evidence: ['WS-011'],
+  isActive: true,
+  version: 1,
+});
+
+/** WS-012 — Dashboard resolved from role, not hardcoded. */
+export const WS_012: RuleNode = createRule({
+  id: 'WS-012',
+  name: 'Dashboard Resolved From Role',
+  category: RuleCategory.Workflow,
+  trigger: RuleTrigger.OnTransition,
+  conditions: [{ field: 'target', operator: 'eq', value: 'dashboard' }],
+  action: RuleAction.Require,
+  priority: 90,
+  targetTypes: [ObjectType.Person],
+  contexts: [ClinicalContext.SystemLevel],
+  explanation:
+    'The Dashboard Resolver is the single source of truth for dashboard routing. Dashboard routes are never hardcoded ' +
+    'by role; they are always derived from DashboardResolver from the resolved workspace.',
+  evidence: ['WS-012'],
+  isActive: true,
+  version: 1,
+});
+
+/** WS-013 — Every role owns exactly one dashboard family. */
+export const WS_013: RuleNode = createRule({
+  id: 'WS-013',
+  name: 'Every Role Owns One Dashboard Family',
+  category: RuleCategory.Workflow,
+  trigger: RuleTrigger.OnTransition,
+  conditions: [{ field: 'role', operator: 'exists', value: true }],
+  action: RuleAction.SetValue,
+  priority: 88,
+  targetTypes: [ObjectType.Person],
+  contexts: [ClinicalContext.SystemLevel],
+  explanation:
+    'Each role resolves to exactly one dashboard family (Executive, Clinical, Nursing, Laboratory, Pharmacy, ' +
+    'Finance, Research, ...). No exceptions.',
+  evidence: ['WS-013'],
+  isActive: true,
+  version: 1,
+});
+
+/** WS-014 — Executive users never enter a clinical dashboard (WorkspaceMismatchError). */
+export const WS_014: RuleNode = createRule({
+  id: 'WS-014',
+  name: 'Executive Users Never Enter Clinical Dashboard',
+  category: RuleCategory.Security,
+  trigger: RuleTrigger.BeforeRender,
+  conditions: [{ field: 'role.family', operator: 'eq', value: 'facility_admin' }],
+  action: RuleAction.Block,
+  priority: 89,
+  targetTypes: [ObjectType.Person],
+  contexts: [ClinicalContext.SystemLevel],
+  explanation:
+    'When the resolved role family is "facility_admin", it is constitutionally illegal to render a clinician ' +
+    'dashboard. Matching throws a WorkspaceMismatchError, logs it, and redirects — never continues rendering.',
+  evidence: ['WS-014'],
+  isActive: true,
+  version: 1,
+});
+
+/** WS-015 — Clinicians never enter the executive/administrative workspace. */
+export const WS_015: RuleNode = createRule({
+  id: 'WS-015',
+  name: 'Clinicians Never Enter Executive Workspace',
+  category: RuleCategory.Security,
+  trigger: RuleTrigger.BeforeRender,
+  conditions: [{ field: 'role.family', operator: 'neq', value: 'facility_admin' }],
+  action: RuleAction.Block,
+  priority: 87,
+  targetTypes: [ObjectType.Person],
+  contexts: [ClinicalContext.SystemLevel],
+  explanation:
+    'Clinical roles must never see procurement, payroll, the organization builder, or server status — the ' +
+    'executive workspace is reserved for the administrator family.',
+  evidence: ['WS-015'],
+  isActive: true,
+  version: 1,
+});
+
+/** WS-016 — Actual pages declare which role families may render them (SupportedRoles). */
+export const WS_016: RuleNode = createRule({
+  id: 'WS-016',
+  name: 'Dashboard Components Declare Privileged Role',
+  category: RuleCategory.Security,
+  trigger: RuleTrigger.BeforeRender,
+  conditions: [{ field: 'component.supportedRoles', operator: 'exists', value: true }],
+  action: RuleAction.Require,
+  priority: 86,
+  targetTypes: [ObjectType.Person],
+  contexts: [ClinicalContext.SystemLevel],
+  explanation:
+    'Every renderable component must declare the SupportedRoles, a list of role families it may render. ' +
+    'Before rendering, if the current role family is not in SupportedRoles, redirect rather than render.',
+  evidence: ['WS-016'],
+  isActive: true,
+  version: 1,
+});
+
 /** All workspace-resolution constitutional rules, ordered by priority (highest first). */
 export const WORKSPACE_CONSTITUTIONAL_RULES: RuleNode[] = [
   CR_WS_001,
   WS_001,
+  WS_011,
   WS_002,
+  WS_012,
   WS_003,
   WS_004,
   WS_005,
@@ -226,6 +342,10 @@ export const WORKSPACE_CONSTITUTIONAL_RULES: RuleNode[] = [
   WS_008,
   WS_009,
   WS_010,
+  WS_013,
+  WS_014,
+  WS_015,
+  WS_016,
 ];
 
 export function getWorkspaceRule(ruleId: string): RuleNode | undefined {

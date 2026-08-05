@@ -13,6 +13,9 @@ import {
   WS_008,
   WS_009,
   WS_010,
+  WS_014,
+  WS_015,
+  WS_016,
   WORKSPACE_CONSTITUTIONAL_RULES,
   getWorkspaceRule,
   isWorkspaceConstitutionalRule,
@@ -32,11 +35,11 @@ describe('Book XV — Workspace Resolution Constitution v1.0', () => {
     expect(CR_WS_001.explanation).toContain('shall ever land on a dashboard');
   });
 
-  it('defines WS-001 through WS-010', () => {
+  it('defines WS-001 through WS-016', () => {
     const ids = WORKSPACE_CONSTITUTIONAL_RULES.map(r => r.id);
     expect(ids).toContain('WS-001');
-    expect(ids).toContain('WS-010');
-    expect(ids).toHaveLength(11); // CR-WS-001 + WS-001..WS-010
+    expect(ids).toContain('WS-016');
+    expect(ids).toHaveLength(17); // CR-WS-001 + WS-001..WS-016
   });
 
   it('orders rules by priority, highest first', () => {
@@ -80,5 +83,12 @@ describe('Book XV — Workspace Resolution Constitution v1.0', () => {
     expect(getWorkspaceRule('NOPE')).toBeUndefined();
     expect(isWorkspaceConstitutionalRule('CR-WS-001')).toBe(true);
     expect(isWorkspaceConstitutionalRule('NOPE')).toBe(false);
+  });
+
+  it('enforces the role-family segregation rules WS-013..WS-016', () => {
+    expect(WS_014.action).toBe(RuleAction.Block);
+    expect(WS_014.conditions[0].field).toBe('role.family');
+    expect(WS_015.action).toBe(RuleAction.Block);
+    expect(WS_016.explanation).toContain('SupportedRoles');
   });
 });
