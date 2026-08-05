@@ -297,8 +297,8 @@ const refreshWorkspace = async () => {
         professional: {
           uid: firebaseUser.uid as AmxUid,
           personId: firebaseUser.uid as AmxUid,
-          categories: fetchedRole === 'doctor' ? ['medical_doctor'] : fetchedRole === 'nurse' ? ['nurse'] : fetchedRole === 'admin' ? ['facility_admin'] : ['other'],
-          primaryCategory: fetchedRole === 'doctor' ? 'medical_doctor' : fetchedRole === 'nurse' ? 'nurse' : fetchedRole === 'admin' ? 'facility_admin' : (fetchedRole as any) || 'other',
+          categories: fetchedRole === 'doctor' ? ['medical_doctor'] : fetchedRole === 'nurse' ? ['nurse'] : fetchedRole === 'admin' || fetchedRole === 'facility_administrator' || fetchedRole === 'hospital_admin' ? ['facility_admin'] : ['other'],
+          primaryCategory: fetchedRole === 'doctor' ? 'medical_doctor' : fetchedRole === 'nurse' ? 'nurse' : fetchedRole === 'admin' || fetchedRole === 'facility_administrator' || fetchedRole === 'hospital_admin' ? 'facility_admin' : (fetchedRole as any) || 'other',
           specialties: [],
           qualifications: [],
           yearsOfExperience: 0,

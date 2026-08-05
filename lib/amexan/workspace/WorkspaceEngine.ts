@@ -63,6 +63,14 @@ const ROLE_LABEL: Record<string, ProfessionalCategory> = {
   lab_tech: 'lab_technologist',
   receptionist: 'receptionist',
   student: 'medical_student',
+  facility_administrator: 'facility_admin',
+  facility_admin: 'facility_admin',
+  hospital_admin: 'facility_admin',
+  hospital_director: 'facility_admin',
+  medical_superintendent: 'facility_admin',
+  county_director: 'facility_admin',
+  regional_director: 'facility_admin',
+  national_director: 'facility_admin',
 };
 
 function defaultPermissions(role: string): Permission[] {
@@ -87,7 +95,7 @@ function defaultPermissions(role: string): Permission[] {
       { resource: 'prescription', actions: ['read'], scope, deny: false },
     ];
   }
-  if (role === 'admin' || role === 'super_admin' || role === 'hospital_admin') {
+  if (role === 'admin' || role === 'super_admin' || role === 'hospital_admin' || role === 'facility_administrator') {
     return [
       { resource: 'admin', actions: ['create', 'read', 'update', 'delete', 'admin'], scope: { type: 'global' }, deny: false },
       { resource: 'manage_org', actions: ['manage_org', 'manage_staff', 'manage_roles'], scope: { type: 'global' }, deny: false },

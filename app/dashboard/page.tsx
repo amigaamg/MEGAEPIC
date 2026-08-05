@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Calendar, Clock, Users, Pill, FlaskConical, Scan, FileText, LogOut, Activity, Bell, TrendingUp, BarChart3, UserCog, Settings, Menu, ChevronRight, CheckCircle, XCircle, PlusCircle, UserPlus, Mail, type LucideIcon } from 'lucide-react';
@@ -62,6 +62,14 @@ export default function DashboardPage() {
   const isAdministrativeRole = ['facility_admin', 'super_admin'].includes(
     session.professional?.primaryCategory || ''
   );
+
+  // Facility/executive administrators land on the real-time COO Command
+  // Center (Book V), never the clinician workspace or the legacy mock panel.
+  useEffect(() => {
+    if (!loading && isAdministrativeRole && user) {
+      router.replace('/facility-admin');
+    }
+  }, [loading, isAdministrativeRole, user, router]);
 
   // Email verification is a banner, never a gate. We surface it inline.
 
