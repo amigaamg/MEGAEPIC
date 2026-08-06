@@ -174,6 +174,21 @@ export class WorkspaceEngine {
     // Persist workspace snapshot
     await this.persistWorkspace(workspace);
 
+    // Anchor the resolved organization so the very next resolution (page
+    // reload, /facility-admin, subsequent login) never falls back to a stale or
+    // empty active-org state. Rule WS-010 (workspace immutable): the resolved
+    // membership's organization is the single source of truth.
+    if (workspace.activeMembership?.organizationId) {
+      const { setActiveOrganizationId } = await import('@/lib/firebase/orgContext');
+      try { setActiveOrganizationId(workspace.activeMembership.organizationId); } catch { /* noop */ }
+      try {
+        await (await import('firebase/firestore')).updateDoc(
+          doc(db, 'users', uid),
+          { activeOrganizationId: workspace.activeMembership.organizationId, updatedAt: Date.now() },
+        );
+      } catch { /* non-fatal */ }
+    }
+
     this.initialized = true;
     this.emitEvent({ type: 'workspace_resolved', uid, payload: workspace, timestamp: Date.now(), deviceId: resolverContext.deviceId || '' });
 

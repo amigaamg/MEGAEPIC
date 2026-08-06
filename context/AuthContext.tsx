@@ -217,13 +217,41 @@ const refreshWorkspace = async () => {
     // Registration not complete → do not touch the Workspace Engine. Load a
     // minimal session and let the register page resume onboarding.
     if (!userRegistrationStep || userRegistrationStep !== 'complete') {
+      // Self-healing: if the account already has a membership + organization
+      // (e.g. provisioning completed the org but a later step failed to mark
+      // registrationStep complete), still resolve the workspace so the user is
+      // NOT told "no organization". The gate re-checks completeness after
+      // resolution; this simply restores the true link when the data exists.
+      try {
+        const amxUid = (userData?.amxUid as AmxUid) || undefined;
+        const engine = getWorkspaceEngine();
+        const workspace = await engine.initialize(firebaseUser.uid as AmxUid, {
+          personId: amxUid,
+          activeOrganizationId: (userData?.activeOrganizationId as string) || undefined,
+        });
+        if (workspace.activeMembership?.organizationId) {
+          setWorkspace(workspace);
+          setSession(engine.getSession());
+          setRole(workspace.role?.id || null);
+          setActiveOrganizationIdState(workspace.activeMembership.organizationId);
+          return workspace.role?.id || null;
+        }
+      } catch {
+        // No membership yet → genuinely incomplete; fall through to legacy.
+      }
       return loadUserSessionLegacy(firebaseUser);
     }
 
     try {
-      // Use WorkspaceEngine for complete context resolution
+      // Use WorkspaceEngine for complete context resolution.
+      // Pass the constitutional links explicitly so resolution NEVER depends on
+      // stale localStorage: amxUid (personId) + activeOrganizationId both come
+      // straight from the users/{uid} doc written during registration.
       const engine = getWorkspaceEngine();
-      const workspace = await engine.initialize(firebaseUser.uid as AmxUid);
+      const workspace = await engine.initialize(firebaseUser.uid as AmxUid, {
+        personId: (userData?.amxUid as AmxUid) || undefined,
+        activeOrganizationId: (userData?.activeOrganizationId as string) || undefined,
+      });
 
       setWorkspace(workspace);
       setSession(engine.getSession());
