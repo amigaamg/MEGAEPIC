@@ -231,12 +231,14 @@ export function guardWorkspace(
  */
 export function familyRedirect(family: WorkspaceFamily | null): string {
   if (family === 'executive') return '/facility-admin';
+  if (family === 'clinical_leadership') return '/dashboard/cos-doctor';
   if (family === 'department' || family === 'finance' || family === 'hr' || family === 'ict' || family === 'research') return '/dashboard/cos-admin';
   if (family === 'clinical' || family === 'telemedicine' || family === 'teaching') return '/dashboard/cos-doctor';
   if (family === 'nursing') return '/dashboard/cos-nurse';
   if (family === 'pharmacy') return '/dashboard/cos-pharmacy';
   if (family === 'laboratory') return '/dashboard/cos-lab';
   if (family === 'radiology') return '/dashboard/cos-radiology';
+  if (family === 'community_health') return '/dashboard/cos-doctor';
   if (family === 'patient') return '/dashboard/patient';
   return '/dashboard';
 }

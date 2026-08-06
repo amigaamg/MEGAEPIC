@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { loginRedirectForRole } from "@/lib/amexan/workspace/WorkspaceGuard";
+import { resolveFamily, familyRedirect } from "@/lib/amexan/workspace/WorkspaceGuard";
 import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider, OAuthProvider, sendEmailVerification, isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import MagicLinkForm from "@/components/auth/MagicLinkForm";
@@ -37,7 +37,9 @@ function Spinner() {
 
 export default function AuthLoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const authContext = useAuth();
+  const { login } = authContext;
+  const { session } = authContext;
 
   const [method, setMethod] = useState<AuthMethod>('email');
   const [email, setEmail] = useState("");
@@ -92,9 +94,9 @@ export default function AuthLoginPage() {
     setLoading(true);
     setError(null);
     try {
-      await signInWithEmailLink(auth, address.trim(), window.location.href);
+       await signInWithEmailLink(auth, address.trim(), window.location.href);
       window.localStorage.removeItem('emailForSignIn');
-      router.push(loginRedirectForRole(null));
+      router.push('/workspace');
     } catch (err: any) {
       showError(mapFirebaseError(err.code ?? ''));
     } finally {
@@ -113,13 +115,18 @@ export default function AuthLoginPage() {
 
     setLoading(true);
     try {
-      const resolvedRole = await login(email.trim(), password);
+       const resolvedRole = await login(email.trim(), password);
       const user = auth.currentUser;
       if (user && !user.emailVerified) {
         await sendEmailVerification(user);
         showError('Email not verified. A verification email has been sent. Please verify before accessing all features.');
       }
-      router.push(loginRedirectForRole(resolvedRole));
+      // Route to the constitutional dashboard for the actor's resolved role family.
+      // `login()` already initialized the workspace session, so we read the
+      // primaryCategory from the session context (same table the guard uses).
+      const category = authContext.session?.professional?.primaryCategory;
+      const family = resolveFamily(category ?? resolvedRole, resolvedRole);
+      router.push(family ? familyRedirect(family) : '/dashboard');
     } catch (err: any) {
       showError(mapFirebaseError(err.code ?? ""));
     } finally {
@@ -148,7 +155,7 @@ export default function AuthLoginPage() {
           phone: result.user.phoneNumber || '',
           accountType: 'professional',
         }).catch(() => {});
-        router.push("/dashboard");
+        router.push('/workspace');
       }
     } catch (err: any) {
       showError(mapFirebaseError(err.code ?? ""));
@@ -173,7 +180,7 @@ export default function AuthLoginPage() {
         },
       } as CredentialRequestOptions);
       if (assertion) {
-        router.push("/dashboard");
+        router.push("/workspace");
       }
     } catch (err: any) {
       showError(err.name === 'NotAllowedError' ? 'Passkey verification was cancelled.' : 'Passkey sign in failed. Please try another method.');

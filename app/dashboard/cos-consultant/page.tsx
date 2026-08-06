@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
+import WorkspaceGuard from "@/components/workspace/WorkspaceGuard";
 
 const S = `
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --s50:#f0f9ff;--s100:#e0f2fe;--s200:#bae6fd;--s300:#7dd3fc;
@@ -19,13 +20,13 @@ const S = `
   --r:12px;--r-sm:8px;--r-lg:20px;
   --sh:0 1px 3px rgba(0,0,0,.04);--sh-md:0 4px 16px rgba(0,0,0,.06);--sh-lg:0 12px 40px rgba(0,0,0,.08);
 }
-body{font-family:var(--font);background:var(--f50);color:#0f172a}
+body{font-family:'Inter','Noto Sans',sans-serif;background:var(--f50);color:#0f172a}
 .cos-layout{display:flex;min-height:100vh}
 .cos-sidebar{width:220px;background:var(--w);border-right:1px solid var(--f200);padding:20px 12px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex-shrink:0}
 .cos-brand{font-size:20px;font-weight:800;color:var(--s700);padding:0 8px 16px;border-bottom:1px solid var(--f200);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .cos-brand span{background:var(--s100);color:var(--s600);font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700}
 .sidebar-group{font-size:10px;font-weight:700;color:var(--f400);text-transform:uppercase;letter-spacing:.8px;padding:12px 8px 4px}
-.cos-nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--f500);cursor:pointer;border:none;background:none;text-align:left;width:100%;font-family:var(--font);transition:all .1s}
+.cos-nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--f500);cursor:pointer;border:none;background:none;text-align:left;width:100%;font-family:'Inter','Noto Sans',sans-serif;transition:all .1s}
 .cos-nav-item:hover{background:var(--s50);color:var(--s700)}
 .cos-nav-item.active{background:var(--s100);color:var(--s700);font-weight:700}
 .cos-nav-item .icon{font-size:16px;width:20px;text-align:center}
@@ -56,7 +57,7 @@ body{font-family:var(--font);background:var(--f50);color:#0f172a}
 .section-title{font-size:16px;font-weight:700;color:var(--s800);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .section-title .count{font-size:11px;background:var(--f200);padding:1px 8px;border-radius:99px;color:var(--f500);font-weight:600}
 .team-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.team-tab{font-size:12px;font-weight:600;padding:8px 16px;border-radius:8px;border:1.5px solid var(--f200);background:var(--w);cursor:pointer;transition:all .1s;font-family:var(--font)}
+.team-tab{font-size:12px;font-weight:600;padding:8px 16px;border-radius:8px;border:1.5px solid var(--f200);background:var(--w);cursor:pointer;transition:all .1s;font-family:'Inter','Noto Sans',sans-serif}
 .team-tab:hover{border-color:var(--s300);background:var(--s50)}
 .team-tab.active{background:var(--s500);color:var(--w);border-color:var(--s500)}
 .team-tab .team-badge{font-size:9px;font-weight:700;margin-left:6px;padding:1px 5px;border-radius:99px;background:rgba(255,255,255,.2)}
@@ -82,7 +83,7 @@ body{font-family:var(--font);background:var(--f50);color:#0f172a}
 .patient-tag.blue{background:var(--blue-bg);color:var(--blue-t)}
 .patient-tag.purple{background:var(--purple-bg);color:var(--purple-t)}
 .patient-actions{display:flex;gap:4px}
-.patient-btn{font-size:10px;font-weight:700;padding:5px 10px;border-radius:6px;border:none;cursor:pointer;font-family:var(--font);transition:all .1s}
+.patient-btn{font-size:10px;font-weight:700;padding:5px 10px;border-radius:6px;border:none;cursor:pointer;font-family:'Inter','Noto Sans',sans-serif;transition:all .1s}
 .patient-btn.primary{background:var(--s500);color:var(--w)}
 .patient-btn.primary:hover{background:var(--s600)}
 .patient-btn.outline{background:var(--w);border:1.5px solid var(--f200);color:var(--f500)}
@@ -103,12 +104,12 @@ body{font-family:var(--font);background:var(--f50);color:#0f172a}
 .approval-panel{background:var(--w);border:1.5px solid var(--s200);border-radius:var(--r);padding:16px;margin-bottom:24px}
 .approval-header{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--s800);margin-bottom:12px}
 .approval-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--s50);margin-bottom:6px;font-size:12px;border:1px solid var(--s200)}
-.approval-item .action-btn{font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;border:none;cursor:pointer;font-family:var(--font);margin-left:auto}
+.approval-item .action-btn{font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;border:none;cursor:pointer;font-family:'Inter','Noto Sans',sans-serif;margin-left:auto}
 .approval-item .action-btn.approve{background:var(--green);color:var(--w)}
 .approval-item .action-btn.reject{background:var(--f200);color:var(--f500)}
 `;
 
-export default function CosConsultantDashboard() {
+function _CosConsultantDashboard() {
   const [tab, setTab] = useState("teams");
   const [team, setTeam] = useState("teamA");
 
@@ -520,5 +521,15 @@ export default function CosConsultantDashboard() {
         </main>
       </div>
     </>
+  );
+}
+
+const SUPPORTED_ROLES = ['clinical'] as const;
+
+export default function CosConsultantDashboard() {
+  return (
+    <WorkspaceGuard supportedRoles={SUPPORTED_ROLES}>
+      <_CosConsultantDashboard />
+    </WorkspaceGuard>
   );
 }

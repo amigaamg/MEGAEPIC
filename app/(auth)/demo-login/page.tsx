@@ -23,7 +23,13 @@ export default function DemoLoginPage() {
       // Route each actor to its true dashboard (declared in demoWorkspaces),
       // never through the legacy /clinical-auth gate or workspace resolver.
       const account = DEMO_WORKSPACE_ACCOUNTS.find(a => a.email === email);
-      router.push(account?.dashboardRoute || '/dashboard');
+      if (account) {
+        // Use the demo account's declared dashboard route — this is the
+        // constitutional destination for each seeded persona (WS-017).
+        router.push(account.dashboardRoute);
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err: any) {
       setError(
         err?.code === "auth/user-not-found"

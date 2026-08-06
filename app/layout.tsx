@@ -12,6 +12,12 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const notoSans = Noto_Sans({
+  subsets: ["latin", "cyrillic", "greek"],
+  display: "swap",
+  variable: "--font-noto-sans",
+});
+
 export const metadata: Metadata = {
   title: "AMEXAN — Clinical Operating System for Modern Healthcare",
   description: "AI-powered clinical decision support system",
@@ -27,7 +33,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="light" className={inter.variable}>
+    <html lang="en" data-theme="light" className={`${inter.variable} ${notoSans.variable}`}>
       <body style={{ background: "var(--surface)", color: "var(--text-primary)" }}>
         <ThemeInjector>
           <FirestoreErrorHandler>

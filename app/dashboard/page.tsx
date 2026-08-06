@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Calendar, Clock, Users, Pill, FlaskConical, Scan, FileText, LogOut, Activity, Bell, TrendingUp, BarChart3, UserCog, Settings, Menu, ChevronRight, CheckCircle, XCircle, PlusCircle, UserPlus, Mail, type LucideIcon } from 'lucide-react';
 import { resolveWorkspaceGate } from '@/lib/amexan/workspace/WorkspaceResolutionEngine';
+import { resolveFamily, familyRedirect } from '@/lib/amexan/workspace/WorkspaceGuard';
 import OrganizationSetupWizard from '@/components/workspace/OrganizationSetupWizard';
 import WorkspaceGuard from '@/components/workspace/WorkspaceGuard';
 
@@ -35,7 +36,7 @@ const C = {
 };
 
 const S = {
-  page: { minHeight: '100vh', background: C.panel, fontFamily: "'Inter', system-ui, sans-serif", color: C.text, display: 'flex', flexDirection: 'column' as const },
+  page: { minHeight: '100vh', background: C.panel, fontFamily: "'Inter', 'Noto Sans', system-ui, sans-serif", color: C.text, display: 'flex', flexDirection: 'column' as const },
   topBar: { height: 64, background: C.white, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', padding: '0 24px', gap: 12, flexShrink: 0 },
   logoText: { fontSize: 14, fontWeight: 700, color: C.navy },
   body: { flex: 1, display: 'flex', overflow: 'hidden' },
@@ -89,6 +90,23 @@ function DashboardPageInner() {
       router.replace('/facility-admin');
     }
   }, [loading, isAdministrativeRole, user, router]);
+
+  // WS-016: When the workspace is ready and the guard has allowed rendering,
+  // redirect the actor to their family-specific dashboard (cos-* pages). The
+  // generic /dashboard page is only a routing hub — it must never render as the
+  // final destination for a non-administrative family.
+  useEffect(() => {
+    if (loading || isAdministrativeRole) return;
+    if (!user) return;
+    if (gate.type !== 'ready') return;
+    const category = session?.professional?.primaryCategory ?? null;
+    const roleName = session?.role?.name ?? null;
+    const family = resolveFamily(category, roleName);
+    if (family && family !== 'executive') {
+      router.replace(familyRedirect(family));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, isAdministrativeRole, user, session, gate.type, router]);
 
   // Email verification is a banner, never a gate. We surface it inline.
 

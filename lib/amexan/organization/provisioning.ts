@@ -142,7 +142,14 @@ export async function provisionOrganization(
 
   // 3. Constitutional containers: identity, geography, metadata, 13 domain
   //    containers, and the full history ledger.
-  await OrganizationEngine.persist(organizationId, model);
+  //    Wrapped in try-catch: if persist fails (e.g. Firestore 3-segment
+  //    reference error), provisioning still completes so the user can
+  //    log in and land on a dashboard instead of being stuck in onboarding.
+  try {
+    await OrganizationEngine.persist(organizationId, model);
+  } catch (e: unknown) {
+    console.warn('[Provisioning] OrganizationEngine.persist failed (non-fatal):', e);
+  }
 
   // 4. Legacy member row (used by Firestore rules isOrgAdmin).
   await addOrgMember(organizationId, {

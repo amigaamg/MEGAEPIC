@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
+import WorkspaceGuard from "@/components/workspace/WorkspaceGuard";
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
@@ -20,13 +21,13 @@ const CSS = `
   --shadow:0 1px 3px rgba(0,0,0,.04); --shadow-md:0 4px 16px rgba(0,0,0,.06);
   --shadow-lg:0 12px 40px rgba(0,0,0,.08);
 }
-body{font-family:var(--font);background:var(--frost-50);color:#0f172a}
+body{font-family:'Inter','Noto Sans',sans-serif;background:var(--frost-50);color:#0f172a}
 .cos-layout{display:flex;min-height:100vh}
 .cos-sidebar{width:220px;background:var(--white);border-right:1px solid var(--frost-200);padding:20px 12px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex-shrink:0}
 .cos-sidebar-brand{font-size:20px;font-weight:800;color:var(--sky-700);padding:0 8px 16px;border-bottom:1px solid var(--frost-200);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .cos-sidebar-brand span{background:var(--sky-100);color:var(--sky-600);font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700}
 .sidebar-group{font-size:10px;font-weight:700;color:var(--frost-400);text-transform:uppercase;letter-spacing:.8px;padding:12px 8px 4px}
-.cos-sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:var(--frost-500);cursor:pointer;border:none;background:none;text-align:left;width:100%;font-family:var(--font);transition:all .1s}
+.cos-sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:var(--frost-500);cursor:pointer;border:none;background:none;text-align:left;width:100%;font-family:'Inter','Noto Sans',sans-serif;transition:all .1s}
 .cos-sidebar-item:hover{background:var(--sky-50);color:var(--sky-700)}
 .cos-sidebar-item.active{background:var(--sky-100);color:var(--sky-700);font-weight:700}
 .cos-sidebar-item .icon{font-size:16px;width:20px;text-align:center}
@@ -56,7 +57,7 @@ body{font-family:var(--font);background:var(--frost-50);color:#0f172a}
 .section-title{font-size:16px;font-weight:700;color:var(--sky-800);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .section-title .count{font-size:11px;background:var(--frost-200);padding:1px 8px;border-radius:99px;color:var(--frost-500);font-weight:600}
 .census-tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
-.census-tab{font-size:12px;font-weight:600;padding:8px 16px;border-radius:8px;border:1.5px solid var(--frost-200);background:var(--white);cursor:pointer;transition:all .1s;font-family:var(--font)}
+.census-tab{font-size:12px;font-weight:600;padding:8px 16px;border-radius:8px;border:1.5px solid var(--frost-200);background:var(--white);cursor:pointer;transition:all .1s;font-family:'Inter','Noto Sans',sans-serif}
 .census-tab:hover{border-color:var(--sky-300);background:var(--sky-50)}
 .census-tab.active{background:var(--sky-500);color:var(--white);border-color:var(--sky-500)}
 .ward-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:24px}
@@ -124,7 +125,7 @@ const wards = [
   { name:"ICU/HDU", total:8, occupied:7, capacity:88, critical:3, pending:0 },
 ];
 
-export default function CosAdminDashboard() {
+function _CosAdminDashboard() {
   const [tab, setTab] = useState("census");
 
   const getCount = (id: string) => {
@@ -453,5 +454,18 @@ export default function CosAdminDashboard() {
         </main>
       </div>
     </>
+  );
+}
+
+const SUPPORTED_ROLES = [
+  'executive', 'department', 'finance', 'hr', 'ict', 'research',
+  'clinical_leadership',
+] as const;
+
+export default function CosAdminDashboard() {
+  return (
+    <WorkspaceGuard supportedRoles={SUPPORTED_ROLES}>
+      <_CosAdminDashboard />
+    </WorkspaceGuard>
   );
 }

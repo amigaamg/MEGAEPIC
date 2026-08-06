@@ -240,10 +240,12 @@ const refreshWorkspace = async () => {
       }
       return resolvedRole;
     } catch (err) {
-      console.error('Failed to load UserSession via WorkspaceEngine:', err);
-
-      // Fallback to legacy implementation
-      return loadUserSessionLegacy(firebaseUser);
+      console.error('WorkspaceEngine initialization failed:', err);
+      // Do NOT fall back to legacy silently. A failed Workspace Engine
+      // means the workspace is incomplete; the user must re-provision
+      // or the admin must fix the data. Surface the error so it can be
+      // diagnosed and retried.
+      throw err;
     }
   }
 
@@ -274,11 +276,12 @@ const refreshWorkspace = async () => {
         return derivedRole;
       }
 
-      // Fallback: legacy user without AMX-UID / actor not found
-      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-      const userData = userDoc.data();
-      const fetchedRole = userData?.role ?? null;
-      setRole(fetchedRole);
+       // Fallback: legacy user without AMX-UID / actor not found
+       const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+       const userData = userDoc.data();
+       const fetchedRole = userData?.role ?? null;
+       const isFacilityAdmin = fetchedRole === 'facility_administrator' || fetchedRole === 'hospital_admin' || fetchedRole === 'org_admin';
+       setRole(isFacilityAdmin ? 'facility_administrator' : fetchedRole);
 
       const userRegistrationStep = userData?.registrationStep as string | undefined;
       setRegistrationStep(userRegistrationStep || null);
@@ -437,6 +440,9 @@ function getDefaultPermissions(role: string | null): any[] {
       ];
     case 'admin':
     case 'facility_admin':
+    case 'facility_administrator':
+    case 'hospital_admin':
+    case 'org_admin':
       return [
         { resource: 'admin', actions: ['admin'], scope: { type: 'organization' }, deny: false },
         { resource: 'manage_staff', actions: ['create', 'read', 'update', 'delete'], scope: { type: 'organization' }, deny: false },

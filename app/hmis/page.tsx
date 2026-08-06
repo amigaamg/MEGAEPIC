@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { Building2, Users, IdCard, RefreshCw, CheckCircle, Bell, ClipboardList, BarChart3, Wrench, Pill, Microscope, Radio, Building, DollarSign, Calendar, Send, Globe, FileText, Link, WifiOff, Zap, TrendingUp } from "lucide-react";
+import { Building2, Users, IdCard, RefreshCw, CheckCircle, Bell, ClipboardList, BarChart3, Wrench, Pill, Microscope, Radio, Building, DollarSign, Calendar, Send, Globe, FileText, Link, WifiOff, Zap, TrendingUp, Activity } from "lucide-react";
 
 const BOOKS = [
   { icon: <Building2 size={28} />, title: 'Hospital Model', desc: 'Health system hierarchy, departments, wards, rooms, beds, resources', book: 'I', href: '/hmis/hospital', color: '#06B6D4' },
@@ -16,6 +16,7 @@ const BOOKS = [
   { icon: <Microscope size={28} />, title: 'Laboratory Engine', desc: 'Specimen workflow, QC, test profiles, reference ranges', book: 'XI', href: '/hmis/laboratory', color: '#A855F7' },
   { icon: <Radio size={28} />, title: 'Radiology Engine', desc: 'Imaging request→report, PACS study model, structured reporting', book: 'XII', href: '/hmis/radiology', color: '#06B6D4' },
   { icon: <Building size={28} />, title: 'Theatre Engine', desc: 'WHO checklist, operation notes, theatre availability, surgery', book: 'XIII', href: '/hmis/theatre', color: '#EAB308' },
+  { icon: <Activity size={28} />, title: 'EMR Engine', desc: 'Electronic medical records, clinical notes, vitals, diagnoses, treatment plans', book: 'XIV', href: '/hmis/emr', color: '#2F80ED' },
   { icon: <DollarSign size={28} />, title: 'Billing Engine', desc: 'Charge capture, invoices, M-Pesa, insurance claims, split pay', book: 'XV', href: '/hmis/billing', color: '#34D399' },
   { icon: <Calendar size={28} />, title: 'Scheduling', desc: 'Appointments, resource scheduling, shift management, calendar', book: 'XVI', href: '/hmis/scheduling', color: '#0EA5E9' },
   { icon: <Send size={28} />, title: 'Referrals', desc: 'Inter/intra-facility referral workflows with full lifecycle', book: 'XVII', href: '/hmis/referrals', color: '#D946EF' },

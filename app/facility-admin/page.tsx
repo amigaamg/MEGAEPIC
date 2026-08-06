@@ -179,7 +179,7 @@ function FacilityAdminCommandCenter() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Inter', system-ui, sans-serif", color: C.navy }}>
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Inter', 'Noto Sans', system-ui, sans-serif", color: C.navy }}>
       <style>{`.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.menu-toggle{display:none}@media(max-width:820px){.menu-toggle{display:inline-flex}.cmd-sidebar{display:none;position:fixed;width:250px!important;z-index:30}.cmd-main{padding:16px!important}}`}</style>
         <style>{`.cmd-sidebar--open{display:block!important}`}</style>
       <div style={{ height: 60, background: C.card, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 12, padding: '0 24px' }}>

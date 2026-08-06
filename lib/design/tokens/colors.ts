@@ -3,9 +3,9 @@
 
 export const colorTokens = {
   primary: {
-    DEFAULT: '#1E40AF',    // Clinical Blue
-    hover: '#1E3A8A',
-    active: '#1D4ED8',
+    DEFAULT: '#2F80ED',
+    hover: '#2573E6',
+    active: '#1E6AD1',
     surface: '#EFF6FD',
     border: '#BFDBFE',
     text: '#1F2937',
@@ -21,12 +21,12 @@ export const colorTokens = {
     contrast: '#000000',
   },
   accent: {
-    DEFAULT: '#0EA5E9',    // Clinical Teal
-    hover: '#0284C7',
-    active: '#0369A1',
-    surface: '#F0F9FF',
-    border: '#BAE6FD',
-    text: '#0C4A6E',
+    DEFAULT: '#2F80ED',
+    hover: '#2573E6',
+    active: '#1E6AD1',
+    surface: '#EFF6FD',
+    border: '#BFDBFE',
+    text: '#1F2937',
     contrast: '#FFFFFF',
   },
   success: {

@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
+import WorkspaceGuard from "@/components/workspace/WorkspaceGuard";
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd; --sky-300:#7dd3fc;
@@ -20,13 +21,13 @@ const CSS = `
   --shadow:0 1px 3px rgba(0,0,0,.04); --shadow-md:0 4px 16px rgba(0,0,0,.06);
   --shadow-lg:0 12px 40px rgba(0,0,0,.08);
 }
-body{font-family:var(--font);background:var(--frost-50);color:#0f172a}
+body{font-family:'Inter','Noto Sans',sans-serif;background:var(--frost-50);color:#0f172a}
 .cos-layout{display:flex;min-height:100vh}
 .cos-sidebar{width:220px;background:var(--white);border-right:1px solid var(--frost-200);padding:20px 12px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex-shrink:0}
 .cos-sidebar-brand{font-size:20px;font-weight:800;color:var(--sky-700);padding:0 8px 16px;border-bottom:1px solid var(--frost-200);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .cos-sidebar-brand span{background:var(--sky-100);color:var(--sky-600);font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700}
 .sidebar-group{font-size:10px;font-weight:700;color:var(--frost-400);text-transform:uppercase;letter-spacing:.8px;padding:12px 8px 4px}
-.cos-sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:var(--frost-500);cursor:pointer;border:none;background:none;text-align:left;width:100%;font-family:var(--font);transition:all .1s}
+.cos-sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:var(--frost-500);cursor:pointer;border:none;background:none;text-align:left;width:100%;font-family:'Inter','Noto Sans',sans-serif;transition:all .1s}
 .cos-sidebar-item:hover{background:var(--sky-50);color:var(--sky-700)}
 .cos-sidebar-item.active{background:var(--sky-100);color:var(--sky-700);font-weight:700}
 .cos-sidebar-item .icon{font-size:16px;width:20px;text-align:center}
@@ -72,7 +73,7 @@ body{font-family:var(--font);background:var(--frost-50);color:#0f172a}
 .request-status.performed{background:var(--blue-bg);color:var(--blue-text)}
 .request-status.reported{background:var(--green-bg);color:var(--green-text)}
 .request-actions{display:flex;gap:4px}
-.request-btn{font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;border:none;cursor:pointer;font-family:var(--font)}
+.request-btn{font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;border:none;cursor:pointer;font-family:'Inter','Noto Sans',sans-serif}
 .request-btn.primary{background:var(--sky-500);color:var(--white)}
 .request-btn.primary:hover{background:var(--sky-600)}
 .request-btn.outline{background:var(--white);border:1.5px solid var(--frost-200);color:var(--frost-500)}
@@ -85,7 +86,7 @@ body{font-family:var(--font);background:var(--frost-50);color:#0f172a}
 .report-finding{font-size:12px;color:#0f172a;margin-bottom:6px;line-height:1.5}
 .report-meta{font-size:10px;color:var(--frost-400)}
 .report-actions{display:flex;gap:4px;margin-top:8px}
-.report-btn{font-size:10px;font-weight:700;padding:4px 10px;border-radius:5px;border:none;cursor:pointer;font-family:var(--font)}
+.report-btn{font-size:10px;font-weight:700;padding:4px 10px;border-radius:5px;border:none;cursor:pointer;font-family:'Inter','Noto Sans',sans-serif}
 .report-btn.approve{background:var(--green-bg);color:var(--green-text)}
 .report-btn.edit{background:var(--sky-50);color:var(--sky-600);border:1px solid var(--sky-200)}
 .report-btn.verify{background:var(--purple-bg);color:var(--purple-text)}
@@ -160,7 +161,7 @@ const renderRequests = (items: any[], showFindings: boolean = false) => (
   </div>
 );
 
-export default function CosRadiologyDashboard() {
+function _CosRadiologyDashboard() {
   const [tab, setTab] = useState("pending");
   const [activePatient, setActivePatient] = useState<any>(null);
 
@@ -349,5 +350,15 @@ export default function CosRadiologyDashboard() {
         </main>
       </div>
     </>
+  );
+}
+
+const SUPPORTED_ROLES = ['radiology'] as const;
+
+export default function CosRadiologyDashboard() {
+  return (
+    <WorkspaceGuard supportedRoles={SUPPORTED_ROLES}>
+      <_CosRadiologyDashboard />
+    </WorkspaceGuard>
   );
 }

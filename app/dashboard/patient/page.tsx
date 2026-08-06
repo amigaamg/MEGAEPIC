@@ -26,6 +26,7 @@ import PatientRxCenter      from '@/components/PatientRxCenter';
 import DiscoverTab from '@/components/DiscoverTab';
 import PatientReferralPortal from '@/components/PatientReferralPortal';
 import PatientEducationView from '@/components/PatientEducationView';
+import WorkspaceGuard from "@/components/workspace/WorkspaceGuard";
 
 import {
   Home, ClipboardList, Users, MessageCircle, BarChart3, Settings,
@@ -1747,7 +1748,7 @@ function MessagesPanel({ patient, appointments }: { patient: Patient; appointmen
 // ═══════════════════════════════════════════════════════════════════════════
 // MAIN DASHBOARD
 // ═══════════════════════════════════════════════════════════════════════════
-export default function PatientDashboard() {
+function _PatientDashboard() {
   const router = useRouter();
   const [authDone, setAuthDone] = useState(false);
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -3975,5 +3976,15 @@ useEffect(() => { initPatientTheme(); setPatientTheme(getStoredPatientTheme()); 
         </div>
       )}
     </>
+  );
+}
+
+const SUPPORTED_ROLES = ['patient'] as const;
+
+export default function PatientDashboard() {
+  return (
+    <WorkspaceGuard supportedRoles={SUPPORTED_ROLES}>
+      <_PatientDashboard />
+    </WorkspaceGuard>
   );
 }

@@ -81,7 +81,7 @@ export default function Hero() {
             Start Free Trial
           </Link>
           <Link
-            href="/demo"
+            href="/demo-login"
             style={{
               padding: `${spacingTokens[3]} ${spacingTokens[6]}`,
               background: 'rgba(255,255,255,0.1)',

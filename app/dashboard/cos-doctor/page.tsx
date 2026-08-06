@@ -1,8 +1,9 @@
 "use client";
 import { useState, useCallback } from "react";
+import WorkspaceGuard from "@/components/workspace/WorkspaceGuard";
 
 const S = `
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --sky-50:#f0f9ff;--sky-100:#e0f2fe;--sky-200:#bae6fd;--sky-300:#7dd3fc;
@@ -19,7 +20,7 @@ const S = `
   --r:12px;--r-sm:8px;--r-lg:20px;
   --sh:0 1px 3px rgba(0,0,0,.04);--sh-md:0 4px 16px rgba(0,0,0,.06);--sh-lg:0 12px 40px rgba(0,0,0,.08);
 }
-body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter','Noto Sans',sans-serif;background:var(--f-50);color:#0f172a;-webkit-font-smoothing:antialiased}
 @keyframes pulse-live{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,.4)}50%{opacity:.6;box-shadow:0 0 0 6px rgba(52,211,153,0)}}
 @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -33,7 +34,7 @@ body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-s
 .cos-brand-badge{background:var(--sky-100);color:var(--sky-600);font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
 .cos-nav{display:flex;flex-direction:column;gap:1px;padding:0 8px;flex:1}
 .cos-nav-section{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--f-400);padding:12px 10px 4px}
-.cos-nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-sm);font-size:12px;font-weight:600;color:var(--f-500);cursor:pointer;transition:all .1s;border:none;background:none;text-align:left;width:100%;font-family:var(--font)}
+.cos-nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-sm);font-size:12px;font-weight:600;color:var(--f-500);cursor:pointer;transition:all .1s;border:none;background:none;text-align:left;width:100%;font-family:'Inter','Noto Sans',sans-serif}
 .cos-nav-item:hover{background:var(--sky-50);color:var(--sky-700)}
 .cos-nav-item.active{background:var(--sky-100);color:var(--sky-700);font-weight:700}
 .cos-nav-item .icon{font-size:14px;width:18px;text-align:center;opacity:.7}
@@ -71,7 +72,7 @@ body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-s
 .stat-label{font-size:10px;color:var(--f-500);margin-top:2px}
 
 .quick-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.q-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-sm);font-size:12px;font-weight:600;border:1.5px solid var(--f-200);background:var(--white);cursor:pointer;transition:all .15s;font-family:var(--font)}
+.q-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-sm);font-size:12px;font-weight:600;border:1.5px solid var(--f-200);background:var(--white);cursor:pointer;transition:all .15s;font-family:'Inter','Noto Sans',sans-serif}
 .q-btn:hover{border-color:var(--sky-300);background:var(--sky-50);box-shadow:var(--sh)}
 .q-btn.primary{background:var(--sky-500);color:var(--white);border-color:var(--sky-500)}
 .q-btn.primary:hover{background:var(--sky-600)}
@@ -108,7 +109,7 @@ body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-s
 .round-body{padding:16px 20px}
 
 .filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.filter-chip{padding:5px 12px;border-radius:5px;font-size:11px;font-weight:600;background:var(--f-100);color:var(--f-500);cursor:pointer;border:1px solid var(--f-200);transition:all .1s;font-family:var(--font)}
+.filter-chip{padding:5px 12px;border-radius:5px;font-size:11px;font-weight:600;background:var(--f-100);color:var(--f-500);cursor:pointer;border:1px solid var(--f-200);transition:all .1s;font-family:'Inter','Noto Sans',sans-serif}
 .filter-chip:hover{border-color:var(--sky-300);color:var(--sky-600)}
 .filter-chip.active{background:var(--sky-500);color:var(--white);border-color:var(--sky-500)}
 
@@ -132,7 +133,7 @@ body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-s
 .bed-tag.blue{background:var(--blue-bg);color:var(--blue-text)}
 .bed-tag.purple{background:var(--purple-bg);color:var(--purple-text)}
 .bed-actions{display:flex;gap:5px;flex-shrink:0}
-.bed-btn{font-size:10px;font-weight:700;padding:5px 12px;border-radius:7px;border:none;cursor:pointer;font-family:var(--font);transition:all .1s}
+.bed-btn{font-size:10px;font-weight:700;padding:5px 12px;border-radius:7px;border:none;cursor:pointer;font-family:'Inter','Noto Sans',sans-serif;transition:all .1s}
 .bed-btn.primary{background:var(--sky-500);color:var(--white)}
 .bed-btn.primary:hover{background:var(--sky-600)}
 .bed-btn.outline{background:var(--white);border:1.5px solid var(--f-200);color:var(--f-500)}
@@ -153,11 +154,11 @@ body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-s
 .ws-pill.inpatient{background:var(--purple-bg);color:var(--purple-text)}
 .ws-pill.priority{background:var(--red-bg);color:var(--red-text)}
 .ws-pill.stable{background:var(--green-bg);color:var(--green-text)}
-.ws-close{background:none;border:none;font-size:16px;cursor:pointer;color:var(--f-500);padding:3px 7px;border-radius:6px;font-family:var(--font)}
+.ws-close{background:none;border:none;font-size:16px;cursor:pointer;color:var(--f-500);padding:3px 7px;border-radius:6px;font-family:'Inter','Noto Sans',sans-serif}
 .ws-close:hover{background:var(--sky-100);color:var(--sky-700)}
 
 .ws-tabs{display:flex;border-bottom:1px solid var(--f-200);background:var(--f-50);overflow-x:auto;gap:0}
-.ws-tab{padding:9px 12px;font-size:11px;font-weight:600;color:var(--f-500);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;border:none;background:none;font-family:var(--font);flex-shrink:0}
+.ws-tab{padding:9px 12px;font-size:11px;font-weight:600;color:var(--f-500);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;border:none;background:none;font-family:'Inter','Noto Sans',sans-serif;flex-shrink:0}
 .ws-tab:hover{color:var(--sky-600)}
 .ws-tab.active{color:var(--sky-700);border-bottom-color:var(--sky-500);background:var(--white)}
 .ws-tab .tab-icon{margin-right:4px}
@@ -237,7 +238,7 @@ body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-s
 .problem-card .name{font-size:12px;font-weight:600}
 .problem-card .detail{font-size:10px;color:var(--f-500);margin-top:1px}
 .problem-card .actions{display:flex;gap:4px}
-.prob-btn{font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px;border:none;cursor:pointer;transition:all .1s;font-family:var(--font)}
+.prob-btn{font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px;border:none;cursor:pointer;transition:all .1s;font-family:'Inter','Noto Sans',sans-serif}
 .prob-btn.goal{background:var(--sky-50);color:var(--sky-600)}
 .prob-btn.resolve{background:var(--green-bg);color:var(--green-text)}
 .prob-btn.order{background:var(--purple-bg);color:var(--purple-text)}
@@ -291,9 +292,9 @@ body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-s
 .comm-task .status-dot.done{background:var(--green)}
 .comm-task .status-dot.pending{background:var(--amber)}
 .comm-input-row{display:flex;gap:6px;margin-top:8px}
-.comm-input{flex:1;padding:7px 10px;border:1.5px solid var(--f-200);border-radius:var(--r-sm);font-size:11px;font-family:var(--font);outline:none;transition:border-color .15s}
+.comm-input{flex:1;padding:7px 10px;border:1.5px solid var(--f-200);border-radius:var(--r-sm);font-size:11px;font-family:'Inter','Noto Sans',sans-serif;outline:none;transition:border-color .15s}
 .comm-input:focus{border-color:var(--purple)}
-.comm-send{padding:7px 14px;border-radius:var(--r-sm);border:none;background:var(--purple);color:var(--white);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.comm-send{padding:7px 14px;border-radius:var(--r-sm);border:none;background:var(--purple);color:var(--white);font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter','Noto Sans',sans-serif}
 .comm-send:hover{background:var(--purple-t)}
 
 /* ROUND COMPLETE MODAL */
@@ -305,11 +306,11 @@ body{font-family:var(--font);background:var(--f-50);color:#0f172a;-webkit-font-s
 .modal-stat{border:1px solid var(--f-200);border-radius:var(--r-sm);padding:12px;text-align:center}
 .modal-stat .num{font-size:22px;font-weight:800;color:var(--sky-700)}
 .modal-stat .label{font-size:9px;color:var(--f-500);margin-top:2px;text-transform:uppercase;letter-spacing:.3px}
-.modal-btn{display:block;width:100%;padding:12px;border-radius:var(--r-sm);border:none;background:var(--sky-500);color:var(--white);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);text-align:center}
+.modal-btn{display:block;width:100%;padding:12px;border-radius:var(--r-sm);border:none;background:var(--sky-500);color:var(--white);font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter','Noto Sans',sans-serif;text-align:center}
 .modal-btn:hover{background:var(--sky-600)}
 
 .ws-footer{display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--f-200);background:var(--f-50);flex-wrap:wrap}
-.ws-action{font-size:11px;font-weight:700;padding:8px 16px;border-radius:7px;border:none;cursor:pointer;transition:all .1s;font-family:var(--font)}
+.ws-action{font-size:11px;font-weight:700;padding:8px 16px;border-radius:7px;border:none;cursor:pointer;transition:all .1s;font-family:'Inter','Noto Sans',sans-serif}
 .ws-action.primary{background:var(--sky-500);color:var(--white)}
 .ws-action.primary:hover{background:var(--sky-600)}
 .ws-action.outline{background:var(--white);border:1.5px solid var(--f-200);color:var(--f-500)}
@@ -427,7 +428,7 @@ const quickLookData = [
   { label: "Hb Trend", value: "6.8→8.2→9.1", unit: "g/dL", detail: "↑ Improving with transfusion", color: "var(--amber)" },
 ];
 
-export default function CosDoctorDashboard() {
+function _CosDoctorDashboard() {
   const [sidebarTab, setSidebarTab] = useState("wardround");
   const [roundActive, setRoundActive] = useState(false);
   const [completedBeds, setCompletedBeds] = useState<number[]>([]);
@@ -1059,5 +1060,17 @@ export default function CosDoctorDashboard() {
         </div>
       </div>
     </>
+  );
+}
+
+const SUPPORTED_ROLES = [
+  'clinical', 'telemedicine', 'teaching', 'clinical_leadership',
+] as const;
+
+export default function CosDoctorDashboard() {
+  return (
+    <WorkspaceGuard supportedRoles={SUPPORTED_ROLES}>
+      <_CosDoctorDashboard />
+    </WorkspaceGuard>
   );
 }

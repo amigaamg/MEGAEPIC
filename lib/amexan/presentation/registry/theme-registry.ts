@@ -34,7 +34,7 @@ const defaultLight: ThemeTokens = {
   colors: {
     primary: AMEXAN_BLUE,
     secondary: '#FFFFFF',
-    accent: '#0EA5E9',
+    accent: AMEXAN_BLUE,
     background: '#FFFFFF',
     surface: '#F8FAFC',
     text: '#0F172A',
@@ -109,8 +109,8 @@ export const THEMES: Record<ThemeId, ThemeDefinition> = {
   hospital: {
     id: 'hospital', name: 'Hospital', brandName: 'Hospital',
     description: 'Hospital brand palette. Reasoning unchanged.',
-    light: { ...defaultLight, colors: { ...defaultLight.colors, primary: '#1D4ED8', accent: '#0369A1' }, semantics: { ...defaultLight.semantics, info: '#1D4ED8' } },
-    dark: { ...defaultDark, colors: { ...defaultDark.colors, primary: '#93C5FD', accent: '#7DD3FC' }, semantics: { ...defaultDark.semantics, info: '#93C5FD' } },
+    light: { ...defaultLight, colors: { ...defaultLight.colors, primary: AMEXAN_BLUE, accent: AMEXAN_BLUE }, semantics: { ...defaultLight.semantics, info: AMEXAN_BLUE } },
+    dark: { ...defaultDark, colors: { ...defaultDark.colors, primary: '#60A5FA', accent: '#60A5FA' }, semantics: { ...defaultDark.semantics, info: '#60A5FA' } },
     inherits: 'amexan-default',
   },
   university: {
