@@ -108,34 +108,33 @@ function FacilityAdminCommandCenter() {
   const adminId = useRef<string>('');
   adminId.current = (session.identity?.uid as string) || (user?.uid as string) || '';
 
+  // Fast start: derive orgId synchronously from the session so the shell
+  // renders immediately, then load model + settings in parallel (one round-trip
+  // set) instead of two sequential awaits. No infinite spinner: any failure is
+  // surfaced as an inline banner with a retry.
   useEffect(() => {
     const org = activeOrganizationId || (session.currentOrganization?.id as string) || null;
     setOrgId(org);
   }, [activeOrganizationId, session.currentOrganization]);
 
   useEffect(() => {
-    if (!orgId || !adminId.current) return;
+    if (!orgId || !adminId.current || model) return;
+    let cancelled = false;
     (async () => {
       try {
-        const m = await loadFacilityAdminModel(orgId, adminId.current);
+        const [m, s] = await Promise.all([
+          loadFacilityAdminModel(orgId, adminId.current),
+          loadFacilityAdminSettings(orgId),
+        ]);
+        if (cancelled) return;
         setModel(m);
-      } catch (e: any) {
-        setError(e?.message || 'Failed to load facility');
-      }
-    })();
-  }, [orgId]);
-
-  useEffect(() => {
-    if (!orgId) return;
-    (async () => {
-      try {
-        const s = await loadFacilityAdminSettings(orgId);
         setSettings(s);
       } catch (e: any) {
-        setError(e?.message || 'Failed to load settings');
+        if (!cancelled) setError(e?.message || 'Failed to load facility');
       }
     })();
-  }, [orgId]);
+    return () => { cancelled = true; };
+  }, [orgId, model]);
 
   const isAdmin = !loading && user && (session.professional?.primaryCategory
     ? resolveFamily(session.professional.primaryCategory, session.role?.name) === 'executive'
@@ -158,10 +157,9 @@ function FacilityAdminCommandCenter() {
   if (loading) return <Centered><Loader2 className="spin" size={28} color={C.sky} /><span>Loading Command Center…</span></Centered>;
   if (!user || !isAdmin) return <Centered><AlertTriangle size={24} color={C.amber} /><span>Facility Administrator access required.</span></Centered>;
   if (!orgId) return <Centered><AlertTriangle size={24} color={C.amber} /><span>No active organization. Switch to a facility from your workspace.</span></Centered>;
-  if (!model) return <Centered><Loader2 className="spin" size={28} color={C.sky} /><span>Initializing facility…</span></Centered>;
-  if (!settings) return <Centered><Loader2 className="spin" size={28} color={C.sky} /><span>Loading settings…</span></Centered>;
 
   const actorId = adminId.current;
+  const loadingData = !model || !settings;
 
   const saveSettings = async (next: FacilityAdminSettings | ((s: FacilityAdminSettings) => FacilityAdminSettings)) => {
     if (!orgId || !settings) return;
@@ -189,8 +187,8 @@ function FacilityAdminCommandCenter() {
         <Building2 size={18} color={C.sky} />
         <span style={{ fontSize: 15, fontWeight: 800 }}>AMEXAN · Facility Administration</span>
         <span style={{ width: 1, height: 22, background: C.border }} />
-        <span style={{ fontSize: 12, color: C.muted }}>{model.organizationId.toUpperCase()}</span>
-        <span style={{ background: model.status === 'live' ? `${C.green}18` : `${C.amber}18`, color: model.status === 'live' ? C.green : C.amber, padding: '3px 10px', borderRadius: 20, fontSize: 10, fontWeight: 700 }}>● {model.status}</span>
+        <span style={{ fontSize: 12, color: C.muted }}>{model ? model.organizationId.toUpperCase() : orgId}</span>
+        <span style={{ background: model && model.status === 'live' ? `${C.green}18` : `${C.amber}18`, color: model && model.status === 'live' ? C.green : C.amber, padding: '3px 10px', borderRadius: 20, fontSize: 10, fontWeight: 700 }}>● {model ? model.status : 'loading'}</span>
         <div style={{ flex: 1 }} />
         <span style={{ fontSize: 11, color: C.muted }}>Digital COO · Engine No. 23</span>
       </div>
@@ -217,30 +215,47 @@ function FacilityAdminCommandCenter() {
           {saving && <div data-testid="saving" style={{ marginBottom: 12, fontSize: 11, color: C.slate, display: 'flex', alignItems: 'center', gap: 6 }}><Loader2 size={13} className="spin" /> Persisting…</div>}
           {error && <div style={{ ...S.banner, background: `${C.red}12`, color: C.red }}><AlertTriangle size={15} /> {error}</div>}
 
-          {center === 'executive' && <ExecutiveView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateMetrics(m, m.administratorId, patch))} />}
-          {center === 'workforce' && <WorkforceView model={model} actorId={actorId} onCommand={(staffId, action) => mutate(m => FacilityAdministrationEngine.commandWorkforce(m, m.administratorId, { action, staffId, by: m.organizationId }))} />}
-          {center === 'workforce_provisioning' && <WorkforceProvisioning orgId={model.organizationId} structures={settings.structure} onProvisioned={() => setCenter('workforce')} />}
-          {center === 'services' && <ServicesView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'infrastructure' && <InfrastructureView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'quality' && <QualityView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateQuality(m, m.administratorId, patch))} />}
-          {center === 'research' && <ResearchView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateResearch(m, m.administratorId, patch))} />}
-          {center === 'education' && <EducationView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateEducation(m, m.administratorId, patch))} />}
-          {center === 'finance' && <FinanceView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateFinance(m, m.administratorId, patch))} />}
-          {center === 'communication' && <CommunicationView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'protocol' && <ProtocolView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'integration' && <IntegrationView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'migration' && <MigrationView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'marketplace' && <MarketplaceView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'security' && <SecurityView model={model} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'analytics' && <AnalyticsView model={model} />}
-          {center === 'digital_twin' && <DigitalTwinView model={model} />}
-          {center === 'organization' && <OrganizationView model={model} />}
-          {center === 'clinical' && <ClinicalView model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateMetrics(m, m.administratorId, patch))} />}
-          {center === 'workforce_analytics' && <WorkforceAnalyticsView model={model} />}
-          {center === 'intelligence' && <IntelligenceCenter model={model} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateIntelligence(m, m.administratorId, patch))} />}
-          {center === 'hmis' && <HmisCenter model={model} onSave={(fn) => mutate(fn)} />}
-          {center === 'structure' && <StructureCenter entries={settings.structure} onChange={(structure) => saveSettings(s => ({ ...s, structure }))} />}
-          {center === 'settings' && <SettingsCenter settings={settings} onChange={(next) => saveSettings(next)} />}
+          {loadingData ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center', justifyContent: 'center', minHeight: '60vh', color: C.slate, fontSize: 13 }}>
+              <Loader2 className="spin" size={26} color={C.sky} />
+              <span>Initializing facility…</span>
+              {error && (
+                <button
+                  onClick={() => { setError(''); setModel(null); setSettings(null); }}
+                  style={{ marginTop: 4, padding: '8px 16px', borderRadius: 8, border: 'none', background: C.sky, color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}
+                >
+                  Retry
+                </button>
+              )}
+            </div>
+          ) : (
+            <>
+          {center === 'executive' && <ExecutiveView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateMetrics(m, m.administratorId, patch))} />}
+          {center === 'workforce' && <WorkforceView model={model!} actorId={actorId} onCommand={(staffId, action) => mutate(m => FacilityAdministrationEngine.commandWorkforce(m, m.administratorId, { action, staffId, by: m.organizationId }))} />}
+          {center === 'workforce_provisioning' && <WorkforceProvisioning orgId={model!.organizationId} structures={settings!.structure} onProvisioned={() => setCenter('workforce')} />}
+          {center === 'services' && <ServicesView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'infrastructure' && <InfrastructureView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'quality' && <QualityView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateQuality(m, m.administratorId, patch))} />}
+          {center === 'research' && <ResearchView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateResearch(m, m.administratorId, patch))} />}
+          {center === 'education' && <EducationView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateEducation(m, m.administratorId, patch))} />}
+          {center === 'finance' && <FinanceView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateFinance(m, m.administratorId, patch))} />}
+          {center === 'communication' && <CommunicationView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'protocol' && <ProtocolView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'integration' && <IntegrationView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'migration' && <MigrationView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'marketplace' && <MarketplaceView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'security' && <SecurityView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'analytics' && <AnalyticsView model={model!} />}
+          {center === 'digital_twin' && <DigitalTwinView model={model!} />}
+          {center === 'organization' && <OrganizationView model={model!} />}
+          {center === 'clinical' && <ClinicalView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateMetrics(m, m.administratorId, patch))} />}
+          {center === 'workforce_analytics' && <WorkforceAnalyticsView model={model!} />}
+          {center === 'intelligence' && <IntelligenceCenter model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateIntelligence(m, m.administratorId, patch))} />}
+          {center === 'hmis' && <HmisCenter model={model!} onSave={(fn) => mutate(fn)} />}
+          {center === 'structure' && <StructureCenter entries={settings!.structure} onChange={(structure) => saveSettings(s => ({ ...s, structure }))} />}
+          {center === 'settings' && <SettingsCenter settings={settings!} onChange={(next) => saveSettings(next)} />}
+            </>
+          )}
         </main>
       </div>
     </div>

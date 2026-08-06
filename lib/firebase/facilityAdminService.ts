@@ -16,17 +16,44 @@ import { getSeedDepartments } from '@/lib/firebase/seedService';
 
 const FACILITY_ADMIN_DOC = 'facility-admin-model';
 
+// Hard ceiling on any single Firestore read/write so a cold network, a rules
+// denial, or a large query can NEVER leave the Command Center stuck on
+// "Initializing facility…". On timeout we fall through to the fail-safe model.
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(`Firestore call timed out after ${ms}ms`)), ms);
+    p.then((v) => { clearTimeout(t); resolve(v); }).catch((e) => { clearTimeout(t); reject(e); });
+  });
+}
+
 export async function loadFacilityAdminModel(orgId: string, administratorId: string): Promise<FacilityAdminModel> {
+  const base = FacilityAdministrationEngine.create({
+    organizationId: orgId,
+    administratorId: administratorId as unknown as FacilityAdminModel['administratorId'],
+  });
   const ref = doc(db, 'organizations', orgId, FACILITY_ADMIN_DOC, 'current');
-  const snap = await getDoc(ref);
-  if (snap.exists()) {
-    const data = snap.data() as FacilityAdminModel;
-    return { ...data, organizationId: orgId, administratorId: administratorId as unknown as FacilityAdminModel['administratorId'] };
+
+  // 1. Try the persisted model (cached per-org doc — the fast path).
+  try {
+    const snap = await withTimeout(getDoc(ref), 8000);
+    if (snap.exists()) {
+      const data = snap.data() as FacilityAdminModel;
+      return { ...data, organizationId: orgId, administratorId: administratorId as unknown as FacilityAdminModel['administratorId'] };
+    }
+  } catch {
+    // Read failed (rules not deployed, network) — continue to seed path.
   }
 
-  const seeded = await buildSeededModel(orgId, administratorId);
-  await setDoc(ref, seeded);
-  return seeded;
+  // 2. Try to seed from live organizational data (single round, resilient).
+  try {
+    const seeded = await withTimeout(buildSeededModel(orgId, administratorId), 12000);
+    await setDoc(ref, seeded).catch(() => {}); // non-fatal if rules block the write
+    return seeded;
+  } catch {
+    // 3. Fail-safe: never hang. Render the constitutional model (zeros + live
+    //    org id) so the Command Center is usable even if Firestore is blocked.
+    return base;
+  }
 }
 
 export async function saveFacilityAdminModel(model: FacilityAdminModel): Promise<void> {

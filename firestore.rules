@@ -148,6 +148,16 @@ service cloud.firestore {
         allow create: if isOrgMember(orgId);
       }
 
+      // Facility Command Center persistence (facility-admin/page.tsx)
+      match /facility-admin-model/{docId} {
+        allow read: if isOrgMember(orgId);
+        allow write: if isOrgAdmin(orgId);
+      }
+      match /facility-admin-settings/{docId} {
+        allow read: if isOrgMember(orgId);
+        allow write: if isOrgAdmin(orgId);
+      }
+
       // Organization patients
       match /patients/{patientId} {
         allow read: if isOrgMember(orgId);

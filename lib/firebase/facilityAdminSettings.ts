@@ -98,13 +98,27 @@ const DEFAULT_SETTINGS: Omit<FacilityAdminSettings, 'updatedAt' | 'structure'> =
   },
 };
 
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(`Firestore call timed out after ${ms}ms`)), ms);
+    p.then((v) => { clearTimeout(t); resolve(v); }).catch((e) => { clearTimeout(t); reject(e); });
+  });
+}
+
 export async function loadFacilityAdminSettings(orgId: string): Promise<FacilityAdminSettings> {
+  const defaults: FacilityAdminSettings = { ...DEFAULT_SETTINGS, structure: [], updatedAt: Date.now() };
   const ref = doc(db, 'organizations', orgId, 'facility-admin-settings', 'current');
-  const snap = await getDoc(ref);
-  if (snap.exists()) return snap.data() as FacilityAdminSettings;
-  const seeded = { ...DEFAULT_SETTINGS, structure: [], updatedAt: Date.now() };
-  await setDoc(ref, seeded);
-  return seeded;
+
+  // Fast path: persisted settings. On any error/timeout we fall through to defaults.
+  try {
+    const snap = await withTimeout(getDoc(ref), 8000);
+    if (snap.exists()) return snap.data() as FacilityAdminSettings;
+    const seeded = { ...defaults, updatedAt: Date.now() };
+    await setDoc(ref, seeded).catch(() => {}); // non-fatal if rules block the write
+    return seeded;
+  } catch {
+    return defaults;
+  }
 }
 
 export async function saveFacilityAdminSettings(orgId: string, settings: FacilityAdminSettings): Promise<void> {
