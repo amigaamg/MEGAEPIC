@@ -16,6 +16,7 @@ import type {
 } from './types';
 import { getOrganization } from '@/lib/amexan/constitution/firestoreService';
 import { getOrgRole } from '@/lib/amexan/constitution/firestoreService';
+import type { Organization } from '@/lib/amexan/constitution/types';
 
 const MEMBERS_COLLECTION = 'members';
 const MEMBERSHIPS_COLLECTION = 'memberships';
@@ -250,10 +251,10 @@ export const membershipResolver = new MembershipResolver();
  */
 async function readDirectMembership(
   orgId: string,
-  org: { name?: string; type?: string },
+  org: Organization,
   useNew: boolean,
   actorIds: string[],
-  personId: string,
+  personId: AmxUid,
 ): Promise<Membership | null> {
   const { doc, getDoc } = await import('firebase/firestore');
   const ids = useNew ? [personId] : actorIds;
@@ -273,7 +274,7 @@ async function readDirectMembership(
         personId,
         organizationId: orgId,
         organizationName: org.name || '',
-        organizationType: org.type || '',
+        organizationType: org.type,
         roleId: data.roleId || '',
         roleName,
         departmentId: data.departmentId || undefined,
@@ -291,10 +292,10 @@ async function readDirectMembership(
       id: snap.id,
       personId,
       organizationId: orgId,
-      organizationName: org.name || '',
-      organizationType: org.type || '',
-      roleId: data.roleId || '',
-      roleName: data.roleName || data.roleId || 'Member',
+organizationName: org.name || '',
+        organizationType: org.type,
+        roleId: data.roleId || '',
+        roleName: data.roleName || data.roleId || 'Member',
       departmentId: data.departmentIds?.[0] || undefined,
       departmentName: undefined,
       facilityId: undefined,
