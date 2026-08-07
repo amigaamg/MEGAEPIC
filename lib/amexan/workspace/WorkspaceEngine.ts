@@ -282,14 +282,19 @@ export class WorkspaceEngine {
     };
 
     // Phase 2: Resolve Memberships
-    const membershipsResult = await membershipResolver.resolve({ ...context, personId });
+    // Anchor on the ACTIVE organization so membership resolves via a single
+    // direct doc read (no collection-group index). The user doc's
+    // activeOrganizationId (persisted at provisioning, WS-010) is the primary
+    // source; localStorage is a secondary preference.
+    const anchorOrgId = (userData?.activeOrganizationId as string) || getActiveOrganizationId() || context.activeOrganizationId;
+    const membershipsResult = await membershipResolver.resolve({ ...context, personId, activeOrganizationId: anchorOrgId });
     const memberships = membershipsResult.data || [];
 
     // Phase 3: Determine Active Membership
     // `storedOrgId` is the persisted active organization (localStorage, and now
     // Firestore via AuthContext) — the actor's own preference wins over the
     // passed-in context so switching survives page reloads (WS-010).
-    const storedOrgId = getActiveOrganizationId() || undefined;
+    const storedOrgId = anchorOrgId || undefined;
     const activeMembershipResult = await membershipResolver.getActiveMembership({
       ...context,
       personId,
@@ -610,6 +615,13 @@ export class WorkspaceEngine {
 
     // Firestore (async, non-blocking)
     if (this.config.persistence.firestore) {
+      // Diagnostics — surface the exact path of every deeply nested `undefined`
+      // (or non-finite number) that would otherwise make setDoc throw, so a bad
+      // resolver is identifiable in one reload instead of a raw Firestore error.
+      const problems = collectInvalidPaths(snapshot);
+      if (problems.length > 0) {
+        console.warn('[WorkspaceEngine] Persistence carried invalid fields (will be stripped):', problems.slice(0, 25));
+      }
       try {
         const { setDoc } = await import('firebase/firestore');
         await setDoc(doc(db, 'workspaces', workspace.identity.uid), sanitizeForFirestore(snapshot));
@@ -723,3 +735,33 @@ export const workspaceEngine = {
   onEvent: (listener: WorkspaceEventListener) => getWorkspaceEngine().onEvent(listener),
   destroy: () => getWorkspaceEngine().destroy(),
 };
+
+// Diagnostic walker that returns firestore-invalid paths (undefined keys/array
+// elements and non-finite numbers). Used only to make the culprit visible.
+function collectInvalidPaths(root: unknown): string[] {
+  const out: string[] = [];
+  const seen = new WeakSet<object>();
+
+  function walk(v: unknown, path: string): void {
+    if (v === undefined) { out.push(path); return; }
+    if (v === null) return;
+    const t = typeof v;
+    if (t !== 'object') {
+      if (typeof v === 'number' && !Number.isFinite(v)) out.push(`${path} (=${String(v)})`);
+      return;
+    }
+    if (v instanceof Date || v instanceof Blob || v instanceof Uint8Array) return;
+    if (seen.has(v as object)) return;
+    seen.add(v as object);
+    if (Array.isArray(v)) {
+      v.forEach((el, i) => walk(el, `${path}[${i}]`));
+    } else {
+      for (const key of Object.keys(v as object)) {
+        walk((v as Record<string, unknown>)[key], path ? `${path}.${key}` : key);
+      }
+    }
+  }
+
+  walk(root, 'workspace');
+  return out;
+}

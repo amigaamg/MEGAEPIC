@@ -38,16 +38,44 @@ export class MembershipResolver {
       // The actor may be referenced by Firebase UID (legacy members) or by the
       // canonical AMX-UID (constitutional memberships). Query both and de-dupe.
       const actorIds = Array.from(new Set([context.uid, context.personId].filter(Boolean))) as string[];
+      const personId = context.personId || context.uid;
 
+      // ── Primary path (always works): read the ACTIVE organization's membership
+      // directly. `users/{uid}.activeOrganizationId` is the constitutional anchor
+      // (WS-010) already persisted on the user doc, so this read needs no
+      // missing-collection-group index and is single-doc — one round trip.
+      // Both the legacy `members/{firebaseUid}` and constitutional
+      // `memberships/{personId}` shapes are supported.
+      if (context.activeOrganizationId) {
+        const orgDirect = await getOrganization(context.activeOrganizationId).catch(() => null);
+        if (orgDirect) {
+          const fromLegacy = await readDirectMembership(
+            context.activeOrganizationId, orgDirect, false, actorIds, personId,
+          );
+          const fromNew = await readDirectMembership(
+            context.activeOrganizationId, orgDirect, true, actorIds, personId,
+          );
+          const direct = fromNew ?? fromLegacy;
+          if (direct) {
+            memberships.push(direct);
+            seen.add(direct.organizationId);
+          }
+        }
+      }
+
+      // ── Best-effort scans: find any ADDITIONAL organizations the actor belongs
+      // to. These require a collection-group index; if the index is missing the
+      // queries throw and we deliberately IGNORE them — the active membership
+      // above already guarantees the workspaces single-organization resolution.
       // ── Legacy path: organizations/{orgId}/members/{userId} ─────────────────
-      // NOTE: `where` + no `orderBy` so no composite index is required.
       for (const actorId of actorIds) {
         const legacySnap = await getDocs(
           query(
             collectionGroup(db, MEMBERS_COLLECTION),
             where('userId', '==', actorId),
           )
-        );
+        ).catch(() => null);
+        if (!legacySnap) continue;
         for (const doc of legacySnap.docs) {
           const data = doc.data();
           const orgId = doc.ref.parent.parent?.id;
@@ -86,7 +114,8 @@ export class MembershipResolver {
             collectionGroup(db, MEMBERSHIPS_COLLECTION),
             where('personId', '==', actorId),
           )
-        );
+        ).catch(() => null);
+        if (!newSnap) continue;
         for (const doc of newSnap.docs) {
           const data = doc.data();
           const orgId = doc.ref.parent.parent?.id;
@@ -211,3 +240,71 @@ export class MembershipResolver {
 }
 
 export const membershipResolver = new MembershipResolver();
+
+/**
+ * Read a single membership directly from the ACTIVE organization — no
+ * collection-group index required (WS-010 anchor: users/{uid}.activeOrganizationId).
+ * Tries both storage shapes and returns the first that exists:
+ *   legacy  : organizations/{orgId}/members/{firebaseUid}        (field userId)
+ *   new     : organizations/{orgId}/memberships/{personId}       (field personId)
+ */
+async function readDirectMembership(
+  orgId: string,
+  org: { name?: string; type?: string },
+  useNew: boolean,
+  actorIds: string[],
+  personId: string,
+): Promise<Membership | null> {
+  const { doc, getDoc } = await import('firebase/firestore');
+  const ids = useNew ? [personId] : actorIds;
+  for (const id of ids) {
+    const ref = doc(db, 'organizations', orgId, useNew ? MEMBERSHIPS_COLLECTION : MEMBERS_COLLECTION, id);
+    const snap = await getDoc(ref).catch(() => null);
+    if (!snap?.exists()) continue;
+    const data = snap.data();
+    if (useNew) {
+      let roleName = data.roleId || 'Member';
+      if (data.roleId) {
+        const role = await getOrgRole(orgId, data.roleId).catch(() => null);
+        if (role) roleName = role.name;
+      }
+      return {
+        id: snap.id,
+        personId,
+        organizationId: orgId,
+        organizationName: org.name || '',
+        organizationType: org.type || '',
+        roleId: data.roleId || '',
+        roleName,
+        departmentId: data.departmentId || undefined,
+        departmentName: data.departmentName || undefined,
+        facilityId: data.facilityId || undefined,
+        facilityName: data.facilityName || undefined,
+        isPrimary: !!data.isPrimary,
+        status: data.status || 'active',
+        joinedAt: data.joinedAt || 0,
+        updatedAt: data.updatedAt || 0,
+        metadata: data.metadata,
+      };
+    }
+    return {
+      id: snap.id,
+      personId,
+      organizationId: orgId,
+      organizationName: org.name || '',
+      organizationType: org.type || '',
+      roleId: data.roleId || '',
+      roleName: data.roleName || data.roleId || 'Member',
+      departmentId: data.departmentIds?.[0] || undefined,
+      departmentName: undefined,
+      facilityId: undefined,
+      facilityName: undefined,
+      isPrimary: false,
+      status: data.isActive === false ? 'inactive' : 'active',
+      joinedAt: data.joinedAt || 0,
+      updatedAt: 0,
+      metadata: { source: 'members', ...data },
+    };
+  }
+  return null;
+}
