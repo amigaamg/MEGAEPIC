@@ -105,7 +105,11 @@ export function computeTrustScore(identity: PatientIdentity): number {
 
 export function determineVerificationLevel(identity: PatientIdentity): PatientVerificationLevel {
   const v = identity.verification;
-  if (v.facilityVerified && v.governmentVerified && v.emailVerified && v.phoneVerified) return 4;
+  if (v.facilityVerified && v.governmentVerified && v.emailVerified && v.phoneVerified) {
+    // Level 4 (Lifetime Trusted) requires an explicit upgrade (time + no conflicts),
+    // it is never derived from evidence flags alone.
+    return v.level === 4 ? 4 : 3;
+  }
   if (v.facilityVerified && v.governmentVerified) return 3;
   if (v.governmentVerified) return 2;
   if (v.emailVerified || v.phoneVerified) return 1;

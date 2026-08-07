@@ -7,6 +7,7 @@
 
 import { getDocs, query, where, collectionGroup } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { sanitizeForFirestore } from '@/lib/firebase/sanitize';
 import type { AmxUid } from '@/lib/amexan/constitution/types';
 import type {
   Membership,
@@ -177,7 +178,7 @@ export class MembershipResolver {
     const { doc, setDoc } = await import('firebase/firestore');
     const now = Date.now();
     const ref = doc(db, 'organizations', membership.organizationId, MEMBERSHIPS_COLLECTION, membership.personId);
-    await setDoc(ref, { ...membership, joinedAt: now, updatedAt: now });
+    await setDoc(ref, sanitizeForFirestore({ ...membership, joinedAt: now, updatedAt: now }));
     this.invalidateCache(membership.personId);
     return ref.id;
   }

@@ -491,6 +491,16 @@ export default function ConstitutionRegisterPage() {
           verified: false,
           verificationDocuments: [],
         }));
+
+        // WS-CAN: persist the canonical role onto the Actor root so the role→family
+        // resolver and the Workspace Engine agree with the professional identity.
+        // Must NOT stay 'patient' after a profession is chosen.
+        if (firebaseUid) {
+          await updateDoc(doc(db, 'users', firebaseUid), cleanFirestore({
+            role: data.primaryCategory || 'other',
+            updatedAt: serverTimestamp(),
+          })).catch(() => {});
+        }
         await saveProgress('organization_choice');
         setStep('organization_choice');
       } catch (err: any) {

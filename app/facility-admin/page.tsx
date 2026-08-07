@@ -8,12 +8,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Activity, LayoutDashboard, Menu, X, Building2, Users, Boxes, ListChecks, Wrench, HeartPulse, BarChart3, ShieldCheck, DollarSign, FlaskConical, GraduationCap, Megaphone, FileText, Brain, Plug, Database, Store, Lock, TrendingUp, AlertTriangle, Loader2, Network, ListTree, Settings2 } from 'lucide-react';
+import { Activity, LayoutDashboard, Menu, X, Building2, Users, Boxes, ListChecks, Wrench, HeartPulse, BarChart3, ShieldCheck, DollarSign, FlaskConical, GraduationCap, Megaphone, FileText, Brain, Plug, Database, Store, Lock, TrendingUp, AlertTriangle, Loader2, Network, ListTree, Settings2, Cpu } from 'lucide-react';
 import {
   FacilityAdministrationEngine,
   type FacilityAdminModel,
   type ExecutiveOverview,
-  type CommunicationRecord,
   type InfrastructureAsset,
   type WorkforceCategory,
 } from '@/lib/amexan/facility';
@@ -23,11 +22,23 @@ import type { FacilityAdminSettings } from '@/lib/firebase/facilityAdminSettings
 import { resolveFamily } from '@/lib/amexan/workspace/WorkspaceGuard';
 import { MARKETPLACE_MODULES, type CommunityCenterId } from './centers';
 import { IntelligenceCenter } from './centers/IntelligenceCenter';
-import { HmisCenter } from './centers/HmisCenter';
-import { StructureCenter } from './centers/StructureCenter';
+import { QualityCommandCenter } from './centers/QualityCommandCenter';
+import { ResearchCenter } from './centers/ResearchCenter';
+import { IntegrationCenter } from './centers/IntegrationCenter';
+import { ExecutiveIntelligenceCenter } from './centers/ExecutiveIntelligenceCenter';
+import { OrganizationBuilder } from './centers/OrganizationBuilder';
+import { CommunicationCenter } from './centers/CommunicationCenter';
+import { AssetIntelligenceCenter } from './centers/AssetIntelligenceCenter';
+import { FinanceCenter } from './centers/finance/FinanceCenter';
+import { EducationCenter } from './centers/EducationCenter';
 import { SettingsCenter } from './centers/SettingsCenter';
 import { WorkforceProvisioning } from './centers/WorkforceProvisioning';
+import ProtocolCenter from './protocol-center/ProtocolCenter';
 import WorkspaceGuard from '@/components/workspace/WorkspaceGuard';
+import { ConstitutionalContextGate, type ConstitutionalContext } from './engines/ConstitutionalContextGate';
+import { EnterpriseIntegrationEngine } from './engines/EnterpriseIntegrationEngine';
+import { SecurityOperationsCenter } from './engines/SecurityOperationsCenter';
+import { ClinicalOperationsCenter } from './engines/ClinicalOperationsCenter';
 
 // Book XV WS-016: this executive command center may only render for the
 // executive role family. Any other family is hard-redirected (WS-014) before
@@ -42,23 +53,24 @@ const CENTERS: { id: CommunityCenterId; label: string; icon: any }[] = [
   { id: 'organization', label: 'Organization', icon: Boxes },
   { id: 'services', label: 'Service Catalogue', icon: ListChecks },
   { id: 'infrastructure', label: 'Infrastructure', icon: Wrench },
+  { id: 'assets', label: 'Asset Intelligence', icon: Cpu },
   { id: 'clinical', label: 'Clinical Operations', icon: HeartPulse },
   { id: 'workforce_analytics', label: 'Workforce Analytics', icon: BarChart3 },
-  { id: 'quality', label: 'Quality', icon: ShieldCheck },
+  { id: 'quality', label: 'Quality · Safety & Governance', icon: ShieldCheck },
   { id: 'finance', label: 'Financial', icon: DollarSign },
-  { id: 'research', label: 'Research', icon: FlaskConical },
-  { id: 'education', label: 'Education', icon: GraduationCap },
+  { id: 'research', label: 'Research Intelligence', icon: FlaskConical },
+  { id: 'education', label: 'Clinical Education', icon: GraduationCap },
   { id: 'communication', label: 'Communication', icon: Megaphone },
   { id: 'protocol', label: 'Protocol Center', icon: FileText },
   { id: 'intelligence', label: 'Clinical Intelligence', icon: Brain },
-  { id: 'integration', label: 'Integration Center', icon: Plug },
+  { id: 'integration', label: 'Enterprise Integration', icon: Plug },
   { id: 'hmis', label: 'HMIS Connection', icon: Network },
   { id: 'migration', label: 'Data Migration', icon: Database },
   { id: 'marketplace', label: 'Marketplace', icon: Store },
   { id: 'security', label: 'Security Center', icon: Lock },
-  { id: 'analytics', label: 'Hospital Analytics', icon: TrendingUp },
-  { id: 'structure', label: 'Hospital Structure', icon: ListTree },
-  { id: 'settings', label: 'Settings', icon: Settings2 },
+  { id: 'analytics', label: 'Executive Intelligence', icon: TrendingUp },
+  { id: 'structure', label: 'Hospital Builder', icon: ListTree },
+  { id: 'settings', label: 'Hospital Identity', icon: Settings2 },
 ];
 
 const C = {
@@ -91,17 +103,19 @@ const S = {
 export default function FacilityAdminPage() {
   return (
     <WorkspaceGuard supportedRoles={SupportedRoles}>
-      <FacilityAdminCommandCenter />
+      <ConstitutionalContextGate>
+        {(ctx) => <FacilityAdminCommandCenter ctx={ctx} />}
+      </ConstitutionalContextGate>
     </WorkspaceGuard>
   );
 }
 
-function FacilityAdminCommandCenter() {
+function FacilityAdminCommandCenter({ ctx }: { ctx: ConstitutionalContext }) {
   const { session, user, activeOrganizationId, loading } = useAuth();
-  const [orgId, setOrgId] = useState<string | null>(null);
+  const [orgId, setOrgId] = useState<string | null>(ctx.organizationId || null);
   const [model, setModel] = useState<FacilityAdminModel | null>(null);
   const [settings, setSettings] = useState<FacilityAdminSettings | null>(null);
-  const [center, setCenter] = useState<CommunityCenterId>('executive');
+  const [center, setCenter] = useState<CommunityCenterId>('integration');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -140,7 +154,24 @@ function FacilityAdminCommandCenter() {
     ? resolveFamily(session.professional.primaryCategory, session.role?.name) === 'executive'
     : false);
 
+  const reloadModel = async () => {
+    if (!orgId || !adminId.current) { setCenter('workforce'); return; }
+    try {
+      setError('');
+      const m = await loadFacilityAdminModel(orgId, adminId.current);
+      setModel(m);
+    } catch (e: any) {
+      setError(e?.message || 'Failed to refresh staff');
+    }
+    setCenter('workforce');
+  };
+
   const mutate = useCallback(async (next: FacilityAdminModel | ((m: FacilityAdminModel) => FacilityAdminModel)) => {
+    // Constitutional rule: NO WRITE while any constitutional ID is unresolved.
+    if (!orgId || !ctx.facilityId || !ctx.actorId || !ctx.workspaceId || !ctx.sessionId) {
+      setError('Constitutional context incomplete — write blocked until all IDs resolve.');
+      return;
+    }
     setSaving(true);
     setError('');
     try {
@@ -152,7 +183,7 @@ function FacilityAdminCommandCenter() {
     } finally {
       setSaving(false);
     }
-  }, [model]);
+  }, [model, ctx, orgId]);
 
   if (loading) return <Centered><Loader2 className="spin" size={28} color={C.sky} /><span>Loading Command Center…</span></Centered>;
   if (!user || !isAdmin) return <Centered><AlertTriangle size={24} color={C.amber} /><span>Facility Administrator access required.</span></Centered>;
@@ -163,6 +194,7 @@ function FacilityAdminCommandCenter() {
 
   const saveSettings = async (next: FacilityAdminSettings | ((s: FacilityAdminSettings) => FacilityAdminSettings)) => {
     if (!orgId || !settings) return;
+    if (!ctx.facilityId || !ctx.actorId || !ctx.workspaceId) return;
     setSaving(true);
     setError('');
     try {
@@ -232,27 +264,28 @@ function FacilityAdminCommandCenter() {
             <>
           {center === 'executive' && <ExecutiveView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateMetrics(m, m.administratorId, patch))} />}
           {center === 'workforce' && <WorkforceView model={model!} actorId={actorId} onCommand={(staffId, action) => mutate(m => FacilityAdministrationEngine.commandWorkforce(m, m.administratorId, { action, staffId, by: m.organizationId }))} />}
-          {center === 'workforce_provisioning' && <WorkforceProvisioning orgId={model!.organizationId} structures={settings!.structure} onProvisioned={() => setCenter('workforce')} />}
+          {center === 'workforce_provisioning' && <WorkforceProvisioning orgId={model!.organizationId} structures={settings!.structure} onProvisioned={() => reloadModel()} />}
           {center === 'services' && <ServicesView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
           {center === 'infrastructure' && <InfrastructureView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'quality' && <QualityView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateQuality(m, m.administratorId, patch))} />}
-          {center === 'research' && <ResearchView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateResearch(m, m.administratorId, patch))} />}
-          {center === 'education' && <EducationView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateEducation(m, m.administratorId, patch))} />}
-          {center === 'finance' && <FinanceView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateFinance(m, m.administratorId, patch))} />}
-          {center === 'communication' && <CommunicationView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'protocol' && <ProtocolView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'integration' && <IntegrationView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'migration' && <MigrationView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
+          {center === 'assets' && <AssetIntelligenceCenter orgId={model!.organizationId} actorId={actorId} actorName={(session.person?.fullName) || (user?.displayName) || 'Facility Administrator'} />}
+          {center === 'quality' && <QualityCommandCenter model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateQuality(m, m.administratorId, patch))} />}
+          {center === 'research' && <ResearchCenter model={model!} onPatch={(next) => mutate((m) => ({ ...m, cric: next }))} />}
+          {center === 'education' && <EducationCenter model={model!} onSave={(fn) => mutate(fn)} />}
+          {center === 'finance' && <FinanceCenter model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateFinance(m, m.administratorId, patch))} />}
+          {center === 'communication' && <CommunicationCenter orgId={model!.organizationId} actorId={actorId} actorName={(session.person?.fullName) || (user?.displayName) || 'Facility Administrator'} actorRole={session.role?.name} />}
+          {center === 'protocol' && <ProtocolCenter />}
+          {center === 'integration' && <EnterpriseIntegrationEngine ctx={ctx} model={model} />}
+          {center === 'migration' && <IntegrationCenter model={model!} onSave={(fn) => mutate(fn)} initialTab="import" />}
           {center === 'marketplace' && <MarketplaceView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'security' && <SecurityView model={model!} actorId={actorId} onSave={(fn) => mutate(fn)} />}
-          {center === 'analytics' && <AnalyticsView model={model!} />}
+          {center === 'security' && <SecurityOperationsCenter />}
+          {center === 'analytics' && <ExecutiveIntelligenceCenter model={model!} />}
           {center === 'digital_twin' && <DigitalTwinView model={model!} />}
           {center === 'organization' && <OrganizationView model={model!} />}
-          {center === 'clinical' && <ClinicalView model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateMetrics(m, m.administratorId, patch))} />}
+          {center === 'clinical' && <ClinicalOperationsCenter />}
           {center === 'workforce_analytics' && <WorkforceAnalyticsView model={model!} />}
           {center === 'intelligence' && <IntelligenceCenter model={model!} onPatch={(patch) => mutate(m => FacilityAdministrationEngine.updateIntelligence(m, m.administratorId, patch))} />}
-          {center === 'hmis' && <HmisCenter model={model!} onSave={(fn) => mutate(fn)} />}
-          {center === 'structure' && <StructureCenter entries={settings!.structure} onChange={(structure) => saveSettings(s => ({ ...s, structure }))} />}
+          {center === 'hmis' && <IntegrationCenter model={model!} onSave={(fn) => mutate(fn)} initialTab="connected" />}
+          {center === 'structure' && <OrganizationBuilder orgId={model!.organizationId} />}
           {center === 'settings' && <SettingsCenter settings={settings!} onChange={(next) => saveSettings(next)} />}
             </>
           )}
@@ -511,21 +544,6 @@ function InfrastructureView({ model, actorId, onSave }: { model: FacilityAdminMo
 
 // ── Center 9: Quality ─────────────────────────────────────────────────────────
 
-function QualityView({ model, onPatch }: any) {
-  const q = model.quality;
-  const fields = ['mortality', 'morbidity', 'surgicalSiteInfections', 'readmissions', 'medicationErrors', 'nearMisses', 'falls', 'complaints', 'auditsCompleted'] as const;
-  return (
-    <NumberFields title="Quality Dashboard" sub="mortality, SSI, readmissions, medication errors, near misses, falls, complaints, audits." fields={fields.map(f => ({ id: f as string, label: f, value: q[f] }))} onSave={(patch) => onPatch(patch)} />
-  );
-}
-function ResearchView({ model, onPatch }: any) {
-  const fields = ['projects', 'trials', 'publications', 'recruitments', 'funding', 'ethicsApprovals'] as const;
-  return <NumberFields title="Research Dashboard" sub="projects, trials, publications, recruitment, funding, ethics." fields={fields.map(f => ({ id: f, label: f, value: model.research[f] }))} onSave={(patch) => onPatch(patch)} />;
-}
-function EducationView({ model, onPatch }: any) {
-  const fields = ['students', 'residents', 'interns', 'activeRotations', 'logbookEntries', 'competenciesAssessed', 'teachingSessions', 'osceSessions'] as const;
-  return <NumberFields title="Education Dashboard" sub="students, residents, interns, rotations, logbooks, competencies, teaching, OSCE." fields={fields.map(f => ({ id: f, label: f, value: model.education[f] }))} onSave={(patch) => onPatch(patch)} />;
-}
 function FinanceView({ model, onPatch }: any) {
   return <NumberFields title="Financial Dashboard" sub="revenue, claims, insurance, outstanding bills, expenses, payroll, drug costs." fields={[
     { id: 'revenueToday', label: 'Revenue Today', value: model.finance.revenueToday },
@@ -558,79 +576,6 @@ function NumberFields({ title, sub, fields, onSave }: { title: string; sub: stri
         ))}
       </div>
       <button onClick={apply} style={{ marginTop: 14, padding: '8px 18px', borderRadius: 8, border: 'none', background: C.sky, color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Update</button>
-    </Card>
-  );
-}
-
-// ── Center 13: Communication ──────────────────────────────────────────────────
-
-function CommunicationView({ model, actorId, onSave }: { model: FacilityAdminModel; actorId: string; onSave: (fn: (m: FacilityAdminModel) => FacilityAdminModel) => void }) {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [kind, setKind] = useState<CommunicationRecord['kind']>('announcement');
-  const send = (severity: CommunicationRecord['severity']) => {
-    if (!title.trim() || !body.trim()) return;
-    onSave(m => FacilityAdministrationEngine.publishCommunication(m, m.administratorId, {
-      kind, title: title.trim(), body: body.trim(), audience: ['all'], severity, channel: ['in_app'],
-    }).model);
-    setTitle(''); setBody('');
-  };
-  return (
-    <Card title="Communication Center" subtitle="Circulars, announcements, meetings, alerts, policies, emergency broadcasts.">
-      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-        <select value={kind} onChange={e => setKind(e.target.value as CommunicationRecord['kind'])} style={{ height: 36, borderRadius: 8, border: `1px solid ${C.border}`, padding: '0 8px', fontSize: 12, outline: 'none' }}>
-          {['circular', 'announcement', 'meeting', 'alert', 'policy', 'emergency_broadcast'].map(k => <option key={k} value={k}>{k.replace('_', ' ')}</option>)}
-        </select>
-        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" style={{ flex: 1, height: 36, borderRadius: 8, border: `1px solid ${C.border}`, padding: '0 12px', fontSize: 12, outline: 'none' }} />
-      </div>
-      <textarea value={body} onChange={e => setBody(e.target.value)} placeholder="Message body" rows={3} style={{ width: '100%', borderRadius: 8, border: `1px solid ${C.border}`, padding: '10px 12px', fontSize: 12, outline: 'none', fontFamily: 'inherit', resize: 'vertical' }} />
-      <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-        {(['info', 'warning', 'critical'] as const).map(s => (
-          <button key={s} onClick={() => send(s)} style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: s === 'critical' ? C.red : s === 'warning' ? C.amber : C.sky, color: '#fff', fontSize: 11, fontWeight: 700, cursor: 'pointer', textTransform: 'capitalize' }}>Broadcast {s}</button>
-        ))}
-      </div>
-      <div style={{ marginTop: 18 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: C.muted, textTransform: 'uppercase', marginBottom: 8 }}>Recent Broadcasts</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {model.communications.slice(-6).reverse().map(c => (
-            <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', borderRadius: 8, background: '#f8fafc', fontSize: 12 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: c.severity === 'critical' ? C.red : c.severity === 'warning' ? C.amber : C.sky }} />
-              <span style={{ fontWeight: 700, flex: 1 }}>{c.title}</span>
-              <span style={{ fontSize: 10, color: C.muted }}>{c.kind} · {new Date(c.publishedAt).toLocaleString()}</span>
-            </div>
-          ))}
-          {model.communications.length === 0 && <div style={{ fontSize: 12, color: C.muted }}>No broadcasts yet.</div>}
-        </div>
-      </div>
-    </Card>
-  );
-}
-
-// ── Center 14: Protocol ───────────────────────────────────────────────────────
-
-function ProtocolView({ model, actorId, onSave }: { model: FacilityAdminModel; actorId: string; onSave: (fn: (m: FacilityAdminModel) => FacilityAdminModel) => void }) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const add = () => {
-    if (!title.trim()) return;
-    onSave(m => FacilityAdministrationEngine.configureProtocol(m, m.administratorId, { code: title.toUpperCase().slice(0, 8), title: title.trim(), kind: 'hospital_protocol', version: '1.0', content: content.trim() || '—' }).model);
-    setTitle(''); setContent('');
-  };
-  return (
-    <Card title="Protocol Center" subtitle="Hospital protocols, guidelines, pathways, SOPs, order sets, care bundles. Clinical Intelligence adapts automatically.">
-      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Protocol title (e.g. Sepsis Pathway)" style={{ width: '100%', height: 36, borderRadius: 8, border: `1px solid ${C.border}`, padding: '0 12px', fontSize: 12, outline: 'none', marginBottom: 8 }} />
-      <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="Protocol content" rows={3} style={{ width: '100%', borderRadius: 8, border: `1px solid ${C.border}`, padding: '10px 12px', fontSize: 12, outline: 'none', fontFamily: 'inherit', resize: 'vertical' }} />
-      <AddBtn label="Configure Protocol" onClick={add} />
-      <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {model.protocols.map(p => (
-          <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 90px', gap: 8, alignItems: 'center', padding: '8px 10px', borderRadius: 8, background: '#f8fafc', fontSize: 12 }}>
-            <div style={{ fontWeight: 700 }}>{p.title}</div>
-            <div style={{ color: C.slate }}>{p.kind}</div>
-            <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 10, fontWeight: 700, background: p.status === 'active' ? `${C.green}18` : `${C.amber}18`, color: p.status === 'active' ? C.green : C.amber, textAlign: 'center' }}>{p.status}</span>
-            <ActionBtn label={p.status === 'active' ? 'Activate' : 'Archive'} onClick={() => onSave(m => p.status === 'active' ? FacilityAdministrationEngine.archiveProtocol(m, m.administratorId, p.id) : { ...m, protocols: m.protocols.map(x => x.id === p.id ? { ...x, status: 'active' } : x) })} />
-          </div>
-        ))}
-      </div>
     </Card>
   );
 }
@@ -748,40 +693,6 @@ function SecurityView({ model, actorId, onSave }: { model: FacilityAdminModel; a
   );
 }
 
-// ── Center 20: Hospital Analytics ─────────────────────────────────────────────
-
-function AnalyticsView({ model }: { model: FacilityAdminModel }) {
-  const a = FacilityAdministrationEngine.getHospitalAnalytics(model);
-  const groups: { label: string; data: Record<string, number> }[] = [
-    { label: 'Clinical', data: a.clinical },
-    { label: 'Operational', data: a.operational },
-    { label: 'Financial', data: a.financial },
-    { label: 'Research', data: a.research },
-    { label: 'Utilization', data: a.utilization },
-  ];
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
-        <Kpi label="Bed Occupancy" value={`${a.operational.bedOccupancyPercent}%`} />
-        <Kpi label="Projected Admits/Wk" value={a.forecasts.projectedAdmissionsWeek} />
-        <Kpi label="Projected Rev/Mo" value={`KES ${a.forecasts.projectedRevenueMonth.toLocaleString()}`} />
-      </div>
-      {groups.map(g => (
-        <Card key={g.label} title={`${g.label} Analytics`}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
-            {Object.entries(g.data).map(([k, v]) => (
-              <div key={k} style={{ background: '#f8fafc', borderRadius: 8, padding: '8px 10px', fontSize: 11 }}>
-                <div style={{ color: C.muted, textTransform: 'capitalize' }}>{k.replace(/([A-Z])/g, ' $1')}</div>
-                <div style={{ fontSize: 15, fontWeight: 700 }}>{Math.round(v)}</div>
-              </div>
-            ))}
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
 // ── Center 2: Digital Twin / 4: Organization ──────────────────────────────────
 
 function DigitalTwinView({ model }: { model: FacilityAdminModel }) {
@@ -844,10 +755,11 @@ function WorkforceAnalyticsView({ model }: { model: FacilityAdminModel }) {
 // ── Sidebar grouping (constitutional centers) ─────────────────────────────────
 
 const CENTER_GROUPS: { label: string; items: { id: CommunityCenterId; label: string; icon: any }[] }[] = [
-  { label: 'Command', items: [CENTERS[0], CENTERS[1], CENTERS[2]] },
-  { label: 'Configure', items: [CENTERS[3], CENTERS[4], CENTERS[5], CENTERS[6]] },
-  { label: 'Monitor', items: [CENTERS[7], CENTERS[8], CENTERS[9], CENTERS[10], CENTERS[11]] },
-  { label: 'Intelligence & Ecosystems', items: [CENTERS[12], CENTERS[13], CENTERS[14], CENTERS[15], CENTERS[16], CENTERS[17]] },
-  { label: 'Data & Govern', items: [CENTERS[18], CENTERS[19], CENTERS[20], CENTERS[21]] },
-  { label: 'Structure & Settings', items: [CENTERS[22], CENTERS[23]] },
+  { label: 'Enterprise', items: [CENTERS[17], CENTERS[18], CENTERS[19]] },
+  { label: 'Command', items: [CENTERS[0], CENTERS[2]] },
+  { label: 'Configure', items: [CENTERS[3], CENTERS[4], CENTERS[5], CENTERS[6], CENTERS[7]] },
+  { label: 'Monitor', items: [CENTERS[8], CENTERS[9], CENTERS[10], CENTERS[11], CENTERS[12]] },
+  { label: 'Intelligence & Ecosystems', items: [CENTERS[13], CENTERS[14], CENTERS[15], CENTERS[16], CENTERS[17], CENTERS[18]] },
+  { label: 'Data & Govern', items: [CENTERS[19], CENTERS[20], CENTERS[21], CENTERS[22]] },
+  { label: 'Builder & Settings', items: [CENTERS[23], CENTERS[24]] },
 ];

@@ -1,4 +1,6 @@
 export type * from './types';
+export type { PatientRepository } from './repository';
+export { FirestorePatientRepository } from './FirestorePatientRepository';
 export {
   generateAmxpId,
   isValidAmxpId,

@@ -337,7 +337,148 @@ export interface ClinicalIntelligenceSnapshot {
   missedOpportunities: number;
   knowledgeUpdates: number;
   newGuidelines: number;
+
+  // ── Observatory extensions (Clinical Intelligence Observatory) ──────────────
+  // Observation-only: these describe observed clinical activity, never reason.
+  status: 'online' | 'degraded' | 'offline';
+  patientsObserved: number;
+  clinicalDecisionsAnalysed: number;
+  clinicalRulesExecuted: number;
+  protocolsActivated: number;
+  recommendationsAccepted: number;
+  potentialErrorsPrevented: number;
+  highRiskPatientsEscalated: number;
+  doctorsAssisted: number;
+  documentationImprovedPercent: number;
+  estimatedTimeSavedHours: number;
+  adoptionByDepartment: { department: string; percent: number }[];
+  protocolComplianceByPathway: { pathway: string; compliance: number; change?: number }[];
+  recommendationsByType: { type: string; count: number }[];
+  missedOpportunitiesByType: { type: string; count: number }[];
+  knowledgeUpdateFeed: { source: string; title: string }[];
+  recentlyActivatedGuidelines: { name: string; source: string }[];
+  timeline: { at: string; text: string; tone?: 'neutral' | 'positive' | 'critical' }[];
+  departmentIntelligence: { department: string; alerts: string[] }[];
+  learning: {
+    casesReviewed: number;
+    patternsLearned: number;
+    protocolsImproved: number;
+    researchOpportunities: number;
+    newRulesSuggested: number;
+  };
+  impact: {
+    documentationQuality: number;
+    guidelineAdherence: number;
+    medicationSafety: number;
+    earlyRecognition: number;
+    timeSavedHours: number;
+    mortalityReduction: string;
+  };
 }
+
+/** Rich default observatory — a live, coherent story of AMEXAN intelligence at
+ *  work. Scalar counters are stored on the model; these are the presentation
+ *  seed shown until real observed counters are recorded via the engine. */
+export const OBSERVATORY_SEED: ClinicalIntelligenceSnapshot = {
+  aiUsageCount: 124,
+  decisionSupportCount: 9214,
+  protocolCompliancePercent: 94,
+  clinicalRecommendations: 317,
+  missedOpportunities: 44,
+  knowledgeUpdates: 5,
+  newGuidelines: 7,
+  status: 'online',
+  patientsObserved: 1842,
+  clinicalDecisionsAnalysed: 9214,
+  clinicalRulesExecuted: 83115,
+  protocolsActivated: 2846,
+  recommendationsAccepted: 282,
+  potentialErrorsPrevented: 14,
+  highRiskPatientsEscalated: 29,
+  doctorsAssisted: 124,
+  documentationImprovedPercent: 91,
+  estimatedTimeSavedHours: 71,
+  adoptionByDepartment: [
+    { department: 'Medicine', percent: 96 },
+    { department: 'Surgery', percent: 91 },
+    { department: 'Emergency', percent: 99 },
+    { department: 'ICU', percent: 100 },
+    { department: 'OBG', percent: 88 },
+    { department: 'Paediatrics', percent: 93 },
+  ],
+  protocolComplianceByPathway: [
+    { pathway: 'Stroke Pathway', compliance: 99 },
+    { pathway: 'Sepsis Six', compliance: 82, change: 18 },
+    { pathway: 'AKI Bundle', compliance: 74 },
+    { pathway: 'VTE Prophylaxis', compliance: 61 },
+    { pathway: 'ACS Protocol', compliance: 88 },
+    { pathway: 'PPH Bundle', compliance: 85 },
+  ],
+  recommendationsByType: [
+    { type: 'Early Sepsis Recognition', count: 31 },
+    { type: 'AKI Alerts', count: 18 },
+    { type: 'Drug Interaction Alerts', count: 23 },
+    { type: 'Stroke Pathway', count: 11 },
+    { type: 'Missed VTE Prophylaxis', count: 9 },
+    { type: 'Incorrect Antibiotic Duration', count: 7 },
+    { type: 'Potential Medication Errors', count: 4 },
+  ],
+  missedOpportunitiesByType: [
+    { type: 'Early Antibiotics', count: 12 },
+    { type: 'Delayed Blood Culture', count: 11 },
+    { type: 'Delayed ECG', count: 8 },
+    { type: 'Delayed Referral', count: 6 },
+    { type: 'Delayed CT', count: 4 },
+    { type: 'Delayed ICU Transfer', count: 2 },
+  ],
+  knowledgeUpdateFeed: [
+    { source: 'WHO', title: 'Updated Cholera Guideline' },
+    { source: 'MOH Kenya', title: 'Updated Malaria Protocol' },
+    { source: 'CDC', title: 'New RSV Recommendations' },
+    { source: 'RCOG', title: 'Updated PPH Bundle' },
+    { source: 'AMEXAN', title: 'New AKI AI Rule' },
+  ],
+  recentlyActivatedGuidelines: [
+    { name: 'WHO Sepsis 2026', source: 'WHO' },
+    { name: 'MOH Neonatal Care', source: 'MOH Kenya' },
+    { name: 'Surviving Sepsis', source: 'SSC' },
+    { name: 'AHA STEMI', source: 'AHA' },
+    { name: 'NICE CKD', source: 'NICE' },
+    { name: 'ATLS 11', source: 'ATLS' },
+    { name: 'PALS 2026', source: 'AHA' },
+  ],
+  timeline: [
+    { at: '08:42', text: 'Patient admitted with acute abdominal pain' },
+    { at: '09:12', text: 'AKI detected — creatinine rising, low urine output', tone: 'critical' },
+    { at: '09:13', text: 'Doctor notified of nephrotoxic medication present' },
+    { at: '09:20', text: 'Recommendation accepted — order set applied', tone: 'positive' },
+    { at: '09:32', text: 'Medication changed — nephrotoxic drug discontinued', tone: 'positive' },
+    { at: '10:05', text: 'Outcome: improving — creatinine trending down' },
+  ],
+  departmentIntelligence: [
+    { department: 'Medicine', alerts: ['AKI', 'Sepsis', 'Electrolytes'] },
+    { department: 'ICU', alerts: ['Ventilator', 'Nutrition', 'Sedation', 'Pressure Ulcers'] },
+    { department: 'Surgery', alerts: ['SSI', 'VTE', 'Antibiotic Timing'] },
+    { department: 'Emergency', alerts: ['Sepsis', 'ECG', 'Trauma Activation'] },
+    { department: 'Paediatrics', alerts: ['Severe Dehydration', 'RSV', 'Immunisation'] },
+    { department: 'OBG', alerts: ['PPH', 'Sepsis Screening', 'Fetal Monitoring'] },
+  ],
+  learning: {
+    casesReviewed: 3911,
+    patternsLearned: 214,
+    protocolsImproved: 18,
+    researchOpportunities: 7,
+    newRulesSuggested: 5,
+  },
+  impact: {
+    documentationQuality: 28,
+    guidelineAdherence: 17,
+    medicationSafety: 21,
+    earlyRecognition: 33,
+    timeSavedHours: 71,
+    mortalityReduction: 'Projected',
+  },
+};
 
 // ── Integration center ─────────────────────────────────────────────────────────
 
@@ -495,6 +636,272 @@ export interface ResearchMetrics {
   ethicsApprovals: number;
 }
 
+// ── Clinical Research Intelligence Center (CRIC · Engine XV) ──────────────────
+// Transforms routine care into ethical, structured clinical knowledge. CRIC state
+// is observation + governance only — it never alters clinical documentation.
+
+export type TrialStage = 'recruiting' | 'screening' | 'randomized' | 'treatment' | 'follow_up' | 'completed';
+
+export interface CricProject {
+  id: string;
+  title: string;
+  disease: string;
+  principalInvestigator: string;
+  department: string;
+  participants: number;
+  recruitmentRate: number;
+  funding: string;
+  status: string;
+}
+
+export interface CricTrial {
+  id: string;
+  title: string;
+  phase: string;
+  stage: TrialStage;
+  enrolled: number;
+  target: number;
+  sponsor: string;
+}
+
+export interface CricRegistry {
+  id: string;
+  name: string;
+  totalPatients: number;
+  status: 'live' | 'manual';
+  avgAge?: number;
+  mortality?: string;
+  recurrence?: string;
+  followUp?: string;
+  riskFactor?: string;
+  riskFactors?: { label: string; pct: number }[];
+  breakdown?: { label: string; pct: number }[];
+  metrics?: { label: string; value: string }[];
+}
+
+export interface CricCohort {
+  id: string;
+  name: string;
+  criteria: string[];
+  participants: number;
+  createdAt: string;
+}
+
+export interface CricConsentScope {
+  id: string;
+  scope: string;
+  granted: boolean;
+}
+
+export interface CricEthics {
+  pending: number;
+  approved: number;
+  expired: number;
+  renewalDue: number;
+  protocolDeviations: number;
+  seriousAdverseEvents: number;
+}
+
+export interface ClinicalResearchIntelligence {
+  metrics: {
+    projects: number; clinicalTrials: number; participants: number; recruitmentRate: number;
+    ethicsCompliance: number; publications: number; activeGrantsKES: number; researchQualityScore: number;
+  };
+  projects: CricProject[];
+  trials: CricTrial[];
+  registries: CricRegistry[];
+  registryNames: string[];
+  cohorts: CricCohort[];
+  consentScopes: CricConsentScope[];
+  recruitment: { eligible: number; approached: number; consented: number; declined: number; withdrawn: number; completed: number; lostFollowUp: number };
+  pregnancy: { current: number; malaria: number; diabetes: number; preeclampsia: number; anaemia: number };
+  diseasePeaks: { disease: string; peak: string }[];
+  ethics: CricEthics;
+  statisticsStudio: string[];
+  crfTypes: string[];
+  exportFormats: string[];
+  publications: { submitted: number; accepted: number; published: number; citations: number; impactFactor: string };
+  grants: { label: string; available: string; utilized: string; remaining: string };
+  collaborations: { name: string; kind: string }[];
+  biobank: { type: string; count: number }[];
+  aiQuality: { completeness: number; missingValues: number; duplicates: number; bias: string; readyForAi: boolean };
+  wall: { label: string; value: number }[];
+  executive: { label: string; value: string }[];
+  treatmentOutcomes: { treatment: string; outcome: string; completion: string; recurrence: string }[];
+  assistant: string;
+}
+
+export const functionBadge = (n: number) => n.toLocaleString();
+
+export const CRIC_SEED: ClinicalResearchIntelligence = {
+  metrics: {
+    projects: 48, clinicalTrials: 12, participants: 6482, recruitmentRate: 91,
+    ethicsCompliance: 100, publications: 214, activeGrantsKES: 428, researchQualityScore: 98,
+  },
+  projects: [
+    { id: 'reg-breast', title: 'Breast Cancer Registry', disease: 'Breast Cancer', principalInvestigator: 'Dr Jane', department: 'Surgery', participants: 612, recruitmentRate: 84, funding: 'KES 14M', status: 'Recruiting' },
+    { id: 'reg-diabetes', title: 'Diabetes Cohort', disease: 'Diabetes', principalInvestigator: 'Dr Kimani', department: 'Medicine', participants: 12418, recruitmentRate: 92, funding: 'KES 9M', status: 'Recruiting' },
+    { id: 'reg-stroke', title: 'Stroke Registry', disease: 'Stroke', principalInvestigator: 'Dr Otieno', department: 'Neurology', participants: 2210, recruitmentRate: 78, funding: 'KES 6M', status: 'Active' },
+    { id: 'reg-trauma', title: 'Trauma Registry', disease: 'Trauma', principalInvestigator: 'Dr Kamau', department: 'Emergency', participants: 3460, recruitmentRate: 88, funding: 'KES 5M', status: 'Active' },
+  ],
+  trials: [
+    { id: 'trial-1', title: 'Adjuvant AC-T in ER+/HER2- Breast Cancer', phase: 'III', stage: 'recruiting', enrolled: 128, target: 300, sponsor: 'AMEXAN Oncology Network' },
+    { id: 'trial-2', title: 'Insulin Intensification in Type 2 Diabetes', phase: 'II', stage: 'treatment', enrolled: 220, target: 240, sponsor: 'UON' },
+    { id: 'trial-3', title: 'Early Sepsis Biomarker Panel', phase: 'II', stage: 'screening', enrolled: 96, target: 400, sponsor: 'Oxford' },
+    { id: 'trial-4', title: 'Stroke Thrombolysis Window Study', phase: 'IV', stage: 'follow_up', enrolled: 150, target: 150, sponsor: 'Harvard' },
+    { id: 'trial-5', title: 'PPH Bundle Implementation Trial', phase: 'III', stage: 'randomized', enrolled: 310, target: 520, sponsor: 'KEMRI' },
+  ],
+  registries: [
+    { id: 'd-breast', name: 'Breast Cancer', totalPatients: 3842, status: 'live', avgAge: 48, mortality: '4.2%', recurrence: '6%', followUp: '38 months', riskFactor: 'Family History', breakdown: [ { label: 'Stage I', pct: 22 }, { label: 'Stage II', pct: 31 }, { label: 'Stage III', pct: 28 }, { label: 'Stage IV', pct: 19 } ], metrics: [ { label: 'Most Used Chemotherapy', value: 'AC-T' } ] },
+    { id: 'd-diabetes', name: 'Diabetes', totalPatients: 12418, status: 'live', avgAge: 54, mortality: '2.1%', followUp: '12 months', metrics: [ { label: 'Average HbA1c', value: '8.2' }, { label: 'Foot Ulcers', value: '18%' }, { label: 'CKD', value: '22%' }, { label: 'Retinopathy', value: '16%' } ], riskFactors: [ { label: 'Alcohol', pct: 41 }, { label: 'Hypertension', pct: 48 }, { label: 'Obesity', pct: 36 }, { label: 'Smoking', pct: 32 }, { label: 'Family History', pct: 27 } ] },
+    { id: 'd-hyper', name: 'Hypertension', totalPatients: 9833, status: 'live' },
+    { id: 'd-stroke', name: 'Stroke', totalPatients: 2210, status: 'live' },
+    { id: 'd-sepsis', name: 'Sepsis', totalPatients: 1876, status: 'live' },
+    { id: 'd-hiv', name: 'HIV', totalPatients: 4290, status: 'live' },
+    { id: 'd-malaria', name: 'Malaria', totalPatients: 6201, status: 'live' },
+    { id: 'd-sickle', name: 'Sickle Cell', totalPatients: 1442, status: 'live' },
+    { id: 'd-icu', name: 'ICU', totalPatients: 988, status: 'live' },
+  ],
+  registryNames: ['Breast Cancer', 'Diabetes', 'Hypertension', 'Stroke', 'Trauma', 'Sepsis', 'HIV', 'TB', 'Malaria', 'COVID', 'Pregnancy', 'Cancer', 'Burns', 'ICU', 'Dialysis', 'Sickle Cell', 'Mental Health'],
+  cohorts: [
+    { id: 'c1', name: 'ER+/HER2- Stage II AC-T', criteria: ['Female', 'Age 40-60', 'Diagnosis Breast Cancer', 'ER Positive', 'HER2 Negative', 'Stage II', 'Received AC-T', 'Follow-up >24 months'], participants: 612, createdAt: '06/2025' },
+    { id: 'c2', name: 'Diabetes with CKD', criteria: ['Diagnosis Diabetes', 'eGFR < 60', 'Follow-up >12 months'], participants: 2734, createdAt: '02/2025' },
+  ],
+  consentScopes: [
+    { id: 's1', scope: 'Clinical Research', granted: true },
+    { id: 's2', scope: 'Genomics', granted: false },
+    { id: 's3', scope: 'AI Dataset', granted: true },
+    { id: 's4', scope: 'Teaching', granted: true },
+    { id: 's5', scope: 'Photography', granted: false },
+    { id: 's6', scope: 'International Collaboration', granted: true },
+    { id: 's7', scope: 'Future Contact', granted: true },
+  ],
+  recruitment: { eligible: 184, approached: 174, consented: 162, declined: 22, withdrawn: 4, completed: 81, lostFollowUp: 3 },
+  pregnancy: { current: 3118, malaria: 128, diabetes: 214, preeclampsia: 84, anaemia: 782 },
+  diseasePeaks: [
+    { disease: 'Malaria', peak: 'April' },
+    { disease: 'Pneumonia', peak: 'July' },
+    { disease: 'Trauma', peak: 'December' },
+    { disease: 'Caesarean Sections', peak: 'October' },
+    { disease: 'Maternal Deaths', peak: 'March' },
+  ],
+  ethics: { pending: 7, approved: 214, expired: 3, renewalDue: 5, protocolDeviations: 2, seriousAdverseEvents: 0 },
+  statisticsStudio: ['Descriptive Statistics', 'Frequency', 'Cross Tabs', 'Regression', 'ANOVA', 'T-test', 'Chi-square', 'Survival Analysis', 'Kaplan-Meier', 'Cox Regression', 'ROC', 'Sensitivity', 'Specificity', 'Correlation', 'PCA', 'Cluster Analysis'],
+  crfTypes: ['Demographics', 'Medical History', 'Vitals', 'Diagnostics', 'Treatment Log', 'Outcomes', 'Adverse Events', 'Follow-up'],
+  exportFormats: ['CSV', 'Excel', 'SPSS', 'R', 'Python', 'Stata', 'FHIR', 'OMOP', 'REDCap'],
+  publications: { submitted: 12, accepted: 9, published: 41, citations: 1284, impactFactor: '4.6' },
+  grants: { label: 'KES 482M', available: 'KES 211M', utilized: 'KES 271M', remaining: 'KES 211M' },
+  collaborations: [
+    { name: 'University of Nairobi', kind: 'Academic' },
+    { name: 'KEMRI', kind: 'Research' },
+    { name: 'Oxford', kind: 'International' },
+    { name: 'Harvard', kind: 'International' },
+    { name: 'WHO', kind: 'Agency' },
+    { name: 'CDC', kind: 'Agency' },
+    { name: 'Liverpool', kind: 'International' },
+    { name: 'Manchester', kind: 'International' },
+  ],
+  biobank: [
+    { type: 'Blood', count: 2841 },
+    { type: 'DNA', count: 1820 },
+    { type: 'Tumor', count: 640 },
+    { type: 'Serum', count: 3110 },
+    { type: 'Plasma', count: 2445 },
+    { type: 'CSF', count: 118 },
+  ],
+  aiQuality: { completeness: 98, missingValues: 2, duplicates: 0, bias: 'Low', readyForAi: true },
+  wall: [
+    { label: 'Patients Eligible', value: 412 },
+    { label: 'Recruitment Today', value: 12 },
+    { label: 'Samples Today', value: 48 },
+    { label: 'New Publications', value: 1 },
+    { label: 'New Grants', value: 2 },
+    { label: 'Ethics Pending', value: 3 },
+  ],
+  executive: [
+    { label: 'Most Researched Disease', value: 'Breast Cancer' },
+    { label: 'Highest Recruitment', value: 'Diabetes' },
+    { label: 'Highest Funding', value: 'Oncology' },
+    { label: 'Highest Publication Output', value: 'Surgery' },
+    { label: 'Most Active Department', value: 'Medicine' },
+  ],
+  treatmentOutcomes: [
+    { treatment: 'Regimen A', outcome: '82%', completion: '12%', recurrence: '4%' },
+    { treatment: 'Regimen B', outcome: '67%', completion: '12%', recurrence: '17%' },
+  ],
+  assistant: 'Show mortality predictors in ICU patients over the last five years.',
+};
+
+// ── Clinical Education & Professional Development (dashboard 12) ───────────────
+// The Facility Administrator runs the hospital's entire academic ecosystem:
+// CME, grand rounds, department teaching, morbidity/mortality meetings, journal
+// clubs, clinical audits, simulation, competency, student rotations, residency,
+// internship, CPD, research presentations and the unified teaching calendar.
+
+export type EducationRecordDomain =
+  | 'cmeSessions' | 'grandRounds' | 'departmentTeaching' | 'morbidityMeetings'
+  | 'mortalityMeetings' | 'journalClubs' | 'clinicalAudits' | 'simulationSessions'
+  | 'competencies' | 'rotations' | 'residency' | 'internship' | 'cpdRecords'
+  | 'researchPresentations' | 'calendar';
+
+export interface CmeSessionRecord {
+  id: string; title: string; department: string; speaker: string;
+  durationHours: number; cpdCredits: number; attendance: number; date: number;
+}
+export interface GrandRoundRecord {
+  id: string; patientPresented: string; department: string; presenter: string;
+  discussant: string; recommendations: string; followUp: string; attendance: number; date: number;
+}
+export interface DepartmentTeachingRecord {
+  id: string; department: string; kind: string; title: string; attendance: number; date: number;
+}
+export interface MorbidityMeetingRecord {
+  id: string; department: string; casesReviewed: number; lessonsLearned: string;
+  actionPlans: string; attendance: number; date: number;
+}
+export interface MortalityMeetingRecord {
+  id: string; deathsReviewed: number; avoidability: string; contributingFactors: string;
+  committeeDecision: string; actionItems: string; protocolChanges: string; date: number;
+}
+export interface JournalClubRecord {
+  id: string; article: string; presenter: string; department: string;
+  criticalAppraisal: string; discussion: string; recommendations: string; attendance: number; date: number;
+}
+export interface ClinicalAuditRecord {
+  id: string; title: string; type: string; department: string;
+  status: 'completed' | 'in_progress' | 'planned'; recommendations: string;
+  compliancePercent: number; reauditDue: number; date: number;
+}
+export interface SimulationRecord {
+  id: string; scenario: string; type: string; department: string; participants: number; date: number;
+}
+export interface CompetencyRecord {
+  id: string; staffCategory: string; competency: string; staffCount: number;
+  dueDate: number; status: 'pending' | 'completed' | 'expiring';
+}
+export interface RotationRecord {
+  id: string; university: string; student: string; department: string;
+  rotation: string; status: string; date: number;
+}
+export interface ResidentRecord {
+  id: string; trainee: string; supervisor: string; rotation: string;
+  procedures: number; assessmentScore: number; status: string; date: number;
+}
+export interface InternRecord {
+  id: string; trainee: string; rotation: string; skillsSigned: number;
+  logbookEntries: number; supervision: string; status: string; date: number;
+}
+export interface CpdRecord {
+  id: string; professionalCategory: string; creditsRequired: number;
+  creditsObtained: number; renewalDate: number; status: 'current' | 'due' | 'overdue';
+}
+export interface ResearchPresentationRecord {
+  id: string; kind: string; title: string; presenter: string; department: string; date: number;
+}
+export interface TeachingCalendarEvent {
+  id: string; kind: string; title: string; date: number; audience: string;
+}
+
 export interface EducationMetrics {
   students: number;
   residents: number;
@@ -504,6 +911,27 @@ export interface EducationMetrics {
   competenciesAssessed: number;
   teachingSessions: number;
   osceSessions: number;
+  mandatoryTrainings: number;
+  cpdCreditsEarned: number;
+  cpdCompliancePercent: number;
+  attendanceRatePercent: number;
+  trainingHours: number;
+  simulationHours: number;
+  cmeSessions: CmeSessionRecord[];
+  grandRounds: GrandRoundRecord[];
+  departmentTeaching: DepartmentTeachingRecord[];
+  morbidityMeetings: MorbidityMeetingRecord[];
+  mortalityMeetings: MortalityMeetingRecord[];
+  journalClubs: JournalClubRecord[];
+  clinicalAudits: ClinicalAuditRecord[];
+  simulationSessions: SimulationRecord[];
+  competencies: CompetencyRecord[];
+  rotations: RotationRecord[];
+  residency: ResidentRecord[];
+  internship: InternRecord[];
+  cpdRecords: CpdRecord[];
+  researchPresentations: ResearchPresentationRecord[];
+  calendar: TeachingCalendarEvent[];
 }
 
 // ── Dashboard snapshots (generated, never stored) ─────────────────────────────
@@ -589,6 +1017,7 @@ export interface FacilityAdminModel {
   quality: QualityMetrics;
   finance: FinancialMetrics;
   research: ResearchMetrics;
+  cric: ClinicalResearchIntelligence;
   education: EducationMetrics;
   auditLog: { at: number; actorId: AmxUid; action: string; detail?: string }[];
   createdAt: number;
@@ -603,6 +1032,108 @@ export interface CreateFacilityAdminModelInput {
 
 function nextId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
+// Seed a realistic Clinical Education & Professional Development dataset so the
+// Facility Administrator's teaching command center is alive on day one. The
+// hospital already exists; AMEXAN digitizes its ongoing academic ecosystem.
+// Every record is editable in the UI (add / complete), so this is a starting
+// dataset — never a frozen fixture.
+function buildEducationSeed(): EducationMetrics {
+  const DAY = 86400000;
+  const now = Date.now();
+  const d = (offset: number) => now + offset * DAY;
+  return {
+    students: 42, residents: 18, interns: 24, activeRotations: 16,
+    logbookEntries: 1284, competenciesAssessed: 372, teachingSessions: 92, osceSessions: 11,
+    mandatoryTrainings: 17, cpdCreditsEarned: 1842, cpdCompliancePercent: 91,
+    attendanceRatePercent: 83, trainingHours: 412, simulationHours: 96,
+    cmeSessions: [
+      { id: 'cme-01', title: 'Management of Septic Shock', department: 'Medicine', speaker: 'Consultant Intensivist', durationHours: 2, cpdCredits: 2, attendance: 87, date: d(2) },
+      { id: 'cme-02', title: 'Emergency Trauma Resuscitation', department: 'Emergency', speaker: 'Consultant Emergency Physician', durationHours: 3, cpdCredits: 3, attendance: 104, date: d(0) },
+      { id: 'cme-03', title: 'Antimicrobial Stewardship Update', department: 'Pharmacy', speaker: 'Chief Pharmacist', durationHours: 2, cpdCredits: 2, attendance: 61, date: d(-4) },
+      { id: 'cme-04', title: 'Advances in Thrombolysis', department: 'Cardiology', speaker: 'Consultant Cardiologist', durationHours: 2, cpdCredits: 2, attendance: 73, date: d(-9) },
+    ],
+    grandRounds: [
+      { id: 'gr-01', patientPresented: 'Case 41 — Puerperal Sepsis', department: 'Obstetrics & Gynaecology', presenter: 'Dr A. Njoroge', discussant: 'Consultant OG', recommendations: 'Early source control and sepsis bundle', followUp: 'Re-audit in 2 weeks', attendance: 120, date: d(0) },
+      { id: 'gr-02', patientPresented: 'Case 57 — Guillain-Barré Syndrome', department: 'Neurology', presenter: 'Dr S. Wanjiru', discussant: 'Consultant Neurologist', recommendations: 'IVIG protocol update', followUp: 'Clinical note review', attendance: 96, date: d(-7) },
+      { id: 'gr-03', patientPresented: 'Case 33 — Upper GI Bleed', department: 'Gastroenterology', presenter: 'Dr T. Otieno', discussant: 'Consultant Gastroenterologist', recommendations: 'Early endoscopic referral', followUp: 'QI bundle', attendance: 88, date: d(-14) },
+    ],
+    departmentTeaching: [
+      { id: 'dt-01', department: 'Medicine', kind: 'Morning Report', title: 'Admissions review', attendance: 34, date: d(0) },
+      { id: 'dt-02', department: 'Orthopaedics', kind: 'Teaching Ward Round', title: 'Complex fractures', attendance: 22, date: d(-1) },
+      { id: 'dt-03', department: 'Paediatrics', kind: 'Case Presentation', title: 'Neonatal jaundice', attendance: 28, date: d(-2) },
+      { id: 'dt-04', department: 'Surgery', kind: 'Procedure Demonstration', title: 'Central line insertion', attendance: 19, date: d(-5) },
+      { id: 'dt-05', department: 'Obstetrics & Gynaecology', kind: 'Bedside Teaching', title: 'Cardiotocography interpretation', attendance: 25, date: d(-6) },
+    ],
+    morbidityMeetings: [
+      { id: 'mb-01', department: 'Surgery', casesReviewed: 4, lessonsLearned: 'Delay in theatre allocation worsened outcomes', actionPlans: 'Streamline emergency theatre booking', attendance: 41, date: d(1) },
+      { id: 'mb-02', department: 'Orthopaedics', casesReviewed: 3, lessonsLearned: 'Inconsistent antibiotic prophylaxis', actionPlans: 'Standardise prophylaxis timing', attendance: 35, date: d(-3) },
+      { id: 'mb-03', department: 'Paediatrics', casesReviewed: 2, lessonsLearned: 'Delayed recognition of sepsis', actionPlans: 'Sepsis screening on admission', attendance: 30, date: d(-10) },
+    ],
+    mortalityMeetings: [
+      { id: 'mt-01', deathsReviewed: 4, avoidability: '1 of 4 possibly avoidable', contributingFactors: 'Late ICU transfer, fluid overload', committeeDecision: 'Implement early warning score', actionItems: 'Roll out MEWS escalation', protocolChanges: 'Sepsis management protocol v4', date: d(-2) },
+      { id: 'mt-02', deathsReviewed: 3, avoidability: 'All deemed unavoidable', contributingFactors: 'Advanced malignancy, late presentation', committeeDecision: 'No protocol change', actionItems: 'Palliative pathway referral', protocolChanges: '—', date: d(-16) },
+    ],
+    journalClubs: [
+      { id: 'jc-01', article: 'Early vs delayed extubation in ICU', presenter: 'Dr L. Kiptoo', department: 'ICU', criticalAppraisal: 'Good methodology, limited power', discussion: 'Residual sedative accumulation', recommendations: 'Adopt daily light sedation audit', attendance: 27, date: d(0) },
+      { id: 'jc-02', article: 'Restrictive transfusion thresholds', presenter: 'Dr R. Mwangi', department: 'Medicine', criticalAppraisal: 'Relevant, generalisable', discussion: 'Applicability in resource-limited setting', recommendations: 'Pilot restrictive policy with monitoring', attendance: 23, date: d(-8) },
+      { id: 'jc-03', article: 'Sodium correction rates and outcomes', presenter: 'Dr P. Ochieng', department: 'Medicine', criticalAppraisal: 'Observational, confounded', discussion: 'Risk of osmotic demyelination', recommendations: 'Protocolised slow correction', attendance: 21, date: d(-15) },
+    ],
+    clinicalAudits: [
+      { id: 'audit-01', title: 'Surgical Site Infection Rate', type: 'Compliance Audit', department: 'Surgery', status: 'completed', recommendations: 'Implement bundle care checklist', compliancePercent: 82, reauditDue: d(30), date: d(-20) },
+      { id: 'audit-02', title: 'Antibiotic Stewardship', type: 'Documentation Audit', department: 'Medicine', status: 'in_progress', recommendations: 'Resource-driven guideline implementation', compliancePercent: 64, reauditDue: d(-6), date: d(-12) },
+      { id: 'audit-03', title: 'Trauma Documentation Completeness', type: 'Documentation Audit', department: 'Emergency', status: 'planned', recommendations: '—', compliancePercent: 0, reauditDue: d(45), date: d(-3) },
+      { id: 'audit-04', title: 'Hand Hygiene Compliance', type: 'Compliance Audit', department: 'Nursing', status: 'completed', recommendations: 'Increase ward champions', compliancePercent: 78, reauditDue: d(20), date: d(-40) },
+    ],
+    simulationSessions: [
+      { id: 'sim-01', scenario: 'Code Blue', type: 'Advanced Life Support', department: 'Emergency', participants: 18, date: d(6) },
+      { id: 'sim-02', scenario: 'Difficult Airway', type: 'Airway Skills', department: 'Anaesthesia', participants: 12, date: d(13) },
+      { id: 'sim-03', scenario: 'Mass Casualty', type: 'Disaster Drill', department: 'Emergency', participants: 45, date: d(20) },
+    ],
+    competencies: [
+      { id: 'comp-01', staffCategory: 'Doctors', competency: 'ACLS', staffCount: 18, dueDate: d(45), status: 'pending' },
+      { id: 'comp-02', staffCategory: 'Nurses', competency: 'BLS', staffCount: 60, dueDate: d(90), status: 'completed' },
+      { id: 'comp-03', staffCategory: 'Doctors', competency: 'ATLS', staffCount: 12, dueDate: d(20), status: 'expiring' },
+      { id: 'comp-04', staffCategory: 'Laboratory', competency: 'Phlebotomy Safety', staffCount: 15, dueDate: d(120), status: 'pending' },
+      { id: 'comp-05', staffCategory: 'Radiology', competency: 'Contrast Safety', staffCount: 8, dueDate: d(30), status: 'expiring' },
+    ],
+    rotations: [
+      { id: 'rot-01', university: 'Nairobi Medical School', student: 'St. Resident Batch 27', department: 'Medicine', rotation: 'Internal Medicine', status: 'active', date: d(0) },
+      { id: 'rot-02', university: 'Moi University', student: 'Batch 14B', department: 'Paediatrics', rotation: 'Child Health', status: 'active', date: d(0) },
+      { id: 'rot-03', university: 'Aga Khan University', student: 'PGY-2', department: 'Surgery', rotation: 'General Surgery', status: 'active', date: d(-7) },
+      { id: 'rot-04', university: 'Kenyatta University', student: 'Set 3', department: 'Obstetrics & Gynaecology', rotation: 'Maternal Health', status: 'completed', date: d(-30) },
+    ],
+    residency: [
+      { id: 'res-01', trainee: 'Dr J. Barasa', supervisor: 'Prof. W. Karanja', rotation: 'Cardiology', procedures: 14, assessmentScore: 82, status: 'on_track', date: d(0) },
+      { id: 'res-02', trainee: 'Dr S. Chebet', supervisor: 'Dr P. Muthoni', rotation: 'Haematology', procedures: 9, assessmentScore: 77, status: 'at_risk', date: d(0) },
+      { id: 'res-03', trainee: 'Dr K. Abdi', supervisor: 'Prof. L. Njoki', rotation: 'Infectious Disease', procedures: 16, assessmentScore: 88, status: 'on_track', date: d(-3) },
+    ],
+    internship: [
+      { id: 'int-01', trainee: 'Dr F. Muthoka', rotation: 'Medicine', skillsSigned: 31, logbookEntries: 94, supervision: 'Dr A. Njoroge', status: 'on_track', date: d(0) },
+      { id: 'int-02', trainee: 'Dr G. Achieng', rotation: 'Surgery', skillsSigned: 22, logbookEntries: 71, supervision: 'Dr T. Otieno', status: 'on_track', date: d(-2) },
+      { id: 'int-03', trainee: 'Dr H. Nyambura', rotation: 'Paediatrics', skillsSigned: 18, logbookEntries: 60, supervision: 'Dr M. Kamau', status: 'behind_schedule', date: d(-5) },
+    ],
+    cpdRecords: [
+      { id: 'cpd-01', professionalCategory: 'Doctors', creditsRequired: 60, creditsObtained: 54, renewalDate: d(45), status: 'due' },
+      { id: 'cpd-02', professionalCategory: 'Nurses', creditsRequired: 60, creditsObtained: 58, renewalDate: d(60), status: 'current' },
+      { id: 'cpd-03', professionalCategory: 'Pharmacists', creditsRequired: 60, creditsObtained: 51, renewalDate: d(30), status: 'due' },
+      { id: 'cpd-04', professionalCategory: 'Laboratory', creditsRequired: 40, creditsObtained: 36, renewalDate: d(75), status: 'current' },
+      { id: 'cpd-05', professionalCategory: 'Radiographers', creditsRequired: 40, creditsObtained: 29, renewalDate: d(21), status: 'overdue' },
+    ],
+    researchPresentations: [
+      { id: 'respres-01', kind: 'Protocol Presentation', title: 'Diabetic Retinopathy Screening Package', presenter: 'Dr S. Waweru', department: 'Research', date: d(4) },
+      { id: 'respres-02', kind: 'Thesis Defence', title: 'ICU Early Warning Score Validation', presenter: 'Dr C. Omondi', department: 'Residency', date: d(-6) },
+      { id: 'respres-03', kind: 'Grant Presentation', title: 'Community Hypertension Program', presenter: 'Dr A. Cheruto', department: 'Research', date: d(-12) },
+    ],
+    calendar: [
+      { id: 'cal-01', kind: 'Grand Round', title: 'Hospital Grand Round — Puerperal Sepsis', date: d(0), audience: 'all clinical' },
+      { id: 'cal-02', kind: 'Morbidity Meeting', title: 'Orthopaedic M&M', date: d(1), audience: 'Orthopaedics' },
+      { id: 'cal-03', kind: 'CME', title: 'Emergency Trauma CME', date: d(0), audience: 'Emergency' },
+      { id: 'cal-04', kind: 'Journal Club', title: 'ICU Journal Club', date: d(0), audience: 'ICU' },
+      { id: 'cal-05', kind: 'Clinical Audit', title: 'Pharmacy Clinical Audit', date: d(0), audience: 'Pharmacy' },
+    ],
+  };
 }
 
 // ── Constitutional capability tables ───────────────────────────────────────────
@@ -654,13 +1185,7 @@ export class FacilityAdministrationEngine {
       communications: [],
       protocols: [],
       intelligence: {
-        aiUsageCount: 0,
-        decisionSupportCount: 0,
-        protocolCompliancePercent: 0,
-        clinicalRecommendations: 0,
-        missedOpportunities: 0,
-        knowledgeUpdates: 0,
-        newGuidelines: 0,
+        ...OBSERVATORY_SEED,
       },
       integrations: [],
       migrations: [],
@@ -711,7 +1236,8 @@ export class FacilityAdministrationEngine {
         drugCosts: 0,
       },
       research: { projects: 0, trials: 0, publications: 0, recruitments: 0, funding: 0, ethicsApprovals: 0 },
-      education: { students: 0, residents: 0, interns: 0, activeRotations: 0, logbookEntries: 0, competenciesAssessed: 0, teachingSessions: 0, osceSessions: 0 },
+      cric: CRIC_SEED,
+      education: buildEducationSeed(),
       auditLog: [],
       createdAt: now,
       updatedAt: now,
@@ -1175,6 +1701,24 @@ export class FacilityAdministrationEngine {
     return { ...model.research };
   }
 
+  // ── Clinical Research Intelligence Center (Engine XV) ────────────────────────
+
+  static getCRIC(model: FacilityAdminModel): ClinicalResearchIntelligence {
+    // Merge the seed over the model so the CRIC renders a live, coherent story
+    // even before real research records are recorded on the model.
+    const merged: any = { ...CRIC_SEED };
+    const storedCric = (model.cric ?? {}) as Partial<ClinicalResearchIntelligence>;
+    (Object.keys(CRIC_SEED) as (keyof ClinicalResearchIntelligence)[]).forEach((key) => {
+      const value = (storedCric as any)[key];
+      const empty = value === undefined || value === null ||
+        (typeof value === 'number' && value === 0) ||
+        (Array.isArray(value) && value.length === 0) ||
+        (value && typeof value === 'object' && Object.keys(value).length === 0);
+      if (!empty) merged[key] = value;
+    });
+    return merged as ClinicalResearchIntelligence;
+  }
+
   static updateEducation(model: FacilityAdminModel, actorId: AmxUid, patch: Partial<EducationMetrics>): FacilityAdminModel {
     FacilityAdministrationEngine.guard(model, actorId, 'monitor_education');
     return { ...model, education: { ...model.education, ...patch }, updatedAt: Date.now() };
@@ -1182,6 +1726,25 @@ export class FacilityAdministrationEngine {
 
   static getEducationDashboard(model: FacilityAdminModel): EducationMetrics {
     return { ...model.education };
+  }
+
+  static addEducationRecord(model: FacilityAdminModel, actorId: AmxUid, domain: EducationRecordDomain, record: any): FacilityAdminModel {
+    FacilityAdministrationEngine.guard(model, actorId, 'monitor_education');
+    const current = (model.education[domain] as any[]) ?? [];
+    return { ...model, education: { ...model.education, [domain]: [...current, record] }, updatedAt: Date.now() };
+  }
+
+  static updateEducationRecord(model: FacilityAdminModel, actor: AmxUid, domain: EducationRecordDomain, id: string, patch: any): FacilityAdminModel {
+    FacilityAdministrationEngine.guard(model, actor, 'monitor_education');
+    const current = ((model.education[domain] as any[]) ?? []) as { id?: string }[];
+    return {
+      ...model,
+      education: {
+        ...model.education,
+        [domain]: current.map((r) => (r.id === id ? { ...r, ...patch } : r)),
+      },
+      updatedAt: Date.now(),
+    };
   }
 
   // ── Communication Center (dashboard 13) ─────────────────────────────────────
@@ -1243,7 +1806,19 @@ export class FacilityAdministrationEngine {
 
   /** The admin can view Clinical Intelligence but never override its reasoning. */
   static getClinicalIntelligence(model: FacilityAdminModel): ClinicalIntelligenceSnapshot {
-    return { ...model.intelligence };
+    // Merge the observation-only seed so the Observatory renders a live story
+    // even before real counters are recorded on the model. Empty/zero stored
+    // values fall back to the seed; anything actually observed (or recorded by
+    // an administrator) wins.
+    const merged: ClinicalIntelligenceSnapshot = { ...OBSERVATORY_SEED };
+    (Object.keys(merged) as (keyof ClinicalIntelligenceSnapshot)[]).forEach((key) => {
+      const stored = model.intelligence[key];
+      const empty = stored === undefined || stored === null ||
+        (typeof stored === 'number' && stored === 0) ||
+        (Array.isArray(stored) && stored.length === 0);
+      if (!empty) (merged as any)[key] = stored;
+    });
+    return merged;
   }
 
   static overrideClinicalIntelligence(model: FacilityAdminModel, actorId: AmxUid): FacilityAdminModel {
@@ -1432,7 +2007,7 @@ export class FacilityAdministrationEngine {
         claimsApproved: model.finance.claimsApproved,
         claimsSubmitted: model.finance.claimsSubmitted,
       },
-      teaching: { ...model.education },
+      teaching: pickNumeric(model.education),
       research: { ...model.research },
       population: {
         patients: model.metrics.patients,
@@ -1467,4 +2042,15 @@ function mapCategory(category: string): WorkforceCategory {
   if (c.includes('intern')) return 'interns';
   if (c.includes('admin') || c.includes('finance') || c.includes('hr') || c.includes('it') || c.includes('records')) return 'administration';
   return 'doctors';
+}
+
+// Analytics groups are typed as Record<string, number>. The teaching group may
+// carry nested record arrays, so reduce any domain object to its numeric fields
+// before it flows into a dashboard snapshot.
+function pickNumeric(o: object): Record<string, number> {
+  const out: Record<string, number> = {};
+  Object.entries(o).forEach(([k, v]) => {
+    if (typeof v === 'number') out[k] = v;
+  });
+  return out;
 }

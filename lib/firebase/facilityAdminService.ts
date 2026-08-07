@@ -13,6 +13,7 @@ import {
 import { getOrganization, getOrgMembers } from '@/lib/firebase/organizationService';
 import { listPatients } from '@/lib/firebase/patientService';
 import { getSeedDepartments } from '@/lib/firebase/seedService';
+import { sanitizeForFirestore } from '@/lib/firebase/sanitize';
 
 const FACILITY_ADMIN_DOC = 'facility-admin-model';
 
@@ -47,7 +48,7 @@ export async function loadFacilityAdminModel(orgId: string, administratorId: str
   // 2. Try to seed from live organizational data (single round, resilient).
   try {
     const seeded = await withTimeout(buildSeededModel(orgId, administratorId), 12000);
-    await setDoc(ref, seeded).catch(() => {}); // non-fatal if rules block the write
+    await setDoc(ref, sanitizeForFirestore(seeded)).catch(() => {}); // non-fatal if rules block the write
     return seeded;
   } catch {
     // 3. Fail-safe: never hang. Render the constitutional model (zeros + live
@@ -58,10 +59,10 @@ export async function loadFacilityAdminModel(orgId: string, administratorId: str
 
 export async function saveFacilityAdminModel(model: FacilityAdminModel): Promise<void> {
   const ref = doc(db, 'organizations', model.organizationId, FACILITY_ADMIN_DOC, 'current');
-  await setDoc(ref, {
+  await setDoc(ref, sanitizeForFirestore({
     ...model,
     updatedAt: Date.now(),
-  });
+  }));
 }
 
 async function buildSeededModel(orgId: string, administratorId: string): Promise<FacilityAdminModel> {

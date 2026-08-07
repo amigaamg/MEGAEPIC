@@ -225,7 +225,14 @@ export function roleTokensFor(
       if (search.includes(keyword)) tokens.push(...roles);
     }
   }
-  if (CATEGORY_TO_ROLE[normalizedRole]) tokens.push(normalizedRole);
+  // A raw role-name token may refine the category's tokens (e.g. a role name of
+  // "medical_officer"), BUT a stale 'patient' role (legacy accounts where
+  // users/{uid}.role was never promoted past the registration default) must NOT
+  // contaminate a staff actor's tokens — otherwise every clinician/admin would
+  // resolve to the Patient family dashboard.
+  if (CATEGORY_TO_ROLE[normalizedRole] && !(normalizedRole === 'patient' && category && category !== 'patient')) {
+    tokens.push(normalizedRole);
+  }
 
   return [...new Set(tokens)];
 }

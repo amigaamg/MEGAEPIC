@@ -30,9 +30,14 @@ const PAD = { display: 'flex', minHeight: '100vh', alignItems: 'center', justify
 export default function WorkspaceGuard({
   supportedRoles,
   children,
+  allowUnknown = false,
 }: {
   supportedRoles: SupportedRoles;
   children: React.ReactNode;
+  /** Allow the page to render for an unclassifiable role family (null). Only the
+   *  /dashboard hub uses this — every specialized dashboard treats null as a hard
+   *  mismatch (WS-016) and redirects. Prevents the null-family redirect loop. */
+  allowUnknown?: boolean;
 }) {
   const { session, user, loading } = useAuth();
   const router = useRouter();
@@ -49,14 +54,16 @@ export default function WorkspaceGuard({
       return;
     }
     // WS-012/WS-014/WS-015/WS-016: mismatch is a hard error — log and redirect,
-    // never continue rendering.
-    const allowed = family !== null && supportedRoles.includes(family);
+    // never continue rendering. A null family is a mismatch on every page EXCEPT
+    // the /dashboard hub (allowUnknown), otherwise the guard would redirect into
+    // itself forever.
+    const allowed = (family !== null && supportedRoles.includes(family)) || (allowUnknown && family === null);
     if (!allowed) {
       const err = new WorkspaceMismatchError(category ?? 'unknown', family, supportedRoles);
       console.error('[WorkspaceGuard]', err.message);
       router.replace(family ? familyRedirect(family) : '/dashboard');
     }
-  }, [loading, user, family, category, supportedRoles, router]);
+  }, [loading, user, family, category, supportedRoles, allowUnknown, router]);
 
   if (loading) {
     return (
@@ -70,7 +77,7 @@ export default function WorkspaceGuard({
     );
   }
 
-  const allowed = family !== null && supportedRoles.includes(family);
+  const allowed = (family !== null && supportedRoles.includes(family)) || (allowUnknown && family === null);
   if (!user || !allowed) return null;
 
   return <>{children}</>;

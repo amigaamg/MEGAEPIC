@@ -5,7 +5,7 @@
 
 export type CommunityCenterId =
   | 'executive' | 'digital_twin' | 'workforce' | 'workforce_provisioning' | 'organization' | 'services'
-  | 'infrastructure' | 'clinical' | 'workforce_analytics' | 'quality' | 'finance'
+  | 'infrastructure' | 'assets' | 'clinical' | 'workforce_analytics' | 'quality' | 'finance'
   | 'research' | 'education' | 'communication' | 'protocol' | 'intelligence'
   | 'integration' | 'hmis' | 'structure' | 'migration' | 'marketplace'
   | 'security' | 'settings' | 'analytics';

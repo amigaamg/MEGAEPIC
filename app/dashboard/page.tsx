@@ -52,7 +52,7 @@ const ICONS: Record<string, LucideIcon> = { Pill, FlaskConical, Scan, FileText, 
 
 export default function DashboardPage() {
   return (
-    <WorkspaceGuard supportedRoles={SupportedRoles}>
+    <WorkspaceGuard supportedRoles={SupportedRoles} allowUnknown>
       <DashboardPageInner />
     </WorkspaceGuard>
   );

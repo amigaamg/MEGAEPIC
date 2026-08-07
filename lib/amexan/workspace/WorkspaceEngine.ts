@@ -6,6 +6,7 @@
 
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { sanitizeForFirestore } from '@/lib/firebase/sanitize';
 import { composeUserSession } from '../constitution/session';
 import { buildEmptySession } from '../constitution/auth';
 import {
@@ -57,10 +58,17 @@ const ROLE_LABEL: Record<string, ProfessionalCategory> = {
   doctor: 'medical_doctor',
   consultant: 'consultant',
   nurse: 'nurse',
+  midwife: 'midwife',
   admin: 'facility_admin',
   super_admin: 'super_admin',
+  administrator: 'administrator',
+  org_admin: 'facility_admin',
+  organization_admin: 'facility_admin',
+  organisational_admin: 'facility_admin',
   pharmacist: 'pharmacist',
   lab_tech: 'lab_technologist',
+  lab_technologist: 'lab_technologist',
+  radiographer: 'radiographer',
   receptionist: 'receptionist',
   student: 'medical_student',
   facility_administrator: 'facility_admin',
@@ -604,7 +612,7 @@ export class WorkspaceEngine {
     if (this.config.persistence.firestore) {
       try {
         const { setDoc } = await import('firebase/firestore');
-        await setDoc(doc(db, 'workspaces', workspace.identity.uid), snapshot);
+        await setDoc(doc(db, 'workspaces', workspace.identity.uid), sanitizeForFirestore(snapshot));
       } catch (e: any) {
         // Check if this is a permissions error
         const errorCode = e?.code || e?.message || '';

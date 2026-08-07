@@ -50,6 +50,22 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(staleWhileRevalidate(request));
 });
 
+async function cachePut(cache, request, response) {
+  try {
+    if (!response || !response.ok) return;
+    if (request.method !== 'GET') return;
+    if (!response.type || response.type === 'opaque' || response.type === 'opaqueredirect') return;
+    if (response.redirected) return;
+    if (request.mode === 'navigate') return;
+    // Only cache same-origin resources reliably; never throw on failure.
+    const url = new URL(request.url);
+    if (url.origin !== self.location.origin) return;
+    await cache.put(request, response.clone());
+  } catch (e) {
+    // Swallow — a failed cache write must never break the request.
+  }
+}
+
 async function cacheFirst(request) {
   const cached = await caches.match(request);
   if (cached) return cached;
@@ -57,7 +73,7 @@ async function cacheFirst(request) {
     const response = await fetch(request);
     if (response.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, response.clone());
+      await cachePut(cache, request, response);
     }
     return response;
   } catch {
@@ -70,7 +86,7 @@ async function networkFirst(request) {
     const response = await fetch(request);
     if (response.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, response.clone());
+      await cachePut(cache, request, response);
     }
     return response;
   } catch {
@@ -98,8 +114,8 @@ async function staleWhileRevalidate(request) {
   const cache = await caches.open(DYNAMIC_CACHE);
   const cached = await cache.match(request);
   const fetchPromise = fetch(request)
-    .then((response) => {
-      if (response.ok) cache.put(request, response.clone());
+    .then(async (response) => {
+      if (response.ok) await cachePut(cache, request, response);
       return response;
     })
     .catch(() => cached);
