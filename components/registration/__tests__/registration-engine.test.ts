@@ -86,7 +86,7 @@ describe('Constitutional Registration Engine', () => {
 
     const ctx = engine.getClinicalContext();
 
-    expect(ctx.demographic.ageGroup).toBe('child');
+    expect(ctx.demographic.ageGroup).toBe('toddler');
     expect(ctx.demographic.clinicalCohort).toBe('pediatric_male');
     expect(ctx.demographic.reproductiveStage).toBe('male');
     expect(ctx.clinical.activeModules).toContain('pediatric');
@@ -110,7 +110,7 @@ describe('Constitutional Registration Engine', () => {
 
     const ctx = engine.getClinicalContext();
 
-    expect(ctx.demographic.ageGroup).toBe('elderly');
+    expect(ctx.demographic.ageGroup).toBe('older_adult');
     expect(ctx.demographic.clinicalCohort).toBe('geriatric_male');
     expect(ctx.demographic.geriatricSubtype).toBe('young_old');
     expect(ctx.clinical.isGeriatric).toBe(true);

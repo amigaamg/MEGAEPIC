@@ -141,11 +141,11 @@ export function useClinicalIntelligence(
   }
 
   function reset(): void {
-    state.events = []
-    state.recommendations = []
-    state.predictions = []
-    state.differentials = []
-    state.explanations = []
+    state.events.length = 0
+    state.recommendations.length = 0
+    state.predictions.length = 0
+    state.differentials.length = 0
+    state.explanations.length = 0
     state.confidence = ConfidenceLevel.Low
     state.isLoading = false
   }

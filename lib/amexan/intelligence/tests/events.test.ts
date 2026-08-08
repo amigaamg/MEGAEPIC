@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import Events from '../events'
 
 describe('Events', () => {
@@ -6,7 +7,7 @@ describe('Events', () => {
   })
 
   test('should emit and listen for events', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
     const unsubscribe = Events.on('test_event', listener)
 
     Events.emit('test_event', { data: 'test' })
@@ -41,8 +42,8 @@ describe('Events', () => {
   })
 
   test('should return listener count', () => {
-    const listener1 = jest.fn()
-    const listener2 = jest.fn()
+    const listener1 = vi.fn()
+    const listener2 = vi.fn()
     Events.on('test_event', listener1)
     Events.on('test_event', listener2)
 

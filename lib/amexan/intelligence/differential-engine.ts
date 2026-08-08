@@ -22,7 +22,7 @@ export async function generateDifferentials(
 
   const symptomMap = buildSymptomMap(observations)
 
-  for (const [symptom, entries] of Object.entries(symptomMap)) {
+  for (const [symptom, entries] of symptomMap) {
     const diff = generateDifferentialForSymptom(symptom, entries, context)
     if (diff) {
       differentials.push(diff)

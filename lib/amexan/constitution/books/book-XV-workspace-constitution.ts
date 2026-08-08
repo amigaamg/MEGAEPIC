@@ -330,10 +330,14 @@ export const WS_016: RuleNode = createRule({
 /** All workspace-resolution constitutional rules, ordered by priority (highest first). */
 export const WORKSPACE_CONSTITUTIONAL_RULES: RuleNode[] = [
   CR_WS_001,
-  WS_001,
   WS_011,
-  WS_002,
+  WS_001,
   WS_012,
+  WS_014,
+  WS_013,
+  WS_015,
+  WS_016,
+  WS_002,
   WS_003,
   WS_004,
   WS_005,
@@ -342,10 +346,6 @@ export const WORKSPACE_CONSTITUTIONAL_RULES: RuleNode[] = [
   WS_008,
   WS_009,
   WS_010,
-  WS_013,
-  WS_014,
-  WS_015,
-  WS_016,
 ];
 
 export function getWorkspaceRule(ruleId: string): RuleNode | undefined {

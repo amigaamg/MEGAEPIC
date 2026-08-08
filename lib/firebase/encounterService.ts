@@ -5,6 +5,7 @@ import {
 } from 'firebase/firestore';
 import {
   encounterRef, encountersCol, encounterEventsCol, encounterPhaseRef,
+  encounterStateRef,
   patientRef, patientLifelineCol, patientEncountersCol,
 } from './collections';
 import type { Encounter, EncounterType, DocumentEvent, AIInsight } from '@/lib/encounterTypes';
@@ -184,6 +185,29 @@ export function listenPhaseData(
   return onSnapshot(encounterPhaseRef(resolveOrgId(orgId), deptId, unitId, encounterId, phaseId),
     (snap) => onData(snap.exists() ? snap.data() as Record<string, unknown> : null),
   );
+}
+
+/** Persist the full orchestrator working-state blob for an encounter (cross-device resume). */
+export async function saveEncounterState(
+  deptId: string, unitId: string, encounterId: string,
+  state: Record<string, unknown>,
+  orgId?: string,
+): Promise<void> {
+  await setDoc(encounterStateRef(resolveOrgId(orgId), deptId, unitId, encounterId), {
+    state: state as unknown,
+    savedAt: Date.now(),
+    updatedAt: Date.now(),
+  }, { merge: true });
+}
+
+export async function getEncounterState(
+  deptId: string, unitId: string, encounterId: string,
+  orgId?: string,
+): Promise<Record<string, unknown> | null> {
+  const snap = await getDoc(encounterStateRef(resolveOrgId(orgId), deptId, unitId, encounterId));
+  if (!snap.exists()) return null;
+  const data = snap.data();
+  return (data?.state as Record<string, unknown>) || null;
 }
 
 export function listenDepartmentStats(

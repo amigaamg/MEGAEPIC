@@ -1,8 +1,11 @@
-// Encounter persistence — localStorage + Firestore dual persistence
+// Encounter persistence — localStorage + Firestore full-state dual persistence.
+// The Complete orchestrator working-state (answers, problems, differentials,
+// orders, phase) is stored to a Firestore `states/main` doc so an encounter can
+// be resumed across devices, while localStorage+IndexedDB keeps it working offline.
 import { saveEncounter as localSave, loadEncounter as localLoad, listRecentEncounters as localList, completeEncounter as localComplete } from '@/lib/amexan/persistence/localStorage';
 import type { SavedEncounter as LocalSavedEncounter } from '@/lib/amexan/persistence/localStorage';
 import type { EncounterOrchestratorState } from '../encounter-engine/engines/orchestrator';
-import { createEncounter, updateEncounter, getEncounter } from '@/lib/firebase/encounterService';
+import { createEncounter, updateEncounter, getEncounter, saveEncounterState, getEncounterState } from '@/lib/firebase/encounterService';
 
 export type SavedEncounter = LocalSavedEncounter;
 
@@ -16,6 +19,7 @@ export async function saveEncounter(
 ): Promise<void> {
   localSave(orgId, encounterId, state);
   try {
+    await saveEncounterState(DEFAULT_DEPT, DEFAULT_UNIT, encounterId, state as unknown as Record<string, unknown>, orgId);
     const existing = await getEncounter(DEFAULT_DEPT, DEFAULT_UNIT, encounterId, orgId).catch(() => null);
     if (existing) {
       await updateEncounter(DEFAULT_DEPT, DEFAULT_UNIT, encounterId, {
@@ -45,10 +49,23 @@ export async function saveEncounter(
   }
 }
 
+/**
+ * Reconstruct the full orchestrator working-state. Prefers the Firestore
+ * `states/main` blob (cross-device), falls back to localStorage.
+ */
 export async function loadEncounter(
   orgId: string,
   encounterId: string,
 ): Promise<{ state: any; answers: Record<string, any> } | null> {
+  try {
+    const remoteState = await getEncounterState(DEFAULT_DEPT, DEFAULT_UNIT, encounterId, orgId);
+    if (remoteState && (remoteState.biodata || remoteState.questionEngine || Object.keys(remoteState).length > 0)) {
+      const answers = (remoteState as any).questionEngine?.answers
+        || (remoteState as any).answers
+        || {};
+      return { state: remoteState, answers };
+    }
+  } catch { }
   const local = await localLoad(orgId, encounterId);
   if (local) return local;
   try {

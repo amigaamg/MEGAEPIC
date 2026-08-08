@@ -59,6 +59,26 @@ export function encounterPhaseRef(orgId: string, deptId: string, unitId: string,
   return doc(db, 'organizations', orgId, 'departments', deptId, 'units', unitId, 'encounters', encounterId, 'phases', phaseId);
 }
 
+// Full encounter working-state (orchestrator) — persisted as a single doc so
+// cross-device resumes reconstruct the complete clinical working state.
+export function encounterStateRef(orgId: string, deptId: string, unitId: string, encounterId: string): DocumentReference {
+  return doc(db, 'organizations', orgId, 'departments', deptId, 'units', unitId, 'encounters', encounterId, 'states', 'main');
+}
+
+// ── Universal Orders (under encounter tree) ───────────────────
+
+export function orderRef(orgId: string, deptId: string, unitId: string, encounterId: string, orderId: string): DocumentReference {
+  return doc(db, 'organizations', orgId, 'departments', deptId, 'units', unitId, 'encounters', encounterId, 'orders', orderId);
+}
+
+export function ordersCol(orgId: string, deptId: string, unitId: string, encounterId: string): CollectionReference {
+  return collection(db, 'organizations', orgId, 'departments', deptId, 'units', unitId, 'encounters', encounterId, 'orders');
+}
+
+export function patientOrdersCol(orgId: string, patientId: string): CollectionReference {
+  return collection(db, 'organizations', orgId, 'patients', patientId, 'orders');
+}
+
 // ── Patients (under org tree) ────────────────────────────────────────────────
 
 export function patientRef(orgId: string, patientId: string): DocumentReference {

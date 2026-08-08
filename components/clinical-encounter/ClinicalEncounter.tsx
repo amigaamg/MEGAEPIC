@@ -29,6 +29,7 @@ import {
   generateSummaryNarrative,
 } from '@/lib/amexan/encounter-engine/engines/documentation-engine';
 import { saveEncounter } from '@/lib/amexan/encounter/encounterPersistence';
+import { syncEncounterOrders } from '@/lib/amexan/hmis/orderRepository';
 import { persistExamFindings, listenExamFindings, persistEvidenceGraph } from '@/lib/clinical/constitutional/examinationPersistence';
 import { InvestigationCards } from './InvestigationCards';
 import { PrescriptionCards } from './PrescriptionCards';
@@ -441,6 +442,27 @@ export function ClinicalEncounter({
     }, 2000);
     return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
   }, [state.questionEngine.answers, examFindings, currentPhase, completedPhases]);
+
+  // Universal Orders: sync every actionable lab/imaging/prescription order the
+  // encounter has generated into the shared Universal Orders engine (Firestore).
+  const orderSyncRef = useRef<{ snapshot?: string; sent: Record<string, boolean> }>({ sent: {} });
+  useEffect(() => {
+    const eid = encounterIdRef.current;
+    if (!eid) return;
+    const snapshot = [
+      ...(state.labOrders || []).map(o => `${o.id}:${o.status}`),
+      ...(state.imagingOrders || []).map(o => `${o.id}:${o.status}`),
+      ...(state.prescriptionOrders || []).map(o => `${o.id}:${o.status}`),
+    ].join('|');
+    if (orderSyncRef.current.snapshot === snapshot) return;
+    orderSyncRef.current.snapshot = snapshot;
+    const changed = [...(state.labOrders || []), ...(state.imagingOrders || []), ...(state.prescriptionOrders || [])]
+      .filter(o => o.status !== 'suggested' && !orderSyncRef.current.sent[o.id]);
+    if (changed.length === 0) return;
+    changed.forEach(o => { orderSyncRef.current.sent[o.id] = true; });
+    syncEncounterOrders(orgId(), DEFAULT_DEPT, DEFAULT_UNIT, eid, state)
+      .catch(() => {});
+  }, [state.labOrders, state.imagingOrders, state.prescriptionOrders]);
 
   const historyFacts = useMemo(() => {
     const facts: Record<string, unknown> = {};
